@@ -1,0 +1,45 @@
+<div class="col-md-12">
+  <h2 *ngIf="politenessconfig.id">Politenessconfig Details</h2>
+  <h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Navn:
+    <input class="form-control" [(ngModel)]="politenessconfig.meta.name">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Beskrivelse:
+    <input class="form-control" [(ngModel)]="politenessconfig.meta.description">
+  </label>
+</div>
+
+
+<div class="form-group">
+  <label class="center-block">robots_policy
+    <input class="form-control" [(ngModel)]="politenessconfig.robots_policy">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">minimum_robots_validity_duration_s:
+    <input class="form-control" [(ngModel)]="politenessconfig.minimum_robots_validity_duration_s">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">custom_robots:
+    <input class="form-control" [(ngModel)]="politenessconfig.custom_robots">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">min_time_between_page_load_ms:
+    <input class="form-control" [(ngModel)]="politenessconfig.min_time_between_page_load_ms">
+  </label>
+</div>
+
+
+<button class="btn btn-primary" *ngIf="!politenessconfig.id" (click)="createPolitenessConfig(politenessconfig)" novalidate>Create</button>
+<button class="btn btn-info"  *ngIf="politenessconfig.id" (click)="updatePolitenessConfig(politenessconfig)">Update</button>
+<button class="btn btn-danger" *ngIf="politenessconfig.id" (click)="deletePolitenessConfig(politenessconfig.id); $event.stopPropagation()">Delete</button>
+
+<pre>{{politenessconfig | json}}</pre>

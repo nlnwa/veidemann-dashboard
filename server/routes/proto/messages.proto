@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package broprox;
+option java_package = "no.nb.nna.broprox.model";
+//option java_multiple_files = true;
+option java_outer_classname = "MessagesProto";
+
+import "timestamp.proto";
+import "config.proto";
+
+message CrawlExecutionStatus {
+  enum State {
+    UNDEFINED = 0;
+    CREATED = 1;
+    RUNNING = 2;
+    FINISHED = 3;
+    ABORTED_TIMEOUT = 4;
+    ABORTED_SIZE = 5;
+    ABORTED_MANUAL = 6;
+    FAILED = 7;
+    DIED = 8;
+  }
+
+  string id = 1;
+  State state = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  int64 documents_crawled = 5;
+  int64 bytes_crawled = 6;
+}
+
+message CrawlLog {
+  string warc_id = 1;
+  google.protobuf.Timestamp time_stamp = 2;
+  string surt = 3;
+  int32 status_code = 4;
+  int64 size = 5;
+  string requested_uri = 6;
+  string response_uri = 7;
+
+  /**
+   * Get the discoveryPath,
+   * <p>
+   * <table>
+   * <tr><td>R</td><td>Redirect</td></tr>
+   * <tr><td>E</td><td>Embed</td></tr>
+   * <tr><td>X</td><td>Speculative embed (aggressive/Javascript link extraction)</td></tr>
+   * <tr><td>L</td><td>Link</td></tr>
+   * <tr><td>P</td><td>Prerequisite (as for DNS or robots.txt before another URI)</td></tr>
+   * </table>
+   * <p>
+   * @return the discovery path
+   */
+  string discovery_path = 8;
+  string referrer = 9;
+  string content_type = 10;
+  google.protobuf.Timestamp fetch_time_stamp = 11;
+  int64 fetch_time_millis = 12;
+  string block_digest = 13;
+  string payload_digest = 14;
+  string storage_ref = 15;
+  string record_type = 16;
+  string warc_refers_to = 17;
+  string ip_address = 18;
+}
+
+message CrawledContent {
+  string digest = 1;
+  string warc_id = 2;
+}
+
+message ExtractedText {
+  string warc_id = 1;
+  string text = 2;
+  int64 sentence_count = 3;
+  int64 word_count = 4;
+  int64 long_word_count = 5;
+  int64 character_count = 6;
+  int64 lix = 7;
+}
+
+message QueuedUri {
+  message IdSeq {
+    string id = 1;
+    int64 seq = 2;
+  }
+
+  string id = 1;
+  repeated IdSeq execution_ids = 2;
+  google.protobuf.Timestamp time_stamp = 3;
+  string surt = 4;
+  string uri = 5;
+
+  /**
+   * Get the discoveryPath,
+   * <p>
+   * <table>
+   * <tr><td>R</td><td>Redirect</td></tr>
+   * <tr><td>E</td><td>Embed</td></tr>
+   * <tr><td>X</td><td>Speculative embed (aggressive/Javascript link extraction)</td></tr>
+   * <tr><td>L</td><td>Link</td></tr>
+   * <tr><td>P</td><td>Prerequisite (as for DNS or robots.txt before another URI)</td></tr>
+   * </table>
+   * <p>
+   * @return the discovery path
+   */
+  string discovery_path = 6;
+  string referrer = 7;
+  CrawlScope scope = 8;
+}
+
+message Screenshot {
+  string id = 1;
+  string execution_id = 2;
+  string uri = 3;
+  bytes img = 4;
+}

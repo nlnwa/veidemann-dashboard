@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Crawljobs</h2>
+      <ul class="list-group">
+        <li class="list-group-item"
+            *ngFor="let crawljob of crawljobs.value" (click)="selectCrawljob(crawljob)" [class.active]="crawljob === selectedCrawljob">
+          {{crawljob.meta.name}}
+
+        </li>
+      </ul>
+      <button class="btn btn-warning" (click)="createNewCrawljob()">New</button>
+    </div>
+    <div class="col-md-5">
+
+      <div *ngIf="selectedCrawljob">
+        <crawljob-details
+          [crawljob]="selectedCrawljob"
+          [createHandler]="addCrawljob"
+          [updateHandler]="updateCrawljob"
+          [deleteHandler]="deleteCrawljob">
+        </crawljob-details>
+      </div>
+    </div>
+  </div>
+</div>

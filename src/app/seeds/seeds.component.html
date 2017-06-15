@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+
+      <h4>Legg til Seeds</h4>
+      <form [formGroup]="seedForm">
+
+
+      <label class="center-block">Entitet:
+        <angular2-multiselect [data]="entityList" [(ngModel)]="selectedEntityItems"[settings]="dropdownEntitySettings"
+                              (onSelect)="onItemSelect($event)"
+                              (onDeSelect)="OnItemDeSelect($event)" formControlName="entity_id" ></angular2-multiselect>
+        <small [hidden]="seedForm.controls.entity_id.valid" class="text-danger">
+          Entitet er påkrevd.
+        </small>
+      </label>
+
+        <div class="form-group" formGroupName="meta">
+        <label class="center-block">Seed:
+          <input type="url" class="form-control" formControlName="name">
+          <small [hidden]="seedForm.controls.meta.valid" class="text-danger">
+            Seed er påkrevd.
+          </small>
+
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="center-block">Høstejobb:
+          <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
+                                [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
+                                (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
+          <small [hidden]="seedForm.controls.job_id.valid" class="text-danger">
+            Høstejobb er påkrevd.
+          </small>
+        </label>
+      </div>
+
+        <div class="form-group"formGroupName="meta">
+          <label class="center-block">Description:
+            <input class="form-control" formControlName="description">
+          </label>
+        </div>
+
+        <div class="form-group" >
+
+          <div formArrayName="label" class="well well-lg" >
+            <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i" >
+              <div class="panel-heading">
+                <span>Merkelapp #{{i + 1}}</span>
+                <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="center-block">Type:
+                  <input class="form-control" formControlName="key">
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="center-block">Verdi:
+                  <input class="form-control" formControlName="value">
+
+                </label>
+                <small [hidden]="seedForm.controls.label.valid" class="text-danger">
+                  Merkelapp er påkrevd.
+                </small>
+              </div>
+            </div>
+            <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+          </div>
+        </div>
+
+        <button class="btn btn-warning" (click)="modal2.show()">Flere konfigurasjoner</button>
+
+
+      </form>
+      <br>
+
+      <button class="btn btn-primary" (click)="modal1.show()" novalidate disabled>Kontroller</button>
+      <button id="createSeed" [disabled]="!seedForm.valid" class="btn btn-info" (click)="createSeed()">Lagre</button>
+      <button class="btn btn-danger" [disabled]="!seedForm.valid" (click)="createSeedNew()">Lagre og ny</button>
+
+
+    </div>
+  </div>
+</div>
+
+<app-modal #modal1>
+  <div class="app-modal-header">
+    Kontroller
+  </div>
+
+  <div class="app-modal-body">
+    <div *ngFor="let selectedEntityItem of selectedEntityItems">
+      <h2>{{selectedEntityItem.name}}</h2>
+    </div>
+    <div class="app-modal-body">
+
+      Seeds:
+      <input type="text" [(ngModel)]="name">
+    </div>
+    <div class="app-modal-body">
+
+      Labels:
+      <input type="text" [(ngModel)]="labels">
+    </div>
+    <div class="app-modal-body">
+
+      Høstes med følgende konfigurasjon:
+      <ul>
+      <div *ngFor="let selectedCrawljobItem of selectedCrawljobItems">
+        <li>{{selectedCrawljobItem.name}}</li>
+      </div>
+      </ul>
+
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default" (click)="modal1.hide()">Lukk</button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+  </div>
+</app-modal>
+
+<app-modal #modal2>
+  <div class="app-modal-header">
+    Konfigurasjon
+  </div>
+  <div class="app-modal-body">
+    Skoill' no hatt konnfigurrert nåkka ækstra ja!
+  </div>
+  <div class="app-modal-body">
+    Snapshot
+  <input type="checkbox" name="snapshot" value="snapshot">
+  </div>
+  <div class="app-modal-body">
+    Gen text
+  <input type="checkbox" name="textgen" value="textgen" >
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default" (click)="modal2.hide()">Lukk</button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+  </div>
+</app-modal>
+
+
+
+

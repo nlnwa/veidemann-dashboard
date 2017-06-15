@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Schedules</h2>
+      <ul class="list-group">
+        <li class="list-group-item"
+            *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)" [class.active]="schedule === selectedSchedule">
+          {{schedule.meta.name}}
+
+        </li>
+      </ul>
+      <button class="btn btn-warning" (click)="createNewSchedule()">New</button>
+    </div>
+    <div class="col-md-5">
+
+      <div *ngIf="selectedSchedule">
+        <schedule-details
+          [schedule]="selectedSchedule"
+          [createHandler]="addSchedule"
+          [updateHandler]="updateSchedule"
+          [deleteHandler]="deleteSchedule">
+        </schedule-details>
+      </div>
+    </div>
+  </div>
+</div>

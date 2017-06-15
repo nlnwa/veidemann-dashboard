@@ -1,0 +1,132 @@
+<button mdl-button mdl-button-type="raised" (click)="goBack()">Tilbake</button>
+
+<div class="container">
+  <div class="content-grid mdl-grid">
+
+    <div *ngIf="seed" class="mdl-cell mdl-cell--12-col">
+
+
+      <h2>Seed Details
+      </h2>
+      <div class="switch">
+        <mdl-switch [(ngModel)]="checkbox1">Aktiv</mdl-switch>
+      </div>
+
+      <form [formGroup]="seedForm">
+        <div class="form-group">
+          <label class="center-block">Entity_id:
+            <input class="form-control" [(ngModel)]="seed.entity_id" formControlName="entity_id"/>
+          </label>
+        </div>
+
+        <div class="form-group" formGroupName="meta">
+          <label class="center-block">Seed:
+            <input class="form-control" [(ngModel)]="seed.meta.name" formControlName="name">
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="center-block">Høstejobb:
+            <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
+                                  [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
+                                  (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
+          </label>
+        </div>
+
+        <div class="form-group" formGroupName="meta">
+          <label class="center-block">Description:
+            <input class="form-control" [(ngModel)]="seed.meta.description" formControlName="description"
+                   placeholder="description"/>
+          </label>
+        </div>
+
+        <div class="form-group">
+
+          <div formArrayName="label" class="well well-lg">
+            <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+              <div class="panel-heading">
+                <span>Merkelapp #{{i + 1}}</span>
+                <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="center-block">Type:
+                  <input class="form-control" formControlName="key">
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="center-block">Verdi:
+                  <input class="form-control" formControlName="value">
+                </label>
+              </div>
+            </div>
+            <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+          </div>
+        </div>
+
+
+        <div class="well well-details"(click)="isCollapsedContent = !isCollapsedContent">
+          <ng-container *ngIf="isCollapsedContent">
+            <span class="glyphicon glyphicon-plus-sign pull-left"></span>
+             <label class="collapse-details">Flere detaljer</label>
+          </ng-container>
+          <ng-container *ngIf="!isCollapsedContent">
+          <span class="glyphicon glyphicon-minus-sign pull-left"></span>
+            <label class="collapse-details">Mindre detaljer</label>
+          </ng-container>
+        </div>
+
+
+        <div [collapse]="isCollapsedContent" id="details" class="collapse">
+
+            <div class="form-group" formGroupName="scope">
+              <label class="center-block">Scope:
+                <input *ngIf="!seed.scope" class="form-control"/>
+                <input *ngIf="seed.scope" class="form-control" [(ngModel)]="seed.scope.surt_prefix"
+                       formControlName="surt_prefix"/>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="center-block">id:
+                <input class="form-control" [(ngModel)]="seed.id" formControlName="id"/>
+              </label>
+            </div>
+            <div class="form-group" formGroupName="meta">
+              <div class="form-group" formGroupName="created">
+                <label class="center-block">Created:
+                  <input class="form-control"
+                         [ngModel]="seed.meta.created.seconds * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'"
+                         formControlName="seconds"/>
+                </label>
+              </div>
+            </div>
+            <div class="form-group" formGroupName="meta">
+              <label class="center-block">Created By:
+                <input class="form-control" [(ngModel)]="seed.meta.created_by" formControlName="created_by"/>
+              </label>
+            </div>
+            <div class="form-group" formGroupName="meta">
+              <div class="form-group" formGroupName="last_modified">
+                <label class="center-block">Last Modified:
+                  <input class="form-control"
+                         [ngModel]="seed.meta.last_modified.seconds * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'"
+                         formControlName="seconds"/>
+                </label>
+              </div>
+            </div>
+            <div class="form-group" formGroupName="meta">
+              <label class="center-block">Last Modified By:
+                <input class="form-control" [(ngModel)]="seed.meta.last_modified_by"
+                       formControlName="last_modified_by"/>
+              </label>
+          </div>
+
+        </div>
+        <button class="btn btn-success" (click)="updateSeed(seedForm)">Update</button>
+        <button class="btn btn-info" (click)="revert()" disabled>Tilbakestill</button>
+        <button class="btn btn-danger" (click)="deleteSeed(seed.id)">Delete</button>
+      </form>
+
+    </div>
+  </div>
+</div>

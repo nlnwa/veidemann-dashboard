@@ -1,0 +1,57 @@
+<div class="col-md-12">
+  <h2 *ngIf="schedule.id">Schedule Details</h2>
+  <h2 *ngIf="!schedule.id">New Schedule</h2>
+</div>
+  <div class="form-group">
+    <label class="center-block">Navn:
+      <input class="form-control" [(ngModel)]="schedule.meta.name">
+    </label>
+  </div>
+  <div class="form-group">
+    <label class="center-block">Beskrivelse:
+      <input class="form-control" [(ngModel)]="schedule.meta.description">
+    </label>
+  </div>
+
+  <!--div class="form-group">
+  <label class="center-block">cron_expression:
+    <table  class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+      <tr>
+        <th class="mdl-data-table__cell--non-numeric">Minutes</th>
+        <th class="mdl-data-table__cell--non-numeric">Hours</th>
+        <th class="mdl-data-table__cell--non-numeric">DOM</th>
+        <th class="mdl-data-table__cell--non-numeric">Month</th>
+        <th class="mdl-data-table__cell--non-numeric">DOW</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <th><input class="form-control_cron" [ngModel]="schedule.cron_expression" disabled></th>
+      </tbody>
+    </table>
+  </label>
+  </div-->
+
+<div class="form-group">
+  <label class="center-block">cron_expression
+    <img src="http://2.bp.blogspot.com/--d9V7XzD9aU/UgzRLNXIgSI/AAAAAAAAAcM/cIzUHV665v0/s1600/cron.png"  style="width:390px;height:152px;">
+    <input class="form-control" [(ngModel)]="schedule.cron_expression">
+  </label>
+</div>
+
+  <div  class="form-group">
+    <label class="center-block">Gyldig fra:
+      <input *ngIf="!schedule.valid_from" class="form-control" [(ngModel)]="schedule.valid_from">
+      <input *ngIf="schedule.valid_from" class="form-control" [(ngModel)]="schedule.valid_from.seconds">
+    </label>
+  </div>
+  <div class="form-group">
+    <label class="center-block">Gyldig til:
+      <input *ngIf="!schedule.valid_to" class="form-control" [(ngModel)]="schedule.valid_to">
+      <input *ngIf="schedule.valid_to" class="form-control" [(ngModel)]="schedule.valid_to.seconds">
+    </label>
+  </div>
+<button class="btn btn-primary" *ngIf="!schedule.id" (click)="createSchedule(schedule)" novalidate>Create</button>
+<button class="btn btn-info"  *ngIf="schedule.id" (click)="updateSchedule(schedule)">Update</button>
+<button class="btn btn-danger" *ngIf="schedule.id" (click)="deleteSchedule(schedule.id); $event.stopPropagation()">Delete</button>

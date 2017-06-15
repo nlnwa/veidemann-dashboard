@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Browserconfigs</h2>
+      <ul class="list-group">
+        <li class="list-group-item"
+            *ngFor="let browserconfig of browserconfigs" (click)="selectBrowserconfig(browserconfig)" [class.active]="browserconfig === selectedBrowserconfig">
+          {{browserconfig.meta.name}}
+
+        </li>
+      </ul>
+      <button class="btn btn-warning" (click)="createNewBrowserConfig()">New</button>
+    </div>
+    <div class="col-md-5">
+
+      <div *ngIf="selectedBrowserconfig">
+        <browserconfig-details
+          [browserconfig]="selectedBrowserconfig"
+          [createHandler]="addBrowserconfig"
+          [updateHandler]="updateBrowserconfig"
+          [deleteHandler]="deleteBrowserconfig">
+        </browserconfig-details>
+      </div>
+    </div>
+  </div>
+</div>

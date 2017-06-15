@@ -1,0 +1,92 @@
+<!-- Uses a header that contracts as the page scrolls down. -->
+
+
+<div class="demo-layout-waterfall mdl-layout mdl-js-layout">
+  <header class="mdl-layout__header mdl-layout__header--waterfall">
+    <!-- Top row, always visible -->
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Whaat</span>
+      <div class="mdl-layout-spacer"></div>
+      <!--div class="searcbox"-->
+        <div class="mdl-textfield is-dirty" data-upgraded=",MaterialTextfield">
+          <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp" data-upgraded=",MaterialButton">
+            <i class="material-icons">search</i>
+          </label>
+          <div class="mdl-textfield__expandable-holder">
+            <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
+          </div>
+        </div>
+      </div>
+      <!--/div-->
+
+    <!-- Bottom row, not visible on scroll -->
+
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation -->
+
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">
+          <a class="mdl-button mdl-js-button mdl-button--raised"  [routerLink]="['/logon']">Logg på</a>
+    </span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Aktivitet</a>
+      <a class="mdl-navigation__link" [routerLink]="['/seeds']" [routerLinkActive]="['is-active']">Legg til Seeds</a>
+      <a class="mdl-navigation__link" [routerLink]="['/crawlers']" [routerLinkActive]="['is-active']">Innhøstere</a>
+      <a class="mdl-navigation__link" [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">Statistikk</a>
+      <a class="mdl-navigation__link" [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Dokumentasjon</a>
+      <a class="mdl-navigation__link" [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Søk i alle Seeds</a>
+      <a class="mdl-navigation__link" [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Crawljobs</a>
+      <a class="mdl-navigation__link" [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Schedule</a>
+      <a class="mdl-navigation__link" [routerLink]="['/crawlconfig']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Crawlconfig</a>
+      <a class="mdl-navigation__link" [routerLink]="['/browserconfig']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Browserconfig</a>
+      <a class="mdl-navigation__link" [routerLink]="['/politenessconfig']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Politenessconfig</a>
+
+
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+      <router-outlet></router-outlet>
+      <dialog-outlet></dialog-outlet>
+
+    </div>
+  </main>
+</div>
+
+
+<!--
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+<header class="mdl-layout__header">
+  <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+  </div>
+  <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+    <h3>NANANA-NNADMIN</h3>
+  </div>
+  <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+    <div class="mdl-layout-login" id="mdl-layout-login">
+      <form class="mdl-layout-login-form" method="post" action="search..">
+        <input type="text" name="Search" placeholder="Search...">
+      </form>
+    </div>
+  </div>
+  <div class="mdl-layout__tab-bar-container">
+  <div class="mdl-layout__tab-bar mdl-color--primary-dark">
+    <a class="mdl-layout__tab" [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Aktivitet</a>
+    <a class="mdl-layout__tab" [routerLink]="['/listcrawlentities']" [routerLinkActive]="['is-active']">Legg til Seeds</a>
+    <a class="mdl-layout__tab" [routerLink]="['/users']" [routerLinkActive]="['is-active']">Innhøstere</a>
+    <a class="mdl-layout__tab" [routerLink]="['/posts']" [routerLinkActive]="['is-active']">Statistikk</a>
+    <a class="mdl-layout__tab" [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Dokumentasjon</a>
+    <a class="mdl-layout__tab" [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }" [routerLinkActive]="['is-active']">Søk i alle Seeds</a>
+  </div>
+  </div>
+</header>
+<div class="mdl-container">
+  <div class="row">
+
+    <router-outlet></router-outlet>
+  </div>
+</div>
+< routing here -->

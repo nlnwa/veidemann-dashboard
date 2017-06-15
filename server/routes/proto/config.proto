@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package broprox;
+option java_package = "no.nb.nna.broprox.model";
+//option java_multiple_files = true;
+option java_outer_classname = "ConfigProto";
+
+import "timestamp.proto";
+
+message Meta {
+  string name = 1;
+  string description = 2;
+  google.protobuf.Timestamp created = 3;
+  string created_by = 4;
+  google.protobuf.Timestamp last_modified = 5;
+  string last_modified_by = 6;
+  repeated Label label = 7;
+}
+
+message Selector {
+  repeated Label label = 1;
+}
+
+message Label {
+  string key = 1;
+  string value = 2;
+}
+
+// A crawl entity (might be an organisation with one or more seeds)
+message CrawlEntity {
+  string id = 1;
+  Meta meta = 2;
+}
+
+message Seed {
+  string id = 1;
+  Meta meta = 2;
+  string entity_id = 3;
+  CrawlScope scope = 5;
+  repeated string job_id = 6;
+  bool disabled = 18;
+}
+
+message CrawlJob {
+  string id = 1;
+  Meta meta = 2;
+  oneof scedule_config_or_id {
+    string schedule_id = 3;
+    CrawlScheduleConfig schedule = 16;
+    Selector schedule_selector = 30;
+  }
+  CrawlLimitsConfig limits = 4;
+  oneof crawl_config_or_id {
+    string crawl_config_id = 5;
+    CrawlConfig crawl_config = 17;
+    Selector crawl_config_selector = 31;
+  }
+  bool disabled = 18;
+}
+
+message CrawlConfig {
+  string id = 1;
+  Meta meta = 2;
+  oneof browser_config_or_id {
+    string browser_config_id = 7;
+    BrowserConfig browser_config = 16;
+    Selector browser_config_selector = 17;
+  }
+  oneof politeness_or_id {
+    string politeness_id = 8;
+    PolitenessConfig politeness = 18;
+    Selector politeness_selector = 19;
+  }
+  ExtraConfig extra = 9;
+  int32 minimum_dns_ttl_s = 10; // Not implemented
+  bool depth_first = 20;
+}
+
+message CrawlScheduleConfig {
+  string id = 1;
+  Meta meta = 2;
+  string cron_expression = 3;
+  google.protobuf.Timestamp valid_from = 4;
+  google.protobuf.Timestamp valid_to = 5;
+}
+
+message CrawlScope {
+  string surt_prefix = 1;
+}
+
+message CrawlLimitsConfig {
+  int32 depth = 1; // Not implemented
+  int64 max_duration_s = 2; // Not implemented
+  int64 max_bytes = 3; // Not implemented
+}
+
+message BrowserConfig {
+  string id = 1;
+  Meta meta = 2;
+  string user_agent = 3;
+  int32 window_width = 4;
+  int32 window_height = 5;
+  int64 page_load_timeout_ms = 6;
+  Selector script_selector = 7;
+  repeated string script_id = 8;
+  map<string, string> headers = 16;
+  int64 sleep_after_pageload_ms = 17;
+}
+
+message PolitenessConfig {
+  enum RobotsPolicy {
+    OBEY_ROBOTS = 0;
+    IGNORE_ROBOTS = 1;
+    CUSTOM_ROBOTS = 2;
+  }
+  string id = 1;
+  Meta meta = 2;
+  RobotsPolicy robots_policy = 3;
+  int32 minimum_robots_validity_duration_s = 11;
+  string custom_robots = 20;
+  int64 min_time_between_page_load_ms = 4;
+}
+
+message ExtraConfig {
+  bool extract_text = 5; // Not implemented
+  bool create_snapshot = 6;
+}
+
+// Message containing a javascript to be run in a browser
+message BrowserScript {
+  enum Type {
+    UNDEFINED = 0;
+    BEHAVIOR = 1;
+    EXTRACT_OUTLINKS = 2;
+    LOGIN = 3;
+  }
+
+  string id = 1;
+  Meta meta = 2;
+  Type type = 3;
+  string script = 4;
+  string url_regexp = 5;
+  map<string, string> parameters = 6;
+}

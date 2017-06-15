@@ -1,0 +1,37 @@
+.search-result{
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid gray;
+  border-top: 1px solid gray;
+  width:200px;
+  height: 22px;
+  padding: 2px;
+  background-color: white;
+  cursor: pointer;
+}
+.search-result:hover {
+  color: #000000;
+  background-color: #ffa31a;
+}
+#search-box{
+  width: 400px;
+  height: 40px;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.mdl-data-table {
+  margin-top: 10px;
+  width: 860px;
+  border-bottom: 2px;
+}
+
+.mdl-data-table tbody {
+  border-top: black;
+  border-top: 2px;
+}
+
+.mdl-data-table th {
+  width: 214px;
+  text-align: left;
+  border-top: 2px;
+}

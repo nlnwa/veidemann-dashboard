@@ -1,0 +1,28 @@
+<div class="container">
+
+<h3 *ngIf="isLoading"><i>Loading heroes ... </i></h3>
+<h3 *ngIf="!isLoading">Select a hero:</h3>
+
+<nav>
+  <button (click)="getHeroes()" class="btn btn-primary">Refresh</button>
+  <a *ngFor="let hero of heroes" (click)="select(hero)">
+    {{hero.name}}
+  </a>
+
+</nav>
+  <div class="col-md-5 col-md-offset-2">
+
+<div *ngIf="selectedHero">
+  <hr>
+  <h2>Hero Detail</h2>
+  <h3>Editing: {{selectedHero.name}}</h3>
+  <hero-detail [hero]="selectedHero"></hero-detail>
+</div>
+</div>
+</div>
+
+<!--
+Copyright 2017 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

@@ -1,0 +1,61 @@
+<div class="col-md-12">
+  <h2 *ngIf="browserconfig.id">Browserconfig Details</h2>
+  <h2 *ngIf="!browserconfig.id">New Browserconfig</h2>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Navn:
+    <input class="form-control" [(ngModel)]="browserconfig.meta.name">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Beskrivelse:
+    <input class="form-control" [(ngModel)]="browserconfig.meta.description">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">User Agent:
+    <input class="form-control" [(ngModel)]="browserconfig.user_agent">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Window width
+    <input class="form-control" type="number" [(ngModel)]="browserconfig.window_width">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Window height:
+    <input class="form-control" type="number" [(ngModel)]="browserconfig.window_height">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Page load timeout in ms:
+    <input class="form-control" [(ngModel)]="browserconfig.page_load_timeout_ms">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Script id:
+    <input class="form-control" [(ngModel)]="browserconfig.script_id">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Headers:
+    <input class="form-control" [(ngModel)]="browserconfig.headers">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">sleep_after_pageload_ms:
+    <input class="form-control" [(ngModel)]="browserconfig.sleep_after_pageload_ms">
+  </label>
+</div>
+
+
+
+<button class="btn btn-primary" *ngIf="!browserconfig.id" (click)="createBrowserConfig(browserconfig)" novalidate>Create</button>
+<button class="btn btn-info"  *ngIf="browserconfig.id" (click)="updateBrowserConfig(browserconfig)">Update</button>
+<button class="btn btn-danger" *ngIf="browserconfig.id" (click)="deleteBrowserConfig(browserconfig.id); $event.stopPropagation()">Delete</button>
+
+<pre>{{browserconfig | json}}</pre>

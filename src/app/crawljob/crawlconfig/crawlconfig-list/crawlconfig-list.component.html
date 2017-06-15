@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Crawlconfigs</h2>
+      <ul class="list-group">
+        <li class="list-group-item"
+            *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)" [class.active]="crawlconfig === selectedCrawlconfig">
+          {{crawlconfig.meta.name}}
+
+        </li>
+      </ul>
+      <button class="btn btn-warning" (click)="createNewCrawlConfig()">New</button>
+    </div>
+    <div class="col-md-5">
+
+      <div *ngIf="selectedCrawlconfig">
+        <crawlconfig-details
+          [crawlconfig]="selectedCrawlconfig"
+          [createHandler]="addCrawlconfig"
+          [updateHandler]="updateCrawlconfig"
+          [deleteHandler]="deleteCrawlconfig">
+        </crawlconfig-details>
+      </div>
+    </div>
+  </div>
+</div>
