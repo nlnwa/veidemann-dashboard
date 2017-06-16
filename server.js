@@ -34,6 +34,8 @@ app.use('/api', api);
  */
 const port = process.env.PORT || '3010';
 app.set('port', port);
+const host = process.env.HOST || '0.0.0.0';
+app.set('host', '0.0.0.0');
 
 /**
  * Create HTTP server.
@@ -47,4 +49,4 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port, () => console.log(`API running on localhost:${port}`));
+server.listen(port, host, () => console.log(`API running on ${host}:${port}`));
