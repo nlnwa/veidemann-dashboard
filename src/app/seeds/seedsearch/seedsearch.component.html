@@ -42,9 +42,6 @@
         <tr class="search-result" *ngFor="let seed of seeds | async; let i=index" (click)="selectSeed(seed)">
           <ng-container *ngIf="i<12" >
           <th>{{seed.meta.name}}</th>
-          <th *ngIf="!seed.meta.label?.length > 0">
-            Ingen merkelapp
-          </th>
           <th *ngIf="seed.meta.label?.length > 0 ">
             <ng-container *ngFor="let see of seed.meta.label; let i=index"> {{see.value}} </ng-container>
           </th>

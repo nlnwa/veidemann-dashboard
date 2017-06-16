@@ -16,12 +16,7 @@
     </label>
   </div>
 
-  <button class="btn"(click)="isCollapsedContentlimits = !isCollapsedContentlimits">Begrensinger
-  </button>
-  <br>
 
-
-  <div [collapse]="isCollapsedContentlimits" class="collapse">
     <div class="form-group" formGroupName="limits">
       <label class="center-block">Dybde:
         <input class="form-control" [(ngModel)]="crawljob.limits.depth" formControlName="depth">
@@ -59,10 +54,9 @@
     </label>
   </div>
 
-</div>
   <button class="btn btn-success" (click)="updateCrawljob(crawljobForm)">Update</button>
-  <button class="btn btn-info" (click)="revert()" disabled>Tilbakestill</button>
-  <button class="btn btn-danger" (click)="deleteCrawljob(crawljob.id)">Delete</button>
+  <!--button class="btn btn-info" (click)="revert()" disabled>Tilbakestill</button-->
+  <!--button class="btn btn-danger" (click)="deleteCrawljob(crawljob.id)">Delete</button-->
 </form>
 
 <pre>{{crawljobForm.value | json}}</pre>

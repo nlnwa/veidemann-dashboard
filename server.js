@@ -35,7 +35,7 @@ app.use('/api', api);
 const port = process.env.PORT || '3010';
 app.set('port', port);
 const host = process.env.HOST || '0.0.0.0';
-app.set('host', '0.0.0.0');
+app.set('host', host);
 
 /**
  * Create HTTP server.

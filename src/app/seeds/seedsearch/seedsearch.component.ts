@@ -18,7 +18,7 @@ import {FormBuilder} from "@angular/forms";
   styleUrls: ['./seedsearch.component.css']
 })
 export class SeedSearchComponent implements OnInit {
-  seeds: Observable<Seed[]>;
+  seed: Observable<Seed[]>;
   selectedSeed: Seed;
 
 
@@ -41,7 +41,7 @@ export class SeedSearchComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.seeds = this.searchTerms
+    this.seed = this.searchTerms
     .debounceTime(300)        // wait 300ms after each keystroke before considering the term
     .distinctUntilChanged()   // ignore if next search term is same as previous
     .switchMap(term => term   // switch to new observable each time the term changes

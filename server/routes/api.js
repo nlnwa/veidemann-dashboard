@@ -20,12 +20,12 @@ console.warn('gRPC: Using: ' + process.env.grpc_controller);
 client = new grpc_controller.Controller(process.env.grpc_controller, grpc.credentials.createInsecure());
 
 
-r = require('rethinkdbdash')({
+/*r = require('rethinkdbdash')({
   port: process.env.rethink_port,
   host: process.env.rethink_host,
   db: process.env.rethink_db
 });
-
+*/
 
 
 const accessLevel = function () {

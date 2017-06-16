@@ -70,13 +70,12 @@
           </div>
         </div>
 
-        <button class="btn btn-warning" (click)="modal2.show()">Flere konfigurasjoner</button>
 
 
       </form>
       <br>
 
-      <button class="btn btn-primary" (click)="modal1.show()" novalidate disabled>Kontroller</button>
+
       <button id="createSeed" [disabled]="!seedForm.valid" class="btn btn-info" (click)="createSeed()">Lagre</button>
       <button class="btn btn-danger" [disabled]="!seedForm.valid" (click)="createSeedNew()">Lagre og ny</button>
 
@@ -85,6 +84,9 @@
   </div>
 </div>
 
+<!--
+<button class="btn btn-warning" (click)="modal2.show()">Flere konfigurasjoner</button>
+<button class="btn btn-primary" (click)="modal1.show()" novalidate disabled>Kontroller</button>
 <app-modal #modal1>
   <div class="app-modal-header">
     Kontroller
@@ -140,7 +142,7 @@
     <button type="button" class="btn btn-default" (click)="modal2.hide()">Lukk</button>
     <button type="button" class="btn btn-primary">Save changes</button>
   </div>
-</app-modal>
+</app-modal!-->
 
 
 
