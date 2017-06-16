@@ -70,9 +70,9 @@ router.get('/test', accessLevel('admin', 'kurator', 'potet'), (req, res) => {
 });
 
 /* GET api listing. */
-/* GET api listing. */
-router.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/dist/index.html'));
+
+router.get('/', (req, res) => {
+  res.send("api works!");
 });
 
 router.get('/searchentities/name=:name', entities.searchCrawlEntities);
