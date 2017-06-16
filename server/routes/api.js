@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const grpc = require('grpc');
 const grpc_controller = grpc.load(__dirname + '/proto/controller.proto').broprox;
-
 const seeds = require('./seeds');
 const entities = require('./entities');
 const browserscripts = require('./browserscript');
@@ -11,8 +10,7 @@ const crawlconfigs = require('./crawlconfig');
 const crawljobs = require('./crawljob');
 const schedule = require('./schedule');
 const politenessconfig = require('./politenessconfig');
-
-
+const path = require('path');
 const users = require('./users');
 
 
@@ -72,12 +70,10 @@ router.get('/test', accessLevel('admin', 'kurator', 'potet'), (req, res) => {
 });
 
 /* GET api listing. */
-router.get('/', (req, res) => {
-  res.send('api works');
+/* GET api listing. */
+router.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
-
-
-
 
 router.get('/searchentities/name=:name', entities.searchCrawlEntities);
 router.get('/entities', entities.listCrawlEntities);
