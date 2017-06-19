@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
 import {Seed} from "./seed";
@@ -7,9 +7,10 @@ import {Seed} from "./seed";
 export class SeedsService {
   private seedsUrl = '/api/seeds';
   private entitiessUrl = '/api/entities';
-  private crawljobUrl = '/api/crawljobs';
+  private crawljobUrl = '/api/crawljob';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
   getAllSeeds() {
     return this.http.get(this.seedsUrl)
@@ -30,8 +31,8 @@ export class SeedsService {
   }
 
   getEntities() {
-  return this.http.get(this.entitiessUrl)
-  .map(res => res.json());
+    return this.http.get(this.entitiessUrl)
+      .map(res => res.json());
   }
 
   getEntity(entity) {

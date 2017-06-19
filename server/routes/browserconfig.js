@@ -3,30 +3,61 @@
  */
 exports.listBrowserConfig = (req, res) => {
   client.listBrowserConfigs({}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
+
 };
 
 exports.getBrowserConfig = (req, res) => {
   client.listBrowserConfigs({id: req.params.id}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
 };
 
 exports.saveBrowserConfig = (req, res) => {
-  console.log(req.body);
   client.saveBrowserConfig(req.body, function (err, response) {
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200);
+    }
   })
 };
 
 exports.updateBrowserConfig = (req, res) => {
   client.saveBrowserConfig(req.body, function (err, response) {
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200);
+    }
   })
 };
 
 exports.deleteBrowserConfig = (req, res) => {
   client.deleteBrowserConfig({id: req.params.id}, function (err, response) {
-  console.log(err);
-  console.log('deleting: '+req.params.id);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+
+    }
   })
 };

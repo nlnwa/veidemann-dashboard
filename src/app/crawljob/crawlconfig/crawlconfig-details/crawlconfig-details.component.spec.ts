@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CrawlconfigDetailsComponent } from './crawlconfig-details.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {CrawlconfigDetailsComponent} from "./crawlconfig-details.component";
 
 describe('CrawlconfigDetailsComponent', () => {
   let component: CrawlconfigDetailsComponent;
@@ -8,9 +7,9 @@ describe('CrawlconfigDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawlconfigDetailsComponent ]
+      declarations: [CrawlconfigDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

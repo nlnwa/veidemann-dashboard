@@ -13,61 +13,10 @@ const politenessconfig = require('./politenessconfig');
 const path = require('path');
 const users = require('./users');
 
-
 require('dotenv').config();
 
 console.warn('gRPC: Using: ' + process.env.grpc_controller);
 client = new grpc_controller.Controller(process.env.grpc_controller, grpc.credentials.createInsecure());
-
-
-/*r = require('rethinkdbdash')({
-  port: process.env.rethink_port,
-  host: process.env.rethink_host,
-  db: process.env.rethink_db
-});
-*/
-
-
-const accessLevel = function () {
-  const accesslvls = arguments;
-  return function (req, res, next) {
-    r.table('users')
-      .filter(r.row('name').eq('kristiana')) //req.users.sAMAccountName
-      .run()
-      .then(function (response) {
-        for (x = 0; x < accesslvls.length; x++) {
-          const accesslvl = accesslvls[x];
-          for (var i = 0, l = response.length; i < l; i++) {
-            const group = (response[i]['groups']);
-            for (var a = 0, ln = group.length; a < ln; a++) {
-              if (group[a] == accesslvl) {
-                return next();
-              }
-            }
-          }
-        }
-        res.send('Ikke tilgang!');
-      });
-  }
-};
-
-//Client side check if users is authenticated
-router.get('/user_data', function (req, res) {
-  if (req.user === undefined) {
-    // The users is not logged in
-    res.json({});
-  } else {
-    res.json({
-      name: req.user.displayName,
-      username: req.user.sAMAccountName,
-      email: req.user.mail,
-    });
-  }
-});
-
-router.get('/test', accessLevel('admin', 'kurator', 'potet'), (req, res) => {
-  res.send("ok");
-});
 
 /* GET api listing. */
 
@@ -79,7 +28,7 @@ router.get('/searchentities/name=:name', entities.searchCrawlEntities);
 router.get('/entities', entities.listCrawlEntities);
 router.post('/entities', entities.saveCrawlEntities);
 router.get('/entities/:id', entities.getCrawlEntities);
-router.put('/entities/:id',entities.updateCrawlEntities);
+router.put('/entities/:id', entities.updateCrawlEntities);
 router.delete('/entities/:id', entities.deleteCrawlEntities);
 
 router.get('/users', users.listUser);
@@ -100,10 +49,10 @@ router.get('/browserscript/:id', browserscripts.getBrowserScript);
 router.put('/browserscript/:id', browserscripts.updateBrowserScript);
 router.delete('/browserscript/:id', browserscripts.deleteBrowserScript);
 
-router.get('/crawljobs', crawljobs.listCrawlJobs);
+router.get('/crawljob', crawljobs.listCrawlJobs);
 router.post('/crawljob', crawljobs.saveCrawlJob);
-router.get('/crawljobs/:id', crawljobs.getCrawlJob);
-router.put('/crawljobs/:id', crawljobs.updateCrawlJob);
+router.get('/crawljob/:id', crawljobs.getCrawlJob);
+router.put('/crawljob/:id', crawljobs.updateCrawlJob);
 router.delete('/crawljob/:id', crawljobs.deleteCrawlJob);
 
 router.get('/crawlconfig', crawlconfigs.listCrawlConfigs);
@@ -130,6 +79,5 @@ router.post('/seeds', seeds.saveSeed);
 router.get('/seeds/:id', seeds.getSeed);
 router.put('/seeds/:id', seeds.updateSeed);
 router.delete('/seeds/:id', seeds.deleteSeed);
-
 
 module.exports = router;

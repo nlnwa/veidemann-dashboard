@@ -1,8 +1,7 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
-import { StatisticsService } from './statistics.service';
+import {Component, OnInit} from "@angular/core";
+import {StatisticsService} from "./statistics.service";
 import {Seed} from "../seeds/seed";
-import { Entity } from "../../../crap/entities/entity"
-
+import {Entity} from "../models/entity";
 import {FormBuilder} from "@angular/forms";
 
 @Component({

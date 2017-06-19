@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PolitenessconfigDetailsComponent } from './politenessconfig-details.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {PolitenessconfigDetailsComponent} from "./politenessconfig-details.component";
 
 describe('PolitenessconfigDetailsComponent', () => {
   let component: PolitenessconfigDetailsComponent;
@@ -8,9 +7,9 @@ describe('PolitenessconfigDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PolitenessconfigDetailsComponent ]
+      declarations: [PolitenessconfigDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

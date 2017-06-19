@@ -3,32 +3,58 @@
  */
 exports.listCrawlJobs = (req, res) => {
   client.listCrawlJobs({}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
 };
 
 exports.getCrawlJob = (req, res) => {
   client.listCrawlJobs({id: req.params.id}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
 };
 
 exports.saveCrawlJob = (req, res) => {
   client.saveCrawlJob(req.body, function (err, response) {
-    res.status(201).json(response);
-    console.log('Saveentity: ', response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(201).json(response);
+    }
   })
 };
 
 exports.updateCrawlJob = (req, res) => {
-    client.saveCrawlJob(req.body, function (err, response) {
-   //   res.status(200).json(response);
-      console.log('Saveentity: ', response);
+  client.saveCrawlJob(req.body, function (err, response) {
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+    }
   })
 };
 
 exports.deleteCrawlJob = (req, res) => {
-  //client.saveBroswerScript({id: req.params.id}, function (err, response) {
-  console.log('deleting: '+req.params.id);
-  //})
+  client.deleteCrawlJob({id: req.params.id}, function (err, response) {
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+    }
+  })
 };

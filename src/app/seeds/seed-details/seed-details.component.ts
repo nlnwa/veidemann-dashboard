@@ -16,7 +16,7 @@ import {MdlSnackbarService} from "angular2-mdl";
 
 
 export class SeedDetailComponent {
-  @Input() seed : Seed;
+  @Input() seed: Seed;
   seedForm: FormGroup;
   @Input()
   createHandler: Function;
@@ -26,20 +26,18 @@ export class SeedDetailComponent {
   deleteHandler: Function;
 
   //collapse content
-  public isCollapsedContent:boolean = true;
+  public isCollapsedContent: boolean = true;
 
 
   dropdownCrawljobSettings = {};
   selectedCrawljobItems = [];
   crawljobList: any = [];
 
-  constructor(
-    private seedService: SeedsService,
-    private router: Router,
-    private fb: FormBuilder,
-    private location: Location,
-    private mdlSnackbarService: MdlSnackbarService,
-  ) {
+  constructor(private seedService: SeedsService,
+              private router: Router,
+              private fb: FormBuilder,
+              private location: Location,
+              private mdlSnackbarService: MdlSnackbarService,) {
     this.router = router;
     this.createForm();
     this.getJobs();
@@ -50,12 +48,13 @@ export class SeedDetailComponent {
       id: {value: '', disabled: true},
       entity_id: {value: '', disabled: true},
       job_id: '',
-      scope: this.fb.group ({
-        surt_prefix: ''}),
-      meta: this.fb.group ({
+      scope: this.fb.group({
+        surt_prefix: ''
+      }),
+      meta: this.fb.group({
         name: '',
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true, }}),
+        created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
@@ -66,20 +65,20 @@ export class SeedDetailComponent {
 
   ngOnChanges() {
     this.seedForm.reset({
-    id: this.seed.id,
-    entity_id: this.seed.entity_id,
-    scope: this.fb.group({
-      surt_prefix: this.seed.scope.surt_prefix,
-    }),
-      meta: this.fb.group ({
+      id: this.seed.id,
+      entity_id: this.seed.entity_id,
+      scope: this.fb.group({
+        surt_prefix: this.seed.scope.surt_prefix,
+      }),
+      meta: this.fb.group({
         name: this.seed.meta.name,
         description: this.seed.meta.description,
         created: this.seed.meta.created,
         created_by: this.seed.meta.created_by,
         last_modified: this.seed.meta.last_modified,
         last_modified_by: this.seed.meta.last_modified_by,
-    }),
-  });
+      }),
+    });
 
     this.setLabel(this.seed.meta.label);
     for (let i of this.seed.job_id) {
@@ -96,7 +95,7 @@ export class SeedDetailComponent {
   };
 
 
-  getJobs(){
+  getJobs() {
     this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
         this.crawljobList.push({id: key.id, itemName: key.meta.name})
@@ -105,9 +104,9 @@ export class SeedDetailComponent {
 
     this.dropdownCrawljobSettings = {
       singleSelection: false,
-      text:"Velg høstejobb",
-      selectAllText:'Select All',
-      unSelectAllText:'UnSelect All',
+      text: "Velg høstejobb",
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
       enableSearchFilter: true
     };
   }
@@ -137,20 +136,20 @@ export class SeedDetailComponent {
 
 
   /*updateSchedule(schedule: Schedule): void {
-    this.crawljobService.updateSchedule(this.schedule).then((updatedSchedule: Schedule) => {
-      this.updateHandler(updatedSchedule);
-      //   this.ngOnChanges();
-    });
-  }*/
+   this.crawljobService.updateSchedule(this.schedule).then((updatedSchedule: Schedule) => {
+   this.updateHandler(updatedSchedule);
+   //   this.ngOnChanges();
+   });
+   }*/
 
   updateSeed(seedForm): void {
-    this.seed  = this.prepareSaveSeed();
-   // console.log(this.seed);
+    this.seed = this.prepareSaveSeed();
+    // console.log(this.seed);
     //console.log(seedForm.getRawValue());
     this.seedService.updateSeed(this.seed);
     this.mdlSnackbarService.showSnackbar(
       {
-        message:'Lagret',
+        message: 'Lagret',
       });
   }
 
@@ -159,12 +158,14 @@ export class SeedDetailComponent {
     this.seedService.deleteSeed(seedId);
     this.mdlSnackbarService.showSnackbar(
       {
-        message:'Slettet',
+        message: 'Slettet',
       });
     this.goBack()
   }
 
-  revert() {this.ngOnChanges(); }
+  revert() {
+    this.ngOnChanges();
+  }
 
   prepareSaveSeed(): Seed {
     const formModel = this.seedForm.value;
@@ -187,7 +188,7 @@ export class SeedDetailComponent {
       uri: formModel.uri as string,
       scope: {surt_prefix: formModel.scope.surt_prefix as string},
       job_id: job_idlist,
-      meta: {
+      meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
         created: this.seed.meta.created,
@@ -199,19 +200,25 @@ export class SeedDetailComponent {
     };
     return saveSeed;
   }
-  onItemSelect(item){
+
+  onItemSelect(item) {
     console.log('Selected Item:');
     console.log(item.id);
   }
-  OnItemDeSelect(item){
+
+  OnItemDeSelect(item) {
     console.log('De-Selected Item:');
     console.log(item);
   }
 
 
   goBack(): void {
-    setTimeout(()=> {this.router.navigate(['/']);},0);
-    setTimeout(()=> {this.router.navigate(['/seedsearch']);},0);
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 0);
+    setTimeout(() => {
+      this.router.navigate(['/seedsearch']);
+    }, 0);
   }
 
 }

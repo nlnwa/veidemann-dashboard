@@ -4,7 +4,8 @@
       <h2>Browserconfigs</h2>
       <ul class="list-group">
         <li class="list-group-item"
-            *ngFor="let browserconfig of browserconfigs" (click)="selectBrowserconfig(browserconfig)" [class.active]="browserconfig === selectedBrowserconfig">
+            *ngFor="let browserconfig of browserconfigs" (click)="selectBrowserconfig(browserconfig)"
+            [class.active]="browserconfig === selectedBrowserconfig">
           {{browserconfig.meta.name}}
 
         </li>

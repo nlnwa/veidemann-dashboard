@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {Schedule} from "../../../models/schedule";
 import {CrawljobService} from "../../crawljob.service";
 
@@ -11,9 +11,15 @@ export class ScheduleComponent implements OnInit {
 
   schedules: Schedule[];
   selectedSchedule: Schedule;
-  constructor(private crawljobService: CrawljobService) { }
 
-  ngOnInit() {this.crawljobService.getAllSchedules().subscribe(schedules => {this.schedules = schedules.value})  }
+  constructor(private crawljobService: CrawljobService) {
+  }
+
+  ngOnInit() {
+    this.crawljobService.getAllSchedules().subscribe(schedules => {
+      this.schedules = schedules.value
+    })
+  }
 
   private getIndexOfEntity = (scheduleId: String) => {
     return this.schedules.findIndex((schedule) => {
@@ -28,7 +34,7 @@ export class ScheduleComponent implements OnInit {
 
   createNewSchedule() {
     const schedule: Schedule = {
-      meta:{
+      meta: {
         name: '',
         description: '',
       },
@@ -37,7 +43,7 @@ export class ScheduleComponent implements OnInit {
         seconds: 0,
       },
       valid_to: {
-        seconds:0,
+        seconds: 0,
       },
     };
     // By default, a newly-created  will have the selected state.
@@ -45,29 +51,28 @@ export class ScheduleComponent implements OnInit {
   }
 
   deleteSchedule = (scheduleId: String) => {
-   const idx = this.getIndexOfEntity(scheduleId);
-   if (idx !== -1) {
-   this.schedules.splice(idx, 1);
-   this.selectSchedule(null);
-   }
-   return this.schedules;
-   };
+    const idx = this.getIndexOfEntity(scheduleId);
+    if (idx !== -1) {
+      this.schedules.splice(idx, 1);
+      this.selectSchedule(null);
+    }
+    return this.schedules;
+  };
 
-   addSchedule = (schedule: Schedule) => {
-   this.schedules.push(schedule);
-   this.selectSchedule(schedule);
-   return this.schedules;
-   };
+  addSchedule = (schedule: Schedule) => {
+    this.schedules.push(schedule);
+    this.selectSchedule(schedule);
+    return this.schedules;
+  };
 
-   updateSchedule = (schedule: Schedule) => {
-   const idx = this.getIndexOfEntity(schedule.id);
-   if (idx !== -1) {
-   this.schedules[idx] = schedule;
-   this.selectSchedule(schedule);
-   }
-   return this.schedules;
-   }
-
+  updateSchedule = (schedule: Schedule) => {
+    const idx = this.getIndexOfEntity(schedule.id);
+    if (idx !== -1) {
+      this.schedules[idx] = schedule;
+      this.selectSchedule(schedule);
+    }
+    return this.schedules;
+  }
 
 
 }

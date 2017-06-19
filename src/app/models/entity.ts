@@ -1,12 +1,11 @@
-
-export class Entity {
-  value: Value[];
+export class Entities {
+  Entity: Entity[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Value {
+export class Entity {
   id?: string;
   meta: Meta;
   entity_id: string;

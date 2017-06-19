@@ -6,51 +6,51 @@
 </div>
 <div class="col-md-12">
 
-<form [formGroup]="userForm">
+  <form [formGroup]="userForm">
 
 
-  <div class="form-group">
-    <label class="center-block">Name:
-      <input class="form-control" [(ngModel)]="user.name" formControlName="name">
-    </label>
-  </div>
-  <div class="form-group">
-    <label class="center-block">
-      <input class="form-control" [(ngModel)]="user.id" formControlName="id" hidden/>
-    </label>
-  </div>
-  <!-- The repeated address template -->
-
-  <div class="form-group">
-
-  <div formArrayName="roles" class="well well-lg">
-    <div *ngFor="let role of roles.controls; let i=index" [formGroupName]="i" >
-      <div class="panel-heading">
-      <span>Role #{{i + 1}}</span>
-      <span class="glyphicon glyphicon-remove pull-right" *ngIf="roles.controls.length > 1" (click)="removeRole(i)"></span>
-      </div>
-
-      <div class="form-group">
-        <label class="center-block">Role:
-          <input class="form-control" formControlName="role">
-        </label>
-
-      </div>
+    <div class="form-group">
+      <label class="center-block">Name:
+        <input class="form-control" [(ngModel)]="user.name" formControlName="name">
+      </label>
     </div>
-    <button class="btn btn-success" (click)="addRole()" type="button">Add a Role</button>
-  </div>
+    <div class="form-group">
+      <label class="center-block">
+        <input class="form-control" [(ngModel)]="user.id" formControlName="id" hidden/>
+      </label>
+    </div>
+    <!-- The repeated address template -->
+
+    <div class="form-group">
+
+      <div formArrayName="roles" class="well well-lg">
+        <div *ngFor="let role of roles.controls; let i=index" [formGroupName]="i">
+          <div class="panel-heading">
+            <span>Role #{{i + 1}}</span>
+            <span class="glyphicon glyphicon-remove pull-right" *ngIf="roles.controls.length > 1"
+                  (click)="removeRole(i)"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="center-block">Role:
+              <input class="form-control" formControlName="role">
+            </label>
+
+          </div>
+        </div>
+        <button class="btn btn-success" (click)="addRole()" type="button">Add a Role</button>
+      </div>
     </div>
 
     <br>
     <!-- End of the repeated address template -->
 
 
+    {{userForm.value | json}}
 
-  {{userForm.value | json}}
-
-</form>
+  </form>
   <button class="btn btn-primary" *ngIf="!user.id" (click)="createUser(userForm.value)" novalidate>Create</button>
-  <button class="btn btn-info"  *ngIf="user.id" (click)="updateUser(userForm)">Update</button>
+  <button class="btn btn-info" *ngIf="user.id" (click)="updateUser(userForm)">Update</button>
   <button class="btn btn-danger" *ngIf="user.id" (click)="deleteUser(user.id); $event.stopPropagation()">Delete</button>
 
 </div>

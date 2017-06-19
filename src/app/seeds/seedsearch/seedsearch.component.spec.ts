@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SeedsearchComponent } from './seedsearch.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {SeedsearchComponent} from "./seedsearch.component";
 
 describe('SeedsearchComponent', () => {
   let component: SeedsearchComponent;
@@ -8,9 +7,9 @@ describe('SeedsearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SeedsearchComponent ]
+      declarations: [SeedsearchComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -11,45 +11,70 @@ import "empty.proto";
 // Service for communicating with controller.
 service Controller {
   // List a set of entities
-  rpc ListCrawlEntities (ListRequest) returns (CrawlEntityListReply) {}
-  rpc SaveEntity (CrawlEntity) returns (CrawlEntity) {}
-  rpc DeleteEntity (CrawlEntity) returns (google.protobuf.Empty) {}
+  rpc ListCrawlEntities (ListRequest) returns (CrawlEntityListReply) {
+  }
+  rpc SaveEntity (CrawlEntity) returns (CrawlEntity) {
+  }
+  rpc DeleteEntity (CrawlEntity) returns (google.protobuf.Empty) {
+  }
 
   // List a set of seeds
-  rpc ListSeeds (SeedListRequest) returns (SeedListReply) {}
-  rpc SaveSeed (Seed) returns (Seed) {}
-  rpc DeleteSeed (Seed) returns (google.protobuf.Empty) {}
+  rpc ListSeeds (SeedListRequest) returns (SeedListReply) {
+  }
+  rpc SaveSeed (Seed) returns (Seed) {
+  }
+  rpc DeleteSeed (Seed) returns (google.protobuf.Empty) {
+  }
 
   // List a set of crawl jobs
-  rpc ListCrawlJobs (CrawlJobListRequest) returns (CrawlJobListReply) {}
-  rpc SaveCrawlJob (CrawlJob) returns (CrawlJob) {}
-  rpc DeleteCrawlJob (CrawlJob) returns (google.protobuf.Empty) {}
+  rpc ListCrawlJobs (CrawlJobListRequest) returns (CrawlJobListReply) {
+  }
+  rpc SaveCrawlJob (CrawlJob) returns (CrawlJob) {
+  }
+  rpc DeleteCrawlJob (CrawlJob) returns (google.protobuf.Empty) {
+  }
 
   // List a set of crawl configs
-  rpc ListCrawlConfigs (ListRequest) returns (CrawlConfigListReply) {}
-  rpc SaveCrawlConfig (CrawlConfig) returns (CrawlConfig) {}
-  rpc DeleteCrawlConfig (CrawlConfig) returns (google.protobuf.Empty) {}
+  rpc ListCrawlConfigs (ListRequest) returns (CrawlConfigListReply) {
+  }
+  rpc SaveCrawlConfig (CrawlConfig) returns (CrawlConfig) {
+  }
+  rpc DeleteCrawlConfig (CrawlConfig) returns (google.protobuf.Empty) {
+  }
 
   // List a set of crawl schedule configs
-  rpc ListCrawlScheduleConfigs (ListRequest) returns (CrawlScheduleConfigListReply) {}
-  rpc SaveCrawlScheduleConfig (CrawlScheduleConfig) returns (CrawlScheduleConfig) {}
-  rpc DeleteCrawlScheduleConfig (CrawlScheduleConfig) returns (google.protobuf.Empty) {}
+  rpc ListCrawlScheduleConfigs (ListRequest) returns (CrawlScheduleConfigListReply) {
+  }
+  rpc SaveCrawlScheduleConfig (CrawlScheduleConfig) returns (CrawlScheduleConfig) {
+  }
+  rpc DeleteCrawlScheduleConfig (CrawlScheduleConfig) returns (google.protobuf.Empty) {
+  }
 
   // List a set of politeness configs
-  rpc ListPolitenessConfigs (ListRequest) returns (PolitenessConfigListReply) {}
-  rpc SavePolitenessConfig (PolitenessConfig) returns (PolitenessConfig) {}
-  rpc DeletePolitenessConfig (PolitenessConfig) returns (google.protobuf.Empty) {}
+  rpc ListPolitenessConfigs (ListRequest) returns (PolitenessConfigListReply) {
+  }
+  rpc SavePolitenessConfig (PolitenessConfig) returns (PolitenessConfig) {
+  }
+  rpc DeletePolitenessConfig (PolitenessConfig) returns (google.protobuf.Empty) {
+  }
 
   // List a set of browser configs
-  rpc ListBrowserConfigs (ListRequest) returns (BrowserConfigListReply) {}
-  rpc SaveBrowserConfig (BrowserConfig) returns (BrowserConfig) {}
-  rpc DeleteBrowserConfig (BrowserConfig) returns (google.protobuf.Empty) {}
+  rpc ListBrowserConfigs (ListRequest) returns (BrowserConfigListReply) {
+  }
+  rpc SaveBrowserConfig (BrowserConfig) returns (BrowserConfig) {
+  }
+  rpc DeleteBrowserConfig (BrowserConfig) returns (google.protobuf.Empty) {
+  }
 
-  rpc ListBrowserScripts (BrowserScriptListRequest) returns (BrowserScriptListReply) {}
-  rpc SaveBrowserScript (BrowserScript) returns (BrowserScript) {}
-  rpc DeleteBrowserScript (BrowserScript) returns (google.protobuf.Empty) {}
+  rpc ListBrowserScripts (BrowserScriptListRequest) returns (BrowserScriptListReply) {
+  }
+  rpc SaveBrowserScript (BrowserScript) returns (BrowserScript) {
+  }
+  rpc DeleteBrowserScript (BrowserScript) returns (google.protobuf.Empty) {
+  }
 
-  rpc RunCrawl (RunCrawlRequest) returns (google.protobuf.Empty) {}
+  rpc RunCrawl (RunCrawlRequest) returns (google.protobuf.Empty) {
+  }
 }
 
 // Specification of wich entities to get.

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {CrawljobService} from "../../crawljob.service";
 import {BrowserConfig} from "../../../models/BrowserConfig";
 
@@ -11,9 +11,15 @@ export class BrowserconfigListComponent implements OnInit {
 
   browserconfigs: BrowserConfig[];
   selectedBrowserconfig: BrowserConfig;
-  constructor(private crawljobService: CrawljobService) {}
 
-  ngOnInit() {this.crawljobService.getAllBrowserconfigs().subscribe(browserconfigs => {this.browserconfigs = browserconfigs.value})}
+  constructor(private crawljobService: CrawljobService) {
+  }
+
+  ngOnInit() {
+    this.crawljobService.getAllBrowserconfigs().subscribe(browserconfigs => {
+      this.browserconfigs = browserconfigs.value
+    })
+  }
 
   private getIndexOfBrowserconfig = (browserconfigId: String) => {
     return this.browserconfigs.findIndex((browserconfig) => {

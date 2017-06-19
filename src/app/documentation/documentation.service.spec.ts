@@ -1,6 +1,5 @@
-import { TestBed, inject } from '@angular/core/testing';
-
-import { DocumentationService } from './documentation.service';
+import {TestBed, inject} from "@angular/core/testing";
+import {DocumentationService} from "./documentation.service";
 
 describe('DocumentationService', () => {
   beforeEach(() => {

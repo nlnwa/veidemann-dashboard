@@ -1,7 +1,7 @@
 /**
  * Created by kristiana on 16.05.17.
  */
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 
 
 @Component({
@@ -35,7 +35,8 @@ export class ModalComponent {
   public visible = false;
   public visibleAnimate = false;
 
-  constructor(){}
+  constructor() {
+  }
 
   public show(): void {
     this.visible = true;
@@ -52,7 +53,6 @@ export class ModalComponent {
       this.hide();
     }
   }
-
 
 
 }

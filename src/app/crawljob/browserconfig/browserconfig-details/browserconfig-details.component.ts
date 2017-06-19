@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input} from "@angular/core";
 import {CrawljobService} from "../../crawljob.service";
 import {BrowserConfig} from "../../../models/BrowserConfig";
 
@@ -27,23 +27,24 @@ export class BrowserconfigDetailsComponent implements OnInit {
   }
 
   createBrowserConfig() {
-    this.crawljobService.createBrowserConfig(this.browserconfig)/*.then((newBrowserconfig: BrowserConfig) => {
-      this.createHandler(newBrowserconfig);
-    });*/
+    this.crawljobService.createBrowserConfig(this.browserconfig)
+    /*.then((newBrowserconfig: BrowserConfig) => {
+     this.createHandler(newBrowserconfig);
+     });*/
 
   };
 
 
   updateBrowserConfig(browserconfig: BrowserConfig): void {
     this.crawljobService.updateBrowserConfig(this.browserconfig).then((updatedBrowserconfig: BrowserConfig) => {
-      this.updateHandler(updatedBrowserconfig);
+      //   this.updateHandler(updatedBrowserconfig);
       //   this.ngOnChanges();
     });
   }
 
   deleteBrowserConfig(browserconfigId: String): void {
     this.crawljobService.deleteBrowserConfig(browserconfigId).then((deletedBrowserconfigId: String) => {
-      this.deleteHandler(deletedBrowserconfigId);
+      // this.deleteHandler(deletedBrowserconfigId);
     });
   }
 }

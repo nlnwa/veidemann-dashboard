@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {CrawljobService} from "../../crawljob.service";
 import {Crawlconfig} from "../../../models/crawlconfig";
 
@@ -11,9 +11,15 @@ export class CrawlconfigListComponent implements OnInit {
 
   crawlconfigs: Crawlconfig[];
   selectedCrawlconfig: Crawlconfig;
-  constructor(private crawljobService: CrawljobService) {}
 
-  ngOnInit() {this.crawljobService.getAllCrawlconfigs().subscribe(crawlconfigs => {this.crawlconfigs = crawlconfigs.value})}
+  constructor(private crawljobService: CrawljobService) {
+  }
+
+  ngOnInit() {
+    this.crawljobService.getAllCrawlconfigs().subscribe(crawlconfigs => {
+      this.crawlconfigs = crawlconfigs.value
+    })
+  }
 
   private getIndexOfCrawlconfig = (crawlconfigId: String) => {
     return this.crawlconfigs.findIndex((crawlconfig) => {
@@ -26,12 +32,11 @@ export class CrawlconfigListComponent implements OnInit {
   }
 
   createNewCrawlConfig() {
-    console.log("create");
     const crawlconfig: Crawlconfig = {
       browser_config_id: '',
       politeness_id: '',
       minimum_dns_ttl_s: 0,
-      depth_first:true,
+      depth_first: true,
       extra: {
         extract_text: true,
         create_snapshot: true,

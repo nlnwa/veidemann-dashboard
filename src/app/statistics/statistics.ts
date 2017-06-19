@@ -30,5 +30,5 @@ export class Meta {
 
 export class Label {
   key: '';
-  value= '';
+  value = '';
 }

@@ -12,8 +12,10 @@ import "empty.proto";
 // Service for communicating with harvester.
 service Harvester {
   // harvest a page
-  rpc HarvestPage (HarvestPageRequest) returns (HarvestPageReply) {}
-  rpc CleanupExecution (CleanupExecutionRequest) returns (google.protobuf.Empty) {}
+  rpc HarvestPage (HarvestPageRequest) returns (HarvestPageReply) {
+  }
+  rpc CleanupExecution (CleanupExecutionRequest) returns (google.protobuf.Empty) {
+  }
 }
 
 // A request telling which page to harves.

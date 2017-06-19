@@ -1,29 +1,29 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Schedule} from "../models/schedule";
 import {Crawlconfig} from "../models/crawlconfig";
 import {BrowserConfig} from "../models/BrowserConfig";
 import {PolitenessConfig} from "../models/Politenessconfig";
-import { Crawljob } from '../models/crawljob';
+import {Crawljob} from "../models/crawljob";
 
 @Injectable()
 export class CrawljobService {
 
-  private crawljobUrl = '/api/crawljobs';
+  private crawljobUrl = '/api/crawljob';
   private scheduleUrl = '/api/schedule';
   private crawlconfigUrl = '/api/crawlconfig';
   private browserconfigUrl = '/api/browserconfig';
-  private politenessconfigUrl  ='/api/politenessconfig';
+  private politenessconfigUrl = '/api/politenessconfig';
 
 
-  constructor (private http: Http) {}
+  constructor(private http: Http) {
+  }
 
 
   getAllCrawlJobs() {
     return this.http.get(this.crawljobUrl)
       .map(res => res.json());
   }
-
 
 
   updateCrawljob(putCrawljob: Crawljob): Promise<Crawljob> {
@@ -34,20 +34,37 @@ export class CrawljobService {
       .catch(this.handleError);
   }
 
+  createCrawljob(putCrawljob: Crawljob): Promise<Crawljob> {
+    return this.http.post(this.crawljobUrl, putCrawljob)
+      .toPromise()
+      .then(response => response.json() as Crawljob)
+      .catch(this.handleError);
+  }
+
+  // delete("/api/users/:id")
+  deleteCrawljob(delCrawlJobId: String): Promise<String> {
+    return this.http.delete(this.crawljobUrl + '/' + delCrawlJobId)
+      .toPromise()
+      .then(response => response.json() as String)
+      .catch(this.handleError);
+  }
+
+
   getSchedule(schedule_id) {
     return this.http.get(`${this.scheduleUrl}/${schedule_id}`)
-    .map(res => res.json().value);
+      .map(res => res.json().value);
   }
 
   getAllSchedules() {
-  return this.http.get(this.scheduleUrl)
-  .map(res => res.json());
+    return this.http.get(this.scheduleUrl)
+      .map(res => res.json());
   }
 
   getCrawlConfig(crawlconfig_id) {
 
     return this.http.get(`${this.crawlconfigUrl}/${crawlconfig_id}`)
-      .map(res => res.json().value);  }
+      .map(res => res.json().value);
+  }
 
   getAllCrawlconfigs() {
     return this.http.get(this.crawlconfigUrl)
@@ -58,17 +75,18 @@ export class CrawljobService {
     return this.http.get(this.browserconfigUrl)
       .map(res => res.json());
   }
+
   getBrowserconfigs(browserconfig_id) {
     return this.http.get(`${this.browserconfigUrl}/${browserconfig_id}`)
       .map(res => res.json().value);
   }
 
 
-
   getAllPolitenessconfigs() {
     return this.http.get(this.politenessconfigUrl)
       .map(res => res.json());
   }
+
   getPolitenessconfig(politenessconfig_id) {
     return this.http.get(`${this.politenessconfigUrl}/${politenessconfig_id}`)
       .map(res => res.json().value)
@@ -171,7 +189,7 @@ export class CrawljobService {
       .catch(this.handleError);
   }
 
-  private handleError (error: any) {
+  private handleError(error: any) {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead

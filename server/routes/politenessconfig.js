@@ -4,32 +4,60 @@
 
 exports.listPolitenessConfigs = (req, res) => {
   client.listPolitenessConfigs({}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
 };
 
 exports.getPolitenessConfig = (req, res) => {
   client.listPolitenessConfigs({id: req.params.id}, function (err, response) {
-    res.status(200).json(response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
   })
 };
 
 exports.savePolitenessConfig = (req, res) => {
   client.savePolitenessConfig(req.body, function (err, response) {
-    res.status(201).json(response);
-    console.log('Saveentity: ', response);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(201).json(response);
+    }
   })
 };
 
 exports.updatePolitenessConfig = (req, res) => {
   client.savePolitenessConfig(req.body, function (err, response) {
-
-  })
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response)
+    }
+  });
 };
 
 exports.deletePolitenessConfig = (req, res) => {
   client.deletePolitenessConfig({id: req.params.id}, function (err, response) {
-  console.log('deleting: '+req.params.id);
-    res.status(200).json(req.params.id);
+    if (err) {
+      console.log("error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(req.params.id);
+    }
   })
 };

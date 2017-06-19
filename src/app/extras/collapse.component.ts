@@ -1,32 +1,32 @@
-import {Directive, Input, HostBinding} from '@angular/core';
+import {Directive, Input, HostBinding} from "@angular/core";
 
 
 @Directive({selector: '[collapse]'})
 export class Collapse {
   // style
   @HostBinding('style.height')
-  private height:string;
+  private height: string;
   // shown
   @HostBinding('class.in')
   @HostBinding('attr.aria-expanded')
-  private isExpanded:boolean = true;
+  private isExpanded: boolean = true;
   // hidden
   @HostBinding('attr.aria-hidden')
-  private isCollapsed:boolean = false;
+  private isCollapsed: boolean = false;
   // stale state
   @HostBinding('class.collapse')
-  private isCollapse:boolean = true;
+  private isCollapse: boolean = true;
   // animation state
   @HostBinding('class.collapsing')
-  private isCollapsing:boolean = false;
+  private isCollapsing: boolean = false;
 
   @Input()
-  private set collapse(value:boolean) {
+  private set collapse(value: boolean) {
     this.isExpanded = value;
     this.toggle();
   }
 
-  private get collapse():boolean {
+  private get collapse(): boolean {
     return this.isExpanded;
   }
 

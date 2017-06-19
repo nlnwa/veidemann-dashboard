@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {PolitenessConfig} from "../../../models/Politenessconfig";
 import {CrawljobService} from "../../crawljob.service";
 
@@ -11,9 +11,15 @@ export class PolitenessconfigListComponent implements OnInit {
 
   politenessconfigs: PolitenessConfig[];
   selectedPolitenessconfig: PolitenessConfig;
-  constructor(private crawljobService: CrawljobService) {}
 
-  ngOnInit() {this.crawljobService.getAllPolitenessconfigs().subscribe(politenessconfigs => {this.politenessconfigs = politenessconfigs.value})}
+  constructor(private crawljobService: CrawljobService) {
+  }
+
+  ngOnInit() {
+    this.crawljobService.getAllPolitenessconfigs().subscribe(politenessconfigs => {
+      this.politenessconfigs = politenessconfigs.value
+    })
+  }
 
   private getIndexOfPolitenessconfig = (politenessconfigId: String) => {
     return this.politenessconfigs.findIndex((politenessconfig) => {
@@ -21,13 +27,7 @@ export class PolitenessconfigListComponent implements OnInit {
     });
   };
 
-  selectPolitenessconfig(politenessconfig: PolitenessConfig) {
-    this.selectedPolitenessconfig = politenessconfig
-  }
-
-
   createNewPolitenessConfig() {
-    console.log("create");
     const politenessconfig: PolitenessConfig = {
       robots_policy: '',
       minimum_robots_validity_duration_s: 0,
@@ -40,6 +40,10 @@ export class PolitenessconfigListComponent implements OnInit {
     };
     // By default, a newly-created  will have the selected state.
     this.selectPolitenessconfig(politenessconfig);
+  }
+
+  selectPolitenessconfig(politenessconfig: PolitenessConfig) {
+    this.selectedPolitenessconfig = politenessconfig
   }
 
   deletePolitenessConfig = (politenessconfig: String) => {

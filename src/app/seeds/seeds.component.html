@@ -6,46 +6,48 @@
       <form [formGroup]="seedForm">
 
 
-      <label class="center-block">Entitet:
-        <angular2-multiselect [data]="entityList" [(ngModel)]="selectedEntityItems"[settings]="dropdownEntitySettings"
-                              (onSelect)="onItemSelect($event)"
-                              (onDeSelect)="OnItemDeSelect($event)" formControlName="entity_id" ></angular2-multiselect>
-        <small [hidden]="seedForm.controls.entity_id.valid" class="text-danger">
-          Entitet er påkrevd.
-        </small>
-      </label>
+        <label class="center-block">Entitet:
+          <angular2-multiselect [data]="entityList" [(ngModel)]="selectedEntityItems"
+                                [settings]="dropdownEntitySettings"
+                                (onSelect)="onItemSelect($event)"
+                                (onDeSelect)="OnItemDeSelect($event)"
+                                formControlName="entity_id"></angular2-multiselect>
+          <small [hidden]="seedForm.controls.entity_id.valid" class="text-danger">
+            Entitet er påkrevd.
+          </small>
+        </label>
 
         <div class="form-group" formGroupName="meta">
-        <label class="center-block">Seed:
-          <input type="url" class="form-control" formControlName="name">
-          <small [hidden]="seedForm.controls.meta.valid" class="text-danger">
-            Seed er påkrevd.
-          </small>
+          <label class="center-block">Seed:
+            <input type="url" class="form-control" formControlName="name">
+            <small [hidden]="seedForm.controls.meta.valid" class="text-danger">
+              Seed er påkrevd.
+            </small>
 
-        </label>
-      </div>
+          </label>
+        </div>
 
-      <div class="form-group">
-        <label class="center-block">Høstejobb:
-          <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
-                                [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
-                                (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
-          <small [hidden]="seedForm.controls.job_id.valid" class="text-danger">
-            Høstejobb er påkrevd.
-          </small>
-        </label>
-      </div>
+        <div class="form-group">
+          <label class="center-block">Høstejobb:
+            <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
+                                  [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
+                                  (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
+            <small [hidden]="seedForm.controls.job_id.valid" class="text-danger">
+              Høstejobb er påkrevd.
+            </small>
+          </label>
+        </div>
 
-        <div class="form-group"formGroupName="meta">
+        <div class="form-group" formGroupName="meta">
           <label class="center-block">Description:
             <input class="form-control" formControlName="description">
           </label>
         </div>
 
-        <div class="form-group" >
+        <div class="form-group">
 
-          <div formArrayName="label" class="well well-lg" >
-            <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i" >
+          <div formArrayName="label" class="well well-lg">
+            <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
               <div class="panel-heading">
                 <span>Merkelapp #{{i + 1}}</span>
                 <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
@@ -69,7 +71,6 @@
             <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
           </div>
         </div>
-
 
 
       </form>

@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
 import {Crawljob} from "../../models/crawljob";
 import {CrawljobService} from "../crawljob.service";
-import {Schedule } from '../../models/schedule';
+import {Schedule} from "../../models/schedule";
 import {Crawlconfig} from "../../models/crawlconfig";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
@@ -38,9 +38,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   constructor(private crawljobService: CrawljobService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,
-
-  ) {
+              private mdlSnackbarService: MdlSnackbarService,) {
     this.filldropdown();
     this.createForm();
   }
@@ -50,15 +48,15 @@ export class CrawljobDetailsComponent implements OnChanges {
       id: {value: '', disabled: true},
       schedule_id: '',
       crawl_config_id: '',
-      limits: this.fb.group ({
+      limits: this.fb.group({
         depth: '',
         max_duration_s: '',
         max_bytes: '',
       }),
-      meta: this.fb.group ({
+      meta: this.fb.group({
         name: '',
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true, }}),
+        created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
@@ -75,7 +73,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         max_duration_s: this.crawljob.limits.max_duration_s,
         max_bytes: this.crawljob.limits.max_bytes,
       }),
-      meta: this.fb.group ({
+      meta: this.fb.group({
         name: this.crawljob.meta.name,
         description: this.crawljob.meta.description,
         created: this.crawljob.meta.created,
@@ -89,34 +87,53 @@ export class CrawljobDetailsComponent implements OnChanges {
 
 
   updateCrawljob(crawljobForm): void {
-    this.crawljob  = this.prepareSaveCrawljob();
+    this.crawljob = this.prepareSaveCrawljob();
     // console.log(this.seed);
     //console.log(seedForm.getRawValue());
-    this.crawljobService.updateCrawljob(this.crawljob)/*.then((updatedCrawljob) => {
-      this.updateHandler(updatedCrawljob);
-      this.ngOnChanges();
-    });*/
+    this.crawljobService.updateCrawljob(this.crawljob)
+    /*.then((updatedCrawljob) => {
+     this.updateHandler(updatedCrawljob);
+     this.ngOnChanges();
+     });*/
     this.mdlSnackbarService.showSnackbar(
       {
-        message:'Lagret',
+        message: 'Lagret',
       });
   };
 
+  deleteCrawljob(crawljobId: String): void {
+    this.crawljobService.deleteCrawljob(crawljobId);
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Slettet',
+      });
+  }
+
+  createCrawljob() {
+    this.crawljob = this.prepareSaveCrawljob();
+    this.crawljobService.createCrawljob(this.crawljob);
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret',
+      });
+  }
+
   prepareSaveCrawljob(): Crawljob {
     const formModel = this.crawljobForm.value;
+    console.log(formModel);
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveCrawljob: Crawljob = {
       id: this.crawljob.id,
-      schedule_id: formModel.schedule_id[0].id as string ,
-      crawl_config_id: formModel.crawlconfig_id[0].id as string ,
+      schedule_id: formModel.schedule_id[0].id as string,
+      crawl_config_id: formModel.crawl_config_id[0].id as string,
       limits: {
         depth: formModel.limits.depth as number,
         max_duration_s: formModel.limits.max_duration_s as string,
-        max_bytes: formModel.limits.max_bytes as string ,
+        max_bytes: formModel.limits.max_bytes as string,
       },
-      meta: {
+      meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
       }
@@ -125,18 +142,19 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
 
-  onItemSelect(item){
+  onItemSelect(item) {
     console.log('Selected Item:');
     console.log(item);
   }
-  OnItemDeSelect(item){
+
+  OnItemDeSelect(item) {
     console.log('De-Selected Item:');
     console.log(item);
   }
 
   setDropdown() {
-    this.selectedScheduleItems=[];
-    this.selectedCrawlconfigItems=[];
+    this.selectedScheduleItems = [];
+    this.selectedCrawlconfigItems = [];
 
     if (this.crawljob.schedule_id !== "") {
       this.crawljobService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
@@ -174,14 +192,14 @@ export class CrawljobDetailsComponent implements OnChanges {
 
     this.dropdownScheduleSettings = {
       singleSelection: true,
-      text:"Velg Schedule",
+      text: "Velg Schedule",
       enableSearchFilter: true
     };
 
 
     this.dropdownCrawlconfigSettings = {
       singleSelection: true,
-      text:"Velg crawlconfig",
+      text: "Velg crawlconfig",
       enableSearchFilter: true
     };
   }

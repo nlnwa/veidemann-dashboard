@@ -1,7 +1,7 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input} from "@angular/core";
 import {SeedsService} from "./seeds.service";
 import {Seed, Label} from "./seed";
-import {Entity} from "../../../crap/entities/entity"
+import {Entity} from "../models/entity";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./seeds.component.css']
 })
 export class SeedsComponent {
-  @Input() seed : Seed;
+  @Input() seed: Seed;
   entities: Entity[];
   seedForm: FormGroup;
   entityList: any = [];
@@ -30,12 +30,10 @@ export class SeedsComponent {
   @Input()
   deleteHandler: Function;
 
-  constructor(
-    private seedService: SeedsService,
-    private fb: FormBuilder,
-    private mdlSnackbarService: MdlSnackbarService,
-    private router: Router,
-  ) {
+  constructor(private seedService: SeedsService,
+              private fb: FormBuilder,
+              private mdlSnackbarService: MdlSnackbarService,
+              private router: Router,) {
     this.createForm();
     this.getSeeds();
     this.getEntities();
@@ -46,10 +44,11 @@ export class SeedsComponent {
       entity_id: ['', FormValidatorUtils.nonEmpty],
       uri: '',
       job_id: ['', FormValidatorUtils.nonEmpty],
-      scope: this.fb.group ({
-        surt_prefix: ''}),
-      meta: this.fb.group ({
-        name: ['http://', [Validators.required,Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+      scope: this.fb.group({
+        surt_prefix: ''
+      }),
+      meta: this.fb.group({
+        name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
         description: '',
         label: this.fb.array([]),
       }),
@@ -66,26 +65,30 @@ export class SeedsComponent {
 
   getSeeds(): void {
     this.seedService.getAllSeeds().subscribe(seed => this.seed = seed)
-}
+  }
 
   createSeedNew() {
-    this.seed  = this.prepareSaveSeed();
+    this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
     this.mdlSnackbarService.showSnackbar(
       {
-        message:'Lagret',
+        message: 'Lagret',
       });
-    setTimeout(()=> {this.router.navigate(['/']);},0);
-    setTimeout(()=> {this.router.navigate(['/seeds']);},0);
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 0);
+    setTimeout(() => {
+      this.router.navigate(['/seeds']);
+    }, 0);
   }
 
   createSeed() {
-    this.seed  = this.prepareSaveSeed();
+    this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
     this.mdlSnackbarService.showSnackbar(
       {
-      message:'Lagret',
-  });
+        message: 'Lagret',
+      });
   }
 
   prepareSaveSeed(): Seed {
@@ -103,10 +106,10 @@ export class SeedsComponent {
     );
 
     /* kanskje sette id i objektet, beholder inntil videre
-    const job_idDeepCopy: Job_id[] = job_idlist.map(
-      (job_id: Job_id) => Object.assign({}, job_id)
-    );
-    */
+     const job_idDeepCopy: Job_id[] = job_idlist.map(
+     (job_id: Job_id) => Object.assign({}, job_id)
+     );
+     */
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
@@ -116,7 +119,7 @@ export class SeedsComponent {
       uri: formModel.uri as string,
       scope: {surt_prefix: ''},
       job_id: job_idlist,
-      meta: {
+      meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
         created: null,
@@ -131,8 +134,8 @@ export class SeedsComponent {
 
   updateSeed(seed: Seed): void {
     this.seedService.updateSeed(this.seedForm.value).then((updatedSeed: Seed) => {
-    this.updateHandler(updatedSeed);
-  });
+      this.updateHandler(updatedSeed);
+    });
   }
 
   get label(): FormArray {
@@ -155,14 +158,16 @@ export class SeedsComponent {
     control.removeAt(i);
   }
 
-  onItemSelect(item){
+  onItemSelect(item) {
     console.log('Selected Item:');
     console.log(item);
   }
-  OnItemDeSelect(item){
+
+  OnItemDeSelect(item) {
     console.log('De-Selected Item:');
     console.log(item);
   }
+
   getEntities() {
     //  this.setLabel(this.seed.meta.label);
     this.seedService.getEntities().map(entities => entities.value).forEach((value) => {
@@ -182,13 +187,13 @@ export class SeedsComponent {
 
     this.dropdownEntitySettings = {
       singleSelection: true,
-      text:"Velg Entitet",
+      text: "Velg Entitet",
       enableSearchFilter: true
     };
 
     this.dropdownCrawljobSettings = {
       singleSelection: false,
-      text:"Velg høstejobb",
+      text: "Velg høstejobb",
       enableSearchFilter: true
     };
   }
@@ -197,7 +202,7 @@ export class SeedsComponent {
 export class FormValidatorUtils {
   static nonEmpty(control: any) {
     if (!control.value || control.value.length === 0) {
-      return { 'noElements': true };
+      return {'noElements': true};
     }
     return null;
   }

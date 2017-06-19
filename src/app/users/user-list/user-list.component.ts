@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../user';
-import { UserService } from '../users.service';
-import { UserDetailsComponent } from '../user-details/user-details.component';
+import {Component, OnInit} from "@angular/core";
+import {User} from "../user";
+import {UserService} from "../users.service";
 
 @Component({
   selector: 'users',
@@ -14,9 +13,15 @@ export class UserComponent implements OnInit {
 
   users: User[];
   selectedUser: User;
-  constructor(private userService: UserService) { }
 
-  ngOnInit() {this.userService.getAllUsers().subscribe(users => {this.users = users})  }
+  constructor(private userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.userService.getAllUsers().subscribe(users => {
+      this.users = users
+    })
+  }
 
   private getIndexOfUser = (userId: String) => {
     return this.users.findIndex((user) => {

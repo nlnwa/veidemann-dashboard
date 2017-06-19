@@ -4,7 +4,8 @@
       <h2>Crawlconfigs</h2>
       <ul class="list-group">
         <li class="list-group-item"
-            *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)" [class.active]="crawlconfig === selectedCrawlconfig">
+            *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)"
+            [class.active]="crawlconfig === selectedCrawlconfig">
           {{crawlconfig.meta.name}}
 
         </li>

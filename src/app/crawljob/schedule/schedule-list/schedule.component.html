@@ -4,7 +4,8 @@
       <h2>Schedules</h2>
       <ul class="list-group">
         <li class="list-group-item"
-            *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)" [class.active]="schedule === selectedSchedule">
+            *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)"
+            [class.active]="schedule === selectedSchedule">
           {{schedule.meta.name}}
 
         </li>

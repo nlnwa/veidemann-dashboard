@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
 import {Crawlconfig} from "../../../models/crawlconfig";
 import {CrawljobService} from "../../crawljob.service";
 import {FormGroup, FormBuilder} from "@angular/forms";
@@ -16,7 +16,6 @@ import {PolitenessConfig} from "../../../models/Politenessconfig";
 export class CrawlconfigDetailsComponent implements OnChanges {
 
   crawlconfigForm: FormGroup;
-
 
 
   @Input()
@@ -41,9 +40,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   constructor(private crawljobService: CrawljobService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,
-
-  ) {
+              private mdlSnackbarService: MdlSnackbarService,) {
     this.filldropdown();
     this.createForm();
   }
@@ -53,16 +50,16 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       id: {value: '', disabled: true},
       browser_config_id: '',
       politeness_id: '',
-      extra: this.fb.group ({
+      extra: this.fb.group({
         extract_text: true,
         create_snapshot: true,
       }),
       minimum_dns_ttl_s: '',
       depth_first: '',
-      meta: this.fb.group ({
+      meta: this.fb.group({
         name: '',
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true, }}),
+        created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
@@ -80,7 +77,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       }),
       minimum_dns_ttl_s: this.crawlconfig.minimum_dns_ttl_s,
       depth_first: this.crawlconfig.depth_first,
-      meta: this.fb.group ({
+      meta: this.fb.group({
         name: this.crawlconfig.meta.name,
         description: this.crawlconfig.meta.description,
         created: this.crawlconfig.meta.created,
@@ -90,18 +87,18 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       }),
     });
     this.setDropdown();
-
   }
 
   updateCrawlconfig(crawlconfigForm): void {
-    this.crawlconfig  = this.prepareSaveCrawlconfig();
-    this.crawljobService.updateCrawlConfig(this.crawlconfig)/*.then((updatedCrawlconfig) => {
+    this.crawlconfig = this.prepareSaveCrawlconfig();
+    this.crawljobService.updateCrawlConfig(this.crawlconfig)
+    /*.then((updatedCrawlconfig) => {
      this.updateHandler(updatedCrawlconfig);
      this.ngOnChanges();
      });*/
     this.mdlSnackbarService.showSnackbar(
       {
-        message:'Lagret',
+        message: 'Lagret',
       });
   };
 
@@ -113,15 +110,15 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     // and deep copies of changed form model values
     const saveCrawlconfig: Crawlconfig = {
       id: this.crawlconfig.id,
-      browser_config_id: formModel.browser_config_id[0].id as string ,
-      politeness_id: formModel.politeness_id[0].id as string ,
+      browser_config_id: formModel.browser_config_id[0].id as string,
+      politeness_id: formModel.politeness_id[0].id as string,
       extra: {
         extract_text: formModel.extra.extract_text as boolean,
         create_snapshot: formModel.extra.create_snapshot as boolean,
       },
       minimum_dns_ttl_s: formModel.minimum_dns_ttl_s as number,
       depth_first: formModel.depth_first as boolean,
-      meta: {
+      meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
       }
@@ -130,18 +127,19 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   }
 
 
-  onItemSelect(item){
+  onItemSelect(item) {
     console.log('Selected Item:');
     console.log(item);
   }
-  OnItemDeSelect(item){
+
+  OnItemDeSelect(item) {
     console.log('De-Selected Item:');
     console.log(item);
   }
 
   setDropdown() {
-    this.selectedPolitenessconfigItems=[];
-    this.selectedBrowserconfigItems=[];
+    this.selectedPolitenessconfigItems = [];
+    this.selectedBrowserconfigItems = [];
 
     if (this.crawlconfig.browser_config_id !== "") {
       this.crawljobService.getBrowserconfigs(this.crawlconfig.browser_config_id).map(browser_config => browser_config).forEach((value) => {
@@ -151,11 +149,11 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       });
     }
     if (this.crawlconfig.politeness_id !== "") {
-    this.crawljobService.getPolitenessconfig(this.crawlconfig.politeness_id).map(politeness => politeness).forEach((value) => {
-      value.forEach((key) => {
-        this.selectedPolitenessconfigItems.push({id: key.id, itemName: key.meta.name})
-      })
-    });
+      this.crawljobService.getPolitenessconfig(this.crawlconfig.politeness_id).map(politeness => politeness).forEach((value) => {
+        value.forEach((key) => {
+          this.selectedPolitenessconfigItems.push({id: key.id, itemName: key.meta.name})
+        })
+      });
     }
   }
 
@@ -178,13 +176,13 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
     this.dropdownPolitenessconfigSettings = {
       singleSelection: true,
-      text:"Velg Politeness",
+      text: "Velg Politeness",
       enableSearchFilter: true
     };
 
     this.dropdownBrowserconfigSettings = {
       singleSelection: true,
-      text:"Velg browserconfig",
+      text: "Velg browserconfig",
       enableSearchFilter: true
     };
   }

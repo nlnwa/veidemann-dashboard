@@ -1,24 +1,27 @@
-.search-result{
+.search-result {
   border-bottom: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid gray;
   border-top: 1px solid gray;
-  width:200px;
+  width: 200px;
   height: 22px;
   padding: 2px;
   background-color: white;
   cursor: pointer;
 }
+
 .search-result:hover {
   color: #000000;
   background-color: #ffa31a;
 }
-#search-box{
+
+#search-box {
   width: 400px;
   height: 40px;
   font-size: 30px;
   margin-bottom: 10px;
 }
+
 .mdl-data-table {
   margin-top: 10px;
   width: 860px;

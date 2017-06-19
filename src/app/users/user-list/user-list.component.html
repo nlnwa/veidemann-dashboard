@@ -12,19 +12,17 @@
     </div>
     <div class="col-md-5 col-md-offset-2">
 
-    <div *ngIf="selectedUser">
-      <user-details
-        [user]="selectedUser"
-        [createHandler]="addUser"
-        [updateHandler]="updateUser"
-        [deleteHandler]="deleteUser">
-      </user-details>
+      <div *ngIf="selectedUser">
+        <user-details
+          [user]="selectedUser"
+          [createHandler]="addUser"
+          [updateHandler]="updateUser"
+          [deleteHandler]="deleteUser">
+        </user-details>
+      </div>
     </div>
   </div>
 </div>
-</div>
-
-
 
 
 <!--

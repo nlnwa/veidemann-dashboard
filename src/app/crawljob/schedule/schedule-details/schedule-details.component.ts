@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input} from "@angular/core";
 import {Schedule} from "../../../models/schedule";
 import {CrawljobService} from "../../crawljob.service";
 

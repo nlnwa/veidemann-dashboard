@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input} from "@angular/core";
 import {PolitenessConfig} from "../../../models/Politenessconfig";
 import {CrawljobService} from "../../crawljob.service";
 
@@ -28,22 +28,23 @@ export class PolitenessconfigDetailsComponent implements OnInit {
 
   createPolitenessConfig() {
     this.crawljobService.createPolitenessConfig(this.politenessconfig).then((newPolitenessconfig: PolitenessConfig) => {
-      this.createHandler(newPolitenessconfig);
+      //this.createHandler(newPolitenessconfig);
     });
 
   }
 
 
   updatePolitenessConfig(politenessconfig: PolitenessConfig): void {
-    this.crawljobService.updatePolitenessConfig(this.politenessconfig); /*.then((updatedPolitenessconfig: PolitenessConfig) => {
-      this.updateHandler(updatedPolitenessconfig);
-    });*/
+    this.crawljobService.updatePolitenessConfig(this.politenessconfig);
+    /*.then((updatedPolitenessconfig: PolitenessConfig) => {
+     this.updateHandler(updatedPolitenessconfig);
+     });*/
   }
 
   deletePolitenessConfig(politenessconfigId: String): void {
     //console.log(scheduleId);
     this.crawljobService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfigId: String) => {
-      this.deleteHandler(deletedPolitenessconfigId);
+      //this.deleteHandler(deletedPolitenessconfigId);
     });
   }
 }

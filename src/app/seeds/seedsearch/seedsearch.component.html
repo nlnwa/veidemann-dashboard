@@ -6,27 +6,27 @@
         <input #searchBox id="search-box" (keyup)="search(searchBox.value)"/>
         <br>
         <tr>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
-            <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
-            <span class="mdl-checkbox__label">Seeds</span>
-          </label>
-        </td>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox2">
-            <input type="checkbox" id="checkbox2" class="mdl-checkbox__input">
-            <span class="mdl-checkbox__label">Entities</span>
-          </label>
-        </td>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox3">
-            <input type="checkbox" id="checkbox3" class="mdl-checkbox__input">
-            <span class="mdl-checkbox__label">Labels</span>
-          </label>
-        </td>
+          <td>
+            <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
+              <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
+              <span class="mdl-checkbox__label">Seeds</span>
+            </label>
+          </td>
+          <td>
+            <label class="mdl-checkbox mdl-js-checkbox" for="checkbox2">
+              <input type="checkbox" id="checkbox2" class="mdl-checkbox__input">
+              <span class="mdl-checkbox__label">Entities</span>
+            </label>
+          </td>
+          <td>
+            <label class="mdl-checkbox mdl-js-checkbox" for="checkbox3">
+              <input type="checkbox" id="checkbox3" class="mdl-checkbox__input">
+              <span class="mdl-checkbox__label">Labels</span>
+            </label>
+          </td>
         </tr>
-    </div>
-      <table  class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      </div>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
         <tr>
           <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
@@ -39,16 +39,16 @@
         <tbody>
         <!-- Row 1 -->
         <tr class="search-result" *ngFor="let seed of seed | async; let i=index" (click)="selectSeed(seed)">
-          <ng-container *ngIf="i<12" >
-          <th>{{seed.meta.name}}</th>
-          <th *ngIf="!seed.meta.label?.length">
-            Ingen merkelapp
-          </th>
-          <th *ngIf="seed.meta.label?.length > 0 ">
-            <ng-container *ngFor="let see of seed.meta.label; let i=index"> {{see.value}} </ng-container>
-          </th>
-          <th>{{seed.meta.created.seconds * 1000 | date:'yyyy-MM-dd'}}</th>
-          <th>{{seed.meta.created_by}}</th>
+          <ng-container *ngIf="i<12">
+            <th>{{seed.meta.name}}</th>
+            <th *ngIf="!seed.meta.label?.length">
+              Ingen merkelapp
+            </th>
+            <th *ngIf="seed.meta.label?.length > 0 ">
+              <ng-container *ngFor="let see of seed.meta.label; let i=index"> {{see.value}}</ng-container>
+            </th>
+            <th>{{seed.meta.created.seconds * 1000 | date:'yyyy-MM-dd'}}</th>
+            <th>{{seed.meta.created_by}}</th>
           </ng-container>
         </tr>
         </tbody>

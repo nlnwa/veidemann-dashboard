@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {CrawljobService} from "../crawljob.service";
 import {Crawljob} from "../../models/crawljob";
 
@@ -11,9 +11,15 @@ export class CrawljobListComponent implements OnInit {
 
   crawljobs: any = [];
   selectedCrawljob: Crawljob;
-  constructor(private crawljobService: CrawljobService) { }
 
-  ngOnInit() {this.crawljobService.getAllCrawlJobs().subscribe(crawljobs => {this.crawljobs = crawljobs})  }
+  constructor(private crawljobService: CrawljobService) {
+  }
+
+  ngOnInit() {
+    this.crawljobService.getAllCrawlJobs().subscribe(crawljobs => {
+      this.crawljobs = crawljobs
+    })
+  }
 
   private getIndexOfCrawljob = (crawljobId: String) => {
     return this.crawljobs.findIndex((crawljob) => {

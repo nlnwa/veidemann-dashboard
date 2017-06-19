@@ -4,7 +4,8 @@
       <h2>Crawljobs</h2>
       <ul class="list-group">
         <li class="list-group-item"
-            *ngFor="let crawljob of crawljobs.value" (click)="selectCrawljob(crawljob)" [class.active]="crawljob === selectedCrawljob">
+            *ngFor="let crawljob of crawljobs.value" (click)="selectCrawljob(crawljob)"
+            [class.active]="crawljob === selectedCrawljob">
           {{crawljob.meta.name}}
 
         </li>

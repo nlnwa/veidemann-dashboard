@@ -1,6 +1,5 @@
-import { TestBed, inject } from '@angular/core/testing';
-
-import { CrawljobService } from './crawljob.service';
+import {TestBed, inject} from "@angular/core/testing";
+import {CrawljobService} from "./crawljob.service";
 
 describe('CrawljobService', () => {
   beforeEach(() => {

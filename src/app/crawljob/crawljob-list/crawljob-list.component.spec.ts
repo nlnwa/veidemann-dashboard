@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CrawljobListComponent } from './crawljob-list.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {CrawljobListComponent} from "./crawljob-list.component";
 
 describe('CrawljobListComponent', () => {
   let component: CrawljobListComponent;
@@ -8,9 +7,9 @@ describe('CrawljobListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawljobListComponent ]
+      declarations: [CrawljobListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

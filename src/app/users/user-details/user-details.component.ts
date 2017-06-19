@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges} from '@angular/core';
-import {User, Role} from '../user';
-import { UserService } from '../users.service';
+import {Component, Input} from "@angular/core";
+import {User, Role} from "../user";
+import {UserService} from "../users.service";
 import {FormArray, FormGroup, FormBuilder} from "@angular/forms";
 
 @Component({
@@ -21,10 +21,8 @@ export class UserDetailsComponent {
   @Input()
   deleteHandler: Function;
 
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService)
-  {
+  constructor(private fb: FormBuilder,
+              private userService: UserService) {
     this.createForm();
     // this.logNameChange();
   }
@@ -78,7 +76,7 @@ export class UserDetailsComponent {
   updateUser(user: User): void {
     this.userService.updateUser(this.userForm.value).then((updatedUser: User) => {
       this.updateHandler(updatedUser);
-   //   this.ngOnChanges();
+      //   this.ngOnChanges();
     });
   }
 
