@@ -8,6 +8,8 @@ WORKDIR /app
 
 RUN groupadd -r nnadmin \
   && useradd --no-log-init -r -g nnadmin nnadmin \
+  && mkdir /home/nnadmin \
+  && chown -R nnadmin:nnadmin /home/nnadmin \
   && chown -R nnadmin:nnadmin .
 
 USER nnadmin
