@@ -1,0 +1,7 @@
+**
+!*.json
+!server.js
+!server/
+!crap/
+!src/
+
