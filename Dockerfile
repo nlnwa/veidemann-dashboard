@@ -6,17 +6,17 @@ RUN mkdir /app
 
 WORKDIR /app
 
+COPY . .
+
 RUN groupadd -r nnadmin \
   && useradd --no-log-init -r -g nnadmin nnadmin \
   && mkdir /home/nnadmin \
-  && chown -R nnadmin:nnadmin /home/nnadmin
+  && chown -R nnadmin:nnadmin /home/nnadmin \
+  && chown -R nnadmin:nnadmin .
 
 USER nnadmin
 
-COPY . .
-
-RUN chown -R nnadmin:nnadmin . \
-   && npm install \
+RUN npm install \
    && node_modules/@angular/cli/bin/ng build --aot \
    && rm -rf src/
 
