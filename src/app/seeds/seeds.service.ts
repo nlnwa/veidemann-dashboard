@@ -60,7 +60,7 @@ export class SeedsService {
 
   // put("/api/entities/:id")
   updateSeed(putSeed: Seed): Promise<Seed> {
-    var putUrl = this.seedsUrl + '/' + putSeed.id;
+    const putUrl = this.seedsUrl + '/' + putSeed.id;
     return this.http.put(putUrl, putSeed)
       .toPromise()
       .then(response => response.json() as Seed)

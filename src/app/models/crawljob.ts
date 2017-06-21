@@ -1,7 +1,7 @@
 /**
  * Created by kristiana on 18.05.17.
  */
-export class CrawlJobs {
+export class Crawljobs {
   //value: Value[];
   count: number;
   page_size: string;

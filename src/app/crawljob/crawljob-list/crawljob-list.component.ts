@@ -9,7 +9,7 @@ import {Crawljob} from "../../models/crawljob";
 })
 export class CrawljobListComponent implements OnInit {
 
-  crawljobs: any = [];
+  crawljobs: Crawljob[];
   selectedCrawljob: Crawljob;
 
   constructor(private crawljobService: CrawljobService) {
@@ -17,7 +17,7 @@ export class CrawljobListComponent implements OnInit {
 
   ngOnInit() {
     this.crawljobService.getAllCrawlJobs().subscribe(crawljobs => {
-      this.crawljobs = crawljobs
+      this.crawljobs = crawljobs.value
     })
   }
 
@@ -27,8 +27,11 @@ export class CrawljobListComponent implements OnInit {
     });
   };
 
+  selectCrawljob(crawljob: Crawljob) {
+    this.selectedCrawljob = crawljob
+  }
+
   createNewCrawljob() {
-    console.log("create");
     const crawljob: Crawljob = {
       schedule_id: '',
       crawl_config_id: '',
@@ -47,31 +50,27 @@ export class CrawljobListComponent implements OnInit {
     this.selectCrawljob(crawljob);
   }
 
-  selectCrawljob(crawljob: Crawljob) {
-    this.selectedCrawljob = crawljob
-  }
-
   deleteCrawljob = (crawljobId: String) => {
     const idx = this.getIndexOfCrawljob(crawljobId);
     if (idx !== -1) {
-      this.crawljobs.crawljob.splice(idx, 1);
+      this.crawljobs.splice(idx, 1);
       this.selectCrawljob(null);
     }
-    return this.crawljobs.crawljob;
+    return this.crawljobs;
   };
 
   addCrawljob = (crawljob: Crawljob) => {
-    this.crawljobs.crawljob.push(crawljob);
+    this.crawljobs.push(crawljob);
     this.selectCrawljob(crawljob);
-    return this.crawljobs.crawljob;
+    return this.crawljobs;
   };
 
   updateCrawljob = (crawljob: Crawljob) => {
     const idx = this.getIndexOfCrawljob(crawljob.id);
     if (idx !== -1) {
-      this.crawljobs.crawljob[idx] = crawljob;
+      this.crawljobs[idx] = crawljob;
       this.selectCrawljob(crawljob);
     }
-    return this.crawljobs.crawljob;
+    return this.crawljobs;
   }
 }

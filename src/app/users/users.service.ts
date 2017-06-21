@@ -11,7 +11,6 @@ export class UserService {
   constructor(private http: Http) {
   }
 
-  // get("/api/entities")
   getUsers(): Promise<User[]> {
     return this.http.get(this.userssUrl)
       .toPromise()
@@ -24,7 +23,6 @@ export class UserService {
       .map(res => res.json());
   }
 
-  // post("/api/entities")
   createUser(newUser: User): Promise<User> {
     return this.http.post(this.userssUrl, newUser)
       .toPromise()
@@ -32,7 +30,6 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  // delete("/api/users/:id")
   deleteUser(delUserId: String): Promise<String> {
     return this.http.delete(this.userssUrl + '/' + delUserId)
       .toPromise()
@@ -40,9 +37,8 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  // put("/api/entities/:id")
   updateUser(putUser: User): Promise<User> {
-    var putUrl = this.userssUrl + '/' + putUser.id;
+    const putUrl = this.userssUrl + '/' + putUser.id;
     return this.http.put(putUrl, putUser)
       .toPromise()
       .then(response => response.json() as User)

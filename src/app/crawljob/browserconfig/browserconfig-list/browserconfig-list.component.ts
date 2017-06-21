@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {CrawljobService} from "../../crawljob.service";
-import {BrowserConfig} from "../../../models/BrowserConfig";
+import {Browserconfig} from "../../../models/browserconfig";
 
 @Component({
   selector: 'browserconfig-list',
@@ -9,8 +9,8 @@ import {BrowserConfig} from "../../../models/BrowserConfig";
 })
 export class BrowserconfigListComponent implements OnInit {
 
-  browserconfigs: BrowserConfig[];
-  selectedBrowserconfig: BrowserConfig;
+  browserconfigs: Browserconfig[];
+  selectedBrowserconfig: Browserconfig;
 
   constructor(private crawljobService: CrawljobService) {
   }
@@ -27,14 +27,14 @@ export class BrowserconfigListComponent implements OnInit {
     });
   };
 
-  selectBrowserconfig(browserconfig: BrowserConfig) {
+  selectBrowserconfig(browserconfig: Browserconfig) {
     this.selectedBrowserconfig = browserconfig
   }
 
 
-  createNewBrowserConfig() {
+  createNewBrowserconfig() {
     console.log("create");
-    const browserconfig: BrowserConfig = {
+    const browserconfig: Browserconfig = {
       user_agent: '',
       page_load_timeout_ms: '',
       sleep_after_pageload_ms: '',
@@ -47,7 +47,7 @@ export class BrowserconfigListComponent implements OnInit {
     this.selectBrowserconfig(browserconfig);
   }
 
-  deleteBrowserConfig = (browserconfig: String) => {
+  deleteBrowserconfig = (browserconfig: String) => {
     const idx = this.getIndexOfBrowserconfig(browserconfig);
     if (idx !== -1) {
       this.browserconfigs.splice(idx, 1);
@@ -56,14 +56,14 @@ export class BrowserconfigListComponent implements OnInit {
     return this.browserconfigs
   };
 
-  addBrowserConfig = (browserconfig: BrowserConfig) => {
+  addBrowserconfig = (browserconfig: Browserconfig) => {
     console.log('add');
     this.browserconfigs.push(browserconfig);
     this.selectBrowserconfig(browserconfig);
     return this.browserconfigs;
   };
 
-  updateBrowserConfig = (browserconfig: BrowserConfig) => {
+  updateBrowserconfig = (browserconfig: Browserconfig) => {
     const idx = this.getIndexOfBrowserconfig(browserconfig.id);
     if (idx !== -1) {
       this.browserconfigs[idx] = browserconfig;

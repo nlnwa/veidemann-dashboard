@@ -34,6 +34,7 @@ export class SeedsComponent {
               private fb: FormBuilder,
               private mdlSnackbarService: MdlSnackbarService,
               private router: Router,) {
+
     this.createForm();
     this.getSeeds();
     this.getEntities();
@@ -42,7 +43,6 @@ export class SeedsComponent {
   createForm() {
     this.seedForm = this.fb.group({
       entity_id: ['', FormValidatorUtils.nonEmpty],
-      uri: '',
       job_id: ['', FormValidatorUtils.nonEmpty],
       scope: this.fb.group({
         surt_prefix: ''
@@ -105,18 +105,11 @@ export class SeedsComponent {
       (label: Label) => Object.assign({}, label)
     );
 
-    /* kanskje sette id i objektet, beholder inntil videre
-     const job_idDeepCopy: Job_id[] = job_idlist.map(
-     (job_id: Job_id) => Object.assign({}, job_id)
-     );
-     */
-
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveSeed: Seed = {
       id: this.seed.id,
       entity_id: formModel.entity_id[0].id,
-      uri: formModel.uri as string,
       scope: {surt_prefix: ''},
       job_id: job_idlist,
       meta: {

@@ -2,14 +2,14 @@
  * Created by kristiana on 08.06.17.
  */
 
-export class PolitenessConfigs {
+export class Politenessconfigs {
   //value: Value[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class PolitenessConfig {
+export class Politenessconfig {
   id?: string;
   meta: Meta;
   robots_policy?: string;

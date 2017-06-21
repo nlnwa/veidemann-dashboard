@@ -88,13 +88,10 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   updateCrawljob(crawljobForm): void {
     this.crawljob = this.prepareSaveCrawljob();
-    // console.log(this.seed);
-    //console.log(seedForm.getRawValue());
     this.crawljobService.updateCrawljob(this.crawljob)
-    /*.then((updatedCrawljob) => {
-     this.updateHandler(updatedCrawljob);
-     this.ngOnChanges();
-     });*/
+      .then((updatedCrawljob) => {
+        this.updateHandler(updatedCrawljob);
+      });
     this.mdlSnackbarService.showSnackbar(
       {
         message: 'Lagret',
@@ -102,19 +99,23 @@ export class CrawljobDetailsComponent implements OnChanges {
   };
 
   deleteCrawljob(crawljobId: String): void {
-    this.crawljobService.deleteCrawljob(crawljobId);
+    this.crawljobService.deleteCrawljob(crawljobId).then((deletedCrawljobId: String) => {
+      this.deleteHandler(deletedCrawljobId);
+    });
     this.mdlSnackbarService.showSnackbar(
       {
-        message: 'Slettet',
+        message: 'Slettet'
       });
   }
 
   createCrawljob() {
     this.crawljob = this.prepareSaveCrawljob();
-    this.crawljobService.createCrawljob(this.crawljob);
+    this.crawljobService.createCrawljob(this.crawljob).then((newCrawljob: Crawljob) => {
+      this.createHandler(newCrawljob);
+    });
     this.mdlSnackbarService.showSnackbar(
       {
-        message: 'Lagret',
+        message: 'Lagret'
       });
   }
 
@@ -122,8 +123,6 @@ export class CrawljobDetailsComponent implements OnChanges {
     const formModel = this.crawljobForm.value;
     console.log(formModel);
 
-    // return new `Hero` object containing a combination of original hero value(s)
-    // and deep copies of changed form model values
     const saveCrawljob: Crawljob = {
       id: this.crawljob.id,
       schedule_id: formModel.schedule_id[0].id as string,
@@ -165,7 +164,7 @@ export class CrawljobDetailsComponent implements OnChanges {
     }
 
     if (this.crawljob.crawl_config_id !== "") {
-      this.crawljobService.getCrawlConfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
+      this.crawljobService.getCrawlconfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
         value.forEach((key) => {
           this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name})
         })
@@ -174,7 +173,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   filldropdown() {
-    //  this.setLabel(this.seed.meta.label);
     this.crawljobService.getAllSchedules().map(schedules => schedules.value).forEach((value) => {
       value.forEach((key) => {
         this.scheduleList.push({id: key.id, itemName: key.meta.name})
@@ -203,5 +201,4 @@ export class CrawljobDetailsComponent implements OnChanges {
       enableSearchFilter: true
     };
   }
-
 }

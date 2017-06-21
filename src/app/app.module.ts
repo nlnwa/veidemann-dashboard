@@ -97,10 +97,8 @@ const ROUTES = [
 @NgModule({
   declarations: [
     AppComponent,
-
     UserComponent,
     UserDetailsComponent,
-
     DocumentationComponent,
     StatisticsComponent,
     SeedSearchComponent,

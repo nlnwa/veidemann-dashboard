@@ -1,16 +1,18 @@
-import {Component, OnInit, Input} from "@angular/core";
-import {PolitenessConfig} from "../../../models/Politenessconfig";
+import {Component, Input} from "@angular/core";
+import {Politenessconfig} from "../../../models/politenessconfig";
 import {CrawljobService} from "../../crawljob.service";
+import {MdlSnackbarService} from "angular2-mdl";
+
 
 @Component({
   selector: 'politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
   styleUrls: ['./politenessconfig-details.component.css']
 })
-export class PolitenessconfigDetailsComponent implements OnInit {
 
+export class PolitenessconfigDetailsComponent {
   @Input()
-  politenessconfig: PolitenessConfig;
+  politenessconfig: Politenessconfig;
 
   @Input()
   createHandler: Function;
@@ -19,32 +21,38 @@ export class PolitenessconfigDetailsComponent implements OnInit {
   @Input()
   deleteHandler: Function;
 
-  constructor(private crawljobService: CrawljobService) {
+  constructor(private crawljobService: CrawljobService,
+              private mdlSnackbarService: MdlSnackbarService) {
   }
 
-  ngOnInit() {
-    //  console.log(this.crawljob);
-  }
-
-  createPolitenessConfig() {
-    this.crawljobService.createPolitenessConfig(this.politenessconfig).then((newPolitenessconfig: PolitenessConfig) => {
-      //this.createHandler(newPolitenessconfig);
+  createPolitenessconfig() {
+    this.crawljobService.createPolitenessconfig(this.politenessconfig).then((newPolitenessconfig: Politenessconfig) => {
+      this.createHandler(newPolitenessconfig);
     });
-
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret'
+      });
   }
 
 
-  updatePolitenessConfig(politenessconfig: PolitenessConfig): void {
-    this.crawljobService.updatePolitenessConfig(this.politenessconfig);
-    /*.then((updatedPolitenessconfig: PolitenessConfig) => {
-     this.updateHandler(updatedPolitenessconfig);
-     });*/
+  updatePolitenessconfig(politenessconfig: Politenessconfig): void {
+    this.crawljobService.updatePolitenessConfig(this.politenessconfig).then((updatedPolitenessconfig: Politenessconfig) => {
+      this.updateHandler(updatedPolitenessconfig);
+    });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret'
+      });
   }
 
-  deletePolitenessConfig(politenessconfigId: String): void {
-    //console.log(scheduleId);
+  deletePolitenessconfig(politenessconfigId: String): void {
     this.crawljobService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfigId: String) => {
-      //this.deleteHandler(deletedPolitenessconfigId);
+      this.deleteHandler(deletedPolitenessconfigId);
     });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Slettet'
+      });
   }
 }

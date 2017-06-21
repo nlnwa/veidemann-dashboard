@@ -44,6 +44,7 @@ exports.updateCrawlJob = (req, res) => {
       res.status(500);
     }
     else {
+      res.status(200).json(response);
     }
   })
 };
@@ -55,6 +56,7 @@ exports.deleteCrawlJob = (req, res) => {
       res.status(500);
     }
     else {
+      res.status(200).json(req.params.id)
     }
   })
 };

@@ -19,7 +19,6 @@ export class SeedSearchComponent implements OnInit {
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
 
-
   private searchTerms = new Subject<string>();
 
   constructor(private SeedService: SeedsService,
@@ -52,12 +51,17 @@ export class SeedSearchComponent implements OnInit {
         console.log(error);
         return Observable.of<Seed[]>([]);
       });
-
   }
 
+
   gotoDetail(seed: Seed): void {
-    let link = ['api/seeds/', seed.id];
+    let link = ['api/seed/', seed.id];
     this.router.navigate(link);
+  }
+
+
+  updateSeed = (seed: Seed) => {
+    return this.seed;
   }
 
 

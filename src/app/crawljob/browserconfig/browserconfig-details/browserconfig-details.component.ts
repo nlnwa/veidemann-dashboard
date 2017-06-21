@@ -1,16 +1,17 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {CrawljobService} from "../../crawljob.service";
-import {BrowserConfig} from "../../../models/BrowserConfig";
+import {Browserconfig} from "../../../models/browserconfig";
+import {MdlSnackbarService} from "angular2-mdl";
 
 @Component({
   selector: 'browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
   styleUrls: ['./browserconfig-details.component.css']
 })
-export class BrowserconfigDetailsComponent implements OnInit {
+export class BrowserconfigDetailsComponent {
 
   @Input()
-  browserconfig: BrowserConfig;
+  browserconfig: Browserconfig;
 
   @Input()
   createHandler: Function;
@@ -19,32 +20,39 @@ export class BrowserconfigDetailsComponent implements OnInit {
   @Input()
   deleteHandler: Function;
 
-  constructor(private crawljobService: CrawljobService) {
+  constructor(private crawljobService: CrawljobService,
+              private mdlSnackbarService: MdlSnackbarService) {
   }
 
-  ngOnInit() {
-    //  console.log(this.crawljob);
-  }
-
-  createBrowserConfig() {
-    this.crawljobService.createBrowserConfig(this.browserconfig)
-    /*.then((newBrowserconfig: BrowserConfig) => {
+  createBrowserconfig() {
+    this.crawljobService.createBrowserconfig(this.browserconfig)
+    .then((newBrowserconfig: Browserconfig) => {
      this.createHandler(newBrowserconfig);
-     });*/
+     });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret',
+      });
 
   };
 
-
-  updateBrowserConfig(browserconfig: BrowserConfig): void {
-    this.crawljobService.updateBrowserConfig(this.browserconfig).then((updatedBrowserconfig: BrowserConfig) => {
-      //   this.updateHandler(updatedBrowserconfig);
-      //   this.ngOnChanges();
+  updateBrowserconfig(browserconfig: Browserconfig): void {
+    this.crawljobService.updateBrowserconfig(this.browserconfig).then((updatedBrowserconfig: Browserconfig) => {
+         this.updateHandler(updatedBrowserconfig);
     });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret',
+      });
   }
 
-  deleteBrowserConfig(browserconfigId: String): void {
-    this.crawljobService.deleteBrowserConfig(browserconfigId).then((deletedBrowserconfigId: String) => {
-      // this.deleteHandler(deletedBrowserconfigId);
+  deleteBrowserconfig(browserconfigId: String): void {
+    this.crawljobService.deleteBrowserconfig(browserconfigId).then((deletedBrowserconfigId: String) => {
+       this.deleteHandler(deletedBrowserconfigId);
     });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Slettet',
+      });
   }
 }

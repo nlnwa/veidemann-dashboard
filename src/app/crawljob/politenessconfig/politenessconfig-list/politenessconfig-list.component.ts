@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {PolitenessConfig} from "../../../models/Politenessconfig";
+import {Politenessconfig} from "../../../models/politenessconfig";
 import {CrawljobService} from "../../crawljob.service";
 
 @Component({
@@ -9,8 +9,8 @@ import {CrawljobService} from "../../crawljob.service";
 })
 export class PolitenessconfigListComponent implements OnInit {
 
-  politenessconfigs: PolitenessConfig[];
-  selectedPolitenessconfig: PolitenessConfig;
+  politenessconfigs: Politenessconfig[];
+  selectedPolitenessconfig: Politenessconfig;
 
   constructor(private crawljobService: CrawljobService) {
   }
@@ -27,8 +27,21 @@ export class PolitenessconfigListComponent implements OnInit {
     });
   };
 
-  createNewPolitenessConfig() {
-    const politenessconfig: PolitenessConfig = {
+  selectPolitenessconfig(politenessconfig: Politenessconfig) {
+    this.selectedPolitenessconfig = politenessconfig
+  }
+
+  deletePolitenessconfig = (politenessconfigId: String) => {
+    const idx = this.getIndexOfPolitenessconfig(politenessconfigId);
+    if (idx !== -1) {
+      this.politenessconfigs.splice(idx, 1);
+      this.selectPolitenessconfig(null);
+    }
+    return this.politenessconfigs
+  };
+
+  createNewPolitenessconfig() {
+    const politenessconfig: Politenessconfig = {
       robots_policy: '',
       minimum_robots_validity_duration_s: 0,
       custom_robots: '',
@@ -42,26 +55,13 @@ export class PolitenessconfigListComponent implements OnInit {
     this.selectPolitenessconfig(politenessconfig);
   }
 
-  selectPolitenessconfig(politenessconfig: PolitenessConfig) {
-    this.selectedPolitenessconfig = politenessconfig
-  }
-
-  deletePolitenessConfig = (politenessconfig: String) => {
-    const idx = this.getIndexOfPolitenessconfig(politenessconfig);
-    if (idx !== -1) {
-      this.politenessconfigs.splice(idx, 1);
-      this.selectPolitenessconfig(null);
-    }
-    return this.politenessconfigs
-  };
-
-  addPolitenessConfig = (politenessconfig: PolitenessConfig) => {
+  addPolitenessconfig = (politenessconfig: Politenessconfig) => {
     this.politenessconfigs.push(politenessconfig);
     this.selectPolitenessconfig(politenessconfig);
     return this.politenessconfigs;
   };
 
-  updatePolitenessConfig = (politenessconfig: PolitenessConfig) => {
+  updatePolitenessconfig = (politenessconfig: Politenessconfig) => {
     const idx = this.getIndexOfPolitenessconfig(politenessconfig.id);
     if (idx !== -1) {
       this.politenessconfigs[idx] = politenessconfig;

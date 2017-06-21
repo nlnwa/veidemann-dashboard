@@ -31,7 +31,7 @@ export class CrawlconfigListComponent implements OnInit {
     this.selectedCrawlconfig = crawlconfig;
   }
 
-  createNewCrawlConfig() {
+  createNewCrawlconfig() {
     const crawlconfig: Crawlconfig = {
       browser_config_id: '',
       politeness_id: '',
@@ -51,7 +51,7 @@ export class CrawlconfigListComponent implements OnInit {
   }
 
 
-  deleteCrawlConfig = (crawlconfig: String) => {
+  deleteCrawlconfig = (crawlconfig: String) => {
     const idx = this.getIndexOfCrawlconfig(crawlconfig);
     if (idx !== -1) {
       this.crawlconfigs.splice(idx, 1);
@@ -60,14 +60,13 @@ export class CrawlconfigListComponent implements OnInit {
     return this.crawlconfigs
   };
 
-  addCrawlConfig = (crawlconfig: Crawlconfig) => {
-    console.log('add');
+  addCrawlconfig = (crawlconfig: Crawlconfig) => {
     this.crawlconfigs.push(crawlconfig);
     this.selectCrawlconfig(crawlconfig);
     return this.crawlconfigs;
   };
 
-  updateCrawlConfig = (crawlconfig: Crawlconfig) => {
+  updateCrawlconfig = (crawlconfig: Crawlconfig) => {
     const idx = this.getIndexOfCrawlconfig(crawlconfig.id);
     if (idx !== -1) {
       this.crawlconfigs[idx] = crawlconfig;

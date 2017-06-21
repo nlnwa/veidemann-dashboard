@@ -1,9 +1,6 @@
 /**
  * Created by kristiana on 08.06.17.
  */
-/**
- * Created by kristiana on 18.05.17.
- */
 export class BrowserConfigs {
   //value: Value[];
   count: number;
@@ -11,7 +8,7 @@ export class BrowserConfigs {
   page: string;
 }
 
-export class BrowserConfig {
+export class Browserconfig {
   id?: string;
   meta: Meta;
   user_agent?: string;

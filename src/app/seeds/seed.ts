@@ -13,7 +13,6 @@ export class Seed {
   id?: string;
   meta: Meta;
   entity_id: string;
-  uri: string;
   scope: Scope;
   job_id: Job_id[];
 }

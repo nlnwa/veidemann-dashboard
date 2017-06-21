@@ -11,7 +11,6 @@ import {FormArray, FormGroup, FormBuilder} from "@angular/forms";
 
 export class UserDetailsComponent {
   @Input() user: User;
-
   userForm: FormGroup;
 
   @Input()
@@ -36,7 +35,6 @@ export class UserDetailsComponent {
   }
 
   ngOnChanges() {
-    console.log('heihei');
     this.userForm.reset({
       name: this.user.name,
       id: this.user.id
@@ -50,7 +48,6 @@ export class UserDetailsComponent {
   };
 
   setRoles(roles: Role[]) {
-    console.log('heihei');
     const roleFGs = roles.map(role => this.fb.group(role));
     const roleFormArray = this.fb.array(roleFGs);
     this.userForm.setControl('roles', roleFormArray);
@@ -66,17 +63,15 @@ export class UserDetailsComponent {
   }
 
   createUser() {
+    console.log(this.createHandler);
     this.userService.createUser(this.userForm.value).then((newUser: User) => {
       this.createHandler(newUser);
     });
-
   }
-
 
   updateUser(user: User): void {
     this.userService.updateUser(this.userForm.value).then((updatedUser: User) => {
       this.updateHandler(updatedUser);
-      //   this.ngOnChanges();
     });
   }
 
@@ -86,6 +81,7 @@ export class UserDetailsComponent {
       this.deleteHandler(deletedUserId);
     });
   }
+
 
 }
 

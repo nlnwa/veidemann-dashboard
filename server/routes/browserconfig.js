@@ -11,7 +11,6 @@ exports.listBrowserConfig = (req, res) => {
       res.status(200).json(response);
     }
   })
-
 };
 
 exports.getBrowserConfig = (req, res) => {
@@ -33,7 +32,7 @@ exports.saveBrowserConfig = (req, res) => {
       res.status(500);
     }
     else {
-      res.status(200);
+      res.status(200).json(response);
     }
   })
 };
@@ -45,7 +44,7 @@ exports.updateBrowserConfig = (req, res) => {
       res.status(500);
     }
     else {
-      res.status(200);
+      res.status(200).json(response);
     }
   })
 };
@@ -57,7 +56,7 @@ exports.deleteBrowserConfig = (req, res) => {
       res.status(500);
     }
     else {
-
+      res.status(200).json(req.params.id);
     }
   })
 };

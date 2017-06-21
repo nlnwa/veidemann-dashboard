@@ -12,6 +12,8 @@ const schedule = require('./schedule');
 const politenessconfig = require('./politenessconfig');
 const path = require('path');
 const users = require('./users');
+const fs = require("fs");
+
 
 require('dotenv').config();
 
@@ -22,6 +24,58 @@ client = new grpc_controller.Controller(process.env.grpc_controller, grpc.creden
 
 router.get('/', (req, res) => {
   res.send("api works!");
+});
+
+
+r = require('rethinkdbdash')({
+ port: process.env.rethink_port,
+ host: process.env.rethink_host,
+ db: process.env.rethink_db
+ });
+
+const accessLevel = function () {
+  const accesslvls = arguments;
+  return function (req, res, next) {
+    r.table('users')
+      .filter(r.row('name').eq('kristiana')) //req.users.sAMAccountName
+      .run()
+      .then(function (response) {
+        for (x = 0; x < accesslvls.length; x++) {
+          const accesslvl = accesslvls[x];
+          for (var i = 0, l = response.length; i < l; i++) {
+            const group = (response[i]['groups']);
+            for (var a = 0, ln = group.length; a < ln; a++) {
+              if (group[a] == accesslvl) {
+                return next();
+              }
+            }
+          }
+        }
+        res.send('Ikke tilgang!');
+      });
+  }
+};
+
+//Client side check if users is authenticated
+router.get('/user_data', function (req, res) {
+  if (req.user === undefined) {
+    // The users is not logged in
+    res.json({});
+  } else {
+    res.json({
+      name: req.user.displayName,
+      username: req.user.sAMAccountName,
+      email: req.user.mail,
+    });
+  }
+});
+
+router.get('/test', accessLevel('admin', 'kurator', 'potet'), (req, res) => {
+  res.send("ok");
+});
+
+router.get('/fest', (req, res) => {
+  res.send('heihei');
 });
 
 router.get('/searchentities/name=:name', entities.searchCrawlEntities);

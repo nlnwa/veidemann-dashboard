@@ -3,11 +3,12 @@
 <div class="container">
   <div class="content-grid mdl-grid">
 
-    <div *ngIf="seed" class="mdl-cell mdl-cell--12-col">
+    <div class="mdl-cell mdl-cell--12-col">
 
 
       <h2>Seed Details
       </h2>
+      {{seedForm.value | json }}
       <div class="switch">
         <mdl-switch [(ngModel)]="checkbox1">Aktiv</mdl-switch>
       </div>
@@ -15,21 +16,20 @@
       <form [formGroup]="seedForm">
         <div class="form-group">
           <label class="center-block">Entity_id:
-            <input class="form-control" [(ngModel)]="seed.entity_id" formControlName="entity_id"/>
+            <input class="form-control" formControlName="entity_id"/>
           </label>
         </div>
 
         <div class="form-group" formGroupName="meta">
           <label class="center-block">Seed:
-            <input class="form-control" [(ngModel)]="seed.meta.name" formControlName="name">
+            <input class="form-control" formControlName="name">
           </label>
         </div>
 
         <div class="form-group">
           <label class="center-block">Høstejobb:
             <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
-                                  [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
-                                  (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
+                                  [settings]="dropdownCrawljobSettings" formControlName="job_id"></angular2-multiselect>
           </label>
         </div>
 
@@ -122,11 +122,10 @@
           </div>
 
         </div>
-        <button class="btn btn-success" (click)="updateSeed(seedForm)">Update</button>
+        <button class="btn btn-success" (click)="updateSeed(seedForm.value)">Update</button>
         <button class="btn btn-info" (click)="revert()" disabled>Tilbakestill</button>
         <button class="btn btn-danger" (click)="deleteSeed(seed.id)">Delete</button>
       </form>
-
     </div>
   </div>
 </div>

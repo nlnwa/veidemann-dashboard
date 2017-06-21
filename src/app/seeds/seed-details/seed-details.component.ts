@@ -18,6 +18,8 @@ import {MdlSnackbarService} from "angular2-mdl";
 export class SeedDetailComponent {
   @Input() seed: Seed;
   seedForm: FormGroup;
+
+
   @Input()
   createHandler: Function;
   @Input()
@@ -63,6 +65,7 @@ export class SeedDetailComponent {
     });
   }
 
+
   ngOnChanges() {
     this.seedForm.reset({
       id: this.seed.id,
@@ -79,7 +82,6 @@ export class SeedDetailComponent {
         last_modified_by: this.seed.meta.last_modified_by,
       }),
     });
-
     this.setLabel(this.seed.meta.label);
     for (let i of this.seed.job_id) {
       this.seedService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
@@ -93,7 +95,6 @@ export class SeedDetailComponent {
   get label(): FormArray {
     return this.seedForm.get('label') as FormArray;
   };
-
 
   getJobs() {
     this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
@@ -134,25 +135,17 @@ export class SeedDetailComponent {
     control.removeAt(i);
   }
 
-
-  /*updateSchedule(schedule: Schedule): void {
-   this.crawljobService.updateSchedule(this.schedule).then((updatedSchedule: Schedule) => {
-   this.updateHandler(updatedSchedule);
-   //   this.ngOnChanges();
-   });
-   }*/
-
   updateSeed(seedForm): void {
     this.seed = this.prepareSaveSeed();
-    // console.log(this.seed);
-    //console.log(seedForm.getRawValue());
-    this.seedService.updateSeed(this.seed);
+    this.seedService.updateSeed(this.seed)
+      .then((updatedSeed) => {
+      this.updateHandler(updatedSeed);
+      });
     this.mdlSnackbarService.showSnackbar(
       {
         message: 'Lagret',
       });
   }
-
 
   deleteSeed(seedId: String): void {
     this.seedService.deleteSeed(seedId);
@@ -161,10 +154,6 @@ export class SeedDetailComponent {
         message: 'Slettet',
       });
     this.goBack()
-  }
-
-  revert() {
-    this.ngOnChanges();
   }
 
   prepareSaveSeed(): Seed {
@@ -185,7 +174,6 @@ export class SeedDetailComponent {
     const saveSeed: Seed = {
       id: this.seed.id,
       entity_id: this.seed.entity_id,
-      uri: formModel.uri as string,
       scope: {surt_prefix: formModel.scope.surt_prefix as string},
       job_id: job_idlist,
       meta: {
@@ -201,15 +189,6 @@ export class SeedDetailComponent {
     return saveSeed;
   }
 
-  onItemSelect(item) {
-    console.log('Selected Item:');
-    console.log(item.id);
-  }
-
-  OnItemDeSelect(item) {
-    console.log('De-Selected Item:');
-    console.log(item);
-  }
 
 
   goBack(): void {

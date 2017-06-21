@@ -3,8 +3,8 @@ import {Crawlconfig} from "../../../models/crawlconfig";
 import {CrawljobService} from "../../crawljob.service";
 import {FormGroup, FormBuilder} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
-import {BrowserConfig} from "../../../models/BrowserConfig";
-import {PolitenessConfig} from "../../../models/Politenessconfig";
+import {Browserconfig} from "../../../models/browserconfig";
+import {Politenessconfig} from "../../../models/politenessconfig";
 
 @Component({
   selector: 'crawlconfig-details',
@@ -21,8 +21,8 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   @Input()
   crawlconfig: Crawlconfig;
 
-  browserconfig: BrowserConfig;
-  politenessconfig: PolitenessConfig;
+  browserconfig: Browserconfig;
+  politenessconfig: Politenessconfig;
   browserconfigList: any = [];
   politenessconfigList: any = [];
 
@@ -30,6 +30,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   dropdownBrowserconfigSettings = {};
   dropdownPolitenessconfigSettings = {};
   selectedPolitenessconfigItems = [];
+
 
   @Input()
   createHandler: Function;
@@ -89,19 +90,41 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     this.setDropdown();
   }
 
+  createCrawlconfig() {
+    this.crawlconfig = this.prepareSaveCrawlconfig();
+    this.crawljobService.createCrawlconfig(this.crawlconfig).then((newCrawlconfig: Crawlconfig) => {
+      this.createHandler(newCrawlconfig);
+    });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Lagret'
+      });
+  }
+
+
+
   updateCrawlconfig(crawlconfigForm): void {
     this.crawlconfig = this.prepareSaveCrawlconfig();
-    this.crawljobService.updateCrawlConfig(this.crawlconfig)
-    /*.then((updatedCrawlconfig) => {
+    this.crawljobService.updateCrawlconfig(this.crawlconfig)
+    .then((updatedCrawlconfig) => {
      this.updateHandler(updatedCrawlconfig);
-     this.ngOnChanges();
-     });*/
+     });
     this.mdlSnackbarService.showSnackbar(
       {
         message: 'Lagret',
       });
   };
 
+  deleteCrawlconfig(crawlconfigId: String): void {
+    this.crawljobService.deleteCrawlconfig(crawlconfigId).then((deletedCrawlconfigId: String) => {
+      this.deleteHandler(deletedCrawlconfigId);
+    });
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Slettet',
+      });
+
+  }
 
   prepareSaveCrawlconfig(): Crawlconfig {
     const formModel = this.crawlconfigForm.value;
@@ -125,7 +148,6 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     };
     return saveCrawlconfig;
   }
-
 
   onItemSelect(item) {
     console.log('Selected Item:');

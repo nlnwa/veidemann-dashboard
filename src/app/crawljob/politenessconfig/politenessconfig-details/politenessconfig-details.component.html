@@ -38,13 +38,13 @@
 </div>
 
 
-<button class="btn btn-primary" *ngIf="!politenessconfig.id" (click)="createPolitenessConfig(politenessconfig)"
+<button class="btn btn-primary" *ngIf="!politenessconfig.id" (click)="createPolitenessconfig(politenessconfig)"
         novalidate>Create
 </button>
-<button class="btn btn-info" *ngIf="politenessconfig.id" (click)="updatePolitenessConfig(politenessconfig)">Update
+<button class="btn btn-info" *ngIf="politenessconfig.id" (click)="updatePolitenessconfig(politenessconfig)">Update
 </button>
 <button class="btn btn-danger" *ngIf="politenessconfig.id"
-        (click)="deletePolitenessConfig(politenessconfig.id); $event.stopPropagation()">Delete
+        (click)="deletePolitenessconfig(politenessconfig.id); $event.stopPropagation()">Delete
 </button>
 
 <pre>{{politenessconfig | json}}</pre>

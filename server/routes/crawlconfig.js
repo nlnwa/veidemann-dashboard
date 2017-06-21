@@ -44,19 +44,20 @@ exports.updateCrawlConfig = (req, res) => {
       res.status(500);
     }
     else {
+      res.status(200).json(response);
 
     }
   })
 };
 
 exports.deleteCrawlConfig = (req, res) => {
-  client.saveCrawlConfig({id: req.params.id}, function (err, response) {
+  client.deleteCrawlConfig({id: req.params.id}, function (err, response) {
     if (err) {
       console.log("error: " + err);
       res.status(500);
     }
     else {
-
+      res.status(200).json(req.params.id);
     }
   })
 };
