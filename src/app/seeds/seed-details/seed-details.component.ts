@@ -19,7 +19,6 @@ export class SeedDetailComponent {
   @Input() seed: Seed;
   seedForm: FormGroup;
 
-
   @Input()
   createHandler: Function;
   @Input()
@@ -29,7 +28,6 @@ export class SeedDetailComponent {
 
   //collapse content
   public isCollapsedContent: boolean = true;
-
 
   dropdownCrawljobSettings = {};
   selectedCrawljobItems = [];
@@ -64,7 +62,6 @@ export class SeedDetailComponent {
       }),
     });
   }
-
 
   ngOnChanges() {
     this.seedForm.reset({
@@ -189,7 +186,9 @@ export class SeedDetailComponent {
     return saveSeed;
   }
 
-
+  test() {
+    console.log("hei");
+  }
 
   goBack(): void {
     setTimeout(() => {
