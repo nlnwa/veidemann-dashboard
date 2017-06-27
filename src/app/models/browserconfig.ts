@@ -1,3 +1,5 @@
+import {Meta} from "./meta";
+import {Label} from "./label";
 /**
  * Created by kristiana on 08.06.17.
  */
@@ -24,22 +26,6 @@ export class Browserconfig {
 export class Script_Id {
 
 }
-
-
-export class Meta {
-  name: string;
-  description: string;
-  created?: string;
-  created_by?: string;
-  last_modified?: string;
-  last_modified_by?: string;
-  label?: Label[];
-}
 export class Script_Selector {
   label: Label[];
-}
-
-export class Label {
-  key: string;
-  value: string;
 }

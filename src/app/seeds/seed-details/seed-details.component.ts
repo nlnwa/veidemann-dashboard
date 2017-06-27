@@ -1,11 +1,11 @@
 import {Component, Input} from "@angular/core";
-import {Seed, Label} from "../seed";
+import {Seed} from "../seed";
+import {Label} from "../../models/label";
 import {SeedsService} from "../seeds.service";
 import {Location} from "@angular/common";
 import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
-
 
 @Component({
   selector: 'seed-details',
@@ -13,7 +13,6 @@ import {MdlSnackbarService} from "angular2-mdl";
   styleUrls: ['./seed-details.component.css'],
 
 })
-
 
 export class SeedDetailComponent {
   @Input() seed: Seed;
@@ -48,9 +47,7 @@ export class SeedDetailComponent {
       id: {value: '', disabled: true},
       entity_id: {value: '', disabled: true},
       job_id: '',
-      scope: this.fb.group({
-        surt_prefix: ''
-      }),
+      scope: this.fb.group({surt_prefix: ''}),
       meta: this.fb.group({
         name: '',
         description: '',
@@ -63,23 +60,35 @@ export class SeedDetailComponent {
     });
   }
 
-  ngOnChanges() {
-    this.seedForm.reset({
-      id: this.seed.id,
-      entity_id: this.seed.entity_id,
-      scope: this.fb.group({
-        surt_prefix: this.seed.scope.surt_prefix,
-      }),
-      meta: this.fb.group({
-        name: this.seed.meta.name,
-        description: this.seed.meta.description,
-        created: this.seed.meta.created,
-        created_by: this.seed.meta.created_by,
-        last_modified: this.seed.meta.last_modified,
-        last_modified_by: this.seed.meta.last_modified_by,
-      }),
+  updateData(seed: Seed) {
+    this.seedForm.controls['id'].setValue(seed.id);
+    this.seedForm.controls['entity_id'].setValue(seed.entity_id);
+    this.seedForm.controls['scope'].setValue(seed.scope);
+    this.seedForm.controls['meta'].patchValue({
+      name: seed.meta.name,
+      description: seed.meta.description,
+      created: {
+        seconds: this.convertTimestamp(seed.meta.created.seconds),
+      },
+      created_by: seed.meta.created_by,
+      last_modified: {
+        seconds: this.convertTimestamp(seed.meta.last_modified.seconds),
+      },
+      last_modified_by: seed.meta.last_modified_by,
     });
     this.setLabel(this.seed.meta.label);
+    this.setDropdown()
+  }
+
+
+  ngOnChanges() {
+    this.updateData(this.seed);
+  }
+
+
+  setDropdown() {
+    this.selectedCrawljobItems = [];
+
     for (let i of this.seed.job_id) {
       this.seedService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
         value.forEach((key) => {
@@ -89,9 +98,11 @@ export class SeedDetailComponent {
     }
   }
 
-  get label(): FormArray {
-    return this.seedForm.get('label') as FormArray;
-  };
+  convertTimestamp(timestamp) {
+    const newdate = new Date(timestamp * 1000);
+    return newdate
+  }
+
 
   getJobs() {
     this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
@@ -109,35 +120,16 @@ export class SeedDetailComponent {
     };
   }
 
-  setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.seedForm.setControl('label', labelFormArray);
-  }
-
-  initLabel() {
-    return this.fb.group({
-      key: '',
-      value: '',
-    });
-  }
-
-  addLabel() {
-    const control = <FormArray>this.seedForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.seedForm.controls['label'];
-    control.removeAt(i);
-  }
 
   updateSeed(seedForm): void {
     this.seed = this.prepareSaveSeed();
     this.seedService.updateSeed(this.seed)
       .then((updatedSeed) => {
-      this.updateHandler(updatedSeed);
+        this.updateHandler(updatedSeed);
+        console.log(updatedSeed.meta.last_modified.seconds);
+        this.updateData(updatedSeed);
       });
+
     this.mdlSnackbarService.showSnackbar(
       {
         message: 'Lagret',
@@ -186,8 +178,40 @@ export class SeedDetailComponent {
     return saveSeed;
   }
 
-  test() {
-    console.log("hei");
+  setLabel(label) {
+    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFormArray = this.fb.array(labelFGs);
+    this.seedForm.setControl('label', labelFormArray);
+  }
+
+  initLabel() {
+    return this.fb.group({
+      key: '',
+      value: '',
+    });
+  }
+
+  get label(): FormArray {
+    return this.seedForm.get('label') as FormArray;
+  };
+
+
+  addLabel() {
+    const control = <FormArray>this.seedForm.controls['label'];
+    control.push(this.initLabel());
+  }
+
+  removeLabel(i: number) {
+    const control = <FormArray>this.seedForm.controls['label'];
+    control.removeAt(i);
+  }
+
+  revert() {
+    this.updateData(this.seed);
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
   }
 
   goBack(): void {

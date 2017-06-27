@@ -1,3 +1,4 @@
+import {Meta} from "./meta";
 export class Entities {
   Entity: Entity[];
   count: number;
@@ -14,17 +15,3 @@ export class Entity {
   job_id: string;
 }
 
-export class Meta {
-  name: string;
-  description: string;
-  created: string;
-  created_by: string;
-  last_modified: string;
-  last_modified_by: string;
-  labels: Label[];
-}
-
-export class Label {
-  key: string;
-  value: string;
-}

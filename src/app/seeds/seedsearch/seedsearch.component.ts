@@ -3,12 +3,10 @@ import {Seed} from "../seed";
 import {Observable, Subject} from "rxjs";
 import {SeedsService} from "../seeds.service";
 import {Router} from "@angular/router";
-import {Location} from "@angular/common";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
-import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-seedsearch',
@@ -22,15 +20,12 @@ export class SeedSearchComponent implements OnInit {
   private searchTerms = new Subject<string>();
 
   constructor(private SeedService: SeedsService,
-              private router: Router,
-              private fb: FormBuilder,
-              private location: Location,) {
+              private router: Router) {
   }
 
   search(term: string): void {
     this.searchTerms.next(term.replace(/\//g, '%2F'));
   }
-
 
   selectSeed(seed: Seed) {
     this.selectedSeed = seed;
@@ -53,16 +48,15 @@ export class SeedSearchComponent implements OnInit {
       });
   }
 
-
   gotoDetail(seed: Seed): void {
     let link = ['api/seed/', seed.id];
     this.router.navigate(link);
   }
 
-
   updateSeed = (seed: Seed) => {
-    return this.seed;
-  }
-
+    //this.SeedService.getSeed(seed.id);
+    //console.log(seed.meta.last_modified.seconds);
+    //const updatedSeed = this.SeedService.getSeed(seed.id).subscribe(updatedSeed => updatedSeed);
+  };
 
 }

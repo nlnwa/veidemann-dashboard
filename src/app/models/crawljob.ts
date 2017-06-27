@@ -1,3 +1,4 @@
+import {Meta} from "./meta";
 /**
  * Created by kristiana on 18.05.17.
  */
@@ -20,22 +21,8 @@ export class Crawljob {
   crawl_config?: string;
 }
 
-export class Meta {
-  name: string;
-  description: string;
-  created?: string;
-  created_by?: string;
-  last_modified?: string;
-  last_modified_by?: string;
-  label?: Label[];
-}
 export class Limit {
   depth: number;
   max_duration_s: string;
   max_bytes: string;
-}
-
-export class Label {
-  key: string;
-  value: string;
 }

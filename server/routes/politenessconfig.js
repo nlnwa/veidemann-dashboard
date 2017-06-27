@@ -46,7 +46,6 @@ exports.updatePolitenessConfig = (req, res) => {
       res.status(500);
     }
     else {
-
       res.status(200).json(response)
     }
   });

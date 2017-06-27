@@ -9,8 +9,6 @@
         <label class="center-block">Entitet:
           <angular2-multiselect [data]="entityList" [(ngModel)]="selectedEntityItems"
                                 [settings]="dropdownEntitySettings"
-                                (onSelect)="onItemSelect($event)"
-                                (onDeSelect)="OnItemDeSelect($event)"
                                 formControlName="entity_id"></angular2-multiselect>
           <small [hidden]="seedForm.controls.entity_id.valid" class="text-danger">
             Entitet er påkrevd.
@@ -30,8 +28,7 @@
         <div class="form-group">
           <label class="center-block">Høstejobb:
             <angular2-multiselect [data]="crawljobList" [(ngModel)]="selectedCrawljobItems"
-                                  [settings]="dropdownCrawljobSettings" (onSelect)="onItemSelect($event)"
-                                  (onDeSelect)="OnItemDeSelect($event)" formControlName="job_id"></angular2-multiselect>
+                                  [settings]="dropdownCrawljobSettings" formControlName="job_id"></angular2-multiselect>
             <small [hidden]="seedForm.controls.job_id.valid" class="text-danger">
               Høstejobb er påkrevd.
             </small>

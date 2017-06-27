@@ -1,3 +1,4 @@
+import {Meta} from "./meta";
 /**
  * Created by kristiana on 18.05.17.
  */
@@ -22,21 +23,7 @@ export class Crawlconfig {
   depth_first: boolean;
 }
 
-export class Meta {
-  name: string;
-  description: string;
-  created?: string;
-  created_by?: string;
-  last_modified?: string;
-  last_modified_by?: string;
-  label?: Label[];
-}
 export class Extra {
   extract_text: boolean;
   create_snapshot: boolean;
-}
-
-export class Label {
-  key: string;
-  value: string;
 }

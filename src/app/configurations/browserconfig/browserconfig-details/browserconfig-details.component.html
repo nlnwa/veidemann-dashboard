@@ -1,0 +1,88 @@
+<div class="col-md-12">
+  <h2 *ngIf="browserconfig.id">Browserconfig Details</h2>
+  <h2 *ngIf="!browserconfig.id">New Browserconfig</h2>
+</div>
+
+<form [formGroup]="browserconfigForm">
+
+<div class="form-group" formGroupName="meta">
+  <label class="center-block">Navn:
+    <input class="form-control" formControlName="name">
+  </label>
+</div>
+<div class="form-group" formGroupName="meta">
+  <label class="center-block">Beskrivelse:
+    <input class="form-control" formControlName="description">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">User Agent:
+    <input class="form-control" formControlName="user_agent">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Window width
+    <input class="form-control" type="number" formControlName="window_width">
+  </label>
+</div>
+
+<div class="form-group">
+  <label class="center-block">Window height:
+    <input class="form-control" type="number" formControlName="window_height">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">Page load timeout in ms:
+    <input class="form-control" formControlName="page_load_timeout_ms">
+  </label>
+</div>
+<!--div class="form-group">
+  <label class="center-block">Script id:
+    <input class="form-control" formControlName="script_id">
+  </label>
+</div-->
+<div class="form-group" formGroupName="headers">
+  <label class="center-block">Headers:
+    <input class="form-control">
+  </label>
+</div>
+<div class="form-group">
+  <label class="center-block">sleep_after_pageload_ms:
+    <input class="form-control" formControlName="sleep_after_pageload_ms">
+  </label>
+</div>
+
+  <div class="form-group">
+
+    <div formArrayName="label" class="well well-lg">
+      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+        <div class="panel-heading">
+          <span>Merkelapp #{{i + 1}}</span>
+          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="center-block">Type:
+            <input class="form-control" formControlName="key">
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="center-block">Verdi:
+            <input class="form-control" formControlName="value">
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+    </div>
+  </div>
+
+<button class="btn btn-primary" *ngIf="!browserconfig.id" (click)="createBrowserconfig(browserconfigForm.value)" novalidate>
+  Create
+</button>
+<button class="btn btn-info" *ngIf="browserconfig.id" (click)="updateBrowserconfig(browserconfigForm.value)">Update</button>
+<button class="btn btn-danger" *ngIf="browserconfig.id"
+        (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Delete
+</button>
+</form>

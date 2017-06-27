@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {SeedsService} from "./seeds.service";
-import {Seed, Label} from "./seed";
-import {Entity} from "../models/entity";
+import {Seed} from "./seed";
+import {Label} from "../models/label";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
@@ -13,7 +13,6 @@ import {Router} from "@angular/router";
 })
 export class SeedsComponent {
   @Input() seed: Seed;
-  entities: Entity[];
   seedForm: FormGroup;
   entityList: any = [];
   crawljobList: any = [];
@@ -38,6 +37,7 @@ export class SeedsComponent {
     this.createForm();
     this.getSeeds();
     this.getEntities();
+    this.getCrawljobs()
   }
 
   createForm() {
@@ -54,13 +54,6 @@ export class SeedsComponent {
       }),
     });
     this.setLabel([]);
-  }
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
   }
 
   getSeeds(): void {
@@ -151,47 +144,44 @@ export class SeedsComponent {
     control.removeAt(i);
   }
 
-  onItemSelect(item) {
-    console.log('Selected Item:');
-    console.log(item);
-  }
-
-  OnItemDeSelect(item) {
-    console.log('De-Selected Item:');
-    console.log(item);
+  initLabel() {
+    return this.fb.group({
+      key: ['', [Validators.required, Validators.minLength(2)]],
+      value: ['', [Validators.required, Validators.minLength(2)]],
+    });
   }
 
   getEntities() {
-    //  this.setLabel(this.seed.meta.label);
-    this.seedService.getEntities().map(entities => entities.value).forEach((value) => {
-      value.forEach((key) => {
-        this.entityList.push({id: key.id, itemName: key.meta.name})
-      })
-    });
-
-    this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
-      value.forEach((key) => {
-        this.crawljobList.push({id: key.id, itemName: key.meta.name})
-      })
-    });
-
-    this.selectedCrawljobItems = [];
     this.selectedEntityItems = [];
-
     this.dropdownEntitySettings = {
       singleSelection: true,
       text: "Velg Entitet",
       enableSearchFilter: true
     };
 
+    this.seedService.getEntities().map(entities => entities.value).forEach((value) => {
+      value.forEach((key) => {
+        this.entityList.push({id: key.id, itemName: key.meta.name})
+      })
+    });
+  }
+
+  getCrawljobs() {
+    this.selectedCrawljobItems = [];
     this.dropdownCrawljobSettings = {
       singleSelection: false,
       text: "Velg høstejobb",
       enableSearchFilter: true
     };
-  }
 
+    this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
+      value.forEach((key) => {
+        this.crawljobList.push({id: key.id, itemName: key.meta.name})
+      })
+    });
+  }
 }
+
 export class FormValidatorUtils {
   static nonEmpty(control: any) {
     if (!control.value || control.value.length === 0) {

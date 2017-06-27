@@ -8,7 +8,6 @@
 
       <h2>Seed Details
       </h2>
-      {{seedForm.value | json }}
       <div class="switch">
         <mdl-switch>Aktiv</mdl-switch>
       </div>
@@ -22,7 +21,7 @@
 
         <div class="form-group"  formGroupName="meta">
           <label class="center-block">Seed:
-            <input class="form-control" [(ngModel)]="seed.meta.name" formControlName="name">
+            <input class="form-control" formControlName="name">
           </label>
         </div>
 
@@ -35,7 +34,7 @@
 
         <div class="form-group" formGroupName="meta">
           <label class="center-block">Description:
-            <input class="form-control" [(ngModel)]="seed.meta.description" formControlName="description"
+            <input class="form-control"  formControlName="description"
                    placeholder="description"/>
           </label>
         </div>
@@ -82,48 +81,45 @@
           <div class="form-group" formGroupName="scope">
             <label class="center-block">Scope:
               <input *ngIf="!seed.scope" class="form-control"/>
-              <input *ngIf="seed.scope" class="form-control" [(ngModel)]="seed.scope.surt_prefix"
+              <input *ngIf="seed.scope" class="form-control"
                      formControlName="surt_prefix"/>
             </label>
           </div>
           <div class="form-group">
             <label class="center-block">id:
-              <input class="form-control" [(ngModel)]="seed.id" formControlName="id"/>
+              <input class="form-control" formControlName="id"/>
             </label>
           </div>
           <div class="form-group" formGroupName="meta">
             <div class="form-group" formGroupName="created">
               <label class="center-block">Created:
                 <input class="form-control"
-                       [ngModel]="seed.meta.created.seconds * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'"
                        formControlName="seconds"/>
               </label>
             </div>
           </div>
           <div class="form-group" formGroupName="meta">
             <label class="center-block">Created By:
-              <input class="form-control" [(ngModel)]="seed.meta.created_by" formControlName="created_by"/>
+              <input class="form-control" formControlName="created_by"/>
             </label>
           </div>
           <div class="form-group" formGroupName="meta">
             <div class="form-group" formGroupName="last_modified">
               <label class="center-block">Last Modified:
                 <input class="form-control"
-                       [ngModel]="seed.meta.last_modified.seconds * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'"
                        formControlName="seconds"/>
               </label>
             </div>
           </div>
           <div class="form-group" formGroupName="meta">
             <label class="center-block">Last Modified By:
-              <input class="form-control" [(ngModel)]="seed.meta.last_modified_by"
-                     formControlName="last_modified_by"/>
+              <input class="form-control" formControlName="last_modified_by"/>
             </label>
           </div>
 
         </div>
         <button class="btn btn-success" (click)="updateSeed(seedForm.value)">Update</button>
-        <button class="btn btn-info" (click)="test()">Tilbakestill</button>
+        <button class="btn btn-info" (click)="revert()">Tilbakestill</button>
         <button class="btn btn-danger" (click)="deleteSeed(seed.id)">Delete</button>
       </form>
     </div>

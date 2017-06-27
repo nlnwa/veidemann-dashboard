@@ -18,20 +18,23 @@ import {SeedsService} from "./seeds/seeds.service";
 import {ModalComponent} from "./extras/modal.components";
 import {SeedDetailComponent} from "./seeds/seed-details/seed-details.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {AngularMultiSelectModule} from "angular2-multiselect-dropdown/angular2-multiselect-dropdown";
+import {AngularMultiSelectModule} from "./angular2-multiselect-dropdown/angular2-multiselect-dropdown";
 import {MdlModule} from "angular2-mdl";
 import {Collapse} from "./extras/collapse.component";
-import {CrawljobDetailsComponent} from "./crawljob/crawljob-details/crawljob-details.component";
-import {CrawljobListComponent} from "./crawljob/crawljob-list/crawljob-list.component";
-import {CrawljobService} from "./crawljob/crawljob.service";
-import {ScheduleComponent} from "./crawljob/schedule/schedule-list/schedule.component";
-import {ScheduleDetailsComponent} from "./crawljob/schedule/schedule-details/schedule-details.component";
-import {CrawlconfigListComponent} from "./crawljob/crawlconfig/crawlconfig-list/crawlconfig-list.component";
-import {CrawlconfigDetailsComponent} from "./crawljob/crawlconfig/crawlconfig-details/crawlconfig-details.component";
-import {BrowserconfigDetailsComponent} from "./crawljob/browserconfig/browserconfig-details/browserconfig-details.component";
-import {BrowserconfigListComponent} from "./crawljob/browserconfig/browserconfig-list/browserconfig-list.component";
-import {PolitenessconfigDetailsComponent} from "./crawljob/politenessconfig/politenessconfig-details/politenessconfig-details.component";
-import {PolitenessconfigListComponent} from "./crawljob/politenessconfig/politenessconfig-list/politenessconfig-list.component";
+import {CrawljobDetailsComponent} from "./configurations/crawljobs/crawljob-details/crawljob-details.component";
+import {CrawljobListComponent} from "./configurations/crawljobs/crawljob-list/crawljob-list.component";
+import {CrawljobService} from "./configurations/crawljobs/crawljob.service";
+import {ScheduleComponent} from "./configurations/schedule/schedule-list/schedule.component";
+import {ScheduleDetailsComponent} from "./configurations/schedule/schedule-details/schedule-details.component";
+import {CrawlconfigListComponent} from "./configurations/crawlconfig/crawlconfig-list/crawlconfig-list.component";
+import {CrawlconfigDetailsComponent} from "./configurations/crawlconfig/crawlconfig-details/crawlconfig-details.component";
+import {CrawlconfigService} from "./configurations/crawlconfig/crawlconfig.service";
+import {BrowserconfigDetailsComponent} from "./configurations/browserconfig/browserconfig-details/browserconfig-details.component";
+import {BrowserconfigListComponent} from "./configurations/browserconfig/browserconfig-list/browserconfig-list.component";
+import {BrowserconfigService} from "./configurations/browserconfig/browserconfig.service"
+import {PolitenessconfigDetailsComponent} from "./configurations/politenessconfig/politenessconfig-details/politenessconfig-details.component";
+import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
+import {PolitenessconfigService} from "./configurations/politenessconfig/politenessconfig.service";
 
 
 const ROUTES = [
@@ -135,6 +138,9 @@ const ROUTES = [
     StatisticsService,
     SeedsService,
     CrawljobService,
+    CrawlconfigService,
+    PolitenessconfigService,
+    BrowserconfigService,
   ],
   bootstrap: [AppComponent]
 })

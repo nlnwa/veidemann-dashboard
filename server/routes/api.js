@@ -27,11 +27,11 @@ router.get('/', (req, res) => {
 });
 
 
-r = require('rethinkdbdash')({
+/*r = require('rethinkdbdash')({
  port: process.env.rethink_port,
  host: process.env.rethink_host,
  db: process.env.rethink_db
- });
+ });*/
 
 const accessLevel = function () {
   const accesslvls = arguments;

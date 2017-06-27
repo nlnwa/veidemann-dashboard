@@ -40,7 +40,7 @@ exports.updateSeed = (req, res) => {
       res.status(500);
     }
     else {
-
+      console.log(response);
       res.status(200).json(response);
     }
   })

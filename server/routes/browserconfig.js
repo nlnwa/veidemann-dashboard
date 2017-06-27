@@ -44,6 +44,7 @@ exports.updateBrowserConfig = (req, res) => {
       res.status(500);
     }
     else {
+      console.log(req.body);
       res.status(200).json(response);
     }
   })
