@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Politenessconfig} from "../../../models/politenessconfig";
+import {Politenessconfig} from "../politenessconfig";
 import {PolitenessconfigService} from "../politenessconfig.service";
 
 @Component({

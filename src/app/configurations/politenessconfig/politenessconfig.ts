@@ -1,4 +1,4 @@
-import {Meta} from "./meta";
+import {Meta} from "../../commons/models/meta";
 /**
  * Created by kristiana on 08.06.17.
  */
@@ -16,5 +16,5 @@ export class Politenessconfig {
   robots_policy: string;
   minimum_robots_validity_duration_s?: number;
   custom_robots: string;
-  min_time_between_page_load_ms?: string;
+  min_time_between_page_load_ms?: number;
 }

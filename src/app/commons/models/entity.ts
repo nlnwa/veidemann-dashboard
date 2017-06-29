@@ -10,7 +10,6 @@ export class Entity {
   id?: string;
   meta: Meta;
   entity_id: string;
-  uri: string;
   scope: string;
   job_id: string;
 }

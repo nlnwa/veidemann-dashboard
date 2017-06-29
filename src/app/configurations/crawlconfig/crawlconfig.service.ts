@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
-import {Crawlconfig} from "../../models/crawlconfig";
+import {Crawlconfig} from "./crawlconfig";
 
 @Injectable()
 export class CrawlconfigService {

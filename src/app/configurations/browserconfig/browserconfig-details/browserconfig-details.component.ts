@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {BrowserconfigService} from "../browserconfig.service";
-import {Browserconfig} from "../../../models/browserconfig";
+import {Browserconfig} from "../browserconfig";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
-import {Label} from "../../../models/label";
+import {Label} from "../../../commons/models/label";
 
 @Component({
   selector: 'browserconfig-details',

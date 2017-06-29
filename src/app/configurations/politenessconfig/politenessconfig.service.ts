@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
 
-import {Politenessconfig} from "../../models/politenessconfig";
+import {Politenessconfig} from "./politenessconfig";
 
 
 @Injectable()

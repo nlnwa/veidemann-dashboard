@@ -1,13 +1,13 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
-import {Crawlconfig} from "../../../models/crawlconfig";
+import {Crawlconfig} from "../crawlconfig";
 import {CrawlconfigService} from "../crawlconfig.service";
 import {PolitenessconfigService} from "../../politenessconfig/politenessconfig.service"
 import {FormGroup, FormBuilder, FormArray} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
-import {Browserconfig} from "../../../models/browserconfig";
-import {Politenessconfig} from "../../../models/politenessconfig";
+import {Browserconfig} from "../../browserconfig/browserconfig";
+import {Politenessconfig} from "../../politenessconfig/politenessconfig";
 import {BrowserconfigService} from "../../browserconfig/browserconfig.service";
-import {Label} from "../../../models/label";
+import {Label} from "../../../commons/models/label";
 
 @Component({
   selector: 'crawlconfig-details',

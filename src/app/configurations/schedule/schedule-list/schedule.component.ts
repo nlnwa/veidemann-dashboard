@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Schedule} from "../../../models/schedule";
+import {Schedule} from "../schedule";
 import {CrawljobService} from "../../crawljobs/crawljob.service";
 
 @Component({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
-import {Browserconfig} from "../../models/browserconfig";
+import {Browserconfig} from "./browserconfig";
 
 @Injectable()
 export class BrowserconfigService {

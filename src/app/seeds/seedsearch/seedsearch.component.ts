@@ -29,6 +29,9 @@ export class SeedSearchComponent implements OnInit {
 
   selectSeed(seed: Seed) {
     this.selectedSeed = seed;
+    this.searchTerms=null;
+    //let link = ['/seeds/', seed.id];
+    //this.router.navigate(link);
   }
 
   ngOnInit() {
@@ -49,7 +52,7 @@ export class SeedSearchComponent implements OnInit {
   }
 
   gotoDetail(seed: Seed): void {
-    let link = ['api/seed/', seed.id];
+    let link = ['/seeds/', seed.id];
     this.router.navigate(link);
   }
 

@@ -1,9 +1,9 @@
 import {Component, Input} from "@angular/core";
-import {Politenessconfig} from "../../../models/politenessconfig";
+import {Politenessconfig} from "../politenessconfig";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
 import {PolitenessconfigService} from "../politenessconfig.service";
-import {Label} from "../../../models/label";
+import {Label} from "../../../commons/models/label";
 
 
 @Component({
@@ -141,7 +141,7 @@ export class PolitenessconfigDetailsComponent {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
        // created: '',
-       // created_by: '',
+        created_by: '',
        // last_modified: null,
         last_modified_by: '',
         label: labelsDeepCopy

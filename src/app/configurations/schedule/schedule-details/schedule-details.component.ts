@@ -1,9 +1,9 @@
 import {Component, Input} from "@angular/core";
-import {Schedule} from "../../../models/schedule";
+import {Schedule} from "../schedule";
 import {CrawljobService} from "../../crawljobs/crawljob.service";
 import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
-import {Label} from "../../../models/label";
+import {Label} from "../../../commons/models/label";
 
 @Component({
   selector: 'schedule-details',

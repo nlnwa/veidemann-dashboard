@@ -17,11 +17,10 @@ export class SeedsService {
       .map(res => res.json().value);
   }
 
-
   getSeed(seed) {
     const url = `${this.seedsUrl}/${seed}`;
     return this.http.get(url)
-      .map(res => res.json().value);
+      .map(res => res.json().value as Seed);
   }
 
   search(term: string): Observable<Seed[]> {
@@ -61,7 +60,6 @@ export class SeedsService {
   // put("/api/entities/:id")
   updateSeed(putSeed: Seed): Promise<Seed> {
     const putUrl = this.seedsUrl + '/' + putSeed.id;
-    //console.log(this.http.put(putUrl, putSeed).toPromise().then(response => {console.log(response.json())}));  //).json() as Seed));
     return this.http.put(putUrl, putSeed)
       .toPromise()
       .then(response => response.json() as Seed)

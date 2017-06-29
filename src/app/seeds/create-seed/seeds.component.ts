@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
-import {SeedsService} from "./seeds.service";
-import {Seed} from "./seed";
-import {Label} from "../models/label";
+import {SeedsService} from "../seeds.service";
+import {Seed} from "../seed";
+import {Label} from "../../commons/models/label";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
@@ -82,6 +82,9 @@ export class SeedsComponent {
       {
         message: 'Lagret',
       });
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 0);
   }
 
   prepareSaveSeed(): Seed {

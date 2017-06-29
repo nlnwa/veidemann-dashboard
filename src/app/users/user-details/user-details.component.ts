@@ -63,7 +63,6 @@ export class UserDetailsComponent {
   }
 
   createUser() {
-    console.log(this.createHandler);
     this.userService.createUser(this.userForm.value).then((newUser: User) => {
       this.createHandler(newUser);
     });
@@ -76,7 +75,6 @@ export class UserDetailsComponent {
   }
 
   deleteUser(userId: String): void {
-    console.log(userId);
     this.userService.deleteUser(userId).then((deletedUserId: String) => {
       this.deleteHandler(deletedUserId);
     });

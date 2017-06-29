@@ -1,6 +1,8 @@
 /**
  * Created by kristiana on 11.05.17.
  */
+
+
 exports.listBrowserConfig = (req, res) => {
   client.listBrowserConfigs({}, function (err, response) {
     if (err) {

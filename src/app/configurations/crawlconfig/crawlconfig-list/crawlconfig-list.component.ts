@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {CrawlconfigService} from "../crawlconfig.service";
-import {Crawlconfig} from "../../../models/crawlconfig";
+import {Crawlconfig} from "../crawlconfig";
 
 @Component({
   selector: 'crawlconfig-list',
@@ -17,7 +17,7 @@ export class CrawlconfigListComponent implements OnInit {
 
   ngOnInit() {
     this.crawlconfigService.getAllCrawlconfigs().subscribe(crawlconfigs => {
-      this.crawlconfigs = crawlconfigs.value
+      this.crawlconfigs = crawlconfigs.value;
     })
   }
 

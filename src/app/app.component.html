@@ -4,7 +4,7 @@
     <!-- Top row, always visible -->
     <div class="mdl-layout__header-row">
       <!-- Title -->
-      <span class="mdl-layout-title">Whaat</span>
+      <span class="mdl-layout-title">Bosslady's Nettarkiv</span>
       <div class="mdl-layout-spacer"></div>
       <!--div class="searcbox"-->
       <div class="mdl-textfield is-dirty" data-upgraded=",MaterialTextfield">
@@ -13,17 +13,14 @@
           <i class="material-icons">search</i>
         </label>
         <div class="mdl-textfield__expandable-holder">
-          <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
-        </div>
+          <input class="mdl-textfield__input" placeholder="Search.." id="fixed-header-drawer-exp" #searchBox id="search-box" (keyup)="search(searchBox.value)">
       </div>
     </div>
-    <!--/div-->
+    </div>
 
     <!-- Bottom row, not visible on scroll -->
-
     <div class="mdl-layout-spacer"></div>
     <!-- Navigation -->
-
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">
@@ -52,10 +49,28 @@
 
     </nav>
   </div>
+
+
   <main class="mdl-layout__content">
+    <div class="search-result_right">
+
+      <ul class="demo-list-item mdl-list">
+        <li class="mdl-list__item" *ngFor="let seed of seed | async; let i=index" (click)="gotoDetail(seed)">
+        <ng-container *ngIf="i<12">
+          {{seed.meta.name}}
+        </ng-container>
+        </li>
+      </ul>
+    </div>
+    <!-- Row 1 -->
+
     <div class="page-content"><!-- Your content goes here -->
-      <router-outlet></router-outlet>
-      <dialog-outlet></dialog-outlet>
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--11-col">
+          <router-outlet></router-outlet>
+          <dialog-outlet></dialog-outlet>
+        </div>
+      </div>
     </div>
   </main>
 </div>

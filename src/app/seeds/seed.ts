@@ -1,4 +1,4 @@
-import {Meta} from "../models/meta";
+import {Meta} from "../commons/models/meta";
 /**
  * Created by kristiana on 16.05.17.
  */
