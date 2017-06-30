@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {Schedule} from "../schedule";
 import {CrawljobService} from "../../crawljobs/crawljob.service";
-import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
+import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../../commons/models/label";
 
@@ -31,21 +31,34 @@ export class ScheduleDetailsComponent {
 
   createForm() {
     this.scheduleForm = this.fb.group({
-      id: '',
-      cron_expression:'',
-      valid_from:'',
+      id: {value: '', disabled: true},
+      cron_expression: this.fb.group({
+        minute: ['', [Validators.required, Validators.minLength(1)]],
+        hour: ['', [Validators.required, Validators.minLength(1)]],
+        dom: ['', [Validators.required, Validators.minLength(1)]],
+        month: ['', [Validators.required, Validators.minLength(1)]],
+        dow: ['', [Validators.required, Validators.minLength(1)]],
+      }),
+      valid_from: '',
       valid_to: '',
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: ['', [Validators.required, Validators.minLength(2)]],
 //        label: this.fb.array([]),
       }),
     });
   }
 
   updateData(schedule: Schedule) {
+    const cron_splitted = schedule.cron_expression.split(' ');
     this.scheduleForm.controls['id'].setValue(schedule.id);
-    this.scheduleForm.controls['cron_expression'].setValue(schedule.cron_expression);
+    this.scheduleForm.controls['cron_expression'].setValue({
+      minute: cron_splitted[0],
+      hour: cron_splitted[1],
+      dom: cron_splitted[2],
+      month: cron_splitted[3],
+      dow: cron_splitted[4],
+    });
     this.scheduleForm.controls['valid_from'].setValue(schedule.valid_from);
     this.scheduleForm.controls['valid_to'].setValue(schedule.valid_to);
     this.scheduleForm.controls['meta'].patchValue({
@@ -114,8 +127,8 @@ export class ScheduleDetailsComponent {
 
   initLabel() {
     return this.fb.group({
-      key: '',
-      value: '',
+      key: ['', [Validators.required, Validators.minLength(2)]],
+      value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 
@@ -126,11 +139,16 @@ export class ScheduleDetailsComponent {
       (label: Label) => Object.assign({}, label)
     );
 
+    const cron_expression = formModel.cron_expression.minute + ' '
+      + formModel.cron_expression.hour + ' '
+      + formModel.cron_expression.dom + ' '
+      + formModel.cron_expression.month + ' '
+      + formModel.cron_expression.dow;
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveSchedule: Schedule = {
       id: this.schedule.id,
-      cron_expression: formModel.cron_expression,
+      cron_expression: cron_expression,
       valid_from: formModel.valid_from,
       valid_to: formModel.valid_to,
       meta: {

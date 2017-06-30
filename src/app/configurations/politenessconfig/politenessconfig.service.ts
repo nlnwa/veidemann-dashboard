@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-
 import {Politenessconfig} from "./politenessconfig";
 
 
@@ -9,7 +8,8 @@ export class PolitenessconfigService {
 
   private politenessconfigUrl = '/api/politenessconfig';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
 
   getAllPolitenessconfigs() {
@@ -43,6 +43,7 @@ export class PolitenessconfigService {
       .then(response => response.json() as Politenessconfig)
       .catch(this.handleError);
   }
+
   private handleError(error: any) {
     const errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';

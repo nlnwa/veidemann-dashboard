@@ -1,12 +1,13 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
 import {Crawljob} from "../crawljob";
 import {CrawljobService} from "../crawljob.service";
-import {CrawlconfigService } from "../../crawlconfig/crawlconfig.service";
+import {CrawlconfigService} from "../../crawlconfig/crawlconfig.service";
 import {Schedule} from "../../schedule/schedule";
 import {Crawlconfig} from "../../crawlconfig/crawlconfig";
-import {FormBuilder, FormGroup, FormArray} from "@angular/forms";
+import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../../commons/models/label";
+import {FormValidatorUtils} from "../../../commons/components/formValidation";
 
 @Component({
   selector: 'crawljob-details',
@@ -49,16 +50,16 @@ export class CrawljobDetailsComponent implements OnChanges {
   createForm() {
     this.crawljobForm = this.fb.group({
       id: {value: '', disabled: true},
-      schedule_id: '',
-      crawl_config_id: '',
+      schedule_id: ['', FormValidatorUtils.nonEmpty],
+      crawl_config_id: ['', FormValidatorUtils.nonEmpty],
       limits: this.fb.group({
-        depth: '',
-        max_duration_s: '',
-        max_bytes: '',
+        depth: ['', [Validators.required, Validators.minLength(1)]],
+        max_duration_s: ['', [Validators.required, Validators.minLength(1)]],
+        max_bytes: ['', [Validators.required, Validators.minLength(1)]],
       }),
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: ['', [Validators.required, Validators.minLength(2)]],
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
@@ -217,8 +218,8 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   initLabel() {
     return this.fb.group({
-      key: '',
-      value: '',
+      key: ['', [Validators.required, Validators.minLength(2)]],
+      value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 }

@@ -18,7 +18,7 @@
           </label>
         </div>
 
-        <div class="form-group"  formGroupName="meta">
+        <div class="form-group" formGroupName="meta">
           <label class="center-block">Seed:
             <input class="form-control" formControlName="name">
           </label>
@@ -33,7 +33,7 @@
 
         <div class="form-group" formGroupName="meta">
           <label class="center-block">Description:
-            <input class="form-control"  formControlName="description"
+            <input class="form-control" formControlName="description"
                    placeholder="description"/>
           </label>
         </div>
@@ -116,7 +116,8 @@
           </div>
 
         </div>
-        <button class="btn btn-success" (click)="updateSeed(seedForm.value)">Update</button>
+        <button class="btn btn-success" [disabled]="!seedForm.valid" (click)="updateSeed(seedForm.value)">Update
+        </button>
         <button class="btn btn-info" (click)="revert()">Tilbakestill</button>
         <button class="btn btn-danger" (click)="deleteSeed(seed.id)">Delete</button>
       </form>

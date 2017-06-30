@@ -50,7 +50,7 @@ export class CrawljobService {
       .map(res => res.json());
   }
 
- createSchedule(newSchedule: Schedule): Promise<Schedule> {
+  createSchedule(newSchedule: Schedule): Promise<Schedule> {
     return this.http.post(this.scheduleUrl, newSchedule)
       .toPromise()
       .then(response => response.json() as Schedule)

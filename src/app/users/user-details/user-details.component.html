@@ -45,9 +45,6 @@
     <br>
     <!-- End of the repeated address template -->
 
-
-    {{userForm.value | json}}
-
   </form>
   <button class="btn btn-primary" *ngIf="!user.id" (click)="createUser(userForm.value)" novalidate>Create</button>
   <button class="btn btn-info" *ngIf="user.id" (click)="updateUser(userForm)">Update</button>

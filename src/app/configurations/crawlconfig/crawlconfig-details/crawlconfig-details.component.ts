@@ -1,19 +1,20 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
+import {Component, Input, OnChanges} from "@angular/core";
 import {Crawlconfig} from "../crawlconfig";
 import {CrawlconfigService} from "../crawlconfig.service";
-import {PolitenessconfigService} from "../../politenessconfig/politenessconfig.service"
-import {FormGroup, FormBuilder, FormArray} from "@angular/forms";
+import {PolitenessconfigService} from "../../politenessconfig/politenessconfig.service";
+import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Browserconfig} from "../../browserconfig/browserconfig";
 import {Politenessconfig} from "../../politenessconfig/politenessconfig";
 import {BrowserconfigService} from "../../browserconfig/browserconfig.service";
 import {Label} from "../../../commons/models/label";
+import {FormValidatorUtils} from "../../../commons/components/formValidation";
 
 @Component({
   selector: 'crawlconfig-details',
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  //encapsulation: ViewEncapsulation.None,
 
 })
 export class CrawlconfigDetailsComponent implements OnChanges {
@@ -50,17 +51,17 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   createForm() {
     this.crawlconfigForm = this.fb.group({
       id: {value: '', disabled: true},
-      browser_config_id: '',
-      politeness_id: '',
+      browser_config_id: ['', FormValidatorUtils.nonEmpty],
+      politeness_id: ['', FormValidatorUtils.nonEmpty],
       extra: this.fb.group({
         extract_text: true,
         create_snapshot: true,
       }),
-      minimum_dns_ttl_s: '',
+      minimum_dns_ttl_s: ['', [Validators.required, Validators.minLength(1)]],
       depth_first: '',
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: ['', [Validators.required, Validators.minLength(2)]],
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
@@ -83,12 +84,12 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       description: crawlconfig.meta.description as string,
     });
     this.setLabel(crawlconfig.meta.label);
-    this.setDropdown();
+    this.setSelectedDropdown();
 
   }
 
   ngOnChanges() {
-  this.updateData(this.crawlconfig);
+    this.updateData(this.crawlconfig);
   }
 
   createCrawlconfig() {
@@ -105,9 +106,9 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   updateCrawlconfig(crawlconfigForm): void {
     this.crawlconfig = this.prepareSaveCrawlconfig();
     this.crawlconfigService.updateCrawlconfig(this.crawlconfig)
-    .then((updatedCrawlconfig) => {
-     this.updateHandler(updatedCrawlconfig);
-     });
+      .then((updatedCrawlconfig) => {
+        this.updateHandler(updatedCrawlconfig);
+      });
     this.mdlSnackbarService.showSnackbar(
       {
         message: 'Lagret',
@@ -153,7 +154,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     return saveCrawlconfig;
   }
 
-  setDropdown() {
+  setSelectedDropdown() {
     this.selectedPolitenessconfigItems = [];
     this.selectedBrowserconfigItems = [];
 
@@ -174,6 +175,10 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   }
 
   filldropdown() {
+
+    this.selectedPolitenessconfigItems = [];
+    this.selectedBrowserconfigItems = [];
+
     this.browserconfigService.getAllBrowserconfigs().map(browserconfigs => browserconfigs.value).forEach((value) => {
       value.forEach((key) => {
         this.browserconfigList.push({id: key.id, itemName: key.meta.name})
@@ -186,10 +191,6 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       })
     });
 
-
-
-    this.selectedPolitenessconfigItems = [];
-    this.selectedBrowserconfigItems = [];
 
     this.dropdownPolitenessconfigSettings = {
       singleSelection: true,
@@ -226,8 +227,8 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   initLabel() {
     return this.fb.group({
-      key: '',
-      value: '',
+      key: ['', [Validators.required, Validators.minLength(2)]],
+      value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 

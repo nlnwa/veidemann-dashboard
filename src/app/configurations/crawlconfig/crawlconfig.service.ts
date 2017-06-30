@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Crawlconfig} from "./crawlconfig";
 
@@ -7,7 +7,8 @@ export class CrawlconfigService {
 
   private crawlconfigUrl = '/api/crawlconfig';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
   getCrawlconfig(crawlconfig_id) {
     return this.http.get(`${this.crawlconfigUrl}/${crawlconfig_id}`)

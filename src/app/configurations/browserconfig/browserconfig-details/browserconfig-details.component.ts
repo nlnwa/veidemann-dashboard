@@ -2,7 +2,7 @@ import {Component, Input, OnChanges} from "@angular/core";
 import {BrowserconfigService} from "../browserconfig.service";
 import {Browserconfig} from "../browserconfig";
 import {MdlSnackbarService} from "angular2-mdl";
-import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
+import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/models/label";
 
 @Component({
@@ -22,32 +22,31 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  constructor(
-    private browserconfigService: BrowserconfigService,
-    private mdlSnackbarService: MdlSnackbarService,
-    private fb: FormBuilder) {
+  constructor(private browserconfigService: BrowserconfigService,
+              private mdlSnackbarService: MdlSnackbarService,
+              private fb: FormBuilder) {
     this.createForm()
   }
 
   createForm() {
     this.browserconfigForm = this.fb.group({
       id: '',
-      user_agent:'',
-      window_width:'',
-      window_height: '',
-      page_load_timeout_ms:'',
-      sleep_after_pageload_ms: '',
+      user_agent: ['', [Validators.required, Validators.minLength(1)]],
+      window_width: ['', [Validators.required, Validators.minLength(1)]],
+      window_height: ['', [Validators.required, Validators.minLength(1)]],
+      page_load_timeout_ms: ['', [Validators.required, Validators.minLength(1)]],
+      sleep_after_pageload_ms: ['', [Validators.required, Validators.minLength(1)]],
       headers: this.fb.group({}),
       script_id: this.fb.array([]),
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['', [Validators.required, Validators.minLength(1)]],
+        description: ['', [Validators.required, Validators.minLength(1)]],
         label: this.fb.array([]),
       }),
     });
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.updateData(this.browserconfig);
   }
 
@@ -58,7 +57,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     this.browserconfigForm.controls['window_height'].setValue(browserconfig.window_height);
     this.browserconfigForm.controls['page_load_timeout_ms'].setValue(browserconfig.page_load_timeout_ms);
     this.browserconfigForm.controls['sleep_after_pageload_ms'].setValue(browserconfig.sleep_after_pageload_ms);
-   // this.browserconfigForm.controls['headers'].patchValue({heihei: browserconfig.headers});
+    // this.browserconfigForm.controls['headers'].patchValue({heihei: browserconfig.headers});
     this.browserconfigForm.controls['meta'].patchValue({
       name: browserconfig.meta.name as string,
       description: browserconfig.meta.description as string,
@@ -84,7 +83,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   updateBrowserconfig(browserconfig: Browserconfig): void {
     this.browserconfig = this.prepareSaveBrowserconfig();
     this.browserconfigService.updateBrowserconfig(this.browserconfig).then((updatedBrowserconfig: Browserconfig) => {
-         this.updateHandler(updatedBrowserconfig);
+      this.updateHandler(updatedBrowserconfig);
     });
     this.mdlSnackbarService.showSnackbar(
       {
@@ -94,7 +93,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   deleteBrowserconfig(browserconfigId: String): void {
     this.browserconfigService.deleteBrowserconfig(browserconfigId).then((deletedBrowserconfigId: String) => {
-       this.deleteHandler(deletedBrowserconfigId);
+      this.deleteHandler(deletedBrowserconfigId);
     });
     this.mdlSnackbarService.showSnackbar(
       {
@@ -124,8 +123,8 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   initLabel() {
     return this.fb.group({
-      key: '',
-      value: '',
+      key: ['', [Validators.required, Validators.minLength(1)]],
+      value: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
@@ -143,10 +142,10 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       user_agent: formModel.user_agent,
       window_width: formModel.window_width,
       window_height: formModel.window_height,
-      page_load_timeout_ms:formModel.page_load_timeout_ms,
-      sleep_after_pageload_ms:formModel.sleep_after_pageload_ms,
-      script_id:formModel.script_id,
-      headers:formModel.headers,
+      page_load_timeout_ms: formModel.page_load_timeout_ms,
+      sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
+      script_id: formModel.script_id,
+      headers: formModel.headers,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,

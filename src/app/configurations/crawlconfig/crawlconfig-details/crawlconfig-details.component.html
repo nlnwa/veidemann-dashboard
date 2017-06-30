@@ -40,11 +40,13 @@
   <div class="form-group" formGroupName="extra">
     <label class="center-block">Ekstraher tekst
       <label class="mdl-radio mdl-js-radio" for="extract_text_true">
-        <input type="radio" id="extract_text_true" class="mdl-radio__button" name="extract_text" [value]="true" formControlName="extract_text">
+        <input type="radio" id="extract_text_true" class="mdl-radio__button" name="extract_text" [value]="true"
+               formControlName="extract_text">
         <span class="mdl-radio__label">Ja</span>
       </label>
       <label class="mdl-radio mdl-js-radio " for="extract_text_false">
-        <input type="radio" id="extract_text_false" class="mdl-radio__button" name="extract_text" [value]="false" formControlName="extract_text">
+        <input type="radio" id="extract_text_false" class="mdl-radio__button" name="extract_text" [value]="false"
+               formControlName="extract_text">
         <span class="mdl-radio__label">Nei</span>
       </label>
     </label>
@@ -53,11 +55,13 @@
   <div class="form-group" formGroupName="extra">
     <label class="center-block">Lag snapshots
       <label class="mdl-radio mdl-js-radio" for="create_snapshot_true">
-        <input type="radio" id="create_snapshot_true" class="mdl-radio__button" name="create_snapshot" [value]="true" formControlName="create_snapshot">
+        <input type="radio" id="create_snapshot_true" class="mdl-radio__button" name="create_snapshot" [value]="true"
+               formControlName="create_snapshot">
         <span class="mdl-radio__label">Ja</span>
       </label>
       <label class="mdl-radio mdl-js-radio " for="create_snapshot_false">
-        <input type="radio" id="create_snapshot_false" class="mdl-radio__button" name="create_snapshot" [value]="false" formControlName="create_snapshot">
+        <input type="radio" id="create_snapshot_false" class="mdl-radio__button" name="create_snapshot" [value]="false"
+               formControlName="create_snapshot">
         <span class="mdl-radio__label">Nei</span>
       </label>
     </label>
@@ -101,7 +105,8 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" *ngIf="!crawlconfig.id" (click)="createCrawlconfig(crawlconfigForm.value)" novalidate>
+  <button class="btn btn-primary" [disabled]="!crawlconfigForm.valid" *ngIf="!crawlconfig.id"
+          (click)="createCrawlconfig(crawlconfigForm.value)" novalidate>
     Create
   </button>
   <button class="btn btn-info" *ngIf="crawlconfig.id" (click)="updateCrawlconfig(crawlconfigForm.value)">Update</button>

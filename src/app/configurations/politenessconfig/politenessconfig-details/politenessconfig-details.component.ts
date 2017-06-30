@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {Politenessconfig} from "../politenessconfig";
 import {MdlSnackbarService} from "angular2-mdl";
-import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
+import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {PolitenessconfigService} from "../politenessconfig.service";
 import {Label} from "../../../commons/models/label";
 
@@ -33,13 +33,13 @@ export class PolitenessconfigDetailsComponent {
   createForm() {
     this.politenessconfigForm = this.fb.group({
       id: '',
-      robots_policy:'',
-      minimum_robots_validity_duration_s:'',
-      custom_robots: '',
-      min_time_between_page_load_ms:'',
+      robots_policy: '',
+      minimum_robots_validity_duration_s: ['', [Validators.required, Validators.minLength(1)]],
+      custom_robots: ['', [Validators.required, Validators.minLength(1)]],
+      min_time_between_page_load_ms: ['', [Validators.required, Validators.minLength(1)]],
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: ['', [Validators.required, Validators.minLength(2)]],
 //        label: this.fb.array([]),
       }),
     });
@@ -52,10 +52,10 @@ export class PolitenessconfigDetailsComponent {
     this.politenessconfigForm.controls['custom_robots'].setValue(politenessconfig.custom_robots);
     this.politenessconfigForm.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
     this.politenessconfigForm.controls['meta'].patchValue({
-        name: politenessconfig.meta.name as string,
-        description: politenessconfig.meta.description as string,
+      name: politenessconfig.meta.name as string,
+      description: politenessconfig.meta.description as string,
     });
-      this.setLabel(politenessconfig.meta.label);
+    this.setLabel(politenessconfig.meta.label);
   };
 
   ngOnChanges() {
@@ -117,8 +117,8 @@ export class PolitenessconfigDetailsComponent {
 
   initLabel() {
     return this.fb.group({
-      key: '',
-      value: '',
+      key: ['', [Validators.required, Validators.minLength(2)]],
+      value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 
@@ -136,13 +136,13 @@ export class PolitenessconfigDetailsComponent {
       robots_policy: formModel.robots_policy,
       minimum_robots_validity_duration_s: formModel.minimum_robots_validity_duration_s,
       custom_robots: formModel.custom_robots,
-      min_time_between_page_load_ms:formModel.min_time_between_page_load_ms,
+      min_time_between_page_load_ms: formModel.min_time_between_page_load_ms,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
-       // created: '',
+        // created: '',
         created_by: '',
-       // last_modified: null,
+        // last_modified: null,
         last_modified_by: '',
         label: labelsDeepCopy
       }

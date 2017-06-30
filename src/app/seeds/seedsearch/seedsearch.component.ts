@@ -29,7 +29,7 @@ export class SeedSearchComponent implements OnInit {
 
   selectSeed(seed: Seed) {
     this.selectedSeed = seed;
-    this.searchTerms=null;
+    this.searchTerms = null;
     //let link = ['/seeds/', seed.id];
     //this.router.navigate(link);
   }

@@ -76,7 +76,8 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" *ngIf="!crawljob.id" (click)="createCrawljob(crawljobForm.value)" novalidate>Create
+  <button class="btn btn-primary" [disabled]="!crawljobForm.valid" *ngIf="!crawljob.id"
+          (click)="createCrawljob(crawljobForm.value)" novalidate>Create
   </button>
   <button class="btn btn-info" *ngIf="crawljob.id" (click)="updateCrawljob(crawljobForm.value)">Update</button>
   <button class="btn btn-danger" *ngIf="crawljob.id" (click)="deleteCrawljob(crawljob.id); $event.stopPropagation()">
@@ -84,4 +85,3 @@
   </button>
 </form>
 
-<pre>{{crawljobForm.value | json}}</pre>

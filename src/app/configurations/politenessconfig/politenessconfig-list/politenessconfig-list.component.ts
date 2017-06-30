@@ -45,7 +45,7 @@ export class PolitenessconfigListComponent implements OnInit {
       robots_policy: '',
       minimum_robots_validity_duration_s: 0,
       custom_robots: '',
-      min_time_between_page_load_ms: '',
+      min_time_between_page_load_ms: 0,
       meta: {
         name: '',
         description: '',

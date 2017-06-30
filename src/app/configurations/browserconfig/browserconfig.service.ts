@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Browserconfig} from "./browserconfig";
 
@@ -9,6 +9,7 @@ export class BrowserconfigService {
 
   constructor(private http: Http) {
   }
+
   getAllBrowserconfigs() {
     return this.http.get(this.browserconfigUrl)
       .map(res => res.json());

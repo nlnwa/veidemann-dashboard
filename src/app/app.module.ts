@@ -24,14 +24,14 @@ import {Collapse} from "./commons/components/collapse.component";
 import {CrawljobDetailsComponent} from "./configurations/crawljobs/crawljob-details/crawljob-details.component";
 import {CrawljobListComponent} from "./configurations/crawljobs/crawljob-list/crawljob-list.component";
 import {CrawljobService} from "./configurations/crawljobs/crawljob.service";
-import {ScheduleComponent} from "./configurations/schedule/schedule-list/schedule.component";
+import {ScheduleComponent} from "./configurations/schedule/schedule-list/schedule-list.component";
 import {ScheduleDetailsComponent} from "./configurations/schedule/schedule-details/schedule-details.component";
 import {CrawlconfigListComponent} from "./configurations/crawlconfig/crawlconfig-list/crawlconfig-list.component";
 import {CrawlconfigDetailsComponent} from "./configurations/crawlconfig/crawlconfig-details/crawlconfig-details.component";
 import {CrawlconfigService} from "./configurations/crawlconfig/crawlconfig.service";
 import {BrowserconfigDetailsComponent} from "./configurations/browserconfig/browserconfig-details/browserconfig-details.component";
 import {BrowserconfigListComponent} from "./configurations/browserconfig/browserconfig-list/browserconfig-list.component";
-import {BrowserconfigService} from "./configurations/browserconfig/browserconfig.service"
+import {BrowserconfigService} from "./configurations/browserconfig/browserconfig.service";
 import {PolitenessconfigDetailsComponent} from "./configurations/politenessconfig/politenessconfig-details/politenessconfig-details.component";
 import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
 import {PolitenessconfigService} from "./configurations/politenessconfig/politenessconfig.service";

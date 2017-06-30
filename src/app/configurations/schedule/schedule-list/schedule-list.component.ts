@@ -4,8 +4,8 @@ import {CrawljobService} from "../../crawljobs/crawljob.service";
 
 @Component({
   selector: 'app-schedule',
-  templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.css']
+  templateUrl: './schedule-list.component.html',
+  styleUrls: ['./schedule-list.component.css']
 })
 export class ScheduleComponent implements OnInit {
 
@@ -35,7 +35,7 @@ export class ScheduleComponent implements OnInit {
   createNewSchedule() {
     const schedule: Schedule = {
       id: '',
-      cron_expression: '',
+      cron_expression: '     ',
       valid_from: {
         seconds: 0,
       },

@@ -8,6 +8,14 @@ const bodyParser = require('body-parser');
 const api = require('./server/routes/api');
 const app = express();
 
+
+const log = console.log;
+
+console.log = function () {
+  log.apply(console, [Date()].concat(arguments));
+
+};
+
 // Parsers for POST data
 
 app.use(bodyParser.json());

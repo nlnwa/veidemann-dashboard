@@ -3,14 +3,13 @@
   <h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
 </div>
 
-{{politenessconfigForm.value | json}}
 
 <form [formGroup]="politenessconfigForm">
 
 
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Navn:
-      <input class="form-control"  formControlName="name">
+      <input class="form-control" formControlName="name">
     </label>
   </div>
   <div class="form-group" formGroupName="meta">
@@ -35,6 +34,7 @@
       <input class="form-control" formControlName="custom_robots">
     </label>
   </div>
+
   <div class="form-group">
     <label class="center-block">min_time_between_page_load_ms:
       <input class="form-control" formControlName="min_time_between_page_load_ms">
@@ -65,10 +65,12 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" *ngIf="!politenessconfig.id" (click)="createPolitenessconfig(politenessconfigForm.value)"
+  <button class="btn btn-primary" [disabled]="!politenessconfigForm.valid" *ngIf="!politenessconfig.id"
+          (click)="createPolitenessconfig(politenessconfigForm.value)"
           novalidate>Create
   </button>
-  <button class="btn btn-info" *ngIf="politenessconfig.id" (click)="updatePolitenessconfig(politenessconfigForm.value)">Update
+  <button class="btn btn-info" *ngIf="politenessconfig.id" (click)="updatePolitenessconfig(politenessconfigForm.value)">
+    Update
   </button>
   <button class="btn btn-danger" *ngIf="politenessconfig.id"
           (click)="deletePolitenessconfig(politenessconfig.id); $event.stopPropagation()">Delete

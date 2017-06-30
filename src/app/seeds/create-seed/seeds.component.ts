@@ -5,6 +5,7 @@ import {Label} from "../../commons/models/label";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
+import {FormValidatorUtils} from "../../commons/components/formValidation";
 
 @Component({
   selector: 'app-seeds',
@@ -183,14 +184,4 @@ export class SeedsComponent {
       })
     });
   }
-}
-
-export class FormValidatorUtils {
-  static nonEmpty(control: any) {
-    if (!control.value || control.value.length === 0) {
-      return {'noElements': true};
-    }
-    return null;
-  }
-
 }

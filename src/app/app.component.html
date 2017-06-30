@@ -13,9 +13,10 @@
           <i class="material-icons">search</i>
         </label>
         <div class="mdl-textfield__expandable-holder">
-          <input class="mdl-textfield__input" placeholder="Search.." id="fixed-header-drawer-exp" #searchBox id="search-box" (keyup)="search(searchBox.value)">
+          <input class="mdl-textfield__input" placeholder="Search.." id="fixed-header-drawer-exp" #searchBox
+                 id="search-box" (keyup)="search(searchBox.value)">
+        </div>
       </div>
-    </div>
     </div>
 
     <!-- Bottom row, not visible on scroll -->
@@ -56,9 +57,9 @@
 
       <ul class="demo-list-item mdl-list">
         <li class="mdl-list__item" *ngFor="let seed of seed | async; let i=index" (click)="gotoDetail(seed)">
-        <ng-container *ngIf="i<12">
-          {{seed.meta.name}}
-        </ng-container>
+          <ng-container *ngIf="i<12">
+            {{seed.meta.name}}
+          </ng-container>
         </li>
       </ul>
     </div>

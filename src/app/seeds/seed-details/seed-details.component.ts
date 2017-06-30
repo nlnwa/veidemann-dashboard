@@ -3,9 +3,10 @@ import {Seed} from "../seed";
 import {Label} from "../../commons/models/label";
 import {SeedsService} from "../seeds.service";
 import {Location} from "@angular/common";
-import {FormGroup, FormArray, FormBuilder} from "@angular/forms";
+import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
+import {FormValidatorUtils} from "../../commons/components/formValidation";
 
 
 @Component({
@@ -62,11 +63,11 @@ export class SeedDetailComponent {
     this.seedForm = this.fb.group({
       id: {value: '', disabled: true},
       entity_id: {value: '', disabled: true},
-      job_id: '',
-      scope: this.fb.group({surt_prefix: ''}),
+      job_id: ['', FormValidatorUtils.nonEmpty],
+      scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
       meta: this.fb.group({
-        name: '',
-        description: '',
+        name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+        description: ['', [Validators.required, Validators.minLength(2)]],
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
@@ -100,7 +101,6 @@ export class SeedDetailComponent {
 
 
   ngOnChanges() {
-    console.log(this.seed);
     this.updateData(this.seed);
   }
 
