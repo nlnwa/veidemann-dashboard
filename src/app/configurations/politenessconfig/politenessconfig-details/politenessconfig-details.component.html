@@ -11,6 +11,9 @@
     <label class="center-block">Navn:
       <input class="form-control" formControlName="name">
     </label>
+    <small [hidden]="politenessconfigForm.controls.meta.valid" class="text-danger">
+      Name required.
+    </small>
   </div>
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Beskrivelse:
@@ -19,15 +22,21 @@
   </div>
 
   <div class="form-group">
-    <label class="center-block">robots_policy
+    <label class="center-block">Robots Policy
       <input class="form-control" formControlName="robots_policy">
     </label>
+    <small [hidden]="politenessconfigForm.controls.robots_policy.valid" class="text-danger">
+      Robots Policy required.
+    </small>
   </div>
 
   <div class="form-group">
     <label class="center-block">minimum_robots_validity_duration_s:
-      <input class="form-control" formControlName="minimum_robots_validity_duration_s">
+      <input class="form-control" type="number" formControlName="minimum_robots_validity_duration_s">
     </label>
+    <small [hidden]="politenessconfigForm.controls.minimum_robots_validity_duration_s.valid" class="text-danger">
+      Validity duration required.
+    </small>
   </div>
   <div class="form-group">
     <label class="center-block">custom_robots:
@@ -37,8 +46,11 @@
 
   <div class="form-group">
     <label class="center-block">min_time_between_page_load_ms:
-      <input class="form-control" formControlName="min_time_between_page_load_ms">
+      <input class="form-control" type="number" formControlName="min_time_between_page_load_ms">
     </label>
+    <small [hidden]="politenessconfigForm.controls.min_time_between_page_load_ms.valid" class="text-danger">
+      Time betweed pageload duration required.
+    </small>
   </div>
 
   <div class="form-group">

@@ -12,7 +12,6 @@
       </ul>
       <button class="btn btn-warning" (click)="createNewSchedule()">New</button>
     </div>
-    <div class="col-md-5">
 
       <div *ngIf="selectedSchedule">
         <schedule-details
@@ -21,7 +20,6 @@
           [updateHandler]="updateSchedule"
           [deleteHandler]="deleteSchedule">
         </schedule-details>
-      </div>
     </div>
   </div>
 </div>

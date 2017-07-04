@@ -9,6 +9,9 @@
     <label class="center-block">Navn:
       <input class="form-control" formControlName="name">
     </label>
+    <small [hidden]="browserconfigForm.controls.meta.valid" class="text-danger">
+      Name required.
+    </small>
   </div>
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Beskrivelse:
@@ -20,23 +23,35 @@
     <label class="center-block">User Agent:
       <input class="form-control" formControlName="user_agent">
     </label>
+    <small [hidden]="browserconfigForm.controls.user_agent.valid" class="text-danger">
+      User agent required.
+    </small>
   </div>
 
   <div class="form-group">
     <label class="center-block">Window width
       <input class="form-control" type="number" formControlName="window_width">
     </label>
+    <small [hidden]="browserconfigForm.controls.window_width.valid" class="text-danger">
+      Window width required.
+    </small>
   </div>
 
   <div class="form-group">
     <label class="center-block">Window height:
       <input class="form-control" type="number" formControlName="window_height">
     </label>
+    <small [hidden]="browserconfigForm.controls.window_height.valid" class="text-danger">
+      Window height required.
+    </small>
   </div>
   <div class="form-group">
     <label class="center-block">Page load timeout in ms:
       <input class="form-control" type="number" formControlName="page_load_timeout_ms">
     </label>
+    <small [hidden]="browserconfigForm.controls.page_load_timeout_ms.valid" class="text-danger">
+      Page load timeout required.
+    </small>
   </div>
   <!--div class="form-group">
     <label class="center-block">Script id:
@@ -52,6 +67,10 @@
     <label class="center-block">sleep_after_pageload_ms:
       <input class="form-control" type="number" formControlName="sleep_after_pageload_ms">
     </label>
+    <small [hidden]="browserconfigForm.controls.sleep_after_pageload_ms.valid" class="text-danger">
+      Sleep after pageload required.
+    </small>
+
   </div>
 
   <div class="form-group">

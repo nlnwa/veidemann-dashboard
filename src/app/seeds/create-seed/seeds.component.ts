@@ -5,7 +5,7 @@ import {Label} from "../../commons/models/label";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
-import {FormValidatorUtils} from "../../commons/components/formValidation";
+import {CustomValidators} from "../../commons/components/validators";
 
 @Component({
   selector: 'app-seeds',
@@ -43,8 +43,8 @@ export class SeedsComponent {
 
   createForm() {
     this.seedForm = this.fb.group({
-      entity_id: ['', FormValidatorUtils.nonEmpty],
-      job_id: ['', FormValidatorUtils.nonEmpty],
+      entity_id: ['', CustomValidators.nonEmpty],
+      job_id: ['', CustomValidators.nonEmpty],
       scope: this.fb.group({
         surt_prefix: ''
       }),

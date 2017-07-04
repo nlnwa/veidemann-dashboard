@@ -4,6 +4,7 @@ import {Browserconfig} from "../browserconfig";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/models/label";
+import {CustomValidators} from "../../../commons/components/validators";
 
 @Component({
   selector: 'browserconfig-details',
@@ -32,15 +33,15 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     this.browserconfigForm = this.fb.group({
       id: '',
       user_agent: ['', [Validators.required, Validators.minLength(1)]],
-      window_width: ['', [Validators.required, Validators.minLength(1)]],
-      window_height: ['', [Validators.required, Validators.minLength(1)]],
-      page_load_timeout_ms: ['', [Validators.required, Validators.minLength(1)]],
-      sleep_after_pageload_ms: ['', [Validators.required, Validators.minLength(1)]],
+      window_width: ['', [Validators.required, CustomValidators.min(1)]],
+      window_height: ['', [Validators.required, CustomValidators.min(1)]],
+      page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       headers: this.fb.group({}),
       script_id: this.fb.array([]),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
-        description: ['', [Validators.required, Validators.minLength(1)]],
+        description: '',
         label: this.fb.array([]),
       }),
     });

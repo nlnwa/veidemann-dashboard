@@ -2,9 +2,9 @@ import {BrowserModule} from "@angular/platform-browser";
 import {NgModule} from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
-import {RouterModule} from "@angular/router";
 import {AppComponent} from "./app.component";
 import {UserService} from "./users/users.service";
+import { ROUTES } from "./routes"
 import {UserComponent} from "./users/user-list/user-list.component";
 import {UserDetailsComponent} from "./users/user-details/user-details.component";
 import {DocumentationComponent} from "./documentation/documentation.component";
@@ -16,6 +16,7 @@ import {CrawlersComponent} from "./crawlers/crawlers.component";
 import {StatisticsService} from "./statistics/statistics.service";
 import {SeedsService} from "./seeds/seeds.service";
 import {ModalComponent} from "./commons/components/modal.components";
+import {ConvertTimestamp} from "./commons/components/convertTimestamp";
 import {SeedDetailComponent} from "./seeds/seed-details/seed-details.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AngularMultiSelectModule} from "./angular2-multiselect-dropdown/angular2-multiselect-dropdown";
@@ -35,67 +36,8 @@ import {BrowserconfigService} from "./configurations/browserconfig/browserconfig
 import {PolitenessconfigDetailsComponent} from "./configurations/politenessconfig/politenessconfig-details/politenessconfig-details.component";
 import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
 import {PolitenessconfigService} from "./configurations/politenessconfig/politenessconfig.service";
-
-
-const ROUTES = [
-  {
-    path: '',
-    redirectTo: '/activity', pathMatch: 'full'
-  },
-  {
-    path: 'activity',
-    component: ActivityComponent
-  },
-  {
-    path: 'seeds',
-    component: SeedsComponent
-  },
-  {
-    path: 'crawljobs',
-    component: CrawljobListComponent
-  },
-  {
-    path: 'crawlers',
-    component: CrawlersComponent
-  },
-  {
-    path: 'documentation',
-    component: DocumentationComponent
-  },
-  {
-    path: 'statistics',
-    component: StatisticsComponent
-  },
-  {
-    path: 'seedsearch',
-    component: SeedSearchComponent
-  },
-  {
-    path: 'users',
-    component: UserComponent
-  },
-  {
-    path: 'seeds/:seed',
-    component: SeedDetailComponent
-  },
-  {
-    path: 'schedule',
-    component: ScheduleComponent
-  },
-  {
-    path: 'crawlconfig',
-    component: CrawlconfigListComponent
-  },
-  {
-    path: 'browserconfig',
-    component: BrowserconfigListComponent
-  },
-  {
-    path: 'politenessconfig',
-    component: PolitenessconfigListComponent
-  },
-
-];
+import {RouterModule} from "@angular/router";
+import { ScheduleSidebarComponent } from './configurations/schedule/schedule-sidebar/schedule-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -121,6 +63,7 @@ const ROUTES = [
     BrowserconfigListComponent,
     PolitenessconfigDetailsComponent,
     PolitenessconfigListComponent,
+    ScheduleSidebarComponent,
 
   ],
   imports: [
@@ -141,6 +84,7 @@ const ROUTES = [
     CrawlconfigService,
     PolitenessconfigService,
     BrowserconfigService,
+    ConvertTimestamp,
   ],
   bootstrap: [AppComponent]
 })

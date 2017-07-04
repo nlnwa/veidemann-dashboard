@@ -8,7 +8,7 @@ import {Browserconfig} from "../../browserconfig/browserconfig";
 import {Politenessconfig} from "../../politenessconfig/politenessconfig";
 import {BrowserconfigService} from "../../browserconfig/browserconfig.service";
 import {Label} from "../../../commons/models/label";
-import {FormValidatorUtils} from "../../../commons/components/formValidation";
+import {CustomValidators} from "../../../commons/components/validators";
 
 @Component({
   selector: 'crawlconfig-details',
@@ -51,8 +51,8 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   createForm() {
     this.crawlconfigForm = this.fb.group({
       id: {value: '', disabled: true},
-      browser_config_id: ['', FormValidatorUtils.nonEmpty],
-      politeness_id: ['', FormValidatorUtils.nonEmpty],
+      browser_config_id: ['', CustomValidators.nonEmpty],
+      politeness_id: ['', CustomValidators.nonEmpty],
       extra: this.fb.group({
         extract_text: true,
         create_snapshot: true,
@@ -61,7 +61,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       depth_first: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
-        description: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),

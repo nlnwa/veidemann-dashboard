@@ -8,6 +8,9 @@
     <label class="center-block">Navn:
       <input class="form-control" formControlName="name">
     </label>
+    <small [hidden]="crawlconfigForm.controls.meta.valid" class="text-danger">
+      Name required.
+    </small>
   </div>
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Beskrivelse:
@@ -21,6 +24,9 @@
                             [settings]="dropdownBrowserconfigSettings"
                             formControlName="browser_config_id"></angular2-multiselect>
     </label>
+    <small [hidden]="crawlconfigForm.controls.browser_config_id.valid" class="text-danger">
+      Browserconfig required.
+    </small>
   </div>
 
   <div class="form-group">
@@ -29,12 +35,18 @@
                             [settings]="dropdownPolitenessconfigSettings"
                             formControlName="politeness_id"></angular2-multiselect>
     </label>
+    <small [hidden]="crawlconfigForm.controls.politeness_id.valid" class="text-danger">
+      Politenessconfig required.
+    </small>
   </div>
 
   <div class="form-group">
     <label class="center-block">DNS TTL
       <input class="form-control" type="number" formControlName="minimum_dns_ttl_s">
     </label>
+    <small [hidden]="crawlconfigForm.controls.minimum_dns_ttl_s.valid" class="text-danger">
+      minimum_dns_ttl_s required.
+    </small>
   </div>
 
   <div class="form-group" formGroupName="extra">
@@ -76,7 +88,7 @@
       </label>
       <label class="mdl-radio mdl-js-radio " for="depth_first_false">
         <input type="radio" id="depth_first_false" class="mdl-radio__button"
-               name="depth_first" [value]="false" formControlName="depth_first" checked>
+               name="depth_first" [value]="false" formControlName="depth_first">
         <span class="mdl-radio__label">Nei</span>
       </label>
     </label>

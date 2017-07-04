@@ -4,6 +4,7 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {PolitenessconfigService} from "../politenessconfig.service";
 import {Label} from "../../../commons/models/label";
+import {CustomValidators} from "../../../commons/components/validators";
 
 
 @Component({
@@ -33,13 +34,13 @@ export class PolitenessconfigDetailsComponent {
   createForm() {
     this.politenessconfigForm = this.fb.group({
       id: '',
-      robots_policy: '',
-      minimum_robots_validity_duration_s: ['', [Validators.required, Validators.minLength(1)]],
-      custom_robots: ['', [Validators.required, Validators.minLength(1)]],
-      min_time_between_page_load_ms: ['', [Validators.required, Validators.minLength(1)]],
+      robots_policy: ['', [Validators.required, Validators.minLength(2)]],
+      minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
+      custom_robots: '',
+      min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
-        description: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
 //        label: this.fb.array([]),
       }),
     });

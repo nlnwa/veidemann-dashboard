@@ -6,7 +6,8 @@ import {Location} from "@angular/common";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
-import {FormValidatorUtils} from "../../commons/components/formValidation";
+import {CustomValidators} from "../../commons/components/validators";
+import {ConvertTimestamp} from "../../commons/components/convertTimestamp";
 
 
 @Component({
@@ -39,7 +40,9 @@ export class SeedDetailComponent {
               private fb: FormBuilder,
               private location: Location,
               private route: ActivatedRoute,
-              private mdlSnackbarService: MdlSnackbarService,) {
+              private mdlSnackbarService: MdlSnackbarService,
+              private convertTimestamp: ConvertTimestamp,
+              ) {
     this.createForm();
     this.router = router;
     this.getParams();
@@ -49,6 +52,7 @@ export class SeedDetailComponent {
   getParams() {
     this.route.params.subscribe(params => {
       if (params.seed == null) {
+
         this.createForm();
       } else {
         this.seedService.getSeed(params.seed).subscribe(seed => {
@@ -63,7 +67,7 @@ export class SeedDetailComponent {
     this.seedForm = this.fb.group({
       id: {value: '', disabled: true},
       entity_id: {value: '', disabled: true},
-      job_id: ['', FormValidatorUtils.nonEmpty],
+      job_id: ['', CustomValidators.nonEmpty],
       scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
       meta: this.fb.group({
         name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
@@ -87,11 +91,11 @@ export class SeedDetailComponent {
       name: seed.meta.name,
       description: seed.meta.description,
       created: {
-        seconds: this.convertTimestamp(seed.meta.created.seconds),
+        seconds: this.convertTimestamp.convertFullTimestamp(seed.meta.created.seconds),
       },
       created_by: seed.meta.created_by,
       last_modified: {
-        seconds: this.convertTimestamp(seed.meta.last_modified.seconds),
+        seconds: this.convertTimestamp.convertFullTimestamp(seed.meta.last_modified.seconds),
       },
       last_modified_by: seed.meta.last_modified_by,
     });
@@ -114,12 +118,6 @@ export class SeedDetailComponent {
       });
     }
   }
-
-  convertTimestamp(timestamp) {
-    const newdate = new Date(timestamp * 1000);
-    return newdate
-  }
-
 
   getJobs() {
     this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {

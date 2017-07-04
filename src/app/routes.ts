@@ -1,7 +1,6 @@
 /**
  * Created by kristiana on 30.06.17.
  */
-import {RouterModule} from "@angular/router";
 import {ActivityComponent} from "./activity/activity.component";
 import {SeedsComponent} from "./seeds/create-seed/seeds.component";
 import {CrawljobListComponent} from "./configurations/crawljobs/crawljob-list/crawljob-list.component";
@@ -17,7 +16,7 @@ import {BrowserconfigListComponent} from "./configurations/browserconfig/browser
 import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
 
 
-const ROUTES = [
+export const ROUTES = [
   {
     path: '',
     redirectTo: '/activity', pathMatch: 'full'

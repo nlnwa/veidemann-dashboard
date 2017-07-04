@@ -62,7 +62,6 @@
           </div>
         </div>
 
-
         <div class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">
           <ng-container *ngIf="isCollapsedContent">
             <span class="glyphicon glyphicon-plus-sign pull-left"></span>
@@ -73,7 +72,6 @@
             <label class="collapse-details">Mindre detaljer</label>
           </ng-container>
         </div>
-
 
         <div [collapse]="isCollapsedContent" id="details" class="collapse">
 

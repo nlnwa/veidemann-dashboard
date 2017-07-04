@@ -42,10 +42,10 @@ export class PolitenessconfigListComponent implements OnInit {
 
   createNewPolitenessconfig() {
     const politenessconfig: Politenessconfig = {
-      robots_policy: '',
-      minimum_robots_validity_duration_s: 0,
+      robots_policy: 'OBEY_ROBOTS',
+      minimum_robots_validity_duration_s: null,
       custom_robots: '',
-      min_time_between_page_load_ms: 0,
+      min_time_between_page_load_ms: null,
       meta: {
         name: '',
         description: '',

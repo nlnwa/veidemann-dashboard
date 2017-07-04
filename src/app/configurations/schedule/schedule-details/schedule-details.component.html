@@ -1,9 +1,8 @@
-<div class="col-md-12">
+<div class="col-md-5">
   <h2 *ngIf="schedule.id">Schedule Details</h2>
   <h2 *ngIf="!schedule.id">New Schedule</h2>
-</div>
 
-<form [formGroup]="scheduleForm">
+  <form [formGroup]="scheduleForm">
 
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Navn:
@@ -17,8 +16,7 @@
   </div>
 
   <div class="form-group" formGroupName="cron_expression">
-    <label class="center-block">cron_expression:
-      <a target="_blank" href="http://www.sauronsoftware.it/projects/cron4j/manual.php#p02">Cron Documentation</a>
+    <label class="center-block">Cron Expression:
       <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <thead>
         <tr>
@@ -30,7 +28,6 @@
         </tr>
         </thead>
         <tbody>
-
         <th><input class="form-control_cron" formControlName="minute"></th>
         <th><input class="form-control_cron" formControlName="hour"></th>
         <th><input class="form-control_cron" formControlName="dom"></th>
@@ -41,10 +38,6 @@
     </label>
   </div>
 
-  <!-- Simple Tooltip -->
-  <mdl-icon class="icon material-icons" mdl-tooltip-large="Print">print</mdl-icon>
-
-
   <!--div class="form-group">
     <label class="center-block">cron_expression
       <img src="http://2.bp.blogspot.com/--d9V7XzD9aU/UgzRLNXIgSI/AAAAAAAAAcM/cIzUHV665v0/s1600/cron.png"
@@ -53,14 +46,41 @@
     </label>
   </div-->
 
-  <div class="form-group">
-    <label class="center-block">Gyldig fra:
-      <input class="form-control" formControlName="valid_from">
+  <div class="form-group" formGroupName="valid_from">
+    <label class="center-block">Valid from:
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Year</th>
+          <th class="mdl-data-table__cell--non-numeric">Month</th>
+          <th class="mdl-data-table__cell--non-numeric">Day</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th><input class="form-control_cron" type="number" formControlName="year"></th>
+        <th><input class="form-control_cron" type="number" formControlName="month"></th>
+        <th><input class="form-control_cron" type="number" formControlName="day"></th>
+        </tbody>
+      </table>
     </label>
   </div>
-  <div class="form-group">
-    <label class="center-block">Gyldig til:
-      <input class="form-control" formControlName="valid_to">
+
+  <div class="form-group" formGroupName="valid_to">
+    <label class="center-block">Valid from:
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Year</th>
+          <th class="mdl-data-table__cell--non-numeric">Month</th>
+          <th class="mdl-data-table__cell--non-numeric">Day</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th><input class="form-control_cron" type="number" formControlName="year"></th>
+        <th><input class="form-control_cron" type="number" formControlName="month"></th>
+        <th><input class="form-control_cron" type="number" formControlName="day"></th>
+        </tbody>
+      </table>
     </label>
   </div>
 
@@ -91,9 +111,12 @@
   <button class="btn btn-primary" [disabled]="!scheduleForm.valid" *ngIf="!schedule.id"
           (click)="createSchedule(schedule)" novalidate>Create
   </button>
-  <button class="btn btn-info" *ngIf="schedule.id" (click)="updateSchedule(schedule)">Update</button>
+  <button class="btn btn-info" *ngIf="schedule.id" [disabled]="!scheduleForm.valid" (click)="updateSchedule(schedule)">Update</button>
   <button class="btn btn-danger" *ngIf="schedule.id" (click)="deleteSchedule(schedule.id); $event.stopPropagation()">
     Delete
   </button>
-</form>
 
+
+</form>
+</div>
+<schedule-sidebar></schedule-sidebar>

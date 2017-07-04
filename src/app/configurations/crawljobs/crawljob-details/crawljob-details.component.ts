@@ -7,7 +7,7 @@ import {Crawlconfig} from "../../crawlconfig/crawlconfig";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../../commons/models/label";
-import {FormValidatorUtils} from "../../../commons/components/formValidation";
+import {CustomValidators} from "../../../commons/components/validators";
 
 @Component({
   selector: 'crawljob-details',
@@ -50,12 +50,12 @@ export class CrawljobDetailsComponent implements OnChanges {
   createForm() {
     this.crawljobForm = this.fb.group({
       id: {value: '', disabled: true},
-      schedule_id: ['', FormValidatorUtils.nonEmpty],
-      crawl_config_id: ['', FormValidatorUtils.nonEmpty],
+      schedule_id: ['', CustomValidators.nonEmpty],
+      crawl_config_id: ['', CustomValidators.nonEmpty],
       limits: this.fb.group({
-        depth: ['', [Validators.required, Validators.minLength(1)]],
-        max_duration_s: ['', [Validators.required, Validators.minLength(1)]],
-        max_bytes: ['', [Validators.required, Validators.minLength(1)]],
+        depth: ['', [Validators.required, CustomValidators.min(0)]],
+        max_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
+        max_bytes: ['', [Validators.required, CustomValidators.min(0)]],
       }),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
