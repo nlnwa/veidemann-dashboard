@@ -1,4 +1,4 @@
-import {ValidatorFn, FormControl} from "@angular/forms";
+import {Validator, FormControl, ValidatorFn} from "@angular/forms";
 
 export class CustomValidators {
   /**

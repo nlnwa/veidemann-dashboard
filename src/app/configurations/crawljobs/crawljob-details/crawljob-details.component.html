@@ -3,34 +3,44 @@
   <h2 *ngIf="!crawljob.id">New Crawljob</h2>
 </div>
 <form [formGroup]="crawljobForm">
-
   <div class="col-md-12">
     <div class="form-group" formGroupName="meta">
       <label class="center-block">Navn:
-        <input class="form-control" [(ngModel)]="crawljob.meta.name" formControlName="name">
+        <input class="form-control" formControlName="name">
       </label>
+      <small [hidden]="crawljobForm['controls'].meta['controls'].name.valid" class="text-danger">
+        Name required.
+      </small>
     </div>
     <div class="form-group" formGroupName="meta">
       <label class="center-block">Beskrivelse:
-        <input class="form-control" [(ngModel)]="crawljob.meta.description" formControlName="description">
+        <input class="form-control" formControlName="description">
       </label>
     </div>
-
 
     <div class="form-group" formGroupName="limits">
       <label class="center-block">Dybde:
-        <input class="form-control" [(ngModel)]="crawljob.limits.depth" type="number" formControlName="depth">
+        <input class="form-control" type="number" formControlName="depth">
       </label>
+      <small [hidden]="crawljobForm['controls'].limits['controls'].depth.valid" class="text-danger">
+        Depth required.
+      </small>
     </div>
-    <div class="form-group" formGroupName="limits">
+      <div class="form-group" formGroupName="limits">
       <label class="center-block">Maks tid:
-        <input class="form-control" [(ngModel)]="crawljob.limits.max_duration_s" formControlName="max_duration_s">
+        <input class="form-control"  formControlName="max_duration_s">
       </label>
-    </div>
+      <small [hidden]="crawljobForm['controls'].limits['controls'].max_duration_s.valid" class="text-danger">
+        Max duration required.
+      </small>
+      </div>
     <div class="form-group" formGroupName="limits">
       <label class="center-block">Maks bytes:
-        <input class="form-control" [(ngModel)]="crawljob.limits.max_bytes" type="number" formControlName="max_bytes">
+        <input class="form-control" type="number" formControlName="max_bytes">
       </label>
+      <small [hidden]="crawljobForm['controls'].limits['controls'].max_bytes.valid" class="text-danger">
+        Max bytes required.
+      </small>
     </div>
   </div>
 
@@ -40,6 +50,9 @@
                             [settings]="dropdownScheduleSettings" formControlName="schedule_id"></angular2-multiselect>
 
     </label>
+    <small [hidden]="crawljobForm.controls.schedule_id.valid" class="text-danger">
+      Schedule required.
+    </small>
   </div>
 
 
@@ -50,6 +63,9 @@
                             formControlName="crawl_config_id"></angular2-multiselect>
 
     </label>
+    <small [hidden]="crawljobForm.controls.crawl_config_id.valid" class="text-danger">
+      Crawlconfig required.
+    </small>
   </div>
 
   <div class="form-group">

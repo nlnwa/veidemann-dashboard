@@ -57,7 +57,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
         extract_text: true,
         create_snapshot: true,
       }),
-      minimum_dns_ttl_s: ['', [Validators.required, Validators.minLength(1)]],
+      minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
       depth_first: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],

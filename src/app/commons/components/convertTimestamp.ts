@@ -17,8 +17,12 @@ export class ConvertTimestamp {
 
 
   convertFullTimestamp(timestamp) {
-    console.log(new Date(timestamp * 1000));
     return new Date(timestamp * 1000);
+  }
+
+  static today() {
+    return (Date.now() / 1000);
+
   }
 
 }

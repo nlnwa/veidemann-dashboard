@@ -59,16 +59,19 @@ export class CrawljobDetailsComponent implements OnChanges {
       }),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
-        description: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
       }),
     });
+
   }
 
   updateData(crawljob: Crawljob) {
+    console.log(this.crawljobForm.controls);
+
     this.crawljobForm.controls['id'].setValue(crawljob.id);
     this.crawljobForm.controls['limits'].setValue({
       depth: crawljob.limits.depth,

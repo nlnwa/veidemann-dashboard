@@ -31,17 +31,12 @@ export class ScheduleComponent implements OnInit {
     this.selectedSchedule = schedule
   }
 
-
   createNewSchedule() {
     const schedule: Schedule = {
       id: '',
       cron_expression: '     ',
-      valid_from: {
-        seconds: 0,
-      },
-      valid_to: {
-        seconds: 0,
-      },
+      valid_from:null,
+      valid_to: null,
       meta: {
         name: '',
         description: '',
