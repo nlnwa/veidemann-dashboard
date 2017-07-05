@@ -40,7 +40,8 @@
             class="pure-checkbox">
           <input type="checkbox" [checked]="isSelected(item)"
                  [disabled]="settings.limitSelection == selectedItems.length && !isSelected(item)"/>
-          <label>{{item.itemName}}</label>
+          <label>{{item.itemName}} </label> <span class="potet"> {{item.description}}</span>
+
         </li>
       </ul>
     </div>

@@ -181,13 +181,13 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
     this.browserconfigService.getAllBrowserconfigs().map(browserconfigs => browserconfigs.value).forEach((value) => {
       value.forEach((key) => {
-        this.browserconfigList.push({id: key.id, itemName: key.meta.name})
+        this.browserconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
 
     this.politenessconfigService.getAllPolitenessconfigs().map(politenessconfigs => politenessconfigs.value).forEach((value) => {
       value.forEach((key) => {
-        this.politenessconfigList.push({id: key.id, itemName: key.meta.name})
+        this.politenessconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
 

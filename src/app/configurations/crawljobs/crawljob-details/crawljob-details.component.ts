@@ -172,13 +172,13 @@ export class CrawljobDetailsComponent implements OnChanges {
   filldropdown() {
     this.crawljobService.getAllSchedules().map(schedules => schedules.value).forEach((value) => {
       value.forEach((key) => {
-        this.scheduleList.push({id: key.id, itemName: key.meta.name})
+        this.scheduleList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
 
     this.crawlconfigService.getAllCrawlconfigs().map(crawlconfigs => crawlconfigs.value).forEach((value) => {
       value.forEach((key) => {
-        this.crawlconfigList.push({id: key.id, itemName: key.meta.name})
+        this.crawlconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
 

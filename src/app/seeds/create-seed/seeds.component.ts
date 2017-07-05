@@ -165,7 +165,7 @@ export class SeedsComponent {
 
     this.seedService.getEntities().map(entities => entities.value).forEach((value) => {
       value.forEach((key) => {
-        this.entityList.push({id: key.id, itemName: key.meta.name})
+        this.entityList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
   }
@@ -180,7 +180,7 @@ export class SeedsComponent {
 
     this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
-        this.crawljobList.push({id: key.id, itemName: key.meta.name})
+        this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
   }

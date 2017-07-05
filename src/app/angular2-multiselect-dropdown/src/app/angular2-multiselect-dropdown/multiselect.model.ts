@@ -1,6 +1,7 @@
 export class ListItem {
   id: Number;
-  itemName: String
+  itemName: String;
+  description: String;
 }
 export class MyException {
   status: number;
