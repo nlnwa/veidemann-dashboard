@@ -6,6 +6,9 @@
       <label class="center-block">Navn:
         <input class="form-control" formControlName="name">
       </label>
+      <small [hidden]="scheduleForm['controls'].meta['controls'].name.valid" class="text-danger">
+        Name required.
+      </small>
     </div>
     <div class="form-group" formGroupName="meta">
       <label class="center-block">Beskrivelse:
@@ -33,6 +36,9 @@
           </tbody>
         </table>
       </label>
+      <small [hidden]="scheduleForm['controls'].cron_expression.valid" class="text-danger">
+        Cron expression required.
+      </small>
     </div>
     <div class="form-group" formGroupName="valid_from">
       <label class="center-block">Valid from:
