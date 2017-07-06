@@ -245,5 +245,12 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     });
   }
 
+  revert() {
+    this.ngOnChanges();
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
+  }
 
 }

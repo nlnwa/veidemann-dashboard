@@ -136,6 +136,14 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     });
   }
 
+  revert() {
+    this.ngOnChanges();
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
+  }
+
   prepareSaveBrowserconfig(): Browserconfig {
     const formModel = this.browserconfigForm.value;
     // deep copy of form model lairs

@@ -97,18 +97,20 @@
             </label>
           </div>
         </div>
-        <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+        <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
       </div>
     </div>
 
     <button class="btn btn-primary" [disabled]="!scheduleForm.valid" *ngIf="!schedule.id"
-            (click)="createSchedule(schedule)" novalidate>Create
+            (click)="createSchedule(schedule)" novalidate>Lagre
     </button>
     <button class="btn btn-info" *ngIf="schedule.id" [disabled]="!scheduleForm.valid"
-            (click)="updateSchedule(schedule)">Update
+            (click)="updateSchedule(schedule)">Lagre
     </button>
+    <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
+
     <button class="btn btn-danger" *ngIf="schedule.id" (click)="deleteSchedule(schedule.id); $event.stopPropagation()">
-      Delete
+      Slett
     </button>
 
 

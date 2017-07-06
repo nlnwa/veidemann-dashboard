@@ -3,8 +3,6 @@
   <h2 *ngIf="!crawlconfig.id">New Crawlconfig</h2>
 </div>
 
-{{crawlconfigForm.value | json}}
-
 <form [formGroup]="crawlconfigForm">
 
   <div class="form-group" formGroupName="meta">
@@ -114,19 +112,22 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
     </div>
   </div>
 
   <button class="btn btn-primary" [disabled]="!crawlconfigForm.valid" *ngIf="!crawlconfig.id"
           (click)="createCrawlconfig(crawlconfigForm.value)" novalidate>
-    Create
+    Lagre
   </button>
-  <button class="btn btn-info" *ngIf="crawlconfig.id" [disabled]="!crawlconfigForm.valid"
-          (click)="updateCrawlconfig(crawlconfigForm.value)">Update
+  <button class="btn btn-primary" *ngIf="crawlconfig.id" [disabled]="!crawlconfigForm.valid"
+          (click)="updateCrawlconfig(crawlconfigForm.value)">Lagre
+
   </button>
+  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
+
   <button class="btn btn-danger" *ngIf="crawlconfig.id"
-          (click)="deleteCrawlconfig(crawlconfig.id); $event.stopPropagation()">Delete
+          (click)="deleteCrawlconfig(crawlconfig.id); $event.stopPropagation()">Slett
   </button>
 
 

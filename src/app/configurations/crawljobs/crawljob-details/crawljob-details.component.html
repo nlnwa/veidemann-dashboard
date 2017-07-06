@@ -89,18 +89,20 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
     </div>
   </div>
 
   <button class="btn btn-primary" [disabled]="!crawljobForm.valid" *ngIf="!crawljob.id"
-          (click)="createCrawljob(crawljobForm.value)" novalidate>Create
+          (click)="createCrawljob(crawljobForm.value)" novalidate>Lagre
   </button>
-  <button class="btn btn-info" *ngIf="crawljob.id" [disabled]="!crawljobForm.valid"
-          (click)="updateCrawljob(crawljobForm.value)">Update
+  <button class="btn btn-primary" *ngIf="crawljob.id" [disabled]="!crawljobForm.valid"
+          (click)="updateCrawljob(crawljobForm.value)">Lagre
   </button>
+  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
+
   <button class="btn btn-danger" *ngIf="crawljob.id" (click)="deleteCrawljob(crawljob.id); $event.stopPropagation()">
-    Delete
+    Slett
   </button>
 </form>
 

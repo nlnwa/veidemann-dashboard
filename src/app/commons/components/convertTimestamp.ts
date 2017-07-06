@@ -11,7 +11,6 @@ export class ConvertTimestamp {
 
   convertTimestamp_yyyymmddhhmm_to_unix(timestamp) {
 
-    //console.log(new Date(timestamp));
     return new Date(timestamp).getTime();
   }
 

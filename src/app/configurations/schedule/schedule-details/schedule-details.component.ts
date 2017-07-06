@@ -186,7 +186,6 @@ export class ScheduleDetailsComponent {
       + formModel.cron_expression.month + ' '
       + formModel.cron_expression.dow;
 
-    //console.log(this.convertTimestamp.convertTimestamp_yyyymmddhhmm_to_unix(valid_from+' 00:00'));
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveSchedule: Schedule = {
@@ -233,6 +232,14 @@ export class ScheduleDetailsComponent {
       key: ['', [Validators.required, Validators.minLength(2)]],
       value: ['', [Validators.required, Validators.minLength(2)]],
     });
+  }
+
+  revert() {
+    this.ngOnChanges();
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
   }
 }
 

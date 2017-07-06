@@ -232,4 +232,12 @@ export class CrawljobDetailsComponent implements OnChanges {
       value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
+
+  revert() {
+    this.ngOnChanges();
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
+  }
 }

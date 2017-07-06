@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, OnChanges} from "@angular/core";
 import {Seed} from "../seed";
 import {Label} from "../../commons/models/label";
 import {SeedsService} from "../seeds.service";
@@ -9,6 +9,7 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {CustomValidators} from "../../commons/components/validators";
 import {ConvertTimestamp} from "../../commons/components/convertTimestamp";
 import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
+import {Crawljob} from "../../configurations/crawljobs/crawljob";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
 
 })
 
-export class SeedDetailComponent {
+export class SeedDetailComponent implements OnChanges{
   @Input() seed: Seed;
   seedForm: FormGroup;
 
@@ -35,6 +36,7 @@ export class SeedDetailComponent {
   dropdownCrawljobSettings = {};
   selectedCrawljobItems = [];
   crawljobList: any = [];
+  crawljob: Crawljob;
 
   constructor(private seedService: SeedsService,
               private router: Router,
@@ -45,16 +47,16 @@ export class SeedDetailComponent {
               private mdlSnackbarService: MdlSnackbarService,
               private convertTimestamp: ConvertTimestamp,) {
     this.createForm();
-    this.router = router;
+
     this.getParams();
-    this.getJobs();
+    this.fillDropdown();
+    this.router = router;
   }
 
   getParams() {
     this.route.params.subscribe(params => {
       if (params.seed == null) {
 
-        this.createForm();
       } else {
         this.seedService.getSeed(params.seed).subscribe(seed => {
           this.seed = seed[0];
@@ -72,13 +74,14 @@ export class SeedDetailComponent {
       scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
       meta: this.fb.group({
         name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
-        description: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true,}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
       }),
       label: this.fb.array([]),
+
     });
   }
 
@@ -101,29 +104,34 @@ export class SeedDetailComponent {
       last_modified_by: seed.meta.last_modified_by,
     });
     this.setLabel(this.seed.meta.label);
-    this.setDropdown()
+    this.setSelectedDropdown()
   }
 
 
   ngOnChanges() {
+    this.setLabel(this.seed.meta.label);
     this.updateData(this.seed);
   }
 
-  setDropdown() {
+  setSelectedDropdown() {
     this.selectedCrawljobItems = [];
+    if (this.seed.job_id !== null) {
     for (let i of this.seed.job_id) {
-      this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
-        value.forEach((key) => {
-          this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name})
-        })
-      });
+        this.crawljobService.getCrawlJob(this.seed.job_id).map(crawljob => crawljob).forEach((value) => {
+          value.forEach((key) => {
+            this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+          });
+          this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
+        });
+      }
     }
+    this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
   }
 
-  getJobs() {
+  fillDropdown() {
     this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
-        this.crawljobList.push({id: key.id, itemName: key.meta.name})
+        this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
 
@@ -141,7 +149,7 @@ export class SeedDetailComponent {
     this.seed = this.prepareSaveSeed();
     this.seedService.updateSeed(this.seed)
       .then((updatedSeed) => {
-        this.updateHandler(updatedSeed);
+        //this.updateHandler(updatedSeed);
         this.updateData(updatedSeed);
       });
 
@@ -209,7 +217,7 @@ export class SeedDetailComponent {
 
   initLabel() {
     return this.fb.group({
-      key: '',
+      key: 'Label',
       value: '',
     });
   }

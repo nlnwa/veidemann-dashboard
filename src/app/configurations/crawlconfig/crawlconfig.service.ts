@@ -30,7 +30,6 @@ export class CrawlconfigService {
   }
 
   deleteCrawlconfig(delCrawlconfigId: String): Promise<String> {
-    console.log("delcrawlservice");
     return this.http.delete(this.crawlconfigUrl + '/' + delCrawlconfigId)
       .toPromise()
       .then(response => response.json() as String)

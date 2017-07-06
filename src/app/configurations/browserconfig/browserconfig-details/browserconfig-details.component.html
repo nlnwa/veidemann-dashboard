@@ -93,17 +93,19 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
     </div>
   </div>
 
   <button class="btn btn-primary" [disabled]="!browserconfigForm.valid" *ngIf="!browserconfig.id"
           (click)="createBrowserconfig(browserconfigForm.value)" novalidate>
-    Create
+    Lagre
   </button>
-  <button class="btn btn-info" *ngIf="browserconfig.id" (click)="updateBrowserconfig(browserconfigForm.value)">Update
+  <button class="btn btn-primary" *ngIf="browserconfig.id" [disabled]="!browserconfigForm.valid"
+          (click)="updateBrowserconfig(browserconfigForm.value)">Lagre
   </button>
+  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
   <button class="btn btn-danger" *ngIf="browserconfig.id"
-          (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Delete
+          (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Slett
   </button>
 </form>

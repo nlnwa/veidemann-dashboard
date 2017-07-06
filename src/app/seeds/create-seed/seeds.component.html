@@ -65,19 +65,13 @@
                 </small>
               </div>
             </div>
-            <button class="btn btn-success" (click)="addLabel()" type="button">Legg til merkelapp</button>
+            <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
           </div>
         </div>
-
-
       </form>
       <br>
-
-
-      <button id="createSeed" [disabled]="!seedForm.valid" class="btn btn-info" (click)="createSeed()">Lagre</button>
+      <button id="createSeed" [disabled]="!seedForm.valid" class="btn btn-primary" (click)="createSeed()">Lagre</button>
       <button class="btn btn-danger" [disabled]="!seedForm.valid" (click)="createSeedNew()">Lagre og ny</button>
-
-
     </div>
   </div>
 </div>

@@ -35,11 +35,11 @@ export class CustomValidators {
   }
 
   static nonEmpty(control: any) {
-    for (let i in control.value) {
-    }
     if (!control.value || control.value.length === 0) {
       return {nonEmpty: true};
+    } else {
+      return null;
     }
-    return null;
+
   }
 }

@@ -32,7 +32,6 @@ export class AppComponent implements OnInit {
   }
 
   selectSeed(seed: Seed) {
-
     this.selectedSeed = seed;
 
   }
@@ -55,7 +54,6 @@ export class AppComponent implements OnInit {
   }
 
   gotoDetail(seed: Seed): void {
-    console.log(this.searchfield);
     this.searchfield = null;
     this.search('');
     let link = ['/seeds/', seed.id];

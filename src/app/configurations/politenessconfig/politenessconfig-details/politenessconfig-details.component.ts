@@ -157,4 +157,12 @@ export class PolitenessconfigDetailsComponent {
     };
     return savePolitenessconfig;
   }
+
+  revert() {
+    this.ngOnChanges();
+    this.mdlSnackbarService.showSnackbar(
+      {
+        message: 'Tilbakestilt',
+      });
+  }
 }
