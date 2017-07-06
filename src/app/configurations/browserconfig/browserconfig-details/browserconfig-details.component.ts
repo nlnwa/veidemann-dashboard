@@ -92,14 +92,21 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       });
   }
 
-  deleteBrowserconfig(browserconfigId: String): void {
-    this.browserconfigService.deleteBrowserconfig(browserconfigId).then((deletedBrowserconfigId: String) => {
-      this.deleteHandler(deletedBrowserconfigId);
+  deleteBrowserconfig(browserconfigId): void {
+    this.browserconfigService.deleteBrowserconfig(browserconfigId).then((deletedBrowserconfig) => {
+      this.deleteHandler(deletedBrowserconfig);
+      if (deletedBrowserconfig === "not_allowed") {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Feil: Ikke slettet',
+          });
+      } else {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Slettet',
+          });
+      }
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Slettet',
-      });
   }
 
   setLabel(label) {

@@ -2,14 +2,15 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
 import {Seed} from "./seed";
+import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
 
 @Injectable()
 export class SeedsService {
   private seedsUrl = '/api/seeds';
   private entitiessUrl = '/api/entities';
-  private crawljobUrl = '/api/crawljob';
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private errorhandlerservice: ErrorHandlerService) {
   }
 
   getAllSeeds() {
@@ -40,21 +41,11 @@ export class SeedsService {
   }
 
 
-  getCrawlJobs() {
-    return this.http.get(this.crawljobUrl)
-      .map(res => res.json());
-  }
-
-  getCrawlJob(job_id) {
-    return this.http.get(`${this.crawljobUrl}/${job_id}`)
-      .map(res => res.json().value);
-  }
-
   deleteSeed(delSeedid: String): Promise<String> {
     return this.http.delete(this.seedsUrl + '/' + delSeedid)
       .toPromise()
       .then(response => response.json() as String)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   // put("/api/entities/:id")
@@ -63,7 +54,7 @@ export class SeedsService {
     return this.http.put(putUrl, putSeed)
       .toPromise()
       .then(response => response.json() as Seed)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   // post("/api/entities")
@@ -71,12 +62,8 @@ export class SeedsService {
     return this.http.post(this.seedsUrl, newSeed)
       .toPromise()
       .then(response => response.json() as Seed)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error accurred', error);
-    return Promise.reject(error.message || error);
-  }
 
 }

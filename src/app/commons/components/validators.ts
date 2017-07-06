@@ -1,11 +1,11 @@
-import {Validator, FormControl, ValidatorFn} from "@angular/forms";
+import {FormControl, ValidatorFn} from "@angular/forms";
 
 export class CustomValidators {
   /**
    * Validator that requires controls to have a value greater than a number.
    */
   static max(max: number): ValidatorFn {
-    return (control: FormControl): { [key: string]: boolean } | null => {
+    return (control: FormControl): {[key: string]: boolean} | null => {
 
       let val: number = control.value;
 
@@ -15,12 +15,12 @@ export class CustomValidators {
       if (val <= max) {
         return null;
       }
-      return { 'max': true };
+      return {'max': true};
     }
   }
 
   static min(min: number): ValidatorFn {
-    return (control: FormControl): { [key: string]: boolean } | null => {
+    return (control: FormControl): {[key: string]: boolean} | null => {
 
       let val: number = control.value;
 
@@ -30,13 +30,15 @@ export class CustomValidators {
       if (val >= min) {
         return null;
       }
-      return { 'min': true };
+      return {'min': true};
     }
   }
 
   static nonEmpty(control: any) {
+    for (let i in control.value) {
+    }
     if (!control.value || control.value.length === 0) {
-      return {'noElements': true};
+      return {nonEmpty: true};
     }
     return null;
   }

@@ -86,14 +86,21 @@ export class PolitenessconfigDetailsComponent {
       });
   }
 
-  deletePolitenessconfig(politenessconfigId: String): void {
-    this.politenessconfigService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfigId: String) => {
-      this.deleteHandler(deletedPolitenessconfigId);
+  deletePolitenessconfig(politenessconfigId): void {
+    this.politenessconfigService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfig) => {
+      this.deleteHandler(deletedPolitenessconfig);
+      if (deletedPolitenessconfig === "not_allowed") {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Feil: Ikke slettet',
+          });
+      } else {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Slettet',
+          });
+      }
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Slettet'
-      });
   }
 
   setLabel(label) {

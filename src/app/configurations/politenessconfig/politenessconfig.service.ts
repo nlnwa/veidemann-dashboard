@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Politenessconfig} from "./politenessconfig";
+import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
 
 
 @Injectable()
@@ -8,7 +9,8 @@ export class PolitenessconfigService {
 
   private politenessconfigUrl = '/api/politenessconfig';
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private errorhandlerservice: ErrorHandlerService) {
   }
 
 
@@ -26,14 +28,14 @@ export class PolitenessconfigService {
     return this.http.post(this.politenessconfigUrl, newPolitenessconfig)
       .toPromise()
       .then(response => response.json() as Politenessconfig)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   deletePolitenessConfig(delPolitenessconfigId: String): Promise<String> {
     return this.http.delete(this.politenessconfigUrl + '/' + delPolitenessconfigId)
       .toPromise()
       .then(response => response.json() as String)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   updatePolitenessConfig(putPolitenessconfig: Politenessconfig): Promise<Politenessconfig> {
@@ -41,12 +43,7 @@ export class PolitenessconfigService {
     return this.http.put(putUrl, putPolitenessconfig)
       .toPromise()
       .then(response => response.json() as Politenessconfig)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
-  private handleError(error: any) {
-    const errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-  }
 }

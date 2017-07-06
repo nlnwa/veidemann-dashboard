@@ -6,6 +6,7 @@ import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
 import {CustomValidators} from "../../commons/components/validators";
+import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
 
 @Component({
   selector: 'app-seeds',
@@ -32,6 +33,7 @@ export class SeedsComponent {
 
   constructor(private seedService: SeedsService,
               private fb: FormBuilder,
+              private crawljobService: CrawljobService,
               private mdlSnackbarService: MdlSnackbarService,
               private router: Router,) {
 
@@ -178,7 +180,7 @@ export class SeedsComponent {
       enableSearchFilter: true
     };
 
-    this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
+    this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
         this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })

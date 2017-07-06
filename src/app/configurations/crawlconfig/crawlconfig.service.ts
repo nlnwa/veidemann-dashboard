@@ -1,13 +1,15 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Crawlconfig} from "./crawlconfig";
+import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
 
 @Injectable()
 export class CrawlconfigService {
 
   private crawlconfigUrl = '/api/crawlconfig';
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private errorhandlerservice: ErrorHandlerService) {
   }
 
   getCrawlconfig(crawlconfig_id) {
@@ -24,14 +26,15 @@ export class CrawlconfigService {
     return this.http.post(this.crawlconfigUrl, newCrawlconfig)
       .toPromise()
       .then(response => response.json() as Crawlconfig)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   deleteCrawlconfig(delCrawlconfigId: String): Promise<String> {
+    console.log("delcrawlservice");
     return this.http.delete(this.crawlconfigUrl + '/' + delCrawlconfigId)
       .toPromise()
       .then(response => response.json() as String)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   updateCrawlconfig(putCrawlconfig: Crawlconfig): Promise<Crawlconfig> {
@@ -39,12 +42,7 @@ export class CrawlconfigService {
     return this.http.put(putUrl, putCrawlconfig)
       .toPromise()
       .then(response => response.json() as Crawlconfig)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
-  private handleError(error: any) {
-    const errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-  }
 }

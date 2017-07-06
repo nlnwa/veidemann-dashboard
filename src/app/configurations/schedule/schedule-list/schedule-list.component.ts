@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Schedule} from "../schedule";
-import {CrawljobService} from "../../crawljobs/crawljob.service";
+import {ScheduleService} from "../schedule.service";
 
 @Component({
   selector: 'app-schedule',
@@ -12,11 +12,11 @@ export class ScheduleComponent implements OnInit {
   schedules: Schedule[];
   selectedSchedule: Schedule;
 
-  constructor(private crawljobService: CrawljobService) {
+  constructor(private scheduleService: ScheduleService) {
   }
 
   ngOnInit() {
-    this.crawljobService.getAllSchedules().subscribe(schedules => {
+    this.scheduleService.getAllSchedules().subscribe(schedules => {
       this.schedules = schedules.value
     })
   }
@@ -35,7 +35,7 @@ export class ScheduleComponent implements OnInit {
     const schedule: Schedule = {
       id: '',
       cron_expression: '     ',
-      valid_from:null,
+      valid_from: null,
       valid_to: null,
       meta: {
         name: '',

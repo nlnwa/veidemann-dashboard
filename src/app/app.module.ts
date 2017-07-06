@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {UserService} from "./users/users.service";
-import { ROUTES } from "./routes"
+import {ROUTES} from "./routes";
 import {UserComponent} from "./users/user-list/user-list.component";
 import {UserDetailsComponent} from "./users/user-details/user-details.component";
 import {DocumentationComponent} from "./documentation/documentation.component";
@@ -17,6 +17,7 @@ import {StatisticsService} from "./statistics/statistics.service";
 import {SeedsService} from "./seeds/seeds.service";
 import {ModalComponent} from "./commons/components/modal.components";
 import {ConvertTimestamp} from "./commons/components/convertTimestamp";
+import {ErrorHandlerService} from "./commons/components/errorhandlerservice";
 import {SeedDetailComponent} from "./seeds/seed-details/seed-details.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AngularMultiSelectModule} from "./angular2-multiselect-dropdown/angular2-multiselect-dropdown";
@@ -37,7 +38,9 @@ import {PolitenessconfigDetailsComponent} from "./configurations/politenessconfi
 import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
 import {PolitenessconfigService} from "./configurations/politenessconfig/politenessconfig.service";
 import {RouterModule} from "@angular/router";
-import { ScheduleSidebarComponent } from './configurations/schedule/schedule-sidebar/schedule-sidebar.component';
+import {ScheduleSidebarComponent} from "./configurations/schedule/schedule-sidebar/schedule-sidebar.component";
+import {ScheduleService} from "./configurations/schedule/schedule.service";
+
 
 @NgModule({
   declarations: [
@@ -85,6 +88,8 @@ import { ScheduleSidebarComponent } from './configurations/schedule/schedule-sid
     PolitenessconfigService,
     BrowserconfigService,
     ConvertTimestamp,
+    ErrorHandlerService,
+    ScheduleService,
   ],
   bootstrap: [AppComponent]
 })

@@ -2,6 +2,9 @@
   <h2 *ngIf="crawlconfig.id">Crawlconfig Details</h2>
   <h2 *ngIf="!crawlconfig.id">New Crawlconfig</h2>
 </div>
+
+{{crawlconfigForm.value | json}}
+
 <form [formGroup]="crawlconfigForm">
 
   <div class="form-group" formGroupName="meta">
@@ -51,14 +54,12 @@
 
   <div class="form-group" formGroupName="extra">
     <label class="center-block">Ekstraher tekst
-      <label class="mdl-radio mdl-js-radio" for="extract_text_true">
-        <input type="radio" id="extract_text_true" class="mdl-radio__button" name="extract_text" [value]="true"
-               formControlName="extract_text">
+      <label class="mdl-radio mdl-js-radio">
+        <input type="radio" name="extract_text" [value]="true" formControlName="extract_text">
         <span class="mdl-radio__label">Ja</span>
       </label>
-      <label class="mdl-radio mdl-js-radio " for="extract_text_false">
-        <input type="radio" id="extract_text_false" class="mdl-radio__button" name="extract_text" [value]="false"
-               formControlName="extract_text">
+      <label class="mdl-radio mdl-js-radio">
+        <input type="radio" name="extract_text" [value]="false" formControlName="extract_text">
         <span class="mdl-radio__label">Nei</span>
       </label>
     </label>
@@ -121,7 +122,9 @@
           (click)="createCrawlconfig(crawlconfigForm.value)" novalidate>
     Create
   </button>
-  <button class="btn btn-info" *ngIf="crawlconfig.id" (click)="updateCrawlconfig(crawlconfigForm.value)">Update</button>
+  <button class="btn btn-info" *ngIf="crawlconfig.id" [disabled]="!crawlconfigForm.valid"
+          (click)="updateCrawlconfig(crawlconfigForm.value)">Update
+  </button>
   <button class="btn btn-danger" *ngIf="crawlconfig.id"
           (click)="deleteCrawlconfig(crawlconfig.id); $event.stopPropagation()">Delete
   </button>

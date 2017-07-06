@@ -50,10 +50,10 @@ exports.deleteBrowserScript = (req, res) => {
   client.saveBroswerScript({id: req.params.id}, function (err, response) {
     if (err) {
       console.log("error: " + err);
-      res.status(500);
+      res.status(405).json(err);
     }
     else {
-
+      res.status(200).json(req.params.id)
     }
   })
 };

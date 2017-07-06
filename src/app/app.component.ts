@@ -17,6 +17,8 @@ import {SeedsService} from "./seeds/seeds.service";
 export class AppComponent implements OnInit {
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
+  searchfield: String;
+
 
   private searchTerms = new Subject<string>();
 
@@ -32,11 +34,12 @@ export class AppComponent implements OnInit {
   selectSeed(seed: Seed) {
 
     this.selectedSeed = seed;
+
   }
 
   ngOnInit() {
     this.seed = this.searchTerms
-      .debounceTime(300)        // wait 300ms after each keystroke before considering the term
+      .debounceTime(150)        // wait 300ms after each keystroke before considering the term
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .switchMap(term => term   // switch to new observable each time the term changes
         // return the http search observable
@@ -52,8 +55,13 @@ export class AppComponent implements OnInit {
   }
 
   gotoDetail(seed: Seed): void {
+    console.log(this.searchfield);
+    this.searchfield = null;
+    this.search('');
     let link = ['/seeds/', seed.id];
+
     this.router.navigate(link);
+
   }
 
   updateSeed = (seed: Seed) => {

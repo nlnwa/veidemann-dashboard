@@ -8,6 +8,7 @@ import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../../commons/models/label";
 import {CustomValidators} from "../../../commons/components/validators";
+import {ScheduleService} from "../../schedule/schedule.service";
 
 @Component({
   selector: 'crawljob-details',
@@ -41,6 +42,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   constructor(private crawljobService: CrawljobService,
               private crawlconfigService: CrawlconfigService,
+              private scheduleService: ScheduleService,
               private fb: FormBuilder,
               private mdlSnackbarService: MdlSnackbarService,) {
     this.filldropdown();
@@ -70,8 +72,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   updateData(crawljob: Crawljob) {
-    console.log(this.crawljobForm.controls);
-
     this.crawljobForm.controls['id'].setValue(crawljob.id);
     this.crawljobForm.controls['limits'].setValue({
       depth: crawljob.limits.depth,
@@ -84,6 +84,8 @@ export class CrawljobDetailsComponent implements OnChanges {
     });
     this.setLabel(crawljob.meta.label);
     this.setDropdown();
+    this.selectedScheduleItems = [];
+    this.selectedCrawlconfigItems = [];
   };
 
   ngOnChanges() {
@@ -102,14 +104,21 @@ export class CrawljobDetailsComponent implements OnChanges {
       });
   };
 
-  deleteCrawljob(crawljobId: String): void {
-    this.crawljobService.deleteCrawljob(crawljobId).then((deletedCrawljobId: String) => {
-      this.deleteHandler(deletedCrawljobId);
+  deleteCrawljob(crawljobId): void {
+    this.crawljobService.deleteCrawljob(crawljobId).then((deletedCrawljob) => {
+      this.deleteHandler(deletedCrawljob);
+      if (deletedCrawljob === "not_allowed") {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Feil: Ikke slettet',
+          });
+      } else {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Slettet',
+          });
+      }
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Slettet'
-      });
   }
 
   createCrawljob() {
@@ -149,28 +158,28 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   setDropdown() {
-    this.selectedScheduleItems = [];
-    this.selectedCrawlconfigItems = [];
-
     if (this.crawljob.schedule_id !== "") {
-      this.crawljobService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
+      this.scheduleService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
         value.forEach((key) => {
-          this.selectedScheduleItems.push({id: key.id, itemName: key.meta.name})
-        })
+          this.selectedScheduleItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+        });
+        this.crawljobForm.controls['schedule_id'].setValue(this.selectedScheduleItems);
       });
     }
 
     if (this.crawljob.crawl_config_id !== "") {
       this.crawlconfigService.getCrawlconfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
         value.forEach((key) => {
-          this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name})
-        })
+          this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description});
+
+        });
+        this.crawljobForm.controls['crawl_config_id'].setValue(this.selectedCrawlconfigItems);
       });
     }
   }
 
   filldropdown() {
-    this.crawljobService.getAllSchedules().map(schedules => schedules.value).forEach((value) => {
+    this.scheduleService.getAllSchedules().map(schedules => schedules.value).forEach((value) => {
       value.forEach((key) => {
         this.scheduleList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
@@ -182,8 +191,6 @@ export class CrawljobDetailsComponent implements OnChanges {
       })
     });
 
-    this.selectedCrawlconfigItems = [];
-    this.selectedScheduleItems = [];
 
     this.dropdownScheduleSettings = {
       singleSelection: true,

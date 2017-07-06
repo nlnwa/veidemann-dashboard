@@ -63,7 +63,7 @@ exports.seedSearch = (req, res) => {
   client.listSeeds({name_prefix: req.params.name}, function (err, response) {
     if (err) {
       console.log("error: " + err);
-      res.status(500);
+      res.status(405).json(err);
     }
     else {
       console.log(response);

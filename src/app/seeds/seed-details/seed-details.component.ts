@@ -8,6 +8,7 @@ import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
 import {CustomValidators} from "../../commons/components/validators";
 import {ConvertTimestamp} from "../../commons/components/convertTimestamp";
+import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
 
 
 @Component({
@@ -38,11 +39,11 @@ export class SeedDetailComponent {
   constructor(private seedService: SeedsService,
               private router: Router,
               private fb: FormBuilder,
+              private crawljobService: CrawljobService,
               private location: Location,
               private route: ActivatedRoute,
               private mdlSnackbarService: MdlSnackbarService,
-              private convertTimestamp: ConvertTimestamp,
-              ) {
+              private convertTimestamp: ConvertTimestamp,) {
     this.createForm();
     this.router = router;
     this.getParams();
@@ -111,7 +112,7 @@ export class SeedDetailComponent {
   setDropdown() {
     this.selectedCrawljobItems = [];
     for (let i of this.seed.job_id) {
-      this.seedService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
+      this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
         value.forEach((key) => {
           this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name})
         })
@@ -120,7 +121,7 @@ export class SeedDetailComponent {
   }
 
   getJobs() {
-    this.seedService.getCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
+    this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
         this.crawljobList.push({id: key.id, itemName: key.meta.name})
       })
@@ -151,11 +152,19 @@ export class SeedDetailComponent {
   }
 
   deleteSeed(seedId: String): void {
-    this.seedService.deleteSeed(seedId);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Slettet',
-      });
+    this.seedService.deleteSeed(seedId).then((deletedSeed) => {
+      if (deletedSeed === "not_allowed") {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Feil: Ikke slettet',
+          });
+      } else {
+        this.mdlSnackbarService.showSnackbar(
+          {
+            message: 'Slettet',
+          });
+      }
+    });
     this.goBack()
   }
 

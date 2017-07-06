@@ -14,7 +14,7 @@
         </label>
         <div class="mdl-textfield__expandable-holder">
           <input class="mdl-textfield__input" placeholder="Search.." id="fixed-header-drawer-exp" #searchBox
-                 id="search-box" (keyup)="search(searchBox.value)">
+                 id="search-box" [(ngModel)]="searchfield" (keyup)="search(searchBox.value)">
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
       <a class="mdl-navigation__link" [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">Dokumentasjon</a>
       <a class="mdl-navigation__link" [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Søk i alle Seeds</a>
+         [routerLinkActive]="['is-active']">Søk</a>
       <a class="mdl-navigation__link" [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">Crawljobs</a>
       <a class="mdl-navigation__link" [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"

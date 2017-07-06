@@ -48,6 +48,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
+
   createForm() {
     this.crawlconfigForm = this.fb.group({
       id: {value: '', disabled: true},
@@ -55,7 +56,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       politeness_id: ['', CustomValidators.nonEmpty],
       extra: this.fb.group({
         extract_text: true,
-        create_snapshot: true,
+        create_snapshot: '',
       }),
       minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
       depth_first: '',
@@ -83,14 +84,21 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       name: crawlconfig.meta.name as string,
       description: crawlconfig.meta.description as string,
     });
-    this.setLabel(crawlconfig.meta.label);
     this.setSelectedDropdown();
-
   }
 
   ngOnChanges() {
-    this.updateData(this.crawlconfig);
+    this.selectedPolitenessconfigItems = [];
+    this.selectedBrowserconfigItems = [];
+    this.setLabel(this.crawlconfig.meta.label);
+
+    //what the bug?! pre-filled radiobuttons aint working without this.
+    setTimeout(() => {
+      this.updateData(this.crawlconfig);
+    });
+
   }
+
 
   createCrawlconfig() {
     this.crawlconfig = this.prepareSaveCrawlconfig();
@@ -115,15 +123,22 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       });
   };
 
-  deleteCrawlconfig(crawlconfigId: String): void {
-    this.crawlconfigService.deleteCrawlconfig(crawlconfigId).then((deletedCrawlconfigId: String) => {
-      this.deleteHandler(deletedCrawlconfigId);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Slettet',
+  deleteCrawlconfig(crawlconfigId): void {
+    this.crawlconfigService.deleteCrawlconfig(crawlconfigId)
+      .then((deletedCrawlconfig) => {
+        this.deleteHandler(deletedCrawlconfig);
+        if (deletedCrawlconfig === "not_allowed") {
+          this.mdlSnackbarService.showSnackbar(
+            {
+              message: 'Feil: Ikke slettet',
+            });
+        } else {
+          this.mdlSnackbarService.showSnackbar(
+            {
+              message: 'Slettet',
+            });
+        }
       });
-
   }
 
   prepareSaveCrawlconfig(): Crawlconfig {
@@ -155,30 +170,29 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   }
 
   setSelectedDropdown() {
-    this.selectedPolitenessconfigItems = [];
-    this.selectedBrowserconfigItems = [];
-
     if (this.crawlconfig.browser_config_id !== "") {
       this.browserconfigService.getBrowserconfigs(this.crawlconfig.browser_config_id).map(browser_config => browser_config).forEach((value) => {
         value.forEach((key) => {
-          this.selectedBrowserconfigItems.push({id: key.id, itemName: key.meta.name})
-        })
+          this.selectedBrowserconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+        });
+        this.crawlconfigForm.controls['browser_config_id'].setValue(this.selectedBrowserconfigItems);
       });
     }
     if (this.crawlconfig.politeness_id !== "") {
       this.politenessconfigService.getPolitenessconfig(this.crawlconfig.politeness_id).map(politeness => politeness).forEach((value) => {
         value.forEach((key) => {
-          this.selectedPolitenessconfigItems.push({id: key.id, itemName: key.meta.name})
-        })
+          this.selectedPolitenessconfigItems.push({
+            id: key.id,
+            itemName: key.meta.name,
+            description: key.meta.description
+          })
+        });
+        this.crawlconfigForm.controls['politeness_id'].setValue(this.selectedPolitenessconfigItems);
       });
     }
   }
 
   filldropdown() {
-
-    this.selectedPolitenessconfigItems = [];
-    this.selectedBrowserconfigItems = [];
-
     this.browserconfigService.getAllBrowserconfigs().map(browserconfigs => browserconfigs.value).forEach((value) => {
       value.forEach((key) => {
         this.browserconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
@@ -190,7 +204,6 @@ export class CrawlconfigDetailsComponent implements OnChanges {
         this.politenessconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
-
 
     this.dropdownPolitenessconfigSettings = {
       singleSelection: true,

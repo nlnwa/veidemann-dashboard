@@ -1,13 +1,16 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Browserconfig} from "./browserconfig";
+import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+
 
 @Injectable()
 export class BrowserconfigService {
 
   private browserconfigUrl = '/api/browserconfig';
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private errorhandlerservice: ErrorHandlerService) {
   }
 
   getAllBrowserconfigs() {
@@ -24,14 +27,14 @@ export class BrowserconfigService {
     return this.http.post(this.browserconfigUrl, newBrowserconfig)
       .toPromise()
       .then(response => response.json() as Browserconfig)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   deleteBrowserconfig(delBrowserconfigId: String): Promise<String> {
     return this.http.delete(this.browserconfigUrl + '/' + delBrowserconfigId)
       .toPromise()
       .then(response => response.json() as String)
-      .catch(this.handleError);
+      .catch(this.errorhandlerservice.handleError);
   }
 
   // put("/api/entities/:id")
@@ -40,13 +43,7 @@ export class BrowserconfigService {
     return this.http.put(putUrl, putBrowserconfig)
       .toPromise()
       .then(response => response.json() as Browserconfig)
-      .catch(this.handleError);
-  }
-
-  private handleError(error: any) {
-    const errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
+      .catch(this.errorhandlerservice.handleError);
   }
 
 }

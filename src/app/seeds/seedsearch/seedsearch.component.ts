@@ -16,6 +16,7 @@ import "rxjs/add/operator/distinctUntilChanged";
 export class SeedSearchComponent implements OnInit {
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
+  searchinput: String;
 
   private searchTerms = new Subject<string>();
 
@@ -23,11 +24,13 @@ export class SeedSearchComponent implements OnInit {
               private router: Router) {
   }
 
+
   search(term: string): void {
     this.searchTerms.next(term.replace(/\//g, '%2F'));
   }
 
   selectSeed(seed: Seed) {
+    this.searchinput = null;
     this.selectedSeed = seed;
     this.search('');
     //let link = ['/seeds/', seed.id];
@@ -36,7 +39,7 @@ export class SeedSearchComponent implements OnInit {
 
   ngOnInit() {
     this.seed = this.searchTerms
-      .debounceTime(300)        // wait 300ms after each keystroke before considering the term
+      .debounceTime(150)        // wait 300ms after each keystroke before considering the term
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .switchMap(term => term   // switch to new observable each time the term changes
         // return the http search observable

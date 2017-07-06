@@ -13,13 +13,13 @@
       <button class="btn btn-warning" (click)="createNewSchedule()">New</button>
     </div>
 
-      <div *ngIf="selectedSchedule">
-        <schedule-details
-          [schedule]="selectedSchedule"
-          [createHandler]="addSchedule"
-          [updateHandler]="updateSchedule"
-          [deleteHandler]="deleteSchedule">
-        </schedule-details>
+    <div *ngIf="selectedSchedule">
+      <schedule-details
+        [schedule]="selectedSchedule"
+        [createHandler]="addSchedule"
+        [updateHandler]="updateSchedule"
+        [deleteHandler]="deleteSchedule">
+      </schedule-details>
     </div>
   </div>
 </div>

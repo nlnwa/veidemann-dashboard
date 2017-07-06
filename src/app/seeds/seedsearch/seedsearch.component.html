@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div id="search-component">
       <h4>Seed Search</h4>
-      <input #searchBox id="search-box" (keyup)="search(searchBox.value)"/>
+      <input [(ngModel)]="searchinput" #searchBox id="search-box" (keyup)="search(searchBox.value)"/>
       <br>
       <tr>
         <td>
@@ -27,13 +27,16 @@
     </div>
     <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
       <thead>
-      <tr>
-        <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
-        <th class="mdl-data-table__cell--non-numeric">Seed</th>
-        <th class="mdl-data-table__cell--non-numeric">Merkelapp</th>
-        <th class="mdl-data-table__cell--non-numeric">Opprettet</th>
-        <th class="mdl-data-table__cell--non-numeric">Lagt til av</th>
-      </tr>
+      <ng-container *ngIf="searchinput">
+        <tr>
+          <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+          <th class="mdl-data-table__cell--non-numeric">Seed</th>
+          <th class="mdl-data-table__cell--non-numeric">Merkelapp</th>
+          <th class="mdl-data-table__cell--non-numeric">Opprettet</th>
+          <th class="mdl-data-table__cell--non-numeric">Lagt til av</th>
+        </tr>
+      </ng-container>
+
       </thead>
       <tbody>
       <!-- Row 1 -->
