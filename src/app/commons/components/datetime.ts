@@ -2,7 +2,7 @@
  * Created by kristiana on 04.07.17.
  */
 
-export class ConvertTimestamp {
+export class DateTime {
 
   convertTimestamp_s_to_yyyymmddhhmm(timestamp) {
     const d = new Date(timestamp * 1000);
@@ -19,9 +19,12 @@ export class ConvertTimestamp {
     return new Date(timestamp * 1000);
   }
 
-  static today() {
+   today() {
     return (Date.now() / 1000);
+  }
 
+  todayFullDate() {
+    return (new Date)
   }
 
 }

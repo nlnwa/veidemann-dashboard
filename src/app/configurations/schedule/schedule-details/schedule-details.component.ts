@@ -4,7 +4,7 @@ import {ScheduleService} from "../schedule.service";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../../commons/models/label";
-import {ConvertTimestamp} from "../../../commons/components/convertTimestamp";
+import {DateTime} from "../../../commons/components/datetime";
 
 @Component({
   selector: 'schedule-details',
@@ -28,7 +28,7 @@ export class ScheduleDetailsComponent {
   constructor(private scheduleService: ScheduleService,
               private mdlSnackbarService: MdlSnackbarService,
               private fb: FormBuilder,
-              private convertTimestamp: ConvertTimestamp) {
+              private convertTimestamp: DateTime) {
     this.createForm();
   }
 

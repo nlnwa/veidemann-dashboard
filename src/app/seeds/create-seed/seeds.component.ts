@@ -7,6 +7,7 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
 import {CustomValidators} from "../../commons/components/validators";
 import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
+import {EntityService} from "../../entities/entity.service";
 
 @Component({
   selector: 'app-seeds',
@@ -33,6 +34,7 @@ export class SeedsComponent {
 
   constructor(private seedService: SeedsService,
               private fb: FormBuilder,
+              private entityService: EntityService,
               private crawljobService: CrawljobService,
               private mdlSnackbarService: MdlSnackbarService,
               private router: Router,) {
@@ -165,7 +167,7 @@ export class SeedsComponent {
       enableSearchFilter: true
     };
 
-    this.seedService.getEntities().map(entities => entities.value).forEach((value) => {
+    this.entityService.getEntities().map(entities => entities.value).forEach((value) => {
       value.forEach((key) => {
         this.entityList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })

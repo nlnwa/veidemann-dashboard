@@ -4,7 +4,7 @@ import {Meta} from "../commons/models/meta";
  */
 
 export class Seeds {
-  //value: Value[];
+  value: Seed[];
   count: number;
   page_size: string;
   page: string;

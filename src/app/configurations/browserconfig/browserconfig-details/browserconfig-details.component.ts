@@ -58,7 +58,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     this.browserconfigForm.controls['window_height'].setValue(browserconfig.window_height);
     this.browserconfigForm.controls['page_load_timeout_ms'].setValue(browserconfig.page_load_timeout_ms);
     this.browserconfigForm.controls['sleep_after_pageload_ms'].setValue(browserconfig.sleep_after_pageload_ms);
-    // this.browserconfigForm.controls['headers'].patchValue({heihei: browserconfig.headers});
+    this.browserconfigForm.controls['headers'].patchValue(browserconfig.headers);
     this.browserconfigForm.controls['meta'].patchValue({
       name: browserconfig.meta.name as string,
       description: browserconfig.meta.description as string,

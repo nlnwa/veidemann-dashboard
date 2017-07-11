@@ -15,6 +15,8 @@ const users = require('./users');
 const fs = require("fs");
 
 
+
+
 require('dotenv').config();
 
 console.warn('gRPC: Using: ' + process.env.grpc_controller);
@@ -25,7 +27,6 @@ client = new grpc_controller.Controller(process.env.grpc_controller, grpc.creden
 router.get('/', (req, res) => {
   res.send("api works!");
 });
-
 
 /*r = require('rethinkdbdash')({
  port: process.env.rethink_port,
@@ -80,7 +81,7 @@ router.get('/fest', (req, res) => {
 
 router.get('/searchentities/name=:name', entities.searchCrawlEntities);
 router.get('/entities', entities.listCrawlEntities);
-router.post('/entities', entities.saveCrawlEntities);
+router.post('/entities', entities.saveEntity);
 router.get('/entities/:id', entities.getCrawlEntities);
 router.put('/entities/:id', entities.updateCrawlEntities);
 router.delete('/entities/:id', entities.deleteCrawlEntities);
@@ -96,8 +97,9 @@ router.post('/browserconfig', browserconfigs.saveBrowserConfig);
 router.get('/browserconfig/:id', browserconfigs.getBrowserConfig);
 router.put('/browserconfig/:id', browserconfigs.updateBrowserConfig);
 router.delete('/browserconfig/:id', browserconfigs.deleteBrowserConfig);
+router.get('/browserscripts', browserconfigs.browserscript);
 
-router.get('/browserscript', browserscripts.listBrowserScripts);
+
 router.post('/browserscript', browserscripts.saveBrowserScript);
 router.get('/browserscript/:id', browserscripts.getBrowserScript);
 router.put('/browserscript/:id', browserscripts.updateBrowserScript);
@@ -126,6 +128,7 @@ router.post('/politenessconfig', politenessconfig.savePolitenessConfig);
 router.get('/politenessconfig/:id', politenessconfig.getPolitenessConfig);
 router.put('/politenessconfig/:id', politenessconfig.updatePolitenessConfig);
 router.delete('/politenessconfig/:id', politenessconfig.deletePolitenessConfig);
+router.get('/robotspolicy', politenessconfig.getrobotsconfig);
 
 router.get('/seedsearch/name=:name', seeds.seedSearch);
 router.get('/seeds', seeds.listSeeds);

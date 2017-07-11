@@ -1,0 +1,106 @@
+<form *ngIf="entity" [formGroup]="entityForm">
+
+<div class="col-md-12">
+  <h2 *ngIf="entity.id" >Entity Details</h2>
+  <h2 *ngIf="!entity.id" >New Entity</h2>
+</div>
+
+
+
+  <div class="form-group" formGroupName="meta">
+    <label class="center-block">Navn:
+      <input class="form-control" formControlName="name">
+    </label>
+    <small [hidden]="entityForm.controls.meta.valid" class="text-danger">
+      Name required.
+    </small>
+  </div>
+  <div class="form-group" formGroupName="meta">
+    <label class="center-block">Beskrivelse:
+      <input class="form-control" formControlName="description">
+    </label>
+  </div>
+
+  <div class="form-group">
+
+    <div formArrayName="label" class="well well-lg">
+      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+        <div class="panel-heading">
+          <span>Merkelapp #{{i + 1}}</span>
+          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="center-block">Type:
+            <input class="form-control" formControlName="key">
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="center-block">Verdi:
+            <input class="form-control" formControlName="value">
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
+    </div>
+  </div>
+
+  <div  class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">
+    <ng-container *ngIf="isCollapsedContent">
+      <span class="glyphicon glyphicon-plus-sign pull-left"></span>
+      <label class="collapse-details">Flere detaljer</label>
+    </ng-container>
+    <ng-container *ngIf="!isCollapsedContent">
+      <span class="glyphicon glyphicon-minus-sign pull-left"></span>
+      <label class="collapse-details">Mindre detaljer</label>
+    </ng-container>
+  </div>
+
+  <div [collapse]="isCollapsedContent" id="details" class="collapse">
+
+    <div class="form-group">
+      <label class="center-block">id:
+        <input class="form-control" formControlName="id"/>
+      </label>
+    </div>
+    <div class="form-group" formGroupName="meta">
+      <div class="form-group" formGroupName="created">
+        <label class="center-block">Created:
+          <input class="form-control"
+                 formControlName="seconds"/>
+        </label>
+      </div>
+    </div>
+    <div class="form-group" formGroupName="meta">
+      <label class="center-block">Created By:
+        <input class="form-control" formControlName="created_by"/>
+      </label>
+    </div>
+    <div class="form-group" formGroupName="meta">
+      <div class="form-group" formGroupName="last_modified">
+        <label class="center-block">Last Modified:
+          <input class="form-control"
+                 formControlName="seconds"/>
+        </label>
+      </div>
+    </div>
+    <div class="form-group" formGroupName="meta">
+      <label class="center-block">Last Modified By:
+        <input class="form-control" formControlName="last_modified_by"/>
+      </label>
+    </div>
+
+  </div>
+
+  <button class="btn btn-primary" *ngIf="!entity.id" [disabled]="!entityForm.valid"
+          (click)="createEntity(entityForm.value)" novalidate>
+    Lagre
+  </button>
+  <button class="btn btn-primary" *ngIf="entity.id" [disabled]="!entityForm.valid"
+          (click)="updateEntity(entityForm.value)">Lagre
+  </button>
+  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
+  <button class="btn btn-danger"
+          (click)="deleteEntity(); $event.stopPropagation()">Slett
+  </button>
+</form>

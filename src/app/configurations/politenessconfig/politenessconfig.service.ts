@@ -8,6 +8,7 @@ import {ErrorHandlerService} from "../../commons/components/errorhandlerservice"
 export class PolitenessconfigService {
 
   private politenessconfigUrl = '/api/politenessconfig';
+  private robotspolicyUrl = '/api/robotspolicy';
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
@@ -45,5 +46,11 @@ export class PolitenessconfigService {
       .then(response => response.json() as Politenessconfig)
       .catch(this.errorhandlerservice.handleError);
   }
+
+  getRobotsconfig() {
+    return this.http.get(this.robotspolicyUrl)
+      .map(res => res.json());
+  }
+
 
 }

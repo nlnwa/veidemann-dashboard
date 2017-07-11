@@ -16,7 +16,7 @@ import {CrawlersComponent} from "./crawlers/crawlers.component";
 import {StatisticsService} from "./statistics/statistics.service";
 import {SeedsService} from "./seeds/seeds.service";
 import {ModalComponent} from "./commons/components/modal.components";
-import {ConvertTimestamp} from "./commons/components/convertTimestamp";
+import {DateTime} from "./commons/components/datetime";
 import {ErrorHandlerService} from "./commons/components/errorhandlerservice";
 import {SeedDetailComponent} from "./seeds/seed-details/seed-details.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
@@ -40,6 +40,11 @@ import {PolitenessconfigService} from "./configurations/politenessconfig/politen
 import {RouterModule} from "@angular/router";
 import {ScheduleSidebarComponent} from "./configurations/schedule/schedule-sidebar/schedule-sidebar.component";
 import {ScheduleService} from "./configurations/schedule/schedule.service";
+import { BrowserscriptListComponent } from './configurations/browserscript/browserscript-list/browserscript-list.component';
+import { BrowserscriptDetailsComponent } from './configurations/browserscript/browserscript-details/browserscript-details.component';
+import { EntityDetailsComponent } from './entities/entity-details/entity-details.component';
+import { EntityListComponent } from './entities/entity-list/entity-list.component';
+import { EntityService } from './entities/entity.service';
 
 
 @NgModule({
@@ -67,6 +72,10 @@ import {ScheduleService} from "./configurations/schedule/schedule.service";
     PolitenessconfigDetailsComponent,
     PolitenessconfigListComponent,
     ScheduleSidebarComponent,
+    BrowserscriptListComponent,
+    BrowserscriptDetailsComponent,
+    EntityDetailsComponent,
+    EntityListComponent,
 
   ],
   imports: [
@@ -87,9 +96,10 @@ import {ScheduleService} from "./configurations/schedule/schedule.service";
     CrawlconfigService,
     PolitenessconfigService,
     BrowserconfigService,
-    ConvertTimestamp,
+    DateTime,
     ErrorHandlerService,
     ScheduleService,
+    EntityService,
   ],
   bootstrap: [AppComponent]
 })

@@ -14,6 +14,8 @@ import {ScheduleComponent} from "./configurations/schedule/schedule-list/schedul
 import {CrawlconfigListComponent} from "./configurations/crawlconfig/crawlconfig-list/crawlconfig-list.component";
 import {BrowserconfigListComponent} from "./configurations/browserconfig/browserconfig-list/browserconfig-list.component";
 import {PolitenessconfigListComponent} from "./configurations/politenessconfig/politenessconfig-list/politenessconfig-list.component";
+import {EntityListComponent} from "./entities/entity-list/entity-list.component";
+import {EntityDetailsComponent} from "./entities/entity-details/entity-details.component";
 
 
 export const ROUTES = [
@@ -24,6 +26,14 @@ export const ROUTES = [
   {
     path: 'activity',
     component: ActivityComponent
+  },
+  {
+    path: 'entities',
+    component: EntityListComponent
+  },
+  {
+    path: 'entities/:entity',
+    component: EntityDetailsComponent
   },
   {
     path: 'seeds',

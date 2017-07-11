@@ -7,7 +7,6 @@ import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
 @Injectable()
 export class SeedsService {
   private seedsUrl = '/api/seeds';
-  private entitiessUrl = '/api/entities';
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
@@ -29,17 +28,6 @@ export class SeedsService {
       .get(`api/seedsearch/name=${term}`)
       .map(res => res.json().value);
   }
-
-  getEntities() {
-    return this.http.get(this.entitiessUrl)
-      .map(res => res.json());
-  }
-
-  getEntity(entity) {
-    return this.http.get(`${this.entitiessUrl}/${entity}`)
-      .map(res => res.json().value);
-  }
-
 
   deleteSeed(delSeedid: String): Promise<String> {
     return this.http.delete(this.seedsUrl + '/' + delSeedid)

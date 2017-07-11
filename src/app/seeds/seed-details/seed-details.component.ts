@@ -2,12 +2,11 @@ import {Component, Input, OnChanges} from "@angular/core";
 import {Seed} from "../seed";
 import {Label} from "../../commons/models/label";
 import {SeedsService} from "../seeds.service";
-import {Location} from "@angular/common";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
 import {CustomValidators} from "../../commons/components/validators";
-import {ConvertTimestamp} from "../../commons/components/convertTimestamp";
+import {DateTime} from "../../commons/components/datetime";
 import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
 import {Crawljob} from "../../configurations/crawljobs/crawljob";
 
@@ -42,15 +41,12 @@ export class SeedDetailComponent implements OnChanges{
               private router: Router,
               private fb: FormBuilder,
               private crawljobService: CrawljobService,
-              private location: Location,
               private route: ActivatedRoute,
               private mdlSnackbarService: MdlSnackbarService,
-              private convertTimestamp: ConvertTimestamp,) {
+              private convertTimestamp: DateTime,) {
     this.createForm();
-
     this.getParams();
     this.fillDropdown();
-    this.router = router;
   }
 
   getParams() {
@@ -159,8 +155,8 @@ export class SeedDetailComponent implements OnChanges{
       });
   }
 
-  deleteSeed(seedId: String): void {
-    this.seedService.deleteSeed(seedId).then((deletedSeed) => {
+  deleteSeed(): void {
+    this.seedService.deleteSeed(this.seed.id).then((deletedSeed) => {
       if (deletedSeed === "not_allowed") {
         this.mdlSnackbarService.showSnackbar(
           {

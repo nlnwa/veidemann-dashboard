@@ -63,3 +63,22 @@ exports.deleteBrowserConfig = (req, res) => {
     }
   })
 };
+
+
+exports.browserscript = (req, res) => {
+  res.status(200).json({
+      "menuitem": [{
+        "value": "UNDEFINED"
+      },
+        {
+          "value": "BEHAVIOR"
+        },
+        {
+          "value": "EXTRACT_OUTLINKS"
+        },
+        {
+          "value": "LOGIN"
+        }
+      ]
+  });
+};

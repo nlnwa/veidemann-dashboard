@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Entities</h2>
+      <ul class="list-group">
+        <li class="list-group-item"
+            *ngFor="let entity of entities" (click)="selectEntity(entity)"
+            [class.active]="entity === selectedEntity">
+          {{entity.meta.name}}
+
+        </li>
+      </ul>
+      <button class="btn btn-warning" (click)="createNewEntity()">New</button>
+    </div>
+    <div class="col-md-5">
+
+      <div *ngIf="selectedEntity">
+        <entity-details
+          [entity]="selectedEntity"
+          [createHandler]="addEntity"
+          [updateHandler]="updateEntity"
+          [deleteHandler]="deleteEntity">
+        </entity-details>
+      </div>
+    </div>
+  </div>
+</div>

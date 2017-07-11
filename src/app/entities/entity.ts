@@ -1,4 +1,4 @@
-import {Meta} from "./meta";
+import {Meta} from "../commons/models/meta";
 export class Entities {
   Entity: Entity[];
   count: number;
@@ -7,10 +7,7 @@ export class Entities {
 }
 
 export class Entity {
-  id?: string;
+  id: string;
   meta: Meta;
-  entity_id: string;
-  scope: string;
-  job_id: string;
 }
 

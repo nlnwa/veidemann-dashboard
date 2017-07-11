@@ -6,7 +6,9 @@
       <!-- Title -->
       <span class="mdl-layout-title">Bosslady's Nettarkiv</span>
       <div class="mdl-layout-spacer"></div>
+      <span  class="mdl-layout-title">{{myDate}}</span>
       <!--div class="searcbox"-->
+      <div class="mdl-layout-spacer"></div>
       <div class="mdl-textfield is-dirty" data-upgraded=",MaterialTextfield">
         <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp"
                data-upgraded=",MaterialButton">
@@ -37,6 +39,8 @@
          [routerLinkActive]="['is-active']">Dokumentasjon</a>
       <a class="mdl-navigation__link" [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">Søk</a>
+      <a class="mdl-navigation__link" [routerLink]="['/entities']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">Entities</a>
       <a class="mdl-navigation__link" [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">Crawljobs</a>
       <a class="mdl-navigation__link" [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"

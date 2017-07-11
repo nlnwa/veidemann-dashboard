@@ -7,6 +7,7 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import {Seed} from "./seeds/seed";
 import {SeedsService} from "./seeds/seeds.service";
+import {DateTime} from "./commons/components/datetime";
 
 
 @Component({
@@ -18,13 +19,22 @@ export class AppComponent implements OnInit {
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
   searchfield: String;
+  myDate: Date;
 
 
   private searchTerms = new Subject<string>();
 
   constructor(private SeedService: SeedsService,
-              private router: Router) {
+              private router: Router,
+              private datetime: DateTime) {
   }
+
+  getTimestamp() {
+    setInterval(() => {         //replaced function() by ()=>
+      this.myDate = new Date();
+    }, 1000);
+  }
+
 
 
   search(term: string): void {
@@ -37,6 +47,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getTimestamp();
     this.seed = this.searchTerms
       .debounceTime(150)        // wait 300ms after each keystroke before considering the term
       .distinctUntilChanged()   // ignore if next search term is same as previous

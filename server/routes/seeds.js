@@ -31,7 +31,6 @@ exports.saveSeed = (req, res) => {
       res.status(201).json(response);
     }
   })
-
 };
 
 exports.updateSeed = (req, res) => {

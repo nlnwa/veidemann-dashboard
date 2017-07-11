@@ -26,6 +26,7 @@ export class SeedSearchComponent implements OnInit {
 
 
   search(term: string): void {
+    console.log(term);
     this.searchTerms.next(term.replace(/\//g, '%2F'));
   }
 
@@ -52,6 +53,7 @@ export class SeedSearchComponent implements OnInit {
         console.log(error);
         return Observable.of<Seed[]>([]);
       });
+
   }
 
   gotoDetail(seed: Seed): void {

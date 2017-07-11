@@ -22,17 +22,9 @@ exports.getCrawlEntities = (req, res) => {
   })
 };
 
-///skrot
-exports.saveCrawlEntities = (req, res) => {
-  console.log(req.body.labels);
-  client.saveEntity({
-    meta: {
-      name: req.body.name,
-      description: req.body.description,
-      label: req.body.labels
-    }
-  }, function (err, response) {
-    console.log(response);
+exports.saveEntity = (req, res) => {
+  console.log(req.body);
+  client.saveEntity(req.body, function (err, response) {
     if (err) {
       console.log("error: " + err);
       res.status(500);
@@ -40,7 +32,7 @@ exports.saveCrawlEntities = (req, res) => {
     else {
       res.status(201).json(response);
     }
-  });
+  })
 };
 
 exports.updateCrawlEntities = (req, res) => {
@@ -56,7 +48,7 @@ exports.updateCrawlEntities = (req, res) => {
 };
 
 exports.deleteCrawlEntities = (req, res) => {
-  client.deleteEntity({id: req.params.id}, function (response) {
+  client.deleteEntity({id: req.params.id}, function (err, response) {
     if (err) {
       console.log("error: " + err);
       res.status(405).json(err);

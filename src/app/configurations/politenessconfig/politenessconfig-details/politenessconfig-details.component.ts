@@ -17,6 +17,11 @@ export class PolitenessconfigDetailsComponent {
   @Input()
   politenessconfig: Politenessconfig;
   politenessconfigForm: FormGroup;
+
+  robotspolicyList: any = [];
+  robotspolicy_dropdownSettings = {};
+  selectedRobotspolicyItems = [];
+
   @Input()
   createHandler: Function;
   @Input()
@@ -29,14 +34,15 @@ export class PolitenessconfigDetailsComponent {
               private mdlSnackbarService: MdlSnackbarService,
               private fb: FormBuilder) {
     this.createForm();
+    this.filldropdown();
   }
 
   createForm() {
     this.politenessconfigForm = this.fb.group({
       id: '',
-      robots_policy: ['', [Validators.required, Validators.minLength(2)]],
+      robots_policy: [null, [Validators.required, CustomValidators.nonEmpty]],
       minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
-      custom_robots: '',
+      custom_robots: null,
       min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
@@ -48,7 +54,6 @@ export class PolitenessconfigDetailsComponent {
 
   updateData(politenessconfig: Politenessconfig) {
     this.politenessconfigForm.controls['id'].setValue(politenessconfig.id);
-    this.politenessconfigForm.controls['robots_policy'].setValue(politenessconfig.robots_policy);
     this.politenessconfigForm.controls['minimum_robots_validity_duration_s'].setValue(politenessconfig.minimum_robots_validity_duration_s);
     this.politenessconfigForm.controls['custom_robots'].setValue(politenessconfig.custom_robots);
     this.politenessconfigForm.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
@@ -57,10 +62,13 @@ export class PolitenessconfigDetailsComponent {
       description: politenessconfig.meta.description as string,
     });
     this.setLabel(politenessconfig.meta.label);
+    this.setSelectedDropdown();
+    this.selectedRobotspolicyItems = [];
   };
 
   ngOnChanges() {
     this.updateData(this.politenessconfig);
+
   }
 
   createPolitenessconfig() {
@@ -103,6 +111,34 @@ export class PolitenessconfigDetailsComponent {
     });
   }
 
+  filldropdown() {
+    this.politenessconfigService.getRobotsconfig().map(robotspolicy => robotspolicy).forEach((value) => {
+      for (let i of value.menuitem) {
+        this.robotspolicyList.push({id: i.id, itemName: i.itemName});
+      }
+    });
+  }
+
+  setSelectedDropdown() {
+    if (this.politenessconfig.robots_policy !== "") {
+      this.politenessconfigService.getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig).forEach((value) => {
+        value.forEach((key) => {
+          for (let i of this.robotspolicyList) {
+            if (i.itemName == key.robots_policy) {
+              this.selectedRobotspolicyItems.push({id: i.id, itemName: key.robots_policy})
+            }
+          }
+        });
+        this.politenessconfigForm.controls['robots_policy'].setValue(this.selectedRobotspolicyItems);
+      });
+    }
+    this.robotspolicy_dropdownSettings = {
+      singleSelection: true,
+      text: "Velg Robots policy",
+    };
+
+  }
+
   setLabel(label) {
     const labelFGs = label.map(label => (this.fb.group(label)));
     const labelFormArray = this.fb.array(labelFGs);
@@ -121,7 +157,7 @@ export class PolitenessconfigDetailsComponent {
 
   get label(): FormArray {
     return this.politenessconfigForm.get('label') as FormArray;
-  };
+  }
 
   initLabel() {
     return this.fb.group({
@@ -141,7 +177,7 @@ export class PolitenessconfigDetailsComponent {
     // and deep copies of changed form model values
     const savePolitenessconfig: Politenessconfig = {
       id: this.politenessconfig.id,
-      robots_policy: formModel.robots_policy,
+      robots_policy: formModel.robots_policy[0].itemName,
       minimum_robots_validity_duration_s: formModel.minimum_robots_validity_duration_s,
       custom_robots: formModel.custom_robots,
       min_time_between_page_load_ms: formModel.min_time_between_page_load_ms,

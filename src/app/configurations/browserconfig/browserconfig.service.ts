@@ -8,6 +8,7 @@ import {ErrorHandlerService} from "../../commons/components/errorhandlerservice"
 export class BrowserconfigService {
 
   private browserconfigUrl = '/api/browserconfig';
+  private browserscripts = '/api/browserscripts';
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
@@ -15,12 +16,14 @@ export class BrowserconfigService {
 
   getAllBrowserconfigs() {
     return this.http.get(this.browserconfigUrl)
-      .map(res => res.json());
+      .map(res => res.json())
+      .catch(this.errorhandlerservice.handleError);;
   }
 
   getBrowserconfigs(browserconfig_id) {
     return this.http.get(`${this.browserconfigUrl}/${browserconfig_id}`)
-      .map(res => res.json().value);
+      .map(res => res.json().value)
+      .catch(this.errorhandlerservice.handleError);;
   }
 
   createBrowserconfig(newBrowserconfig: Browserconfig): Promise<Browserconfig> {
@@ -44,6 +47,13 @@ export class BrowserconfigService {
       .toPromise()
       .then(response => response.json() as Browserconfig)
       .catch(this.errorhandlerservice.handleError);
+  }
+
+
+  getBrowserscripts() {
+    return this.http.get(this.browserscripts)
+      .map(res => res.json())
+      .catch(this.errorhandlerservice.handleError);;
   }
 
 }

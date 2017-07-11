@@ -4,8 +4,7 @@
   <div class="content-grid mdl-grid">
 
     <div class="mdl-cell mdl-cell--12-col">
-
-      <h2>Seed Details
+       <h2>Seed Details
       </h2>
       <div class="switch">
         <mdl-switch>Aktiv</mdl-switch>
@@ -111,12 +110,11 @@
               <input class="form-control" formControlName="last_modified_by"/>
             </label>
           </div>
-
         </div>
         <button class="btn btn-primary" [disabled]="!seedForm.valid" (click)="updateSeed(seedForm.value)">Lagre
         </button>
         <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
-        <button class="btn btn-danger" (click)="deleteSeed(seed.id)">Slett</button>
+        <button class="btn btn-danger" (click)="deleteSeed()">Slett</button>
       </form>
     </div>
   </div>

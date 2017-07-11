@@ -3,7 +3,6 @@
   <h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
 </div>
 
-
 <form [formGroup]="politenessconfigForm">
 
 
@@ -22,13 +21,25 @@
   </div>
 
   <div class="form-group">
-    <label class="center-block">Robots Policy
-      <input class="form-control" formControlName="robots_policy">
+    <label class="center-block">Robots policy:
+      <angular2-multiselect [data]="robotspolicyList" [(ngModel)]="selectedRobotspolicyItems"
+                            [settings]="robotspolicy_dropdownSettings"
+                            formControlName="robots_policy"></angular2-multiselect>
     </label>
     <small [hidden]="politenessconfigForm.controls.robots_policy.valid" class="text-danger">
-      Robots Policy required.
+      Robots policy required.
     </small>
   </div>
+  <ng-container *ngIf="politenessconfigForm.value.robots_policy[0]">
+    <div *ngIf="politenessconfigForm.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'" class="form-group">
+      <label class="center-block">custom_robots:
+        <textarea class="form-control" formControlName="custom_robots"></textarea>
+      </label>
+      <small [hidden]="politenessconfigForm.controls.custom_robots.valid" class="text-danger">
+        Validity duration required.
+      </small>
+    </div>
+  </ng-container>
 
   <div class="form-group">
     <label class="center-block">minimum_robots_validity_duration_s:
@@ -38,11 +49,7 @@
       Validity duration required.
     </small>
   </div>
-  <div class="form-group">
-    <label class="center-block">custom_robots:
-      <textarea class="form-control" formControlName="custom_robots"></textarea>
-    </label>
-  </div>
+
 
   <div class="form-group">
     <label class="center-block">min_time_between_page_load_ms:

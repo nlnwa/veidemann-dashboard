@@ -6,18 +6,13 @@ import {Label} from "./label";
 export class Meta {
   name: string;
   description: string;
-  created?: Created;
+  created?: Time;
   created_by?: string;
-  last_modified?: Last_modified;
+  last_modified?: Time;
   last_modified_by?: string;
   label: Label[];
 }
-export class Last_modified {
-  seconds: number;
-  nanos: number;
-}
-
-export class Created {
-  seconds: number;
-  nanos: number;
+export class Time {
+  seconds?: number;
+  nanos?: number;
 }
