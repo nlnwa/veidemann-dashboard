@@ -117,7 +117,6 @@ export class SeedDetailComponent implements OnChanges{
           value.forEach((key) => {
             this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
           });
-          this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
         });
       }
     }

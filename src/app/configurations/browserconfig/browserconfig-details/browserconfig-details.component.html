@@ -53,16 +53,11 @@
       Page load timeout required.
     </small>
   </div>
-  <!--div class="form-group">
-    <label class="center-block">Script id:
-      <input class="form-control" formControlName="script_id">
-    </label>
-  </div-->
-  <div class="form-group" formGroupName="headers">
+  <!--div class="form-group" formGroupName="headers">
     <label class="center-block">Headers:
       <input class="form-control">
     </label>
-  </div>
+  </div-->
   <div class="form-group">
     <label class="center-block">sleep_after_pageload_ms:
       <input class="form-control" type="number" formControlName="sleep_after_pageload_ms">
@@ -71,6 +66,17 @@
       Sleep after pageload required.
     </small>
 
+  </div>
+
+  <div class="form-group">
+    <label class="center-block">Scripts:
+      <angular2-multiselect [data]="browserScriptlist" [(ngModel)]="selectedbrowserScriptItems"
+                            [settings]="browserScript_dropdownSettings"
+                            formControlName="script_id"></angular2-multiselect>
+    </label>
+    <small [hidden]="browserconfigForm.controls.script_id.valid" class="text-danger">
+      Scripts required.
+    </small>
   </div>
 
   <div class="form-group">

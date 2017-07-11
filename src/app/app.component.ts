@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
   searchfield: String;
-  myDate: Date;
+  myDate: String;
 
 
   private searchTerms = new Subject<string>();
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
 
   getTimestamp() {
     setInterval(() => {         //replaced function() by ()=>
-      this.myDate = new Date();
+    this.myDate =  this.datetime.nowUTC();
     }, 1000);
   }
 

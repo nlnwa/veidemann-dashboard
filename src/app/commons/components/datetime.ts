@@ -23,8 +23,9 @@ export class DateTime {
     return (Date.now() / 1000);
   }
 
-  todayFullDate() {
-    return (new Date)
+  nowUTC() {
+    const newDate = new Date();
+    return (new Date().toUTCString());
   }
 
 }

@@ -5,6 +5,8 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/models/label";
 import {CustomValidators} from "../../../commons/components/validators";
+import {BrowserscriptService} from "../../browserscript/browserscript.service";
+import {isUndefined} from "util";
 
 @Component({
   selector: 'browserconfig-details',
@@ -16,6 +18,11 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   browserconfig: Browserconfig;
   browserconfigForm: FormGroup;
 
+  browserScriptlist: any = [];
+  browserScript_dropdownSettings = {};
+  selectedbrowserScriptItems = [];
+
+
   @Input()
   createHandler: Function;
   @Input()
@@ -25,8 +32,12 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   constructor(private browserconfigService: BrowserconfigService,
               private mdlSnackbarService: MdlSnackbarService,
-              private fb: FormBuilder) {
-    this.createForm()
+              private fb: FormBuilder,
+              private browserscriptService: BrowserscriptService,
+  ) {
+    this.createForm();
+    this.filldropdown();
+
   }
 
   createForm() {
@@ -37,18 +48,14 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       window_height: ['', [Validators.required, CustomValidators.min(1)]],
       page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      headers: this.fb.group({}),
-      script_id: this.fb.array([]),
+      //headers: this.fb.group({''}),
+      script_id: [null, [Validators.required, CustomValidators.nonEmpty]],
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
         label: this.fb.array([]),
       }),
     });
-  }
-
-  ngOnChanges() {
-    this.updateData(this.browserconfig);
   }
 
   updateData(browserconfig: Browserconfig) {
@@ -58,14 +65,18 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     this.browserconfigForm.controls['window_height'].setValue(browserconfig.window_height);
     this.browserconfigForm.controls['page_load_timeout_ms'].setValue(browserconfig.page_load_timeout_ms);
     this.browserconfigForm.controls['sleep_after_pageload_ms'].setValue(browserconfig.sleep_after_pageload_ms);
-    this.browserconfigForm.controls['headers'].patchValue(browserconfig.headers);
+    //this.browserconfigForm.controls['headers'].patchValue(browserconfig.headers);
     this.browserconfigForm.controls['meta'].patchValue({
       name: browserconfig.meta.name as string,
       description: browserconfig.meta.description as string,
     });
-    //this.setScript(browserconfig.script_id);
-
+    this.setSelectedDropdown();
+    this.selectedbrowserScriptItems = [];
     this.setLabel(browserconfig.meta.label);
+  }
+
+  ngOnChanges() {
+    this.updateData(this.browserconfig);
   }
 
   createBrowserconfig() {
@@ -107,6 +118,28 @@ export class BrowserconfigDetailsComponent implements OnChanges {
           });
       }
     });
+  }
+
+  filldropdown() {
+    this.browserscriptService.getAllBrowserscripts().map(browserscripts => browserscripts.value).forEach((value) => {
+      value.forEach((key) => {
+        this.browserScriptlist.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+      })
+    });
+  }
+
+  setSelectedDropdown() {
+    this.selectedbrowserScriptItems = [];
+    if (!isUndefined(this.browserconfig.script_id)) {
+      for (let i of this.browserconfig.script_id) {
+        this.browserscriptService.getBrowserscript(this.browserconfig.script_id).map(crawljob => crawljob).forEach((value) => {
+          value.forEach((key) => {
+            this.selectedbrowserScriptItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+          });
+        });
+      }
+    }
+    this.browserconfigForm.controls['script_id'].setValue(this.selectedbrowserScriptItems);
   }
 
   setLabel(label) {

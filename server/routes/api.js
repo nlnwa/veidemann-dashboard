@@ -97,13 +97,14 @@ router.post('/browserconfig', browserconfigs.saveBrowserConfig);
 router.get('/browserconfig/:id', browserconfigs.getBrowserConfig);
 router.put('/browserconfig/:id', browserconfigs.updateBrowserConfig);
 router.delete('/browserconfig/:id', browserconfigs.deleteBrowserConfig);
-router.get('/browserscripts', browserconfigs.browserscript);
 
 
+router.get('/browserscript', browserscripts.listBrowserScripts);
 router.post('/browserscript', browserscripts.saveBrowserScript);
 router.get('/browserscript/:id', browserscripts.getBrowserScript);
 router.put('/browserscript/:id', browserscripts.updateBrowserScript);
 router.delete('/browserscript/:id', browserscripts.deleteBrowserScript);
+
 
 router.get('/crawljob', crawljobs.listCrawlJobs);
 router.post('/crawljob', crawljobs.saveCrawlJob);

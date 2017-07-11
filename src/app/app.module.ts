@@ -45,6 +45,7 @@ import { BrowserscriptDetailsComponent } from './configurations/browserscript/br
 import { EntityDetailsComponent } from './entities/entity-details/entity-details.component';
 import { EntityListComponent } from './entities/entity-list/entity-list.component';
 import { EntityService } from './entities/entity.service';
+import {BrowserscriptService} from "./configurations/browserscript/browserscript.service";
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { EntityService } from './entities/entity.service';
     ErrorHandlerService,
     ScheduleService,
     EntityService,
+    BrowserscriptService,
   ],
   bootstrap: [AppComponent]
 })

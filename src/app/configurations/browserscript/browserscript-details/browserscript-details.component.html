@@ -1,3 +1,69 @@
-<p>
-  browserscript-details works!
-</p>
+<div class="col-md-12">
+  <h2 *ngIf="browserscript.id">Browserscript Details</h2>
+  <h2 *ngIf="!browserscript.id">New Browserscript</h2>
+</div>
+
+<form [formGroup]="browserscriptForm">
+
+
+  <div class="form-group" formGroupName="meta">
+    <label class="center-block">Navn:
+      <input class="form-control" formControlName="name">
+    </label>
+    <small [hidden]="browserscriptForm.controls.meta.valid" class="text-danger">
+      Name required.
+    </small>
+  </div>
+  <div class="form-group" formGroupName="meta">
+    <label class="center-block">Beskrivelse:
+      <input class="form-control" formControlName="description">
+    </label>
+  </div>
+
+   <div class="form-group">
+    <label class="center-block">Script:
+      <textarea class="form-control" formControlName="script"> </textarea>
+    </label>
+    <small [hidden]="browserscriptForm.controls.script.valid" class="text-danger">
+      Validity duration required.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <div formArrayName="label" class="well well-lg">
+      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+        <div class="panel-heading">
+          <span>Merkelapp #{{i + 1}}</span>
+          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="center-block">Type:
+            <input class="form-control" formControlName="key">
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="center-block">Verdi:
+            <input class="form-control" formControlName="value">
+
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" [disabled]="!browserscriptForm.valid" *ngIf="!browserscript.id"
+          (click)="createBrowserscript(browserscriptForm.value)"
+          novalidate>Lagre
+  </button>
+  <button class="btn btn-primary" *ngIf="browserscript.id" [disabled]="!browserscriptForm.valid"
+          (click)="updateBrowserscript(browserscriptForm.value)">
+    Lagre
+  </button>
+  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
+
+  <button class="btn btn-danger" *ngIf="browserscript.id"
+          (click)="deleteBrowserscript(browserscript.id); $event.stopPropagation()">Slett
+  </button>
+</form>

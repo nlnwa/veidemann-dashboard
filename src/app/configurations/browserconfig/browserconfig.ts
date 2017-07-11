@@ -17,15 +17,14 @@ export class Browserconfig {
   window_width?: number;
   window_height?: number;
   page_load_timeout_ms?: string;
-  script_selector?: Script_Selector;
   script_id?: Script_Id[];
-  headers?: {};
+  headers?: Headers;
   sleep_after_pageload_ms?: string;
 }
 
 export class Script_Id {
-
 }
-export class Script_Selector {
-  label: Label[];
+
+export class Headers {
+
 }

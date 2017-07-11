@@ -27,3 +27,4 @@ export class Extra {
   extract_text: boolean;
   create_snapshot: boolean;
 }
+
