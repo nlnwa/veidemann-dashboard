@@ -1,10 +1,9 @@
 <form *ngIf="entity" [formGroup]="entityForm">
 
-<div class="col-md-12">
-  <h2 *ngIf="entity.id" >Entity Details</h2>
-  <h2 *ngIf="!entity.id" >New Entity</h2>
-</div>
-
+  <div class="col-md-12">
+    <h2 *ngIf="entity.id">Entity Details</h2>
+    <h2 *ngIf="!entity.id">New Entity</h2>
+  </div>
 
 
   <div class="form-group" formGroupName="meta">
@@ -45,7 +44,7 @@
     </div>
   </div>
 
-  <div  class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">
+  <div class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">
     <ng-container *ngIf="isCollapsedContent">
       <span class="glyphicon glyphicon-plus-sign pull-left"></span>
       <label class="collapse-details">Flere detaljer</label>

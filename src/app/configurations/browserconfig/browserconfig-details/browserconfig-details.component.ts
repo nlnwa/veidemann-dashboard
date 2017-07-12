@@ -19,7 +19,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   browserconfigForm: FormGroup;
 
   browserScriptlist: any = [];
-  browserScript_dropdownSettings = {};
+  browserScriptDropdownSettings = {};
   selectedbrowserScriptItems = [];
 
 
@@ -33,8 +33,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   constructor(private browserconfigService: BrowserconfigService,
               private mdlSnackbarService: MdlSnackbarService,
               private fb: FormBuilder,
-              private browserscriptService: BrowserscriptService,
-  ) {
+              private browserscriptService: BrowserscriptService,) {
     this.createForm();
     this.filldropdown();
 
@@ -126,6 +125,12 @@ export class BrowserconfigDetailsComponent implements OnChanges {
         this.browserScriptlist.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
+    this.browserScriptDropdownSettings = {
+      singleSelection: false,
+      text: "Velg Script",
+      enableCheckAll: false,
+      enableSearchFilter: true,
+    };
   }
 
   setSelectedDropdown() {
@@ -134,7 +139,11 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       for (let i of this.browserconfig.script_id) {
         this.browserscriptService.getBrowserscript(this.browserconfig.script_id).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
-            this.selectedbrowserScriptItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+            this.selectedbrowserScriptItems.push({
+              id: key.id,
+              itemName: key.meta.name,
+              description: key.meta.description
+            })
           });
         });
       }

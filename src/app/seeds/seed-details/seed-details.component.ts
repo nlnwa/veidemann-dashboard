@@ -9,6 +9,7 @@ import {CustomValidators} from "../../commons/components/validators";
 import {DateTime} from "../../commons/components/datetime";
 import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
 import {Crawljob} from "../../configurations/crawljobs/crawljob";
+import {EntityService} from "../../entities/entity.service";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {Crawljob} from "../../configurations/crawljobs/crawljob";
 
 })
 
-export class SeedDetailComponent implements OnChanges{
+export class SeedDetailComponent implements OnChanges {
   @Input() seed: Seed;
   seedForm: FormGroup;
 
@@ -43,7 +44,8 @@ export class SeedDetailComponent implements OnChanges{
               private crawljobService: CrawljobService,
               private route: ActivatedRoute,
               private mdlSnackbarService: MdlSnackbarService,
-              private convertTimestamp: DateTime,) {
+              private convertTimestamp: DateTime,
+              private entityService: EntityService) {
     this.createForm();
     this.getParams();
     this.fillDropdown();
@@ -64,26 +66,29 @@ export class SeedDetailComponent implements OnChanges{
 
   createForm() {
     this.seedForm = this.fb.group({
-      id: {value: '', disabled: true},
-      entity_id: {value: '', disabled: true},
-      job_id: ['', CustomValidators.nonEmpty],
-      scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
-      meta: this.fb.group({
-        name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
-        description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true,}}),
-        created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
-        last_modified_by: {value: '', disabled: true},
-      }),
-      label: this.fb.array([]),
+        id: {value: '', disabled: true},
 
-    });
+        entity_id: this.fb.group({
+          entity_name: {value: '', disabled: true},
+          entity_ids: ''
+        }),
+        job_id: ['', CustomValidators.nonEmpty],
+        scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
+        meta: this.fb.group({
+          name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+          description: '',
+          created: this.fb.group({seconds: {value: '', disabled: true,}}),
+          created_by: {value: '', disabled: true},
+          last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+          last_modified_by: {value: '', disabled: true},
+        }),
+        label: this.fb.array([]),
+      }
+    );
   }
 
   updateData(seed: Seed) {
     this.seedForm.controls['id'].setValue(seed.id);
-    this.seedForm.controls['entity_id'].setValue(seed.entity_id);
     this.seedForm.controls['scope'].patchValue({
       surt_prefix: seed.scope.surt_prefix
     });
@@ -103,16 +108,23 @@ export class SeedDetailComponent implements OnChanges{
     this.setSelectedDropdown()
   }
 
+  getEntityName(entity_id) {
+    this.entityService.getEntity(entity_id).map(entity => entity).forEach((value) => {
+      value.forEach((key) => {
+        this.seedForm.controls['entity_id'].setValue({entity_name: key.meta.name, entity_ids: this.seed.entity_id});
+      });
+    })
+  }
 
   ngOnChanges() {
-    this.setLabel(this.seed.meta.label);
+    this.getEntityName(this.seed.entity_id);
     this.updateData(this.seed);
   }
 
   setSelectedDropdown() {
     this.selectedCrawljobItems = [];
     if (this.seed.job_id !== null) {
-    for (let i of this.seed.job_id) {
+      for (let i of this.seed.job_id) {
         this.crawljobService.getCrawlJob(this.seed.job_id).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
             this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
@@ -219,7 +231,7 @@ export class SeedDetailComponent implements OnChanges{
 
   get label(): FormArray {
     return this.seedForm.get('label') as FormArray;
-  };
+  }
 
 
   addLabel() {
@@ -240,10 +252,19 @@ export class SeedDetailComponent implements OnChanges{
       });
   }
 
+  goToEntity() {
+    console.log(this.seed.entity_id);
+    this.router.navigate(['/entities/',this.seed.entity_id])
+  }
+
   goBack(): void {
     setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 0);
+        this.router.navigate(['/']);
+      }
+      ,
+      0
+    )
+    ;
     setTimeout(() => {
       this.router.navigate(['/seedsearch']);
     }, 0);

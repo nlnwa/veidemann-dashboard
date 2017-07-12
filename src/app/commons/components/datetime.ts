@@ -19,7 +19,7 @@ export class DateTime {
     return new Date(timestamp * 1000);
   }
 
-   today() {
+  today() {
     return (Date.now() / 1000);
   }
 

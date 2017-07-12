@@ -1,5 +1,4 @@
 import {Meta} from "../../commons/models/meta";
-import {Label} from "../../commons/models/label";
 /**
  * Created by kristiana on 08.06.17.
  */

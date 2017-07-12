@@ -14,7 +14,6 @@ exports.getSeed = (req, res) => {
       res.status(500);
     }
     else {
-      console.log(response);
       res.status(200).json(response);
     }
   })
@@ -40,7 +39,6 @@ exports.updateSeed = (req, res) => {
       res.status(500);
     }
     else {
-      console.log(response);
       res.status(200).json(response);
     }
   })
@@ -65,7 +63,6 @@ exports.seedSearch = (req, res) => {
       res.status(405).json(err);
     }
     else {
-      console.log(response);
       res.status(200).json(response);
     }
   });

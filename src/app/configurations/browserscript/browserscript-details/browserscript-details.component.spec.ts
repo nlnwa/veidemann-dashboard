@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { BrowserscriptDetailsComponent } from './browserscript-details.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {BrowserscriptDetailsComponent} from "./browserscript-details.component";
 
 describe('BrowserscriptDetailsComponent', () => {
   let component: BrowserscriptDetailsComponent;
@@ -8,9 +7,9 @@ describe('BrowserscriptDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BrowserscriptDetailsComponent ]
+      declarations: [BrowserscriptDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

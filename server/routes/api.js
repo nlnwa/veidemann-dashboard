@@ -14,9 +14,6 @@ const path = require('path');
 const users = require('./users');
 const fs = require("fs");
 
-
-
-
 require('dotenv').config();
 
 console.warn('gRPC: Using: ' + process.env.grpc_controller);

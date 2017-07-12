@@ -4,7 +4,7 @@
   border-right: 1px solid gray;
   border-top: 1px solid gray;
   width: 200px;
-  height: 22px;
+  height: auto;
   padding: 2px;
   background-color: white;
   cursor: pointer;

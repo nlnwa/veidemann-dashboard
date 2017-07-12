@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
 import {Entity} from "./entity";
@@ -9,7 +9,8 @@ export class EntityService {
   private entitiessUrl = '/api/entities';
 
   constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) { }
+              private errorhandlerservice: ErrorHandlerService) {
+  }
 
   getEntities() {
     return this.http.get(this.entitiessUrl)
@@ -24,7 +25,6 @@ export class EntityService {
   }
 
   createEntity(newEntity: Entity): Promise<Entity> {
-    console.log(newEntity);
     return this.http.post(this.entitiessUrl, newEntity)
       .toPromise()
       .then(response => response.json() as Entity)

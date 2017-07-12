@@ -40,11 +40,11 @@ import {PolitenessconfigService} from "./configurations/politenessconfig/politen
 import {RouterModule} from "@angular/router";
 import {ScheduleSidebarComponent} from "./configurations/schedule/schedule-sidebar/schedule-sidebar.component";
 import {ScheduleService} from "./configurations/schedule/schedule.service";
-import { BrowserscriptListComponent } from './configurations/browserscript/browserscript-list/browserscript-list.component';
-import { BrowserscriptDetailsComponent } from './configurations/browserscript/browserscript-details/browserscript-details.component';
-import { EntityDetailsComponent } from './entities/entity-details/entity-details.component';
-import { EntityListComponent } from './entities/entity-list/entity-list.component';
-import { EntityService } from './entities/entity.service';
+import {BrowserscriptListComponent} from "./configurations/browserscript/browserscript-list/browserscript-list.component";
+import {BrowserscriptDetailsComponent} from "./configurations/browserscript/browserscript-details/browserscript-details.component";
+import {EntityDetailsComponent} from "./entities/entity-details/entity-details.component";
+import {EntityListComponent} from "./entities/entity-list/entity-list.component";
+import {EntityService} from "./entities/entity.service";
 import {BrowserscriptService} from "./configurations/browserscript/browserscript.service";
 
 

@@ -4,7 +4,6 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {BrowserscriptService} from "../browserscript.service";
 import {Label} from "../../../commons/models/label";
-import {CustomValidators} from "../../../commons/components/validators";
 
 
 @Component({

@@ -4,17 +4,18 @@
   <div class="content-grid mdl-grid">
 
     <div class="mdl-cell mdl-cell--12-col">
-       <h2>Seed Details
+      <h2>Seed Details
       </h2>
+      <form [formGroup]="seedForm">
+
       <div class="switch">
         <mdl-switch>Aktiv</mdl-switch>
       </div>
-      <form [formGroup]="seedForm">
-        <div class="form-group">
-          <label class="center-block">Entity_id:
-            <input class="form-control" formControlName="entity_id"/>
-          </label>
-        </div>
+      <div class="form-group"  formGroupName="entity_id">
+        <label class="center-block" (click)="goToEntity()"> Entity:
+          <input type="text" class="form-control"  formControlName="entity_name"/>
+        </label>
+      </div>
 
         <div class="form-group" formGroupName="meta">
           <label class="center-block">Seed:
@@ -45,8 +46,8 @@
                 <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
               </div>
 
-              <div class="form-group" hidden>
-                <label class="center-block">Type:
+              <div class="form-group">
+                <label class="center-block" hidden>Type:
                   <input class="form-control" formControlName="key">
                 </label>
               </div>

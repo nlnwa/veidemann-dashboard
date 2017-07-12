@@ -37,11 +37,11 @@ export class EntityListComponent implements OnInit {
     const entity: Entity = {
       id: '',
       meta: {
-          name: '',
-          description: '',
-          label: [],
-          created: {seconds: null},
-          last_modified: {seconds: null}
+        name: '',
+        description: '',
+        label: [],
+        created: {seconds: null},
+        last_modified: {seconds: null}
       }
     };
 

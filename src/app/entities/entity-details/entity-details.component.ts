@@ -1,9 +1,8 @@
-import {Component, OnInit, Input, OnChanges} from '@angular/core';
+import {Component, Input, OnChanges} from "@angular/core";
 import {Entity} from "../entity";
 import {Validators, FormBuilder, FormArray, FormGroup} from "@angular/forms";
 import {EntityService} from "../entity.service";
 import {MdlSnackbarService} from "angular2-mdl";
-import {CustomValidators} from "../../commons/components/validators";
 import {Label} from "../../commons/models/label";
 import {DateTime} from "../../commons/components/datetime";
 import {ActivatedRoute} from "@angular/router";
@@ -170,7 +169,6 @@ export class EntityDetailsComponent implements OnChanges {
   prepareSaveEntity(): Entity {
 
     const formModel = this.entityForm.value;
-    console.log(formModel);
     // deep copy of form model lairs
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)

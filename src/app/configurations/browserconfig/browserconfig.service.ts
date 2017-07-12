@@ -17,13 +17,15 @@ export class BrowserconfigService {
   getAllBrowserconfigs() {
     return this.http.get(this.browserconfigUrl)
       .map(res => res.json())
-      .catch(this.errorhandlerservice.handleError);;
+      .catch(this.errorhandlerservice.handleError);
+    ;
   }
 
   getBrowserconfigs(browserconfig_id) {
     return this.http.get(`${this.browserconfigUrl}/${browserconfig_id}`)
       .map(res => res.json().value)
-      .catch(this.errorhandlerservice.handleError);;
+      .catch(this.errorhandlerservice.handleError);
+    ;
   }
 
   createBrowserconfig(newBrowserconfig: Browserconfig): Promise<Browserconfig> {
@@ -53,7 +55,8 @@ export class BrowserconfigService {
   getBrowserscripts() {
     return this.http.get(this.browserscripts)
       .map(res => res.json())
-      .catch(this.errorhandlerservice.handleError);;
+      .catch(this.errorhandlerservice.handleError);
+    ;
   }
 
 }
