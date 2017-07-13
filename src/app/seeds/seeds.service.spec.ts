@@ -1,14 +1,14 @@
 import {TestBed, inject} from "@angular/core/testing";
-import {SeedsService} from "./seeds.service";
+import {SeedService} from "./seeds.service";
 
-describe('SeedsService', () => {
+describe('SeedService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SeedsService]
+      providers: [SeedService]
     });
   });
 
-  it('should ...', inject([SeedsService], (service: SeedsService) => {
+  it('should ...', inject([SeedService], (service: SeedService) => {
     expect(service).toBeTruthy();
   }));
 });

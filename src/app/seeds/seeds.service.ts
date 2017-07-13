@@ -1,17 +1,16 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
-import {Seed} from "./seed";
+import {Seed, Seeds} from "./seed";
 import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
 
 @Injectable()
-export class SeedsService {
+export class SeedService {
   private seedsUrl = '/api/seeds';
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
   }
-
   getAllSeeds() {
     return this.http.get(this.seedsUrl)
       .map(res => res.json().value);
@@ -53,5 +52,10 @@ export class SeedsService {
       .catch(this.errorhandlerservice.handleError);
   }
 
+  getSeedsOfEntity(entity_id) {
+    return this.http
+      .get(`api/seedsofentity/entityid=${entity_id}`)
+      .map(res => res.json());
+  }
 
 }

@@ -6,7 +6,7 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import {Seed} from "./seeds/seed";
-import {SeedsService} from "./seeds/seeds.service";
+import {SeedService} from "./seeds/seeds.service";
 import {DateTime} from "./commons/components/datetime";
 
 
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
 
-  constructor(private SeedService: SeedsService,
+  constructor(private SeedService: SeedService,
               private router: Router,
               private datetime: DateTime) {
   }

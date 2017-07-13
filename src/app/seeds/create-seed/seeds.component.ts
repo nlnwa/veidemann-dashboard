@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {SeedsService} from "../seeds.service";
+import {SeedService} from "../seeds.service";
 import {Seed} from "../seed";
 import {Label} from "../../commons/models/label";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
@@ -32,7 +32,7 @@ export class SeedsComponent {
   @Input()
   deleteHandler: Function;
 
-  constructor(private seedService: SeedsService,
+  constructor(private seedService: SeedService,
               private fb: FormBuilder,
               private entityService: EntityService,
               private crawljobService: CrawljobService,
@@ -40,7 +40,7 @@ export class SeedsComponent {
               private router: Router,) {
 
     this.createForm();
-    this.getSeeds();
+    //this.getSeeds();
     this.getEntities();
     this.getCrawljobs()
   }
@@ -109,7 +109,7 @@ export class SeedsComponent {
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveSeed: Seed = {
-      id: this.seed.id,
+      //id: this.seed.id,
       entity_id: formModel.entity_id[0].id,
       scope: {surt_prefix: ''},
       job_id: job_idlist,

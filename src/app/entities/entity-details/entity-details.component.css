@@ -1,0 +1,17 @@
+.mdl-data-table {
+  margin-top: 10px;
+  width: 100%;
+  border-bottom: 2px;
+  background-color: transparent;
+}
+
+.mdl-data-table tbody {
+  border-top: black;
+  border-top: 2px;
+}
+
+.mdl-data-table th {
+  width: 214px;
+  text-align: left;
+  border-top: 2px;
+}

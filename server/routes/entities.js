@@ -1,7 +1,7 @@
 exports.listCrawlEntities = (req, res) => {
   client.listCrawlEntities({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities listall :  error: " + err);
       res.status(500);
     }
     else {
@@ -13,7 +13,7 @@ exports.listCrawlEntities = (req, res) => {
 exports.getCrawlEntities = (req, res) => {
   client.listCrawlEntities({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities getone :  error: " + err);
       res.status(500);
     }
     else {
@@ -26,7 +26,7 @@ exports.saveEntity = (req, res) => {
   console.log(req.body);
   client.saveEntity(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities save :  error: " + err);
       res.status(500);
     }
     else {
@@ -38,7 +38,7 @@ exports.saveEntity = (req, res) => {
 exports.updateCrawlEntities = (req, res) => {
   client.saveEntity(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities update :  error: " + err);
       res.status(500);
     }
     else {
@@ -50,7 +50,7 @@ exports.updateCrawlEntities = (req, res) => {
 exports.deleteCrawlEntities = (req, res) => {
   client.deleteEntity({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities delete :  error: " + err);
       res.status(405).json(err);
     }
     else {
@@ -62,7 +62,7 @@ exports.deleteCrawlEntities = (req, res) => {
 exports.searchCrawlEntities = (req, res) => {
   client.listCrawlEntities({name_prefix: req.params.name}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("entities search :  error: " + err);
       res.status(500);
     }
     else {

@@ -14,7 +14,7 @@ import {ActivityComponent} from "./activity/activity.component";
 import {SeedsComponent} from "./seeds/create-seed/seeds.component";
 import {CrawlersComponent} from "./crawlers/crawlers.component";
 import {StatisticsService} from "./statistics/statistics.service";
-import {SeedsService} from "./seeds/seeds.service";
+import {SeedService} from "./seeds/seeds.service";
 import {ModalComponent} from "./commons/components/modal.components";
 import {DateTime} from "./commons/components/datetime";
 import {ErrorHandlerService} from "./commons/components/errorhandlerservice";
@@ -92,7 +92,7 @@ import {BrowserscriptService} from "./configurations/browserscript/browserscript
   providers: [
     UserService,
     StatisticsService,
-    SeedsService,
+    SeedService,
     CrawljobService,
     CrawlconfigService,
     PolitenessconfigService,

@@ -5,7 +5,10 @@ import {EntityService} from "../entity.service";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label} from "../../commons/models/label";
 import {DateTime} from "../../commons/components/datetime";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {SeedService} from "../../seeds/seeds.service";
+import {Seeds} from "../../seeds/seed";
+import {observable} from "rxjs/symbol/observable";
 
 @Component({
   selector: 'entity-details',
@@ -17,8 +20,12 @@ export class EntityDetailsComponent implements OnChanges {
   @Input()
   entity: Entity;
   entityForm: FormGroup;
+  seeds = Seeds;
+  getseedlist = [];
 
   public isCollapsedContent: boolean = true;
+  public isCollapsedSeeds: boolean = true;
+
 
 
   @Input()
@@ -29,18 +36,20 @@ export class EntityDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
   constructor(private entityService: EntityService,
+              private seedService: SeedService,
               private route: ActivatedRoute,
               private mdlSnackbarService: MdlSnackbarService,
               private fb: FormBuilder,
+              private router: Router,
               private convertTimestamp: DateTime) {
     this.createForm();
     this.getParams();
-
   }
 
   createForm() {
     this.entityForm = this.fb.group({
       id: {value: '', disabled: true},
+      seedcount: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
@@ -49,26 +58,40 @@ export class EntityDetailsComponent implements OnChanges {
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
       }),
-      label: this.fb.array([]),
-
+      seedlist: this.fb.array([]),
+      label: this.fb.array([], Validators.minLength(1)),
     });
   }
 
   getParams() {
     this.route.params.subscribe(params => {
       if (params.entity == null) {
-
       } else {
         this.entityService.getEntity(params.entity).subscribe(entity => {
           this.entity = entity[0];
-          this.updateData(this.entity);
+          this.ngOnChanges();
         })
       }
     });
   }
 
   ngOnChanges() {
+    this.getSeedsOfEntity(this.entity.id);
     this.updateData(this.entity);
+    setTimeout(() => {
+      this.updateData(this.entity);
+    },500);
+  }
+
+  getSeedsOfEntity(entity_id) {
+    this.seedService.getSeedsOfEntity(entity_id).map(seeds => seeds).forEach((seed) => {
+      this.entityForm.controls['seedcount'].setValue(seed.count);
+      seed.value.forEach((key) => {
+        this.getseedlist.push({name: key.meta.name, id: key.id, label: key.meta.label, description: key.meta.description})
+      });
+      console.log(this.getseedlist);
+
+    });
   }
 
   updateData(entity: Entity) {
@@ -85,9 +108,10 @@ export class EntityDetailsComponent implements OnChanges {
       },
       last_modified_by: entity.meta.last_modified_by,
     });
-    //this.setScript(entity.script_id);
+    this.setSeedlist(this.getseedlist);
+    this.setLabel(this.entity.meta.label);
 
-    this.setLabel(entity.meta.label);
+
   }
 
   createEntity(entity) {
@@ -131,20 +155,23 @@ export class EntityDetailsComponent implements OnChanges {
     });
   }
 
+
+  setSeedlist(seedlist) {
+    this.getseedlist = [];
+    const seedlistFG = seedlist.map(seedlist => (this.fb.group(seedlist)));
+    const seedlistFormArray = this.fb.array(seedlistFG);
+    this.entityForm.setControl('seedlist', seedlistFormArray);
+  }
+
+  get seedlist(): FormArray {
+    return this.entityForm.get('seedlist') as FormArray;
+  };
+
+
   setLabel(label) {
     const labelFGs = label.map(label => (this.fb.group(label)));
     const labelFormArray = this.fb.array(labelFGs);
     this.entityForm.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.entityForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.entityForm.controls['label'];
-    control.removeAt(i);
   }
 
   get label(): FormArray {
@@ -156,6 +183,16 @@ export class EntityDetailsComponent implements OnChanges {
       key: ['', [Validators.required, Validators.minLength(1)]],
       value: ['', [Validators.required, Validators.minLength(1)]],
     });
+  }
+
+  addLabel() {
+    const control = <FormArray>this.entityForm.controls['label'];
+    control.push(this.initLabel());
+  }
+
+  removeLabel(i: number) {
+    const control = <FormArray>this.entityForm.controls['label'];
+    control.removeAt(i);
   }
 
   revert() {
@@ -189,5 +226,9 @@ export class EntityDetailsComponent implements OnChanges {
       }
     };
     return saveEntity;
+  }
+
+  goToSeed(seed_id) {
+    this.router.navigate(['/seeds/',seed_id])
   }
 }

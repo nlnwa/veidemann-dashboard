@@ -2,13 +2,7 @@
  * Created by kristiana on 11.05.17.
  */
 exports.listSeeds = (req, res) => {
-  client.listSeeds({}, function (err, response) {
-    res.status(200).json(response);
-  })
-};
-
-exports.getSeed = (req, res) => {
-  client.listSeeds({id: req.params.id}, function (err, response) {
+  client.listSeeds({page_size: 10000}, function (err, response) {
     if (err) {
       console.log("error: " + err);
       res.status(500);
@@ -19,11 +13,36 @@ exports.getSeed = (req, res) => {
   })
 };
 
+exports.getSeedsOfEntity = (req, res) => {
+  console.log(req.params.entityid);
+client.listSeeds({entity_id: req.params.entityid, page_size: 30}, function (err, response) {
+  if (err) {
+    console.log("seeds :  error: " + err);
+    res.status(500);
+  }
+  else {
+    res.status(201).json(response);
+  }
+})
+};
+
+
+exports.getSeed = (req, res) => {
+  client.listSeeds({id: req.params.id}, function (err, response) {
+    if (err) {
+      console.log("seeds :  error: " + err);
+      res.status(500);
+    }
+    else {
+      res.status(200).json(response);
+    }
+  })
+};
+
 exports.saveSeed = (req, res) => {
-  console.log(req.body);
   client.saveSeed(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("seeds :  error: " + err);
       res.status(500);
     }
     else {
@@ -35,7 +54,7 @@ exports.saveSeed = (req, res) => {
 exports.updateSeed = (req, res) => {
   client.saveSeed(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("seeds :  error: " + err);
       res.status(500);
     }
     else {
@@ -47,7 +66,7 @@ exports.updateSeed = (req, res) => {
 exports.deleteSeed = (req, res) => {
   client.deleteSeed({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("seeds :  error: " + err);
       res.status(500);
     }
     else {
@@ -57,9 +76,9 @@ exports.deleteSeed = (req, res) => {
 };
 
 exports.seedSearch = (req, res) => {
-  client.listSeeds({name_prefix: req.params.name}, function (err, response) {
+  client.listSeeds({name_prefix: req.params.name, page_size: 10000}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("seeds :  error: " + err);
       res.status(405).json(err);
     }
     else {

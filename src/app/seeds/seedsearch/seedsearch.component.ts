@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Seed} from "../seed";
 import {Observable, Subject} from "rxjs";
-import {SeedsService} from "../seeds.service";
+import {SeedService} from "../seeds.service";
 import {Router} from "@angular/router";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
@@ -20,7 +20,7 @@ export class SeedSearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
 
-  constructor(private SeedService: SeedsService,
+  constructor(private SeedService: SeedService,
               private router: Router) {
   }
 

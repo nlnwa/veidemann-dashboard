@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {Seed} from "../seed";
 import {Label} from "../../commons/models/label";
-import {SeedsService} from "../seeds.service";
+import {SeedService} from "../seeds.service";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
@@ -38,7 +38,7 @@ export class SeedDetailComponent implements OnChanges {
   crawljobList: any = [];
   crawljob: Crawljob;
 
-  constructor(private seedService: SeedsService,
+  constructor(private seedService: SeedService,
               private router: Router,
               private fb: FormBuilder,
               private crawljobService: CrawljobService,
@@ -260,11 +260,7 @@ export class SeedDetailComponent implements OnChanges {
   goBack(): void {
     setTimeout(() => {
         this.router.navigate(['/']);
-      }
-      ,
-      0
-    )
-    ;
+      },0);
     setTimeout(() => {
       this.router.navigate(['/seedsearch']);
     }, 0);

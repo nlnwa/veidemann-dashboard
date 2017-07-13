@@ -25,6 +25,24 @@ router.get('/', (req, res) => {
   res.send("api works!");
 });
 
+/*client.listBrowserScripts({selector: {
+  "label": [
+    {
+      "key": "type",
+      "value": ""
+    }
+  ]
+}}, function (err, response) {
+  if (err) {
+    console.log("entities getone :  error: " + err);
+  }
+  else {
+    console.log(JSON.stringify(response.value));
+  }
+});*/
+
+
+
 /*r = require('rethinkdbdash')({
  port: process.env.rethink_port,
  host: process.env.rethink_host,
@@ -134,5 +152,6 @@ router.post('/seeds', seeds.saveSeed);
 router.get('/seeds/:id', seeds.getSeed);
 router.put('/seeds/:id', seeds.updateSeed);
 router.delete('/seeds/:id', seeds.deleteSeed);
+router.get('/seedsofentity/entityid=:entityid', seeds.getSeedsOfEntity);
 
 module.exports = router;
