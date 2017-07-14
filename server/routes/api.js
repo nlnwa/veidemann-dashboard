@@ -26,21 +26,7 @@ router.get('/', (req, res) => {
   res.send("api works!");
 });
 
-/*client.listBrowserScripts({selector: {
-  "label": [
-    {
-      "key": "type",
-      "value": ""
-    }
-  ]
-}}, function (err, response) {
-  if (err) {
-    console.log("entities getone :  error: " + err);
-  }
-  else {
-    console.log(JSON.stringify(response.value));
-  }
-});*/
+
 
 
 

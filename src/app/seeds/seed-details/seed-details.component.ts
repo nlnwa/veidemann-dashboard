@@ -58,7 +58,7 @@ export class SeedDetailComponent implements OnChanges {
       } else {
         this.seedService.getSeed(params.seed).subscribe(seed => {
           this.seed = seed[0];
-          this.updateData(this.seed);
+          this.ngOnChanges();
         })
       }
     });
@@ -124,7 +124,7 @@ export class SeedDetailComponent implements OnChanges {
 
   setSelectedDropdown() {
     this.selectedCrawljobItems = [];
-    if (this.seed.job_id !== null) {
+    if (this.seed.job_id) {
       for (let i of this.seed.job_id) {
         this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {

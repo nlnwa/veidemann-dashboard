@@ -40,7 +40,6 @@
     "@angular/compiler-cli": "^4.0.0",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
-    "angular2-multiselect-dropdown": "latest",
     "codelyzer": "~2.0.0",
     "dotenv": "latest",
     "jasmine-core": "~2.5.2",

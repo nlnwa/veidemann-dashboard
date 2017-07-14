@@ -4,7 +4,7 @@
 exports.listSchedule = (req, res) => {
   client.listCrawlScheduleConfigs({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Schedule: " + err);
       res.status(500);
     }
     else {
@@ -16,7 +16,7 @@ exports.listSchedule = (req, res) => {
 exports.getSchedule = (req, res) => {
   client.listCrawlScheduleConfigs({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Schedule: " + err);
       res.status(500);
     }
     else {
@@ -29,7 +29,7 @@ exports.saveSchedule = (req, res) => {
   console.log(req.body);
   client.saveCrawlScheduleConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Schedule: " + err);
       res.status(500);
     }
     else {
@@ -41,7 +41,7 @@ exports.saveSchedule = (req, res) => {
 exports.updateSchedule = (req, res) => {
   client.saveCrawlScheduleConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Schedule: " + err);
       res.status(500);
     }
     else {
@@ -53,7 +53,7 @@ exports.updateSchedule = (req, res) => {
 exports.deleteSchedule = (req, res) => {
   client.deleteCrawlScheduleConfig({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Schedule: " + err);
       res.status(405).json(err);
     }
     else {

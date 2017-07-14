@@ -1,12 +1,11 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {BrowserconfigService} from "../browserconfig.service";
-import {Browserconfig} from "../browserconfig";
+import {Browserconfig, Script_selector} from "../browserconfig";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/models/label";
 import {CustomValidators} from "../../../commons/components/validators";
 import {BrowserscriptService} from "../../browserscript/browserscript.service";
-import {isUndefined} from "util";
 
 @Component({
   selector: 'browserconfig-details',
@@ -36,7 +35,6 @@ export class BrowserconfigDetailsComponent implements OnChanges {
               private browserscriptService: BrowserscriptService,) {
     this.createForm();
     this.filldropdown();
-
   }
 
   createForm() {
@@ -49,11 +47,14 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       //headers: this.fb.group({''}),
       script_id: null,
+      script_selector:this.fb.array([]),
+
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
         label: this.fb.array([]),
       }),
+
     });
   }
 
@@ -135,6 +136,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   setSelectedDropdown() {
     this.selectedbrowserScriptItems = [];
+    if (this.browserconfig.script_id) {
       for (let i of this.browserconfig.script_id) {
         this.browserscriptService.getBrowserscript(i).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
@@ -145,6 +147,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
             })
           });
         });
+      }
     }
     this.browserconfigForm.controls['script_id'].setValue(this.selectedbrowserScriptItems);
   }
@@ -176,6 +179,33 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     });
   }
 
+  setScript_selector(script_selector) {
+    const script_selectorFGs = script_selector.map(script_selector => (this.fb.group(script_selector)));
+    const script_selectorFormArray = this.fb.array(script_selectorFGs);
+    this.browserconfigForm.setControl('script_selector', script_selectorFormArray);
+  }
+
+  addScript_selector() {
+    const control = <FormArray>this.browserconfigForm.controls['script_selector'];
+    control.push(this.initScript_selector());
+  }
+
+  removeScript_selector(i: number) {
+    const control = <FormArray>this.browserconfigForm.controls['script_selector'];
+    control.removeAt(i);
+  }
+
+  get script_selector(): FormArray {
+    return this.browserconfigForm.get('script_selector') as FormArray;
+  };
+
+  initScript_selector() {
+    return this.fb.group({
+      key: ['', [Validators.required, Validators.minLength(1)]],
+      value: ['', [Validators.required, Validators.minLength(1)]],
+    });
+  }
+
   revert() {
     this.ngOnChanges();
     this.mdlSnackbarService.showSnackbar(
@@ -191,6 +221,9 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       (label: Label) => Object.assign({}, label)
     );
 
+    const script_selectorDeepCopy: Label[] = formModel.script_selector.map(
+      (label: Label) => Object.assign({}, label)
+    );
 
     let script_idlist = [];
     for (let i of formModel.script_id) {
@@ -208,6 +241,9 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
       script_id: script_idlist,
+      script_selector: {
+        label: script_selectorDeepCopy
+      },
       headers: formModel.headers,
       meta: {
         name: formModel.meta.name as string,

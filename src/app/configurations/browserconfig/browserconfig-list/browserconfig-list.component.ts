@@ -37,6 +37,7 @@ export class BrowserconfigListComponent implements OnInit {
       user_agent: '',
       page_load_timeout_ms: '',
       sleep_after_pageload_ms: '',
+      script_selector: null,
       meta: {
         name: '',
         description: '',

@@ -4,7 +4,7 @@
 exports.listCrawlJobs = (req, res) => {
   client.listCrawlJobs({}, function (err, response) {
     if (err) {
-      console.log("Crawljob listall:  " + err);
+      console.log("Crawljob:  " + err);
       res.status(500);
     }
     else {
@@ -16,7 +16,7 @@ exports.listCrawlJobs = (req, res) => {
 exports.getCrawlJob = (req, res) => {
   client.listCrawlJobs({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("Crawljob: getone " + err);
+      console.log("Crawljob: " + err);
       res.status(500);
     }
     else {

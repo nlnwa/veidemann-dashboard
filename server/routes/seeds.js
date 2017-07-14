@@ -17,7 +17,7 @@ exports.getSeedsOfEntity = (req, res) => {
   console.log(req.params.entityid);
 client.listSeeds({entity_id: req.params.entityid, page_size: 30}, function (err, response) {
   if (err) {
-    console.log("seeds :  error: " + err);
+    console.log("Seeds: " + err);
     res.status(500);
   }
   else {
@@ -30,7 +30,7 @@ client.listSeeds({entity_id: req.params.entityid, page_size: 30}, function (err,
 exports.getSeed = (req, res) => {
   client.listSeeds({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("seeds :  error: " + err);
+      console.log("Seeds: " + err);
       res.status(500);
     }
     else {
@@ -42,7 +42,7 @@ exports.getSeed = (req, res) => {
 exports.saveSeed = (req, res) => {
   client.saveSeed(req.body, function (err, response) {
     if (err) {
-      console.log("seeds :  error: " + err);
+      console.log("Seeds: " + err);
       res.status(500);
     }
     else {
@@ -54,7 +54,7 @@ exports.saveSeed = (req, res) => {
 exports.updateSeed = (req, res) => {
   client.saveSeed(req.body, function (err, response) {
     if (err) {
-      console.log("seeds :  error: " + err);
+      console.log("Seeds: " + err);
       res.status(500);
     }
     else {
@@ -66,7 +66,7 @@ exports.updateSeed = (req, res) => {
 exports.deleteSeed = (req, res) => {
   client.deleteSeed({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("seeds :  error: " + err);
+      console.log("Seeds: " + err);
       res.status(500);
     }
     else {
@@ -78,7 +78,7 @@ exports.deleteSeed = (req, res) => {
 exports.seedSearch = (req, res) => {
   client.listSeeds({name_prefix: req.params.name, page_size: 10000}, function (err, response) {
     if (err) {
-      console.log("seeds :  error: " + err);
+      console.log("Seeds: " + err);
       res.status(405).json(err);
     }
     else {

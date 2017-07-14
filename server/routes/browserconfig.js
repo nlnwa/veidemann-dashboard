@@ -64,7 +64,6 @@ exports.deleteBrowserConfig = (req, res) => {
   })
 };
 
-
 exports.browserscript = (req, res) => {
   res.status(200).json({
       "menuitem": [{
