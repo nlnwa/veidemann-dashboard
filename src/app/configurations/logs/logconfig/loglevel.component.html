@@ -1,0 +1,32 @@
+<form [formGroup]="logForm">
+  <div formArrayName="log_level">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+
+      <thead>
+
+      <tr>
+        <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+        <th class="mdl-data-table__cell--non-numeric">Logger</th>
+        <th class="mdl-data-table__cell--non-numeric">Level</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let log_level of log_level.controls; let i=index" [formGroupName]="i">
+        <th><input class="form-control_cron" formControlName="logger"></th>
+        <th><select formControlName="level">
+          <option *ngFor="let x of levelList" [value]="x.text">{{x.text}}</option>
+        </select></th>
+        <button class="btn btn-danger" type="button" (click)="removeLogconfig(i)">Slett</button>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn btn-info" (click)="addLogconfig()" type="button">Legg til Logconfig</button>
+
+  <button class="btn btn-primary" (click)="saveLog(logForm.value)" novalidate>
+    Lagre
+  </button>
+
+</form>
