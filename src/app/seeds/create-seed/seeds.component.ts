@@ -154,7 +154,7 @@ export class SeedsComponent {
 
   initLabel() {
     return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
+      key: ['Label', [Validators.required, Validators.minLength(2)]],
       value: ['', [Validators.required, Validators.minLength(2)]],
     });
   }

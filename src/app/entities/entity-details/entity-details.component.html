@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <div class="well well-details" (click)="isCollapsedSeeds = !isCollapsedSeeds">
+  <div *ngIf="entity.id" class="well well-details" (click)="isCollapsedSeeds = !isCollapsedSeeds">
     <ng-container *ngIf="isCollapsedSeeds">
       <span class="glyphicon glyphicon-plus-sign pull-left"></span>
       {{seedcount}}

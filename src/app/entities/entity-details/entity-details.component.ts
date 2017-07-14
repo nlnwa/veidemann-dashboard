@@ -84,12 +84,14 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   getSeedsOfEntity(entity_id) {
+    if(entity_id) {
     this.seedService.getSeedsOfEntity(entity_id).map(seeds => seeds).forEach((seed) => {
       this.entityForm.controls['seedcount'].setValue(seed.count);
       seed.value.forEach((key) => {
         this.getseedlist.push({name: key.meta.name, id: key.id, label: key.meta.label, description: key.meta.description})
       });
     });
+    }
   }
 
   updateData(entity: Entity) {
