@@ -46,6 +46,8 @@ import {EntityDetailsComponent} from "./entities/entity-details/entity-details.c
 import {EntityListComponent} from "./entities/entity-list/entity-list.component";
 import {EntityService} from "./entities/entity.service";
 import {BrowserscriptService} from "./configurations/browserscript/browserscript.service";
+import { LoglevelComponent } from './configurations/logs/logconfig/loglevel.component';
+import {LogService} from "./configurations/logs/log.service";
 
 
 @NgModule({
@@ -77,6 +79,7 @@ import {BrowserscriptService} from "./configurations/browserscript/browserscript
     BrowserscriptDetailsComponent,
     EntityDetailsComponent,
     EntityListComponent,
+    LoglevelComponent,
 
   ],
   imports: [
@@ -102,6 +105,7 @@ import {BrowserscriptService} from "./configurations/browserscript/browserscript
     ScheduleService,
     EntityService,
     BrowserscriptService,
+    LogService,
   ],
   bootstrap: [AppComponent]
 })

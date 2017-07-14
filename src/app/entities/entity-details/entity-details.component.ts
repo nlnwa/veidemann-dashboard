@@ -89,8 +89,6 @@ export class EntityDetailsComponent implements OnChanges {
       seed.value.forEach((key) => {
         this.getseedlist.push({name: key.meta.name, id: key.id, label: key.meta.label, description: key.meta.description})
       });
-      console.log(this.getseedlist);
-
     });
   }
 

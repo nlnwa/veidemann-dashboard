@@ -1,7 +1,7 @@
 exports.listBrowserScripts = (req, res) => {
   client.listBrowserScripts({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("BrowserScript: " + err);
       res.status(500);
     }
     else {
@@ -13,7 +13,7 @@ exports.listBrowserScripts = (req, res) => {
 exports.getBrowserScript = (req, res) => {
   client.listBrowserScripts({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("BrowserScript: " + err);
       res.status(500);
     }
     else {
@@ -25,7 +25,7 @@ exports.getBrowserScript = (req, res) => {
 exports.saveBrowserScript = (req, res) => {
   client.saveBrowserScript(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("BrowserScript: " + err);
       res.status(500);
     }
     else {
@@ -37,7 +37,7 @@ exports.saveBrowserScript = (req, res) => {
 exports.updateBrowserScript = (req, res) => {
   client.saveBrowserScript(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("BrowserScript: " + err);
       res.status(500);
     }
     else {
@@ -49,7 +49,7 @@ exports.updateBrowserScript = (req, res) => {
 exports.deleteBrowserScript = (req, res) => {
   client.deleteBrowserScript({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("BrowserScript: " + err);
       res.status(405).json(err);
     }
     else {

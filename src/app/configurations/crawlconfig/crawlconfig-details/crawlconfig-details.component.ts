@@ -147,6 +147,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)
     );
+
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveCrawlconfig: Crawlconfig = {

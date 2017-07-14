@@ -4,7 +4,7 @@
 exports.listCrawlConfigs = (req, res) => {
   client.listCrawlConfigs({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Crawlconfig: " + err);
       res.status(500);
     }
     else {
@@ -16,7 +16,7 @@ exports.listCrawlConfigs = (req, res) => {
 exports.getCrawlConfig = (req, res) => {
   client.listCrawlConfigs({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Crawlconfig: " + err);
       res.status(500);
     }
     else {
@@ -28,7 +28,7 @@ exports.getCrawlConfig = (req, res) => {
 exports.saveCrawlConfig = (req, res) => {
   client.saveCrawlConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Crawlconfig: " + err);
       res.status(500);
     }
     else {
@@ -40,7 +40,7 @@ exports.saveCrawlConfig = (req, res) => {
 exports.updateCrawlConfig = (req, res) => {
   client.saveCrawlConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Crawlconfig: " + err);
       res.status(500);
     }
     else {
@@ -53,7 +53,7 @@ exports.updateCrawlConfig = (req, res) => {
 exports.deleteCrawlConfig = (req, res) => {
   client.deleteCrawlConfig({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Crawlconfig: " + err);
       res.status(405).json(err);
     }
     else {

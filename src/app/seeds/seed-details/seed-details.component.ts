@@ -48,7 +48,7 @@ export class SeedDetailComponent implements OnChanges {
               private entityService: EntityService) {
     this.createForm();
     this.getParams();
-    this.fillDropdown();
+    this.getCrawljobs();
   }
 
   getParams() {
@@ -67,7 +67,6 @@ export class SeedDetailComponent implements OnChanges {
   createForm() {
     this.seedForm = this.fb.group({
         id: {value: '', disabled: true},
-
         entity_id: this.fb.group({
           entity_name: {value: '', disabled: true},
           entity_ids: ''
@@ -117,7 +116,9 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.getEntityName(this.seed.entity_id);
+    setTimeout(() => {
+      this.getEntityName(this.seed.entity_id);
+    },0);
     this.updateData(this.seed);
   }
 
@@ -125,30 +126,30 @@ export class SeedDetailComponent implements OnChanges {
     this.selectedCrawljobItems = [];
     if (this.seed.job_id !== null) {
       for (let i of this.seed.job_id) {
-        this.crawljobService.getCrawlJob(this.seed.job_id).map(crawljob => crawljob).forEach((value) => {
+        this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
             this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
           });
         });
       }
+     // this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
+
     }
-    this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
   }
 
-  fillDropdown() {
+  getCrawljobs() {
+    this.selectedCrawljobItems = [];
+    this.dropdownCrawljobSettings = {
+      singleSelection: false,
+      text: "Velg høstejobb",
+      enableSearchFilter: true
+    };
+
     this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
       value.forEach((key) => {
         this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
       })
     });
-
-    this.dropdownCrawljobSettings = {
-      singleSelection: false,
-      text: "Velg høstejobb",
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      enableSearchFilter: true
-    };
   }
 
 
@@ -253,7 +254,6 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   goToEntity() {
-    console.log(this.seed.entity_id);
     this.router.navigate(['/entities/',this.seed.entity_id])
   }
 

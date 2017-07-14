@@ -5,7 +5,7 @@ option java_package = "no.nb.nna.broprox.model";
 //option java_multiple_files = true;
 option java_outer_classname = "MessagesProto";
 
-import "timestamp.proto";
+import "google/protobuf/timestamp.proto";
 import "config.proto";
 
 message CrawlExecutionStatus {

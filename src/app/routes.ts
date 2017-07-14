@@ -17,6 +17,7 @@ import {PolitenessconfigListComponent} from "./configurations/politenessconfig/p
 import {EntityListComponent} from "./entities/entity-list/entity-list.component";
 import {EntityDetailsComponent} from "./entities/entity-details/entity-details.component";
 import {BrowserscriptListComponent} from "./configurations/browserscript/browserscript-list/browserscript-list.component";
+import {LoglevelComponent} from "./configurations/logs/logconfig/loglevel.component";
 
 
 export const ROUTES = [
@@ -88,5 +89,10 @@ export const ROUTES = [
     path: 'politenessconfig',
     component: PolitenessconfigListComponent
   },
+  {
+    path: 'logconfig',
+    component: LoglevelComponent
+  },
+
 
 ];

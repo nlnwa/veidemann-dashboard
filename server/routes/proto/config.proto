@@ -1,4 +1,3 @@
-
 syntax = "proto3";
 
 package broprox;
@@ -6,7 +5,7 @@ option java_package = "no.nb.nna.broprox.model";
 //option java_multiple_files = true;
 option java_outer_classname = "ConfigProto";
 
-import "timestamp.proto";
+import "google/protobuf/timestamp.proto";
 
 message Meta {
   string name = 1;
@@ -135,4 +134,23 @@ message BrowserScript {
   Meta meta = 2;
   string script = 3;
   string url_regexp = 4; // Not implemented
+}
+
+message LogLevels {
+  enum Level {
+    UNDEFINED = 0;
+    ALL = 1;
+    TRACE = 2;
+    DEBUG = 3;
+    INFO = 4;
+    WARN = 5;
+    ERROR = 6;
+    FATAL = 7;
+    OFF = 8;
+  }
+  message LogLevel {
+    string logger = 1;
+    Level level = 2;
+  }
+  repeated LogLevel log_level = 1;
 }

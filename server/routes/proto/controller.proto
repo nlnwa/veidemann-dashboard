@@ -7,7 +7,7 @@ option java_outer_classname = "ControllerProto";
 
 import "config.proto";
 import "messages.proto";
-import "empty.proto";
+import "google/protobuf/empty.proto";
 
 // Service for communicating with controller.
 service Controller {
@@ -49,6 +49,9 @@ service Controller {
   rpc ListBrowserScripts (BrowserScriptListRequest) returns (BrowserScriptListReply) {}
   rpc SaveBrowserScript (BrowserScript) returns (BrowserScript) {}
   rpc DeleteBrowserScript (BrowserScript) returns (google.protobuf.Empty) {}
+
+  rpc GetLogConfig (google.protobuf.Empty) returns (LogLevels) {}
+  rpc SaveLogConfig (LogLevels) returns (LogLevels) {}
 
   rpc RunCrawl (RunCrawlRequest) returns (RunCrawlReply) {}
 }

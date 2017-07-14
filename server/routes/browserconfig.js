@@ -6,7 +6,7 @@
 exports.listBrowserConfig = (req, res) => {
   client.listBrowserConfigs({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Browserconfig " + err);
       res.status(500);
     }
     else {
@@ -18,7 +18,7 @@ exports.listBrowserConfig = (req, res) => {
 exports.getBrowserConfig = (req, res) => {
   client.listBrowserConfigs({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Browserconfig " + err);
       res.status(500);
     }
     else {
@@ -30,7 +30,7 @@ exports.getBrowserConfig = (req, res) => {
 exports.saveBrowserConfig = (req, res) => {
   client.saveBrowserConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Browserconfig " + err);
       res.status(500);
     }
     else {
@@ -42,7 +42,7 @@ exports.saveBrowserConfig = (req, res) => {
 exports.updateBrowserConfig = (req, res) => {
   client.saveBrowserConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Browserconfig " + err);
       res.status(500);
     }
     else {
@@ -55,7 +55,7 @@ exports.updateBrowserConfig = (req, res) => {
 exports.deleteBrowserConfig = (req, res) => {
   client.deleteBrowserConfig({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Browserconfig " + err);
       res.status(405).json(err);
     }
     else {

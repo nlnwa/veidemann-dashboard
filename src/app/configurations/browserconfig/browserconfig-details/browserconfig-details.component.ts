@@ -48,7 +48,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       //headers: this.fb.group({''}),
-      script_id: [null, [Validators.required, CustomValidators.nonEmpty]],
+      script_id: null,
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
@@ -135,9 +135,8 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   setSelectedDropdown() {
     this.selectedbrowserScriptItems = [];
-    if (!isUndefined(this.browserconfig.script_id)) {
       for (let i of this.browserconfig.script_id) {
-        this.browserscriptService.getBrowserscript(this.browserconfig.script_id).map(crawljob => crawljob).forEach((value) => {
+        this.browserscriptService.getBrowserscript(i).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
             this.selectedbrowserScriptItems.push({
               id: key.id,
@@ -146,7 +145,6 @@ export class BrowserconfigDetailsComponent implements OnChanges {
             })
           });
         });
-      }
     }
     this.browserconfigForm.controls['script_id'].setValue(this.selectedbrowserScriptItems);
   }
@@ -193,6 +191,13 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       (label: Label) => Object.assign({}, label)
     );
 
+
+    let script_idlist = [];
+    for (let i of formModel.script_id) {
+      let script_id = i.id;
+      script_idlist.push(script_id);
+    }
+
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveBrowserconfig: Browserconfig = {
@@ -202,7 +207,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       window_height: formModel.window_height,
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
-      script_id: formModel.script_id,
+      script_id: script_idlist,
       headers: formModel.headers,
       meta: {
         name: formModel.meta.name as string,

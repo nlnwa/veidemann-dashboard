@@ -7,7 +7,7 @@ option java_outer_classname = "HarvesterProto";
 
 import "messages.proto";
 import "config.proto";
-import "empty.proto";
+import "google/protobuf/empty.proto";
 
 // Service for communicating with harvester.
 service Harvester {

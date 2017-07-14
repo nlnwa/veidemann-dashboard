@@ -54,30 +54,30 @@
       <label class="collapse-seeds">Skjul {{entityForm.controls.seedcount.value}} tilhørende seeds</label>
     </ng-container>
 
-  <div [collapse]="isCollapsedSeeds" id="seeds" class="collapse">
-    <div formArrayName="seedlist">
-      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    <div [collapse]="isCollapsedSeeds" id="seeds" class="collapse">
+      <div formArrayName="seedlist">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 
-      <thead>
+          <thead>
 
-      <tr>
-        <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
-        <th class="mdl-data-table__cell--non-numeric">Seed</th>
-        <th class="mdl-data-table__cell--non-numeric">Description</th>
-      </tr>
-      </thead>
-      <tbody>
+          <tr>
+            <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
+            <th class="mdl-data-table__cell--non-numeric">Seed</th>
+            <th class="mdl-data-table__cell--non-numeric">Description</th>
+          </tr>
+          </thead>
+          <tbody>
 
-      <tr *ngFor="let seedlist of seedlist.controls; let i=index" (click)="goToSeed(seedlist.controls.id.value)" [formGroupName]="i">
-        <th>{{seedlist.controls.name.value}}</th>
-        <th> {{seedlist.controls.description.value}}</th>
-      </tr>
-      </tbody>
-      </table>
+          <tr *ngFor="let seedlist of seedlist.controls; let i=index" (click)="goToSeed(seedlist.controls.id.value)"
+              [formGroupName]="i">
+            <th>{{seedlist.controls.name.value}}</th>
+            <th> {{seedlist.controls.description.value}}</th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-  </div>
-
 
 
   <div class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">

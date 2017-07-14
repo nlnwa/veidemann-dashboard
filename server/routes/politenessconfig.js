@@ -5,7 +5,7 @@
 exports.listPolitenessConfigs = (req, res) => {
   client.listPolitenessConfigs({}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Politenessconfig " + err);
       res.status(500);
     }
     else {
@@ -17,7 +17,7 @@ exports.listPolitenessConfigs = (req, res) => {
 exports.getPolitenessConfig = (req, res) => {
   client.listPolitenessConfigs({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Politenessconfig " + err);
       res.status(500);
     }
     else {
@@ -29,7 +29,7 @@ exports.getPolitenessConfig = (req, res) => {
 exports.savePolitenessConfig = (req, res) => {
   client.savePolitenessConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Politenessconfig " + err);
       res.status(500);
     }
     else {
@@ -42,7 +42,7 @@ exports.savePolitenessConfig = (req, res) => {
 exports.updatePolitenessConfig = (req, res) => {
   client.savePolitenessConfig(req.body, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Politenessconfig " + err);
       res.status(500);
     }
     else {
@@ -54,7 +54,7 @@ exports.updatePolitenessConfig = (req, res) => {
 exports.deletePolitenessConfig = (req, res) => {
   client.deletePolitenessConfig({id: req.params.id}, function (err, response) {
     if (err) {
-      console.log("error: " + err);
+      console.log("Politenessconfig " + err);
       res.status(405).json(err);
     }
     else {
