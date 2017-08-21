@@ -1,6 +1,5 @@
 import {Component, Input} from "@angular/core";
 import {SeedService, Seed} from "../";
-
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";

@@ -39,9 +39,8 @@ export class LoglevelComponent implements OnInit {
 
     setTimeout(() => {
       this.setLogconfig(this.loglist);
-    },200);
+    }, 200);
   };
-
 
 
   setLogconfig(logconfig) {
@@ -63,13 +62,14 @@ export class LoglevelComponent implements OnInit {
   }
 
   saveLog(logconfig) {
-      this.logService.updateLogconfig(logconfig)
+    this.logService.updateLogconfig(logconfig)
   }
 
   addLogconfig() {
     const control = <FormArray>this.logForm.controls['log_level'];
     control.push(this.initLogconfig());
   }
+
   removeLogconfig(i: number) {
     const control = <FormArray>this.logForm.controls['log_level'];
     control.removeAt(i);

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-import {Logconfig} from './';
+import {Logconfig} from "./";
 import {ErrorHandlerService} from "../../commons/";
 
 
@@ -26,26 +26,26 @@ export class LogService {
       .catch(this.errorhandlerservice.handleError);
   }
 
-/*  getLogconfig(job_id) {
-    return this.http.get(`${this.logconfigUrl}/${job_id}`)
-      .map(res => res.json().value);
-  }
+  /*  getLogconfig(job_id) {
+   return this.http.get(`${this.logconfigUrl}/${job_id}`)
+   .map(res => res.json().value);
+   }
 
 
 
-  createLogconfig(putLogconfig: Logconfig): Promise<Logconfig> {
-    return this.http.post(this.logconfigUrl, putLogconfig)
-      .toPromise()
-      .then(response => response.json() as Logconfig)
-      .catch(this.errorhandlerservice.handleError);
-  }
+   createLogconfig(putLogconfig: Logconfig): Promise<Logconfig> {
+   return this.http.post(this.logconfigUrl, putLogconfig)
+   .toPromise()
+   .then(response => response.json() as Logconfig)
+   .catch(this.errorhandlerservice.handleError);
+   }
 
-  deleteLogconfig(delLogconfigId: String): Promise<String> {
-    return this.http.delete(this.logconfigUrl + '/' + delLogconfigId)
-      .toPromise()
-      .then(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
-  }
-*/
+   deleteLogconfig(delLogconfigId: String): Promise<String> {
+   return this.http.delete(this.logconfigUrl + '/' + delLogconfigId)
+   .toPromise()
+   .then(response => response.json() as String)
+   .catch(this.errorhandlerservice.handleError);
+   }
+   */
 
 }

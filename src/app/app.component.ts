@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   getTimestamp() {
-    setInterval(() => {         //replaced function() by ()=>
+    setInterval(() => {
       this.myDate = this.datetime.nowUTC();
     }, 1000);
   }

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
-import {Seed, Seeds} from "./";
+import {Seed} from "./";
 import {ErrorHandlerService} from "../commons/";
 
 @Injectable()
@@ -11,6 +11,7 @@ export class SeedService {
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
   }
+
   getAllSeeds() {
     return this.http.get(this.seedsUrl)
       .map(res => res.json().value);

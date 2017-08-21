@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {BrowserconfigService, Browserconfig} from '../'
+import {BrowserconfigService, Browserconfig} from "../";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label, CustomValidators} from "../../../commons";
@@ -45,7 +45,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       //headers: this.fb.group({''}),
       script_id: null,
-      script_selector:this.fb.array([]),
+      script_selector: this.fb.array([]),
 
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],

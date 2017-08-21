@@ -24,7 +24,7 @@ export class Browserconfig {
 }
 
 export class Script_selector {
-    label: Label[];
+  label: Label[];
 }
 
 export class Script_Id {

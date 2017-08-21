@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
-import {Crawljob, CrawljobService } from "../";
+import {Crawljob, CrawljobService} from "../";
 import {Crawlconfig, CrawlconfigService} from "../../crawlconfig/";
 import {Schedule, ScheduleService} from "../../schedule/";
 import {CustomValidators, Label} from "../../../commons/";

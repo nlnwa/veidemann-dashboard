@@ -1,6 +1,5 @@
 import {Component, Input} from "@angular/core";
 import {Schedule, ScheduleService} from "../";
-
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {DateTime, Label} from "../../../commons/";

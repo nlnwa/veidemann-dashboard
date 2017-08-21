@@ -23,7 +23,6 @@ export class EntityDetailsComponent implements OnChanges {
   public isCollapsedSeeds: boolean = true;
 
 
-
   @Input()
   createHandler: Function;
   @Input()
@@ -76,17 +75,22 @@ export class EntityDetailsComponent implements OnChanges {
     this.updateData(this.entity);
     setTimeout(() => {
       this.updateData(this.entity);
-    },500);
+    }, 500);
   }
 
   getSeedsOfEntity(entity_id) {
-    if(entity_id) {
-    this.seedService.getSeedsOfEntity(entity_id).map(seeds => seeds).forEach((seed) => {
-      this.entityForm.controls['seedcount'].setValue(seed.count);
-      seed.value.forEach((key) => {
-        this.getseedlist.push({name: key.meta.name, id: key.id, label: key.meta.label, description: key.meta.description})
+    if (entity_id) {
+      this.seedService.getSeedsOfEntity(entity_id).map(seeds => seeds).forEach((seed) => {
+        this.entityForm.controls['seedcount'].setValue(seed.count);
+        seed.value.forEach((key) => {
+          this.getseedlist.push({
+            name: key.meta.name,
+            id: key.id,
+            label: key.meta.label,
+            description: key.meta.description
+          })
+        });
       });
-    });
     }
   }
 
@@ -225,6 +229,6 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   goToSeed(seed_id) {
-    this.router.navigate(['/seeds/',seed_id])
+    this.router.navigate(['/seeds/', seed_id])
   }
 }

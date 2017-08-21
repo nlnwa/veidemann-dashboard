@@ -8,14 +8,14 @@
       </h2>
       <form [formGroup]="seedForm">
 
-      <div class="switch">
-        <mdl-switch>Aktiv</mdl-switch>
-      </div>
-      <div class="form-group"  formGroupName="entity_id">
-        <label class="center-block" (click)="goToEntity()"> Entity:
-          <input type="text" class="form-control"  formControlName="entity_name"/>
-        </label>
-      </div>
+        <div class="switch">
+          <mdl-switch>Aktiv</mdl-switch>
+        </div>
+        <div class="form-group" formGroupName="entity_id">
+          <label class="center-block" (click)="goToEntity()"> Entity:
+            <input type="text" class="form-control" formControlName="entity_name"/>
+          </label>
+        </div>
 
         <div class="form-group" formGroupName="meta">
           <label class="center-block">Seed:

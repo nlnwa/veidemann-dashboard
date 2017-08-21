@@ -99,12 +99,14 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-pink"  style="background-color: #ff70f1" (click)="addScript_selector()" type="button">Legg til Selector</button>
+      <button class="btn btn-pink" style="background-color: #ff70f1" (click)="addScript_selector()" type="button">Legg
+        til Selector
+      </button>
     </div>
   </div>
 
 
-  <div class="form-group" >
+  <div class="form-group">
 
     <div formArrayName="label" class="well well-lg">
       <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">

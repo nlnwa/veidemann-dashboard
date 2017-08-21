@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges} from "@angular/core";;
+import {Component, Input, OnChanges} from "@angular/core";
 import {SeedService, Seed} from "../";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
@@ -6,7 +6,6 @@ import {MdlSnackbarService} from "angular2-mdl";
 import {DateTime, Label, CustomValidators} from "../../commons/";
 import {CrawljobService, Crawljob} from "../../configurations/crawljobs/";
 import {EntityService} from "../../entities/";
-
 
 @Component({
   selector: 'seed-details',
@@ -114,7 +113,7 @@ export class SeedDetailComponent implements OnChanges {
   ngOnChanges() {
     setTimeout(() => {
       this.getEntityName(this.seed.entity_id);
-    },0);
+    }, 0);
     this.updateData(this.seed);
   }
 
@@ -128,7 +127,7 @@ export class SeedDetailComponent implements OnChanges {
           });
         });
       }
-     // this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
+      // this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
 
     }
   }
@@ -250,13 +249,13 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   goToEntity() {
-    this.router.navigate(['/entities/',this.seed.entity_id])
+    this.router.navigate(['/entities/', this.seed.entity_id])
   }
 
   goBack(): void {
     setTimeout(() => {
-        this.router.navigate(['/']);
-      },0);
+      this.router.navigate(['/']);
+    }, 0);
     setTimeout(() => {
       this.router.navigate(['/seedsearch']);
     }, 0);

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {Crawlconfig, CrawlconfigService } from "../";
+import {Crawlconfig, CrawlconfigService} from "../";
 import {PolitenessconfigService, Politenessconfig} from "../../politenessconfig/";
 import {Browserconfig, BrowserconfigService} from "../../browserconfig/";
 import {Label, CustomValidators} from "../../../commons/";

@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { LoglevelComponent } from './loglevel.component';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {LoglevelComponent} from "./loglevel.component";
 
 describe('LoglevelComponent', () => {
   let component: LoglevelComponent;
@@ -8,9 +7,9 @@ describe('LoglevelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoglevelComponent ]
+      declarations: [LoglevelComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
