@@ -1,6 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {LogService} from "../log.service";
-import {Logconfig} from "../log";
+import {LogService} from "../";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 
 @Component({

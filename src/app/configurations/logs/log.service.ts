@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
-import {Logconfig} from './log';
-import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+import {Logconfig} from './';
+import {ErrorHandlerService} from "../../commons/";
 
 
 @Injectable()
