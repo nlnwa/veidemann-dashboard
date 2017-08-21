@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+import {ErrorHandlerService} from "../../commons/";
 import {Http} from "@angular/http";
-import {Schedule} from "./schedule";
+import {Schedule} from "./";
 
 @Injectable()
 export class ScheduleService {

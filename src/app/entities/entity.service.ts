@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
-import {Entity} from "./entity";
+import {ErrorHandlerService} from "../commons/";
+import {Entity} from "./";
 
 @Injectable()
 export class EntityService {

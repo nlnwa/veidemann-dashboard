@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {Crawljob} from "./crawljob";
+import {Crawljob} from "./";
 import {Http} from "@angular/http";
-import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+import {ErrorHandlerService} from "../../commons/";
 
 
 @Injectable()

@@ -1,15 +1,11 @@
-import {Component, Input, OnChanges} from "@angular/core";
-import {Seed} from "../seed";
-import {Label} from "../../commons/models/label";
-import {SeedService} from "../seeds.service";
+import {Component, Input, OnChanges} from "@angular/core";;
+import {SeedService, Seed} from "../";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
-import {CustomValidators} from "../../commons/components/validators";
-import {DateTime} from "../../commons/components/datetime";
-import {CrawljobService} from "../../configurations/crawljobs/crawljob.service";
-import {Crawljob} from "../../configurations/crawljobs/crawljob";
-import {EntityService} from "../../entities/entity.service";
+import {DateTime, Label, CustomValidators} from "../../commons/";
+import {CrawljobService, Crawljob} from "../../configurations/crawljobs/";
+import {EntityService} from "../../entities/";
 
 
 @Component({

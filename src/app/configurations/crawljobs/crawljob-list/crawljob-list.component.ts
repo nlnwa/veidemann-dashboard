@@ -1,6 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {CrawljobService} from "../crawljob.service";
-import {Crawljob} from "../crawljob";
+import {CrawljobService, Crawljob} from "../";
 
 @Component({
   selector: 'crawljob-list',

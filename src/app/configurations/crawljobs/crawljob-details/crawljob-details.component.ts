@@ -1,14 +1,10 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
-import {Crawljob} from "../crawljob";
-import {CrawljobService} from "../crawljob.service";
-import {CrawlconfigService} from "../../crawlconfig/crawlconfig.service";
-import {Schedule} from "../../schedule/schedule";
-import {Crawlconfig} from "../../crawlconfig/crawlconfig";
+import {Crawljob, CrawljobService } from "../";
+import {Crawlconfig, CrawlconfigService} from "../../crawlconfig/";
+import {Schedule, ScheduleService} from "../../schedule/";
+import {CustomValidators, Label} from "../../../commons/";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
-import {Label} from "../../../commons/models/label";
-import {CustomValidators} from "../../../commons/components/validators";
-import {ScheduleService} from "../../schedule/schedule.service";
 
 @Component({
   selector: 'crawljob-details',

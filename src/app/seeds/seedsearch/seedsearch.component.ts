@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {Seed} from "../seed";
+import {Seed, SeedService} from "../";
 import {Observable, Subject} from "rxjs";
-import {SeedService} from "../seeds.service";
 import {Router} from "@angular/router";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";

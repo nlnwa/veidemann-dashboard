@@ -1,13 +1,12 @@
 import {Component, OnInit} from "@angular/core";
-import {Schedule} from "../schedule";
-import {ScheduleService} from "../schedule.service";
+import {Schedule, ScheduleService} from "../";
 
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule-list.component.html',
   styleUrls: ['./schedule-list.component.css']
 })
-export class ScheduleComponent implements OnInit {
+export class ScheduleListComponent implements OnInit {
 
   schedules: Schedule[];
   selectedSchedule: Schedule;

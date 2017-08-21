@@ -1,10 +1,8 @@
 import {Component, Input} from "@angular/core";
-import {Politenessconfig} from "../politenessconfig";
+import {Politenessconfig, PolitenessconfigService} from "../";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {PolitenessconfigService} from "../politenessconfig.service";
-import {Label} from "../../../commons/models/label";
-import {CustomValidators} from "../../../commons/components/validators";
+import {CustomValidators, Label} from "../../../commons/";
 
 
 @Component({

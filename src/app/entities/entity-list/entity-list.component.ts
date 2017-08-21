@@ -1,6 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Entity} from "../entity";
-import {EntityService} from "../entity.service";
+import {Entity, EntityService} from "../";
 
 @Component({
   selector: 'entity-list',

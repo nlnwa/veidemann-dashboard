@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-import {Politenessconfig} from "./politenessconfig";
-import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+import {Politenessconfig} from "./";
+import {ErrorHandlerService} from "../../commons/";
 
 
 @Injectable()

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-import {Crawlconfig} from "./crawlconfig";
-import {ErrorHandlerService} from "../../commons/components/errorhandlerservice";
+import {Crawlconfig} from "./";
+import {ErrorHandlerService} from "../../commons/";
 
 @Injectable()
 export class CrawlconfigService {

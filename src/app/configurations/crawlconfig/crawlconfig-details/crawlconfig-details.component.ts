@@ -1,14 +1,11 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {Crawlconfig} from "../crawlconfig";
-import {CrawlconfigService} from "../crawlconfig.service";
-import {PolitenessconfigService} from "../../politenessconfig/politenessconfig.service";
+import {Crawlconfig, CrawlconfigService } from "../";
+import {PolitenessconfigService, Politenessconfig} from "../../politenessconfig/";
+import {Browserconfig, BrowserconfigService} from "../../browserconfig/";
+import {Label, CustomValidators} from "../../../commons/";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
-import {Browserconfig} from "../../browserconfig/browserconfig";
-import {Politenessconfig} from "../../politenessconfig/politenessconfig";
-import {BrowserconfigService} from "../../browserconfig/browserconfig.service";
-import {Label} from "../../../commons/models/label";
-import {CustomValidators} from "../../../commons/components/validators";
+
 
 @Component({
   selector: 'crawlconfig-details',
@@ -96,7 +93,6 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     setTimeout(() => {
       this.updateData(this.crawlconfig);
     });
-
   }
 
 

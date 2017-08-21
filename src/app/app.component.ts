@@ -5,9 +5,8 @@ import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
-import {Seed} from "./seeds/seed";
-import {SeedService} from "./seeds/seeds.service";
-import {DateTime} from "./commons/components/datetime";
+import {Seed, SeedService} from "./seeds/";
+import {DateTime} from "./commons/";
 
 
 @Component({

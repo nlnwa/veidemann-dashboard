@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
-import {Seed, Seeds} from "./seed";
-import {ErrorHandlerService} from "../commons/components/errorhandlerservice";
+import {Seed, Seeds} from "./";
+import {ErrorHandlerService} from "../commons/";
 
 @Injectable()
 export class SeedService {
