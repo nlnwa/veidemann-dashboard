@@ -11,6 +11,7 @@ const crawljobs = require('./crawljob');
 const schedule = require('./schedule');
 const politenessconfig = require('./politenessconfig');
 const logconfig = require('./logconfig');
+const runcrawlrequest = require('./runcrawlrequest');
 const path = require('path');
 const users = require('./users');
 const fs = require("fs");
@@ -144,5 +145,8 @@ router.get('/seedsofentity/entityid=:entityid', seeds.getSeedsOfEntity);
 router.get('/logconfig', logconfig.listLogConfig);
 router.put('/logconfig', logconfig.updateLogConfig);
 router.delete('/logconfig/:id', logconfig.deleteLogConfig);
+
+router.get('/runcrawlrequest', runcrawlrequest.runcrawlRequest);
+router.post('/runcrawlrequest', runcrawlrequest.runcrawlRequest);
 
 module.exports = router;
