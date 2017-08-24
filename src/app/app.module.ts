@@ -41,9 +41,9 @@ import {
   ScheduleSidebarComponent,
   ScheduleService
 } from "./configurations/schedule";
-import {EntityDetailsComponent, EntityListComponent, EntityService} from "./entities";
 import {ModalComponent, DateTime, ErrorHandlerService, Collapse} from "./commons";
 import {LogService, LoglevelComponent} from "./configurations/logs/";
+import {EntityDetailsComponent, EntityListComponent, EntityService} from "./entities";
 
 
 @NgModule({

@@ -5,7 +5,7 @@ import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
 import {DateTime, Label, CustomValidators} from "../../commons/";
 import {CrawljobService, Crawljob} from "../../configurations/crawljobs/";
-import {EntityService} from "../../entities/";
+import {EntityService} from "../../entities/entity.service";
 
 @Component({
   selector: 'seed-details',

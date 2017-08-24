@@ -3,6 +3,7 @@ import {Politenessconfig, PolitenessconfigService} from "../";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {CustomValidators, Label} from "../../../commons/";
+import {isUndefined} from "util";
 
 
 @Component({
@@ -31,14 +32,14 @@ export class PolitenessconfigDetailsComponent {
   constructor(private politenessconfigService: PolitenessconfigService,
               private mdlSnackbarService: MdlSnackbarService,
               private fb: FormBuilder) {
-    this.createForm();
     this.filldropdown();
+    this.createForm();
   }
 
   createForm() {
     this.politenessconfigForm = this.fb.group({
       id: '',
-      robots_policy: [null, [Validators.required, CustomValidators.nonEmpty]],
+      robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
       minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
       custom_robots: null,
       min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
@@ -118,7 +119,7 @@ export class PolitenessconfigDetailsComponent {
   }
 
   setSelectedDropdown() {
-    if (this.politenessconfig.robots_policy !== "") {
+    if (!isUndefined(this.politenessconfig.id )) {
       this.politenessconfigService.getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig).forEach((value) => {
         value.forEach((key) => {
           for (let i of this.robotspolicyList) {
