@@ -1,19 +1,19 @@
 /**
  * Created by kristiana on 30.06.17.
  */
-import {ActivityComponent} from "./activity/activity.component";
-import {SeedsComponent, SeedDetailComponent, SeedSearchComponent} from "./seeds/";
-import {CrawljobListComponent} from "./configurations/crawljobs/";
-import {CrawlersComponent} from "./crawlers/crawlers.component";
-import {DocumentationComponent} from "./documentation/documentation.component";
-import {StatisticsComponent} from "./statistics/statistics.component";
-import {ScheduleListComponent} from "./configurations/schedule/";
-import {CrawlconfigListComponent} from "./configurations/crawlconfig/";
-import {BrowserconfigListComponent} from "./configurations/browserconfig/";
-import {PolitenessconfigListComponent} from "./configurations/politenessconfig/";
-import {EntityListComponent, EntityDetailsComponent} from "./entities/";
-import {BrowserscriptListComponent} from "./configurations/browserscript/";
-import {LoglevelComponent} from "./configurations/logs/";
+import {ActivityComponent} from './activity';
+import {SeedsComponent, SeedDetailComponent, SeedSearchComponent} from './seeds/';
+import {CrawljobListComponent} from './configurations/crawljobs/';
+import {CrawlersComponent} from './crawlers';
+import {DocumentationComponent} from './documentation';
+import {StatisticsComponent} from './statistics';
+import {ScheduleListComponent} from './configurations/schedule/';
+import {CrawlconfigListComponent} from './configurations/crawlconfig/';
+import {BrowserconfigListComponent} from './configurations/browserconfig/';
+import {PolitenessconfigListComponent} from './configurations/politenessconfig/';
+import {EntityListComponent, EntityDetailsComponent} from './entities/';
+import {BrowserscriptListComponent} from './configurations/browserscript/';
+import {LoglevelComponent} from './configurations/logs/';
 
 
 export const ROUTES = [
@@ -85,6 +85,4 @@ export const ROUTES = [
     path: 'logconfig',
     component: LoglevelComponent
   },
-
-
 ];

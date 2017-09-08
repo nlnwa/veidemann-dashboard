@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {Browserscript, BrowserscriptService} from "../";
+import {Browserscript} from '../browserscript';
+import {BrowserscriptService} from '../browserscript.service';
 
 @Component({
   selector: 'app-browserscript-list',

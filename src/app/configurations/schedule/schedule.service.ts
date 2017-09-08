@@ -2,11 +2,12 @@ import {Injectable} from "@angular/core";
 import {ErrorHandlerService} from "../../commons/";
 import {Http} from "@angular/http";
 import {Schedule} from "./";
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class ScheduleService {
-  private scheduleUrl = '/api/schedule';
 
+  private scheduleUrl = `${environment.API_URL}/schedule`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {

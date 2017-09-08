@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {LogService} from "../";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
+import {LogService} from '../log.service';
 
 @Component({
   selector: 'app-loglevel',

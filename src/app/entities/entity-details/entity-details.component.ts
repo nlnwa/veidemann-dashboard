@@ -1,10 +1,12 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {Entity, EntityService} from "../";
+import {Entity} from '../entity';
+import {EntityService} from "../entity.service";
 import {Validators, FormBuilder, FormArray, FormGroup} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Label, DateTime} from "../../commons/";
 import {ActivatedRoute, Router} from "@angular/router";
-import {SeedService, Seeds} from "../../seeds/";
+import {Seeds} from '../../seeds/seed';
+import {SeedService} from '../../seeds/seeds.service';
 
 @Component({
   selector: 'entity-details',

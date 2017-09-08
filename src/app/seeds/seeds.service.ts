@@ -1,15 +1,19 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Http} from "@angular/http";
-import {Seed} from "./";
+import {Seed} from "./seed";
 import {ErrorHandlerService} from "../commons/";
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class SeedService {
-  private seedsUrl = '/api/seeds';
+
+  private seedsUrl = `${environment.API_URL}/seeds`;
+  private seedSearchUrl = `${environment.API_URL}/seedsearch`;
+  private seedsOfEntitiyUrl = `${environment.API_URL}/seedsofentitiy`;
 
   constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+              private errorHandlerService: ErrorHandlerService) {
   }
 
   getAllSeeds() {
@@ -25,7 +29,7 @@ export class SeedService {
 
   search(term: string): Observable<Seed[]> {
     return this.http
-      .get(`api/seedsearch/name=${term}`)
+      .get(`${this.seedSearchUrl}/name=${term}`)
       .map(res => res.json().value);
   }
 
@@ -33,7 +37,7 @@ export class SeedService {
     return this.http.delete(this.seedsUrl + '/' + delSeedid)
       .toPromise()
       .then(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
+      .catch(this.errorHandlerService.handleError);
   }
 
   // put("/api/entities/:id")
@@ -42,7 +46,7 @@ export class SeedService {
     return this.http.put(putUrl, putSeed)
       .toPromise()
       .then(response => response.json() as Seed)
-      .catch(this.errorhandlerservice.handleError);
+      .catch(this.errorHandlerService.handleError);
   }
 
   // post("/api/entities")
@@ -50,12 +54,12 @@ export class SeedService {
     return this.http.post(this.seedsUrl, newSeed)
       .toPromise()
       .then(response => response.json() as Seed)
-      .catch(this.errorhandlerservice.handleError);
+      .catch(this.errorHandlerService.handleError);
   }
 
   getSeedsOfEntity(entity_id) {
     return this.http
-      .get(`api/seedsofentity/entityid=${entity_id}`)
+      .get(`${this.seedsOfEntitiyUrl}/entityid=${entity_id}`)
       .map(res => res.json());
   }
 

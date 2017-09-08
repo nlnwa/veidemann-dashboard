@@ -2,13 +2,14 @@ import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Politenessconfig} from "./";
 import {ErrorHandlerService} from "../../commons/";
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
 export class PolitenessconfigService {
 
-  private politenessconfigUrl = '/api/politenessconfig';
-  private robotspolicyUrl = '/api/robotspolicy';
+  private politenessconfigUrl = `${environment.API_URL}/politenessconfig`;
+  private robotspolicyUrl = `${environment.API_URL}/robotspolicyurl`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {

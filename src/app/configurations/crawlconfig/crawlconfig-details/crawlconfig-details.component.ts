@@ -1,10 +1,11 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {Crawlconfig, CrawlconfigService} from "../";
 import {PolitenessconfigService, Politenessconfig} from "../../politenessconfig/";
 import {Browserconfig, BrowserconfigService} from "../../browserconfig/";
 import {Label, CustomValidators} from "../../../commons/";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
+import {Crawlconfig} from '../crawlconfig';
+import {CrawlconfigService} from '../crawlconfig.service';
 
 
 @Component({

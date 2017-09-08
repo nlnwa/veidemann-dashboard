@@ -2,12 +2,13 @@ import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Browserscript} from "./";
 import {ErrorHandlerService} from "../../commons";
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
 export class BrowserscriptService {
 
-  private browserscriptUrl = '/api/browserscript';
+  private browserscriptUrl = `${environment.API_URL}/browserscript`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {

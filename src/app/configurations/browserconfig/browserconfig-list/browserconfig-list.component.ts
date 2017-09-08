@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {BrowserconfigService, Browserconfig} from "../";
+import {Browserconfig} from '../browserconfig';
+import {BrowserconfigService} from '../browserconfig.service';
 
 @Component({
   selector: 'browserconfig-list',

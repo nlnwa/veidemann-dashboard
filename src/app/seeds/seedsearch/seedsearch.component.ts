@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {Seed, SeedService} from "../";
+import {Seed} from '../seed';
+import {SeedService} from "../seeds.service";
 import {Observable, Subject} from "rxjs";
 import {Router} from "@angular/router";
 import "rxjs/add/observable/of";
@@ -23,7 +24,6 @@ export class SeedSearchComponent implements OnInit {
               private router: Router) {
   }
 
-
   search(term: string): void {
     this.searchTerms.next(term.replace(/\//g, '%2F'));
   }
@@ -32,8 +32,8 @@ export class SeedSearchComponent implements OnInit {
     this.searchinput = null;
     this.selectedSeed = seed;
     this.search('');
-    //let link = ['/seeds/', seed.id];
-    //this.router.navigate(link);
+    // let link = ['/seeds/', seed.id];
+    // this.router.navigate(link);
   }
 
   ngOnInit() {
@@ -55,14 +55,14 @@ export class SeedSearchComponent implements OnInit {
   }
 
   gotoDetail(seed: Seed): void {
-    let link = ['/seeds/', seed.id];
+    const link = ['/seeds/', seed.id];
     this.router.navigate(link);
   }
 
   updateSeed = (seed: Seed) => {
-    //this.SeedService.getSeed(seed.id);
-    //console.log(seed.meta.last_modified.seconds);
-    //const updatedSeed = this.SeedService.getSeed(seed.id).subscribe(updatedSeed => updatedSeed);
+    // this.SeedService.getSeed(seed.id);
+    // console.log(seed.meta.last_modified.seconds);
+    // const updatedSeed = this.SeedService.getSeed(seed.id).subscribe(updatedSeed => updatedSeed);
   };
 
 }

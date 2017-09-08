@@ -1,38 +1,39 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {ErrorHandlerService} from "../commons/";
-import {Entity} from "./";
+import {Entity} from "./entity";
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class EntityService {
 
-  private entitiessUrl = '/api/entities';
+  private entitiesUrl = `${environment.API_URL}/entities`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
   }
 
   getEntities() {
-    return this.http.get(this.entitiessUrl)
+    return this.http.get(this.entitiesUrl)
       .map(res => res.json())
       .catch(this.errorhandlerservice.handleError);
   }
 
   getEntity(entity) {
-    return this.http.get(`${this.entitiessUrl}/${entity}`)
+    return this.http.get(`${this.entitiesUrl}/${entity}`)
       .map(res => res.json().value)
       .catch(this.errorhandlerservice.handleError);
   }
 
   createEntity(newEntity: Entity): Promise<Entity> {
-    return this.http.post(this.entitiessUrl, newEntity)
+    return this.http.post(this.entitiesUrl, newEntity)
       .toPromise()
       .then(response => response.json() as Entity)
       .catch(this.errorhandlerservice.handleError);
   }
 
   deleteEntity(delEntityId: String): Promise<String> {
-    return this.http.delete(this.entitiessUrl + '/' + delEntityId)
+    return this.http.delete(this.entitiesUrl + '/' + delEntityId)
       .toPromise()
       .then(response => response.json() as String)
       .catch(this.errorhandlerservice.handleError);
@@ -40,7 +41,7 @@ export class EntityService {
 
   // put("/api/entities/:id")
   updateEntity(putEntity: Entity): Promise<Entity> {
-    const putUrl = this.entitiessUrl + '/' + putEntity.id;
+    const putUrl = this.entitiesUrl + '/' + putEntity.id;
     return this.http.put(putUrl, putEntity)
       .toPromise()
       .then(response => response.json() as Entity)

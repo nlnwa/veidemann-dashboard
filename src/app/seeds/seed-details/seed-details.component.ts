@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {SeedService, Seed} from "../";
-import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
+import {Seed} from '../seed';
+import {SeedService} from "../seeds.service";import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
 import {MdlSnackbarService} from "angular2-mdl";
 import {DateTime, Label, CustomValidators} from "../../commons/";

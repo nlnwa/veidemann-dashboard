@@ -2,11 +2,12 @@ import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Crawlconfig} from "./";
 import {ErrorHandlerService} from "../../commons/";
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class CrawlconfigService {
 
-  private crawlconfigUrl = '/api/crawlconfig';
+  private crawlconfigUrl = `${environment.API_URL}/crawlconfig`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {

@@ -1,8 +1,9 @@
 import {Component, Input} from "@angular/core";
-import {Schedule, ScheduleService} from "../";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {DateTime, Label} from "../../../commons/";
+import {Schedule} from '../schedule';
+import {ScheduleService} from '../schedule.service';
 
 @Component({
   selector: 'schedule-details',

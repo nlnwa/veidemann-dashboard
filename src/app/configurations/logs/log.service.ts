@@ -2,12 +2,13 @@ import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {Logconfig} from "./";
 import {ErrorHandlerService} from "../../commons/";
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
 export class LogService {
 
-  private logconfigUrl = '/api/logconfig';
+  private logconfigUrl = `${environment.API_URL}/logconfig`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {
@@ -19,8 +20,7 @@ export class LogService {
   }
 
   updateLogconfig(putLogconfig: Logconfig): Promise<Logconfig> {
-    const putUrl = this.logconfigUrl;
-    return this.http.put(putUrl, putLogconfig)
+    return this.http.put(this.logconfigUrl, putLogconfig)
       .toPromise()
       .then(response => response.json() as Logconfig)
       .catch(this.errorhandlerservice.handleError);

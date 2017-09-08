@@ -1,7 +1,5 @@
 **
 !*.json
-!server.js
-!server/
-!crap/
+!yarn.lock
 !src/
-
+!nginx

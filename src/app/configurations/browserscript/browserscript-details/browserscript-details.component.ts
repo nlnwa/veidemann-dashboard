@@ -1,8 +1,9 @@
 import {Component, Input} from "@angular/core";
-import {Browserscript, BrowserscriptService} from "../";
 import {MdlSnackbarService} from "angular2-mdl";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/";
+import {Browserscript} from '../browserscript';
+import {BrowserscriptService} from '../browserscript.service';
 
 
 @Component({

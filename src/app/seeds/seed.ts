@@ -1,7 +1,4 @@
 import {Meta} from "../commons/models/meta";
-/**
- * Created by kristiana on 16.05.17.
- */
 
 export class Seeds {
   value: Seed[];

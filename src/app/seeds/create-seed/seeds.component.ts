@@ -1,11 +1,12 @@
 import {Component, Input} from "@angular/core";
-import {SeedService, Seed} from "../";
+import {Seed} from '../seed';
+import {SeedService} from "../seeds.service";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
 import {MdlSnackbarService} from "angular2-mdl";
 import {Router} from "@angular/router";
 import {CustomValidators, Label} from "../../commons/";
 import {CrawljobService} from "../../configurations/crawljobs/";
-import {EntityService} from "../../entities/";
+import {EntityService} from '../../entities/entity.service';
 
 @Component({
   selector: 'app-seeds',
@@ -38,7 +39,7 @@ export class SeedsComponent {
               private router: Router,) {
 
     this.createForm();
-    //this.getSeeds();
+    // this.getSeeds();
     this.getEntities();
     this.getCrawljobs()
   }
