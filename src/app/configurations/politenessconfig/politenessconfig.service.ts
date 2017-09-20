@@ -9,7 +9,7 @@ import {environment} from '../../../environments/environment';
 export class PolitenessconfigService {
 
   private politenessconfigUrl = `${environment.API_URL}/politenessconfig`;
-  private robotspolicyUrl = `${environment.API_URL}/robotspolicyurl`;
+  private robotspolicyUrl = `${environment.API_URL}/robotspolicy`;
 
   constructor(private http: Http,
               private errorhandlerservice: ErrorHandlerService) {

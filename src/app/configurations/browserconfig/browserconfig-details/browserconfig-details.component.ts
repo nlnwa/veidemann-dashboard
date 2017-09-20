@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label, CustomValidators} from "../../../commons";
 import {BrowserscriptService} from "../../browserscript";
@@ -29,7 +29,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
   constructor(private browserconfigService: BrowserconfigService,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
               private browserscriptService: BrowserscriptService,) {
     this.createForm();
@@ -84,10 +84,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       .then((newBrowserconfig: Browserconfig) => {
         this.createHandler(newBrowserconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
 
@@ -95,26 +92,17 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     this.browserconfig = this.prepareSaveBrowserconfig();
     this.browserconfigService.updateBrowserconfig(this.browserconfig).then((updatedBrowserconfig: Browserconfig) => {
       this.updateHandler(updatedBrowserconfig);
+      this.mdSnackBar.open('Lagret');
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
   }
 
   deleteBrowserconfig(browserconfigId): void {
     this.browserconfigService.deleteBrowserconfig(browserconfigId).then((deletedBrowserconfig) => {
       this.deleteHandler(deletedBrowserconfig);
       if (deletedBrowserconfig === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet..');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -207,10 +195,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
   prepareSaveBrowserconfig(): Browserconfig {

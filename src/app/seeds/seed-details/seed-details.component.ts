@@ -1,8 +1,9 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {Seed} from '../seed';
-import {SeedService} from "../seeds.service";import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
+import {SeedService} from "../seeds.service";
+import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Router, ActivatedRoute} from "@angular/router";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {DateTime, Label, CustomValidators} from "../../commons/";
 import {CrawljobService, Crawljob} from "../../configurations/crawljobs/";
 import {EntityService} from "../../entities/entity.service";
@@ -38,7 +39,7 @@ export class SeedDetailComponent implements OnChanges {
               private fb: FormBuilder,
               private crawljobService: CrawljobService,
               private route: ActivatedRoute,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private convertTimestamp: DateTime,
               private entityService: EntityService) {
     this.createForm();
@@ -156,24 +157,15 @@ export class SeedDetailComponent implements OnChanges {
         this.updateData(updatedSeed);
       });
 
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteSeed(): void {
     this.seedService.deleteSeed(this.seed.id).then((deletedSeed) => {
       if (deletedSeed === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
     this.goBack()
@@ -242,10 +234,7 @@ export class SeedDetailComponent implements OnChanges {
 
   revert() {
     this.updateData(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
   goToEntity() {

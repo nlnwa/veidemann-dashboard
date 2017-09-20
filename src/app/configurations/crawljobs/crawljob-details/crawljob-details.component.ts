@@ -1,9 +1,9 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
-import {Crawlconfig, CrawlconfigService} from "../../crawlconfig/";
-import {Schedule, ScheduleService} from "../../schedule/";
-import {CustomValidators, Label} from "../../../commons/";
-import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Crawlconfig, CrawlconfigService} from '../../crawlconfig/';
+import {Schedule, ScheduleService} from '../../schedule/';
+import {CustomValidators, Label} from '../../../commons/';
+import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
 import {Crawljob} from '../crawljob';
 import {CrawljobService} from '../crawljob.service';
 
@@ -41,7 +41,7 @@ export class CrawljobDetailsComponent implements OnChanges {
               private crawlconfigService: CrawlconfigService,
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,) {
+              private mdSnackBar: MdSnackBar,) {
     this.filldropdown();
     this.createForm();
   }
@@ -95,25 +95,16 @@ export class CrawljobDetailsComponent implements OnChanges {
       .then((updatedCrawljob) => {
         this.updateHandler(updatedCrawljob);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
   deleteCrawljob(crawljobId): void {
     this.crawljobService.deleteCrawljob(crawljobId).then((deletedCrawljob) => {
       this.deleteHandler(deletedCrawljob);
-      if (deletedCrawljob === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+      if (deletedCrawljob === 'not_allowed') {
+        this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -123,10 +114,7 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.crawljobService.createCrawljob(this.crawljob).then((newCrawljob: Crawljob) => {
       this.createHandler(newCrawljob);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   prepareSaveCrawljob(): Crawljob {
@@ -155,7 +143,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   setDropdown() {
-    if (this.crawljob.schedule_id !== "") {
+    if (this.crawljob.schedule_id !== '') {
       this.scheduleService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
         value.forEach((key) => {
           this.selectedScheduleItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
@@ -164,7 +152,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       });
     }
 
-    if (this.crawljob.crawl_config_id !== "") {
+    if (this.crawljob.crawl_config_id !== '') {
       this.crawlconfigService.getCrawlconfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
         value.forEach((key) => {
           this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description});
@@ -191,14 +179,14 @@ export class CrawljobDetailsComponent implements OnChanges {
 
     this.dropdownScheduleSettings = {
       singleSelection: true,
-      text: "Velg Schedule",
+      text: 'Velg Schedule',
       enableSearchFilter: true
     };
 
 
     this.dropdownCrawlconfigSettings = {
       singleSelection: true,
-      text: "Velg crawlconfig",
+      text: 'Velg crawlconfig',
       enableSearchFilter: true
     };
   }
@@ -232,9 +220,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }

@@ -1,4 +1,5 @@
 import {Meta} from "../../commons/models/meta";
+
 /**
  * Created by kristiana on 08.06.17.
  */

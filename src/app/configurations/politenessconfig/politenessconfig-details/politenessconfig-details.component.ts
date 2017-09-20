@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {CustomValidators, Label} from "../../../commons/";
 import {isUndefined} from "util";
@@ -31,7 +31,7 @@ export class PolitenessconfigDetailsComponent {
 
 
   constructor(private politenessconfigService: PolitenessconfigService,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.filldropdown();
     this.createForm();
@@ -76,10 +76,7 @@ export class PolitenessconfigDetailsComponent {
     this.politenessconfigService.createPolitenessconfig(this.politenessconfig).then((newPolitenessconfig: Politenessconfig) => {
       this.createHandler(newPolitenessconfig);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
 
@@ -88,25 +85,16 @@ export class PolitenessconfigDetailsComponent {
     this.politenessconfigService.updatePolitenessConfig(this.politenessconfig).then((updatedPolitenessconfig: Politenessconfig) => {
       this.updateHandler(updatedPolitenessconfig);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deletePolitenessconfig(politenessconfigId): void {
     this.politenessconfigService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfig) => {
       this.deleteHandler(deletedPolitenessconfig);
       if (deletedPolitenessconfig === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -120,7 +108,7 @@ export class PolitenessconfigDetailsComponent {
   }
 
   setSelectedDropdown() {
-    if (!isUndefined(this.politenessconfig.id )) {
+    if (!isUndefined(this.politenessconfig.id)) {
       this.politenessconfigService.getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig).forEach((value) => {
         value.forEach((key) => {
           for (let i of this.robotspolicyList) {
@@ -196,9 +184,6 @@ export class PolitenessconfigDetailsComponent {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }

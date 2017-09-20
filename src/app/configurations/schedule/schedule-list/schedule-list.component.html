@@ -1,25 +1,29 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Schedules</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)"
-            [class.active]="schedule === selectedSchedule">
-          {{schedule.meta.name}}
+<div fxLayout="row">
+  <div fxFlex="30%">
+    <h2>
+      <md-icon>schedule</md-icon>
+      Schedules
+    </h2>
+    <md-nav-list>
+      <md-list-item
+        *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)"
+        [class.active]="schedule === selectedSchedule">
+        {{schedule.meta.name}}
+      </md-list-item>
+    </md-nav-list>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewSchedule()">New</button>
-    </div>
-
-    <div *ngIf="selectedSchedule">
-      <schedule-details
-        [schedule]="selectedSchedule"
-        [createHandler]="addSchedule"
-        [updateHandler]="updateSchedule"
-        [deleteHandler]="deleteSchedule">
-      </schedule-details>
-    </div>
+    <button md-raised-button color="warn"
+            (click)="createNewSchedule()">New
+    </button>
   </div>
+
+  <ng-container *ngIf="selectedSchedule">
+    <schedule-details
+      [schedule]="selectedSchedule"
+      [createHandler]="addSchedule"
+      [updateHandler]="updateSchedule"
+      [deleteHandler]="deleteSchedule">
+    </schedule-details>
+  </ng-container>
+
 </div>

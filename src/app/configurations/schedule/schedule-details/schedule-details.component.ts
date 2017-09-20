@@ -1,6 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {DateTime, Label} from "../../../commons/";
 import {Schedule} from '../schedule';
 import {ScheduleService} from '../schedule.service';
@@ -25,7 +25,7 @@ export class ScheduleDetailsComponent {
   private valid_to_unix: any;
 
   constructor(private scheduleService: ScheduleService,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
               private convertTimestamp: DateTime) {
     this.createForm();
@@ -115,10 +115,7 @@ export class ScheduleDetailsComponent {
     this.scheduleService.createSchedule(this.schedule).then((newSchedule: Schedule) => {
       this.createHandler(newSchedule);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   updateSchedule(schedule: Schedule): void {
@@ -126,25 +123,16 @@ export class ScheduleDetailsComponent {
     this.scheduleService.updateSchedule(this.schedule).then((updatedSchedule: Schedule) => {
       this.updateHandler(updatedSchedule);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteSchedule(scheduleId): void {
     this.scheduleService.deleteSchedule(scheduleId).then((deletedSchedule) => {
       this.deleteHandler(deletedSchedule);
       if (deletedSchedule === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet..');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -235,10 +223,7 @@ export class ScheduleDetailsComponent {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }
 

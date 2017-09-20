@@ -1,27 +1,24 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Entities</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let entity of entities" (click)="selectEntity(entity)"
-            [class.active]="entity === selectedEntity">
-          {{entity.meta.name}}
+<h2>Entities</h2>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewEntity()">New</button>
-    </div>
-    <div class="col-md-5">
+<md-nav-list>
+  <md-list-item
+    *ngFor="let entity of entities" (click)="selectEntity(entity)"
+    [class.active]="entity === selectedEntity">
+    {{entity.meta.name}}
+  </md-list-item>
+</md-nav-list>
 
-      <div *ngIf="selectedEntity">
-        <entity-details
-          [entity]="selectedEntity"
-          [createHandler]="addEntity"
-          [updateHandler]="updateEntity"
-          [deleteHandler]="deleteEntity">
-        </entity-details>
-      </div>
-    </div>
-  </div>
-</div>
+<button md-raised-button color="warn"
+        (click)="createNewEntity()">New
+</button>
+
+<ng-container *ngIf="selectedEntity">
+  <entity-details
+    [entity]="selectedEntity"
+    [createHandler]="addEntity"
+    [updateHandler]="updateEntity"
+    [deleteHandler]="deleteEntity">
+  </entity-details>
+</ng-container>
+
+

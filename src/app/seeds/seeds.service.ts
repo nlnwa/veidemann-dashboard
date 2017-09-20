@@ -4,21 +4,23 @@ import {Http} from "@angular/http";
 import {Seed} from "./seed";
 import {ErrorHandlerService} from "../commons/";
 import {environment} from '../../environments/environment';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class SeedService {
 
   private seedsUrl = `${environment.API_URL}/seeds`;
   private seedSearchUrl = `${environment.API_URL}/seedsearch`;
-  private seedsOfEntitiyUrl = `${environment.API_URL}/seedsofentitiy`;
+  private seedsOfEntityUrl = `${environment.API_URL}/seedsofentity`;
 
   constructor(private http: Http,
               private errorHandlerService: ErrorHandlerService) {
   }
 
-  getAllSeeds() {
+  getAllSeeds(): Observable<Seed[]> {
     return this.http.get(this.seedsUrl)
-      .map(res => res.json().value);
+      .map(res => res.json().value as Seed[]);
   }
 
   getSeed(seed) {
@@ -59,7 +61,7 @@ export class SeedService {
 
   getSeedsOfEntity(entity_id) {
     return this.http
-      .get(`${this.seedsOfEntitiyUrl}/entityid=${entity_id}`)
+      .get(`${this.seedsOfEntityUrl}/entityid=${entity_id}`)
       .map(res => res.json());
   }
 

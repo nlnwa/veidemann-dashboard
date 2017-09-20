@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {Label} from "../../../commons/";
 import {Browserscript} from '../browserscript';
@@ -26,7 +26,7 @@ export class BrowserscriptDetailsComponent {
 
 
   constructor(private browserscriptService: BrowserscriptService,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.createForm();
   }
@@ -63,10 +63,7 @@ export class BrowserscriptDetailsComponent {
     this.browserscriptService.createBrowserscript(this.browserscript).then((newBrowserscript: Browserscript) => {
       this.createHandler(newBrowserscript);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
 
@@ -75,25 +72,16 @@ export class BrowserscriptDetailsComponent {
     this.browserscriptService.updatePolitenessConfig(this.browserscript).then((updatedBrowserscript: Browserscript) => {
       this.updateHandler(updatedBrowserscript);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteBrowserscript(browserscriptId): void {
     this.browserscriptService.deletePolitenessConfig(browserscriptId).then((deletedBrowserscript) => {
       this.deleteHandler(deletedBrowserscript);
       if (deletedBrowserscript === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -153,9 +141,6 @@ export class BrowserscriptDetailsComponent {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }

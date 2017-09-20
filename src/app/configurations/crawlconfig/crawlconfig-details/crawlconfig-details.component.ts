@@ -3,7 +3,7 @@ import {PolitenessconfigService, Politenessconfig} from "../../politenessconfig/
 import {Browserconfig, BrowserconfigService} from "../../browserconfig/";
 import {Label, CustomValidators} from "../../../commons/";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {Crawlconfig} from '../crawlconfig';
 import {CrawlconfigService} from '../crawlconfig.service';
 
@@ -41,7 +41,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
               private politenessconfigService: PolitenessconfigService,
               private browserconfigService: BrowserconfigService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,) {
+              private mdSnackBar: MdSnackBar) {
     this.filldropdown();
     this.createForm();
   }
@@ -102,10 +102,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     this.crawlconfigService.createCrawlconfig(this.crawlconfig).then((newCrawlconfig: Crawlconfig) => {
       this.createHandler(newCrawlconfig);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   updateCrawlconfig(crawlconfigForm): void {
@@ -114,10 +111,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       .then((updatedCrawlconfig) => {
         this.updateHandler(updatedCrawlconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
   deleteCrawlconfig(crawlconfigId): void {
@@ -125,15 +119,9 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       .then((deletedCrawlconfig) => {
         this.deleteHandler(deletedCrawlconfig);
         if (deletedCrawlconfig === "not_allowed") {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Feil: Ikke slettet',
-            });
+          this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Slettet',
-            });
+          this.mdSnackBar.open('Slettet');
         }
       });
   }
@@ -245,10 +233,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
 }

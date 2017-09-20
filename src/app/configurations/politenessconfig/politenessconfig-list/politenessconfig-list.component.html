@@ -1,27 +1,24 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Politenessconfigs</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let politenessconfig of politenessconfigs" (click)="selectPolitenessconfig(politenessconfig)"
-            [class.active]="politenessconfig === selectedPolitenessconfig">
-          {{politenessconfig.meta.name}}
+<h2>Politenessconfigs</h2>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewPolitenessconfig()">New</button>
-    </div>
-    <div class="col-md-5">
+<md-nav-list>
+  <md-list-item
+    *ngFor="let politenessconfig of politenessconfigs" (click)="selectPolitenessconfig(politenessconfig)"
+    [class.active]="politenessconfig === selectedPolitenessconfig">
+    {{politenessconfig.meta.name}}
 
-      <div *ngIf="selectedPolitenessconfig">
-        <politenessconfig-details
-          [politenessconfig]="selectedPolitenessconfig"
-          [createHandler]="addPolitenessconfig"
-          [updateHandler]="updatePolitenessconfig"
-          [deleteHandler]="deletePolitenessconfig">
-        </politenessconfig-details>
-      </div>
-    </div>
-  </div>
-</div>
+  </md-list-item>
+</md-nav-list>
+
+<button md-raised-button color="warn"
+        (click)="createNewPolitenessconfig()">New
+</button>
+
+<ng-container *ngIf="selectedPolitenessconfig">
+  <politenessconfig-details
+    [politenessconfig]="selectedPolitenessconfig"
+    [createHandler]="addPolitenessconfig"
+    [updateHandler]="updatePolitenessconfig"
+    [deleteHandler]="deletePolitenessconfig">
+  </politenessconfig-details>
+</ng-container>
+

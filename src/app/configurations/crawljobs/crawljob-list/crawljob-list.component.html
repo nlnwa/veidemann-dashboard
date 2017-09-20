@@ -1,27 +1,23 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Crawljobs</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let crawljob of crawljobs" (click)="selectCrawljob(crawljob)"
-            [class.active]="crawljob === selectedCrawljob">
-          {{crawljob.meta.name}}
+<h2>Crawljobs</h2>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewCrawljob()">New</button>
-    </div>
-    <div class="col-md-5">
+<md-nav-list>
+  <md-list-item
+    *ngFor="let crawljob of crawljobs" (click)="selectCrawljob(crawljob)"
+    [class.active]="crawljob === selectedCrawljob">
+    {{crawljob.meta.name}}
+  </md-list-item>
+</md-nav-list>
 
-      <div *ngIf="selectedCrawljob">
-        <crawljob-details
-          [crawljob]="selectedCrawljob"
-          [createHandler]="addCrawljob"
-          [updateHandler]="updateCrawljob"
-          [deleteHandler]="deleteCrawljob">
-        </crawljob-details>
-      </div>
-    </div>
-  </div>
-</div>
+<button md-raised-button color="warn"
+        (click)="createNewCrawljob()">New
+</button>
+
+<ng-container *ngIf="selectedCrawljob">
+  <crawljob-details
+    [crawljob]="selectedCrawljob"
+    [createHandler]="addCrawljob"
+    [updateHandler]="updateCrawljob"
+    [deleteHandler]="deleteCrawljob">
+  </crawljob-details>
+</ng-container>
+

@@ -1,19 +1,18 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
-import {ROUTES} from './routes';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MdlModule} from 'angular2-mdl';
-import {AngularMultiSelectModule} from './angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import {AppRoutingModule} from './app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import {MaterialModule} from './material.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {DocumentationComponent} from './documentation';
 import {ActivityComponent} from './activity';
 import {CrawlersComponent} from './crawlers';
 import {StatisticsService, StatisticsComponent} from './statistics';
-import {UserService, UserComponent, UserDetailsComponent} from './users';
 import {SeedSearchComponent, SeedService, SeedsComponent, SeedDetailComponent} from './seeds';
 import {
   BrowserconfigDetailsComponent,
@@ -39,24 +38,20 @@ import {
   ScheduleSidebarComponent,
   ScheduleService
 } from './configurations/schedule';
-import {ModalComponent, DateTime, ErrorHandlerService, Collapse} from './commons';
+import {DateTime, ErrorHandlerService,} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent,
-    UserDetailsComponent,
     DocumentationComponent,
     StatisticsComponent,
     SeedSearchComponent,
     ActivityComponent,
     SeedsComponent,
     CrawlersComponent,
-    ModalComponent,
     SeedDetailComponent,
-    Collapse,
     CrawljobDetailsComponent,
     CrawljobListComponent,
     ScheduleListComponent,
@@ -76,16 +71,16 @@ import {EntityDetailsComponent, EntityListComponent, EntityService} from './enti
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES),
-    NgbModule.forRoot(),
+    AppRoutingModule,
     AngularMultiSelectModule,
-    MdlModule,
+    MaterialModule,
+    FlexLayoutModule,
   ],
   providers: [
-    UserService,
     StatisticsService,
     SeedService,
     CrawljobService,

@@ -3,6 +3,8 @@ import {Http} from "@angular/http";
 import {ErrorHandlerService} from "../commons/";
 import {Entity} from "./entity";
 import {environment} from '../../environments/environment';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class EntityService {

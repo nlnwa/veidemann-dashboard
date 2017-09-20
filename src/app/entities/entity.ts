@@ -1,4 +1,5 @@
 import {Meta} from "../commons/models/meta";
+
 export class Entities {
   Entity: Entity[];
   count: number;

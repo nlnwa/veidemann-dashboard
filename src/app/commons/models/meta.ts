@@ -1,4 +1,5 @@
 import {Label} from "./label";
+
 /**
  * Created by kristiana on 27.06.17.
  */
@@ -12,6 +13,7 @@ export class Meta {
   last_modified_by?: string;
   label: Label[];
 }
+
 export class Time {
   seconds?: number;
   nanos?: number;

@@ -2,7 +2,7 @@ import {Component, Input} from "@angular/core";
 import {Seed} from '../seed';
 import {SeedService} from "../seeds.service";
 import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {Router} from "@angular/router";
 import {CustomValidators, Label} from "../../commons/";
 import {CrawljobService} from "../../configurations/crawljobs/";
@@ -35,8 +35,8 @@ export class SeedsComponent {
               private fb: FormBuilder,
               private entityService: EntityService,
               private crawljobService: CrawljobService,
-              private mdlSnackbarService: MdlSnackbarService,
-              private router: Router,) {
+              private mdSnackBar: MdSnackBar,
+              private router: Router) {
 
     this.createForm();
     // this.getSeeds();
@@ -52,7 +52,10 @@ export class SeedsComponent {
         surt_prefix: ''
       }),
       meta: this.fb.group({
-        name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+        name: ['http://',
+          [Validators.required,
+            Validators.pattern(
+              `(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
         description: '',
         label: this.fb.array([]),
       }),
@@ -60,17 +63,10 @@ export class SeedsComponent {
     this.setLabel([]);
   }
 
-  getSeeds(): void {
-    this.seedService.getAllSeeds().subscribe(seed => this.seed = seed)
-  }
-
   createSeedNew() {
     this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
     }, 0);
@@ -82,10 +78,7 @@ export class SeedsComponent {
   createSeed() {
     this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
     }, 0);

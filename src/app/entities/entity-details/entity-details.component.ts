@@ -2,7 +2,7 @@ import {Component, Input, OnChanges} from "@angular/core";
 import {Entity} from '../entity';
 import {EntityService} from "../entity.service";
 import {Validators, FormBuilder, FormArray, FormGroup} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {MdSnackBar} from "@angular/material";
 import {Label, DateTime} from "../../commons/";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Seeds} from '../../seeds/seed';
@@ -35,7 +35,7 @@ export class EntityDetailsComponent implements OnChanges {
   constructor(private entityService: EntityService,
               private seedService: SeedService,
               private route: ActivatedRoute,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
               private router: Router,
               private convertTimestamp: DateTime) {
@@ -122,10 +122,7 @@ export class EntityDetailsComponent implements OnChanges {
       .then((newEntity: Entity) => {
         this.createHandler(newEntity);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
 
@@ -134,25 +131,16 @@ export class EntityDetailsComponent implements OnChanges {
     this.entityService.updateEntity(this.entity).then((updatedEntity: Entity) => {
       this.updateHandler(updatedEntity);
     });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteEntity(): void {
     this.entityService.deleteEntity(this.entity.id).then((deletedEntity) => {
       this.deleteHandler(deletedEntity);
       if (deletedEntity === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
+        this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
+        this.mdSnackBar.open('Slettet');
       }
     });
   }
@@ -199,10 +187,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
   prepareSaveEntity(): Entity {

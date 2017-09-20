@@ -2,6 +2,7 @@
  * Created by kristiana on 11.07.17.
  */
 import {Meta} from "../../commons/models/meta";
+
 /**
  * Created by kristiana on 18.05.17.
  */

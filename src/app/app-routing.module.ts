@@ -1,6 +1,6 @@
-/**
- * Created by kristiana on 30.06.17.
- */
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+
 import {ActivityComponent} from './activity';
 import {SeedsComponent, SeedDetailComponent, SeedSearchComponent} from './seeds/';
 import {CrawljobListComponent} from './configurations/crawljobs/';
@@ -15,11 +15,11 @@ import {EntityListComponent, EntityDetailsComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
 
-
-export const ROUTES = [
+const routes: Routes = [
   {
     path: '',
-    redirectTo: '/activity', pathMatch: 'full'
+    redirectTo: '/activity',
+    pathMatch: 'full'
   },
   {
     path: 'activity',
@@ -86,3 +86,13 @@ export const ROUTES = [
     component: LoglevelComponent
   },
 ];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
+  exports: [
+    RouterModule,
+  ]
+})
+export class AppRoutingModule {}

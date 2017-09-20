@@ -5,7 +5,7 @@ export class CustomValidators {
    * Validator that requires controls to have a value greater than a number.
    */
   static max(max: number): ValidatorFn {
-    return (control: FormControl): {[key: string]: boolean} | null => {
+    return (control: FormControl): { [key: string]: boolean } | null => {
 
       let val: number = control.value;
 
@@ -20,7 +20,7 @@ export class CustomValidators {
   }
 
   static min(min: number): ValidatorFn {
-    return (control: FormControl): {[key: string]: boolean} | null => {
+    return (control: FormControl): { [key: string]: boolean } | null => {
 
       let val: number = control.value;
 
