@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Seeds} from '../../seeds/seed';
 import {SeedService} from '../../seeds/seeds.service';
 
+
 @Component({
   selector: 'entity-details',
   templateUrl: './entity-details.component.html',

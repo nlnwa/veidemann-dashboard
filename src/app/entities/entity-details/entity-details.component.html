@@ -13,12 +13,12 @@
       Name required.
     </small>
   </div>
+
   <div class="form-group" formGroupName="meta">
     <label class="center-block">Beskrivelse:
       <input class="form-control" formControlName="description">
     </label>
   </div>
-
 
   <div class="form-group">
     <div formArrayName="label" class="well well-lg">
@@ -27,7 +27,6 @@
           <span>Merkelapp #{{i + 1}}</span>
           <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
         </div>
-
         <div class="form-group">
           <label class="center-block">Type:
             <input class="form-control" formControlName="key">
@@ -39,7 +38,7 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
+      <button id="addLabel" class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
     </div>
   </div>
 
@@ -124,7 +123,6 @@
         <input class="form-control" formControlName="last_modified_by"/>
       </label>
     </div>
-
   </div>
 
   <button class="btn btn-primary" *ngIf="!entity.id" [disabled]="!entityForm.valid"
@@ -139,3 +137,4 @@
           (click)="deleteEntity(); $event.stopPropagation()">Slett
   </button>
 </form>
+

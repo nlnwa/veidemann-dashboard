@@ -14,6 +14,7 @@ import {PolitenessconfigListComponent} from './configurations/politenessconfig/'
 import {EntityListComponent, EntityDetailsComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
+import {CrawlhostgroupconfigListComponent} from "./configurations/crawlhostgroupconfig/crawlhostgroupconfig-list/crawlhostgroupconfig-list.component";
 
 
 export const ROUTES = [
@@ -68,6 +69,10 @@ export const ROUTES = [
   {
     path: 'crawlconfig',
     component: CrawlconfigListComponent
+  },
+  {
+    path: 'crawlhostgroupconfig',
+    component: CrawlhostgroupconfigListComponent
   },
   {
     path: 'browserconfig',
