@@ -18,42 +18,28 @@
       <input class="form-control" formControlName="description">
     </label>
   </div>
- <!--
-  <div class="form-group">
-    <label class="center-block">From IP
-      <input class="form-control" type="string" formControlName="from_ip">
-    </label>
-    <small [hidden]="crawlhostgroupconfigForm.controls.from_ip.valid" class="text-danger">
-      from IP required.
-    </small>
-  </div>
-
-  <div class="form-group">
-    <label class="center-block">To IP
-      <input class="form-control" type="string" formControlName="to_ip">
-    </label>
-    <small [hidden]="crawlhostgroupconfigForm.controls.to_ip.valid" class="text-danger">
-      to IP required.
-    </small>
-  </div>
-  <div class="form-group">
-  -->
-  {{iprange}}
+  {{crawlhostgroupconfigForm.controls}}
    <div class = "form-group">
-     <div formArrayName="iprange" class="well well-lg">
-       <div *ngFor="let iprange of iprange.controls; let i=index" [formGroupName]="i">
+     <div formArrayName="ip_range" class="well well-lg">
+       <div *ngFor="let ip_range of ip_range.controls; let i=index" [formGroupName]="i">
          <div class="panel-heading">
            <span>IP-range #{{i +1}}</span>
            <span class="glyphicon glyphicon-remove pull-right" (click)="removeIpRange(i)"></span>
          </div>
          <div class="form-group">
            <label class="center-block">Fra IP:
-             <input class="form-control" formControlName="from_ip">
+             <input class="form-control" formControlName="ip_from">
            </label>
+           <small [hidden]="crawlhostgroupconfigForm.controls.ip_range.controls[i].controls.ip_from.valid" class="text-danger">
+             Valid IP address required.
+           </small>
          </div>
          <div class="form-group">
            <label class="center-block">Til IP:
-             <input class="form-control" formControlName="to_ip">
+             <input class="form-control" formControlName="ip_to">
+             <small [hidden]="crawlhostgroupconfigForm.controls.ip_range.controls[i].controls.ip_to.valid" class="text-danger">
+               Valid IP address required.
+             </small>
            </label>
          </div>
        </div>

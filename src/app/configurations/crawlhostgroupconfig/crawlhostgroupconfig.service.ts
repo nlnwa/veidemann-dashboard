@@ -31,6 +31,7 @@ export class CrawlhostgroupconfigService {
   }
 
   deleteCrawlhostgroupconfig(delCrawlhostgroupconfigId: String): Promise<String> {
+
     return this.http.delete(this.crawlhostgroupconfigUrl + '/' + delCrawlhostgroupconfigId)
       .toPromise()
       .then(response => response.json() as String)

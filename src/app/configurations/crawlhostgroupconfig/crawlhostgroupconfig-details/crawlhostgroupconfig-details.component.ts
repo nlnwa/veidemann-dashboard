@@ -33,7 +33,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   createForm() {
     this.crawlhostgroupconfigForm = this.fb.group({
       id: {value: '', disabled: true},
-      iprange: this.fb.array([]),
+      ip_range: this.fb.array([]),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
@@ -48,7 +48,12 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
   ngOnChanges() {
     this.setLabel(this.crawlhostgroupconfig.meta.label);
-    this.setIpRange((this.crawlhostgroupconfig.iprange));
+    this.setIpRange((this.crawlhostgroupconfig.ip_range));
+    this.crawlhostgroupconfigForm.controls['meta'].patchValue({
+      name: this.crawlhostgroupconfig.meta.name as string,
+      description: this.crawlhostgroupconfig.meta.description as string,
+    });
+    console.log(this.crawlhostgroupconfigForm.controls);
   }
 
   createCrawlhostgroupconfig() {
@@ -106,7 +111,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
     const saveCrawlhostgroupconfig: Crawlhostgroupconfig = {
       id: this.crawlhostgroupconfig.id,
-      iprange: iprangeDeepCopy,
+      ip_range: iprangeDeepCopy,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
@@ -143,30 +148,30 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
     });
   }
 
-  setIpRange(iprange) {
-    const iprangeFGs = iprange.map( iprange => (this.fb.group(iprange)));
-    const iprangeFormArray = this.fb.array(iprangeFGs);
-    this.crawlhostgroupconfigForm.setControl('iprange', iprangeFormArray);
+  setIpRange(ip_range) {
+    const ip_rangeFGs = ip_range.map( ip_range => (this.fb.group(ip_range)));
+    const ip_rangeFormArray = this.fb.array(ip_rangeFGs);
+    this.crawlhostgroupconfigForm.setControl('ip_range', ip_rangeFormArray);
   }
   addIpRange() {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['iprange'];
+    const control = <FormArray>this.crawlhostgroupconfigForm.controls['ip_range'];
     control.push(this.initIpRange());
   }
 
   removeIpRange(i: number) {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['iprange'];
+    const control = <FormArray>this.crawlhostgroupconfigForm.controls['ip_range'];
     control.removeAt(i);
   }
 
-  get ipRange(): FormArray {
-    return this.crawlhostgroupconfigForm.get('iprange') as FormArray;
+  get ip_range(): FormArray {
+    return this.crawlhostgroupconfigForm.get('ip_range') as FormArray;
   };
 
   initIpRange() {
     return this.fb.group({
-      from_ip: ['10.0.0.1', [Validators.required, Validators.pattern(
+      ip_from: ['', [Validators.required, Validators.pattern(
         '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')]],
-      to_ip: ['10.0.0.2', [Validators.required, Validators.pattern(
+      ip_to: ['', [Validators.required, Validators.pattern(
         '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')]],
     });
   }

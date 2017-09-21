@@ -10,7 +10,7 @@ export class Crawlhostgroupconfigs {
 export class Crawlhostgroupconfig {
   id?: string;
   meta: Meta;
-  iprange: IpRange[];
+  ip_range: IpRange[];
 }
 
 export class IpRange {

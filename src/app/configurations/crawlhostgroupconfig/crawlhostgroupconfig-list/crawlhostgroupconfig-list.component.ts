@@ -34,7 +34,7 @@ export class CrawlhostgroupconfigListComponent implements OnInit {
 
   createNewCrawlhostgroupconfig() {
     const crawlhostgroupconfig: Crawlhostgroupconfig = {
-     iprange: [],
+     ip_range: [],
       meta: {
         name: '',
         description: '',
