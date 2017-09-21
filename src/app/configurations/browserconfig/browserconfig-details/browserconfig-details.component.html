@@ -1,144 +1,149 @@
-<div class="col-md-12">
-  <h2 *ngIf="browserconfig.id">Browserconfig Details</h2>
-  <h2 *ngIf="!browserconfig.id">New Browserconfig</h2>
-</div>
+<h2 *ngIf="browserconfig.id">Browserconfig Details</h2>
+<h2 *ngIf="!browserconfig.id">New Browserconfig</h2>
 
-<form [formGroup]="browserconfigForm">
+<form [formGroup]="browserconfigForm" fxLayout="column">
 
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Navn:
-      <input class="form-control" formControlName="name">
-    </label>
-    <small [hidden]="browserconfigForm.controls.meta.valid" class="text-danger">
-      Name required.
-    </small>
-  </div>
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Beskrivelse:
-      <input class="form-control" formControlName="description">
-    </label>
-  </div>
+  <md-form-field formGroupName="meta">
+    <input mdInput formControlName="name" placeholder="Navn">
+    <md-error *ngIf="! browserconfigForm.controls.meta.valid">
+      Navn er påkrevd.
+    </md-error>
+  </md-form-field>
 
-  <div class="form-group">
-    <label class="center-block">User Agent:
-      <input class="form-control" formControlName="user_agent">
-    </label>
-    <small [hidden]="browserconfigForm.controls.user_agent.valid" class="text-danger">
-      User agent required.
-    </small>
-  </div>
+  <md-form-field formGroupName="meta">
+    <input mdInput formControlName="description" placeholder="Beskrivelse">
+  </md-form-field>
 
-  <div class="form-group">
-    <label class="center-block">Window width
-      <input class="form-control" type="number" formControlName="window_width">
-    </label>
-    <small [hidden]="browserconfigForm.controls.window_width.valid" class="text-danger">
-      Window width required.
-    </small>
-  </div>
+  <md-form-field>
+    <input mdInput formControlName="user_agent" placeholder="Brukeragent">
+    <md-error *ngIf="! browserconfigForm.controls.user_agent.valid">
+      Brukeragent er påkrevd.
+    </md-error>
+  </md-form-field>
 
-  <div class="form-group">
-    <label class="center-block">Window height:
-      <input class="form-control" type="number" formControlName="window_height">
-    </label>
-    <small [hidden]="browserconfigForm.controls.window_height.valid" class="text-danger">
-      Window height required.
-    </small>
-  </div>
-  <div class="form-group">
-    <label class="center-block">Page load timeout in ms:
-      <input class="form-control" type="number" formControlName="page_load_timeout_ms">
-    </label>
-    <small [hidden]="browserconfigForm.controls.page_load_timeout_ms.valid" class="text-danger">
-      Page load timeout required.
-    </small>
-  </div>
-  <!--div class="form-group" formGroupName="headers">
-    <label class="center-block">Headers:
-      <input class="form-control">
-    </label>
-  </div-->
-  <div class="form-group">
-    <label class="center-block">sleep_after_pageload_ms:
-      <input class="form-control" type="number" formControlName="sleep_after_pageload_ms">
-    </label>
-    <small [hidden]="browserconfigForm.controls.sleep_after_pageload_ms.valid" class="text-danger">
-      Sleep after pageload required.
-    </small>
+  <md-form-field>
+    <input mdInput formControlName="window_width" placeholder="Vindusbredde">
+    <md-error *ngIf="! browserconfigForm.controls.window_width.valid">
+      Vindusbredde er påkrevd.
+    </md-error>
+  </md-form-field>
 
-  </div>
+  <md-form-field>
+    <input mdInput formControlName="window_height" placeholder="Vindushøyde">
+    <md-error *ngIf="! browserconfigForm.controls.window_height.valid">
+      Vindushøyde er påkrevd.
+    </md-error>
+  </md-form-field>
 
-  <div class="form-group">
-    <label class="center-block">Scripts:
-      <angular2-multiselect [data]="browserScriptlist" [(ngModel)]="selectedbrowserScriptItems"
+  <md-form-field>
+    <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms">
+    <md-error *ngIf="! browserconfigForm.controls.page_load_timeout_ms.valid">
+      Page load timeout er påkrevd.
+    </md-error>
+  </md-form-field>
+
+  <md-form-field>
+    <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms">
+    <md-error *ngIf="! browserconfigForm.controls.sleep_after_pageload_ms.valid">
+      Sleep after pageload er påkrevd.
+    </md-error>
+  </md-form-field>
+
+  <div>
+    <label>Scripts:
+      <angular2-multiselect [data]="browserScriptlist"
+                            [(ngModel)]="selectedbrowserScriptItems"
                             [settings]="browserScriptDropdownSettings"
-                            formControlName="script_id"></angular2-multiselect>
+                            formControlName="script_id">
+      </angular2-multiselect>
     </label>
-    <small [hidden]="browserconfigForm.controls.script_id.valid" class="text-danger">
+    <small [hidden]="browserconfigForm.controls.script_id.valid">
       Scripts required.
     </small>
   </div>
 
-  <div class="form-group">
 
-    <div formArrayName="script_selector" class="well well-lg">
-      <div *ngFor="let script_selector of script_selector.controls; let i=index" [formGroupName]="i">
-        <div class="panel-heading">
-          <span>Selector #{{i + 1}}</span>
-          <span class="glyphicon glyphicon-remove pull-right" (click)="removeScript_selector(i)"></span>
-        </div>
+  <md-expansion-panel formArrayName="script_selector">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Selector
+      </md-panel-title>
+      <md-panel-description>
+        Selector beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <md-card
+      *ngFor="let script_selector of script_selector.controls; let i=index"
+      [formGroupName]="i">
+      <md-card-header>
+        <md-card-title>Selector #{{i + 1}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field>
+          <input mdInput formControlName="key" placeholder="Type">
+        </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="value" placeholder="Value">
+          <md-error *ngIf="! browserconfigForm.controls.label.valid">
+            Merkelapp er påkrevd.
+          </md-error>
+        </md-form-field>
+        <button md-icon-button (click)="removeScript_selector(i)">
+          <md-icon>close</md-icon>
+        </button>
+      </md-card-content>
+    </md-card>
+    <button md-raised-button color="accent" (click)="addScript_selector()">Legg til Selector</button>
+  </md-expansion-panel>
 
-        <div class="form-group">
-          <label class="center-block">Type:
-            <input class="form-control" formControlName="key">
-          </label>
-        </div>
-        <div class="form-group">
-          <label class="center-block">Verdi:
-            <input class="form-control" formControlName="value">
-          </label>
-        </div>
-      </div>
-      <button class="btn btn-pink" style="background-color: #ff70f1" (click)="addScript_selector()" type="button">Legg
-        til Selector
-      </button>
-    </div>
+  <md-expansion-panel formArrayName="label">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Merkelapp
+      </md-panel-title>
+      <md-panel-description>
+        Merkelapp beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+      <md-card-header>
+        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field>
+          <input mdInput formControlName="key" placeholder="Type">
+        </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="value" placeholder="Value">
+          <md-error *ngIf="! browserconfigForm.controls.label.valid">
+            Merkelapp er påkrevd.
+          </md-error>
+        </md-form-field>
+        <button md-icon-button (click)="removeLabel(i)">
+          <md-icon>close</md-icon>
+        </button>
+      </md-card-content>
+    </md-card>
+    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
+  </md-expansion-panel>
+
+  <div>
+    <button md-raised-button color="primary"
+            [disabled]="!browserconfigForm.valid"
+            *ngIf="!browserconfig.id"
+            (click)="createBrowserconfig(browserconfigForm.value)" novalidate>Lagre
+    </button>
+    <button md-raised-button color="primary"
+            *ngIf="browserconfig.id"
+            [disabled]="!browserconfigForm.valid"
+            (click)="updateBrowserconfig(browserconfigForm.value)">Lagre
+    </button>
+    <button md-raised-button color="accent"
+            (click)="revert()">Tilbakestill
+    </button>
+    <button md-raised-button color="warn"
+            *ngIf="browserconfig.id"
+            (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Slett
+    </button>
   </div>
-
-
-  <div class="form-group">
-
-    <div formArrayName="label" class="well well-lg">
-      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-        <div class="panel-heading">
-          <span>Merkelapp #{{i + 1}}</span>
-          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="center-block">Type:
-            <input class="form-control" formControlName="key">
-          </label>
-        </div>
-        <div class="form-group">
-          <label class="center-block">Verdi:
-            <input class="form-control" formControlName="value">
-          </label>
-        </div>
-      </div>
-      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
-    </div>
-  </div>
-
-  <button class="btn btn-primary" [disabled]="!browserconfigForm.valid" *ngIf="!browserconfig.id"
-          (click)="createBrowserconfig(browserconfigForm.value)" novalidate>
-    Lagre
-  </button>
-  <button class="btn btn-primary" *ngIf="browserconfig.id" [disabled]="!browserconfigForm.valid"
-          (click)="updateBrowserconfig(browserconfigForm.value)">Lagre
-  </button>
-  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
-  <button class="btn btn-danger" *ngIf="browserconfig.id"
-          (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Slett
-  </button>
 </form>

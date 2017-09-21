@@ -1,11 +1,11 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input} from '@angular/core';
 import {Seed} from '../seed';
-import {SeedService} from "../seeds.service";
-import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
-import {Router} from "@angular/router";
-import {CustomValidators, Label} from "../../commons/";
-import {CrawljobService} from "../../configurations/crawljobs/";
+import {SeedService} from '../seeds.service';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
+import {CustomValidators, Label} from '../../commons/';
+import {CrawljobService} from '../../configurations/crawljobs/';
 import {EntityService} from '../../entities/entity.service';
 
 @Component({
@@ -35,8 +35,8 @@ export class SeedsComponent {
               private fb: FormBuilder,
               private entityService: EntityService,
               private crawljobService: CrawljobService,
-              private mdlSnackbarService: MdlSnackbarService,
-              private router: Router,) {
+              private mdSnackBar: MdSnackBar,
+              private router: Router) {
 
     this.createForm();
     // this.getSeeds();
@@ -52,7 +52,10 @@ export class SeedsComponent {
         surt_prefix: ''
       }),
       meta: this.fb.group({
-        name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+        name: ['http://',
+          [Validators.required,
+            Validators.pattern(
+              `(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
         description: '',
         label: this.fb.array([]),
       }),
@@ -60,17 +63,10 @@ export class SeedsComponent {
     this.setLabel([]);
   }
 
-  getSeeds(): void {
-    this.seedService.getAllSeeds().subscribe(seed => this.seed = seed)
-  }
-
   createSeedNew() {
     this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
     }, 0);
@@ -82,10 +78,7 @@ export class SeedsComponent {
   createSeed() {
     this.seed = this.prepareSaveSeed();
     this.seedService.createSeed(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
     }, 0);
@@ -93,10 +86,10 @@ export class SeedsComponent {
 
   prepareSaveSeed(): Seed {
     const formModel = this.seedForm.value;
-    let job_idlist = [];
+    const job_idlist = [];
 
-    for (let i of formModel.job_id) {
-      let job_id = i.id;
+    for (const i of formModel.job_id) {
+      const job_id = i.id;
       job_idlist.push(job_id);
     }
 
@@ -108,7 +101,7 @@ export class SeedsComponent {
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     const saveSeed: Seed = {
-      //id: this.seed.id,
+      // id: this.seed.id,
       entity_id: formModel.entity_id[0].id,
       scope: {surt_prefix: ''},
       job_id: job_idlist,
@@ -126,9 +119,10 @@ export class SeedsComponent {
   }
 
   updateSeed(seed: Seed): void {
-    this.seedService.updateSeed(this.seedForm.value).then((updatedSeed: Seed) => {
-      this.updateHandler(updatedSeed);
-    });
+    this.seedService.updateSeed(this.seedForm.value)
+      .map((updatedSeed: Seed) => {
+        this.updateHandler(updatedSeed);
+      });
   }
 
   get label(): FormArray {
@@ -136,7 +130,7 @@ export class SeedsComponent {
   };
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(l => (this.fb.group(l)));
     const labelFormArray = this.fb.array(labelFGs);
     this.seedForm.setControl('label', labelFormArray);
   }
@@ -162,7 +156,7 @@ export class SeedsComponent {
     this.selectedEntityItems = [];
     this.dropdownEntitySettings = {
       singleSelection: true,
-      text: "Velg Entitet",
+      text: 'Velg Entitet',
       enableSearchFilter: true
     };
 
@@ -177,7 +171,7 @@ export class SeedsComponent {
     this.selectedCrawljobItems = [];
     this.dropdownCrawljobSettings = {
       singleSelection: false,
-      text: "Velg høstejobb",
+      text: 'Velg høstejobb',
       enableSearchFilter: true
     };
 

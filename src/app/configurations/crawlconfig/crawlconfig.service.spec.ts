@@ -1,5 +1,5 @@
-import {TestBed, inject} from "@angular/core/testing";
-import {CrawlconfigService} from "./crawlconfig.service";
+import {inject, TestBed} from '@angular/core/testing';
+import {CrawlconfigService} from './crawlconfig.service';
 
 describe('CrawlconfigService', () => {
   beforeEach(() => {

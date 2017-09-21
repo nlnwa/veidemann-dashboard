@@ -1,100 +1,108 @@
-<div class="col-md-12">
-  <h2 *ngIf="politenessconfig.id">Politenessconfig Details</h2>
-  <h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
-</div>
+<h2 *ngIf="politenessconfig.id">Politenessconfig Details</h2>
+<h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
 
-<form [formGroup]="politenessconfigForm">
+<form [formGroup]="politenessconfigForm" fxLayout="column">
 
+  <div fxLayout="row">
+    <md-form-field formGroupName="meta">
+      <input mdInput formControlName="name" placeholder="Navn">
+      <md-error *ngIf="! politenessconfigForm.controls.meta.valid">
+        Navn er påkrevd.
+      </md-error>
+    </md-form-field>
 
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Navn:
-      <input class="form-control" formControlName="name">
-    </label>
-    <small [hidden]="politenessconfigForm.controls.meta.valid" class="text-danger">
-      Name required.
-    </small>
-  </div>
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Beskrivelse:
-      <input class="form-control" formControlName="description">
-    </label>
+    <md-form-field formGroupName="meta">
+      <input mdInput formControlName="description" placeholder="Beskrivelse">
+    </md-form-field>
   </div>
 
-  <div class="form-group">
-    <label class="center-block">Robots policy:
-      <angular2-multiselect [data]="robotspolicyList" [(ngModel)]="selectedRobotspolicyItems"
+  <div>
+    <label>Robots policy:
+      <angular2-multiselect [data]="robotspolicyList"
+                            [(ngModel)]="selectedRobotspolicyItems"
                             [settings]="robotspolicy_dropdownSettings"
-                            formControlName="robots_policy"></angular2-multiselect>
+                            formControlName="robots_policy">
+      </angular2-multiselect>
     </label>
-    <small [hidden]="politenessconfigForm.controls.robots_policy.valid" class="text-danger">
+    <small [hidden]="politenessconfigForm.controls.robots_policy.valid">
       Robots policy required.
     </small>
   </div>
-  <ng-container *ngIf="politenessconfigForm.value.robots_policy[0]">
-    <div *ngIf="politenessconfigForm.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'" class="form-group">
-      <label class="center-block">custom_robots:
-        <textarea class="form-control" formControlName="custom_robots"></textarea>
-      </label>
-      <small [hidden]="politenessconfigForm.controls.custom_robots.valid" class="text-danger">
+  <ng-container
+    *ngIf="politenessconfigForm.value.robots_policy[0] && politenessconfigForm.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
+    <md-form-field>
+      <textarea mdInput
+                formControlName="custom_robots"
+                placeholder="robots.txt"></textarea>
+      <md-error *ngIf="!politenessconfigForm.controls.custom_robots.valid">
         Validity duration required.
-      </small>
-    </div>
+      </md-error>
+    </md-form-field>
   </ng-container>
 
-  <div class="form-group">
-    <label class="center-block">minimum_robots_validity_duration_s:
-      <input class="form-control" type="number" formControlName="minimum_robots_validity_duration_s">
-    </label>
-    <small [hidden]="politenessconfigForm.controls.minimum_robots_validity_duration_s.valid" class="text-danger">
+  <md-form-field>
+    <input mdInput
+           formControlName="minimum_robots_validity_duration_s"
+           placeholder="Minimum robots validity (seconds)">
+    <md-error *ngIf="! politenessconfigForm.controls.minimum_robots_validity_duration_s.valid">
       Validity duration required.
-    </small>
+    </md-error>
+  </md-form-field>
+
+  <md-form-field>
+    <input mdInput
+           formControlName="min_time_between_page_load_ms"
+           placeholder="Minimum time between page load (ms)">
+    <md-error *ngIf="! politenessconfigForm.controls.min_time_between_page_load_ms.valid">
+      Minimum time between page load is required.
+    </md-error>
+  </md-form-field>
+
+  <md-expansion-panel formArrayName="label">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Merkelapp
+      </md-panel-title>
+      <md-panel-description>
+        Merkelapp beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+      <md-card-header>
+        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field>
+          <input mdInput formControlName="key" placeholder="Type">
+        </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="value" placeholder="Value">
+        </md-form-field>
+        <button md-icon-button (click)="removeLabel(i)">
+          <md-icon>close</md-icon>
+        </button>
+      </md-card-content>
+    </md-card>
+    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
+  </md-expansion-panel>
+
+  <div>
+    <button md-raised-button color="primary"
+            [disabled]="!politenessconfigForm.valid" *ngIf="!politenessconfig.id"
+            (click)="createPolitenessconfig(politenessconfigForm.value)"
+            novalidate>Lagre
+    </button>
+    <button md-raised-button color="primary"
+            *ngIf="politenessconfig.id" [disabled]="!politenessconfigForm.valid"
+            (click)="updatePolitenessconfig(politenessconfigForm.value)">
+      Lagre
+    </button>
+    <button md-raised-button color="accent"
+            (click)="revert()">Tilbakestill
+    </button>
+    <button md-raised-button color="warn"
+            *ngIf="politenessconfig.id"
+            (click)="deletePolitenessconfig(politenessconfig.id); $event.stopPropagation()">Slett
+    </button>
   </div>
-
-
-  <div class="form-group">
-    <label class="center-block">min_time_between_page_load_ms:
-      <input class="form-control" type="number" formControlName="min_time_between_page_load_ms">
-    </label>
-    <small [hidden]="politenessconfigForm.controls.min_time_between_page_load_ms.valid" class="text-danger">
-      Time betweed pageload duration required.
-    </small>
-  </div>
-
-  <div class="form-group">
-    <div formArrayName="label" class="well well-lg">
-      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-        <div class="panel-heading">
-          <span>Merkelapp #{{i + 1}}</span>
-          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="center-block">Type:
-            <input class="form-control" formControlName="key">
-          </label>
-        </div>
-        <div class="form-group">
-          <label class="center-block">Verdi:
-            <input class="form-control" formControlName="value">
-
-          </label>
-        </div>
-      </div>
-      <button class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
-    </div>
-  </div>
-
-  <button class="btn btn-primary" [disabled]="!politenessconfigForm.valid" *ngIf="!politenessconfig.id"
-          (click)="createPolitenessconfig(politenessconfigForm.value)"
-          novalidate>Lagre
-  </button>
-  <button class="btn btn-primary" *ngIf="politenessconfig.id" [disabled]="!politenessconfigForm.valid"
-          (click)="updatePolitenessconfig(politenessconfigForm.value)">
-    Lagre
-  </button>
-  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
-
-  <button class="btn btn-danger" *ngIf="politenessconfig.id"
-          (click)="deletePolitenessconfig(politenessconfig.id); $event.stopPropagation()">Slett
-  </button>
 </form>

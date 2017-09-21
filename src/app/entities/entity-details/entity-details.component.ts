@@ -1,16 +1,16 @@
-import {Component, Input, OnChanges} from "@angular/core";
+import {Component, Input, OnChanges} from '@angular/core';
 import {Entity} from '../entity';
-import {EntityService} from "../entity.service";
-import {Validators, FormBuilder, FormArray, FormGroup} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
-import {Label, DateTime} from "../../commons/";
-import {ActivatedRoute, Router} from "@angular/router";
+import {EntityService} from '../entity.service';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
+import {DateTime, Label} from '../../commons/';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Seeds} from '../../seeds/seed';
 import {SeedService} from '../../seeds/seeds.service';
 
 
 @Component({
-  selector: 'entity-details',
+  selector: 'app-entity-details',
   templateUrl: './entity-details.component.html',
   styleUrls: ['./entity-details.component.css']
 })
@@ -22,8 +22,8 @@ export class EntityDetailsComponent implements OnChanges {
   seeds = Seeds;
   getseedlist = [];
 
-  public isCollapsedContent: boolean = true;
-  public isCollapsedSeeds: boolean = true;
+  public isCollapsedContent = true;
+  public isCollapsedSeeds = true;
 
 
   @Input()
@@ -36,7 +36,7 @@ export class EntityDetailsComponent implements OnChanges {
   constructor(private entityService: EntityService,
               private seedService: SeedService,
               private route: ActivatedRoute,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
               private router: Router,
               private convertTimestamp: DateTime) {
@@ -120,48 +120,38 @@ export class EntityDetailsComponent implements OnChanges {
   createEntity(entity) {
     this.entity = this.prepareSaveEntity();
     this.entityService.createEntity(this.entity)
-      .then((newEntity: Entity) => {
+      .map((newEntity: Entity) => {
         this.createHandler(newEntity);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
 
   updateEntity(entity: Entity): void {
     this.entity = this.prepareSaveEntity();
-    this.entityService.updateEntity(this.entity).then((updatedEntity: Entity) => {
-      this.updateHandler(updatedEntity);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
+    this.entityService.updateEntity(this.entity)
+      .map((updatedEntity: Entity) => {
+        this.updateHandler(updatedEntity);
       });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteEntity(): void {
-    this.entityService.deleteEntity(this.entity.id).then((deletedEntity) => {
-      this.deleteHandler(deletedEntity);
-      if (deletedEntity === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
-      } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
-      }
-    });
+    this.entityService.deleteEntity(this.entity.id)
+      .map((deletedEntity) => {
+        this.deleteHandler(deletedEntity);
+        if (deletedEntity === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
   }
 
 
   setSeedlist(seedlist) {
     this.getseedlist = [];
-    const seedlistFG = seedlist.map(seedlist => (this.fb.group(seedlist)));
+    const seedlistFG = seedlist.map(sl => (this.fb.group(sl)));
     const seedlistFormArray = this.fb.array(seedlistFG);
     this.entityForm.setControl('seedlist', seedlistFormArray);
   }
@@ -172,7 +162,7 @@ export class EntityDetailsComponent implements OnChanges {
 
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(l => (this.fb.group(l)));
     const labelFormArray = this.fb.array(labelFGs);
     this.entityForm.setControl('label', labelFormArray);
   }
@@ -200,10 +190,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
   prepareSaveEntity(): Entity {
@@ -224,7 +211,7 @@ export class EntityDetailsComponent implements OnChanges {
         // created: '',
         // created_by: '',
         // last_modified: null,
-        //last_modified_by: '',
+        // last_modified_by: '',
         label: labelsDeepCopy
       }
     };

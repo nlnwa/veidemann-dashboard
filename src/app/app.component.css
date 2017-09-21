@@ -1,11 +1,17 @@
-.search-result_right {
-  float: right;
-  width: 240px;
 
+main {
+  padding: 1em 2em;
 }
 
-.mdl-list__item {
-  background: #ffa31a;
-
+md-sidenav {
+  width: 200px;
 }
 
+md-nav-list .material-icons {
+  margin-right: 0.5em;
+}
+
+.title {
+  text-decoration: none;
+  color: inherit;
+}

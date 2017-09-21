@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {Politenessconfig} from '../politenessconfig';
 import {PolitenessconfigService} from '../politenessconfig.service';
 

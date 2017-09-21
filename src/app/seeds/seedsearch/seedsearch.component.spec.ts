@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {SeedsearchComponent} from "./seedsearch.component";
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {SeedsearchComponent} from './seedsearch.component';
 
 describe('SeedsearchComponent', () => {
   let component: SeedsearchComponent;

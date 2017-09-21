@@ -1,140 +1,140 @@
-<form *ngIf="entity" [formGroup]="entityForm">
+<h2 *ngIf="entity.id">Entity Details</h2>
+<h2 *ngIf="!entity.id">New Entity</h2>
 
-  <div class="col-md-12">
-    <h2 *ngIf="entity.id">Entity Details</h2>
-    <h2 *ngIf="!entity.id">New Entity</h2>
-  </div>
+<form *ngIf="entity" [formGroup]="entityForm" fxLayout="column">
 
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Navn:
-      <input class="form-control" formControlName="name">
-    </label>
-    <small [hidden]="entityForm.controls.meta.valid" class="text-danger">
-      Name required.
-    </small>
-  </div>
+  <md-form-field formGroupName="meta">
+    <input mdInput formControlName="name" placeholder="Navn">
+    <md-error *ngIf="! entityForm.controls.meta.valid">
+      Navn er påkrevd.
+    </md-error>
+  </md-form-field>
 
-  <div class="form-group" formGroupName="meta">
-    <label class="center-block">Beskrivelse:
-      <input class="form-control" formControlName="description">
-    </label>
-  </div>
+  <md-form-field formGroupName="meta">
+    <input mdInput formControlName="description" placeholder="Beskrivelse">
+  </md-form-field>
 
-  <div class="form-group">
-    <div formArrayName="label" class="well well-lg">
-      <div *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-        <div class="panel-heading">
-          <span>Merkelapp #{{i + 1}}</span>
-          <span class="glyphicon glyphicon-remove pull-right" (click)="removeLabel(i)"></span>
-        </div>
-        <div class="form-group">
-          <label class="center-block">Type:
-            <input class="form-control" formControlName="key">
-          </label>
-        </div>
-        <div class="form-group">
-          <label class="center-block">Verdi:
-            <input class="form-control" formControlName="value">
-          </label>
-        </div>
-      </div>
-      <button id="addLabel" class="btn btn-info" (click)="addLabel()" type="button">Legg til merkelapp</button>
+  <md-expansion-panel formArrayName="label">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Merkelapp
+      </md-panel-title>
+      <md-panel-description>
+        Merkelapp beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
+      <md-card-header>
+        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field>
+          <input mdInput formControlName="key" placeholder="Type">
+        </md-form-field>
+
+        <md-form-field>
+          <input mdInput formControlName="value" placeholder="Value">
+          <md-error *ngIf="! entityForm.controls.label.valid">
+            Merkelapp er påkrevd.
+          </md-error>
+        </md-form-field>
+        <button md-icon-button (click)="removeLabel(i)">
+          <md-icon>close</md-icon>
+        </button>
+      </md-card-content>
+    </md-card>
+    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
+  </md-expansion-panel>
+
+  <md-expansion-panel formArrayName="seedlist">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Se {{entityForm.controls.seedcount.value}} tilhørende seeds
+      </md-panel-title>
+      <md-panel-description>
+        Tilhørende seeds beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
+
+
+    <div *ngFor="let seedlist of seedlist.controls; let i=index"
+         (click)="goToSeed(seedlist.controls.id.value)"
+         [formGroupName]="i">
+      <p>{{seedlist.controls.name.value}}</p>
+      <p> {{seedlist.controls.description.value}}</p>
     </div>
-  </div>
 
-  <div *ngIf="entity.id" class="well well-details" (click)="isCollapsedSeeds = !isCollapsedSeeds">
-    <ng-container *ngIf="isCollapsedSeeds">
-      <span class="glyphicon glyphicon-plus-sign pull-left"></span>
-      {{seedcount}}
-      <label class="collapse-seeds">Se {{entityForm.controls.seedcount.value}} tilhørende seeds</label>
-    </ng-container>
-    <ng-container *ngIf="!isCollapsedSeeds">
-      <span class="glyphicon glyphicon-minus-sign pull-left"></span>
-      <label class="collapse-seeds">Skjul {{entityForm.controls.seedcount.value}} tilhørende seeds</label>
-    </ng-container>
+  </md-expansion-panel>
 
-    <div [collapse]="isCollapsedSeeds" id="seeds" class="collapse">
-      <div formArrayName="seedlist">
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+  <md-expansion-panel>
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Flere detaljer
+      </md-panel-title>
+      <md-panel-description>
+        Flere detaljer beskrivelse
+      </md-panel-description>
+    </md-expansion-panel-header>
 
-          <thead>
+    <md-form-field>
+      <input mdInput
+             formControlName="id"
+             placeholder="Id">
+    </md-form-field>
 
-          <tr>
-            <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
-            <th class="mdl-data-table__cell--non-numeric">Seed</th>
-            <th class="mdl-data-table__cell--non-numeric">Description</th>
-          </tr>
-          </thead>
-          <tbody>
-
-          <tr *ngFor="let seedlist of seedlist.controls; let i=index" (click)="goToSeed(seedlist.controls.id.value)"
-              [formGroupName]="i">
-            <th>{{seedlist.controls.name.value}}</th>
-            <th> {{seedlist.controls.description.value}}</th>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="well well-details" (click)="isCollapsedContent = !isCollapsedContent">
-    <ng-container *ngIf="isCollapsedContent">
-      <span class="glyphicon glyphicon-plus-sign pull-left"></span>
-      <label class="collapse-details">Flere detaljer</label>
-    </ng-container>
-    <ng-container *ngIf="!isCollapsedContent">
-      <span class="glyphicon glyphicon-minus-sign pull-left"></span>
-      <label class="collapse-details">Mindre detaljer</label>
-    </ng-container>
-  </div>
-
-  <div [collapse]="isCollapsedContent" id="details" class="collapse">
-
-    <div class="form-group">
-      <label class="center-block">id:
-        <input class="form-control" formControlName="id"/>
-      </label>
-    </div>
-    <div class="form-group" formGroupName="meta">
-      <div class="form-group" formGroupName="created">
-        <label class="center-block">Created:
-          <input class="form-control" q
-                 formControlName="seconds"/>
-        </label>
+    <div formGroupName="meta">
+      <div formGroupName="created">
+        <md-form-field>
+          <input mdInput
+                 formControlName="seconds"
+                 placeholder="Created">
+        </md-form-field>
       </div>
     </div>
-    <div class="form-group" formGroupName="meta">
-      <label class="center-block">Created By:
-        <input class="form-control" formControlName="created_by"/>
-      </label>
-    </div>
-    <div class="form-group" formGroupName="meta">
-      <div class="form-group" formGroupName="last_modified">
-        <label class="center-block">Last Modified:
-          <input class="form-control"
-                 formControlName="seconds"/>
-        </label>
-      </div>
-    </div>
-    <div class="form-group" formGroupName="meta">
-      <label class="center-block">Last Modified By:
-        <input class="form-control" formControlName="last_modified_by"/>
-      </label>
-    </div>
-  </div>
 
-  <button class="btn btn-primary" *ngIf="!entity.id" [disabled]="!entityForm.valid"
-          (click)="createEntity(entityForm.value)" novalidate>
-    Lagre
-  </button>
-  <button class="btn btn-primary" *ngIf="entity.id" [disabled]="!entityForm.valid"
-          (click)="updateEntity(entityForm.value)">Lagre
-  </button>
-  <button class="btn btn-success" (click)="revert()">Tilbakestill</button>
-  <button class="btn btn-danger"
-          (click)="deleteEntity(); $event.stopPropagation()">Slett
-  </button>
+    <div formGroupName="meta">
+      <md-form-field>
+        <input mdInput
+               formControlName="created_by"
+               placeholder="Created by">
+      </md-form-field>
+    </div>
+
+    <div formGroupName="meta">
+      <div formGroupName="last_modified">
+        <md-form-field>
+          <input mdInput
+                 formControlName="seconds"
+                 placeholder="Last modified">
+        </md-form-field>
+      </div>
+      <md-form-field>
+        <input mdInput
+               formControlName="last_modified_by"
+               placeholder="Last modified by">
+      </md-form-field>
+    </div>
+
+
+  </md-expansion-panel>
+
+  <div>
+    <button md-raised-button color="primary"
+            *ngIf="!entity.id" [disabled]="!entityForm.valid"
+            (click)="createEntity(entityForm.value)" novalidate>
+      Lagre
+    </button>
+    <button md-raised-button color="primary"
+            *ngIf="entity.id" [disabled]="!entityForm.valid"
+            (click)="updateEntity(entityForm.value)">Lagre
+    </button>
+    <button md-raised-button color="accent"
+            (click)="revert()">Tilbakestill
+    </button>
+    <button md-raised-button color="warn"
+            (click)="deleteEntity(); $event.stopPropagation()">Slett
+    </button>
+
+  </div>
 </form>
 

@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {StatisticsService} from "./statistics.service";
-import {Seed} from "../seeds/seed";
-import {Entity} from "../entities/entity";
-import {FormBuilder} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {StatisticsService} from './statistics.service';
+import {Seed} from '../seeds/seed';
+import {Entity} from '../entities/entity';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-statistics',

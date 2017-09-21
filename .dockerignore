@@ -1,5 +1,5 @@
 **
-!*.json
+!package.json
 !yarn.lock
 !src/
-!nginx
+!nginx/

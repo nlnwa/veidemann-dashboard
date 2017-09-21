@@ -1,87 +1,101 @@
-<!-- Uses a header that contracts as the page scrolls down. -->
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
-  <header class="mdl-layout__header mdl-layout__header--waterfall">
-    <!-- Top row, always visible -->
-    <div class="mdl-layout__header-row">
-      <!-- Title -->
-      <span class="mdl-layout-title">Bosslady's Nettarkiv</span>
-      <div class="mdl-layout-spacer"></div>
-      <span class="mdl-layout-title">{{myDate}}</span>
-      <!--div class="searcbox"-->
-      <div class="mdl-layout-spacer"></div>
-      <div class="mdl-textfield is-dirty" data-upgraded=",MaterialTextfield">
-        <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp"
-               data-upgraded=",MaterialButton">
-          <i class="material-icons">search</i>
-        </label>
-        <div class="mdl-textfield__expandable-holder">
-          <input class="mdl-textfield__input" placeholder="Search.." id="fixed-header-drawer-exp" #searchBox
-                 id="search-box" [(ngModel)]="searchfield" (keyup)="search(searchBox.value)">
-        </div>
-      </div>
-    </div>
+<md-sidenav-container>
 
-    <!-- Bottom row, not visible on scroll -->
-    <div class="mdl-layout-spacer"></div>
+  <!-- Toolbar -->
+
+  <md-toolbar color="primary">
+    <a routerLink="/" class="title"><h1>Veidemann</h1></a>
+    <span fxFlex fxFlexFill></span>
+    <span>{{myDate}}</span>
+    <span fxFlex fxFlexFill></span>
+
+    <!-- Toolbar menu button -->
+
+    <button md-icon-button [md-menu-trigger-for]="menu">
+      <md-icon>more_vert</md-icon>
+    </button>
+  </md-toolbar>
+
+  <!-- Toolbar menu-->
+
+  <md-menu x-position="before" #menu>
+    <button md-menu-item (click)="setExpertMode(true)">Kurator</button>
+    <button md-menu-item (click)="setExpertMode(false)">Expert</button>
+  </md-menu>
+
+  <!-- Sidenav -->
+
+  <md-sidenav mode="side" opened="true">
+
+    <!-- Toolbar -->
+
+    <md-toolbar color="primary">
+      <a color="primary" md-raised-button [routerLink]="['/logon']">
+        <md-icon>person</md-icon>
+        Logg på</a>
+    </md-toolbar>
+
     <!-- Navigation -->
-  </header>
-  <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">
-          <a class="mdl-button mdl-js-button mdl-button--raised" [routerLink]="['/logon']">Logg på</a>
-    </span>
-    <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Aktivitet</a>
-      <a class="mdl-navigation__link" [routerLink]="['/seeds']" [routerLinkActive]="['is-active']">Legg til Seeds</a>
-      <a class="mdl-navigation__link" [routerLink]="['/crawlers']" [routerLinkActive]="['is-active']">Innhøstere</a>
-      <a class="mdl-navigation__link" [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">Statistikk</a>
-      <a class="mdl-navigation__link" [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Dokumentasjon</a>
-      <a class="mdl-navigation__link" [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Søk</a>
-      <a class="mdl-navigation__link" [routerLink]="['/entities']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Entities</a>
-      <a class="mdl-navigation__link" [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Crawljobs</a>
-      <a class="mdl-navigation__link" [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Schedule</a>
-      <a class="mdl-navigation__link" [routerLink]="['/crawlconfig']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Crawlconfig</a>
-      <a class ="mdl-navigation__link" [routerLink]="['/crawlhostgroupconfig']" [routerLinkActiveOptions]="{ exact: true}"
-         [routerLinkActive]="['is-active']">Crawlhostgroupconfig</a>
-      <a class="mdl-navigation__link" [routerLink]="['/browserconfig']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Browserconfig</a>
-      <a class="mdl-navigation__link" [routerLink]="['/browserscript']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Browserscript</a>
-      <a class="mdl-navigation__link" [routerLink]="['/politenessconfig']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Politenessconfig</a>
-      <a class="mdl-navigation__link" [routerLink]="['/logconfig']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">Logconfig</a>
 
-    </nav>
-  </div>
+    <md-nav-list>
+      <a md-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>dashboard</md-icon>
+        Aktivitet</a>
+      <a md-list-item [routerLink]="['/seeds']" [routerLinkActive]="['is-active']">
+        <md-icon>assignment</md-icon>
+        Legg til Seeds</a>
+      <a md-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
+        <md-icon>assessment</md-icon>
+        Statistikk</a>
+      <a md-list-item [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>help</md-icon>
+        Dokumentasjon</a>
+      <a md-list-item [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>search</md-icon>
+        Søk</a>
+      <a md-list-item [routerLink]="['/entities']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>domain</md-icon>
+        Entities</a>
+      <a md-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>work</md-icon>
+        Crawljobs</a>
+      <a md-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>schedule</md-icon>
+        Schedule</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlconfig']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>build</md-icon>
+        Crawlconfig</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>build</md-icon>
+        Browserconfig</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserscript']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>build</md-icon>
+        Browserscript</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/politenessconfig']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>sentiment_neutral</md-icon>
+        Politenessconfig</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/logconfig']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>receipt</md-icon>
+        Logconfig</a>
+    </md-nav-list>
+  </md-sidenav>
 
-
-  <main class="mdl-layout__content">
-    <div class="search-result_right">
-
-      <ul class="demo-list-item mdl-list">
-        <li class="mdl-list__item" *ngFor="let seed of seed | async; let i=index" (click)="gotoDetail(seed)">
-          <ng-container *ngIf="i<12">
-            {{seed.meta.name}}
-          </ng-container>
-        </li>
-      </ul>
-    </div>
-    <!-- Row 1 -->
-
-    <div class="page-content"><!-- Your content goes here -->
-      <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--11-col">
-          <router-outlet></router-outlet>
-          <dialog-outlet></dialog-outlet>
-        </div>
-      </div>
-    </div>
+  <main class="mat-typography">
+    <router-outlet></router-outlet>
   </main>
-</div>
+</md-sidenav-container>

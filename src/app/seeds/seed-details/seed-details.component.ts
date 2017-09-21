@@ -1,21 +1,26 @@
-import {Component, Input, OnChanges} from "@angular/core";
+import {Component, Input, OnChanges} from '@angular/core';
 import {Seed} from '../seed';
-import {SeedService} from "../seeds.service";
-import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {Router, ActivatedRoute} from "@angular/router";
-import {MdlSnackbarService} from "angular2-mdl";
-import {DateTime, Label, CustomValidators} from "../../commons/";
-import {CrawljobService, Crawljob} from "../../configurations/crawljobs/";
-import {EntityService} from "../../entities/entity.service";
+import {SeedService} from '../seeds.service';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MdSnackBar} from '@angular/material';
+import {CustomValidators, DateTime, Label} from '../../commons/';
+import {Crawljob, CrawljobService} from '../../configurations/crawljobs/';
+import {EntityService} from '../../entities/entity.service';
 
 @Component({
-  selector: 'seed-details',
+  selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   styleUrls: ['./seed-details.component.css'],
 
 })
 
 export class SeedDetailComponent implements OnChanges {
+
+  private readonly urlPattern =
+    '(http|https)(://)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)' +
+    '|(http|https)(://)([^www.][a-z0-9-]+[.]{1}[A-z]+.+)';
+
   @Input() seed: Seed;
   seedForm: FormGroup;
 
@@ -26,8 +31,8 @@ export class SeedDetailComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  //collapse content
-  public isCollapsedContent: boolean = true;
+  // collapse content
+  public isCollapsedContent = true;
 
   dropdownCrawljobSettings = {};
   selectedCrawljobItems = [];
@@ -39,7 +44,7 @@ export class SeedDetailComponent implements OnChanges {
               private fb: FormBuilder,
               private crawljobService: CrawljobService,
               private route: ActivatedRoute,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private convertTimestamp: DateTime,
               private entityService: EntityService) {
     this.createForm();
@@ -68,11 +73,12 @@ export class SeedDetailComponent implements OnChanges {
           entity_ids: ''
         }),
         job_id: ['', CustomValidators.nonEmpty],
-        scope: this.fb.group({surt_prefix: ['', [Validators.required, Validators.minLength(2)]],}),
+        scope: this.fb.group(
+          {surt_prefix: ['', [Validators.required, Validators.minLength(2)]]}),
         meta: this.fb.group({
-          name: ['http://', [Validators.required, Validators.pattern(`(http|https)(:\/\/)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)|(http|https)(:\/\/)([^www\.][a-z0-9-]+[.]{1}[A-z]+.+)`)]],
+          name: ['http://', [Validators.required, Validators.pattern(this.urlPattern)]],
           description: '',
-          created: this.fb.group({seconds: {value: '', disabled: true,}}),
+          created: this.fb.group({seconds: {value: '', disabled: true}}),
           created_by: {value: '', disabled: true},
           last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
           last_modified_by: {value: '', disabled: true},
@@ -121,7 +127,7 @@ export class SeedDetailComponent implements OnChanges {
   setSelectedDropdown() {
     this.selectedCrawljobItems = [];
     if (this.seed.job_id) {
-      for (let i of this.seed.job_id) {
+      for (const i of this.seed.job_id) {
         this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
           value.forEach((key) => {
             this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
@@ -137,7 +143,7 @@ export class SeedDetailComponent implements OnChanges {
     this.selectedCrawljobItems = [];
     this.dropdownCrawljobSettings = {
       singleSelection: false,
-      text: "Velg høstejobb",
+      text: 'Velg høstejobb',
       enableSearchFilter: true
     };
 
@@ -152,39 +158,31 @@ export class SeedDetailComponent implements OnChanges {
   updateSeed(seedForm): void {
     this.seed = this.prepareSaveSeed();
     this.seedService.updateSeed(this.seed)
-      .then((updatedSeed) => {
-        //this.updateHandler(updatedSeed);
+      .map((updatedSeed) => {
+        // this.updateHandler(updatedSeed);
         this.updateData(updatedSeed);
       });
 
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   }
 
   deleteSeed(): void {
-    this.seedService.deleteSeed(this.seed.id).then((deletedSeed) => {
-      if (deletedSeed === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
-      } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
-      }
-    });
+    this.seedService.deleteSeed(this.seed.id)
+      .map((deletedSeed) => {
+        if (deletedSeed === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
     this.goBack()
   }
 
   prepareSaveSeed(): Seed {
     const formModel = this.seedForm.value;
-    let job_idlist = [];
-    for (let i of formModel.job_id) {
-      let job_id = i.id;
+    const job_idlist = [];
+    for (const i of formModel.job_id) {
+      const job_id = i.id;
       job_idlist.push(job_id);
     }
 
@@ -214,7 +212,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.seedForm.setControl('label', labelFormArray);
   }
@@ -243,10 +241,7 @@ export class SeedDetailComponent implements OnChanges {
 
   revert() {
     this.updateData(this.seed);
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
   goToEntity() {

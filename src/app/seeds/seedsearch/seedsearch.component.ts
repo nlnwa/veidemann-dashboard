@@ -1,12 +1,12 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
+import {DataSource} from '@angular/cdk/collections';
 import {Seed} from '../seed';
-import {SeedService} from "../seeds.service";
-import {Observable, Subject} from "rxjs";
-import {Router} from "@angular/router";
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/catch";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
+import {SeedService} from '../seeds.service';
+import 'rxjs/add/observable/merge';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-seedsearch',
@@ -14,18 +14,25 @@ import "rxjs/add/operator/distinctUntilChanged";
   styleUrls: ['./seedsearch.component.css']
 })
 export class SeedSearchComponent implements OnInit {
+  seedDataSource: SeedDataSource;
+
+
   seed: Observable<Seed[]>;
   selectedSeed: Seed;
   searchinput: String;
 
   private searchTerms = new Subject<string>();
 
-  constructor(private SeedService: SeedService,
+  constructor(private seedService: SeedService,
               private router: Router) {
   }
 
   search(term: string): void {
     this.searchTerms.next(term.replace(/\//g, '%2F'));
+  }
+
+  handleRowClick(row) {
+    this.selectedSeed = row as Seed;
   }
 
   selectSeed(seed: Seed) {
@@ -36,22 +43,26 @@ export class SeedSearchComponent implements OnInit {
     // this.router.navigate(link);
   }
 
+
   ngOnInit() {
-    this.seed = this.searchTerms
-      .debounceTime(150)        // wait 300ms after each keystroke before considering the term
-      .distinctUntilChanged()   // ignore if next search term is same as previous
-      .switchMap(term => term   // switch to new observable each time the term changes
-        // return the http search observable
-        ? this.SeedService.search(term)
-        // or the observable of empty heroes if there was no search term
-        : Observable.of<Seed[]>([]))
+    this.seedDataSource = new SeedDataSource(this.seedService);
 
-      .catch(error => {
-        // TODO: add real error handling
-        console.log(error);
-        return Observable.of<Seed[]>([]);
-      });
+    /*
+      this.seed = this.searchTerms
+        .debounceTime(150)        // wait 300ms after each keystroke before considering the term
+        .distinctUntilChanged()   // ignore if next search term is same as previous
+        .switchMap(term => term   // switch to new observable each time the term changes
+          // return the http search observable
+          ? this.SeedService.search(term)
+          // or the observable of empty heroes if there was no search term
+          : Observable.of<Seed[]>([]))
 
+        .catch(error => {
+          // TODO: add real error handling
+          console.log(error);
+          return Observable.of<Seed[]>([]);
+        });
+        */
   }
 
   gotoDetail(seed: Seed): void {
@@ -65,4 +76,19 @@ export class SeedSearchComponent implements OnInit {
     // const updatedSeed = this.SeedService.getSeed(seed.id).subscribe(updatedSeed => updatedSeed);
   };
 
+}
+
+export class SeedDataSource extends DataSource<Seed> {
+  _dataChange = new BehaviorSubject<Seed[]>([]);
+
+  constructor(private seedService: SeedService) {
+    super();
+    this.seedService.getAllSeeds().subscribe(this._dataChange);
+  }
+
+  connect(): Observable<Seed[]> {
+    return this._dataChange;
+  }
+
+  disconnect() {}
 }

@@ -1,5 +1,5 @@
-import {TestBed, inject} from "@angular/core/testing";
-import {EntityService} from "./entity.service";
+import {inject, TestBed} from '@angular/core/testing';
+import {EntityService} from './entity.service';
 
 describe('EntityService', () => {
   beforeEach(() => {

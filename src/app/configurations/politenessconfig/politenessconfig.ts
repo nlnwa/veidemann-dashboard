@@ -1,10 +1,7 @@
-import {Meta} from "../../commons/models/meta";
-/**
- * Created by kristiana on 08.06.17.
- */
+import {Meta} from '../../commons/models/meta';
 
 export class Politenessconfigs {
-  //value: Value[];
+  // value: Value[];
   count: number;
   page_size: string;
   page: string;
