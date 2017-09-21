@@ -40,6 +40,14 @@ import {
 } from './configurations/schedule';
 import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
+import {
+  CrawlhostgroupconfigDetailsComponent
+} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-details/crawlhostgroupconfig-details.component';
+
+import {
+  CrawlhostgroupconfigListComponent
+} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-list/crawlhostgroupconfig-list.component';
+import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig.service';
 
 
 @NgModule({
@@ -68,6 +76,8 @@ import {EntityDetailsComponent, EntityListComponent, EntityService} from './enti
     EntityDetailsComponent,
     EntityListComponent,
     LoglevelComponent,
+    CrawlhostgroupconfigDetailsComponent,
+    CrawlhostgroupconfigListComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +95,7 @@ import {EntityDetailsComponent, EntityListComponent, EntityService} from './enti
     SeedService,
     CrawljobService,
     CrawlconfigService,
+    CrawlhostgroupconfigService,
     PolitenessconfigService,
     BrowserconfigService,
     DateTime,
