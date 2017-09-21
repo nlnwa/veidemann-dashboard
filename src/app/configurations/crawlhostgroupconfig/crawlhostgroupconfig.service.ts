@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
-import {Crawlhostgroupconfig} from './';
+import {CrawlHostGroupConfig} from './';
 import {environment} from '../../../environments/environment';
 import {ErrorHandlerService} from '../../commons/';
+import {Observable} from 'rxjs/Observable';
+import {CrawlHostGroupConfigs} from "./crawlhostgroupconfig.model";
 
 @Injectable()
 export class CrawlhostgroupconfigService {
@@ -13,36 +15,32 @@ export class CrawlhostgroupconfigService {
               private errorhandlerservice: ErrorHandlerService) {
   }
 
-  getCrawlhostgroupconfig(crawlhostgroupconfig_id) {
+  getCrawlhostgroupconfig(crawlhostgroupconfig_id): Observable<CrawlHostGroupConfig> {
     return this.http.get(`${this.crawlhostgroupconfigUrl}/${crawlhostgroupconfig_id}`)
       .map(res => res.json().value);
   }
 
-  getAllCrawlhostgroupconfig() {
+  getAllCrawlhostgroupconfig(): Observable<CrawlHostGroupConfigs> {
     return this.http.get(this.crawlhostgroupconfigUrl)
       .map(res => res.json());
   }
 
-  createCrawlhostgroupconfig(newCrawlhostgroupconfig: Crawlhostgroupconfig): Promise<Crawlhostgroupconfig> {
+  createCrawlhostgroupconfig(newCrawlhostgroupconfig: CrawlHostGroupConfig): Observable<CrawlHostGroupConfig> {
     return this.http.post(this.crawlhostgroupconfigUrl, newCrawlhostgroupconfig)
-      .toPromise()
-      .then(response => response.json() as Crawlhostgroupconfig)
+      .map(response => response.json() as CrawlHostGroupConfig)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  deleteCrawlhostgroupconfig(delCrawlhostgroupconfigId: String): Promise<String> {
-
+  deleteCrawlhostgroupconfig(delCrawlhostgroupconfigId: String): Observable<String> {
     return this.http.delete(this.crawlhostgroupconfigUrl + '/' + delCrawlhostgroupconfigId)
-      .toPromise()
-      .then(response => response.json() as String)
+      .map(response => response.json() as String)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  updateCrawlhostgroupconfig(putCrawlhostgroupconfig: Crawlhostgroupconfig): Promise<Crawlhostgroupconfig> {
+  updateCrawlhostgroupconfig(putCrawlhostgroupconfig: CrawlHostGroupConfig): Observable<CrawlHostGroupConfig> {
     const putUrl = this.crawlhostgroupconfigUrl + '/' + putCrawlhostgroupconfig.id;
     return this.http.put(putUrl, putCrawlhostgroupconfig)
-      .toPromise()
-      .then(response => response.json() as Crawlhostgroupconfig)
+      .map(response => response.json() as CrawlHostGroupConfig)
       .catch(this.errorhandlerservice.handleError);
   }
 }
