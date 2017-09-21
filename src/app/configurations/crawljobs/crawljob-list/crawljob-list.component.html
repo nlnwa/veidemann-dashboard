@@ -13,11 +13,11 @@
 </button>
 
 <ng-container *ngIf="selectedCrawljob">
-  <crawljob-details
+  <app-crawljob-details
     [crawljob]="selectedCrawljob"
     [createHandler]="addCrawljob"
     [updateHandler]="updateCrawljob"
     [deleteHandler]="deleteCrawljob">
-  </crawljob-details>
+  </app-crawljob-details>
 </ng-container>
 

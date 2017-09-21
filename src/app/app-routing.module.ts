@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {ActivityComponent} from './activity';
-import {SeedsComponent, SeedDetailComponent, SeedSearchComponent} from './seeds/';
+import {SeedDetailComponent, SeedsComponent, SeedSearchComponent} from './seeds/';
 import {CrawljobListComponent} from './configurations/crawljobs/';
 import {CrawlersComponent} from './crawlers';
 import {DocumentationComponent} from './documentation';
@@ -11,7 +11,7 @@ import {ScheduleListComponent} from './configurations/schedule/';
 import {CrawlconfigListComponent} from './configurations/crawlconfig/';
 import {BrowserconfigListComponent} from './configurations/browserconfig/';
 import {PolitenessconfigListComponent} from './configurations/politenessconfig/';
-import {EntityListComponent, EntityDetailsComponent} from './entities/';
+import {EntityDetailsComponent, EntityListComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
 

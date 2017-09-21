@@ -1,18 +1,18 @@
-import {Component, Input} from "@angular/core";
-import {MdSnackBar} from "@angular/material";
-import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {Label} from "../../../commons/";
+import {Component, Input, OnChanges} from '@angular/core';
+import {MdSnackBar} from '@angular/material';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Label} from '../../../commons/';
 import {Browserscript} from '../browserscript';
 import {BrowserscriptService} from '../browserscript.service';
 
 
 @Component({
-  selector: 'browserscript-details',
+  selector: 'app-browserscript-details',
   templateUrl: './browserscript-details.component.html',
   styleUrls: ['./browserscript-details.component.css']
 })
 
-export class BrowserscriptDetailsComponent {
+export class BrowserscriptDetailsComponent implements OnChanges {
   @Input()
   browserscript: Browserscript;
   browserscriptForm: FormGroup;
@@ -60,7 +60,7 @@ export class BrowserscriptDetailsComponent {
 
   createBrowserscript() {
     this.browserscript = this.prepareSaveBrowserscript();
-    this.browserscriptService.createBrowserscript(this.browserscript).then((newBrowserscript: Browserscript) => {
+    this.browserscriptService.createBrowserscript(this.browserscript).map((newBrowserscript: Browserscript) => {
       this.createHandler(newBrowserscript);
     });
     this.mdSnackBar.open('Lagret');
@@ -69,16 +69,16 @@ export class BrowserscriptDetailsComponent {
 
   updateBrowserscript(browserscript: Browserscript): void {
     this.browserscript = this.prepareSaveBrowserscript();
-    this.browserscriptService.updatePolitenessConfig(this.browserscript).then((updatedBrowserscript: Browserscript) => {
+    this.browserscriptService.updatePolitenessConfig(this.browserscript).map((updatedBrowserscript: Browserscript) => {
       this.updateHandler(updatedBrowserscript);
     });
     this.mdSnackBar.open('Lagret');
   }
 
   deleteBrowserscript(browserscriptId): void {
-    this.browserscriptService.deletePolitenessConfig(browserscriptId).then((deletedBrowserscript) => {
+    this.browserscriptService.deletePolitenessConfig(browserscriptId).map((deletedBrowserscript) => {
       this.deleteHandler(deletedBrowserscript);
-      if (deletedBrowserscript === "not_allowed") {
+      if (deletedBrowserscript === 'not_allowed') {
         this.mdSnackBar.open('Feil: Ikke slettet');
       } else {
         this.mdSnackBar.open('Slettet');
@@ -88,7 +88,7 @@ export class BrowserscriptDetailsComponent {
 
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.browserscriptForm.setControl('label', labelFormArray);
   }

@@ -1,11 +1,7 @@
-import {Meta} from "../../commons/models/meta";
-
-/**
- * Created by kristiana on 18.05.17.
- */
+import {Meta} from '../../commons/models/meta';
 
 export class Schedules {
-  //value: Value[];
+  // value: Value[];
   count: number;
   page_size: string;
   page: string;
@@ -15,16 +11,16 @@ export class Schedule {
   id?: string;
   meta: Meta;
   cron_expression: string;
-  valid_from?: Valid_from;
-  valid_to?: Valid_to;
+  valid_from?: ValidFrom;
+  valid_to?: ValidTo;
 }
 
-export class Valid_from {
+export class ValidFrom {
   seconds: number;
   nanos?: number;
 }
 
-export class Valid_to {
+export class ValidTo {
   seconds: number;
   nanos?: number;
 }

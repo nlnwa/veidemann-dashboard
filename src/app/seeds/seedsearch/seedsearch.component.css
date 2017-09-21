@@ -1,8 +1,7 @@
 .search-result {
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid gray;
-  border-top: 1px solid gray;
+  border: 1px solid gray;
+  border-bottom-color: black;
+  border-left-color: black;
   width: 200px;
   height: auto;
   padding: 2px;

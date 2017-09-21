@@ -12,10 +12,10 @@
 </button>
 
 <ng-container *ngIf="selectedBrowserconfig">
-  <browserconfig-details
+  <app-browserconfig-details
     [browserconfig]="selectedBrowserconfig"
     [createHandler]="addBrowserconfig"
     [updateHandler]="updateBrowserconfig"
     [deleteHandler]="deleteBrowserconfig">
-  </browserconfig-details>
+  </app-browserconfig-details>
 </ng-container>

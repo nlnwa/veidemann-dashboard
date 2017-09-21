@@ -13,12 +13,12 @@
 </button>
 
 <ng-container *ngIf="selectedEntity">
-  <entity-details
+  <app-entity-details
     [entity]="selectedEntity"
     [createHandler]="addEntity"
     [updateHandler]="updateEntity"
     [deleteHandler]="deleteEntity">
-  </entity-details>
+  </app-entity-details>
 </ng-container>
 
 

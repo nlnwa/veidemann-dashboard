@@ -1,8 +1,9 @@
-import {Injectable} from "@angular/core";
-import {ErrorHandlerService} from "../../commons/";
-import {Http} from "@angular/http";
-import {Schedule} from "./";
+import {Injectable} from '@angular/core';
+import {ErrorHandlerService} from '../../commons/';
+import {Http} from '@angular/http';
+import {Schedule} from './';
 import {environment} from '../../../environments/environment';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ScheduleService {
@@ -24,25 +25,22 @@ export class ScheduleService {
       .map(res => res.json());
   }
 
-  createSchedule(newSchedule: Schedule): Promise<Schedule> {
+  createSchedule(newSchedule: Schedule): Observable<Schedule> {
     return this.http.post(this.scheduleUrl, newSchedule)
-      .toPromise()
-      .then(response => response.json() as Schedule)
+      .map(response => response.json() as Schedule)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  deleteSchedule(delScheduleId: String): Promise<String> {
+  deleteSchedule(delScheduleId: String): Observable<String> {
     return this.http.delete(this.scheduleUrl + '/' + delScheduleId)
-      .toPromise()
-      .then(response => response.json() as String)
+      .map(response => response.json() as String)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  updateSchedule(putSchedule: Schedule): Promise<Schedule> {
+  updateSchedule(putSchedule: Schedule): Observable<Schedule> {
     const putUrl = this.scheduleUrl + '/' + putSchedule.id;
     return this.http.put(putUrl, putSchedule)
-      .toPromise()
-      .then(response => response.json() as Schedule)
+      .map(response => response.json() as Schedule)
       .catch(this.errorhandlerservice.handleError);
   }
 }

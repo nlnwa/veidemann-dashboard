@@ -1,10 +1,7 @@
-import {Meta} from "../../commons/models/meta";
+import {Meta} from '../../commons/models/meta';
 
-/**
- * Created by kristiana on 18.05.17.
- */
 export class Crawlconfigs {
-  //value: Value[];
+  // value: Value[];
   count: number;
   page_size: string;
   page: string;

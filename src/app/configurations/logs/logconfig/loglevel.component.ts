@@ -1,5 +1,5 @@
-import {Component, OnInit} from "@angular/core";
-import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class LoglevelComponent implements OnInit {
   levelList = [];
 
   constructor(private logService: LogService,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder) {
 
     this.logForm = this.fb.group({
       log_level: this.fb.array([]),
@@ -45,7 +45,7 @@ export class LoglevelComponent implements OnInit {
 
   setLogconfig(logconfig) {
     this.loglist = [];
-    const logconfigFGs = logconfig.map(logconfig => (this.fb.group(logconfig)));
+    const logconfigFGs = logconfig.map(config => (this.fb.group(config)));
     const logconfigFormArray = this.fb.array(logconfigFGs);
     this.logForm.setControl('log_level', logconfigFormArray);
   }

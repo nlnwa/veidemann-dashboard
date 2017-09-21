@@ -11,11 +11,11 @@
 </button>
 
 <ng-container *ngIf="selectedCrawlconfig">
-  <crawlconfig-details
+  <app-crawlconfig-details
     [crawlconfig]="selectedCrawlconfig"
     [createHandler]="addCrawlconfig"
     [updateHandler]="updateCrawlconfig"
     [deleteHandler]="deleteCrawlconfig">
-  </crawlconfig-details>
+  </app-crawlconfig-details>
 </ng-container>
 

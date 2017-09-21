@@ -1,16 +1,16 @@
-import {Component, Input} from "@angular/core";
-import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {MdSnackBar} from "@angular/material";
-import {DateTime, Label} from "../../../commons/";
+import {Component, Input, OnChanges} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
+import {DateTime, Label} from '../../../commons/';
 import {Schedule} from '../schedule';
 import {ScheduleService} from '../schedule.service';
 
 @Component({
-  selector: 'schedule-details',
+  selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
   styleUrls: ['./schedule-details.component.css']
 })
-export class ScheduleDetailsComponent {
+export class ScheduleDetailsComponent implements OnChanges {
   @Input()
   schedule: Schedule;
   scheduleForm: FormGroup;
@@ -112,29 +112,32 @@ export class ScheduleDetailsComponent {
 
   createSchedule() {
     this.schedule = this.prepareSaveSchedule();
-    this.scheduleService.createSchedule(this.schedule).then((newSchedule: Schedule) => {
-      this.createHandler(newSchedule);
-    });
+    this.scheduleService.createSchedule(this.schedule)
+      .map((newSchedule: Schedule) => {
+        this.createHandler(newSchedule);
+      });
     this.mdSnackBar.open('Lagret');
   }
 
   updateSchedule(schedule: Schedule): void {
     this.schedule = this.prepareSaveSchedule();
-    this.scheduleService.updateSchedule(this.schedule).then((updatedSchedule: Schedule) => {
-      this.updateHandler(updatedSchedule);
-    });
+    this.scheduleService.updateSchedule(this.schedule)
+      .map((updatedSchedule: Schedule) => {
+        this.updateHandler(updatedSchedule);
+      });
     this.mdSnackBar.open('Lagret');
   }
 
   deleteSchedule(scheduleId): void {
-    this.scheduleService.deleteSchedule(scheduleId).then((deletedSchedule) => {
-      this.deleteHandler(deletedSchedule);
-      if (deletedSchedule === "not_allowed") {
-        this.mdSnackBar.open('Feil: Ikke slettet..');
-      } else {
-        this.mdSnackBar.open('Slettet');
-      }
-    });
+    this.scheduleService.deleteSchedule(scheduleId)
+      .map((deletedSchedule) => {
+        this.deleteHandler(deletedSchedule);
+        if (deletedSchedule === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet..');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
   }
 
 
@@ -145,19 +148,18 @@ export class ScheduleDetailsComponent {
       (label: Label) => Object.assign({}, label)
     );
 
-    //allow null and from_date
+    // allow null and from_date
     if (formModel.valid_from.year !== null && formModel.valid_from.month !== null && formModel.valid_from.day !== null) {
       const
         valid_from = formModel.valid_from.year +
           '-' + formModel.valid_from.month +
           '-' + formModel.valid_from.day;
       this.valid_from_unix = {seconds: (this.convertTimestamp.convertTimestamp_yyyymmddhhmm_to_unix(valid_from) / 1000)};
-    }
-    else {
+    } else {
       this.valid_from_unix = null;
     }
 
-    //allow null and a to date
+    // allow null and a to date
     if (formModel.valid_to.year !== null && formModel.valid_to.month !== null && formModel.valid_to.day !== null) {
       const valid_to = formModel.valid_to.year + '-'
         + formModel.valid_to.month + '-'
@@ -195,7 +197,7 @@ export class ScheduleDetailsComponent {
 
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.scheduleForm.setControl('label', labelFormArray);
   }

@@ -1,8 +1,9 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import {Logconfig} from "./";
-import {ErrorHandlerService} from "../../commons/";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Logconfig} from './';
+import {ErrorHandlerService} from '../../commons/';
 import {environment} from '../../../environments/environment';
+import {Observable} from 'rxjs/Observable';
 
 
 @Injectable()
@@ -19,10 +20,9 @@ export class LogService {
       .map(res => res.json());
   }
 
-  updateLogconfig(putLogconfig: Logconfig): Promise<Logconfig> {
+  updateLogconfig(putLogconfig: Logconfig): Observable<Logconfig> {
     return this.http.put(this.logconfigUrl, putLogconfig)
-      .toPromise()
-      .then(response => response.json() as Logconfig)
+      .map(response => response.json() as Logconfig)
       .catch(this.errorhandlerservice.handleError);
   }
 
@@ -33,17 +33,15 @@ export class LogService {
 
 
 
-   createLogconfig(putLogconfig: Logconfig): Promise<Logconfig> {
+   createLogconfig(putLogconfig: Logconfig): Observable<Logconfig> {
    return this.http.post(this.logconfigUrl, putLogconfig)
-   .toPromise()
-   .then(response => response.json() as Logconfig)
+   .map(response => response.json() as Logconfig)
    .catch(this.errorhandlerservice.handleError);
    }
 
-   deleteLogconfig(delLogconfigId: String): Promise<String> {
+   deleteLogconfig(delLogconfigId: String): Observable<String> {
    return this.http.delete(this.logconfigUrl + '/' + delLogconfigId)
-   .toPromise()
-   .then(response => response.json() as String)
+   .map(response => response.json() as String)
    .catch(this.errorhandlerservice.handleError);
    }
    */

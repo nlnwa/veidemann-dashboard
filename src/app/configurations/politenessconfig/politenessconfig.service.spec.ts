@@ -1,5 +1,5 @@
-import {TestBed, inject} from "@angular/core/testing";
-import {PolitenessconfigService} from "./politenessconfig.service";
+import {inject, TestBed} from '@angular/core/testing';
+import {PolitenessconfigService} from './politenessconfig.service';
 
 describe('PolitenessconfigService', () => {
   beforeEach(() => {

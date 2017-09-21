@@ -1,20 +1,20 @@
 import {NgModule} from '@angular/core';
 import {
-  MdSnackBarModule,
-  MdSlideToggleModule,
-  MdListModule,
-  MdSidenavModule,
-  MdToolbarModule,
-  MdIconModule,
-  MdMenuModule,
   MdButtonModule,
-  MdInputModule,
   MdCardModule,
-  MdSelectModule,
-  MdExpansionModule,
   MdCheckboxModule,
-  MdTableModule,
+  MdExpansionModule,
+  MdIconModule,
+  MdInputModule,
+  MdListModule,
+  MdMenuModule,
   MdRadioModule,
+  MdSelectModule,
+  MdSidenavModule,
+  MdSlideToggleModule,
+  MdSnackBarModule,
+  MdTableModule,
+  MdToolbarModule,
 } from '@angular/material';
 
 const modules = [

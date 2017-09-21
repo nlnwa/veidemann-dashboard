@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {Crawljob} from '../crawljob';
 import {CrawljobService} from '../crawljob.service';
 
 @Component({
-  selector: 'crawljob-list',
+  selector: 'app-crawljob-list',
   templateUrl: './crawljob-list.component.html',
   styleUrls: ['./crawljob-list.component.css']
 })

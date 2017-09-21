@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'schedule-sidebar',
+  selector: 'app-schedule-sidebar',
   templateUrl: './schedule-sidebar.component.html',
   styleUrls: ['./schedule-sidebar.component.css']
 })

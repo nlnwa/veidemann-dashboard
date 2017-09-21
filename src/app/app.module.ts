@@ -12,33 +12,33 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {DocumentationComponent} from './documentation';
 import {ActivityComponent} from './activity';
 import {CrawlersComponent} from './crawlers';
-import {StatisticsService, StatisticsComponent} from './statistics';
-import {SeedSearchComponent, SeedService, SeedsComponent, SeedDetailComponent} from './seeds';
+import {StatisticsComponent, StatisticsService} from './statistics';
+import {SeedDetailComponent, SeedsComponent, SeedSearchComponent, SeedService} from './seeds';
 import {
   BrowserconfigDetailsComponent,
   BrowserconfigListComponent,
   BrowserconfigService
 } from './configurations/browserconfig';
 import {
-  BrowserscriptListComponent,
   BrowserscriptDetailsComponent,
+  BrowserscriptListComponent,
   BrowserscriptService
 } from './configurations/browserscript';
-import {CrawlconfigListComponent, CrawlconfigDetailsComponent, CrawlconfigService} from './configurations/crawlconfig';
+import {CrawlconfigDetailsComponent, CrawlconfigListComponent, CrawlconfigService} from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawljobListComponent, CrawljobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
   PolitenessconfigListComponent,
   PolitenessconfigService
 } from './configurations/politenessconfig';
-import {LogService, LoglevelComponent} from './configurations/logs/';
+import {LoglevelComponent, LogService} from './configurations/logs/';
 import {
-  ScheduleListComponent,
   ScheduleDetailsComponent,
-  ScheduleSidebarComponent,
-  ScheduleService
+  ScheduleListComponent,
+  ScheduleService,
+  ScheduleSidebarComponent
 } from './configurations/schedule';
-import {DateTime, ErrorHandlerService,} from './commons';
+import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
 
 

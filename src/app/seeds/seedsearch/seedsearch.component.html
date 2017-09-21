@@ -2,8 +2,6 @@
 
 <md-form-field>
   <input mdInput
-         [(ngModel)]="searchinput"
-         (keyup)="search(searchBox.value)"
          placeholder="Søk"/>
 </md-form-field>
 
@@ -25,10 +23,10 @@
 </md-table>
 
 <ng-container *ngIf="selectedSeed">
-  <seed-details
+  <app-seed-details
     [seed]="selectedSeed"
     [updateHandler]="updateSeed">
-  </seed-details>
+  </app-seed-details>
 </ng-container>
 
 

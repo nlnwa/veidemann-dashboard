@@ -12,10 +12,10 @@
 </button>
 
 <ng-container *ngIf="selectedBrowserscript">
-  <browserscript-details
+  <app-browserscript-details
     [browserscript]="selectedBrowserscript"
     [createHandler]="addBrowserscript"
     [updateHandler]="updateBrowserscript"
     [deleteHandler]="deleteBrowserscript">
-  </browserscript-details>
+  </app-browserscript-details>
 </ng-container>

@@ -1,8 +1,9 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import {Politenessconfig} from "./";
-import {ErrorHandlerService} from "../../commons/";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Politenessconfig} from './';
+import {ErrorHandlerService} from '../../commons/';
 import {environment} from '../../../environments/environment';
+import {Observable} from 'rxjs/Observable';
 
 
 @Injectable()
@@ -26,25 +27,22 @@ export class PolitenessconfigService {
       .map(res => res.json().value);
   }
 
-  createPolitenessconfig(newPolitenessconfig: Politenessconfig): Promise<Politenessconfig> {
+  createPolitenessconfig(newPolitenessconfig: Politenessconfig): Observable<Politenessconfig> {
     return this.http.post(this.politenessconfigUrl, newPolitenessconfig)
-      .toPromise()
-      .then(response => response.json() as Politenessconfig)
+      .map(response => response.json() as Politenessconfig)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  deletePolitenessConfig(delPolitenessconfigId: String): Promise<String> {
+  deletePolitenessConfig(delPolitenessconfigId: String): Observable<String> {
     return this.http.delete(this.politenessconfigUrl + '/' + delPolitenessconfigId)
-      .toPromise()
-      .then(response => response.json() as String)
+      .map(response => response.json() as String)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  updatePolitenessConfig(putPolitenessconfig: Politenessconfig): Promise<Politenessconfig> {
+  updatePolitenessConfig(putPolitenessconfig: Politenessconfig): Observable<Politenessconfig> {
     const putUrl = this.politenessconfigUrl + '/' + putPolitenessconfig.id;
     return this.http.put(putUrl, putPolitenessconfig)
-      .toPromise()
-      .then(response => response.json() as Politenessconfig)
+      .map(response => response.json() as Politenessconfig)
       .catch(this.errorhandlerservice.handleError);
   }
 

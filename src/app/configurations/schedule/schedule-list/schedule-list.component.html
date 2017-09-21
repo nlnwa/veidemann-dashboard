@@ -18,12 +18,12 @@
   </div>
 
   <ng-container *ngIf="selectedSchedule">
-    <schedule-details
+    <app-schedule-details
       [schedule]="selectedSchedule"
       [createHandler]="addSchedule"
       [updateHandler]="updateSchedule"
       [deleteHandler]="deleteSchedule">
-    </schedule-details>
+    </app-schedule-details>
   </ng-container>
 
 </div>

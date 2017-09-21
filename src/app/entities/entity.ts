@@ -1,4 +1,4 @@
-import {Meta} from "../commons/models/meta";
+import {Meta} from '../commons/models/meta';
 
 export class Entities {
   Entity: Entity[];

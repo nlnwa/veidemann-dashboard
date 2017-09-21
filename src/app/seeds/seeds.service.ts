@@ -1,11 +1,11 @@
-import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
-import {Http} from "@angular/http";
-import {Seed} from "./seed";
-import {ErrorHandlerService} from "../commons/";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Seed} from './seed';
+import {ErrorHandlerService} from '../commons/';
 import {environment} from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class SeedService {
@@ -35,28 +35,22 @@ export class SeedService {
       .map(res => res.json().value);
   }
 
-  deleteSeed(delSeedid: String): Promise<String> {
+  deleteSeed(delSeedid: String): Observable<String> {
     return this.http.delete(this.seedsUrl + '/' + delSeedid)
-      .toPromise()
-      .then(response => response.json() as String)
-      .catch(this.errorHandlerService.handleError);
+      .map(res => res.json().value as String)
   }
 
   // put("/api/entities/:id")
-  updateSeed(putSeed: Seed): Promise<Seed> {
+  updateSeed(putSeed: Seed): Observable<Seed> {
     const putUrl = this.seedsUrl + '/' + putSeed.id;
     return this.http.put(putUrl, putSeed)
-      .toPromise()
-      .then(response => response.json() as Seed)
-      .catch(this.errorHandlerService.handleError);
+      .map(response => response.json() as Seed)
   }
 
   // post("/api/entities")
-  createSeed(newSeed: Seed): Promise<Seed> {
+  createSeed(newSeed: Seed): Observable<Seed> {
     return this.http.post(this.seedsUrl, newSeed)
-      .toPromise()
-      .then(response => response.json() as Seed)
-      .catch(this.errorHandlerService.handleError);
+      .map(response => response.json() as Seed)
   }
 
   getSeedsOfEntity(entity_id) {

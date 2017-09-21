@@ -1,8 +1,4 @@
-import {Label} from "./label";
-
-/**
- * Created by kristiana on 27.06.17.
- */
+import {Label} from './label';
 
 export class Meta {
   name: string;
