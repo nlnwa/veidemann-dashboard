@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {BrowserconfigDetailsComponent} from "./browserconfig-details.component";
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserconfigDetailsComponent} from './browserconfig-details.component';
 
 describe('BrowserconfigDetailsComponent', () => {
   let component: BrowserconfigDetailsComponent;

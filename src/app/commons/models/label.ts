@@ -1,7 +1,4 @@
-/**
- * Created by kristiana on 27.06.17.
- */
-export class Label {
+export interface Label {
   key: string;
   value: string;
 }

@@ -1,9 +1,7 @@
-import {Meta} from "../../commons/models/meta";
-/**
- * Created by kristiana on 18.05.17.
- */
+import {Meta} from '../../commons/models/meta';
+
 export class Crawljobs {
-  //value: Value[];
+  // value: Value[];
   count: number;
   page_size: string;
   page: string;

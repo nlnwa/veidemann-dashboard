@@ -1,62 +1,57 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
-import {ROUTES} from './routes';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MdlModule} from 'angular2-mdl';
-import {AngularMultiSelectModule} from './angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import {AppRoutingModule} from './app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import {MaterialModule} from './material.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {DocumentationComponent} from './documentation';
 import {ActivityComponent} from './activity';
 import {CrawlersComponent} from './crawlers';
-import {StatisticsService, StatisticsComponent} from './statistics';
-import {UserService, UserComponent, UserDetailsComponent} from './users';
-import {SeedSearchComponent, SeedService, SeedsComponent, SeedDetailComponent} from './seeds';
+import {StatisticsComponent, StatisticsService} from './statistics';
+import {SeedDetailComponent, SeedsComponent, SeedSearchComponent, SeedService} from './seeds';
 import {
   BrowserconfigDetailsComponent,
   BrowserconfigListComponent,
   BrowserconfigService
 } from './configurations/browserconfig';
 import {
-  BrowserscriptListComponent,
   BrowserscriptDetailsComponent,
+  BrowserscriptListComponent,
   BrowserscriptService
 } from './configurations/browserscript';
-import {CrawlconfigListComponent, CrawlconfigDetailsComponent, CrawlconfigService} from './configurations/crawlconfig';
+import {CrawlconfigDetailsComponent, CrawlconfigListComponent, CrawlconfigService} from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawljobListComponent, CrawljobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
   PolitenessconfigListComponent,
   PolitenessconfigService
 } from './configurations/politenessconfig';
-import {LogService, LoglevelComponent} from './configurations/logs/';
+import {LoglevelComponent, LogService} from './configurations/logs/';
 import {
-  ScheduleListComponent,
   ScheduleDetailsComponent,
-  ScheduleSidebarComponent,
-  ScheduleService
+  ScheduleListComponent,
+  ScheduleService,
+  ScheduleSidebarComponent
 } from './configurations/schedule';
-import {ModalComponent, DateTime, ErrorHandlerService, Collapse} from './commons';
+import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent,
-    UserDetailsComponent,
     DocumentationComponent,
     StatisticsComponent,
     SeedSearchComponent,
     ActivityComponent,
     SeedsComponent,
     CrawlersComponent,
-    ModalComponent,
     SeedDetailComponent,
-    Collapse,
     CrawljobDetailsComponent,
     CrawljobListComponent,
     ScheduleListComponent,
@@ -76,16 +71,16 @@ import {EntityDetailsComponent, EntityListComponent, EntityService} from './enti
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES),
-    NgbModule.forRoot(),
+    AppRoutingModule,
     AngularMultiSelectModule,
-    MdlModule,
+    MaterialModule,
+    FlexLayoutModule,
   ],
   providers: [
-    UserService,
     StatisticsService,
     SeedService,
     CrawljobService,

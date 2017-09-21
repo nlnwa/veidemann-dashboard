@@ -1,6 +1,3 @@
-/**
- * Created by kristiana on 21.08.17.
- */
 export * from './schedule';
 export {ScheduleService} from './schedule.service';
 export {ScheduleSidebarComponent} from './schedule-sidebar/schedule-sidebar.component'

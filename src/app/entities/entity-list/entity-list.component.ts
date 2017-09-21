@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {Entity} from '../entity';
-import {EntityService} from "../entity.service";
+import {EntityService} from '../entity.service';
 
 @Component({
-  selector: 'entity-list',
+  selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.css']
 })

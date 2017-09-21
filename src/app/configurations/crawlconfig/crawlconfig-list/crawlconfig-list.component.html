@@ -1,27 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Crawlconfigs</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)"
-            [class.active]="crawlconfig === selectedCrawlconfig">
-          {{crawlconfig.meta.name}}
+<h2>Crawlconfigs</h2>
+<md-nav-list>
+  <md-list-item
+    *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)"
+    [class.active]="crawlconfig === selectedCrawlconfig">
+    {{crawlconfig.meta.name}}
+  </md-list-item>
+</md-nav-list>
+<button md-raised-button color="primary"
+        (click)="createNewCrawlconfig()">New
+</button>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewCrawlconfig()">New</button>
-    </div>
-    <div class="col-md-5">
+<ng-container *ngIf="selectedCrawlconfig">
+  <app-crawlconfig-details
+    [crawlconfig]="selectedCrawlconfig"
+    [createHandler]="addCrawlconfig"
+    [updateHandler]="updateCrawlconfig"
+    [deleteHandler]="deleteCrawlconfig">
+  </app-crawlconfig-details>
+</ng-container>
 
-      <div *ngIf="selectedCrawlconfig">
-        <crawlconfig-details
-          [crawlconfig]="selectedCrawlconfig"
-          [createHandler]="addCrawlconfig"
-          [updateHandler]="updateCrawlconfig"
-          [deleteHandler]="deleteCrawlconfig">
-        </crawlconfig-details>
-      </div>
-    </div>
-  </div>
-</div>

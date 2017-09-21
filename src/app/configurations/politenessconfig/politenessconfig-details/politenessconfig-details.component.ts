@@ -1,19 +1,19 @@
-import {Component, Input} from "@angular/core";
-import {MdlSnackbarService} from "angular2-mdl";
-import {FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
-import {CustomValidators, Label} from "../../../commons/";
-import {isUndefined} from "util";
+import {Component, Input, OnChanges} from '@angular/core';
+import {MdSnackBar} from '@angular/material';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CustomValidators, Label} from '../../../commons/';
+import {isUndefined} from 'util';
 import {Politenessconfig} from '../politenessconfig';
 import {PolitenessconfigService} from '../politenessconfig.service';
 
 
 @Component({
-  selector: 'politenessconfig-details',
+  selector: 'app-politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
   styleUrls: ['./politenessconfig-details.component.css']
 })
 
-export class PolitenessconfigDetailsComponent {
+export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
   politenessconfig: Politenessconfig;
   politenessconfigForm: FormGroup;
@@ -31,7 +31,7 @@ export class PolitenessconfigDetailsComponent {
 
 
   constructor(private politenessconfigService: PolitenessconfigService,
-              private mdlSnackbarService: MdlSnackbarService,
+              private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.filldropdown();
     this.createForm();
@@ -73,74 +73,67 @@ export class PolitenessconfigDetailsComponent {
 
   createPolitenessconfig() {
     this.politenessconfig = this.prepareSavePolitenessconfig();
-    this.politenessconfigService.createPolitenessconfig(this.politenessconfig).then((newPolitenessconfig: Politenessconfig) => {
-      this.createHandler(newPolitenessconfig);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
+    this.politenessconfigService.createPolitenessconfig(this.politenessconfig)
+      .map((newPolitenessconfig: Politenessconfig) => {
+        this.createHandler(newPolitenessconfig);
       });
+    this.mdSnackBar.open('Lagret');
   }
 
 
   updatePolitenessconfig(politenessconfig: Politenessconfig): void {
     this.politenessconfig = this.prepareSavePolitenessconfig();
-    this.politenessconfigService.updatePolitenessConfig(this.politenessconfig).then((updatedPolitenessconfig: Politenessconfig) => {
-      this.updateHandler(updatedPolitenessconfig);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
+    this.politenessconfigService.updatePolitenessConfig(this.politenessconfig)
+      .map((updatedPolitenessconfig: Politenessconfig) => {
+        this.updateHandler(updatedPolitenessconfig);
       });
+    this.mdSnackBar.open('Lagret');
   }
 
   deletePolitenessconfig(politenessconfigId): void {
-    this.politenessconfigService.deletePolitenessConfig(politenessconfigId).then((deletedPolitenessconfig) => {
-      this.deleteHandler(deletedPolitenessconfig);
-      if (deletedPolitenessconfig === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
-      } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
-      }
-    });
+    this.politenessconfigService.deletePolitenessConfig(politenessconfigId)
+      .map((deletedPolitenessconfig) => {
+        this.deleteHandler(deletedPolitenessconfig);
+        if (deletedPolitenessconfig === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
   }
 
   filldropdown() {
     this.politenessconfigService.getRobotsconfig().map(robotspolicy => robotspolicy).forEach((value) => {
-      for (let i of value.menuitem) {
+      for (const i of value.menuitem) {
         this.robotspolicyList.push({id: i.id, itemName: i.itemName});
       }
     });
   }
 
   setSelectedDropdown() {
-    if (!isUndefined(this.politenessconfig.id )) {
-      this.politenessconfigService.getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig).forEach((value) => {
-        value.forEach((key) => {
-          for (let i of this.robotspolicyList) {
-            if (i.itemName == key.robots_policy) {
-              this.selectedRobotspolicyItems.push({id: i.id, itemName: key.robots_policy})
+    if (!isUndefined(this.politenessconfig.id)) {
+      this.politenessconfigService
+        .getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig)
+        .forEach((value) => {
+          value.forEach((key) => {
+            for (const i of this.robotspolicyList) {
+              if (i.itemName === key.robots_policy) {
+                this.selectedRobotspolicyItems.push({id: i.id, itemName: key.robots_policy})
+              }
             }
-          }
+          });
+          this.politenessconfigForm.controls['robots_policy'].setValue(this.selectedRobotspolicyItems);
         });
-        this.politenessconfigForm.controls['robots_policy'].setValue(this.selectedRobotspolicyItems);
-      });
     }
     this.robotspolicy_dropdownSettings = {
       singleSelection: true,
-      text: "Velg Robots policy",
+      text: 'Velg Robots policy',
     };
 
   }
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.politenessconfigForm.setControl('label', labelFormArray);
   }
@@ -196,9 +189,6 @@ export class PolitenessconfigDetailsComponent {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }

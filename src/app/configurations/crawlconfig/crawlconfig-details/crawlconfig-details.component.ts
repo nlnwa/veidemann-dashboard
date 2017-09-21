@@ -1,18 +1,18 @@
-import {Component, Input, OnChanges} from "@angular/core";
-import {PolitenessconfigService, Politenessconfig} from "../../politenessconfig/";
-import {Browserconfig, BrowserconfigService} from "../../browserconfig/";
-import {Label, CustomValidators} from "../../../commons/";
-import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {Component, Input, OnChanges} from '@angular/core';
+import {Politenessconfig, PolitenessconfigService} from '../../politenessconfig/';
+import {Browserconfig, BrowserconfigService} from '../../browserconfig/';
+import {CustomValidators, Label} from '../../../commons/';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
 import {Crawlconfig} from '../crawlconfig';
 import {CrawlconfigService} from '../crawlconfig.service';
 
 
 @Component({
-  selector: 'crawlconfig-details',
+  selector: 'app-crawlconfig-details',
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
-  //encapsulation: ViewEncapsulation.None,
+  // encapsulation: ViewEncapsulation.None,
 
 })
 export class CrawlconfigDetailsComponent implements OnChanges {
@@ -41,7 +41,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
               private politenessconfigService: PolitenessconfigService,
               private browserconfigService: BrowserconfigService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,) {
+              private mdSnackBar: MdSnackBar) {
     this.filldropdown();
     this.createForm();
   }
@@ -61,7 +61,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true,}}),
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
@@ -90,7 +90,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     this.selectedBrowserconfigItems = [];
     this.setLabel(this.crawlconfig.meta.label);
 
-    //what the bug?! pre-filled radiobuttons aint working without this.
+    // what the bug?! pre-filled radiobuttons aint working without this.
     setTimeout(() => {
       this.updateData(this.crawlconfig);
     });
@@ -99,41 +99,30 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   createCrawlconfig() {
     this.crawlconfig = this.prepareSaveCrawlconfig();
-    this.crawlconfigService.createCrawlconfig(this.crawlconfig).then((newCrawlconfig: Crawlconfig) => {
-      this.createHandler(newCrawlconfig);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
+    this.crawlconfigService.createCrawlconfig(this.crawlconfig)
+      .map((newCrawlconfig: Crawlconfig) => {
+        this.createHandler(newCrawlconfig);
       });
+    this.mdSnackBar.open('Lagret');
   }
 
   updateCrawlconfig(crawlconfigForm): void {
     this.crawlconfig = this.prepareSaveCrawlconfig();
     this.crawlconfigService.updateCrawlconfig(this.crawlconfig)
-      .then((updatedCrawlconfig) => {
+      .map((updatedCrawlconfig) => {
         this.updateHandler(updatedCrawlconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
   deleteCrawlconfig(crawlconfigId): void {
     this.crawlconfigService.deleteCrawlconfig(crawlconfigId)
-      .then((deletedCrawlconfig) => {
+      .map((deletedCrawlconfig) => {
         this.deleteHandler(deletedCrawlconfig);
-        if (deletedCrawlconfig === "not_allowed") {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Feil: Ikke slettet',
-            });
+        if (deletedCrawlconfig === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Slettet',
-            });
+          this.mdSnackBar.open('Slettet');
         }
       });
   }
@@ -168,15 +157,21 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   }
 
   setSelectedDropdown() {
-    if (this.crawlconfig.browser_config_id !== "") {
-      this.browserconfigService.getBrowserconfigs(this.crawlconfig.browser_config_id).map(browser_config => browser_config).forEach((value) => {
-        value.forEach((key) => {
-          this.selectedBrowserconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+    if (this.crawlconfig.browser_config_id !== '') {
+      this.browserconfigService
+        .getBrowserconfigs(this.crawlconfig.browser_config_id).map(browser_config => browser_config)
+        .forEach((value) => {
+          value.forEach((key) => {
+            this.selectedBrowserconfigItems.push({
+              id: key.id,
+              itemName: key.meta.name,
+              description: key.meta.description
+            })
+          });
+          this.crawlconfigForm.controls['browser_config_id'].setValue(this.selectedBrowserconfigItems);
         });
-        this.crawlconfigForm.controls['browser_config_id'].setValue(this.selectedBrowserconfigItems);
-      });
     }
-    if (this.crawlconfig.politeness_id !== "") {
+    if (this.crawlconfig.politeness_id !== '') {
       this.politenessconfigService.getPolitenessconfig(this.crawlconfig.politeness_id).map(politeness => politeness).forEach((value) => {
         value.forEach((key) => {
           this.selectedPolitenessconfigItems.push({
@@ -205,19 +200,19 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
     this.dropdownPolitenessconfigSettings = {
       singleSelection: true,
-      text: "Velg Politeness",
+      text: 'Velg Politeness',
       enableSearchFilter: true
     };
 
     this.dropdownBrowserconfigSettings = {
       singleSelection: true,
-      text: "Velg browserconfig",
+      text: 'Velg browserconfig',
       enableSearchFilter: true
     };
   }
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.crawlconfigForm.setControl('label', labelFormArray);
   }
@@ -245,10 +240,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
 }

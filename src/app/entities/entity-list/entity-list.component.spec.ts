@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {EntityListComponent} from "./entity-list.component";
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {EntityListComponent} from './entity-list.component';
 
 describe('EntityListComponent', () => {
   let component: EntityListComponent;

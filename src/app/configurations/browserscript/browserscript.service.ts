@@ -1,8 +1,9 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import {Browserscript} from "./";
-import {ErrorHandlerService} from "../../commons";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Browserscript} from './';
+import {ErrorHandlerService} from '../../commons';
 import {environment} from '../../../environments/environment';
+import {Observable} from 'rxjs/Observable';
 
 
 @Injectable()
@@ -25,25 +26,22 @@ export class BrowserscriptService {
       .map(res => res.json().value);
   }
 
-  createBrowserscript(newBrowserscript: Browserscript): Promise<Browserscript> {
+  createBrowserscript(newBrowserscript: Browserscript): Observable<Browserscript> {
     return this.http.post(this.browserscriptUrl, newBrowserscript)
-      .toPromise()
-      .then(response => response.json() as Browserscript)
+      .map(response => response.json() as Browserscript)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  deletePolitenessConfig(delBrowserscriptId: String): Promise<String> {
+  deletePolitenessConfig(delBrowserscriptId: String): Observable<String> {
     return this.http.delete(this.browserscriptUrl + '/' + delBrowserscriptId)
-      .toPromise()
-      .then(response => response.json() as String)
+      .map(response => response.json() as String)
       .catch(this.errorhandlerservice.handleError);
   }
 
-  updatePolitenessConfig(putBrowserscript: Browserscript): Promise<Browserscript> {
+  updatePolitenessConfig(putBrowserscript: Browserscript): Observable<Browserscript> {
     const putUrl = this.browserscriptUrl + '/' + putBrowserscript.id;
     return this.http.put(putUrl, putBrowserscript)
-      .toPromise()
-      .then(response => response.json() as Browserscript)
+      .map(response => response.json() as Browserscript)
       .catch(this.errorhandlerservice.handleError);
   }
 

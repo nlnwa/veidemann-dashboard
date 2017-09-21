@@ -1,71 +1,32 @@
-<div class="container">
-  <div class="col-md-12">
-    <div id="search-component">
+<h4>Seed Search</h4>
 
+<md-form-field>
+  <input mdInput
+         placeholder="Søk"/>
+</md-form-field>
 
-      <h4>Seed Search</h4>
+<md-table [dataSource]="seedDataSource">
+  <ng-container mdColumnDef="id">
+    <md-header-cell *mdHeaderCellDef>Id</md-header-cell>
+    <md-cell *mdCellDef="let row">{{row.id}}</md-cell>
+  </ng-container>
 
+  <ng-container mdColumnDef="name">
+    <md-header-cell *mdHeaderCellDef>Name</md-header-cell>
+    <md-cell *mdCellDef="let row">{{row.meta.name}}</md-cell>
+  </ng-container>
 
-      <input [(ngModel)]="searchinput" #searchBox id="search-box" (keyup)="search(searchBox.value)"/>
-      <br>
-      <tr>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
-            <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
-            <span class="mdl-checkbox__label">Seeds</span>
-          </label>
-        </td>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox2">
-            <input type="checkbox" id="checkbox2" class="mdl-checkbox__input">
-            <span class="mdl-checkbox__label">Entities</span>
-          </label>
-        </td>
-        <td>
-          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox3">
-            <input type="checkbox" id="checkbox3" class="mdl-checkbox__input">
-            <span class="mdl-checkbox__label">Labels</span>
-          </label>
-        </td>
-      </tr>
-    </div>
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-      <thead>
-      <ng-container *ngIf="searchinput">
-        <tr>
-          <!-- class "mdl-data-table__cell--non-numeric", align values to left -->
-          <th class="mdl-data-table__cell--non-numeric">Seed</th>
-          <th class="mdl-data-table__cell--non-numeric">Merkelapp</th>
-          <th class="mdl-data-table__cell--non-numeric">Opprettet</th>
-          <th class="mdl-data-table__cell--non-numeric">Lagt til av</th>
-        </tr>
-      </ng-container>
+  <md-header-row *mdHeaderRowDef="['id', 'name']"></md-header-row>
+  <md-row *mdRowDef="let row; columns: ['id', 'name']"
+          (click)="handleRowClick(row)">
+  </md-row>
+</md-table>
 
-      </thead>
-      <tbody>
-      <!-- Row 1 -->
-      <tr class="search-result" *ngFor="let seed of seed | async; let i=index" (click)="selectSeed(seed)">
-        <ng-container *ngIf="i<12">
-          <th>{{seed.meta.name}}</th>
-          <th *ngIf="!seed.meta.label?.length">
-            Ingen merkelapp
-          </th>
-          <th *ngIf="seed.meta.label?.length > 0 ">
-            <ng-container *ngFor="let see of seed.meta.label; let i=index"> {{see.value}}</ng-container>
-          </th>
-          <th>{{seed.meta.created.seconds * 1000 | date:'yyyy-MM-dd'}}</th>
-          <th>{{seed.meta.created_by}}</th>
-        </ng-container>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div *ngIf="selectedSeed">
-  <seed-details
+<ng-container *ngIf="selectedSeed">
+  <app-seed-details
     [seed]="selectedSeed"
     [updateHandler]="updateSeed">
-  </seed-details>
-</div>
+  </app-seed-details>
+</ng-container>
 
 

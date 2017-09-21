@@ -1,14 +1,14 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from "@angular/core";
-import {Crawlconfig, CrawlconfigService} from "../../crawlconfig/";
-import {Schedule, ScheduleService} from "../../schedule/";
-import {CustomValidators, Label} from "../../../commons/";
-import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
-import {MdlSnackbarService} from "angular2-mdl";
+import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Crawlconfig, CrawlconfigService} from '../../crawlconfig/';
+import {Schedule, ScheduleService} from '../../schedule/';
+import {CustomValidators, Label} from '../../../commons/';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
 import {Crawljob} from '../crawljob';
 import {CrawljobService} from '../crawljob.service';
 
 @Component({
-  selector: 'crawljob-details',
+  selector: 'app-crawljob-details',
   templateUrl: './crawljob-details.component.html',
   styleUrls: ['./crawljob-details.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -41,7 +41,7 @@ export class CrawljobDetailsComponent implements OnChanges {
               private crawlconfigService: CrawlconfigService,
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService,) {
+              private mdSnackBar: MdSnackBar) {
     this.filldropdown();
     this.createForm();
   }
@@ -59,7 +59,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true,}}),
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
@@ -92,41 +92,31 @@ export class CrawljobDetailsComponent implements OnChanges {
   updateCrawljob(crawljobForm): void {
     this.crawljob = this.prepareSaveCrawljob();
     this.crawljobService.updateCrawljob(this.crawljob)
-      .then((updatedCrawljob) => {
+      .map((updatedCrawljob) => {
         this.updateHandler(updatedCrawljob);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
   deleteCrawljob(crawljobId): void {
-    this.crawljobService.deleteCrawljob(crawljobId).then((deletedCrawljob) => {
-      this.deleteHandler(deletedCrawljob);
-      if (deletedCrawljob === "not_allowed") {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Feil: Ikke slettet',
-          });
-      } else {
-        this.mdlSnackbarService.showSnackbar(
-          {
-            message: 'Slettet',
-          });
-      }
-    });
+    this.crawljobService.deleteCrawljob(crawljobId)
+      .map((deletedCrawljob) => {
+        this.deleteHandler(deletedCrawljob);
+        if (deletedCrawljob === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
   }
 
   createCrawljob() {
     this.crawljob = this.prepareSaveCrawljob();
-    this.crawljobService.createCrawljob(this.crawljob).then((newCrawljob: Crawljob) => {
-      this.createHandler(newCrawljob);
-    });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
+    this.crawljobService.createCrawljob(this.crawljob)
+      .map((newCrawljob: Crawljob) => {
+        this.createHandler(newCrawljob);
       });
+    this.mdSnackBar.open('Lagret');
   }
 
   prepareSaveCrawljob(): Crawljob {
@@ -155,7 +145,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   setDropdown() {
-    if (this.crawljob.schedule_id !== "") {
+    if (this.crawljob.schedule_id !== '') {
       this.scheduleService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
         value.forEach((key) => {
           this.selectedScheduleItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
@@ -164,7 +154,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       });
     }
 
-    if (this.crawljob.crawl_config_id !== "") {
+    if (this.crawljob.crawl_config_id !== '') {
       this.crawlconfigService.getCrawlconfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
         value.forEach((key) => {
           this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description});
@@ -191,20 +181,20 @@ export class CrawljobDetailsComponent implements OnChanges {
 
     this.dropdownScheduleSettings = {
       singleSelection: true,
-      text: "Velg Schedule",
+      text: 'Velg Schedule',
       enableSearchFilter: true
     };
 
 
     this.dropdownCrawlconfigSettings = {
       singleSelection: true,
-      text: "Velg crawlconfig",
+      text: 'Velg crawlconfig',
       enableSearchFilter: true
     };
   }
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.crawljobForm.setControl('label', labelFormArray);
   }
@@ -232,9 +222,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 }

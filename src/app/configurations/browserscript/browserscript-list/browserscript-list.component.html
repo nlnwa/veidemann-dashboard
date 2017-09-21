@@ -1,27 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Browserscripts</h2>
-      <ul class="list-group">
-        <li class="list-group-item"
-            *ngFor="let browserscript of browserscripts" (click)="selectBrowserscript(browserscript)"
-            [class.active]="browserscript === selectedBrowserscript">
-          {{browserscript.meta.name}}
+<h2>Browserscripts</h2>
+<md-nav-list>
+  <md-list-item
+    *ngFor="let browserscript of browserscripts" (click)="selectBrowserscript(browserscript)"
+    [class.active]="browserscript === selectedBrowserscript">
+    {{browserscript.meta.name}}
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewBrowserscript()">New</button>
-    </div>
-    <div class="col-md-5">
+  </md-list-item>
+</md-nav-list>
+<button md-raised-button color="primary"
+        (click)="createNewBrowserscript()">New
+</button>
 
-      <div *ngIf="selectedBrowserscript">
-        <browserscript-details
-          [browserscript]="selectedBrowserscript"
-          [createHandler]="addBrowserscript"
-          [updateHandler]="updateBrowserscript"
-          [deleteHandler]="deleteBrowserscript">
-        </browserscript-details>
-      </div>
-    </div>
-  </div>
-</div>
+<ng-container *ngIf="selectedBrowserscript">
+  <app-browserscript-details
+    [browserscript]="selectedBrowserscript"
+    [createHandler]="addBrowserscript"
+    [updateHandler]="updateBrowserscript"
+    [deleteHandler]="deleteBrowserscript">
+  </app-browserscript-details>
+</ng-container>

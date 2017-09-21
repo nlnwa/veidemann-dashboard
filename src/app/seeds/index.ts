@@ -1,7 +1,3 @@
-/**
- * Created by kristiana on 21.08.17.
- */
-
 export {Seed, Seeds} from './seed';
 export {SeedService} from './seeds.service';
 export {SeedDetailComponent} from './seed-details/seed-details.component';

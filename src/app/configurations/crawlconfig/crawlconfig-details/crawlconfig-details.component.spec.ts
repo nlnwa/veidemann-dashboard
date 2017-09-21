@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {CrawlconfigDetailsComponent} from "./crawlconfig-details.component";
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {CrawlconfigDetailsComponent} from './crawlconfig-details.component';
 
 describe('CrawlconfigDetailsComponent', () => {
   let component: CrawlconfigDetailsComponent;

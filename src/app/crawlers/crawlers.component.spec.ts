@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {CrawlersComponent} from "./crawlers.component";
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {CrawlersComponent} from './crawlers.component';
 
 describe('CrawlersComponent', () => {
   let component: CrawlersComponent;

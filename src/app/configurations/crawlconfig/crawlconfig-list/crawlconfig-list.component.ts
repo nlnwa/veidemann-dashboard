@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {Crawlconfig} from '../crawlconfig';
 import {CrawlconfigService} from '../crawlconfig.service';
 
 @Component({
-  selector: 'crawlconfig-list',
+  selector: 'app-crawlconfig-list',
   templateUrl: './crawlconfig-list.component.html',
   styleUrls: ['./crawlconfig-list.component.css']
 })
