@@ -72,6 +72,11 @@
          [routerLinkActive]="['is-active']">
         <md-icon>build</md-icon>
         Crawlconfig</a>
+      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlhostgroupconfig']"
+         [routerLinkActiveOptions]="{ exact: true }"
+         [routerLinkActive]="['is-active']">
+        <md-icon>build</md-icon>
+        Crawlhostgroupconfig</a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">

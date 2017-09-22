@@ -1,20 +1,19 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {Crawlhostgroupconfig, IpRange} from '../crawlhostgroupconfig';
+import {CrawlHostGroupConfig, IpRange} from '../crawlhostgroupconfig.model';
 import {CrawlhostgroupconfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdlSnackbarService} from 'angular2-mdl';
-import {CustomValidators} from '../../../commons/components/customvalidators';
+import {MdSnackBar} from '@angular/material';
 import {Label} from '../../../commons/models/label';
 
 
 @Component({
-  selector: 'crawlhostgroupconfig-details',
+  selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css']
 })
 export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   @Input()
-  crawlhostgroupconfig: Crawlhostgroupconfig;
+  crawlhostgroupconfig: CrawlHostGroupConfig;
   crawlhostgroupconfigForm: FormGroup;
 
   @Input()
@@ -26,7 +25,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
   constructor(private crawlhostgroupconfigService: CrawlhostgroupconfigService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService, ) {
+              private mdSnackBar: MdSnackBar, ) {
     this.createForm();
   }
 
@@ -46,9 +45,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
     });
   }
 
-  ngOnChanges() {
-    this.setLabel(this.crawlhostgroupconfig.meta.label);
-    this.setIpRange((this.crawlhostgroupconfig.ip_range));
+  updateData(crawlhostgroupconfig: CrawlHostGroupConfig) {
     this.crawlhostgroupconfigForm.controls['meta'].patchValue({
       name: this.crawlhostgroupconfig.meta.name as string,
       description: this.crawlhostgroupconfig.meta.description as string,
@@ -56,49 +53,46 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
     console.log(this.crawlhostgroupconfigForm.controls);
   }
 
+  ngOnChanges() {
+    this.setLabel(this.crawlhostgroupconfig.meta.label);
+    this.setIpRange((this.crawlhostgroupconfig.ip_range));
+    setTimeout(() => {
+      this.updateData(this.crawlhostgroupconfig);
+    });
+  }
+
   createCrawlhostgroupconfig() {
     this.crawlhostgroupconfig = this.prepareSaveCrawlhostgroupconfig();
-    this.crawlhostgroupconfigService.createCrawlhostgroupconfig(this.crawlhostgroupconfig).then(
-      (newCrawlhostgroupconfig: Crawlhostgroupconfig) => {
-        this.createHandler(newCrawlhostgroupconfig);
-      });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret'
-      });
+    this.crawlhostgroupconfigService.createCrawlhostgroupconfig(this.crawlhostgroupconfig)
+      .map(
+        (newCrawlhostgroupconfig: CrawlHostGroupConfig) => {
+          this.createHandler(newCrawlhostgroupconfig);
+        });
+    this.mdSnackBar.open('Lagret');
   };
 
   updateCrawlhostgroupconfig(crawlhostgroupconfigForm): void {
     this.crawlhostgroupconfig = this.prepareSaveCrawlhostgroupconfig();
     this.crawlhostgroupconfigService.updateCrawlhostgroupconfig(this.crawlhostgroupconfig)
-      .then((updatedCrawlhostgroupconfig) => {
+      .map((updatedCrawlhostgroupconfig) => {
         this.updateHandler(updatedCrawlhostgroupconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Lagret',
-      });
+    this.mdSnackBar.open('Lagret');
   };
 
   deleteCrawlhostgroupconfig(crawlhostgroupconfigId): void {
     this.crawlhostgroupconfigService.deleteCrawlhostgroupconfig(crawlhostgroupconfigId)
-      .then((deletedCrawlhostgroupconfig) => {
+      .map((deletedCrawlhostgroupconfig) => {
         this.deleteHandler(deletedCrawlhostgroupconfig);
         if (deletedCrawlhostgroupconfig === 'not allowed') {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Feil: Ikke slettet',
-            });
+          this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
-          this.mdlSnackbarService.showSnackbar(
-            {
-              message: 'Slettet',
-            });
+          this.mdSnackBar.open('Slettet');
         }
       });
   };
 
-  prepareSaveCrawlhostgroupconfig(): Crawlhostgroupconfig {
+  prepareSaveCrawlhostgroupconfig(): CrawlHostGroupConfig {
     const formModel = this.crawlhostgroupconfigForm.value;
 
     const labelsDeepCopy: Label[] = formModel.label.map(
@@ -109,7 +103,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
       (iprange: IpRange) => Object.assign({}, iprange)
     );
 
-    const saveCrawlhostgroupconfig: Crawlhostgroupconfig = {
+    const saveCrawlhostgroupconfig: CrawlHostGroupConfig = {
       id: this.crawlhostgroupconfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
@@ -122,7 +116,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   }
 
   setLabel(label) {
-    const labelFGs = label.map(label => (this.fb.group(label)));
+    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
     this.crawlhostgroupconfigForm.setControl('label', labelFormArray);
   }
@@ -149,10 +143,11 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   }
 
   setIpRange(ip_range) {
-    const ip_rangeFGs = ip_range.map( ip_range => (this.fb.group(ip_range)));
+    const ip_rangeFGs = ip_range.map(ip_range => (this.fb.group(ip_range)));
     const ip_rangeFormArray = this.fb.array(ip_rangeFGs);
     this.crawlhostgroupconfigForm.setControl('ip_range', ip_rangeFormArray);
   }
+
   addIpRange() {
     const control = <FormArray>this.crawlhostgroupconfigForm.controls['ip_range'];
     control.push(this.initIpRange());
@@ -178,10 +173,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
-      {
-        message: 'Tilbakestilt',
-      });
+    this.mdSnackBar.open('Tilbakestilt');
   }
 
 }

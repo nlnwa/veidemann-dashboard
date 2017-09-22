@@ -1,13 +1,14 @@
 
 import {Meta} from '../../commons/models/meta';
 
-export class Crawlhostgroupconfigs {
+export class CrawlHostGroupConfigs {
+  value: CrawlHostGroupConfig[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Crawlhostgroupconfig {
+export class CrawlHostGroupConfig {
   id?: string;
   meta: Meta;
   ip_range: IpRange[];
