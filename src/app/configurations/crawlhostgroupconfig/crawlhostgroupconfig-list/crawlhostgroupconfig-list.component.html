@@ -1,28 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <h2>Crawlhostgroupconfigs</h2>
-      <ul class="list-group">
-       <li class="list-group-item"
-            *ngFor="let crawlhostgroupconfig of crawlhostgroupconfigs" (click)="selectCrawlhostgroupconfig(crawlhostgroupconfig)"
-            [class.active]="crawlhostgroupconfig === selectedCrawlhostgroupconfig">
-          {{crawlhostgroupconfig.meta.name}}
+<h2>Crawlhostgroupconfigs</h2>
+<md-nav-list>
+  <md-list-item
+    *ngFor="let crawlhostgroupconfig of crawlhostgroupconfigs"
+    (click)="selectCrawlhostgroupconfig(crawlhostgroupconfig)"
+    [class.active]="crawlhostgroupconfig === selectedCrawlhostgroupconfig">
+    {{crawlhostgroupconfig.meta.name}}
+  </md-list-item>
+</md-nav-list>
+<button md-raised-button color="primary"
+        (click)="createNewCrawlhostgroupconfig()">New
+</button>
 
-        </li>
-      </ul>
-      <button class="btn btn-warning" (click)="createNewCrawlhostgroupconfig()">New</button>
-    </div>
-    <div class="col-md-5">
-
-      <div *ngIf="selectedCrawlhostgroupconfig">
-        <app-crawlhostgroupconfig-details
-          [crawlhostgroupconfig]="selectedCrawlhostgroupconfig"
-          [createHandler]="addCrawlhostgroupconfig"
-          [updateHandler]="updateCrawlhostgroupconfig"
-          [deleteHandler]="deleteCrawlhostgroupconfig">
-        </app-crawlhostgroupconfig-details>
-      </div>
-
-    </div>
-  </div>
-</div>
+<ng-container *ngIf="selectedCrawlhostgroupconfig">
+  <app-crawlhostgroupconfig-details
+    [crawlhostgroupconfig]="selectedCrawlhostgroupconfig"
+    [createHandler]="addCrawlhostgroupconfig"
+    [updateHandler]="updateCrawlhostgroupconfig"
+    [deleteHandler]="deleteCrawlhostgroupconfig">
+  </app-crawlhostgroupconfig-details>
+</ng-container>

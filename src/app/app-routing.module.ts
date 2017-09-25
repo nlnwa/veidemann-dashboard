@@ -13,7 +13,7 @@ import {PolitenessConfigListComponent} from './configurations/politenessconfig/'
 import {EntityDetailsComponent, EntityListComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
-import {CrawlhostgroupconfigListComponent} from "./configurations/crawlhostgroupconfig/crawlhostgroupconfig-list/crawlhostgroupconfig-list.component";
+import {CrawlhostgroupconfigListComponent} from './configurations/crawlhostgroupconfig/';
 
 const routes: Routes = [
   {

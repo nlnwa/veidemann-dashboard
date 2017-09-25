@@ -1,0 +1,7 @@
+.ttIcon{
+  opacity: 30;
+}
+
+.ttIcon:hover{
+  opacity: 70;
+}
