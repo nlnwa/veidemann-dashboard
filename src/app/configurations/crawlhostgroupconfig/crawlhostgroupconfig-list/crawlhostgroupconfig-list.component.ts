@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CrawlhostgroupconfigService} from '../crawlhostgroupconfig.service';
+import {Component, OnInit} from '@angular/core';
+import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {CrawlHostGroupConfig} from '../crawlhostgroupconfig.model';
 
 @Component({
@@ -7,34 +7,34 @@ import {CrawlHostGroupConfig} from '../crawlhostgroupconfig.model';
   templateUrl: './crawlhostgroupconfig-list.component.html',
   styleUrls: ['./crawlhostgroupconfig-list.component.css']
 })
-export class CrawlhostgroupconfigListComponent implements OnInit {
+export class CrawlHostGroupConfigListComponent implements OnInit {
 
-  crawlhostgroupconfigs: CrawlHostGroupConfig[];
-  selectedCrawlhostgroupconfig: CrawlHostGroupConfig;
+  crawlHostGroupConfigs: CrawlHostGroupConfig[];
+  selectedCrawlHostGroupConfig: CrawlHostGroupConfig;
 
 
-  constructor(private crawlhostgroupconfigService: CrawlhostgroupconfigService) {
+  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService) {
   }
 
   ngOnInit() {
-    this.crawlhostgroupconfigService.getAllCrawlhostgroupconfig().subscribe(crawlhostgroupconfigs => {
-      this.crawlhostgroupconfigs = crawlhostgroupconfigs.value;
-    })
+    this.crawlHostGroupConfigService.getAllCrawlHostGroupConfig()
+      .map(reply => reply.value)
+      .subscribe(crawlHostGroupConfigs => this.crawlHostGroupConfigs = crawlHostGroupConfigs);
   }
 
-  private getIndexOfCrawlhostgroupconfig = (crawlhostgroupconfigId: String) => {
-    return this.crawlhostgroupconfigs.findIndex((crawlhostgroupconfig) => {
-      return crawlhostgroupconfig.id === crawlhostgroupconfigId;
+  private getIndexOfCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
+    return this.crawlHostGroupConfigs.findIndex((crawlHostGroupConfig) => {
+      return crawlHostGroupConfig.id === crawlHostGroupConfigId;
     });
   };
 
-  selectCrawlhostgroupconfig(crawlhostgroupconfig: CrawlHostGroupConfig) {
-    this.selectedCrawlhostgroupconfig = crawlhostgroupconfig;
+  selectCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    this.selectedCrawlHostGroupConfig = crawlHostGroupConfig;
   }
 
-  createNewCrawlhostgroupconfig() {
-    const crawlhostgroupconfig: CrawlHostGroupConfig = {
-     ip_range: [],
+  createNewCrawlHostGroupConfig() {
+    const crawlHostGroupConfig: CrawlHostGroupConfig = {
+      ip_range: [],
       meta: {
         name: '',
         description: '',
@@ -42,30 +42,30 @@ export class CrawlhostgroupconfigListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectCrawlhostgroupconfig(crawlhostgroupconfig);
+    this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
   }
 
-  deleteCrawlhostgroupconfig = (crawlhostgroupconfig: String) => {
-    const idx = this.getIndexOfCrawlhostgroupconfig(crawlhostgroupconfig);
+  deleteCrawlHostGroupConfig = (crawlHostGroupConfig: String) => {
+    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig);
     if (idx !== -1) {
-      this.crawlhostgroupconfigs.splice(idx, 1);
-      this.selectCrawlhostgroupconfig(null);
+      this.crawlHostGroupConfigs.splice(idx, 1);
+      this.selectCrawlHostGroupConfig(null);
     }
-    return this.crawlhostgroupconfigs
+    return this.crawlHostGroupConfigs
   };
 
-  addCrawlhostgroupconfig = (crawlhostgroupconfig: CrawlHostGroupConfig) => {
-    this.crawlhostgroupconfigs.push(crawlhostgroupconfig);
-    this.selectCrawlhostgroupconfig(crawlhostgroupconfig);
-    return this.crawlhostgroupconfigs;
+  addCrawlHostGroupConfig = (crawlHostGroupConfig: CrawlHostGroupConfig) => {
+    this.crawlHostGroupConfigs.push(crawlHostGroupConfig);
+    this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
+    return this.crawlHostGroupConfigs;
   };
 
-  updateCrawlhostgroupconfig = (crawlhostgroupconfig: CrawlHostGroupConfig) => {
-    const idx = this.getIndexOfCrawlhostgroupconfig(crawlhostgroupconfig.id);
+  updateCrawlHostGroupConfig = (crawlHostGroupConfig: CrawlHostGroupConfig) => {
+    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
     if (idx !== -1) {
-      this.crawlhostgroupconfigs[idx] = crawlhostgroupconfig;
-      this.selectCrawlhostgroupconfig(crawlhostgroupconfig);
+      this.crawlHostGroupConfigs[idx] = crawlHostGroupConfig;
+      this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
     }
-    return this.crawlhostgroupconfigs;
+    return this.crawlHostGroupConfigs;
   }
 }

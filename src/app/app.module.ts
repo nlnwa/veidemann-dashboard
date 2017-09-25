@@ -39,17 +39,12 @@ import {
 import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
 import {DocumentationComponent} from './documentation/documentation.component';
-
-/*
 import {
-  CrawlhostgroupconfigDetailsComponent
-} from './configurations/crawlhostgroupconfig/app-crawlhostgroupconfig-details/app-crawlhostgroupconfig-details.component';
+  CrawlHostGroupConfigDetailsComponent,
+  CrawlHostGroupConfigListComponent,
+  CrawlHostGroupConfigService
+} from './configurations/crawlhostgroupconfig';
 
-import {
-  CrawlhostgroupconfigListComponent
-} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-list/crawlhostgroupconfig-list.component';
-import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig.service';
-*/
 
 @NgModule({
   declarations: [
@@ -76,8 +71,8 @@ import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig
     EntityDetailsComponent,
     EntityListComponent,
     LoglevelComponent,
-    // CrawlhostgroupconfigDetailsComponent,
-    // CrawlhostgroupconfigListComponent,
+    CrawlHostGroupConfigDetailsComponent,
+    CrawlHostGroupConfigListComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,7 +89,7 @@ import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig
     SeedService,
     CrawlJobService,
     CrawlconfigService,
-    // CrawlhostgroupconfigService,
+    CrawlHostGroupConfigService,
     PolitenessConfigService,
     BrowserconfigService,
     DateTime,
@@ -106,5 +101,4 @@ import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

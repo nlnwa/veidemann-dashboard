@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {CrawlHostGroupConfig, IpRange} from '../crawlhostgroupconfig.model';
-import {CrawlhostgroupconfigService} from '../crawlhostgroupconfig.service';
+import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {Label} from '../../../commons/models/label.model';
@@ -11,10 +11,10 @@ import {Label} from '../../../commons/models/label.model';
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css']
 })
-export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
+export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   @Input()
-  crawlhostgroupconfig: CrawlHostGroupConfig;
-  crawlhostgroupconfigForm: FormGroup;
+  crawlHostGroupConfig: CrawlHostGroupConfig;
+  crawlHostGroupConfigFG: FormGroup;
 
   @Input()
   createHandler: Function;
@@ -23,14 +23,14 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  constructor(private crawlhostgroupconfigService: CrawlhostgroupconfigService,
+  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
               private fb: FormBuilder,
               private mdSnackBar: MdSnackBar) {
     this.createForm();
   }
 
   createForm() {
-    this.crawlhostgroupconfigForm = this.fb.group({
+    this.crawlHostGroupConfigFG = this.fb.group({
       id: {value: '', disabled: true},
       ip_range: this.fb.array([]),
       meta: this.fb.group({
@@ -45,46 +45,45 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(crawlhostgroupconfig: CrawlHostGroupConfig) {
-    this.crawlhostgroupconfigForm.controls['meta'].patchValue({
-      name: this.crawlhostgroupconfig.meta.name as string,
-      description: this.crawlhostgroupconfig.meta.description as string,
+  updateData(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    this.crawlHostGroupConfigFG.controls['meta'].patchValue({
+      name: this.crawlHostGroupConfig.meta.name as string,
+      description: this.crawlHostGroupConfig.meta.description as string,
     });
-    console.log(this.crawlhostgroupconfigForm.controls);
   }
 
   ngOnChanges() {
-    this.setLabel(this.crawlhostgroupconfig.meta.label);
-    this.setIpRange((this.crawlhostgroupconfig.ip_range));
+    this.setLabel(this.crawlHostGroupConfig.meta.label);
+    this.setIpRange((this.crawlHostGroupConfig.ip_range));
     setTimeout(() => {
-      this.updateData(this.crawlhostgroupconfig);
+      this.updateData(this.crawlHostGroupConfig);
     });
   }
 
-  createCrawlhostgroupconfig() {
-    this.crawlhostgroupconfig = this.prepareSaveCrawlhostgroupconfig();
-    this.crawlhostgroupconfigService.createCrawlhostgroupconfig(this.crawlhostgroupconfig)
-      .map(
-        (newCrawlhostgroupconfig: CrawlHostGroupConfig) => {
-          this.createHandler(newCrawlhostgroupconfig);
+  createCrawlHostGroupConfig() {
+    this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
+    this.crawlHostGroupConfigService.createCrawlHostGroupConfig(this.crawlHostGroupConfig)
+      .subscribe(
+        (crawlHostGroupConfig: CrawlHostGroupConfig) => {
+          this.createHandler(crawlHostGroupConfig);
         });
     this.mdSnackBar.open('Lagret');
   };
 
-  updateCrawlhostgroupconfig(crawlhostgroupconfigForm): void {
-    this.crawlhostgroupconfig = this.prepareSaveCrawlhostgroupconfig();
-    this.crawlhostgroupconfigService.updateCrawlhostgroupconfig(this.crawlhostgroupconfig)
-      .map((updatedCrawlhostgroupconfig) => {
-        this.updateHandler(updatedCrawlhostgroupconfig);
+  updateCrawlHostGroupConfig(crawlHostGroupConfigForm): void {
+    this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
+    this.crawlHostGroupConfigService.updateCrawlHostGroupConfig(this.crawlHostGroupConfig)
+      .subscribe((updatedCrawlHostGroupConfig) => {
+        this.updateHandler(updatedCrawlHostGroupConfig);
       });
     this.mdSnackBar.open('Lagret');
   };
 
-  deleteCrawlhostgroupconfig(crawlhostgroupconfigId): void {
-    this.crawlhostgroupconfigService.deleteCrawlhostgroupconfig(crawlhostgroupconfigId)
-      .map((deletedCrawlhostgroupconfig) => {
-        this.deleteHandler(deletedCrawlhostgroupconfig);
-        if (deletedCrawlhostgroupconfig === 'not allowed') {
+  deleteCrawlHostGroupConfig(crawlHostGroupConfigId): void {
+    this.crawlHostGroupConfigService.deleteCrawlHostGroupConfig(crawlHostGroupConfigId)
+      .subscribe((response) => {
+        this.deleteHandler(response);
+        if (response === 'not allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
           this.mdSnackBar.open('Slettet');
@@ -92,19 +91,18 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
       });
   };
 
-  prepareSaveCrawlhostgroupconfig(): CrawlHostGroupConfig {
-    const formModel = this.crawlhostgroupconfigForm.value;
-
+  prepareSaveCrawlHostGroupConfig(): CrawlHostGroupConfig {
+    const formModel = this.crawlHostGroupConfigFG.value;
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)
     );
 
-    const iprangeDeepCopy: IpRange[] = formModel.iprange.map(
-      (iprange: IpRange) => Object.assign({}, iprange)
+    const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(
+      (ipRange: IpRange) => Object.assign({}, ipRange)
     );
 
     const saveCrawlhostgroupconfig: CrawlHostGroupConfig = {
-      id: this.crawlhostgroupconfig.id,
+      id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
         name: formModel.meta.name as string,
@@ -118,21 +116,21 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   setLabel(label) {
     const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
-    this.crawlhostgroupconfigForm.setControl('label', labelFormArray);
+    this.crawlHostGroupConfigFG.setControl('label', labelFormArray);
   }
 
   addLabel() {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['label'];
+    const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
     control.push(this.initLabel());
   }
 
   removeLabel(i: number) {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['label'];
+    const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
     control.removeAt(i);
   }
 
   get label(): FormArray {
-    return this.crawlhostgroupconfigForm.get('label') as FormArray;
+    return this.crawlHostGroupConfigFG.get('label') as FormArray;
   };
 
   initLabel() {
@@ -145,21 +143,21 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
   setIpRange(ip_range) {
     const ip_rangeFGs = ip_range.map(ip_range => (this.fb.group(ip_range)));
     const ip_rangeFormArray = this.fb.array(ip_rangeFGs);
-    this.crawlhostgroupconfigForm.setControl('ip_range', ip_rangeFormArray);
+    this.crawlHostGroupConfigFG.setControl('ip_range', ip_rangeFormArray);
   }
 
   addIpRange() {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['ip_range'];
+    const control = <FormArray>this.crawlHostGroupConfigFG.controls['ip_range'];
     control.push(this.initIpRange());
   }
 
   removeIpRange(i: number) {
-    const control = <FormArray>this.crawlhostgroupconfigForm.controls['ip_range'];
+    const control = <FormArray>this.crawlHostGroupConfigFG.controls['ip_range'];
     control.removeAt(i);
   }
 
   get ip_range(): FormArray {
-    return this.crawlhostgroupconfigForm.get('ip_range') as FormArray;
+    return this.crawlHostGroupConfigFG.get('ip_range') as FormArray;
   };
 
   initIpRange() {
