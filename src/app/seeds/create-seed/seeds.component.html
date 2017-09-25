@@ -22,9 +22,9 @@
 
   <div>
     <label>Høstejobb:
-      <angular2-multiselect [data]="crawljobList"
-                            [(ngModel)]="selectedCrawljobItems"
-                            [settings]="dropdownCrawljobSettings"
+      <angular2-multiselect [data]="crawlJobList"
+                            [(ngModel)]="selectedCrawlJobItems"
+                            [settings]="dropdownCrawlJobSettings"
                             formControlName="job_id">
       </angular2-multiselect>
       <small [hidden]="seedForm.controls.job_id.valid">
@@ -70,7 +70,12 @@
             (click)="createSeed()">
       Lagre
     </button>
-    <button md-raised-button color="accent" [disabled]="!seedForm.valid" (click)="createSeedNew()">Lagre og ny</button>
+    <button md-raised-button
+            color="accent"
+            [disabled]="!seedForm.valid"
+            (click)="createSeedNew()">
+      Lagre og ny
+    </button>
   </div>
 
 </form>

@@ -1,14 +1,14 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {CrawljobService} from './crawljob.service';
+import {CrawlJobService} from './crawljob.service';
 
-describe('CrawljobService', () => {
+describe('CrawlJobService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CrawljobService]
+      providers: [CrawlJobService]
     });
   });
 
-  it('should ...', inject([CrawljobService], (service: CrawljobService) => {
+  it('should ...', inject([CrawlJobService], (service: CrawlJobService) => {
     expect(service).toBeTruthy();
   }));
 });

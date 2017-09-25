@@ -3,8 +3,8 @@ import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators, Label} from '../../../commons/';
 import {isUndefined} from 'util';
-import {Politenessconfig} from '../politenessconfig';
-import {PolitenessconfigService} from '../politenessconfig.service';
+import {PolitenessConfig} from '../politenessconfig.model';
+import {PolitenessConfigService} from '../politenessconfig.service';
 
 
 @Component({
@@ -15,12 +15,12 @@ import {PolitenessconfigService} from '../politenessconfig.service';
 
 export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
-  politenessconfig: Politenessconfig;
-  politenessconfigForm: FormGroup;
+  politenessConfig: PolitenessConfig;
+  politenessConfigFG: FormGroup;
 
-  robotspolicyList: any = [];
-  robotspolicy_dropdownSettings = {};
-  selectedRobotspolicyItems = [];
+  robotsPolicyList: any = [];
+  robetsPolicyDropdownSettings = {};
+  selectedRobotsPolicyItems = [];
 
   @Input()
   createHandler: Function;
@@ -30,7 +30,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
 
-  constructor(private politenessconfigService: PolitenessconfigService,
+  constructor(private politenessConfigService: PolitenessConfigService,
               private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.filldropdown();
@@ -38,7 +38,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   createForm() {
-    this.politenessconfigForm = this.fb.group({
+    this.politenessConfigFG = this.fb.group({
       id: '',
       robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
       minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
@@ -52,49 +52,49 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(politenessconfig: Politenessconfig) {
-    this.politenessconfigForm.controls['id'].setValue(politenessconfig.id);
-    this.politenessconfigForm.controls['minimum_robots_validity_duration_s'].setValue(politenessconfig.minimum_robots_validity_duration_s);
-    this.politenessconfigForm.controls['custom_robots'].setValue(politenessconfig.custom_robots);
-    this.politenessconfigForm.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
-    this.politenessconfigForm.controls['meta'].patchValue({
+  updateData(politenessconfig: PolitenessConfig) {
+    this.politenessConfigFG.controls['id'].setValue(politenessconfig.id);
+    this.politenessConfigFG.controls['minimum_robots_validity_duration_s'].setValue(politenessconfig.minimum_robots_validity_duration_s);
+    this.politenessConfigFG.controls['custom_robots'].setValue(politenessconfig.custom_robots);
+    this.politenessConfigFG.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
+    this.politenessConfigFG.controls['meta'].patchValue({
       name: politenessconfig.meta.name as string,
       description: politenessconfig.meta.description as string,
     });
     this.setLabel(politenessconfig.meta.label);
     this.setSelectedDropdown();
-    this.selectedRobotspolicyItems = [];
+    this.selectedRobotsPolicyItems = [];
   };
 
   ngOnChanges() {
-    this.updateData(this.politenessconfig);
+    this.updateData(this.politenessConfig);
 
   }
 
   createPolitenessconfig() {
-    this.politenessconfig = this.prepareSavePolitenessconfig();
-    this.politenessconfigService.createPolitenessconfig(this.politenessconfig)
-      .map((newPolitenessconfig: Politenessconfig) => {
-        this.createHandler(newPolitenessconfig);
+    this.politenessConfig = this.prepareSavePolitenessconfig();
+    this.politenessConfigService.createPolitenessConfig(this.politenessConfig)
+      .subscribe((newPolitenessConfig: PolitenessConfig) => {
+        this.createHandler(newPolitenessConfig);
       });
     this.mdSnackBar.open('Lagret');
   }
 
 
-  updatePolitenessconfig(politenessconfig: Politenessconfig): void {
-    this.politenessconfig = this.prepareSavePolitenessconfig();
-    this.politenessconfigService.updatePolitenessConfig(this.politenessconfig)
-      .map((updatedPolitenessconfig: Politenessconfig) => {
-        this.updateHandler(updatedPolitenessconfig);
+  updatePolitenessconfig(politenessConfig: PolitenessConfig): void {
+    this.politenessConfig = this.prepareSavePolitenessconfig();
+    this.politenessConfigService.updatePolitenessConfig(this.politenessConfig)
+      .subscribe((updatedPolitenessConfig: PolitenessConfig) => {
+        this.updateHandler(updatedPolitenessConfig);
       });
     this.mdSnackBar.open('Lagret');
   }
 
-  deletePolitenessconfig(politenessconfigId): void {
-    this.politenessconfigService.deletePolitenessConfig(politenessconfigId)
-      .map((deletedPolitenessconfig) => {
-        this.deleteHandler(deletedPolitenessconfig);
-        if (deletedPolitenessconfig === 'not_allowed') {
+  deletePolitenessconfig(politenessConfigId) {
+    this.politenessConfigService.deletePolitenessConfig(politenessConfigId)
+      .subscribe((deletedPolitenessConfig) => {
+        this.deleteHandler(deletedPolitenessConfig);
+        if (deletedPolitenessConfig === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
           this.mdSnackBar.open('Slettet');
@@ -103,29 +103,28 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   filldropdown() {
-    this.politenessconfigService.getRobotsconfig().map(robotspolicy => robotspolicy).forEach((value) => {
-      for (const i of value.menuitem) {
-        this.robotspolicyList.push({id: i.id, itemName: i.itemName});
-      }
-    });
+    this.politenessConfigService.getRobotsConfig()
+      .subscribe(robotsPolicies => {
+        robotsPolicies.forEach((robotsPolicy) => {
+          this.robotsPolicyList.push(robotsPolicy);
+        });
+      });
   }
 
   setSelectedDropdown() {
-    if (!isUndefined(this.politenessconfig.id)) {
-      this.politenessconfigService
-        .getPolitenessconfig(this.politenessconfig.id).map(politenessconfig => politenessconfig)
-        .forEach((value) => {
-          value.forEach((key) => {
-            for (const i of this.robotspolicyList) {
-              if (i.itemName === key.robots_policy) {
-                this.selectedRobotspolicyItems.push({id: i.id, itemName: key.robots_policy})
-              }
+    if (!isUndefined(this.politenessConfig.id)) {
+      this.politenessConfigService
+        .getPolitenessConfig(this.politenessConfig.id)
+        .subscribe(politenessConfig => {
+          for (const robotsPolicy of this.robotsPolicyList) {
+            if (robotsPolicy.itemName === politenessConfig.robots_policy) {
+              this.selectedRobotsPolicyItems.push({id: robotsPolicy.id, itemName: politenessConfig.robots_policy})
             }
-          });
-          this.politenessconfigForm.controls['robots_policy'].setValue(this.selectedRobotspolicyItems);
+          }
+          this.politenessConfigFG.controls['robots_policy'].setValue(this.selectedRobotsPolicyItems);
         });
     }
-    this.robotspolicy_dropdownSettings = {
+    this.robetsPolicyDropdownSettings = {
       singleSelection: true,
       text: 'Velg Robots policy',
     };
@@ -135,21 +134,21 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   setLabel(label) {
     const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
-    this.politenessconfigForm.setControl('label', labelFormArray);
+    this.politenessConfigFG.setControl('label', labelFormArray);
   }
 
   addLabel() {
-    const control = <FormArray>this.politenessconfigForm.controls['label'];
+    const control = <FormArray>this.politenessConfigFG.controls['label'];
     control.push(this.initLabel());
   }
 
   removeLabel(i: number) {
-    const control = <FormArray>this.politenessconfigForm.controls['label'];
+    const control = <FormArray>this.politenessConfigFG.controls['label'];
     control.removeAt(i);
   }
 
   get label(): FormArray {
-    return this.politenessconfigForm.get('label') as FormArray;
+    return this.politenessConfigFG.get('label') as FormArray;
   }
 
   initLabel() {
@@ -159,8 +158,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     });
   }
 
-  prepareSavePolitenessconfig(): Politenessconfig {
-    const formModel = this.politenessconfigForm.value;
+  prepareSavePolitenessconfig(): PolitenessConfig {
+    const formModel = this.politenessConfigFG.value;
     // deep copy of form model lairs
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)
@@ -168,8 +167,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const savePolitenessconfig: Politenessconfig = {
-      id: this.politenessconfig.id,
+    const savePolitenessconfig: PolitenessConfig = {
+      id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy[0].itemName,
       minimum_robots_validity_duration_s: formModel.minimum_robots_validity_duration_s,
       custom_robots: formModel.custom_robots,

@@ -1,27 +1,26 @@
 <h2>Logconfig</h2>
 <form [formGroup]="logForm">
-  <div formArrayName="log_level">
+  <ng-container formArrayName="log_level">
     <div *ngFor="let log_level of log_level.controls; let i=index" [formGroupName]="i">
       <md-form-field>
         <input mdInput formControlName="logger" placeholder="Logger">
       </md-form-field>
 
       <md-select formControlName="level" placeholder="Level">
-        <md-option *ngFor="let x of levelList" [value]="x.text">{{x.text}}</md-option>
+        <md-option *ngFor="let level of levels | async" [value]="level">{{level}}</md-option>
       </md-select>
 
       <button md-icon-button color="warn" (click)="removeLogconfig(i)">
         <md-icon>close</md-icon>
       </button>
     </div>
-
-  </div>
+  </ng-container>
 
   <button md-raised-button color="accent"
           (click)="addLogconfig()">Legg til Logconfig
   </button>
   <button md-raised-button color="primary"
-          (click)="saveLog(logForm.value)" novalidate>Lagre
+          (click)="saveLogConfig(logForm.value)" novalidate>Lagre
   </button>
 
 </form>

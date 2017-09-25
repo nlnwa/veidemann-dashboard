@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Seed} from './seed';
-import {ErrorHandlerService} from '../commons/';
+import {Seed, Seeds} from './seed.model';
 import {environment} from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class SeedService {
@@ -14,49 +13,37 @@ export class SeedService {
   private seedSearchUrl = `${environment.API_URL}/seedsearch`;
   private seedsOfEntityUrl = `${environment.API_URL}/seedsofentity`;
 
-  constructor(private http: Http,
-              private errorHandlerService: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+  getAllSeeds(): Observable<Seeds> {
+    return this.http.get(this.seedsUrl);
   }
 
-  getAllSeeds(): Observable<Seed[]> {
-    return this.http.get(this.seedsUrl)
-      .map(res => res.json().value as Seed[]);
+  getSeed(seed): Observable<Seed> {
+    return this.http.get<Seeds>(`${this.seedsUrl}/${seed}`)
+      .map(seeds => seeds.value[0]);
   }
 
-  getSeed(seed) {
-    const url = `${this.seedsUrl}/${seed}`;
-    return this.http.get(url)
-      .map(res => res.json().value as Seed);
+  search(term: string): Observable<Seeds> {
+    return this.http.get(`${this.seedSearchUrl}/name=${term}`);
   }
 
-  search(term: string): Observable<Seed[]> {
-    return this.http
-      .get(`${this.seedSearchUrl}/name=${term}`)
-      .map(res => res.json().value);
-  }
-
-  deleteSeed(delSeedid: String): Observable<String> {
-    return this.http.delete(this.seedsUrl + '/' + delSeedid)
-      .map(res => res.json().value as String)
+  deleteSeed(seedId: String): Observable<String> {
+    return this.http.delete(`${this.seedsUrl}/${seedId}`);
   }
 
   // put("/api/entities/:id")
   updateSeed(putSeed: Seed): Observable<Seed> {
-    const putUrl = this.seedsUrl + '/' + putSeed.id;
-    return this.http.put(putUrl, putSeed)
-      .map(response => response.json() as Seed)
+    return this.http.put(`${this.seedsUrl}/${putSeed.id}`, putSeed);
   }
 
   // post("/api/entities")
   createSeed(newSeed: Seed): Observable<Seed> {
-    return this.http.post(this.seedsUrl, newSeed)
-      .map(response => response.json() as Seed)
+    return this.http.post(this.seedsUrl, newSeed);
   }
 
-  getSeedsOfEntity(entity_id) {
-    return this.http
-      .get(`${this.seedsOfEntityUrl}/entityid=${entity_id}`)
-      .map(res => res.json());
+  getSeedsOfEntity(entity_id): Observable<Seeds> {
+    return this.http.get(`${this.seedsOfEntityUrl}/entityid=${entity_id}`);
   }
 
 }

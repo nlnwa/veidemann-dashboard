@@ -1,13 +1,13 @@
-import {Meta} from '../../commons/models/meta';
+import {Meta} from '../../commons/models/meta.model';
 
-export class Politenessconfigs {
-  // value: Value[];
+export class PolitenessConfigs {
+  value: PolitenessConfig[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Politenessconfig {
+export class PolitenessConfig {
   id?: string;
   meta: Meta;
   robots_policy: string;

@@ -1,49 +1,36 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Browserscript} from './';
-import {ErrorHandlerService} from '../../commons';
+import {BrowserScript, BrowserScripts} from './browserscript.model';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
 
 
 @Injectable()
 export class BrowserscriptService {
 
-  private browserscriptUrl = `${environment.API_URL}/browserscript`;
+  private browserScriptUrl = `${environment.API_URL}/browserscript`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+
+  getAllBrowserScripts(): Observable<BrowserScripts> {
+    return this.http.get(this.browserScriptUrl);
   }
 
-
-  getAllBrowserscripts() {
-    return this.http.get(this.browserscriptUrl)
-      .map(res => res.json());
+  getBrowserScript(browserScriptId): Observable<BrowserScript> {
+    return this.http.get<BrowserScripts>(`${this.browserScriptUrl}/${browserScriptId}`)
+      .map(res => res.value[0]);
   }
 
-  getBrowserscript(browserscript_id) {
-    return this.http.get(`${this.browserscriptUrl}/${browserscript_id}`)
-      .map(res => res.json().value);
+  createBrowserScript(browserScript: BrowserScript): Observable<BrowserScript> {
+    return this.http.post(this.browserScriptUrl, browserScript);
   }
 
-  createBrowserscript(newBrowserscript: Browserscript): Observable<Browserscript> {
-    return this.http.post(this.browserscriptUrl, newBrowserscript)
-      .map(response => response.json() as Browserscript)
-      .catch(this.errorhandlerservice.handleError);
+  deletePolitenessConfig(browserScriptId: String): Observable<String> {
+    return this.http.delete(this.browserScriptUrl + '/' + browserScriptId);
   }
 
-  deletePolitenessConfig(delBrowserscriptId: String): Observable<String> {
-    return this.http.delete(this.browserscriptUrl + '/' + delBrowserscriptId)
-      .map(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
+  updatePolitenessConfig(browserScript: BrowserScript): Observable<BrowserScript> {
+    return this.http.put(this.browserScriptUrl + '/' + browserScript.id, browserScript)
   }
-
-  updatePolitenessConfig(putBrowserscript: Browserscript): Observable<Browserscript> {
-    const putUrl = this.browserscriptUrl + '/' + putBrowserscript.id;
-    return this.http.put(putUrl, putBrowserscript)
-      .map(response => response.json() as Browserscript)
-      .catch(this.errorhandlerservice.handleError);
-  }
-
-
 }

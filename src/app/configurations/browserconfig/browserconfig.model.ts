@@ -1,14 +1,14 @@
-import {Meta} from '../../commons/models/meta';
-import {Label} from '../../commons/models/label';
+import {Meta} from '../../commons/models/meta.model';
+import {Label} from '../../commons/models/label.model';
 
 export class BrowserConfigs {
-  // value: Value[];
+  value: BrowserConfig[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Browserconfig {
+export class BrowserConfig {
   id?: string;
   meta: Meta;
   user_agent?: string;

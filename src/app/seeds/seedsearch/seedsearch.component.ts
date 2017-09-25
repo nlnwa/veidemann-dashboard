@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
-import {Seed} from '../seed';
+import {Seed} from '../seed.model';
 import {SeedService} from '../seeds.service';
 import 'rxjs/add/observable/merge';
 import {Router} from '@angular/router';
@@ -16,10 +16,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export class SeedSearchComponent implements OnInit {
   seedDataSource: SeedDataSource;
 
-
-  seed: Observable<Seed[]>;
   selectedSeed: Seed;
-  searchinput: String;
+  searchInput: String;
 
   private searchTerms = new Subject<string>();
 
@@ -36,7 +34,7 @@ export class SeedSearchComponent implements OnInit {
   }
 
   selectSeed(seed: Seed) {
-    this.searchinput = null;
+    this.searchInput = null;
     this.selectedSeed = seed;
     this.search('');
     // let link = ['/seeds/', seed.id];
@@ -58,8 +56,6 @@ export class SeedSearchComponent implements OnInit {
           : Observable.of<Seed[]>([]))
 
         .catch(error => {
-          // TODO: add real error handling
-          console.log(error);
           return Observable.of<Seed[]>([]);
         });
         */
@@ -83,7 +79,7 @@ export class SeedDataSource extends DataSource<Seed> {
 
   constructor(private seedService: SeedService) {
     super();
-    this.seedService.getAllSeeds().subscribe(this._dataChange);
+    this.seedService.getAllSeeds().subscribe(seeds => this._dataChange.next(seeds.value));
   }
 
   connect(): Observable<Seed[]> {

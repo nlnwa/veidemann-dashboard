@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {StatisticsService} from './statistics.service';
-import {Seed} from '../seeds/seed';
-import {Entity} from '../entities/entity';
-import {FormBuilder} from '@angular/forms';
+import {SeedService} from '../seeds/seeds.service';
+import {EntityService} from '../entities/entity.service';
 
 @Component({
   selector: 'app-statistics',
@@ -10,22 +8,18 @@ import {FormBuilder} from '@angular/forms';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
-  seeds: Seed[];
-  entities: Entity[];
+  nrOfSeeds: number;
+  nrOfEntities: number;
 
-  constructor(private statisticsservice: StatisticsService,
-              private fb: FormBuilder) {
-
-  }
+  constructor(private seedsService: SeedService,
+              private entityService: EntityService) {}
 
   ngOnInit() {
-    this.statisticsservice.getSeeds().subscribe(seeds => {
-      this.seeds = seeds.count
+    this.seedsService.getAllSeeds().subscribe(reply => {
+      this.nrOfSeeds = reply.count;
     });
-    this.statisticsservice.getEntities().subscribe(entities => {
-      this.entities = entities.count
+    this.entityService.getAllEntities().subscribe(reply => {
+      this.nrOfEntities = reply.count;
     });
-
-
   }
 }

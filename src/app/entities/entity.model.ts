@@ -1,7 +1,7 @@
-import {Meta} from '../commons/models/meta';
+import {Meta} from '../commons/models/meta.model';
 
 export class Entities {
-  Entity: Entity[];
+  value: Entity[];
   count: number;
   page_size: string;
   page: string;

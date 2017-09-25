@@ -3,18 +3,17 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {ActivityComponent} from './activity';
 import {SeedDetailComponent, SeedsComponent, SeedSearchComponent} from './seeds/';
-import {CrawljobListComponent} from './configurations/crawljobs/';
-import {CrawlersComponent} from './crawlers';
-import {DocumentationComponent} from './documentation';
-import {StatisticsComponent} from './statistics';
+import {CrawlJobListComponent} from './configurations/crawljobs/';
+import {DocumentationComponent} from './documentation/documentation.component';
+import {StatisticsComponent} from './statistics/statistics.component';
 import {ScheduleListComponent} from './configurations/schedule/';
 import {CrawlconfigListComponent} from './configurations/crawlconfig/';
 import {BrowserconfigListComponent} from './configurations/browserconfig/';
-import {PolitenessconfigListComponent} from './configurations/politenessconfig/';
+import {PolitenessConfigListComponent} from './configurations/politenessconfig/';
 import {EntityDetailsComponent, EntityListComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
-import {CrawlhostgroupconfigListComponent} from './configurations/crawlhostgroupconfig/';
+import {CrawlHostGroupConfigListComponent} from './configurations/crawlhostgroupconfig/';
 
 const routes: Routes = [
   {
@@ -40,11 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'crawljobs',
-    component: CrawljobListComponent
-  },
-  {
-    path: 'crawlers',
-    component: CrawlersComponent
+    component: CrawlJobListComponent
   },
   {
     path: 'documentation',
@@ -72,7 +67,7 @@ const routes: Routes = [
   },
   {
     path: 'crawlhostgroupconfig',
-    component: CrawlhostgroupconfigListComponent
+    component: CrawlHostGroupConfigListComponent
   },
   {
     path: 'browserconfig',
@@ -84,7 +79,7 @@ const routes: Routes = [
   },
   {
     path: 'politenessconfig',
-    component: PolitenessconfigListComponent
+    component: PolitenessConfigListComponent
   },
   {
     path: 'logconfig',

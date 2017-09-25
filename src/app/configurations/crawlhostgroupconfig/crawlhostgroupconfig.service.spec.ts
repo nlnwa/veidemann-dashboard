@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { CrawlhostgroupconfigService } from './crawlhostgroupconfig.service';
+import { CrawlHostGroupConfigService } from './crawlhostgroupconfig.service';
 
-describe('CrawlhostgroupconfigService', () => {
+describe('CrawlHostGroupConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CrawlhostgroupconfigService]
+      providers: [CrawlHostGroupConfigService]
     });
   });
 
-  it('should be created', inject([CrawlhostgroupconfigService], (service: CrawlhostgroupconfigService) => {
+  it('should be created', inject([CrawlHostGroupConfigService], (service: CrawlHostGroupConfigService) => {
     expect(service).toBeTruthy();
   }));
 });

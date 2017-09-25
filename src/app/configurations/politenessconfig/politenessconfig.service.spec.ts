@@ -1,14 +1,14 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {PolitenessconfigService} from './politenessconfig.service';
+import {PolitenessConfigService} from './politenessconfig.service';
 
-describe('PolitenessconfigService', () => {
+describe('PolitenessConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PolitenessconfigService]
+      providers: [PolitenessConfigService]
     });
   });
 
-  it('should ...', inject([PolitenessconfigService], (service: PolitenessconfigService) => {
+  it('should ...', inject([PolitenessConfigService], (service: PolitenessConfigService) => {
     expect(service).toBeTruthy();
   }));
 });

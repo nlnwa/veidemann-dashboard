@@ -1,47 +1,46 @@
 import {Component, OnInit} from '@angular/core';
-import {Politenessconfig} from '../politenessconfig';
-import {PolitenessconfigService} from '../politenessconfig.service';
+import {PolitenessConfig} from '../politenessconfig.model';
+import {PolitenessConfigService} from '../politenessconfig.service';
 
 @Component({
   selector: 'app-politenessconfig-list',
   templateUrl: './politenessconfig-list.component.html',
   styleUrls: ['./politenessconfig-list.component.css']
 })
-export class PolitenessconfigListComponent implements OnInit {
+export class PolitenessConfigListComponent implements OnInit {
 
-  politenessconfigs: Politenessconfig[];
-  selectedPolitenessconfig: Politenessconfig;
+  politenessConfigs: PolitenessConfig[];
+  selectedPolitenessConfig: PolitenessConfig;
 
-  constructor(private politenessconfigService: PolitenessconfigService) {
-  }
+  constructor(private politenessConfigService: PolitenessConfigService) {}
 
   ngOnInit() {
-    this.politenessconfigService.getAllPolitenessconfigs().subscribe(politenessconfigs => {
-      this.politenessconfigs = politenessconfigs.value
-    })
+    this.politenessConfigService.getAllPolitenessConfigs()
+      .map(reply => reply.value)
+      .subscribe(politenessConfigs => this.politenessConfigs = politenessConfigs);
   }
 
-  private getIndexOfPolitenessconfig = (politenessconfigId: String) => {
-    return this.politenessconfigs.findIndex((politenessconfig) => {
-      return politenessconfig.id === politenessconfigId;
+  private getIndexOfPolitenessConfig = (politenessConfigId: String) => {
+    return this.politenessConfigs.findIndex((politenessConfig) => {
+      return politenessConfig.id === politenessConfigId;
     });
   };
 
-  selectPolitenessconfig(politenessconfig: Politenessconfig) {
-    this.selectedPolitenessconfig = politenessconfig
+  selectPolitenessConfig(politenessConfig: PolitenessConfig) {
+    this.selectedPolitenessConfig = politenessConfig
   }
 
-  deletePolitenessconfig = (politenessconfigId: String) => {
-    const idx = this.getIndexOfPolitenessconfig(politenessconfigId);
+  deletePolitenessConfig = (politenessConfigId: String) => {
+    const idx = this.getIndexOfPolitenessConfig(politenessConfigId);
     if (idx !== -1) {
-      this.politenessconfigs.splice(idx, 1);
-      this.selectPolitenessconfig(null);
+      this.politenessConfigs.splice(idx, 1);
+      this.selectPolitenessConfig(null);
     }
-    return this.politenessconfigs
+    return this.politenessConfigs
   };
 
-  createNewPolitenessconfig() {
-    const politenessconfig: Politenessconfig = {
+  createNewPolitenessConfig() {
+    const politenessConfig: PolitenessConfig = {
       robots_policy: 'OBEY_ROBOTS',
       minimum_robots_validity_duration_s: null,
       custom_robots: '',
@@ -53,21 +52,21 @@ export class PolitenessconfigListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectPolitenessconfig(politenessconfig);
+    this.selectPolitenessConfig(politenessConfig);
   }
 
-  addPolitenessconfig = (politenessconfig: Politenessconfig) => {
-    this.politenessconfigs.push(politenessconfig);
-    this.selectPolitenessconfig(politenessconfig);
-    return this.politenessconfigs;
+  addPolitenessConfig = (politenessConfig: PolitenessConfig) => {
+    this.politenessConfigs.push(politenessConfig);
+    this.selectPolitenessConfig(politenessConfig);
+    return this.politenessConfigs;
   };
 
-  updatePolitenessconfig = (politenessconfig: Politenessconfig) => {
-    const idx = this.getIndexOfPolitenessconfig(politenessconfig.id);
+  updatePolitenessConfig = (politenessConfig: PolitenessConfig) => {
+    const idx = this.getIndexOfPolitenessConfig(politenessConfig.id);
     if (idx !== -1) {
-      this.politenessconfigs[idx] = politenessconfig;
-      this.selectPolitenessconfig(politenessconfig);
+      this.politenessConfigs[idx] = politenessConfig;
+      this.selectPolitenessConfig(politenessConfig);
     }
-    return this.politenessconfigs;
+    return this.politenessConfigs;
   }
 }

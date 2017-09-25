@@ -1,12 +1,12 @@
-<h2 *ngIf="crawlhostgroupconfig.id">Crawlhostgroupconfig Details</h2>
-<h2 *ngIf="!crawlhostgroupconfig.id">New Crawlhostgroupconfig</h2>
+<h2 *ngIf="crawlHostGroupConfig.id">Crawlhostgroupconfig Details</h2>
+<h2 *ngIf="!crawlHostGroupConfig.id">New Crawlhostgroupconfig</h2>
 
 
-<form [formGroup]="crawlhostgroupconfigForm" fxLayout="column">
+<form [formGroup]="crawlHostGroupConfigFG" fxLayout="column">
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! crawlhostgroupconfigForm.controls.meta.valid">
+    <md-error *ngIf="! crawlHostGroupConfigFG.controls.meta.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -31,13 +31,13 @@
       <md-card-content>
         <md-form-field>
           <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:">
-          <md-error *ngIf="! crawlhostgroupconfigForm.controls['ip_range'].controls[i].controls.ip_from.valid">
+          <md-error *ngIf="! crawlHostGroupConfigFG.controls['ip_range'].controls[i].controls.ip_from.valid">
             En gyldig IP-addresse er påkrevd.
           </md-error>
         </md-form-field>
         <md-form-field>
           <input mdInput formControlName="ip_to" placeholder="Til IP-addresse">
-          <md-error *ngIf="! crawlhostgroupconfigForm.controls.ip_range.controls[i].controls.ip_to.valid">
+          <md-error *ngIf="! crawlHostGroupConfigFG.controls.ip_range.controls[i].controls.ip_to.valid">
             En gyldig IP-addresse er påkrevd.
           </md-error>
         </md-form-field>
@@ -79,15 +79,15 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!crawlhostgroupconfigForm.valid"
-            *ngIf="!crawlhostgroupconfig.id"
-            (click)="createCrawlhostgroupconfig(crawlhostgroupconfigForm.value)" novalidate>
+            [disabled]="!crawlHostGroupConfigFG.valid"
+            *ngIf="!crawlHostGroupConfig.id"
+            (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)" novalidate>
       Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="crawlhostgroupconfig.id"
-            [disabled]="!crawlhostgroupconfigForm.valid"
-            (click)="updateCrawlhostgroupconfig(crawlhostgroupconfigForm.value)">
+            *ngIf="crawlHostGroupConfig.id"
+            [disabled]="!crawlHostGroupConfigFG.valid"
+            (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)">
       Lagre
     </button>
     <button md-raised-button color="accent"
@@ -95,8 +95,8 @@
     </button>
 
     <button md-raised-button color="warn"
-            *ngIf="crawlhostgroupconfig.id"
-            (click)="deleteCrawlhostgroupconfig(crawlhostgroupconfig.id); $event.stopPropagation()">Slett
+            *ngIf="crawlHostGroupConfig.id"
+            (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

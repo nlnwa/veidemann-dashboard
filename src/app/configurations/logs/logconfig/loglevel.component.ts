@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
+import {LogLevel} from '../log.model';
 
 @Component({
   selector: 'app-loglevel',
@@ -10,8 +11,7 @@ import {LogService} from '../log.service';
 export class LoglevelComponent implements OnInit {
 
   logForm: FormGroup;
-  loglist = [];
-  levelList = [];
+  logLevels: LogLevel[] = [];
 
   constructor(private logService: LogService,
               private fb: FormBuilder) {
@@ -21,30 +21,21 @@ export class LoglevelComponent implements OnInit {
     })
   }
 
-
   ngOnInit() {
-    this.levelList.push({text: 'ALL'});
-    this.levelList.push({text: 'TRACE'});
-    this.levelList.push({text: 'DEBUG'});
-    this.levelList.push({text: 'INFO'});
-    this.levelList.push({text: 'WARN'});
-    this.levelList.push({text: 'ERROR'});
-    this.levelList.push({text: 'FATAL'});
-    this.levelList.push({text: 'OFF'});
-    this.logService.getAllLogconfigs().map(logconfig => logconfig.log_level).forEach((value) => {
-      value.forEach((key) => {
-        this.loglist.push({logger: key.logger, level: key.level});
-      })
-    });
+    this.logService.getLogConfig()
+      .map(response => response.log_level)
+      .subscribe(logLevels => {
+        logLevels.forEach((logLevel) => { this.logLevels.push(logLevel); })
+        this.setLogconfig(this.logLevels);
+      });
+  }
 
-    setTimeout(() => {
-      this.setLogconfig(this.loglist);
-    }, 200);
-  };
-
+  get levels() {
+    return this.logService.getLevels();
+  }
 
   setLogconfig(logconfig) {
-    this.loglist = [];
+    this.logLevels = [];
     const logconfigFGs = logconfig.map(config => (this.fb.group(config)));
     const logconfigFormArray = this.fb.array(logconfigFGs);
     this.logForm.setControl('log_level', logconfigFormArray);
@@ -61,8 +52,8 @@ export class LoglevelComponent implements OnInit {
     });
   }
 
-  saveLog(logconfig) {
-    this.logService.updateLogconfig(logconfig)
+  saveLogConfig(logconfig) {
+    this.logService.updateLogConfig(logconfig).subscribe();
   }
 
   addLogconfig() {

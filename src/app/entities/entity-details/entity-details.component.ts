@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Entity} from '../entity';
+import {Entity} from '../entity.model';
 import {EntityService} from '../entity.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {DateTime, Label} from '../../commons/';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Seeds} from '../../seeds/seed';
+import {Seeds} from '../../seeds/seed.model';
 import {SeedService} from '../../seeds/seeds.service';
 
 
@@ -21,10 +21,6 @@ export class EntityDetailsComponent implements OnChanges {
   entityForm: FormGroup;
   seeds = Seeds;
   getseedlist = [];
-
-  public isCollapsedContent = true;
-  public isCollapsedSeeds = true;
-
 
   @Input()
   createHandler: Function;
@@ -62,13 +58,14 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   getParams() {
-    this.route.params.subscribe(params => {
-      if (params.entity == null) {
-      } else {
-        this.entityService.getEntity(params.entity).subscribe(entity => {
+    this.route.paramMap.subscribe(params => {
+      if (params.has('entity')) {
+        this.entityService.getEntity(params.get('entity')).subscribe(entity => {
           this.entity = entity[0];
           this.ngOnChanges();
         })
+      } else {
+
       }
     });
   }
@@ -120,7 +117,7 @@ export class EntityDetailsComponent implements OnChanges {
   createEntity(entity) {
     this.entity = this.prepareSaveEntity();
     this.entityService.createEntity(this.entity)
-      .map((newEntity: Entity) => {
+      .subscribe((newEntity: Entity) => {
         this.createHandler(newEntity);
       });
     this.mdSnackBar.open('Lagret');
@@ -130,7 +127,7 @@ export class EntityDetailsComponent implements OnChanges {
   updateEntity(entity: Entity): void {
     this.entity = this.prepareSaveEntity();
     this.entityService.updateEntity(this.entity)
-      .map((updatedEntity: Entity) => {
+      .subscribe((updatedEntity: Entity) => {
         this.updateHandler(updatedEntity);
       });
     this.mdSnackBar.open('Lagret');
@@ -138,7 +135,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   deleteEntity(): void {
     this.entityService.deleteEntity(this.entity.id)
-      .map((deletedEntity) => {
+      .subscribe((deletedEntity) => {
         this.deleteHandler(deletedEntity);
         if (deletedEntity === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');

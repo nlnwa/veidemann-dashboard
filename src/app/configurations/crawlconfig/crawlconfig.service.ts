@@ -1,46 +1,36 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Crawlconfig} from './';
-import {ErrorHandlerService} from '../../commons/';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
+import {CrawlConfig, CrawlConfigs} from './crawlconfig.model';
+
 
 @Injectable()
 export class CrawlconfigService {
 
-  private crawlconfigUrl = `${environment.API_URL}/crawlconfig`;
+  private crawlConfigUrl = `${environment.API_URL}/crawlconfig`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+  getCrawlConfig(crawlConfigId): Observable<CrawlConfig> {
+    return this.http.get<CrawlConfigs>(`${this.crawlConfigUrl}/${crawlConfigId}`)
+      .map(res => res.value[0]);
   }
 
-  getCrawlconfig(crawlconfig_id) {
-    return this.http.get(`${this.crawlconfigUrl}/${crawlconfig_id}`)
-      .map(res => res.json().value);
+  getAllCrawlConfigs(): Observable<CrawlConfigs> {
+    return this.http.get(this.crawlConfigUrl);
   }
 
-  getAllCrawlconfigs() {
-    return this.http.get(this.crawlconfigUrl)
-      .map(res => res.json());
+  createCrawlConfig(newCrawlconfig: CrawlConfig): Observable<CrawlConfig> {
+    return this.http.post(this.crawlConfigUrl, newCrawlconfig);
   }
 
-  createCrawlconfig(newCrawlconfig: Crawlconfig): Observable<Crawlconfig> {
-    return this.http.post(this.crawlconfigUrl, newCrawlconfig)
-      .map(response => response.json() as Crawlconfig)
-      .catch(this.errorhandlerservice.handleError);
+  deleteCrawlConfig(delCrawlconfigId: String): Observable<String> {
+    return this.http.delete(this.crawlConfigUrl + '/' + delCrawlconfigId);
   }
 
-  deleteCrawlconfig(delCrawlconfigId: String): Observable<String> {
-    return this.http.delete(this.crawlconfigUrl + '/' + delCrawlconfigId)
-      .map(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
-  }
-
-  updateCrawlconfig(putCrawlconfig: Crawlconfig): Observable<Crawlconfig> {
-    const putUrl = this.crawlconfigUrl + '/' + putCrawlconfig.id;
-    return this.http.put(putUrl, putCrawlconfig)
-      .map(response => response.json() as Crawlconfig)
-      .catch(this.errorhandlerservice.handleError);
+  updateCrawlConfig(putCrawlconfig: CrawlConfig): Observable<CrawlConfig> {
+    return this.http.put(this.crawlConfigUrl + '/' + putCrawlconfig.id, putCrawlconfig);
   }
 
 }

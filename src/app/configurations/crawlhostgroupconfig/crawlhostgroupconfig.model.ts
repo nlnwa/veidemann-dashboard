@@ -1,5 +1,4 @@
-
-import {Meta} from '../../commons/models/meta';
+import {Meta} from '../../commons/models/meta.model';
 
 export class CrawlHostGroupConfigs {
   value: CrawlHostGroupConfig[];
@@ -14,7 +13,7 @@ export class CrawlHostGroupConfig {
   ip_range: IpRange[];
 }
 
-export class IpRange {
+export class IpRange {
   ip_from: string;
   ip_to: string;
 }

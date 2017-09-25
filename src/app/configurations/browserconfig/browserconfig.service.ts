@@ -1,56 +1,36 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Browserconfig} from './';
-import {ErrorHandlerService} from '../../commons';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
+import {BrowserConfig, BrowserConfigs} from './browserconfig.model';
 
 
 @Injectable()
 export class BrowserconfigService {
 
-  private browserconfigUrl = `${environment.API_URL}/browserconfig`;
-  private browserscripts = `${environment.API_URL}/browserscripts`;
+  private browserConfigUrl = `${environment.API_URL}/browserconfig`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+  getAllBrowserConfigs(): Observable<BrowserConfigs> {
+    return this.http.get(this.browserConfigUrl);
   }
 
-  getAllBrowserconfigs() {
-    return this.http.get(this.browserconfigUrl)
-      .map(res => res.json())
-      .catch(this.errorhandlerservice.handleError);
+  getBrowserConfig(browserConfigId): Observable<BrowserConfig> {
+    return this.http.get<BrowserConfigs>(`${this.browserConfigUrl}/${browserConfigId}`)
+      .map(reply => reply.value[0]);
   }
 
-  getBrowserconfigs(browserconfig_id) {
-    return this.http.get(`${this.browserconfigUrl}/${browserconfig_id}`)
-      .map(res => res.json().value)
-      .catch(this.errorhandlerservice.handleError);
+  createBrowserConfig(browserConfig: BrowserConfig): Observable<BrowserConfig> {
+    return this.http.post(this.browserConfigUrl, browserConfig);
   }
 
-  createBrowserconfig(newBrowserconfig: Browserconfig): Observable<Browserconfig> {
-    return this.http.post(this.browserconfigUrl, newBrowserconfig)
-      .map(response => response.json() as Browserconfig)
-      .catch(this.errorhandlerservice.handleError);
-  }
-
-  deleteBrowserconfig(delBrowserconfigId: String): Observable<String> {
-    return this.http.delete(this.browserconfigUrl + '/' + delBrowserconfigId)
-      .map(response => response.json() as String);
+  deleteBrowserConfig(browserConfigId: String): Observable<String> {
+    return this.http.delete(this.browserConfigUrl + '/' + browserConfigId);
   }
 
   // put("/api/entities/:id")
-  updateBrowserconfig(putBrowserconfig: Browserconfig): Observable<Browserconfig> {
-    const putUrl = this.browserconfigUrl + '/' + putBrowserconfig.id;
-    return this.http.put(putUrl, putBrowserconfig)
-      .map(response => response.json() as Browserconfig);
+  updateBrowserConfig(browserConfig: BrowserConfig): Observable<BrowserConfig> {
+    return this.http.put(this.browserConfigUrl + '/' + browserConfig.id, browserConfig);
   }
-
-
-  getBrowserscripts() {
-    return this.http.get(this.browserscripts)
-      .map(res => res.json())
-      .catch(this.errorhandlerservice.handleError);
-  }
-
 }

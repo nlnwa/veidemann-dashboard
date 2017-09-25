@@ -1,55 +1,43 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Politenessconfig} from './';
-import {ErrorHandlerService} from '../../commons/';
+import {PolitenessConfig} from './';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
+import {PolitenessConfigs} from './politenessconfig.model';
 
 
 @Injectable()
-export class PolitenessconfigService {
+export class PolitenessConfigService {
 
-  private politenessconfigUrl = `${environment.API_URL}/politenessconfig`;
-  private robotspolicyUrl = `${environment.API_URL}/robotspolicy`;
+  private politenessConfigUrl = `${environment.API_URL}/politenessconfig`;
+  private robotsPolicyUrl = `${environment.API_URL}/robotspolicy`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+  getAllPolitenessConfigs(): Observable<PolitenessConfigs> {
+    return this.http.get(this.politenessConfigUrl);
   }
 
-
-  getAllPolitenessconfigs() {
-    return this.http.get(this.politenessconfigUrl)
-      .map(res => res.json());
+  getPolitenessConfig(politenessConfigId): Observable<PolitenessConfig> {
+    return this.http.get<PolitenessConfigs>(`${this.politenessConfigUrl}/${politenessConfigId}`)
+      .map(res => res.value[0]);
   }
 
-  getPolitenessconfig(politenessconfig_id) {
-    return this.http.get(`${this.politenessconfigUrl}/${politenessconfig_id}`)
-      .map(res => res.json().value);
+  createPolitenessConfig(newPolitenessconfig: PolitenessConfig): Observable<PolitenessConfig> {
+    return this.http.post<PolitenessConfig>(this.politenessConfigUrl, newPolitenessconfig);
   }
 
-  createPolitenessconfig(newPolitenessconfig: Politenessconfig): Observable<Politenessconfig> {
-    return this.http.post(this.politenessconfigUrl, newPolitenessconfig)
-      .map(response => response.json() as Politenessconfig)
-      .catch(this.errorhandlerservice.handleError);
+  deletePolitenessConfig(politenessConfigId: String): Observable<String> {
+    return this.http.delete(this.politenessConfigUrl + '/' + politenessConfigId);
   }
 
-  deletePolitenessConfig(delPolitenessconfigId: String): Observable<String> {
-    return this.http.delete(this.politenessconfigUrl + '/' + delPolitenessconfigId)
-      .map(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
+  updatePolitenessConfig(politenessConfig: PolitenessConfig): Observable<PolitenessConfig> {
+    const putUrl = this.politenessConfigUrl + '/' + politenessConfig.id;
+    return this.http.put<PolitenessConfig>(putUrl, politenessConfig);
   }
 
-  updatePolitenessConfig(putPolitenessconfig: Politenessconfig): Observable<Politenessconfig> {
-    const putUrl = this.politenessconfigUrl + '/' + putPolitenessconfig.id;
-    return this.http.put(putUrl, putPolitenessconfig)
-      .map(response => response.json() as Politenessconfig)
-      .catch(this.errorhandlerservice.handleError);
+  getRobotsConfig(): Observable<Object[]> {
+    return this.http.get(this.robotsPolicyUrl)
+      .map((res => res['menuitem']));
   }
-
-  getRobotsconfig() {
-    return this.http.get(this.robotspolicyUrl)
-      .map(res => res.json());
-  }
-
-
 }

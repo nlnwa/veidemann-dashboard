@@ -1,12 +1,12 @@
-<h2 *ngIf="politenessconfig.id">Politenessconfig Details</h2>
-<h2 *ngIf="!politenessconfig.id">New Politenessconfig</h2>
+<h2 *ngIf="politenessConfig.id">Politenessconfig Details</h2>
+<h2 *ngIf="!politenessConfig.id">New Politenessconfig</h2>
 
-<form [formGroup]="politenessconfigForm" fxLayout="column">
+<form [formGroup]="politenessConfigFG" fxLayout="column">
 
   <div fxLayout="row">
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="name" placeholder="Navn">
-      <md-error *ngIf="! politenessconfigForm.controls.meta.valid">
+      <md-error *ngIf="! politenessConfigFG.controls.meta.valid">
         Navn er påkrevd.
       </md-error>
     </md-form-field>
@@ -18,23 +18,23 @@
 
   <div>
     <label>Robots policy:
-      <angular2-multiselect [data]="robotspolicyList"
-                            [(ngModel)]="selectedRobotspolicyItems"
-                            [settings]="robotspolicy_dropdownSettings"
+      <angular2-multiselect [data]="robotsPolicyList"
+                            [(ngModel)]="selectedRobotsPolicyItems"
+                            [settings]="robetsPolicyDropdownSettings"
                             formControlName="robots_policy">
       </angular2-multiselect>
     </label>
-    <small [hidden]="politenessconfigForm.controls.robots_policy.valid">
+    <small [hidden]="politenessConfigFG.controls.robots_policy.valid">
       Robots policy required.
     </small>
   </div>
   <ng-container
-    *ngIf="politenessconfigForm.value.robots_policy[0] && politenessconfigForm.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
+    *ngIf="politenessConfigFG.value.robots_policy[0] && politenessConfigFG.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
     <md-form-field>
       <textarea mdInput
                 formControlName="custom_robots"
                 placeholder="robots.txt"></textarea>
-      <md-error *ngIf="!politenessconfigForm.controls.custom_robots.valid">
+      <md-error *ngIf="!politenessConfigFG.controls.custom_robots.valid">
         Validity duration required.
       </md-error>
     </md-form-field>
@@ -44,7 +44,7 @@
     <input mdInput
            formControlName="minimum_robots_validity_duration_s"
            placeholder="Minimum robots validity (seconds)">
-    <md-error *ngIf="! politenessconfigForm.controls.minimum_robots_validity_duration_s.valid">
+    <md-error *ngIf="! politenessConfigFG.controls.minimum_robots_validity_duration_s.valid">
       Validity duration required.
     </md-error>
   </md-form-field>
@@ -53,7 +53,7 @@
     <input mdInput
            formControlName="min_time_between_page_load_ms"
            placeholder="Minimum time between page load (ms)">
-    <md-error *ngIf="! politenessconfigForm.controls.min_time_between_page_load_ms.valid">
+    <md-error *ngIf="! politenessConfigFG.controls.min_time_between_page_load_ms.valid">
       Minimum time between page load is required.
     </md-error>
   </md-form-field>
@@ -88,21 +88,21 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!politenessconfigForm.valid" *ngIf="!politenessconfig.id"
-            (click)="createPolitenessconfig(politenessconfigForm.value)"
+            [disabled]="!politenessConfigFG.valid" *ngIf="!politenessConfig.id"
+            (click)="createPolitenessconfig(politenessConfigFG.value)"
             novalidate>Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="politenessconfig.id" [disabled]="!politenessconfigForm.valid"
-            (click)="updatePolitenessconfig(politenessconfigForm.value)">
+            *ngIf="politenessConfig.id" [disabled]="!politenessConfigFG.valid"
+            (click)="updatePolitenessconfig(politenessConfigFG.value)">
       Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()">Tilbakestill
     </button>
     <button md-raised-button color="warn"
-            *ngIf="politenessconfig.id"
-            (click)="deletePolitenessconfig(politenessconfig.id); $event.stopPropagation()">Slett
+            *ngIf="politenessConfig.id"
+            (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

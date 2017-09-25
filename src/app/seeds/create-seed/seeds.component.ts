@@ -1,11 +1,11 @@
 import {Component, Input} from '@angular/core';
-import {Seed} from '../seed';
+import {Seed} from '../seed.model';
 import {SeedService} from '../seeds.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {CustomValidators, Label} from '../../commons/';
-import {CrawljobService} from '../../configurations/crawljobs/';
+import {CrawlJobService} from '../../configurations/crawljobs/';
 import {EntityService} from '../../entities/entity.service';
 
 @Component({
@@ -17,12 +17,12 @@ export class SeedsComponent {
   @Input() seed: Seed;
   seedForm: FormGroup;
   entityList: any = [];
-  crawljobList: any = [];
+  crawlJobList: any = [];
 
   selectedEntityItems = [];
   dropdownEntitySettings = {};
-  dropdownCrawljobSettings = {};
-  selectedCrawljobItems = [];
+  dropdownCrawlJobSettings = {};
+  selectedCrawlJobItems = [];
 
   @Input()
   createHandler: Function;
@@ -34,14 +34,14 @@ export class SeedsComponent {
   constructor(private seedService: SeedService,
               private fb: FormBuilder,
               private entityService: EntityService,
-              private crawljobService: CrawljobService,
+              private crawlJobService: CrawlJobService,
               private mdSnackBar: MdSnackBar,
               private router: Router) {
 
     this.createForm();
     // this.getSeeds();
     this.getEntities();
-    this.getCrawljobs()
+    this.getCrawlJobs()
   }
 
   createForm() {
@@ -65,7 +65,7 @@ export class SeedsComponent {
 
   createSeedNew() {
     this.seed = this.prepareSaveSeed();
-    this.seedService.createSeed(this.seed);
+    this.seedService.createSeed(this.seed).subscribe();
     this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
@@ -77,7 +77,7 @@ export class SeedsComponent {
 
   createSeed() {
     this.seed = this.prepareSaveSeed();
-    this.seedService.createSeed(this.seed);
+    this.seedService.createSeed(this.seed).subscribe();
     this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
@@ -160,25 +160,37 @@ export class SeedsComponent {
       enableSearchFilter: true
     };
 
-    this.entityService.getEntities().map(entities => entities.value).forEach((value) => {
-      value.forEach((key) => {
-        this.entityList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
-      })
-    });
+    this.entityService.getAllEntities()
+      .map(reply => reply.value)
+      .subscribe((entities) => {
+        entities.forEach((entity) => {
+          this.entityList.push({
+            id: entity.id,
+            itemName: entity.meta.name,
+            description: entity.meta.description
+          })
+        })
+      });
   }
 
-  getCrawljobs() {
-    this.selectedCrawljobItems = [];
-    this.dropdownCrawljobSettings = {
+  getCrawlJobs() {
+    this.selectedCrawlJobItems = [];
+    this.dropdownCrawlJobSettings = {
       singleSelection: false,
       text: 'Velg høstejobb',
       enableSearchFilter: true
     };
 
-    this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
-      value.forEach((key) => {
-        this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
-      })
-    });
+    this.crawlJobService.getAllCrawlJobs()
+      .map(reply => reply.value)
+      .subscribe((crawlJobs) => {
+        crawlJobs.forEach((crawlJob) => {
+          this.crawlJobList.push({
+            id: crawlJob.id,
+            itemName: crawlJob.meta.name,
+            description: crawlJob.meta.description
+          })
+        })
+      });
   }
 }

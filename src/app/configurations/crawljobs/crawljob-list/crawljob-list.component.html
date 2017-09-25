@@ -2,22 +2,22 @@
 
 <md-nav-list>
   <md-list-item
-    *ngFor="let crawljob of crawljobs" (click)="selectCrawljob(crawljob)"
-    [class.active]="crawljob === selectedCrawljob">
+    *ngFor="let crawljob of crawljobs" (click)="selectCrawlJob(crawljob)"
+    [class.active]="crawljob === selectedCrawlJob">
     {{crawljob.meta.name}}
   </md-list-item>
 </md-nav-list>
 
 <button md-raised-button color="warn"
-        (click)="createNewCrawljob()">New
+        (click)="createNewCrawlJob()">New
 </button>
 
-<ng-container *ngIf="selectedCrawljob">
+<ng-container *ngIf="selectedCrawlJob">
   <app-crawljob-details
-    [crawljob]="selectedCrawljob"
-    [createHandler]="addCrawljob"
-    [updateHandler]="updateCrawljob"
-    [deleteHandler]="deleteCrawljob">
+    [crawlJob]="selectedCrawlJob"
+    [createHandler]="addCrawlJob"
+    [updateHandler]="updateCrawlJob"
+    [deleteHandler]="deleteCrawlJob">
   </app-crawljob-details>
 </ng-container>
 

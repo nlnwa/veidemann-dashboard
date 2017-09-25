@@ -1,4 +1,4 @@
-export * from './schedule';
+export * from './schedule.model';
 export {ScheduleService} from './schedule.service';
 export {ScheduleSidebarComponent} from './schedule-sidebar/schedule-sidebar.component'
 export {ScheduleDetailsComponent} from './schedule-details/schedule-details.component';
