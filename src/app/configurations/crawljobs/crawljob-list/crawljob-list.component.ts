@@ -1,38 +1,38 @@
 import {Component, OnInit} from '@angular/core';
-import {Crawljob} from '../crawljob';
-import {CrawljobService} from '../crawljob.service';
+import {CrawlJob} from '../crawljob.model';
+import {CrawlJobService} from '../crawljob.service';
 
 @Component({
   selector: 'app-crawljob-list',
   templateUrl: './crawljob-list.component.html',
   styleUrls: ['./crawljob-list.component.css']
 })
-export class CrawljobListComponent implements OnInit {
+export class CrawlJobListComponent implements OnInit {
 
-  crawljobs: Crawljob[];
-  selectedCrawljob: Crawljob;
+  crawljobs: CrawlJob[];
+  selectedCrawlJob: CrawlJob;
 
-  constructor(private crawljobService: CrawljobService) {
+  constructor(private crawlJobService: CrawlJobService) {
   }
 
   ngOnInit() {
-    this.crawljobService.getAllCrawlJobs().subscribe(crawljobs => {
-      this.crawljobs = crawljobs.value
-    })
+    this.crawlJobService.getAllCrawlJobs()
+      .map(reply => reply.value)
+      .subscribe(crawlJobs => this.crawljobs = crawlJobs);
   }
 
-  private getIndexOfCrawljob = (crawljobId: String) => {
-    return this.crawljobs.findIndex((crawljob) => {
-      return crawljob.id === crawljobId;
+  private getIndexOfCrawlJob = (crawlJobId: String) => {
+    return this.crawljobs.findIndex((crawlJob) => {
+      return crawlJob.id === crawlJobId;
     });
   };
 
-  selectCrawljob(crawljob: Crawljob) {
-    this.selectedCrawljob = crawljob
+  selectCrawlJob(crawlJob: CrawlJob) {
+    this.selectedCrawlJob = crawlJob
   }
 
-  createNewCrawljob() {
-    const crawljob: Crawljob = {
+  createNewCrawlJob() {
+    const crawlJob: CrawlJob = {
       schedule_id: '',
       crawl_config_id: '',
       limits: {
@@ -48,29 +48,29 @@ export class CrawljobListComponent implements OnInit {
       },
     };
     // By default, a newly-created  will have the selected state.
-    this.selectCrawljob(crawljob);
+    this.selectCrawlJob(crawlJob);
   }
 
-  deleteCrawljob = (crawljobId: String) => {
-    const idx = this.getIndexOfCrawljob(crawljobId);
+  deleteCrawlJob = (crawlJobId: String) => {
+    const idx = this.getIndexOfCrawlJob(crawlJobId);
     if (idx !== -1) {
       this.crawljobs.splice(idx, 1);
-      this.selectCrawljob(null);
+      this.selectCrawlJob(null);
     }
     return this.crawljobs;
   };
 
-  addCrawljob = (crawljob: Crawljob) => {
-    this.crawljobs.push(crawljob);
-    this.selectCrawljob(crawljob);
+  addCrawlJob = (crawlJob: CrawlJob) => {
+    this.crawljobs.push(crawlJob);
+    this.selectCrawlJob(crawlJob);
     return this.crawljobs;
   };
 
-  updateCrawljob = (crawljob: Crawljob) => {
-    const idx = this.getIndexOfCrawljob(crawljob.id);
+  updateCrawlJob = (crawlJob: CrawlJob) => {
+    const idx = this.getIndexOfCrawlJob(crawlJob.id);
     if (idx !== -1) {
-      this.crawljobs[idx] = crawljob;
-      this.selectCrawljob(crawljob);
+      this.crawljobs[idx] = crawlJob;
+      this.selectCrawlJob(crawlJob);
     }
     return this.crawljobs;
   }

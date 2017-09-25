@@ -1,12 +1,12 @@
-<h2 *ngIf="browserscript.id">Browserscript Details</h2>
-<h2 *ngIf="!browserscript.id">New Browserscript</h2>
+<h2 *ngIf="browserScript.id">Browserscript Details</h2>
+<h2 *ngIf="!browserScript.id">New Browserscript</h2>
 
 
-<form [formGroup]="browserscriptForm" fxLayout="column">
+<form [formGroup]="browserScriptFG" fxLayout="column">
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! browserscriptForm.controls.meta.valid">
+    <md-error *ngIf="! browserScriptFG.controls.meta.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -17,7 +17,7 @@
 
   <md-form-field>
     <textarea mdInput formControlName="script" placeholder="Script"></textarea>
-    <md-error *ngIf="! browserscriptForm.controls.script.valid">
+    <md-error *ngIf="! browserScriptFG.controls.script.valid">
       Script er påkrevd.
     </md-error>
   </md-form-field>
@@ -45,7 +45,7 @@
 
         <md-form-field>
           <input mdInput formControlName="value" placeholder="Value">
-          <md-error *ngIf="! browserscriptForm.controls.label.valid">
+          <md-error *ngIf="! browserScriptFG.controls.label.valid">
             Merkelapp er påkrevd.
           </md-error>
         </md-form-field>
@@ -61,22 +61,22 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!browserscriptForm.valid"
-            *ngIf="!browserscript.id"
-            (click)="createBrowserscript(browserscriptForm.value)"
+            [disabled]="!browserScriptFG.valid"
+            *ngIf="!browserScript.id"
+            (click)="createBrowserScript(browserScriptFG.value)"
             novalidate>Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="browserscript.id" [disabled]="!browserscriptForm.valid"
-            (click)="updateBrowserscript(browserscriptForm.value)">
+            *ngIf="browserScript.id" [disabled]="!browserScriptFG.valid"
+            (click)="updateBrowserScript(browserScriptFG.value)">
       Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()">Tilbakestill
     </button>
     <button md-raised-button color="warn"
-            *ngIf="browserscript.id"
-            (click)="deleteBrowserscript(browserscript.id); $event.stopPropagation()">Slett
+            *ngIf="browserScript.id"
+            (click)="deleteBrowserScript(browserScript.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

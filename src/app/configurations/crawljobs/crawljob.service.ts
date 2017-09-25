@@ -1,48 +1,36 @@
 import {Injectable} from '@angular/core';
-import {Crawljob} from './';
-import {Http} from '@angular/http';
-import {ErrorHandlerService} from '../../commons/';
+import {CrawlJob} from './';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
+import {CrawlJobs} from './crawljob.model';
 
 
 @Injectable()
-export class CrawljobService {
+export class CrawlJobService {
 
-  private crawljobUrl = `${environment.API_URL}/crawljob`;
+  private crawlJobUrl = `${environment.API_URL}/crawljob`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {}
+
+  getAllCrawlJobs(): Observable<CrawlJobs> {
+    return this.http.get(this.crawlJobUrl);
   }
 
-  getAllCrawlJobs() {
-    return this.http.get(this.crawljobUrl)
-      .map(res => res.json());
+  getCrawlJob(jobId): Observable<CrawlJob> {
+    return this.http.get<CrawlJobs>(`${this.crawlJobUrl}/${jobId}`)
+      .map(crawlJobReply => crawlJobReply.value[0]);
   }
 
-  getCrawlJob(job_id) {
-    return this.http.get(`${this.crawljobUrl}/${job_id}`)
-      .map(res => res.json().value);
+  updateCrawlJob(crawlJob: CrawlJob): Observable<CrawlJob> {
+    return this.http.put<CrawlJob>(`${this.crawlJobUrl}/${crawlJob.id}`, crawlJob);
   }
 
-  updateCrawljob(putCrawljob: Crawljob): Observable<Crawljob> {
-    const putUrl = this.crawljobUrl + '/' + putCrawljob.id;
-    return this.http.put(putUrl, putCrawljob)
-      .map(response => response.json() as Crawljob)
-      .catch(this.errorhandlerservice.handleError);
+  createCrawlJob(crawlJob: CrawlJob): Observable<CrawlJob> {
+    return this.http.post<CrawlJob>(this.crawlJobUrl, crawlJob);
   }
 
-  createCrawljob(putCrawljob: Crawljob): Observable<Crawljob> {
-    return this.http.post(this.crawljobUrl, putCrawljob)
-      .map(response => response.json() as Crawljob)
-      .catch(this.errorhandlerservice.handleError);
+  deleteCrawlJob(crawlJobId: String): Observable<String> {
+    return this.http.delete(this.crawlJobUrl + '/' + crawlJobId);
   }
-
-  deleteCrawljob(delCrawljobId: String): Observable<String> {
-    return this.http.delete(this.crawljobUrl + '/' + delCrawljobId)
-      .map(response => response.json() as String)
-      .catch(this.errorhandlerservice.handleError);
-  }
-
-
 }

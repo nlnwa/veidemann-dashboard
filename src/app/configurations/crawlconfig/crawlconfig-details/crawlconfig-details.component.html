@@ -1,12 +1,12 @@
-<h2 *ngIf="crawlconfig.id">Crawlconfig Details</h2>
-<h2 *ngIf="!crawlconfig.id">New Crawlconfig</h2>
+<h2 *ngIf="crawlConfig.id">Crawlconfig Details</h2>
+<h2 *ngIf="!crawlConfig.id">New Crawlconfig</h2>
 
 
-<form [formGroup]="crawlconfigForm" fxLayout="column">
+<form [formGroup]="crawlConfigFG" fxLayout="column">
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! crawlconfigForm.controls.meta.valid">
+    <md-error *ngIf="! crawlConfigFG.controls.meta.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -17,26 +17,26 @@
 
   <div>
     <label>Browserconfig:
-      <angular2-multiselect [data]="browserconfigList"
-                            [(ngModel)]="selectedBrowserconfigItems"
-                            [settings]="dropdownBrowserconfigSettings"
+      <angular2-multiselect [data]="browserConfigList"
+                            [(ngModel)]="selectedBrowserConfigItems"
+                            [settings]="dropdownBrowserConfigSettings"
                             formControlName="browser_config_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawlconfigForm.controls.browser_config_id.valid">
+    <small [hidden]="crawlConfigFG.controls.browser_config_id.valid">
       Browserconfig required.
     </small>
   </div>
 
   <div>
     <label>Politenessconfig:
-      <angular2-multiselect [data]="politenessconfigList"
-                            [(ngModel)]="selectedPolitenessconfigItems"
-                            [settings]="dropdownPolitenessconfigSettings"
+      <angular2-multiselect [data]="politenessConfigList"
+                            [(ngModel)]="selectedPolitenessConfigItems"
+                            [settings]="dropdownPolitenessConfigSettings"
                             formControlName="politeness_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawlconfigForm.controls.politeness_id.valid">
+    <small [hidden]="crawlConfigFG.controls.politeness_id.valid">
       Politenessconfig required.
     </small>
   </div>
@@ -45,7 +45,7 @@
     <input mdInput
            formControlName="minimum_dns_ttl_s"
            placeholder="DNS TTL">
-    <md-error *ngIf="! crawlconfigForm.controls.minimum_dns_ttl_s.valid">
+    <md-error *ngIf="! crawlConfigFG.controls.minimum_dns_ttl_s.valid">
       minimum_dns_ttl_s required.
     </md-error>
   </md-form-field>
@@ -102,22 +102,22 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!crawlconfigForm.valid"
-            *ngIf="!crawlconfig.id"
-            (click)="createCrawlconfig(crawlconfigForm.value)" novalidate>
+            [disabled]="!crawlConfigFG.valid"
+            *ngIf="!crawlConfig.id"
+            (click)="createCrawlConfig(crawlConfigFG.value)" novalidate>
       Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="crawlconfig.id"
-            [disabled]="!crawlconfigForm.valid"
-            (click)="updateCrawlconfig(crawlconfigForm.value)">Lagre
+            *ngIf="crawlConfig.id"
+            [disabled]="!crawlConfigFG.valid"
+            (click)="updateCrawlConfig(crawlConfigFG.value)">Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()">Tilbakestill
     </button>
     <button md-raised-button color="warn"
-            *ngIf="crawlconfig.id"
-            (click)="deleteCrawlconfig(crawlconfig.id); $event.stopPropagation()">Slett
+            *ngIf="crawlConfig.id"
+            (click)="deleteCrawlConfig(crawlConfig.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

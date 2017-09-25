@@ -1,5 +1,5 @@
-<h2 *ngIf="crawljob.id">Crawljob Details</h2>
-<h2 *ngIf="!crawljob.id">New Crawljob</h2>
+<h2 *ngIf="crawlJob.id">Crawljob Details</h2>
+<h2 *ngIf="!crawlJob.id">New Crawljob</h2>
 
 <form [formGroup]="crawljobForm" fxLayout="column">
 
@@ -98,11 +98,11 @@
   <div>
     <button md-raised-button color="primary"
             [disabled]="!crawljobForm.valid"
-            *ngIf="!crawljob.id"
+            *ngIf="!crawlJob.id"
             (click)="createCrawljob(crawljobForm.value)" novalidate>Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="crawljob.id"
+            *ngIf="crawlJob.id"
             [disabled]="!crawljobForm.valid"
             (click)="updateCrawljob(crawljobForm.value)">Lagre
     </button>
@@ -110,8 +110,8 @@
             (click)="revert()">Tilbakestill
     </button>
     <button md-raised-button color="warn"
-            *ngIf="crawljob.id"
-            (click)="deleteCrawljob(crawljob.id); $event.stopPropagation()">Slett
+            *ngIf="crawlJob.id"
+            (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

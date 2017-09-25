@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -9,10 +9,8 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-m
 import {MaterialModule} from './material.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
-import {DocumentationComponent} from './documentation';
 import {ActivityComponent} from './activity';
-import {CrawlersComponent} from './crawlers';
-import {StatisticsComponent, StatisticsService} from './statistics';
+import {StatisticsComponent} from './statistics/statistics.component';
 import {SeedDetailComponent, SeedsComponent, SeedSearchComponent, SeedService} from './seeds';
 import {
   BrowserconfigDetailsComponent,
@@ -20,16 +18,16 @@ import {
   BrowserconfigService
 } from './configurations/browserconfig';
 import {
-  BrowserscriptDetailsComponent,
+  BrowserScriptDetailsComponent,
   BrowserscriptListComponent,
   BrowserscriptService
 } from './configurations/browserscript';
 import {CrawlconfigDetailsComponent, CrawlconfigListComponent, CrawlconfigService} from './configurations/crawlconfig';
-import {CrawljobDetailsComponent, CrawljobListComponent, CrawljobService} from './configurations/crawljobs';
+import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
-  PolitenessconfigListComponent,
-  PolitenessconfigService
+  PolitenessConfigListComponent,
+  PolitenessConfigService
 } from './configurations/politenessconfig';
 import {LoglevelComponent, LogService} from './configurations/logs/';
 import {
@@ -40,15 +38,18 @@ import {
 } from './configurations/schedule';
 import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
+import {DocumentationComponent} from './documentation/documentation.component';
+
+/*
 import {
   CrawlhostgroupconfigDetailsComponent
-} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-details/crawlhostgroupconfig-details.component';
+} from './configurations/crawlhostgroupconfig/app-crawlhostgroupconfig-details/app-crawlhostgroupconfig-details.component';
 
 import {
   CrawlhostgroupconfigListComponent
 } from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-list/crawlhostgroupconfig-list.component';
 import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig.service';
-
+*/
 
 @NgModule({
   declarations: [
@@ -58,10 +59,9 @@ import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig
     SeedSearchComponent,
     ActivityComponent,
     SeedsComponent,
-    CrawlersComponent,
     SeedDetailComponent,
     CrawljobDetailsComponent,
-    CrawljobListComponent,
+    CrawlJobListComponent,
     ScheduleListComponent,
     ScheduleDetailsComponent,
     CrawlconfigListComponent,
@@ -69,34 +69,33 @@ import {CrawlhostgroupconfigService} from './configurations/crawlhostgroupconfig
     BrowserconfigDetailsComponent,
     BrowserconfigListComponent,
     PolitenessconfigDetailsComponent,
-    PolitenessconfigListComponent,
+    PolitenessConfigListComponent,
     ScheduleSidebarComponent,
     BrowserscriptListComponent,
-    BrowserscriptDetailsComponent,
+    BrowserScriptDetailsComponent,
     EntityDetailsComponent,
     EntityListComponent,
     LoglevelComponent,
-    CrawlhostgroupconfigDetailsComponent,
-    CrawlhostgroupconfigListComponent,
+    // CrawlhostgroupconfigDetailsComponent,
+    // CrawlhostgroupconfigListComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     AngularMultiSelectModule,
     MaterialModule,
     FlexLayoutModule,
   ],
   providers: [
-    StatisticsService,
     SeedService,
-    CrawljobService,
+    CrawlJobService,
     CrawlconfigService,
-    CrawlhostgroupconfigService,
-    PolitenessconfigService,
+    // CrawlhostgroupconfigService,
+    PolitenessConfigService,
     BrowserconfigService,
     DateTime,
     ErrorHandlerService,

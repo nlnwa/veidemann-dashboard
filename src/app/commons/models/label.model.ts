@@ -1,4 +1,4 @@
-export interface Label {
+export class Label {
   key: string;
   value: string;
 }

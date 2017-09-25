@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Entity} from '../entity';
+import {Entity} from '../entity.model';
 import {EntityService} from '../entity.service';
 
 @Component({
@@ -16,11 +16,10 @@ export class EntityListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entityService.getEntities().subscribe(entities => {
-      this.entities = entities.value
+    this.entityService.getAllEntities().subscribe(reply => {
+      this.entities = reply.value
     });
   }
-
 
   private getIndexOfEntity = (entityId: String) => {
     return this.entities.findIndex((entity) => {

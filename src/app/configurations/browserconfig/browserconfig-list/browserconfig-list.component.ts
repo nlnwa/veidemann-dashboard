@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Browserconfig} from '../browserconfig';
+import {BrowserConfig} from '../browserconfig.model';
 import {BrowserconfigService} from '../browserconfig.service';
 
 @Component({
@@ -9,31 +9,31 @@ import {BrowserconfigService} from '../browserconfig.service';
 })
 export class BrowserconfigListComponent implements OnInit {
 
-  browserconfigs: Browserconfig[];
-  selectedBrowserconfig: Browserconfig;
+  browserconfigs: BrowserConfig[];
+  selectedBrowserconfig: BrowserConfig;
 
-  constructor(private browserconfigService: BrowserconfigService) {
+  constructor(private browserConfigService: BrowserconfigService) {
   }
 
   ngOnInit() {
-    this.browserconfigService.getAllBrowserconfigs().subscribe(browserconfigs => {
-      this.browserconfigs = browserconfigs.value
-    })
+    this.browserConfigService.getAllBrowserConfigs()
+      .map(reply => reply.value)
+      .subscribe(browserConfigs => this.browserconfigs = browserConfigs);
   }
 
-  private getIndexOfBrowserconfig = (browserconfigId: String) => {
+  private getIndexOfBrowserConfig = (browserconfigId: String) => {
     return this.browserconfigs.findIndex((browserconfig) => {
       return browserconfig.id === browserconfigId;
     });
   };
 
-  selectBrowserconfig(browserconfig: Browserconfig) {
+  selectBrowserconfig(browserconfig: BrowserConfig) {
     this.selectedBrowserconfig = browserconfig
   }
 
 
   createNewBrowserconfig() {
-    const browserconfig: Browserconfig = {
+    const browserconfig: BrowserConfig = {
       user_agent: '',
       page_load_timeout_ms: '',
       sleep_after_pageload_ms: '',
@@ -49,7 +49,7 @@ export class BrowserconfigListComponent implements OnInit {
   }
 
   deleteBrowserconfig = (browserconfig: String) => {
-    const idx = this.getIndexOfBrowserconfig(browserconfig);
+    const idx = this.getIndexOfBrowserConfig(browserconfig);
     if (idx !== -1) {
       this.browserconfigs.splice(idx, 1);
       this.selectBrowserconfig(null);
@@ -57,14 +57,14 @@ export class BrowserconfigListComponent implements OnInit {
     return this.browserconfigs
   };
 
-  addBrowserconfig = (browserconfig: Browserconfig) => {
+  addBrowserconfig = (browserconfig: BrowserConfig) => {
     this.browserconfigs.push(browserconfig);
     this.selectBrowserconfig(browserconfig);
     return this.browserconfigs;
   };
 
-  updateBrowserconfig = (browserconfig: Browserconfig) => {
-    const idx = this.getIndexOfBrowserconfig(browserconfig.id);
+  updateBrowserconfig = (browserconfig: BrowserConfig) => {
+    const idx = this.getIndexOfBrowserConfig(browserconfig.id);
     if (idx !== -1) {
       this.browserconfigs[idx] = browserconfig;
       this.selectBrowserconfig(browserconfig);

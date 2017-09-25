@@ -2,7 +2,7 @@ import {Component, Input, OnChanges} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Label} from '../../../commons/';
-import {Browserscript} from '../browserscript';
+import {BrowserScript} from '../browserscript.model';
 import {BrowserscriptService} from '../browserscript.service';
 
 
@@ -12,10 +12,10 @@ import {BrowserscriptService} from '../browserscript.service';
   styleUrls: ['./browserscript-details.component.css']
 })
 
-export class BrowserscriptDetailsComponent implements OnChanges {
+export class BrowserScriptDetailsComponent implements OnChanges {
   @Input()
-  browserscript: Browserscript;
-  browserscriptForm: FormGroup;
+  browserScript: BrowserScript;
+  browserScriptFG: FormGroup;
 
   @Input()
   createHandler: Function;
@@ -25,14 +25,14 @@ export class BrowserscriptDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
 
-  constructor(private browserscriptService: BrowserscriptService,
+  constructor(private browserScriptService: BrowserscriptService,
               private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.createForm();
   }
 
   createForm() {
-    this.browserscriptForm = this.fb.group({
+    this.browserScriptFG = this.fb.group({
       id: '',
       script: '',
       meta: this.fb.group({
@@ -43,68 +43,71 @@ export class BrowserscriptDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(browserscript: Browserscript) {
-    this.browserscriptForm.controls['id'].setValue(browserscript.id);
-    this.browserscriptForm.controls['script'].setValue(browserscript.script);
-    this.browserscriptForm.controls['meta'].patchValue({
-      name: browserscript.meta.name as string,
-      description: browserscript.meta.description as string,
+  updateData(browserScript: BrowserScript) {
+    this.browserScriptFG.controls['id'].setValue(browserScript.id);
+    this.browserScriptFG.controls['script'].setValue(browserScript.script);
+    this.browserScriptFG.controls['meta'].patchValue({
+      name: browserScript.meta.name as string,
+      description: browserScript.meta.description as string,
     });
-    this.setLabel(browserscript.meta.label);
+    this.setLabel(browserScript.meta.label);
   };
 
   ngOnChanges() {
-    this.updateData(this.browserscript);
+    this.updateData(this.browserScript);
 
   }
 
-  createBrowserscript() {
-    this.browserscript = this.prepareSaveBrowserscript();
-    this.browserscriptService.createBrowserscript(this.browserscript).map((newBrowserscript: Browserscript) => {
-      this.createHandler(newBrowserscript);
-    });
+  createBrowserScript() {
+    this.browserScript = this.prepareSaveBrowserScript();
+    this.browserScriptService.createBrowserScript(this.browserScript)
+      .subscribe(newBrowserScript => {
+        this.createHandler(newBrowserScript);
+      });
     this.mdSnackBar.open('Lagret');
   }
 
 
-  updateBrowserscript(browserscript: Browserscript): void {
-    this.browserscript = this.prepareSaveBrowserscript();
-    this.browserscriptService.updatePolitenessConfig(this.browserscript).map((updatedBrowserscript: Browserscript) => {
-      this.updateHandler(updatedBrowserscript);
-    });
+  updateBrowserScript(browserscript: BrowserScript): void {
+    this.browserScript = this.prepareSaveBrowserScript();
+    this.browserScriptService.updatePolitenessConfig(this.browserScript)
+      .subscribe(updatedBrowserscript => {
+        this.updateHandler(updatedBrowserscript);
+      });
     this.mdSnackBar.open('Lagret');
   }
 
-  deleteBrowserscript(browserscriptId): void {
-    this.browserscriptService.deletePolitenessConfig(browserscriptId).map((deletedBrowserscript) => {
-      this.deleteHandler(deletedBrowserscript);
-      if (deletedBrowserscript === 'not_allowed') {
-        this.mdSnackBar.open('Feil: Ikke slettet');
-      } else {
-        this.mdSnackBar.open('Slettet');
-      }
-    });
+  deleteBrowserScript(browserscriptId): void {
+    this.browserScriptService.deletePolitenessConfig(browserscriptId)
+      .subscribe(deletedBrowserscript => {
+        this.deleteHandler(deletedBrowserscript);
+        if (deletedBrowserscript === 'not_allowed') {
+          this.mdSnackBar.open('Feil: Ikke slettet');
+        } else {
+          this.mdSnackBar.open('Slettet');
+        }
+      });
   }
 
 
   setLabel(label) {
     const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
-    this.browserscriptForm.setControl('label', labelFormArray);
+    this.browserScriptFG.setControl('label', labelFormArray);
   }
 
   addLabel() {
-    const control = <FormArray>this.browserscriptForm.controls['label'];
+    const control = <FormArray>this.browserScriptFG.controls['label'];
     control.push(this.initLabel());
   }
 
   removeLabel(i: number) {
-    const control = <FormArray>this.browserscriptForm.controls['label'];
+    const control = <FormArray>this.browserScriptFG.controls['label'];
     control.removeAt(i);
   }
 
   get label(): FormArray {
-    return this.browserscriptForm.get('label') as FormArray;
+    return this.browserScriptFG.get('label') as FormArray;
   }
 
   initLabel() {
@@ -114,8 +117,8 @@ export class BrowserscriptDetailsComponent implements OnChanges {
     });
   }
 
-  prepareSaveBrowserscript(): Browserscript {
-    const formModel = this.browserscriptForm.value;
+  prepareSaveBrowserScript(): BrowserScript {
+    const formModel = this.browserScriptFG.value;
     // deep copy of form model lairs
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)
@@ -123,8 +126,8 @@ export class BrowserscriptDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveBrowserscript: Browserscript = {
-      id: this.browserscript.id,
+    const saveBrowserscript: BrowserScript = {
+      id: this.browserScript.id,
       script: formModel.script,
       meta: {
         name: formModel.meta.name as string,

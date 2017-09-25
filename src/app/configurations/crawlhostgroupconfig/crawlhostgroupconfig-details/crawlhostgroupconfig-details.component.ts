@@ -2,13 +2,13 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Crawlhostgroupconfig, IpRange} from '../crawlhostgroupconfig';
 import {CrawlhostgroupconfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdlSnackbarService} from 'angular2-mdl';
-import {CustomValidators} from '../../../commons/components/customvalidators';
+import {MdSnackBar} from '@angular/material';
+import {CustomValidators} from '../../../commons/customvalidators';
 import {Label} from '../../../commons/models/label';
 
 
 @Component({
-  selector: 'crawlhostgroupconfig-details',
+  selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css']
 })
@@ -26,7 +26,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
   constructor(private crawlhostgroupconfigService: CrawlhostgroupconfigService,
               private fb: FormBuilder,
-              private mdlSnackbarService: MdlSnackbarService, ) {
+              private mdlSnackBarService: MdlSnackBarService, ) {
     this.createForm();
   }
 
@@ -62,7 +62,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
       (newCrawlhostgroupconfig: Crawlhostgroupconfig) => {
         this.createHandler(newCrawlhostgroupconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
+    this.mdSnackBarService.showSnackbar(
       {
         message: 'Lagret'
       });
@@ -74,7 +74,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
       .then((updatedCrawlhostgroupconfig) => {
         this.updateHandler(updatedCrawlhostgroupconfig);
       });
-    this.mdlSnackbarService.showSnackbar(
+    this.mdSnackBarService.showSnackbar(
       {
         message: 'Lagret',
       });
@@ -85,12 +85,12 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
       .then((deletedCrawlhostgroupconfig) => {
         this.deleteHandler(deletedCrawlhostgroupconfig);
         if (deletedCrawlhostgroupconfig === 'not allowed') {
-          this.mdlSnackbarService.showSnackbar(
+          this.mdSnackBarService.showSnackbar(
             {
               message: 'Feil: Ikke slettet',
             });
         } else {
-          this.mdlSnackbarService.showSnackbar(
+          this.mdSnackBarService.showSnackbar(
             {
               message: 'Slettet',
             });
@@ -178,7 +178,7 @@ export class CrawlhostgroupconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdlSnackbarService.showSnackbar(
+    this.mdSnackBarService.showSnackbar(
       {
         message: 'Tilbakestilt',
       });

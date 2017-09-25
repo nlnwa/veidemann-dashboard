@@ -1,6 +1,6 @@
 export {DateTime} from './datetime';
-export {ErrorHandlerService} from './errorhandlerservice';
+export {ErrorHandlerService} from './errorhandler.service';
 export {CustomValidators} from './customvalidators';
 
-export * from './models/label';
-export * from './models/meta';
+export * from './models/label.model';
+export * from './models/meta.model';

@@ -15,12 +15,12 @@
     <div class="col-md-5">
 
       <div *ngIf="selectedCrawlhostgroupconfig">
-        <crawlhostgroupconfig-details
+        <app-crawlhostgroupconfig-details
           [crawlhostgroupconfig]="selectedCrawlhostgroupconfig"
           [createHandler]="addCrawlhostgroupconfig"
           [updateHandler]="updateCrawlhostgroupconfig"
           [deleteHandler]="deleteCrawlhostgroupconfig">
-        </crawlhostgroupconfig-details>
+        </app-crawlhostgroupconfig-details>
       </div>
 
     </div>

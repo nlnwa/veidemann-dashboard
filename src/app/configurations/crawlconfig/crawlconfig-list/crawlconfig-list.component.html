@@ -1,21 +1,21 @@
 <h2>Crawlconfigs</h2>
 <md-nav-list>
   <md-list-item
-    *ngFor="let crawlconfig of crawlconfigs" (click)="selectCrawlconfig(crawlconfig)"
-    [class.active]="crawlconfig === selectedCrawlconfig">
+    *ngFor="let crawlconfig of crawlConfigs" (click)="selectCrawlConfig(crawlconfig)"
+    [class.active]="crawlconfig === selectedCrawlConfig">
     {{crawlconfig.meta.name}}
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewCrawlconfig()">New
+        (click)="createNewCrawlConfig()">New
 </button>
 
-<ng-container *ngIf="selectedCrawlconfig">
+<ng-container *ngIf="selectedCrawlConfig">
   <app-crawlconfig-details
-    [crawlconfig]="selectedCrawlconfig"
-    [createHandler]="addCrawlconfig"
-    [updateHandler]="updateCrawlconfig"
-    [deleteHandler]="deleteCrawlconfig">
+    [crawlConfig]="selectedCrawlConfig"
+    [createHandler]="addCrawlConfig"
+    [updateHandler]="updateCrawlConfig"
+    [deleteHandler]="deleteCrawlConfig">
   </app-crawlconfig-details>
 </ng-container>
 

@@ -2,23 +2,23 @@
 
 <md-nav-list>
   <md-list-item
-    *ngFor="let politenessconfig of politenessconfigs" (click)="selectPolitenessconfig(politenessconfig)"
-    [class.active]="politenessconfig === selectedPolitenessconfig">
+    *ngFor="let politenessconfig of politenessConfigs" (click)="selectPolitenessConfig(politenessconfig)"
+    [class.active]="politenessconfig === selectedPolitenessConfig">
     {{politenessconfig.meta.name}}
 
   </md-list-item>
 </md-nav-list>
 
 <button md-raised-button color="warn"
-        (click)="createNewPolitenessconfig()">New
+        (click)="createNewPolitenessConfig()">New
 </button>
 
-<ng-container *ngIf="selectedPolitenessconfig">
+<ng-container *ngIf="selectedPolitenessConfig">
   <app-politenessconfig-details
-    [politenessconfig]="selectedPolitenessconfig"
-    [createHandler]="addPolitenessconfig"
-    [updateHandler]="updatePolitenessconfig"
-    [deleteHandler]="deletePolitenessconfig">
+    [politenessConfig]="selectedPolitenessConfig"
+    [createHandler]="addPolitenessConfig"
+    [updateHandler]="updatePolitenessConfig"
+    [deleteHandler]="deletePolitenessConfig">
   </app-politenessconfig-details>
 </ng-container>
 

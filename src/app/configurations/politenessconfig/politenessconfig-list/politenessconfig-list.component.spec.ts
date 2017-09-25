@@ -1,19 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {PolitenessconfigListComponent} from './politenessconfig-list.component';
+import {PolitenessConfigListComponent} from './politenessconfig-list.component';
 
-describe('PolitenessconfigListComponent', () => {
-  let component: PolitenessconfigListComponent;
-  let fixture: ComponentFixture<PolitenessconfigListComponent>;
+describe('PolitenessConfigListComponent', () => {
+  let component: PolitenessConfigListComponent;
+  let fixture: ComponentFixture<PolitenessConfigListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PolitenessconfigListComponent]
+      declarations: [PolitenessConfigListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PolitenessconfigListComponent);
+    fixture = TestBed.createComponent(PolitenessConfigListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

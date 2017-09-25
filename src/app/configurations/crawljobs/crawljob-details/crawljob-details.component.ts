@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
-import {Crawlconfig, CrawlconfigService} from '../../crawlconfig/';
+import {CrawlConfig, CrawlconfigService} from '../../crawlconfig/';
 import {Schedule, ScheduleService} from '../../schedule/';
 import {CustomValidators, Label} from '../../../commons/';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {Crawljob} from '../crawljob';
-import {CrawljobService} from '../crawljob.service';
+import {CrawlJob} from '../crawljob.model';
+import {CrawlJobService} from '../crawljob.service';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -19,9 +19,9 @@ export class CrawljobDetailsComponent implements OnChanges {
   crawljobForm: FormGroup;
 
   @Input()
-  crawljob: Crawljob;
+  crawlJob: CrawlJob;
   schedule: Schedule;
-  crawlconfig: Crawlconfig;
+  crawlconfig: CrawlConfig;
   scheduleList: any = [];
   crawlconfigList: any = [];
 
@@ -37,12 +37,12 @@ export class CrawljobDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  constructor(private crawljobService: CrawljobService,
+  constructor(private crawlJobService: CrawlJobService,
               private crawlconfigService: CrawlconfigService,
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
               private mdSnackBar: MdSnackBar) {
-    this.filldropdown();
+    this.fillDropdown();
     this.createForm();
   }
 
@@ -68,7 +68,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   }
 
-  updateData(crawljob: Crawljob) {
+  updateData(crawljob: CrawlJob) {
     this.crawljobForm.controls['id'].setValue(crawljob.id);
     this.crawljobForm.controls['limits'].setValue({
       depth: crawljob.limits.depth,
@@ -86,12 +86,12 @@ export class CrawljobDetailsComponent implements OnChanges {
   };
 
   ngOnChanges() {
-    this.updateData(this.crawljob);
+    this.updateData(this.crawlJob);
   }
 
   updateCrawljob(crawljobForm): void {
-    this.crawljob = this.prepareSaveCrawljob();
-    this.crawljobService.updateCrawljob(this.crawljob)
+    this.crawlJob = this.prepareSaveCrawljob();
+    this.crawlJobService.updateCrawlJob(this.crawlJob)
       .map((updatedCrawljob) => {
         this.updateHandler(updatedCrawljob);
       });
@@ -99,7 +99,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   };
 
   deleteCrawljob(crawljobId): void {
-    this.crawljobService.deleteCrawljob(crawljobId)
+    this.crawlJobService.deleteCrawlJob(crawljobId)
       .map((deletedCrawljob) => {
         this.deleteHandler(deletedCrawljob);
         if (deletedCrawljob === 'not_allowed') {
@@ -111,23 +111,23 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   createCrawljob() {
-    this.crawljob = this.prepareSaveCrawljob();
-    this.crawljobService.createCrawljob(this.crawljob)
-      .map((newCrawljob: Crawljob) => {
+    this.crawlJob = this.prepareSaveCrawljob();
+    this.crawlJobService.createCrawlJob(this.crawlJob)
+      .map((newCrawljob: CrawlJob) => {
         this.createHandler(newCrawljob);
       });
     this.mdSnackBar.open('Lagret');
   }
 
-  prepareSaveCrawljob(): Crawljob {
+  prepareSaveCrawljob(): CrawlJob {
     const formModel = this.crawljobForm.value;
 
     const labelsDeepCopy: Label[] = formModel.label.map(
       (label: Label) => Object.assign({}, label)
     );
 
-    const saveCrawljob: Crawljob = {
-      id: this.crawljob.id,
+    return {
+      id: this.crawlJob.id,
       schedule_id: formModel.schedule_id[0].id as string,
       crawl_config_id: formModel.crawl_config_id[0].id as string,
       limits: {
@@ -141,43 +141,60 @@ export class CrawljobDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveCrawljob;
   }
 
   setDropdown() {
-    if (this.crawljob.schedule_id !== '') {
-      this.scheduleService.getSchedule(this.crawljob.schedule_id).map(schedule => schedule).forEach((value) => {
-        value.forEach((key) => {
-          this.selectedScheduleItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+    if (this.crawlJob.schedule_id !== '') {
+      this.scheduleService.getSchedule(this.crawlJob.schedule_id)
+        .subscribe((schedule) => {
+          this.selectedScheduleItems.push({
+            id: schedule.id,
+            itemName: schedule.meta.name,
+            description: schedule.meta.description
+          });
+
+          this.crawljobForm.controls['schedule_id'].setValue(this.selectedScheduleItems);
         });
-        this.crawljobForm.controls['schedule_id'].setValue(this.selectedScheduleItems);
-      });
     }
 
-    if (this.crawljob.crawl_config_id !== '') {
-      this.crawlconfigService.getCrawlconfig(this.crawljob.crawl_config_id).map(crawlconfig => crawlconfig).forEach((value) => {
-        value.forEach((key) => {
-          this.selectedCrawlconfigItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description});
-
+    if (this.crawlJob.crawl_config_id !== '') {
+      this.crawlconfigService.getCrawlConfig(this.crawlJob.crawl_config_id)
+        .subscribe(crawlConfig => {
+          this.selectedCrawlconfigItems.push({
+            id: crawlConfig.id,
+            itemName: crawlConfig.meta.name,
+            description: crawlConfig.meta.description
+          });
+          this.crawljobForm.controls['crawl_config_id'].setValue(this.selectedCrawlconfigItems);
         });
-        this.crawljobForm.controls['crawl_config_id'].setValue(this.selectedCrawlconfigItems);
-      });
     }
   }
 
-  filldropdown() {
-    this.scheduleService.getAllSchedules().map(schedules => schedules.value).forEach((value) => {
-      value.forEach((key) => {
-        this.scheduleList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
-      })
-    });
+  fillDropdown() {
+    this.scheduleService.getAllSchedules()
+      .map(reply => reply.value)
+      .subscribe(schedules => {
+        schedules.forEach((schedule) => {
+          this.scheduleList.push({
+            id: schedule.id,
+            itemName: schedule.meta.name,
+            description: schedule.meta.description
+          })
+        });
+      });
 
-    this.crawlconfigService.getAllCrawlconfigs().map(crawlconfigs => crawlconfigs.value).forEach((value) => {
-      value.forEach((key) => {
-        this.crawlconfigList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
-      })
-    });
-
+    this.crawlconfigService.getAllCrawlConfigs()
+      .map(reply => reply.value)
+      .subscribe(crawlConfigs => {
+        crawlConfigs.forEach((crawlConfig) => {
+          this.crawlconfigList.push(
+            {
+              id: crawlConfig.id,
+              itemName: crawlConfig.meta.name,
+              description: crawlConfig.meta.description
+            });
+        });
+      });
 
     this.dropdownScheduleSettings = {
       singleSelection: true,
@@ -188,7 +205,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
     this.dropdownCrawlconfigSettings = {
       singleSelection: true,
-      text: 'Velg crawlconfig',
+      text: 'Velg crawlConfig',
       enableSearchFilter: true
     };
   }

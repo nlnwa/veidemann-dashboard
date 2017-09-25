@@ -1,49 +1,27 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Logconfig} from './';
-import {ErrorHandlerService} from '../../commons/';
+import {LogLevels} from './';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
-
+import {HttpClient} from '@angular/common/http';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class LogService {
 
-  private logconfigUrl = `${environment.API_URL}/logconfig`;
+  private logConfigUrl = `${environment.API_URL}/logconfig`;
 
-  constructor(private http: Http,
-              private errorhandlerservice: ErrorHandlerService) {
+  constructor(private http: HttpClient) {
   }
 
-  getAllLogconfigs() {
-    return this.http.get(this.logconfigUrl)
-      .map(res => res.json());
+  getLevels(): Observable<string[]> {
+    return Observable.of(['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF']);
   }
 
-  updateLogconfig(putLogconfig: Logconfig): Observable<Logconfig> {
-    return this.http.put(this.logconfigUrl, putLogconfig)
-      .map(response => response.json() as Logconfig)
-      .catch(this.errorhandlerservice.handleError);
+  getLogConfig(): Observable<LogLevels> {
+    return this.http.get(this.logConfigUrl);
   }
 
-  /*  getLogconfig(job_id) {
-   return this.http.get(`${this.logconfigUrl}/${job_id}`)
-   .map(res => res.json().value);
-   }
-
-
-
-   createLogconfig(putLogconfig: Logconfig): Observable<Logconfig> {
-   return this.http.post(this.logconfigUrl, putLogconfig)
-   .map(response => response.json() as Logconfig)
-   .catch(this.errorhandlerservice.handleError);
-   }
-
-   deleteLogconfig(delLogconfigId: String): Observable<String> {
-   return this.http.delete(this.logconfigUrl + '/' + delLogconfigId)
-   .map(response => response.json() as String)
-   .catch(this.errorhandlerservice.handleError);
-   }
-   */
-
+  updateLogConfig(logConfig: LogLevels): Observable<LogLevels> {
+    return this.http.put(this.logConfigUrl, logConfig);
+  }
 }

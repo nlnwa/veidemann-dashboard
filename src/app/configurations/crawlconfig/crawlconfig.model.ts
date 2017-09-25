@@ -1,13 +1,13 @@
-import {Meta} from '../../commons/models/meta';
+import {Meta} from '../../commons/models/meta.model';
 
-export class Crawlconfigs {
-  // value: Value[];
+export class CrawlConfigs {
+  value: CrawlConfig[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Crawlconfig {
+export class CrawlConfig {
   browser_config_or_id?: string;
   politeness_or_id?: string;
   id?: string;

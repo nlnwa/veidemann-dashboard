@@ -1,3 +1,5 @@
+import {Observable} from 'rxjs/Observable';
+
 export class ErrorHandlerService {
 
   handleError(error: any) {
@@ -7,7 +9,8 @@ export class ErrorHandlerService {
     }
     const errMsg = error.message ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.log(errMsg);
+
+    Observable.throw(error);
   }
 
 }

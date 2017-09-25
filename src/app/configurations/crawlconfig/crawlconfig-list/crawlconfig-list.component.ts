@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Crawlconfig} from '../crawlconfig';
+import {CrawlConfig} from '../crawlconfig.model';
 import {CrawlconfigService} from '../crawlconfig.service';
 
 @Component({
@@ -9,30 +9,30 @@ import {CrawlconfigService} from '../crawlconfig.service';
 })
 export class CrawlconfigListComponent implements OnInit {
 
-  crawlconfigs: Crawlconfig[];
-  selectedCrawlconfig: Crawlconfig;
+  crawlConfigs: CrawlConfig[];
+  selectedCrawlConfig: CrawlConfig;
 
-  constructor(private crawlconfigService: CrawlconfigService) {
+  constructor(private crawlConfigService: CrawlconfigService) {
   }
 
   ngOnInit() {
-    this.crawlconfigService.getAllCrawlconfigs().subscribe(crawlconfigs => {
-      this.crawlconfigs = crawlconfigs.value;
-    })
+    this.crawlConfigService.getAllCrawlConfigs()
+      .map(reply => reply.value)
+      .subscribe(crawlConfigs => this.crawlConfigs = crawlConfigs);
   }
 
-  private getIndexOfCrawlconfig = (crawlconfigId: String) => {
-    return this.crawlconfigs.findIndex((crawlconfig) => {
-      return crawlconfig.id === crawlconfigId;
+  private getIndexOfCrawlConfig = (crawlConfigId: String) => {
+    return this.crawlConfigs.findIndex((crawlConfig) => {
+      return crawlConfig.id === crawlConfigId;
     });
   };
 
-  selectCrawlconfig(crawlconfig: Crawlconfig) {
-    this.selectedCrawlconfig = crawlconfig;
+  selectCrawlConfig(crawlConfig: CrawlConfig) {
+    this.selectedCrawlConfig = crawlConfig;
   }
 
-  createNewCrawlconfig() {
-    const crawlconfig: Crawlconfig = {
+  createNewCrawlConfig() {
+    const crawlConfig: CrawlConfig = {
       browser_config_id: '',
       politeness_id: '',
       minimum_dns_ttl_s: null,
@@ -48,31 +48,31 @@ export class CrawlconfigListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectCrawlconfig(crawlconfig);
+    this.selectCrawlConfig(crawlConfig);
   }
 
 
-  deleteCrawlconfig = (crawlconfig: String) => {
-    const idx = this.getIndexOfCrawlconfig(crawlconfig);
+  deleteCrawlConfig = (crawlConfig: String) => {
+    const idx = this.getIndexOfCrawlConfig(crawlConfig);
     if (idx !== -1) {
-      this.crawlconfigs.splice(idx, 1);
-      this.selectCrawlconfig(null);
+      this.crawlConfigs.splice(idx, 1);
+      this.selectCrawlConfig(null);
     }
-    return this.crawlconfigs
+    return this.crawlConfigs
   };
 
-  addCrawlconfig = (crawlconfig: Crawlconfig) => {
-    this.crawlconfigs.push(crawlconfig);
-    this.selectCrawlconfig(crawlconfig);
-    return this.crawlconfigs;
+  addCrawlConfig = (crawlConfig: CrawlConfig) => {
+    this.crawlConfigs.push(crawlConfig);
+    this.selectCrawlConfig(crawlConfig);
+    return this.crawlConfigs;
   };
 
-  updateCrawlconfig = (crawlconfig: Crawlconfig) => {
-    const idx = this.getIndexOfCrawlconfig(crawlconfig.id);
+  updateCrawlConfig = (crawlConfig: CrawlConfig) => {
+    const idx = this.getIndexOfCrawlConfig(crawlConfig.id);
     if (idx !== -1) {
-      this.crawlconfigs[idx] = crawlconfig;
-      this.selectCrawlconfig(crawlconfig);
+      this.crawlConfigs[idx] = crawlConfig;
+      this.selectCrawlConfig(crawlConfig);
     }
-    return this.crawlconfigs;
+    return this.crawlConfigs;
   }
 }

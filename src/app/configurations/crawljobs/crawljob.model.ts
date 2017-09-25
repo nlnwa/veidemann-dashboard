@@ -1,13 +1,13 @@
-import {Meta} from '../../commons/models/meta';
+import {Meta} from '../../commons/models/meta.model';
 
-export class Crawljobs {
-  // value: Value[];
+export class CrawlJobs {
+  value: CrawlJob[];
   count: number;
   page_size: string;
   page: string;
 }
 
-export class Crawljob {
+export class CrawlJob {
   schedule_config_or_id?: string;
   crawl_config_or_id?: string;
   id?: string;

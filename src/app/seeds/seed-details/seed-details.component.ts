@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Seed} from '../seed';
+import {Seed} from '../seed.model';
 import {SeedService} from '../seeds.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MdSnackBar} from '@angular/material';
 import {CustomValidators, DateTime, Label} from '../../commons/';
-import {Crawljob, CrawljobService} from '../../configurations/crawljobs/';
+import {CrawlJob, CrawlJobService} from '../../configurations/crawljobs/';
 import {EntityService} from '../../entities/entity.service';
 
 @Component({
@@ -31,18 +31,15 @@ export class SeedDetailComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  // collapse content
-  public isCollapsedContent = true;
-
   dropdownCrawljobSettings = {};
   selectedCrawljobItems = [];
   crawljobList: any = [];
-  crawljob: Crawljob;
+  crawljob: CrawlJob;
 
   constructor(private seedService: SeedService,
               private router: Router,
               private fb: FormBuilder,
-              private crawljobService: CrawljobService,
+              private crawljobService: CrawlJobService,
               private route: ActivatedRoute,
               private mdSnackBar: MdSnackBar,
               private convertTimestamp: DateTime,
@@ -53,14 +50,14 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   getParams() {
-    this.route.params.subscribe(params => {
-      if (params.seed == null) {
-
-      } else {
-        this.seedService.getSeed(params.seed).subscribe(seed => {
-          this.seed = seed[0];
+    this.route.paramMap.subscribe(params => {
+      if (params.has('seed')) {
+        this.seedService.getSeed(params.get('seed')).subscribe(seed => {
+          this.seed = seed;
           this.ngOnChanges();
         })
+      } else {
+        // TODO fix this
       }
     });
   }
@@ -110,11 +107,9 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   getEntityName(entity_id) {
-    this.entityService.getEntity(entity_id).map(entity => entity).forEach((value) => {
-      value.forEach((key) => {
-        this.seedForm.controls['entity_id'].setValue({entity_name: key.meta.name, entity_ids: this.seed.entity_id});
-      });
-    })
+    this.entityService.getEntity(entity_id).subscribe(entity => {
+      this.seedForm.controls['entity_id'].setValue({entity_name: entity.meta.name, entity_ids: this.seed.entity_id});
+    });
   }
 
   ngOnChanges() {
@@ -128,16 +123,19 @@ export class SeedDetailComponent implements OnChanges {
     this.selectedCrawljobItems = [];
     if (this.seed.job_id) {
       for (const i of this.seed.job_id) {
-        this.crawljobService.getCrawlJob(i).map(crawljob => crawljob).forEach((value) => {
-          value.forEach((key) => {
-            this.selectedCrawljobItems.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
+        this.crawljobService.getCrawlJob(i)
+          .subscribe(crawlJob => {
+            this.selectedCrawljobItems.push({
+              id: crawlJob.id,
+              itemName: crawlJob.meta.name,
+              description: crawlJob.meta.description
+            });
           });
-        });
       }
-      // this.seedForm.controls['job_id'].setValue(this.selectedCrawljobItems);
-
     }
+    // this.seedForm.controls['job_id'].setValue(this.selectedCrawlJobItems);
   }
+
 
   getCrawljobs() {
     this.selectedCrawljobItems = [];
@@ -147,18 +145,24 @@ export class SeedDetailComponent implements OnChanges {
       enableSearchFilter: true
     };
 
-    this.crawljobService.getAllCrawlJobs().map(crawljobs => crawljobs.value).forEach((value) => {
-      value.forEach((key) => {
-        this.crawljobList.push({id: key.id, itemName: key.meta.name, description: key.meta.description})
-      })
-    });
+    this.crawljobService.getAllCrawlJobs()
+      .map(reply => reply.value)
+      .subscribe(crawlJobs => {
+        crawlJobs.forEach((crawlJob) => {
+          this.crawljobList.push({
+            id: crawlJob.id,
+            itemName: crawlJob.meta.name,
+            description: crawlJob.meta.description
+          });
+        });
+      });
   }
 
 
   updateSeed(seedForm): void {
     this.seed = this.prepareSaveSeed();
     this.seedService.updateSeed(this.seed)
-      .map((updatedSeed) => {
+      .subscribe((updatedSeed) => {
         // this.updateHandler(updatedSeed);
         this.updateData(updatedSeed);
       });

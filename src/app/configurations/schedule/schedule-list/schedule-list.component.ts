@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Schedule} from '../schedule';
+import {Schedule} from '../schedule.model';
 import {ScheduleService} from '../schedule.service';
 
 
@@ -17,9 +17,9 @@ export class ScheduleListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.scheduleService.getAllSchedules().subscribe(schedules => {
-      this.schedules = schedules.value
-    })
+    this.scheduleService.getAllSchedules()
+      .map(reply => reply.value)
+      .subscribe(schedules => this.schedules = schedules);
   }
 
   private getIndexOfEntity = (scheduleId: String) => {

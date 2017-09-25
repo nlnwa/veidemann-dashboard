@@ -2,7 +2,7 @@ import {Component, Input, OnChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {DateTime, Label} from '../../../commons/';
-import {Schedule} from '../schedule';
+import {Schedule} from '../schedule.model';
 import {ScheduleService} from '../schedule.service';
 
 @Component({
@@ -113,7 +113,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   createSchedule() {
     this.schedule = this.prepareSaveSchedule();
     this.scheduleService.createSchedule(this.schedule)
-      .map((newSchedule: Schedule) => {
+      .subscribe((newSchedule: Schedule) => {
         this.createHandler(newSchedule);
       });
     this.mdSnackBar.open('Lagret');
@@ -122,7 +122,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   updateSchedule(schedule: Schedule): void {
     this.schedule = this.prepareSaveSchedule();
     this.scheduleService.updateSchedule(this.schedule)
-      .map((updatedSchedule: Schedule) => {
+      .subscribe((updatedSchedule: Schedule) => {
         this.updateHandler(updatedSchedule);
       });
     this.mdSnackBar.open('Lagret');
@@ -130,8 +130,8 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   deleteSchedule(scheduleId): void {
     this.scheduleService.deleteSchedule(scheduleId)
-      .map((deletedSchedule) => {
-        this.deleteHandler(deletedSchedule);
+      .subscribe((deletedSchedule) => {
+        this.deleteHandler(deletedSchedule).subscribe();
         if (deletedSchedule === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet..');
         } else {

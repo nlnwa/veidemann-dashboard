@@ -1,21 +1,21 @@
 <h2>Browserscripts</h2>
 <md-nav-list>
   <md-list-item
-    *ngFor="let browserscript of browserscripts" (click)="selectBrowserscript(browserscript)"
-    [class.active]="browserscript === selectedBrowserscript">
+    *ngFor="let browserscript of browserScripts" (click)="selectBrowserscript(browserscript)"
+    [class.active]="browserscript === selectedBrowserScript">
     {{browserscript.meta.name}}
 
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewBrowserscript()">New
+        (click)="createNewBrowserScript()">New
 </button>
 
-<ng-container *ngIf="selectedBrowserscript">
+<ng-container *ngIf="selectedBrowserScript">
   <app-browserscript-details
-    [browserscript]="selectedBrowserscript"
-    [createHandler]="addBrowserscript"
-    [updateHandler]="updateBrowserscript"
-    [deleteHandler]="deleteBrowserscript">
+    [browserScript]="selectedBrowserScript"
+    [createHandler]="addBrowserScript"
+    [updateHandler]="updateBrowserScript"
+    [deleteHandler]="deleteBrowserScript">
   </app-browserscript-details>
 </ng-container>
