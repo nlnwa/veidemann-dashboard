@@ -15,10 +15,10 @@ export class StatisticsComponent implements OnInit {
               private entityService: EntityService) {}
 
   ngOnInit() {
-    this.seedsService.getAllSeeds().subscribe(reply => {
+    this.seedsService.list().subscribe(reply => {
       this.nrOfSeeds = reply.count;
     });
-    this.entityService.getAllEntities().subscribe(reply => {
+    this.entityService.list().subscribe(reply => {
       this.nrOfEntities = reply.count;
     });
   }

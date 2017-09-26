@@ -62,7 +62,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   createCrawlHostGroupConfig() {
     this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
-    this.crawlHostGroupConfigService.createCrawlHostGroupConfig(this.crawlHostGroupConfig)
+    this.crawlHostGroupConfigService.create(this.crawlHostGroupConfig)
       .subscribe(
         (crawlHostGroupConfig: CrawlHostGroupConfig) => {
           this.createHandler(crawlHostGroupConfig);
@@ -72,7 +72,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   updateCrawlHostGroupConfig(crawlHostGroupConfigForm): void {
     this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
-    this.crawlHostGroupConfigService.updateCrawlHostGroupConfig(this.crawlHostGroupConfig)
+    this.crawlHostGroupConfigService.update(this.crawlHostGroupConfig)
       .subscribe((updatedCrawlHostGroupConfig) => {
         this.updateHandler(updatedCrawlHostGroupConfig);
       });
@@ -80,7 +80,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   };
 
   deleteCrawlHostGroupConfig(crawlHostGroupConfigId): void {
-    this.crawlHostGroupConfigService.deleteCrawlHostGroupConfig(crawlHostGroupConfigId)
+    this.crawlHostGroupConfigService.delete(crawlHostGroupConfigId)
       .subscribe((response) => {
         this.deleteHandler(response);
         if (response === 'not allowed') {
@@ -101,7 +101,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       (ipRange: IpRange) => Object.assign({}, ipRange)
     );
 
-    const saveCrawlhostgroupconfig: CrawlHostGroupConfig = {
+    return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
@@ -110,7 +110,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveCrawlhostgroupconfig;
   }
 
   setLabel(label) {
@@ -140,8 +139,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     });
   }
 
-  setIpRange(ip_range) {
-    const ip_rangeFGs = ip_range.map(ip_range => (this.fb.group(ip_range)));
+  setIpRange(ip_ranges) {
+    const ip_rangeFGs = ip_ranges.map(ip_range => (this.fb.group(ip_range)));
     const ip_rangeFormArray = this.fb.array(ip_rangeFGs);
     this.crawlHostGroupConfigFG.setControl('ip_range', ip_rangeFormArray);
   }

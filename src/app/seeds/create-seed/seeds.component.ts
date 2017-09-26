@@ -65,7 +65,7 @@ export class SeedsComponent {
 
   createSeedNew() {
     this.seed = this.prepareSaveSeed();
-    this.seedService.createSeed(this.seed).subscribe();
+    this.seedService.create(this.seed).subscribe();
     this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
@@ -77,7 +77,7 @@ export class SeedsComponent {
 
   createSeed() {
     this.seed = this.prepareSaveSeed();
-    this.seedService.createSeed(this.seed).subscribe();
+    this.seedService.create(this.seed).subscribe();
     this.mdSnackBar.open('Lagret');
     setTimeout(() => {
       this.router.navigate(['/']);
@@ -100,7 +100,7 @@ export class SeedsComponent {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveSeed: Seed = {
+    return {
       // id: this.seed.id,
       entity_id: formModel.entity_id[0].id,
       scope: {surt_prefix: ''},
@@ -115,11 +115,11 @@ export class SeedsComponent {
         label: labelsDeepCopy
       }
     };
-    return saveSeed;
+
   }
 
   updateSeed(seed: Seed): void {
-    this.seedService.updateSeed(this.seedForm.value)
+    this.seedService.update(this.seedForm.value)
       .map((updatedSeed: Seed) => {
         this.updateHandler(updatedSeed);
       });
@@ -160,7 +160,7 @@ export class SeedsComponent {
       enableSearchFilter: true
     };
 
-    this.entityService.getAllEntities()
+    this.entityService.list()
       .map(reply => reply.value)
       .subscribe((entities) => {
         entities.forEach((entity) => {
@@ -181,7 +181,7 @@ export class SeedsComponent {
       enableSearchFilter: true
     };
 
-    this.crawlJobService.getAllCrawlJobs()
+    this.crawlJobService.list()
       .map(reply => reply.value)
       .subscribe((crawlJobs) => {
         crawlJobs.forEach((crawlJob) => {

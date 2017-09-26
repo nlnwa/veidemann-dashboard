@@ -17,7 +17,7 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.crawlHostGroupConfigService.getAllCrawlHostGroupConfig()
+    this.crawlHostGroupConfigService.list()
       .map(reply => reply.value)
       .subscribe(crawlHostGroupConfigs => this.crawlHostGroupConfigs = crawlHostGroupConfigs);
   }

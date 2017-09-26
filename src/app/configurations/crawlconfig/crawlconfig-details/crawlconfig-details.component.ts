@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {PolitenessConfig, PolitenessConfigService} from '../../politenessconfig/';
-import {BrowserConfig, BrowserconfigService} from '../../browserconfig/';
+import {BrowserConfig, BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators, Label} from '../../../commons/';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {CrawlConfig} from '../crawlconfig.model';
-import {CrawlconfigService} from '../crawlconfig.service';
+import {CrawlConfigService} from '../crawlconfig.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ import {CrawlconfigService} from '../crawlconfig.service';
   // encapsulation: ViewEncapsulation.None,
 
 })
-export class CrawlconfigDetailsComponent implements OnChanges {
+export class CrawlConfigDetailsComponent implements OnChanges {
   @Input()
   crawlConfig: CrawlConfig;
   crawlConfigFG: FormGroup;
@@ -37,9 +37,9 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  constructor(private crawlConfigService: CrawlconfigService,
+  constructor(private crawlConfigService: CrawlConfigService,
               private politenessConfigService: PolitenessConfigService,
-              private browserConfigService: BrowserconfigService,
+              private browserConfigService: BrowserConfigService,
               private fb: FormBuilder,
               private mdSnackBar: MdSnackBar) {
     this.fillDropdown();
@@ -99,7 +99,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   createCrawlConfig() {
     this.crawlConfig = this.prepareSaveCrawlConfig();
-    this.crawlConfigService.createCrawlConfig(this.crawlConfig)
+    this.crawlConfigService.create(this.crawlConfig)
       .map((newCrawlConfig: CrawlConfig) => {
         this.createHandler(newCrawlConfig);
       });
@@ -108,7 +108,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
   updateCrawlConfig(crawlConfigForm): void {
     this.crawlConfig = this.prepareSaveCrawlConfig();
-    this.crawlConfigService.updateCrawlConfig(this.crawlConfig)
+    this.crawlConfigService.update(this.crawlConfig)
       .map((updatedCrawlConfig) => {
         this.updateHandler(updatedCrawlConfig);
       });
@@ -116,7 +116,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
   };
 
   deleteCrawlConfig(crawlConfigId): void {
-    this.crawlConfigService.deleteCrawlConfig(crawlConfigId)
+    this.crawlConfigService.delete(crawlConfigId)
       .map((deletedCrawlConfig) => {
         this.deleteHandler(deletedCrawlConfig);
         if (deletedCrawlConfig === 'not_allowed') {
@@ -136,7 +136,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveCrawlconfig: CrawlConfig = {
+    return {
       id: this.crawlConfig.id,
       browser_config_id: formModel.browser_config_id[0].id as string,
       politeness_id: formModel.politeness_id[0].id as string,
@@ -153,13 +153,12 @@ export class CrawlconfigDetailsComponent implements OnChanges {
 
       }
     };
-    return saveCrawlconfig;
   }
 
   setSelectedDropdown() {
     if (this.crawlConfig.browser_config_id !== '') {
       this.browserConfigService
-        .getBrowserConfig(this.crawlConfig.browser_config_id)
+        .get(this.crawlConfig.browser_config_id)
         .subscribe(browserConfig => {
           this.selectedBrowserConfigItems.push({
             id: browserConfig.id,
@@ -171,20 +170,20 @@ export class CrawlconfigDetailsComponent implements OnChanges {
     }
 
     if (this.crawlConfig.politeness_id !== '') {
-      this.politenessConfigService.getPolitenessConfig(this.crawlConfig.politeness_id)
+      this.politenessConfigService.get(this.crawlConfig.politeness_id)
         .subscribe((politenessConfig) => {
           this.selectedPolitenessConfigItems.push({
             id: politenessConfig.id,
             itemName: politenessConfig.meta.name,
             description: politenessConfig.meta.description
-          })
+          });
           this.crawlConfigFG.controls['politeness_id'].setValue(this.selectedPolitenessConfigItems);
         });
     }
   }
 
   fillDropdown() {
-    this.browserConfigService.getAllBrowserConfigs()
+    this.browserConfigService.list()
       .map(reply => reply.value)
       .subscribe(browserConfigs => {
         browserConfigs.forEach((browserConfig) =>
@@ -195,7 +194,7 @@ export class CrawlconfigDetailsComponent implements OnChanges {
           }));
       });
 
-    this.politenessConfigService.getAllPolitenessConfigs()
+    this.politenessConfigService.list()
       .map(reply => reply.value)
       .subscribe(politenessConfigs => {
         politenessConfigs.forEach((politenessConfig) => {

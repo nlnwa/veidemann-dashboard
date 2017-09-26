@@ -112,7 +112,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   createSchedule() {
     this.schedule = this.prepareSaveSchedule();
-    this.scheduleService.createSchedule(this.schedule)
+    this.scheduleService.create(this.schedule)
       .subscribe((newSchedule: Schedule) => {
         this.createHandler(newSchedule);
       });
@@ -121,7 +121,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   updateSchedule(schedule: Schedule): void {
     this.schedule = this.prepareSaveSchedule();
-    this.scheduleService.updateSchedule(this.schedule)
+    this.scheduleService.update(this.schedule)
       .subscribe((updatedSchedule: Schedule) => {
         this.updateHandler(updatedSchedule);
       });
@@ -129,7 +129,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   deleteSchedule(scheduleId): void {
-    this.scheduleService.deleteSchedule(scheduleId)
+    this.scheduleService.delete(scheduleId)
       .subscribe((deletedSchedule) => {
         this.deleteHandler(deletedSchedule).subscribe();
         if (deletedSchedule === 'not_allowed') {
@@ -177,7 +177,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveSchedule: Schedule = {
+    return {
       id: this.schedule.id,
       cron_expression: cron_expression,
       valid_from: this.valid_from_unix,
@@ -192,7 +192,6 @@ export class ScheduleDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveSchedule;
   }
 
 

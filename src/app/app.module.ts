@@ -13,16 +13,16 @@ import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {SeedDetailComponent, SeedsComponent, SeedSearchComponent, SeedService} from './seeds';
 import {
-  BrowserconfigDetailsComponent,
-  BrowserconfigListComponent,
-  BrowserconfigService
+  BrowserConfigDetailsComponent,
+  BrowserConfigListComponent,
+  BrowserConfigService
 } from './configurations/browserconfig';
 import {
   BrowserScriptDetailsComponent,
   BrowserscriptListComponent,
-  BrowserscriptService
+  BrowserScriptService
 } from './configurations/browserscript';
-import {CrawlconfigDetailsComponent, CrawlconfigListComponent, CrawlconfigService} from './configurations/crawlconfig';
+import {CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigService} from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
@@ -59,10 +59,10 @@ import {
     CrawlJobListComponent,
     ScheduleListComponent,
     ScheduleDetailsComponent,
-    CrawlconfigListComponent,
-    CrawlconfigDetailsComponent,
-    BrowserconfigDetailsComponent,
-    BrowserconfigListComponent,
+    CrawlConfigListComponent,
+    CrawlConfigDetailsComponent,
+    BrowserConfigDetailsComponent,
+    BrowserConfigListComponent,
     PolitenessconfigDetailsComponent,
     PolitenessConfigListComponent,
     ScheduleSidebarComponent,
@@ -88,15 +88,15 @@ import {
   providers: [
     SeedService,
     CrawlJobService,
-    CrawlconfigService,
+    CrawlConfigService,
     CrawlHostGroupConfigService,
     PolitenessConfigService,
-    BrowserconfigService,
+    BrowserConfigService,
     DateTime,
     ErrorHandlerService,
     ScheduleService,
     EntityService,
-    BrowserscriptService,
+    BrowserScriptService,
     LogService,
   ],
   bootstrap: [AppComponent]

@@ -1,21 +1,21 @@
 <h2>Browserconfigs</h2>
 <md-nav-list>
   <md-list-item
-    *ngFor="let browserconfig of browserconfigs" (click)="selectBrowserconfig(browserconfig)"
-    [class.active]="browserconfig === selectedBrowserconfig">
+    *ngFor="let browserconfig of browserConfigs" (click)="selectBrowserConfig(browserconfig)"
+    [class.active]="browserconfig === selectedBrowserConfig">
     {{browserconfig.meta.name}}
 
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewBrowserconfig()">New
+        (click)="createNewBrowserConfig()">New
 </button>
 
-<ng-container *ngIf="selectedBrowserconfig">
+<ng-container *ngIf="selectedBrowserConfig">
   <app-browserconfig-details
-    [browserconfig]="selectedBrowserconfig"
-    [createHandler]="addBrowserconfig"
-    [updateHandler]="updateBrowserconfig"
-    [deleteHandler]="deleteBrowserconfig">
+    [browserConfig]="selectedBrowserConfig"
+    [createHandler]="addBrowserConfig"
+    [updateHandler]="updateBrowserConfig"
+    [deleteHandler]="deleteBrowserConfig">
   </app-browserconfig-details>
 </ng-container>

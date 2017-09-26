@@ -1,26 +1,10 @@
 import {Meta} from '../../commons/models/meta.model';
-
-export class Schedules {
-  value: Schedule[];
-  count: number;
-  page_size: string;
-  page: string;
-}
+import {Timestamp} from '../../commons/models/timestamp.model';
 
 export class Schedule {
   id?: string;
   meta: Meta;
   cron_expression: string;
-  valid_from?: ValidFrom;
-  valid_to?: ValidTo;
-}
-
-export class ValidFrom {
-  seconds: number;
-  nanos?: number;
-}
-
-export class ValidTo {
-  seconds: number;
-  nanos?: number;
+  valid_from?: Timestamp;
+  valid_to?: Timestamp;
 }

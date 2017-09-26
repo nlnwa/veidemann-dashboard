@@ -10,8 +10,7 @@ export class LogService {
 
   private logConfigUrl = `${environment.API_URL}/logconfig`;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   getLevels(): Observable<string[]> {
     return Observable.of(['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF']);

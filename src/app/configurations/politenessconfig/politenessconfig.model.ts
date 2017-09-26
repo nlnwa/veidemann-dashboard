@@ -1,12 +1,5 @@
 import {Meta} from '../../commons/models/meta.model';
 
-export class PolitenessConfigs {
-  value: PolitenessConfig[];
-  count: number;
-  page_size: string;
-  page: string;
-}
-
 export class PolitenessConfig {
   id?: string;
   meta: Meta;

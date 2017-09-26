@@ -1,11 +1,11 @@
 <h2 *ngIf="crawlJob.id">Crawljob Details</h2>
 <h2 *ngIf="!crawlJob.id">New Crawljob</h2>
 
-<form [formGroup]="crawljobForm" fxLayout="column">
+<form [formGroup]="crawlJobForm" fxLayout="column">
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! crawljobForm['controls'].meta['controls'].name.valid">
+    <md-error *ngIf="! crawlJobForm['controls'].meta['controls'].name.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -18,21 +18,21 @@
 
     <md-form-field>
       <input mdInput formControlName="depth" type="number" placeholder="Dybde">
-      <md-error *ngIf="! crawljobForm['controls'].limits['controls'].depth.valid">
+      <md-error *ngIf="! crawlJobForm['controls'].limits['controls'].depth.valid">
         Depth required
       </md-error>
     </md-form-field>
 
     <md-form-field>
       <input mdInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
-      <md-error *ngIf="! crawljobForm['controls'].limits['controls'].max_duration_s.valid">
+      <md-error *ngIf="! crawlJobForm['controls'].limits['controls'].max_duration_s.valid">
         Max duration required.
       </md-error>
     </md-form-field>
 
     <md-form-field>
       <input mdInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
-      <md-error *ngIf="! crawljobForm['controls'].limits['controls'].max_bytes.valid">
+      <md-error *ngIf="! crawlJobForm['controls'].limits['controls'].max_bytes.valid">
         Max duration required.
       </md-error>
     </md-form-field>
@@ -46,20 +46,20 @@
                             formControlName="schedule_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawljobForm['controls'].schedule_id.valid">
+    <small [hidden]="crawlJobForm['controls'].schedule_id.valid">
       Schedule required.
     </small>
   </div>
 
   <div>
     <label>Crawlconfig:
-      <angular2-multiselect [data]="crawlconfigList"
-                            [(ngModel)]="selectedCrawlconfigItems"
-                            [settings]="dropdownCrawlconfigSettings"
+      <angular2-multiselect [data]="crawlConfigList"
+                            [(ngModel)]="selectedCrawlConfigItems"
+                            [settings]="dropdownCrawlConfigSettings"
                             formControlName="crawl_config_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawljobForm['controls'].crawl_config_id.valid">
+    <small [hidden]="crawlJobForm['controls'].crawl_config_id.valid">
       Crawlconfig required.
     </small>
   </div>
@@ -83,7 +83,7 @@
         </md-form-field>
         <md-form-field>
           <input mdInput formControlName="value" placeholder="Value">
-          <md-error *ngIf="! crawljobForm['controls'].label.valid">
+          <md-error *ngIf="! crawlJobForm['controls'].label.valid">
             Merkelapp er påkrevd.
           </md-error>
         </md-form-field>
@@ -97,14 +97,14 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!crawljobForm.valid"
+            [disabled]="!crawlJobForm.valid"
             *ngIf="!crawlJob.id"
-            (click)="createCrawljob(crawljobForm.value)" novalidate>Lagre
+            (click)="createCrawljob(crawlJobForm.value)" novalidate>Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="crawlJob.id"
-            [disabled]="!crawljobForm.valid"
-            (click)="updateCrawljob(crawljobForm.value)">Lagre
+            [disabled]="!crawlJobForm.valid"
+            (click)="updateCrawljob(crawlJobForm.value)">Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()">Tilbakestill

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BrowserScript} from '../browserscript.model';
-import {BrowserscriptService} from '../browserscript.service';
+import {BrowserScriptService} from '../browserscript.service';
 
 @Component({
   selector: 'app-browserscript-list',
@@ -12,29 +12,29 @@ export class BrowserscriptListComponent implements OnInit {
   browserScripts: BrowserScript[];
   selectedBrowserScript: BrowserScript;
 
-  constructor(private browserScriptService: BrowserscriptService) {}
+  constructor(private browserScriptService: BrowserScriptService) {}
 
   ngOnInit() {
-    this.browserScriptService.getAllBrowserScripts()
+    this.browserScriptService.list()
       .map(reply => reply.value)
       .subscribe(browserScripts => this.browserScripts = browserScripts);
   }
 
-  private getIndexOfBrowserScript = (browserscriptId: String) => {
-    return this.browserScripts.findIndex((browserscript) => {
-      return browserscript.id === browserscriptId;
+  private getIndexOfBrowserScript = (browserScriptId: String) => {
+    return this.browserScripts.findIndex((browserScript) => {
+      return browserScript.id === browserScriptId;
     });
   };
 
-  selectBrowserscript(browserscript: BrowserScript) {
-    this.selectedBrowserScript = browserscript
+  selectBrowserScript(browserScript: BrowserScript) {
+    this.selectedBrowserScript = browserScript
   }
 
-  deleteBrowserScript = (browserscriptId: String) => {
-    const idx = this.getIndexOfBrowserScript(browserscriptId);
+  deleteBrowserScript = (browserScriptId: String) => {
+    const idx = this.getIndexOfBrowserScript(browserScriptId);
     if (idx !== -1) {
       this.browserScripts.splice(idx, 1);
-      this.selectBrowserscript(null);
+      this.selectBrowserScript(null);
     }
     return this.browserScripts
   };
@@ -49,20 +49,20 @@ export class BrowserscriptListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectBrowserscript(browserScript);
+    this.selectBrowserScript(browserScript);
   }
 
-  addBrowserScript = (browserscript: BrowserScript) => {
-    this.browserScripts.push(browserscript);
-    this.selectBrowserscript(browserscript);
+  addBrowserScript = (browserScript: BrowserScript) => {
+    this.browserScripts.push(browserScript);
+    this.selectBrowserScript(browserScript);
     return this.browserScripts;
   };
 
-  updateBrowserScript = (browserscript: BrowserScript) => {
-    const idx = this.getIndexOfBrowserScript(browserscript.id);
+  updateBrowserScript = (browserScript: BrowserScript) => {
+    const idx = this.getIndexOfBrowserScript(browserScript.id);
     if (idx !== -1) {
-      this.browserScripts[idx] = browserscript;
-      this.selectBrowserscript(browserscript);
+      this.browserScripts[idx] = browserScript;
+      this.selectBrowserScript(browserScript);
     }
     return this.browserScripts;
   }

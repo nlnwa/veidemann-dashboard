@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { CrawlHostGroupConfigService } from './crawlhostgroupconfig.service';
+import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 
 describe('CrawlHostGroupConfigService', () => {
   beforeEach(() => {

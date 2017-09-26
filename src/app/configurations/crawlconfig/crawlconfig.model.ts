@@ -1,15 +1,6 @@
 import {Meta} from '../../commons/models/meta.model';
 
-export class CrawlConfigs {
-  value: CrawlConfig[];
-  count: number;
-  page_size: string;
-  page: string;
-}
-
 export class CrawlConfig {
-  browser_config_or_id?: string;
-  politeness_or_id?: string;
   id?: string;
   meta: Meta;
   browser_config_id: string;
@@ -25,4 +16,3 @@ export class Extra {
   extract_text: boolean;
   create_snapshot: boolean;
 }
-

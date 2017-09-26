@@ -1,22 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {CrawlConfig} from '../crawlconfig.model';
-import {CrawlconfigService} from '../crawlconfig.service';
+import {CrawlConfigService} from '../crawlconfig.service';
 
 @Component({
   selector: 'app-crawlconfig-list',
   templateUrl: './crawlconfig-list.component.html',
   styleUrls: ['./crawlconfig-list.component.css']
 })
-export class CrawlconfigListComponent implements OnInit {
+export class CrawlConfigListComponent implements OnInit {
 
   crawlConfigs: CrawlConfig[];
   selectedCrawlConfig: CrawlConfig;
 
-  constructor(private crawlConfigService: CrawlconfigService) {
+  constructor(private crawlConfigService: CrawlConfigService) {
   }
 
   ngOnInit() {
-    this.crawlConfigService.getAllCrawlConfigs()
+    this.crawlConfigService.list()
       .map(reply => reply.value)
       .subscribe(crawlConfigs => this.crawlConfigs = crawlConfigs);
   }

@@ -1,19 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {BrowserconfigListComponent} from './browserconfig-list.component';
+import {BrowserConfigListComponent} from './browserconfig-list.component';
 
-describe('BrowserconfigListComponent', () => {
-  let component: BrowserconfigListComponent;
-  let fixture: ComponentFixture<BrowserconfigListComponent>;
+describe('BrowserConfigListComponent', () => {
+  let component: BrowserConfigListComponent;
+  let fixture: ComponentFixture<BrowserConfigListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowserconfigListComponent]
+      declarations: [BrowserConfigListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BrowserconfigListComponent);
+    fixture = TestBed.createComponent(BrowserConfigListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

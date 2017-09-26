@@ -1,5 +1,5 @@
 export * from './browserconfig.model'
-export {BrowserconfigService} from './browserconfig.service';
-export {BrowserconfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
-export {BrowserconfigListComponent} from './browserconfig-list/browserconfig-list.component';
+export {BrowserConfigService} from './browserconfig.service';
+export {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
+export {BrowserConfigListComponent} from './browserconfig-list/browserconfig-list.component';
 

@@ -1,4 +1,4 @@
-export {Seed, Seeds} from './seed.model';
+export {Seed} from './seed.model';
 export {SeedService} from './seeds.service';
 export {SeedDetailComponent} from './seed-details/seed-details.component';
 export {SeedsComponent} from './create-seed/seeds.component';

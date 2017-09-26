@@ -16,7 +16,7 @@ export class CrawlJobListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.crawlJobService.getAllCrawlJobs()
+    this.crawlJobService.list()
       .map(reply => reply.value)
       .subscribe(crawlJobs => this.crawljobs = crawlJobs);
   }

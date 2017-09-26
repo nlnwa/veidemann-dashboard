@@ -7,8 +7,8 @@ import {CrawlJobListComponent} from './configurations/crawljobs/';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {ScheduleListComponent} from './configurations/schedule/';
-import {CrawlconfigListComponent} from './configurations/crawlconfig/';
-import {BrowserconfigListComponent} from './configurations/browserconfig/';
+import {CrawlConfigListComponent} from './configurations/crawlconfig/';
+import {BrowserConfigListComponent} from './configurations/browserconfig/';
 import {PolitenessConfigListComponent} from './configurations/politenessconfig/';
 import {EntityDetailsComponent, EntityListComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
@@ -63,7 +63,7 @@ const routes: Routes = [
   },
   {
     path: 'crawlconfig',
-    component: CrawlconfigListComponent
+    component: CrawlConfigListComponent
   },
   {
     path: 'crawlhostgroupconfig',
@@ -71,7 +71,7 @@ const routes: Routes = [
   },
   {
     path: 'browserconfig',
-    component: BrowserconfigListComponent
+    component: BrowserConfigListComponent
   },
   {
     path: 'browserscript',

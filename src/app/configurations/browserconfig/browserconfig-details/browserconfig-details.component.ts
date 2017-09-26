@@ -2,23 +2,23 @@ import {Component, Input, OnChanges} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators, Label} from '../../../commons';
-import {BrowserscriptService} from '../../browserscript';
+import {BrowserScriptService} from '../../browserscript';
 import {BrowserConfig} from '../browserconfig.model';
-import {BrowserconfigService} from '../browserconfig.service';
+import {BrowserConfigService} from '../browserconfig.service';
 
 @Component({
   selector: 'app-browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
   styleUrls: ['./browserconfig-details.component.css']
 })
-export class BrowserconfigDetailsComponent implements OnChanges {
+export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()
-  browserconfig: BrowserConfig;
-  browserconfigForm: FormGroup;
+  browserConfig: BrowserConfig;
+  browserConfigForm: FormGroup;
 
-  browserScriptlist: any = [];
+  browserScriptList: any = [];
   browserScriptDropdownSettings = {};
-  selectedbrowserScriptItems = [];
+  selectedBrowserScriptItems = [];
 
 
   @Input()
@@ -28,16 +28,16 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  constructor(private browserconfigService: BrowserconfigService,
+  constructor(private browserConfigService: BrowserConfigService,
               private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
-              private browserscriptService: BrowserscriptService) {
+              private browserScriptService: BrowserScriptService) {
     this.createForm();
     this.fillDropdown();
   }
 
   createForm() {
-    this.browserconfigForm = this.fb.group({
+    this.browserConfigForm = this.fb.group({
       id: '',
       user_agent: ['', [Validators.required, Validators.minLength(1)]],
       window_width: ['', [Validators.required, CustomValidators.min(1)]],
@@ -45,7 +45,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       // headers: this.fb.group({''}),
-      script_id: null,
+      script_id: [],
       script_selector: this.fb.array([]),
 
       meta: this.fb.group({
@@ -57,48 +57,48 @@ export class BrowserconfigDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(browserconfig: BrowserConfig) {
-    this.browserconfigForm.controls['id'].setValue(browserconfig.id);
-    this.browserconfigForm.controls['user_agent'].setValue(browserconfig.user_agent);
-    this.browserconfigForm.controls['window_width'].setValue(browserconfig.window_width);
-    this.browserconfigForm.controls['window_height'].setValue(browserconfig.window_height);
-    this.browserconfigForm.controls['page_load_timeout_ms'].setValue(browserconfig.page_load_timeout_ms);
-    this.browserconfigForm.controls['sleep_after_pageload_ms'].setValue(browserconfig.sleep_after_pageload_ms);
-    // this.browserconfigForm.controls['headers'].patchValue(browserConfig.headers);
-    this.browserconfigForm.controls['meta'].patchValue({
-      name: browserconfig.meta.name as string,
-      description: browserconfig.meta.description as string,
+  updateData(browserConfig: BrowserConfig) {
+    this.browserConfigForm.controls['id'].setValue(browserConfig.id);
+    this.browserConfigForm.controls['user_agent'].setValue(browserConfig.user_agent);
+    this.browserConfigForm.controls['window_width'].setValue(browserConfig.window_width);
+    this.browserConfigForm.controls['window_height'].setValue(browserConfig.window_height);
+    this.browserConfigForm.controls['page_load_timeout_ms'].setValue(browserConfig.page_load_timeout_ms);
+    this.browserConfigForm.controls['sleep_after_pageload_ms'].setValue(browserConfig.sleep_after_pageload_ms);
+    // this.browserConfigForm.controls['headers'].patchValue(browserConfig.headers);
+    this.browserConfigForm.controls['meta'].patchValue({
+      name: browserConfig.meta.name as string,
+      description: browserConfig.meta.description as string,
     });
     this.setSelectedDropdown();
-    this.selectedbrowserScriptItems = [];
-    this.setLabel(browserconfig.meta.label);
+    this.selectedBrowserScriptItems = [];
+    this.setLabel(browserConfig.meta.label);
   }
 
   ngOnChanges() {
-    this.updateData(this.browserconfig);
+    this.updateData(this.browserConfig);
   }
 
-  createBrowserconfig() {
-    this.browserconfig = this.prepareSaveBrowserconfig();
-    this.browserconfigService.createBrowserConfig(this.browserconfig)
-      .subscribe(newBrowserconfig => {
-        this.createHandler(newBrowserconfig);
+  createBrowserConfig() {
+    this.browserConfig = this.prepareSaveBrowserconfig();
+    this.browserConfigService.create(this.browserConfig)
+      .subscribe(newBrowserConfig => {
+        this.createHandler(newBrowserConfig);
       });
     this.mdSnackBar.open('Lagret');
   };
 
 
-  updateBrowserconfig(browserconfig: BrowserConfig): void {
-    this.browserconfig = this.prepareSaveBrowserconfig();
-    this.browserconfigService.updateBrowserConfig(this.browserconfig)
-      .subscribe(updatedBrowserconfig => {
-        this.updateHandler(updatedBrowserconfig);
+  updateBrowserConfig(browserConfig: BrowserConfig): void {
+    this.browserConfig = this.prepareSaveBrowserconfig();
+    this.browserConfigService.update(this.browserConfig)
+      .subscribe(updatedBrowserConfig => {
+        this.updateHandler(updatedBrowserConfig);
         this.mdSnackBar.open('Lagret');
       });
   }
 
-  deleteBrowserconfig(browserconfigId): void {
-    this.browserconfigService.deleteBrowserConfig(browserconfigId)
+  deleteBrowserConfig(browserConfigId): void {
+    this.browserConfigService.delete(browserConfigId)
       .subscribe(deletedBrowserConfig => {
         this.deleteHandler(deletedBrowserConfig);
         if (deletedBrowserConfig === 'not_allowed') {
@@ -110,11 +110,11 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   }
 
   fillDropdown() {
-    this.browserscriptService.getAllBrowserScripts()
+    this.browserScriptService.list()
       .map(reply => reply.value)
       .subscribe((browserScripts) => {
         browserScripts.forEach((browserScript) =>
-          this.browserScriptlist.push({
+          this.browserScriptList.push({
             id: browserScript.id,
             itemName: browserScript.meta.name,
             description: browserScript.meta.description
@@ -129,12 +129,12 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   }
 
   setSelectedDropdown() {
-    this.selectedbrowserScriptItems = [];
-    if (this.browserconfig.script_id) {
-      for (const i of this.browserconfig.script_id) {
-        this.browserscriptService.getBrowserScript(i)
+    this.selectedBrowserScriptItems = [];
+    if (this.browserConfig.script_id) {
+      for (const i of this.browserConfig.script_id) {
+        this.browserScriptService.get(i)
           .subscribe(browserScript =>
-            this.selectedbrowserScriptItems.push({
+            this.selectedBrowserScriptItems.push({
               id: browserScript.id,
               itemName: browserScript.meta.name,
               description: browserScript.meta.description
@@ -143,27 +143,27 @@ export class BrowserconfigDetailsComponent implements OnChanges {
       }
     }
 
-    this.browserconfigForm.controls['script_id'].setValue(this.selectedbrowserScriptItems);
+    this.browserConfigForm.controls['script_id'].setValue(this.selectedBrowserScriptItems);
   }
 
   setLabel(label) {
     const labelFGs = label.map(lbl => (this.fb.group(lbl)));
     const labelFormArray = this.fb.array(labelFGs);
-    this.browserconfigForm.setControl('label', labelFormArray);
+    this.browserConfigForm.setControl('label', labelFormArray);
   }
 
   addLabel() {
-    const control = <FormArray>this.browserconfigForm.controls['label'];
+    const control = <FormArray>this.browserConfigForm.controls['label'];
     control.push(this.initLabel());
   }
 
   removeLabel(i: number) {
-    const control = <FormArray>this.browserconfigForm.controls['label'];
+    const control = <FormArray>this.browserConfigForm.controls['label'];
     control.removeAt(i);
   }
 
   get label(): FormArray {
-    return this.browserconfigForm.get('label') as FormArray;
+    return this.browserConfigForm.get('label') as FormArray;
   }
   ;
 
@@ -177,21 +177,21 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   setScriptSelector(scriptSelector) {
     const scriptSelectorFG = scriptSelector.map(ss => (this.fb.group(ss)));
     const script_selectorFormArray = this.fb.array(scriptSelectorFG);
-    this.browserconfigForm.setControl('script_selector', script_selectorFormArray);
+    this.browserConfigForm.setControl('script_selector', script_selectorFormArray);
   }
 
   addScriptSelector() {
-    const control = <FormArray>this.browserconfigForm.controls['script_selector'];
+    const control = <FormArray>this.browserConfigForm.controls['script_selector'];
     control.push(this.initScriptSelector());
   }
 
   removeScriptSelector(i: number) {
-    const control = <FormArray>this.browserconfigForm.controls['script_selector'];
+    const control = <FormArray>this.browserConfigForm.controls['script_selector'];
     control.removeAt(i);
   }
 
   get script_selector(): FormArray {
-    return this.browserconfigForm.get('script_selector') as FormArray;
+    return this.browserConfigForm.get('script_selector') as FormArray;
   }
   ;
 
@@ -208,7 +208,7 @@ export class BrowserconfigDetailsComponent implements OnChanges {
   }
 
   prepareSaveBrowserconfig(): BrowserConfig {
-    const formModel = this.browserconfigForm.value;
+    const formModel = this.browserConfigForm.value;
 
     // deep copy of form model lairs
     const labelsDeepCopy: Label[] = formModel.label.map(
@@ -227,8 +227,8 @@ export class BrowserconfigDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveBrowserconfig: BrowserConfig = {
-      id: this.browserconfig.id,
+    return {
+      id: this.browserConfig.id,
       user_agent: formModel.user_agent,
       window_width: formModel.window_width,
       window_height: formModel.window_height,
@@ -249,6 +249,5 @@ export class BrowserconfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveBrowserconfig;
   }
 }
