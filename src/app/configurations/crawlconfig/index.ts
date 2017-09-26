@@ -1,4 +1,4 @@
 export * from './crawlconfig.model';
-export {CrawlconfigService} from './crawlconfig.service';
-export {CrawlconfigDetailsComponent} from './crawlconfig-details/crawlconfig-details.component';
-export {CrawlconfigListComponent} from './crawlconfig-list/crawlconfig-list.component';
+export {CrawlConfigService} from './crawlconfig.service';
+export {CrawlConfigDetailsComponent} from './crawlconfig-details/crawlconfig-details.component';
+export {CrawlConfigListComponent} from './crawlconfig-list/crawlconfig-list.component';

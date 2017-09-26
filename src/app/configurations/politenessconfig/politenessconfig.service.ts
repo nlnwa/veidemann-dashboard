@@ -3,41 +3,21 @@ import {PolitenessConfig} from './';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
-import {PolitenessConfigs} from './politenessconfig.model';
-
+import {CrudService} from '../../commons/crud.service';
 
 @Injectable()
-export class PolitenessConfigService {
+export class PolitenessConfigService extends CrudService<PolitenessConfig> {
 
-  private politenessConfigUrl = `${environment.API_URL}/politenessconfig`;
-  private robotsPolicyUrl = `${environment.API_URL}/robotspolicy`;
+  private static readonly robotsPolicyUrl = `${environment.API_URL}/robotspolicy`;
 
-  constructor(private http: HttpClient) {}
+  static readonly URL: string = `${environment.API_URL}/politenessconfig`;
 
-  getAllPolitenessConfigs(): Observable<PolitenessConfigs> {
-    return this.http.get(this.politenessConfigUrl);
-  }
-
-  getPolitenessConfig(politenessConfigId): Observable<PolitenessConfig> {
-    return this.http.get<PolitenessConfigs>(`${this.politenessConfigUrl}/${politenessConfigId}`)
-      .map(res => res.value[0]);
-  }
-
-  createPolitenessConfig(newPolitenessconfig: PolitenessConfig): Observable<PolitenessConfig> {
-    return this.http.post<PolitenessConfig>(this.politenessConfigUrl, newPolitenessconfig);
-  }
-
-  deletePolitenessConfig(politenessConfigId: String): Observable<String> {
-    return this.http.delete(this.politenessConfigUrl + '/' + politenessConfigId);
-  }
-
-  updatePolitenessConfig(politenessConfig: PolitenessConfig): Observable<PolitenessConfig> {
-    const putUrl = this.politenessConfigUrl + '/' + politenessConfig.id;
-    return this.http.put<PolitenessConfig>(putUrl, politenessConfig);
+  constructor(protected http: HttpClient) {
+    super(http, PolitenessConfigService.URL);
   }
 
   getRobotsConfig(): Observable<Object[]> {
-    return this.http.get(this.robotsPolicyUrl)
+    return this.http.get(PolitenessConfigService.robotsPolicyUrl)
       .map((res => res['menuitem']));
   }
 }

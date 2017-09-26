@@ -15,7 +15,7 @@ export class PolitenessConfigListComponent implements OnInit {
   constructor(private politenessConfigService: PolitenessConfigService) {}
 
   ngOnInit() {
-    this.politenessConfigService.getAllPolitenessConfigs()
+    this.politenessConfigService.list()
       .map(reply => reply.value)
       .subscribe(politenessConfigs => this.politenessConfigs = politenessConfigs);
   }

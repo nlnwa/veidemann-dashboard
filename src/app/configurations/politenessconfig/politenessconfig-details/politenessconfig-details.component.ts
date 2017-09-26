@@ -72,8 +72,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   createPolitenessconfig() {
-    this.politenessConfig = this.prepareSavePolitenessconfig();
-    this.politenessConfigService.createPolitenessConfig(this.politenessConfig)
+    this.politenessConfig = this.prepareSavePolitenessConfig();
+    this.politenessConfigService.create(this.politenessConfig)
       .subscribe((newPolitenessConfig: PolitenessConfig) => {
         this.createHandler(newPolitenessConfig);
       });
@@ -82,8 +82,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
 
   updatePolitenessconfig(politenessConfig: PolitenessConfig): void {
-    this.politenessConfig = this.prepareSavePolitenessconfig();
-    this.politenessConfigService.updatePolitenessConfig(this.politenessConfig)
+    this.politenessConfig = this.prepareSavePolitenessConfig();
+    this.politenessConfigService.update(this.politenessConfig)
       .subscribe((updatedPolitenessConfig: PolitenessConfig) => {
         this.updateHandler(updatedPolitenessConfig);
       });
@@ -91,7 +91,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   deletePolitenessconfig(politenessConfigId) {
-    this.politenessConfigService.deletePolitenessConfig(politenessConfigId)
+    this.politenessConfigService.delete(politenessConfigId)
       .subscribe((deletedPolitenessConfig) => {
         this.deleteHandler(deletedPolitenessConfig);
         if (deletedPolitenessConfig === 'not_allowed') {
@@ -113,8 +113,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   setSelectedDropdown() {
     if (!isUndefined(this.politenessConfig.id)) {
-      this.politenessConfigService
-        .getPolitenessConfig(this.politenessConfig.id)
+      this.politenessConfigService.get(this.politenessConfig.id)
         .subscribe(politenessConfig => {
           for (const robotsPolicy of this.robotsPolicyList) {
             if (robotsPolicy.itemName === politenessConfig.robots_policy) {
@@ -158,7 +157,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     });
   }
 
-  prepareSavePolitenessconfig(): PolitenessConfig {
+  prepareSavePolitenessConfig(): PolitenessConfig {
     const formModel = this.politenessConfigFG.value;
     // deep copy of form model lairs
     const labelsDeepCopy: Label[] = formModel.label.map(
@@ -167,7 +166,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const savePolitenessconfig: PolitenessConfig = {
+    return {
       id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy[0].itemName,
       minimum_robots_validity_duration_s: formModel.minimum_robots_validity_duration_s,
@@ -183,7 +182,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return savePolitenessconfig;
   }
 
   revert() {

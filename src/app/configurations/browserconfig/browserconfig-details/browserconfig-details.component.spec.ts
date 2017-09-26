@@ -1,19 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {BrowserconfigDetailsComponent} from './browserconfig-details.component';
+import {BrowserConfigDetailsComponent} from './browserconfig-details.component';
 
-describe('BrowserconfigDetailsComponent', () => {
-  let component: BrowserconfigDetailsComponent;
-  let fixture: ComponentFixture<BrowserconfigDetailsComponent>;
+describe('BrowserConfigDetailsComponent', () => {
+  let component: BrowserConfigDetailsComponent;
+  let fixture: ComponentFixture<BrowserConfigDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowserconfigDetailsComponent]
+      declarations: [BrowserConfigDetailsComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BrowserconfigDetailsComponent);
+    fixture = TestBed.createComponent(BrowserConfigDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

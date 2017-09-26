@@ -46,16 +46,17 @@ export class SeedDetailComponent implements OnChanges {
               private entityService: EntityService) {
     this.createForm();
     this.getParams();
-    this.getCrawljobs();
+    this.getCrawlJobs();
   }
 
   getParams() {
     this.route.paramMap.subscribe(params => {
       if (params.has('seed')) {
-        this.seedService.getSeed(params.get('seed')).subscribe(seed => {
-          this.seed = seed;
-          this.ngOnChanges();
-        })
+        this.seedService.get(params.get('seed'))
+          .subscribe(seed => {
+            this.seed = seed;
+            this.ngOnChanges();
+          })
       } else {
         // TODO fix this
       }
@@ -107,9 +108,10 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   getEntityName(entity_id) {
-    this.entityService.getEntity(entity_id).subscribe(entity => {
-      this.seedForm.controls['entity_id'].setValue({entity_name: entity.meta.name, entity_ids: this.seed.entity_id});
-    });
+    this.entityService.get(entity_id)
+      .subscribe(entity => {
+        this.seedForm.get('entity_id').setValue({entity_name: entity.meta.name, entity_ids: this.seed.entity_id});
+      });
   }
 
   ngOnChanges() {
@@ -123,7 +125,7 @@ export class SeedDetailComponent implements OnChanges {
     this.selectedCrawljobItems = [];
     if (this.seed.job_id) {
       for (const i of this.seed.job_id) {
-        this.crawljobService.getCrawlJob(i)
+        this.crawljobService.get(i)
           .subscribe(crawlJob => {
             this.selectedCrawljobItems.push({
               id: crawlJob.id,
@@ -137,7 +139,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
 
-  getCrawljobs() {
+  getCrawlJobs() {
     this.selectedCrawljobItems = [];
     this.dropdownCrawljobSettings = {
       singleSelection: false,
@@ -145,7 +147,7 @@ export class SeedDetailComponent implements OnChanges {
       enableSearchFilter: true
     };
 
-    this.crawljobService.getAllCrawlJobs()
+    this.crawljobService.list()
       .map(reply => reply.value)
       .subscribe(crawlJobs => {
         crawlJobs.forEach((crawlJob) => {
@@ -161,7 +163,7 @@ export class SeedDetailComponent implements OnChanges {
 
   updateSeed(seedForm): void {
     this.seed = this.prepareSaveSeed();
-    this.seedService.updateSeed(this.seed)
+    this.seedService.update(this.seed)
       .subscribe((updatedSeed) => {
         // this.updateHandler(updatedSeed);
         this.updateData(updatedSeed);
@@ -171,8 +173,8 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   deleteSeed(): void {
-    this.seedService.deleteSeed(this.seed.id)
-      .map((deletedSeed) => {
+    this.seedService.delete(this.seed.id)
+      .subscribe((deletedSeed) => {
         if (deletedSeed === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
@@ -197,7 +199,7 @@ export class SeedDetailComponent implements OnChanges {
 
     // return new `Seed` object containing a combination of original seed value(s)
     // and deep copies of changed form model values
-    const saveSeed: Seed = {
+    return {
       id: this.seed.id,
       entity_id: this.seed.entity_id,
       scope: {surt_prefix: formModel.scope.surt_prefix as string},
@@ -212,7 +214,6 @@ export class SeedDetailComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveSeed;
   }
 
   setLabel(label) {

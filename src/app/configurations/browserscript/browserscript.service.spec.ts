@@ -1,14 +1,14 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {BrowserscriptService} from './browserscript.service';
+import {BrowserScriptService} from './browserscript.service';
 
-describe('BrowserscriptService', () => {
+describe('BrowserScriptService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BrowserscriptService]
+      providers: [BrowserScriptService]
     });
   });
 
-  it('should ...', inject([BrowserscriptService], (service: BrowserscriptService) => {
+  it('should ...', inject([BrowserScriptService], (service: BrowserScriptService) => {
     expect(service).toBeTruthy();
   }));
 });

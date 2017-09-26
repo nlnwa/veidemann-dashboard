@@ -1,14 +1,14 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {CrawlconfigService} from './crawlconfig.service';
+import {CrawlConfigService} from './crawlconfig.service';
 
-describe('CrawlconfigService', () => {
+describe('CrawlConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CrawlconfigService]
+      providers: [CrawlConfigService]
     });
   });
 
-  it('should ...', inject([CrawlconfigService], (service: CrawlconfigService) => {
+  it('should ...', inject([CrawlConfigService], (service: CrawlConfigService) => {
     expect(service).toBeTruthy();
   }));
 });

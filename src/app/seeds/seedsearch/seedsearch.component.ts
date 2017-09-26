@@ -79,7 +79,7 @@ export class SeedDataSource extends DataSource<Seed> {
 
   constructor(private seedService: SeedService) {
     super();
-    this.seedService.getAllSeeds().subscribe(seeds => this._dataChange.next(seeds.value));
+    this.seedService.list().subscribe(seeds => this._dataChange.next(seeds.value));
   }
 
   connect(): Observable<Seed[]> {

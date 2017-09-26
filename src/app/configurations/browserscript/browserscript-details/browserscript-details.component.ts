@@ -3,7 +3,7 @@ import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Label} from '../../../commons/';
 import {BrowserScript} from '../browserscript.model';
-import {BrowserscriptService} from '../browserscript.service';
+import {BrowserScriptService} from '../browserscript.service';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
 
-  constructor(private browserScriptService: BrowserscriptService,
+  constructor(private browserScriptService: BrowserScriptService,
               private mdSnackBar: MdSnackBar,
               private fb: FormBuilder) {
     this.createForm();
@@ -60,7 +60,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   createBrowserScript() {
     this.browserScript = this.prepareSaveBrowserScript();
-    this.browserScriptService.createBrowserScript(this.browserScript)
+    this.browserScriptService.create(this.browserScript)
       .subscribe(newBrowserScript => {
         this.createHandler(newBrowserScript);
       });
@@ -68,20 +68,20 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
 
-  updateBrowserScript(browserscript: BrowserScript): void {
+  updateBrowserScript(browserScript: BrowserScript): void {
     this.browserScript = this.prepareSaveBrowserScript();
-    this.browserScriptService.updatePolitenessConfig(this.browserScript)
-      .subscribe(updatedBrowserscript => {
-        this.updateHandler(updatedBrowserscript);
+    this.browserScriptService.update(this.browserScript)
+      .subscribe(updatedBrowserScript => {
+        this.updateHandler(updatedBrowserScript);
       });
     this.mdSnackBar.open('Lagret');
   }
 
-  deleteBrowserScript(browserscriptId): void {
-    this.browserScriptService.deletePolitenessConfig(browserscriptId)
-      .subscribe(deletedBrowserscript => {
-        this.deleteHandler(deletedBrowserscript);
-        if (deletedBrowserscript === 'not_allowed') {
+  deleteBrowserScript(browserScriptId): void {
+    this.browserScriptService.delete(browserScriptId)
+      .subscribe(response => {
+        this.deleteHandler(response);
+        if (response === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
           this.mdSnackBar.open('Slettet');
@@ -124,9 +124,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       (label: Label) => Object.assign({}, label)
     );
 
-    // return new `Hero` object containing a combination of original hero value(s)
-    // and deep copies of changed form model values
-    const saveBrowserscript: BrowserScript = {
+    return {
       id: this.browserScript.id,
       script: formModel.script,
       meta: {
@@ -139,7 +137,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveBrowserscript;
   }
 
   revert() {

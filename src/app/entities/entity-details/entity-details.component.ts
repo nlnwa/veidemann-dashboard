@@ -5,7 +5,6 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {DateTime, Label} from '../../commons/';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Seeds} from '../../seeds/seed.model';
 import {SeedService} from '../../seeds/seeds.service';
 
 
@@ -18,9 +17,9 @@ export class EntityDetailsComponent implements OnChanges {
 
   @Input()
   entity: Entity;
+
   entityForm: FormGroup;
-  seeds = Seeds;
-  getseedlist = [];
+  seedList = [];
 
   @Input()
   createHandler: Function;
@@ -60,7 +59,7 @@ export class EntityDetailsComponent implements OnChanges {
   getParams() {
     this.route.paramMap.subscribe(params => {
       if (params.has('entity')) {
-        this.entityService.getEntity(params.get('entity')).subscribe(entity => {
+        this.entityService.get(params.get('entity')).subscribe(entity => {
           this.entity = entity[0];
           this.ngOnChanges();
         })
@@ -80,17 +79,18 @@ export class EntityDetailsComponent implements OnChanges {
 
   getSeedsOfEntity(entity_id) {
     if (entity_id) {
-      this.seedService.getSeedsOfEntity(entity_id).map(seeds => seeds).forEach((seed) => {
-        this.entityForm.controls['seedcount'].setValue(seed.count);
-        seed.value.forEach((key) => {
-          this.getseedlist.push({
-            name: key.meta.name,
-            id: key.id,
-            label: key.meta.label,
-            description: key.meta.description
-          })
+      this.seedService.getSeedsOfEntity(entity_id)
+        .subscribe((seed) => {
+          this.entityForm.controls['seedcount'].setValue(seed.count);
+          seed.value.forEach((key) => {
+            this.seedList.push({
+              name: key.meta.name,
+              id: key.id,
+              label: key.meta.label,
+              description: key.meta.description
+            })
+          });
         });
-      });
     }
   }
 
@@ -108,7 +108,7 @@ export class EntityDetailsComponent implements OnChanges {
       },
       last_modified_by: entity.meta.last_modified_by,
     });
-    this.setSeedlist(this.getseedlist);
+    this.setSeedlist(this.seedList);
     this.setLabel(this.entity.meta.label);
 
 
@@ -116,7 +116,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   createEntity(entity) {
     this.entity = this.prepareSaveEntity();
-    this.entityService.createEntity(this.entity)
+    this.entityService.create(this.entity)
       .subscribe((newEntity: Entity) => {
         this.createHandler(newEntity);
       });
@@ -126,7 +126,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   updateEntity(entity: Entity): void {
     this.entity = this.prepareSaveEntity();
-    this.entityService.updateEntity(this.entity)
+    this.entityService.update(this.entity)
       .subscribe((updatedEntity: Entity) => {
         this.updateHandler(updatedEntity);
       });
@@ -134,7 +134,7 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   deleteEntity(): void {
-    this.entityService.deleteEntity(this.entity.id)
+    this.entityService.delete(this.entity.id)
       .subscribe((deletedEntity) => {
         this.deleteHandler(deletedEntity);
         if (deletedEntity === 'not_allowed') {
@@ -147,7 +147,7 @@ export class EntityDetailsComponent implements OnChanges {
 
 
   setSeedlist(seedlist) {
-    this.getseedlist = [];
+    this.seedList = [];
     const seedlistFG = seedlist.map(sl => (this.fb.group(sl)));
     const seedlistFormArray = this.fb.array(seedlistFG);
     this.entityForm.setControl('seedlist', seedlistFormArray);
@@ -200,7 +200,7 @@ export class EntityDetailsComponent implements OnChanges {
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
-    const saveEntity: Entity = {
+    return {
       id: this.entity.id,
       meta: {
         name: formModel.meta.name as string,
@@ -212,7 +212,6 @@ export class EntityDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-    return saveEntity;
   }
 
   goToSeed(seed_id) {

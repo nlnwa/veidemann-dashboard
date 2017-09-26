@@ -1,39 +1,39 @@
 import {Component, OnInit} from '@angular/core';
 import {BrowserConfig} from '../browserconfig.model';
-import {BrowserconfigService} from '../browserconfig.service';
+import {BrowserConfigService} from '../browserconfig.service';
 
 @Component({
   selector: 'app-browserconfig-list',
   templateUrl: './browserconfig-list.component.html',
   styleUrls: ['./browserconfig-list.component.css']
 })
-export class BrowserconfigListComponent implements OnInit {
+export class BrowserConfigListComponent implements OnInit {
 
-  browserconfigs: BrowserConfig[];
-  selectedBrowserconfig: BrowserConfig;
+  browserConfigs: BrowserConfig[];
+  selectedBrowserConfig: BrowserConfig;
 
-  constructor(private browserConfigService: BrowserconfigService) {
+  constructor(private browserConfigService: BrowserConfigService) {
   }
 
   ngOnInit() {
-    this.browserConfigService.getAllBrowserConfigs()
+    this.browserConfigService.list()
       .map(reply => reply.value)
-      .subscribe(browserConfigs => this.browserconfigs = browserConfigs);
+      .subscribe(browserConfigs => this.browserConfigs = browserConfigs);
   }
 
-  private getIndexOfBrowserConfig = (browserconfigId: String) => {
-    return this.browserconfigs.findIndex((browserconfig) => {
-      return browserconfig.id === browserconfigId;
+  private getIndexOfBrowserConfig = (browserConfigId: String) => {
+    return this.browserConfigs.findIndex((browserconfig) => {
+      return browserconfig.id === browserConfigId;
     });
   };
 
-  selectBrowserconfig(browserconfig: BrowserConfig) {
-    this.selectedBrowserconfig = browserconfig
+  selectBrowserConfig(browserConfig: BrowserConfig) {
+    this.selectedBrowserConfig = browserConfig
   }
 
 
-  createNewBrowserconfig() {
-    const browserconfig: BrowserConfig = {
+  createNewBrowserConfig() {
+    const browserConfig: BrowserConfig = {
       user_agent: '',
       page_load_timeout_ms: '',
       sleep_after_pageload_ms: '',
@@ -45,30 +45,30 @@ export class BrowserconfigListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectBrowserconfig(browserconfig);
+    this.selectBrowserConfig(browserConfig);
   }
 
-  deleteBrowserconfig = (browserconfig: String) => {
-    const idx = this.getIndexOfBrowserConfig(browserconfig);
+  deleteBrowserConfig = (responseId: String) => {
+    const idx = this.getIndexOfBrowserConfig(responseId);
     if (idx !== -1) {
-      this.browserconfigs.splice(idx, 1);
-      this.selectBrowserconfig(null);
+      this.browserConfigs.splice(idx, 1);
+      this.selectBrowserConfig(null);
     }
-    return this.browserconfigs
+    return this.browserConfigs
   };
 
-  addBrowserconfig = (browserconfig: BrowserConfig) => {
-    this.browserconfigs.push(browserconfig);
-    this.selectBrowserconfig(browserconfig);
-    return this.browserconfigs;
+  addBrowserConfig = (browserConfig: BrowserConfig) => {
+    this.browserConfigs.push(browserConfig);
+    this.selectBrowserConfig(browserConfig);
+    return this.browserConfigs;
   };
 
-  updateBrowserconfig = (browserconfig: BrowserConfig) => {
-    const idx = this.getIndexOfBrowserConfig(browserconfig.id);
+  updateBrowserConfig = (browserConfig: BrowserConfig) => {
+    const idx = this.getIndexOfBrowserConfig(browserConfig.id);
     if (idx !== -1) {
-      this.browserconfigs[idx] = browserconfig;
-      this.selectBrowserconfig(browserconfig);
+      this.browserConfigs[idx] = browserConfig;
+      this.selectBrowserConfig(browserConfig);
     }
-    return this.browserconfigs;
+    return this.browserConfigs;
   }
 }

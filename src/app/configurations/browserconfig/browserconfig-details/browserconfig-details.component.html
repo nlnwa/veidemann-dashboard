@@ -1,11 +1,11 @@
-<h2 *ngIf="browserconfig.id">Browserconfig Details</h2>
-<h2 *ngIf="!browserconfig.id">New Browserconfig</h2>
+<h2 *ngIf="browserConfig.id">Browserconfig Details</h2>
+<h2 *ngIf="!browserConfig.id">New Browserconfig</h2>
 
-<form [formGroup]="browserconfigForm" fxLayout="column">
+<form [formGroup]="browserConfigForm" fxLayout="column">
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! browserconfigForm.controls.meta.valid">
+    <md-error *ngIf="! browserConfigForm.controls.meta.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -16,48 +16,48 @@
 
   <md-form-field>
     <input mdInput formControlName="user_agent" placeholder="Brukeragent">
-    <md-error *ngIf="! browserconfigForm.controls.user_agent.valid">
+    <md-error *ngIf="! browserConfigForm.controls.user_agent.valid">
       Brukeragent er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field>
     <input mdInput formControlName="window_width" placeholder="Vindusbredde">
-    <md-error *ngIf="! browserconfigForm.controls.window_width.valid">
+    <md-error *ngIf="! browserConfigForm.controls.window_width.valid">
       Vindusbredde er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field>
     <input mdInput formControlName="window_height" placeholder="Vindushøyde">
-    <md-error *ngIf="! browserconfigForm.controls.window_height.valid">
+    <md-error *ngIf="! browserConfigForm.controls.window_height.valid">
       Vindushøyde er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field>
     <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms">
-    <md-error *ngIf="! browserconfigForm.controls.page_load_timeout_ms.valid">
+    <md-error *ngIf="! browserConfigForm.controls.page_load_timeout_ms.valid">
       Page load timeout er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field>
     <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms">
-    <md-error *ngIf="! browserconfigForm.controls.sleep_after_pageload_ms.valid">
+    <md-error *ngIf="! browserConfigForm.controls.sleep_after_pageload_ms.valid">
       Sleep after pageload er påkrevd.
     </md-error>
   </md-form-field>
 
   <div>
     <label>Scripts:
-      <angular2-multiselect [data]="browserScriptlist"
-                            [(ngModel)]="selectedbrowserScriptItems"
+      <angular2-multiselect [data]="browserScriptList"
+                            [(ngModel)]="selectedBrowserScriptItems"
                             [settings]="browserScriptDropdownSettings"
                             formControlName="script_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="browserconfigForm.controls.script_id.valid">
+    <small [hidden]="browserConfigForm.controls.script_id.valid">
       Scripts required.
     </small>
   </div>
@@ -84,7 +84,7 @@
         </md-form-field>
         <md-form-field>
           <input mdInput formControlName="value" placeholder="Value">
-          <md-error *ngIf="! browserconfigForm.controls.label.valid">
+          <md-error *ngIf="! browserConfigForm.controls.label.valid">
             Merkelapp er påkrevd.
           </md-error>
         </md-form-field>
@@ -115,7 +115,7 @@
         </md-form-field>
         <md-form-field>
           <input mdInput formControlName="value" placeholder="Value">
-          <md-error *ngIf="! browserconfigForm.controls.label.valid">
+          <md-error *ngIf="! browserConfigForm.controls.label.valid">
             Merkelapp er påkrevd.
           </md-error>
         </md-form-field>
@@ -129,21 +129,21 @@
 
   <div>
     <button md-raised-button color="primary"
-            [disabled]="!browserconfigForm.valid"
-            *ngIf="!browserconfig.id"
-            (click)="createBrowserconfig(browserconfigForm.value)" novalidate>Lagre
+            [disabled]="!browserConfigForm.valid"
+            *ngIf="!browserConfig.id"
+            (click)="createBrowserConfig(browserConfigForm.value)" novalidate>Lagre
     </button>
     <button md-raised-button color="primary"
-            *ngIf="browserconfig.id"
-            [disabled]="!browserconfigForm.valid"
-            (click)="updateBrowserconfig(browserconfigForm.value)">Lagre
+            *ngIf="browserConfig.id"
+            [disabled]="!browserConfigForm.valid"
+            (click)="updateBrowserConfig(browserConfigForm.value)">Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()">Tilbakestill
     </button>
     <button md-raised-button color="warn"
-            *ngIf="browserconfig.id"
-            (click)="deleteBrowserconfig(browserconfig.id); $event.stopPropagation()">Slett
+            *ngIf="browserConfig.id"
+            (click)="deleteBrowserConfig(browserConfig.id); $event.stopPropagation()">Slett
     </button>
   </div>
 </form>

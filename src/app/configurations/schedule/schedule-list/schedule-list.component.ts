@@ -17,7 +17,7 @@ export class ScheduleListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.scheduleService.getAllSchedules()
+    this.scheduleService.list()
       .map(reply => reply.value)
       .subscribe(schedules => this.schedules = schedules);
   }

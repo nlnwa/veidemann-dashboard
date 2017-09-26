@@ -1,19 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {CrawlconfigDetailsComponent} from './crawlconfig-details.component';
+import {CrawlConfigDetailsComponent} from './crawlconfig-details.component';
 
-describe('CrawlconfigDetailsComponent', () => {
-  let component: CrawlconfigDetailsComponent;
-  let fixture: ComponentFixture<CrawlconfigDetailsComponent>;
+describe('CrawlConfigDetailsComponent', () => {
+  let component: CrawlConfigDetailsComponent;
+  let fixture: ComponentFixture<CrawlConfigDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CrawlconfigDetailsComponent]
+      declarations: [CrawlConfigDetailsComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrawlconfigDetailsComponent);
+    fixture = TestBed.createComponent(CrawlConfigDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

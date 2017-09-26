@@ -16,8 +16,8 @@ export class EntityListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entityService.getAllEntities().subscribe(reply => {
-      this.entities = reply.value
+    this.entityService.list().map(reply => reply.value).subscribe(entities => {
+      this.entities = entities;
     });
   }
 
@@ -31,7 +31,6 @@ export class EntityListComponent implements OnInit {
     this.selectedEntity = entity
   }
 
-
   createNewEntity() {
     const entity: Entity = {
       id: '',
@@ -43,7 +42,6 @@ export class EntityListComponent implements OnInit {
         last_modified: {seconds: null}
       }
     };
-
 
     // By default, a newly-created  will have the selected state.
     this.selectEntity(entity);
