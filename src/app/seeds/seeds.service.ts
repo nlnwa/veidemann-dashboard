@@ -19,10 +19,10 @@ export class SeedService extends CrudService<Seed> {
   }
 
   search(term: string): Observable<ListReply<Seed>> {
-    return this.http.get(`${SeedService.seedSearchUrl}/name=${term}`);
+    return this.http.get<ListReply<Seed>>(`${SeedService.seedSearchUrl}/name=${term}`);
   }
 
   getSeedsOfEntity(entity_id): Observable<ListReply<Seed>> {
-    return this.http.get(`${SeedService.seedsOfEntityUrl}/entityid=${entity_id}`);
+    return this.http.get<ListReply<Seed>>(`${SeedService.seedsOfEntityUrl}/entityid=${entity_id}`);
   }
 }
