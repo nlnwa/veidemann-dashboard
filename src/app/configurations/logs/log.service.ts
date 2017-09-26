@@ -17,10 +17,10 @@ export class LogService {
   }
 
   getLogConfig(): Observable<LogLevels> {
-    return this.http.get(this.logConfigUrl);
+    return this.http.get<LogLevels>(this.logConfigUrl);
   }
 
   updateLogConfig(logConfig: LogLevels): Observable<LogLevels> {
-    return this.http.put(this.logConfigUrl, logConfig);
+    return this.http.put<LogLevels>(this.logConfigUrl, logConfig);
   }
 }
