@@ -15,6 +15,7 @@ import {
   MdSnackBarModule,
   MdTableModule,
   MdToolbarModule,
+  MdChipsModule,
 } from '@angular/material';
 
 const modules = [
@@ -33,6 +34,7 @@ const modules = [
   MdCheckboxModule,
   MdTableModule,
   MdRadioModule,
+  MdChipsModule,
 ];
 
 @NgModule({

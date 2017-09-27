@@ -46,6 +46,7 @@ import {
   CrawlHostGroupConfigListComponent,
   CrawlHostGroupConfigService
 } from './configurations/crawlhostgroupconfig';
+import {LabelsComponent} from './labels/labels.component';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import {
     LoglevelComponent,
     CrawlHostGroupConfigDetailsComponent,
     CrawlHostGroupConfigListComponent,
+    LabelsComponent,
   ],
   imports: [
     BrowserModule,

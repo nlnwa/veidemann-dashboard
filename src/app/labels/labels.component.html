@@ -1,0 +1,39 @@
+<md-expansion-panel>
+  <md-expansion-panel-header>
+    <md-panel-title>
+      Merkelapp
+    </md-panel-title>
+    <md-panel-description>
+      Merkelapp beskrivelse
+    </md-panel-description>
+  </md-expansion-panel-header>
+  <md-card>
+    <md-card-content>
+      <md-list>
+        <md-list-item *ngFor="let group of groups">
+          <span>{{ group.key }}</span>
+          <md-chip-list>
+            <md-chip *ngFor="let value of group.values"
+                     [selectable]="selectable"
+                     [removable]="removable"
+                     (remove)="remove([group.key, value])">{{ value }}
+            </md-chip>
+          </md-chip-list>
+        </md-list-item>
+        <md-list-item>
+          <md-form-field>
+            <input id="newKey" mdInput  placeholder="Type">
+          </md-form-field>
+          <md-form-field>
+            <input id="newValue" mdInput  placeholder="Value">
+          </md-form-field>
+          <button md-raised-button color="accent" (click)="onNewLabel($event)">Legg til merkelapp</button>
+        </md-list-item>
+      </md-list>
+
+    </md-card-content>
+  </md-card>
+</md-expansion-panel>
+
+
+
