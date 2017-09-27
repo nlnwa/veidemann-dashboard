@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {LogLevels} from './';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
-import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/observable/of';
+import {HttpClient} from '@angular/common/http';
+import {LogLevels} from '../../commons/models/config.model';
 
 @Injectable()
 export class LogService {

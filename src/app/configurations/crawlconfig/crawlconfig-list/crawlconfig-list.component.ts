@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {CrawlConfig} from '../crawlconfig.model';
 import {CrawlConfigService} from '../crawlconfig.service';
+import {CrawlConfig} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-crawlconfig-list',

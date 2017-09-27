@@ -1,10 +1,10 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators, Label} from '../../../commons/';
+import {CustomValidators} from '../../../commons/';
 import {isUndefined} from 'util';
-import {PolitenessConfig} from '../politenessconfig.model';
 import {PolitenessConfigService} from '../politenessconfig.service';
+import {Label, PolitenessConfig} from '../../../commons/models/config.model';
 
 
 @Component({

@@ -1,12 +1,12 @@
 import {Component, Input} from '@angular/core';
-import {Seed} from '../seed.model';
 import {SeedService} from '../seeds.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
-import {CustomValidators, Label} from '../../commons/';
+import {CustomValidators} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
 import {EntityService} from '../../entities/entity.service';
+import {Label, Seed} from '../../commons/models/config.model';
 
 @Component({
   selector: 'app-seeds',

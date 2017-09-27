@@ -1,8 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {ListRequest} from './models/request.model';
-import {ListReply} from './models/reply.model';
+import {ListReply, ListRequest} from './models/controller.model';
 
 export abstract class CrudService<T extends ListRequest> {
   constructor(protected http: HttpClient,
@@ -25,6 +24,7 @@ export abstract class CrudService<T extends ListRequest> {
     return this.http.put<T>(`${this.url}/${item.id}`, item);
   }
 
+  // noinspection ReservedWordAsName
   delete(id: string): Observable<string> {
     return this.http.delete<string>(`${this.url}/${id}`);
   }

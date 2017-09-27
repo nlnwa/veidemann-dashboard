@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {DateTime, Label} from '../../../commons/';
-import {Schedule} from '../schedule.model';
+import {DateTime} from '../../../commons/';
 import {ScheduleService} from '../schedule.service';
+import {Label, Schedule} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-schedule-details',
@@ -26,8 +26,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   constructor(private scheduleService: ScheduleService,
               private mdSnackBar: MdSnackBar,
-              private fb: FormBuilder,
-              private convertTimestamp: DateTime) {
+              private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -62,7 +61,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   updateData(schedule: Schedule) {
     const cron_splitted = schedule.cron_expression.split(' ');
     if (schedule.valid_from !== null) {
-      const valid_from_splitted = this.convertTimestamp.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_from.seconds).split('-');
+      const valid_from_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_from.seconds).split('-');
       this.scheduleForm.controls['valid_from'].setValue({
         year: valid_from_splitted[0],
         month: valid_from_splitted[1],
@@ -77,7 +76,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
 
     if (schedule.valid_to !== null) {
-      const valid_to_splitted = this.convertTimestamp.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_to.seconds).split('-');
+      const valid_to_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_to.seconds).split('-');
       this.scheduleForm.controls['valid_to'].setValue({
         year: valid_to_splitted[0],
         month: valid_to_splitted[1],
@@ -154,7 +153,7 @@ export class ScheduleDetailsComponent implements OnChanges {
         valid_from = formModel.valid_from.year +
           '-' + formModel.valid_from.month +
           '-' + formModel.valid_from.day;
-      this.valid_from_unix = {seconds: (this.convertTimestamp.convertTimestamp_yyyymmddhhmm_to_unix(valid_from) / 1000)};
+      this.valid_from_unix = {seconds: (DateTime.convertTimestamp_yyyymmddhhmm_to_unix(valid_from) / 1000)};
     } else {
       this.valid_from_unix = null;
     }
@@ -164,7 +163,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       const valid_to = formModel.valid_to.year + '-'
         + formModel.valid_to.month + '-'
         + formModel.valid_to.day;
-      this.valid_to_unix = {seconds: (this.convertTimestamp.convertTimestamp_yyyymmddhhmm_to_unix(valid_to) / 1000)};
+      this.valid_to_unix = {seconds: (DateTime.convertTimestamp_yyyymmddhhmm_to_unix(valid_to) / 1000)};
     } else {
       this.valid_to_unix = null;
     }

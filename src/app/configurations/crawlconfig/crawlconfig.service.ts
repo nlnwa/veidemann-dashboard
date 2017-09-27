@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {CrawlConfig} from './crawlconfig.model';
 import {CrudService} from '../../commons/crud.service';
+import {CrawlConfig} from '../../commons/models/config.model';
 
 @Injectable()
 export class CrawlConfigService extends CrudService<CrawlConfig> {

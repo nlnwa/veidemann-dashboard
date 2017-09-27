@@ -1,9 +1,8 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Label} from '../../../commons/';
-import {BrowserScript} from '../browserscript.model';
 import {BrowserScriptService} from '../browserscript.service';
+import {BrowserScript, Label} from '../../../commons/models/config.model';
 
 
 @Component({

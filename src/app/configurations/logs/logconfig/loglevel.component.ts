@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
-import {LogLevel} from '../log.model';
+import {LogLevel} from '../../../commons/models/config.model';
+
 
 @Component({
   selector: 'app-loglevel',
@@ -25,7 +26,7 @@ export class LoglevelComponent implements OnInit {
     this.logService.getLogConfig()
       .map(response => response.log_level)
       .subscribe(logLevels => {
-        logLevels.forEach((logLevel) => { this.logLevels.push(logLevel); })
+        logLevels.forEach((logLevel) => { this.logLevels.push(logLevel); });
         this.setLogconfig(this.logLevels);
       });
   }

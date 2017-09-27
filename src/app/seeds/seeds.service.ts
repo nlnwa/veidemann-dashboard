@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Seed} from './seed.model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
 import {CrudService} from '../commons/crud.service';
-import {ListReply} from '../commons/models/reply.model';
+import {ListReply} from '../commons/models/controller.model';
+import {Seed} from '../commons/models/config.model';
 
 @Injectable()
 export class SeedService extends CrudService<Seed> {

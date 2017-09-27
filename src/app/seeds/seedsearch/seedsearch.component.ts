@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
-import {Seed} from '../seed.model';
-import {SeedService} from '../seeds.service';
-import 'rxjs/add/observable/merge';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {SeedService} from '../seeds.service';
+import {Seed} from '../../commons/models/config.model';
 
 @Component({
   selector: 'app-seedsearch',
