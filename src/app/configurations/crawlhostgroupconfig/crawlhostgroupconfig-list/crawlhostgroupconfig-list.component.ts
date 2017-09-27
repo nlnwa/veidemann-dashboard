@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
-import {CrawlHostGroupConfig} from '../crawlhostgroupconfig.model';
+import {CrawlHostGroupConfig} from '../../../commons/models/config.model';
+
 
 @Component({
   selector: 'app-crawlhostgroupconfig-list',

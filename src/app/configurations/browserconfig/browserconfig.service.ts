@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BrowserConfig} from './browserconfig.model';
 import {environment} from '../../../environments/environment';
 import {CrudService} from '../../commons/crud.service';
+import {BrowserConfig} from '../../commons/models/config.model';
 
 @Injectable()
 export class BrowserConfigService extends CrudService<BrowserConfig> {

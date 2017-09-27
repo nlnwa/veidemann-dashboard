@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Entity} from './entity.model';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {CrudService} from '../commons/crud.service';
+import {Entity} from '../commons/models/config.model';
 
 @Injectable()
 export class EntityService extends CrudService<Entity> {

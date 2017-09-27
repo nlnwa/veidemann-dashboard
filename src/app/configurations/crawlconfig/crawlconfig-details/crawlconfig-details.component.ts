@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {PolitenessConfig, PolitenessConfigService} from '../../politenessconfig/';
-import {BrowserConfig, BrowserConfigService} from '../../browserconfig/';
-import {CustomValidators, Label} from '../../../commons/';
+import {PolitenessConfigService} from '../../politenessconfig/';
+import {BrowserConfigService} from '../../browserconfig/';
+import {CustomValidators} from '../../../commons/';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {CrawlConfig} from '../crawlconfig.model';
 import {CrawlConfigService} from '../crawlconfig.service';
+import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../../commons/models/config.model';
 
 
 @Component({

@@ -2,12 +2,14 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import {MaterialModule} from './material.module';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
-import {MaterialModule} from './material.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';

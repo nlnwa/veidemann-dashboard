@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   myDate: String;
   isExpertMode: boolean;
 
-  constructor(private datetime: DateTime) {}
+  constructor() {}
 
   setExpertMode(bool: boolean) {
     this.isExpertMode = bool;
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   getTimestamp() {
     setInterval(() => {
-      this.myDate = this.datetime.nowUTC();
+      this.myDate = DateTime.nowUTC();
     }, 1000);
   }
 

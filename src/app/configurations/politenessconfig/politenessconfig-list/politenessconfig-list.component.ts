@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {PolitenessConfig} from '../politenessconfig.model';
 import {PolitenessConfigService} from '../politenessconfig.service';
+import {PolitenessConfig} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-politenessconfig-list',

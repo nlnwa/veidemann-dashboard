@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {BrowserScript} from '../browserscript.model';
 import {BrowserScriptService} from '../browserscript.service';
+import {BrowserScript} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-browserscript-list',

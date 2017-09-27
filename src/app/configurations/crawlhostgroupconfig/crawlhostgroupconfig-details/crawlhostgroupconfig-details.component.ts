@@ -1,9 +1,8 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {CrawlHostGroupConfig, IpRange} from '../crawlhostgroupconfig.model';
 import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {Label} from '../../../commons/models/label.model';
+import {CrawlHostGroupConfig, IpRange, Label} from '../../../commons/models/config.model';
 
 
 @Component({

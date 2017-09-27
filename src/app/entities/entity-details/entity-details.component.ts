@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Entity} from '../entity.model';
 import {EntityService} from '../entity.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {DateTime, Label} from '../../commons/';
+import {DateTime} from '../../commons/';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SeedService} from '../../seeds/seeds.service';
+import {Entity, Label} from '../../commons/models/config.model';
 
 
 @Component({
@@ -33,8 +33,7 @@ export class EntityDetailsComponent implements OnChanges {
               private route: ActivatedRoute,
               private mdSnackBar: MdSnackBar,
               private fb: FormBuilder,
-              private router: Router,
-              private convertTimestamp: DateTime) {
+              private router: Router) {
     this.createForm();
     this.getParams();
   }
@@ -100,11 +99,11 @@ export class EntityDetailsComponent implements OnChanges {
       name: entity.meta.name,
       description: entity.meta.description,
       created: {
-        seconds: this.convertTimestamp.convertFullTimestamp(entity.meta.created.seconds),
+        seconds: DateTime.convertFullTimestamp(entity.meta.created.seconds),
       },
       created_by: entity.meta.created_by,
       last_modified: {
-        seconds: this.convertTimestamp.convertFullTimestamp(entity.meta.last_modified.seconds),
+        seconds: DateTime.convertFullTimestamp(entity.meta.last_modified.seconds),
       },
       last_modified_by: entity.meta.last_modified_by,
     });

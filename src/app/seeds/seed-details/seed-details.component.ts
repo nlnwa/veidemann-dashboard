@@ -1,12 +1,12 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {Seed} from '../seed.model';
 import {SeedService} from '../seeds.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MdSnackBar} from '@angular/material';
-import {CustomValidators, DateTime, Label} from '../../commons/';
-import {CrawlJob, CrawlJobService} from '../../configurations/crawljobs/';
+import {CustomValidators, DateTime} from '../../commons/';
+import {CrawlJobService} from '../../configurations/crawljobs/';
 import {EntityService} from '../../entities/entity.service';
+import {CrawlJob, Label, Seed} from '../../commons/models/config.model';
 
 @Component({
   selector: 'app-seed-details',
@@ -42,7 +42,6 @@ export class SeedDetailComponent implements OnChanges {
               private crawljobService: CrawlJobService,
               private route: ActivatedRoute,
               private mdSnackBar: MdSnackBar,
-              private convertTimestamp: DateTime,
               private entityService: EntityService) {
     this.createForm();
     this.getParams();
@@ -95,11 +94,11 @@ export class SeedDetailComponent implements OnChanges {
       name: seed.meta.name,
       description: seed.meta.description,
       created: {
-        seconds: this.convertTimestamp.convertFullTimestamp(seed.meta.created.seconds),
+        seconds: DateTime.convertFullTimestamp(seed.meta.created.seconds),
       },
       created_by: seed.meta.created_by,
       last_modified: {
-        seconds: this.convertTimestamp.convertFullTimestamp(seed.meta.last_modified.seconds),
+        seconds: DateTime.convertFullTimestamp(seed.meta.last_modified.seconds),
       },
       last_modified_by: seed.meta.last_modified_by,
     });
