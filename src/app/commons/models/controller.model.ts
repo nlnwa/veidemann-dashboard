@@ -1,3 +1,5 @@
+import {Selector} from './config.model';
+
 export interface ListReply<T extends ListRequest> {
   value: T[];
   count: number;
@@ -7,6 +9,13 @@ export interface ListReply<T extends ListRequest> {
 
 export interface ListRequest {
   id?: string;
+  name?: string;
+  crawl_job_id?: string;
+  selector?: Selector;
+  entity_id?: string;
+
+  expand?: boolean;
+
   page_size?: number;
   page?: number;
 }

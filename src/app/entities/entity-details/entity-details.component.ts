@@ -76,17 +76,17 @@ export class EntityDetailsComponent implements OnChanges {
     }, 500);
   }
 
-  getSeedsOfEntity(entity_id) {
-    if (entity_id) {
-      this.seedService.getSeedsOfEntity(entity_id)
-        .subscribe((seed) => {
-          this.entityForm.controls['seedcount'].setValue(seed.count);
-          seed.value.forEach((key) => {
+  getSeedsOfEntity(entityId) {
+    if (entityId) {
+      this.seedService.search({entity_id: entityId})
+        .subscribe((reply) => {
+          this.entityForm.controls['seedcount'].setValue(reply.count);
+          reply.value.forEach((seed) => {
             this.seedList.push({
-              name: key.meta.name,
-              id: key.id,
-              label: key.meta.label,
-              description: key.meta.description
+              name: seed.meta.name,
+              id: seed.id,
+              label: seed.meta.label,
+              description: seed.meta.description
             })
           });
         });
