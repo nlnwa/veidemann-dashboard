@@ -50,10 +50,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         label: [],
       }),
     });
-
-    this.crawlHostGroupConfigFG.valueChanges.subscribe(value => {
-      console.log('crawlHostGroupConfigForm', 'valueChanges', value);
-    });
   }
 
   updateData(crawlHostGroupConfig: CrawlHostGroupConfig) {

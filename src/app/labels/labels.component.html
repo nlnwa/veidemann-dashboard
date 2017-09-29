@@ -1,39 +1,82 @@
-<md-expansion-panel>
-  <md-expansion-panel-header>
-    <md-panel-title>
-      Merkelapp
-    </md-panel-title>
-    <md-panel-description>
-      Merkelapp beskrivelse
-    </md-panel-description>
-  </md-expansion-panel-header>
-  <md-card>
-    <md-card-content>
-      <md-list>
-        <md-list-item *ngFor="let group of groups">
-          <span>{{ group.key }}</span>
-          <md-chip-list>
-            <md-chip *ngFor="let value of group.values"
-                     [selectable]="selectable"
-                     [removable]="removable"
-                     (remove)="remove([group.key, value])">{{ value }}
-            </md-chip>
-          </md-chip-list>
-        </md-list-item>
-        <md-list-item>
-          <md-form-field>
-            <input id="newKey" mdInput  placeholder="Type">
-          </md-form-field>
-          <md-form-field>
-            <input id="newValue" mdInput  placeholder="Value">
-          </md-form-field>
-          <button md-raised-button color="accent" (click)="onNewLabel($event)">Legg til merkelapp</button>
-        </md-list-item>
-      </md-list>
+<!--
+<ul *ngFor="let group of groups">
+  <li>{{group.key}}</li>
+    <ul *ngFor="let value of group.values">
+      <li style="display: inline; type: disc;">{{value}}
+        <md-icon class="removeLabelIcon" (click)="remove()">close</md-icon>
+      </li>
+    </ul>
+  <md-form-field>
+  <input mdInput type="text" style="display: inline" placeholder="Ny verdi for {{group.key}}">
+  </md-form-field>
+</ul>
+<md-form-field>
+  <input mdInput type="text" style="display: inline" placeholder="Ny verdi for">
+</md-form-field>
+-->
+<div id="navcontainer">
+  <ul *ngFor="let group of groups">
+    <li>{{group.key}}</li>
+    <ul *ngFor="let value of group.values">
+      <li #elem [id]="value.id">{{value}}<button (click)="remove(group.key, value)">x</button></li>
+    </ul>
+  </ul>
+</div>
+<!--
+  <md-list-item *ngFor="let value of group.values">
 
-    </md-card-content>
-  </md-card>
-</md-expansion-panel>
+      <md-chip>{{value}}</md-chip>
+
+ <li *ngFor="#item of items" #elem [id]="item.id">
+                {{ item.name}} ID: {{elem.id}}
+
+  <!--<mat-chip-list [selectable]="selectable">
+    <!--<mat-chip *ngFor="let value of group.values">
+      {{ value }}
+    </mat-chip>
+
+  </mat-chip-list>
+  -->
+<!--div>
+  <md-list>
+
+    <md-list-item *ngFor="let group of groups">
+      <span>{{ group.key }} : </span>
+      <md-chip-list [selectable]="selectable">
+        <md-chip *ngFor="let value of group.values"
+                 color="accent"
+                 [selectable]="true"
+                 (remove)="remove([group.key, value])">{{ value }}
+          <md-icon mdChipRemove *ngIf="removable">cancel</md-icon>
+        </md-chip>
+      </md-chip-list>
+    </md-list-item>
+
+    <md-list-item>
+      <button (click)="inputNewLabel()">
+        Legg til
+      </button>
+    </md-list-item>
+
+  </md-list>
+</div-->
+<!--md-card>
+  <md-card-content *ngIf="addLabelCard">
+    <md-list-item>
+      <md-form-field>
+        <input #newKey mdInput placeholder="Type">
+      </md-form-field>
+    </md-list-item>
+    <md-list-item>
+      <md-form-field>
+        <input #newValue mdInput placeholder="Value">
+      </md-form-field>
+      <button md-raised-button color="accent" (click)="onNewLabel(newKey.value, newValue.value)">Legg til</button>
+    </md-list-item>
+  </md-card-content>
+</md-card-->
+
+
 
 
 
