@@ -1,0 +1,9 @@
+md-card {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.highlight {
+  border: 1px dotted gray;
+  box-shadow: 5px 5px 5px black;
+}

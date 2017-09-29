@@ -1,0 +1,26 @@
+<!-- Table of search results -->
+<md-table [dataSource]="dataSource"
+          [trackBy]="trackById">
+
+  <ng-container mdColumnDef="name">
+    <md-header-cell *mdHeaderCellDef>Name</md-header-cell>
+    <md-cell *mdCellDef="let row">{{row.meta.name}}</md-cell>
+  </ng-container>
+
+  <ng-container mdColumnDef="description">
+    <md-header-cell *mdHeaderCellDef>Description</md-header-cell>
+    <md-cell *mdCellDef="let row">{{row.meta.description}}</md-cell>
+  </ng-container>
+
+  <ng-container mdColumnDef="id">
+    <md-header-cell *mdHeaderCellDef>ID</md-header-cell>
+    <md-cell *mdCellDef="let row">{{row.id}}</md-cell>
+  </ng-container>
+
+  <md-header-row *mdHeaderRowDef="['name', 'description']"></md-header-row>
+
+  <md-row *mdRowDef="let row; columns: ['name', 'description']"
+          [ngClass]="{'highlight': selectedRowIndex == row.id}"
+          (click)="handleRowClick(row)">
+  </md-row>
+</md-table>

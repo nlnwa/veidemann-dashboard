@@ -16,7 +16,8 @@ import {
   MdTableModule,
   MdToolbarModule,
   MdChipsModule,
-  MatTooltipModule,
+  MdTooltipModule,
+  MdGridListModule,
 } from '@angular/material';
 
 const modules = [
@@ -36,7 +37,8 @@ const modules = [
   MdTableModule,
   MdRadioModule,
   MdChipsModule,
-  MatTooltipModule,
+  MdTooltipModule,
+  MdGridListModule,
 ];
 
 @NgModule({

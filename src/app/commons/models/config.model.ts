@@ -6,11 +6,17 @@ export class Meta {
   last_modified?: Timestamp;
   last_modified_by?: string;
   label: Label[];
+
+  constructor() {
+    this.created = new Timestamp();
+    this.last_modified = new Timestamp();
+    this.label = [];
+  }
 }
 
 export class Label {
-  key: string;
-  value: string;
+  key?: string;
+  value?: string;
 }
 
 export class Selector {
@@ -20,15 +26,27 @@ export class Selector {
 export class Entity {
   id: string;
   meta: Meta;
+
+  constructor() {
+    this.meta = new Meta();
+  }
 }
 
 export class Seed {
-  id?: string;
+  id: string;
   meta: Meta;
   entity_id: string;
   scope: Scope;
   job_id: string[];
-  disabled?: boolean;
+  disabled: boolean;
+
+  constructor(entityId: string) {
+    this.entity_id = entityId;
+    this.scope = new Scope();
+    this.meta = new Meta();
+    this.job_id = [];
+    this.disabled = true;
+  }
 }
 
 export class CrawlJob {
@@ -150,4 +168,8 @@ export class LogLevel {
 export class Timestamp {
   seconds: number;
   nanos?: number;
+
+  constructor() {
+    this.seconds = null;
+  }
 }

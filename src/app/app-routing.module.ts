@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {ActivityComponent} from './activity';
-import {SeedDetailComponent, SeedsComponent, SeedSearchComponent} from './seeds/';
 import {CrawlJobListComponent} from './configurations/crawljobs/';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {StatisticsComponent} from './statistics/statistics.component';
@@ -10,10 +9,11 @@ import {ScheduleListComponent} from './configurations/schedule/';
 import {CrawlConfigListComponent} from './configurations/crawlconfig/';
 import {BrowserConfigListComponent} from './configurations/browserconfig/';
 import {PolitenessConfigListComponent} from './configurations/politenessconfig/';
-import {EntityDetailsComponent, EntityListComponent} from './entities/';
+import {EntityDetailsComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
 import {CrawlHostGroupConfigListComponent} from './configurations/crawlhostgroupconfig/';
+import {SearchComponent} from './search/search.component';
 
 const routes: Routes = [
   {
@@ -24,18 +24,6 @@ const routes: Routes = [
   {
     path: 'activity',
     component: ActivityComponent
-  },
-  {
-    path: 'entities',
-    component: EntityListComponent
-  },
-  {
-    path: 'entities/:entity',
-    component: EntityDetailsComponent
-  },
-  {
-    path: 'seeds',
-    component: SeedsComponent
   },
   {
     path: 'crawljobs',
@@ -50,12 +38,8 @@ const routes: Routes = [
     component: StatisticsComponent
   },
   {
-    path: 'seedsearch',
-    component: SeedSearchComponent
-  },
-  {
-    path: 'seeds/:seed',
-    component: SeedDetailComponent
+    path: 'search',
+    component: SearchComponent
   },
   {
     path: 'schedule',

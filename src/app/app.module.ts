@@ -13,7 +13,8 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-m
 
 import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';
-import {SeedDetailComponent, SeedsComponent, SeedSearchComponent, SeedService} from './seeds';
+import {SeedDetailComponent, SeedService} from './seeds';
+import {SearchComponent} from './search/search.component';
 import {
   BrowserConfigDetailsComponent,
   BrowserConfigListComponent,
@@ -39,7 +40,7 @@ import {
   ScheduleSidebarComponent
 } from './configurations/schedule';
 import {DateTime, ErrorHandlerService} from './commons';
-import {EntityDetailsComponent, EntityListComponent, EntityService} from './entities';
+import {EntityDetailsComponent, EntityService} from './entities';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {
   CrawlHostGroupConfigDetailsComponent,
@@ -47,16 +48,18 @@ import {
   CrawlHostGroupConfigService
 } from './configurations/crawlhostgroupconfig';
 import {LabelsComponent} from './labels/labels.component';
+import {SearchService} from './search-service/search.service';
+import {BaseListComponent} from './base-list/base-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    BaseListComponent,
     DocumentationComponent,
     StatisticsComponent,
-    SeedSearchComponent,
+    SearchComponent,
     ActivityComponent,
-    SeedsComponent,
     SeedDetailComponent,
     CrawljobDetailsComponent,
     CrawlJobListComponent,
@@ -72,7 +75,6 @@ import {LabelsComponent} from './labels/labels.component';
     BrowserscriptListComponent,
     BrowserScriptDetailsComponent,
     EntityDetailsComponent,
-    EntityListComponent,
     LoglevelComponent,
     CrawlHostGroupConfigDetailsComponent,
     CrawlHostGroupConfigListComponent,
@@ -90,6 +92,7 @@ import {LabelsComponent} from './labels/labels.component';
     FlexLayoutModule,
   ],
   providers: [
+    SearchService,
     SeedService,
     CrawlJobService,
     CrawlConfigService,
