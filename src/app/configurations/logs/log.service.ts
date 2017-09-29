@@ -20,7 +20,7 @@ export class LogService {
     return this.http.get<LogLevels>(this.logConfigUrl);
   }
 
-  updateLogConfig(logConfig: LogLevels): Observable<LogLevels> {
-    return this.http.put<LogLevels>(this.logConfigUrl, logConfig);
+  saveLogConfig(logConfig: LogLevels): Observable<LogLevels> {
+    return this.http.post<LogLevels>(this.logConfigUrl, logConfig);
   }
 }

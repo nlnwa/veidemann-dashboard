@@ -7,7 +7,7 @@ import {Schedule} from '../../commons/models/config.model';
 @Injectable()
 export class ScheduleService extends CrudService<Schedule> {
 
-  static readonly URL: string = `${environment.API_URL}/schedule`;
+  static readonly URL: string = `${environment.API_URL}/schedules`;
 
   constructor(protected http: HttpClient) {
     super(http, ScheduleService.URL);

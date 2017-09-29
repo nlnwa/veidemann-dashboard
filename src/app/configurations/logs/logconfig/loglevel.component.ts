@@ -54,7 +54,7 @@ export class LoglevelComponent implements OnInit {
   }
 
   saveLogConfig(logconfig) {
-    this.logService.updateLogConfig(logconfig).subscribe();
+    this.logService.saveLogConfig(logconfig).subscribe();
   }
 
   addLogconfig() {
