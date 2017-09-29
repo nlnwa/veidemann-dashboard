@@ -7,7 +7,7 @@ import {CrawlConfig} from '../../commons/models/config.model';
 @Injectable()
 export class CrawlConfigService extends CrudService<CrawlConfig> {
 
-  static readonly URL: string = `${environment.API_URL}/crawlconfig`;
+  static readonly URL: string = `${environment.API_URL}/crawlconfigs`;
 
   constructor(protected http: HttpClient) {
     super(http, CrawlConfigService.URL);

@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -10,6 +10,16 @@ export abstract class CrudService<T extends ListRequest> {
 
   list(): Observable<ListReply<T>> {
     return this.http.get<ListReply<T>>(this.url);
+  }
+
+  search(listRequest: ListRequest): Observable<ListReply<T>> {
+    const params = new HttpParams();
+
+    Object.keys(listRequest).forEach(key => {
+      params.append(key, listRequest[key]);
+    });
+
+    return this.http.get<ListReply<T>>(this.url, {params});
   }
 
   get(id: string): Observable<T> {

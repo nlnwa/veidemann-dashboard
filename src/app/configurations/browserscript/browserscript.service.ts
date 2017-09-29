@@ -7,7 +7,7 @@ import {BrowserScript} from '../../commons/models/config.model';
 @Injectable()
 export class BrowserScriptService extends CrudService<BrowserScript> {
 
-  static readonly URL: string = `${environment.API_URL}/browserscript`;
+  static readonly URL: string = `${environment.API_URL}/browserscripts`;
 
   constructor(protected http: HttpClient) {
     super(http, BrowserScriptService.URL);

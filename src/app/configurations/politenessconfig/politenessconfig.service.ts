@@ -8,15 +8,27 @@ import {PolitenessConfig} from '../../commons/models/config.model';
 @Injectable()
 export class PolitenessConfigService extends CrudService<PolitenessConfig> {
 
-  static readonly URL: string = `${environment.API_URL}/politenessconfig`;
-  private static readonly robotsPolicyUrl = `${environment.API_URL}/robotspolicy`;
+  static readonly URL: string = `${environment.API_URL}/politenessconfigs`;
 
   constructor(protected http: HttpClient) {
     super(http, PolitenessConfigService.URL);
   }
 
   getRobotsConfig(): Observable<Object[]> {
-    return this.http.get(PolitenessConfigService.robotsPolicyUrl)
-      .map((res => res['menuitem']));
+    return Observable.of(
+      [
+        {
+          'id': '1',
+          'itemName': 'OBEY_ROBOTS',
+        },
+        {
+          'id': '2',
+          'itemName': 'IGNORE_ROBOTS',
+        },
+        {
+          'id': '3',
+          'itemName': 'CUSTOM_ROBOTS',
+        },
+      ]);
   }
 }
