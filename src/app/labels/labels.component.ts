@@ -1,5 +1,5 @@
 import {Component, forwardRef, Input, OnChanges} from '@angular/core';
-import {ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
 
 
@@ -100,38 +100,4 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.labels.splice(index, 1);
     this.onChange(this.labels);
   }
-
-
-
-
-  /*------ OLD LABEL FUNCTIONS --------------
-
-  setLabel(label) {
-      const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-      const labelFormArray = this.fb.array(labelFGs);
-      this.crawlHostGroupConfigFG.setControl('label', labelFormArray);
-    }
-
-    addLabel() {
-      const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
-      control.push(this.initLabel());
-    }
-
-    removeLabel(i: number) {
-      const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
-      control.removeAt(i);
-    }
-
-    get label(): FormArray {
-      return this.crawlHostGroupConfigFG.get('label') as FormArray;
-    };
-
-    initLabel() {
-      return this.fb.group({
-        key: ['', [Validators.required, Validators.minLength(2)]],
-        value: ['', [Validators.required, Validators.minLength(2)]],
-      });
-    }*/
-
-
 }

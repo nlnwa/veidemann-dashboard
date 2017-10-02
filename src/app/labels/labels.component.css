@@ -1,14 +1,17 @@
-.key {
-  min-width: 150px;
-  font-size: 18px;
+.labelList {
+  margin-bottom: 1em;
 }
+
+.key {
+  display: inline-block;
+  min-width: 200px;
+}
+
 .chip{
   padding-left: 1em;
   border-radius: 20px;
   background: #4286f4;
   margin-left: 1em;
-  margin-bottom: 1em;
-
 }
 
 .removeValueIcon {

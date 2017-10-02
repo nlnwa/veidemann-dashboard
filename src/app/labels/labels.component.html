@@ -1,7 +1,7 @@
 <h2>Merkelapper</h2>
-<div *ngFor="let group of groups" fxLayout="columns">
+<div *ngFor="let group of groups" fxLayout="columns" class="labelList">
   <div fxLayout="row" fxLayoutAlign="center center">
-    <div class="key">{{group.key}}:</div>
+    <h2 class="key">{{group.key}}:</h2>
     <ng-container *ngFor="let value of group.values">
       <div class="chip">{{value}}
         <button class="removeValueIcon" md-icon-button (click)="removeLabel(group.key, value)">
@@ -17,8 +17,7 @@
   </button>
 </md-list-item>
 <br>
-<br>
-<md-list-item *ngIf="showAddLabelCard">
+<md-list-item *ngIf="showAddLabelCard" id="newLabelCard">
   <br>
   <md-form-field>
     <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput">
@@ -41,4 +40,5 @@
 </md-list-item>
 <br>
 <br>
+
 
