@@ -13,12 +13,10 @@ export abstract class CrudService<T extends ListRequest> {
   }
 
   search(listRequest: ListRequest): Observable<ListReply<T>> {
-    const params = new HttpParams();
-
+    let params = new HttpParams()
     Object.keys(listRequest).forEach(key => {
-      params.append(key, listRequest[key]);
+      params = params.append(key, listRequest[key]);
     });
-
     return this.http.get<ListReply<T>>(this.url, {params});
   }
 
