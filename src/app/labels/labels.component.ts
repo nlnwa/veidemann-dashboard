@@ -1,9 +1,7 @@
 import {Component, forwardRef, Input, OnChanges} from '@angular/core';
 import {ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Label} from '../commons/models/label.model';
-import {MdChipInputEvent, ENTER} from '@angular/material';
+import {Label} from '../commons/models/config.model';
 
-const COMMA = 188;
 
 @Component({
   selector: 'app-labels',
@@ -18,22 +16,16 @@ const COMMA = 188;
 export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
   @Input() disabled = false;
-  private addLabelCard = false;
+  public showAddLabelCard = false;
 
   private labels: Label[];
 
-  selectable: boolean;
-  removable: boolean;
+  newKeyInput: string;
+  newValueInput: string;
 
-  fruits = [
-    {name: 'Lemon'},
-    {name: 'Lime'},
-    {name: 'Apple'},
-  ];
 
   constructor() {
-    this.selectable = true;
-    this.removable = true;
+
   }
 
   // Function to call when the rating changes.
@@ -82,21 +74,20 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   }
 
   onNewLabel(key: string, value: string) {
-    console.log('Legger til ny label', key, value);
     this.labels.push({
       key: key,
       value: value
     });
+    this.newKeyInput =  '';
+    this.newValueInput = '';
     this.onChange(this.labels);
   }
 
   inputNewLabel() {
-    this.addLabelCard = true;
+    this.showAddLabelCard = true;
   }
 
-  remove(key: string, value: string): void {
-    console.log('Remove trykket', key, value);
-    console.log(this.labels);
+  removeLabel(key: string, value: string): void {
 
     const index = this.labels.findIndex((element) => {
       if (element.key === key && element.value === value) {
@@ -107,31 +98,10 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     });
 
     this.labels.splice(index, 1);
-    
-    console.log(this.labels);
+    this.onChange(this.labels);
   }
 
 
-  /* ADD EVENT CHIPS
-
-    add(event: MdChipInputEvent): void {
-      let input = event.input;
-      let value = event.value;
-
-      // Hent hvilken key det gjelder
-
-  // Legg til value for key
-      if ((value || '').trim()) {
-        //this.labels.push({ this.label.key, value: value.trim() });
-      }
-
-  // Reset the input value
-      if (input) {
-        input.value = '';
-      }
-    }
-
-*/
 
 
   /*------ OLD LABEL FUNCTIONS --------------

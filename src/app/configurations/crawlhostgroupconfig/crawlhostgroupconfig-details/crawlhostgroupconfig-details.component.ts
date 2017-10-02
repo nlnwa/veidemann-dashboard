@@ -102,14 +102,14 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
     const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
-
+    console.log('labelsdeep', labelsDeepCopy);
     return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
         name: formModel.meta.name,
         description: formModel.meta.description,
-        label: labelsDeepCopy
+        label: labelsDeepCopy,
       }
     };
   }

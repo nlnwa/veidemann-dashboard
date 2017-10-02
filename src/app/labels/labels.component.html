@@ -1,82 +1,44 @@
-<!--
-<ul *ngFor="let group of groups">
-  <li>{{group.key}}</li>
-    <ul *ngFor="let value of group.values">
-      <li style="display: inline; type: disc;">{{value}}
-        <md-icon class="removeLabelIcon" (click)="remove()">close</md-icon>
-      </li>
-    </ul>
-  <md-form-field>
-  <input mdInput type="text" style="display: inline" placeholder="Ny verdi for {{group.key}}">
-  </md-form-field>
-</ul>
-<md-form-field>
-  <input mdInput type="text" style="display: inline" placeholder="Ny verdi for">
-</md-form-field>
--->
-<div id="navcontainer">
-  <ul *ngFor="let group of groups">
-    <li>{{group.key}}</li>
-    <ul *ngFor="let value of group.values">
-      <li #elem [id]="value.id">{{value}}<button (click)="remove(group.key, value)">x</button></li>
-    </ul>
-  </ul>
+<h2>Merkelapper</h2>
+<div *ngFor="let group of groups" fxLayout="columns">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="key">{{group.key}}:</div>
+    <ng-container *ngFor="let value of group.values">
+      <div class="chip">{{value}}
+        <button class="removeValueIcon" md-icon-button (click)="removeLabel(group.key, value)">
+          <md-icon class="md-24">cancel</md-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>
-<!--
-  <md-list-item *ngFor="let value of group.values">
-
-      <md-chip>{{value}}</md-chip>
-
- <li *ngFor="#item of items" #elem [id]="item.id">
-                {{ item.name}} ID: {{elem.id}}
-
-  <!--<mat-chip-list [selectable]="selectable">
-    <!--<mat-chip *ngFor="let value of group.values">
-      {{ value }}
-    </mat-chip>
-
-  </mat-chip-list>
-  -->
-<!--div>
-  <md-list>
-
-    <md-list-item *ngFor="let group of groups">
-      <span>{{ group.key }} : </span>
-      <md-chip-list [selectable]="selectable">
-        <md-chip *ngFor="let value of group.values"
-                 color="accent"
-                 [selectable]="true"
-                 (remove)="remove([group.key, value])">{{ value }}
-          <md-icon mdChipRemove *ngIf="removable">cancel</md-icon>
-        </md-chip>
-      </md-chip-list>
-    </md-list-item>
-
-    <md-list-item>
-      <button (click)="inputNewLabel()">
-        Legg til
-      </button>
-    </md-list-item>
-
-  </md-list>
-</div-->
-<!--md-card>
-  <md-card-content *ngIf="addLabelCard">
-    <md-list-item>
-      <md-form-field>
-        <input #newKey mdInput placeholder="Type">
-      </md-form-field>
-    </md-list-item>
-    <md-list-item>
-      <md-form-field>
-        <input #newValue mdInput placeholder="Value">
-      </md-form-field>
-      <button md-raised-button color="accent" (click)="onNewLabel(newKey.value, newValue.value)">Legg til</button>
-    </md-list-item>
-  </md-card-content>
-</md-card-->
-
-
-
-
+<md-list-item>
+  <button md-raised-button color="accent"
+          (click)="inputNewLabel()"> Legg til merkelapp
+  </button>
+</md-list-item>
+<br>
+<br>
+<md-list-item *ngIf="showAddLabelCard">
+  <br>
+  <md-form-field>
+    <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Hva skal merkelappen beskrive?
+    Eks. Org.nummer, kategorisering, begivenhet">info
+    </md-icon>
+  </md-form-field>
+  <br>
+  <md-form-field>
+    <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
+    Eks. offentlig nettsted, nettavis, Valg 2017">info
+    </md-icon>
+  </md-form-field>
+  <br>
+  <button md-raised-button color="accent"
+          (click)="onNewLabel(newKey.value, newValue.value)">Legg til
+  </button>
+  <br>
+</md-list-item>
+<br>
+<br>
 
