@@ -51,7 +51,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
-        label: this.fb.array([]),
+        label: [],
       }),
 
     });
@@ -71,7 +71,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     });
     this.setSelectedDropdown();
     this.selectedBrowserScriptItems = [];
-    this.setLabel(browserConfig.meta.label);
+    this.browserConfigForm.get('meta.label').setValue(browserConfig.meta.label);
   }
 
   ngOnChanges() {
@@ -146,34 +146,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.browserConfigForm.controls['script_id'].setValue(this.selectedBrowserScriptItems);
   }
 
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.browserConfigForm.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.browserConfigForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.browserConfigForm.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.browserConfigForm.get('label') as FormArray;
-  }
-  ;
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(1)]],
-      value: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
   setScriptSelector(scriptSelector) {
     const scriptSelectorFG = scriptSelector.map(ss => (this.fb.group(ss)));
     const script_selectorFormArray = this.fb.array(scriptSelectorFG);
@@ -210,10 +182,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   prepareSaveBrowserconfig(): BrowserConfig {
     const formModel = this.browserConfigForm.value;
 
-    // deep copy of form model lairs
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     const script_selectorDeepCopy: Label[] = formModel.script_selector.map(
       (label: Label) => Object.assign({}, label)

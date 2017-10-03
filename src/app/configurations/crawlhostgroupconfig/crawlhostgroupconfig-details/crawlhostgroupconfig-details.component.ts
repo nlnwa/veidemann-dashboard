@@ -28,6 +28,12 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
+  ngOnChanges() {
+    setTimeout(() => {
+      this.updateData(this.crawlHostGroupConfig);
+    });
+  }
+
   createForm() {
     this.crawlHostGroupConfigFG = this.fb.group({
       id: {value: '', disabled: true},
@@ -39,25 +45,24 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: this.fb.array([]),
+        label: [],
       }),
     });
   }
 
   updateData(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    const ipRangeFG: FormGroup[] = crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
+    const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
+
+    this.crawlHostGroupConfigFG.setControl('ip_range', ipRangeFGArray);
     this.crawlHostGroupConfigFG.controls['meta'].patchValue({
       name: this.crawlHostGroupConfig.meta.name as string,
       description: this.crawlHostGroupConfig.meta.description as string,
     });
+
+    this.crawlHostGroupConfigFG.get('meta.label').setValue(crawlHostGroupConfig.meta.label);
   }
 
-  ngOnChanges() {
-    this.setLabel(this.crawlHostGroupConfig.meta.label);
-    this.setIpRange((this.crawlHostGroupConfig.ip_range));
-    setTimeout(() => {
-      this.updateData(this.crawlHostGroupConfig);
-    });
-  }
 
   createCrawlHostGroupConfig() {
     this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
@@ -92,56 +97,18 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   prepareSaveCrawlHostGroupConfig(): CrawlHostGroupConfig {
     const formModel = this.crawlHostGroupConfigFG.value;
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
 
-    const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(
-      (ipRange: IpRange) => Object.assign({}, ipRange)
-    );
-
+    const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        label: labelsDeepCopy
+        name: formModel.meta.name,
+        description: formModel.meta.description,
+        label: labelsDeepCopy,
       }
     };
-  }
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.crawlHostGroupConfigFG.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.crawlHostGroupConfigFG.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.crawlHostGroupConfigFG.get('label') as FormArray;
-  };
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
-  }
-
-  setIpRange(ip_ranges) {
-    const ip_rangeFGs = ip_ranges.map(ip_range => (this.fb.group(ip_range)));
-    const ip_rangeFormArray = this.fb.array(ip_rangeFGs);
-    this.crawlHostGroupConfigFG.setControl('ip_range', ip_rangeFormArray);
   }
 
   addIpRange() {
@@ -154,9 +121,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     control.removeAt(i);
   }
 
-  get ip_range(): FormArray {
+  get ip_ranges(): FormArray {
     return this.crawlHostGroupConfigFG.get('ip_range') as FormArray;
-  };
+  }
 
   initIpRange() {
     return this.fb.group({

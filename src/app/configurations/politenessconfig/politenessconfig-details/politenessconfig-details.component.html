@@ -58,33 +58,9 @@
     </md-error>
   </md-form-field>
 
-  <md-expansion-panel formArrayName="label">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        Merkelapp
-      </md-panel-title>
-      <md-panel-description>
-        Merkelapp beskrivelse
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-      <md-card-header>
-        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <md-form-field>
-          <input mdInput formControlName="key" placeholder="Type">
-        </md-form-field>
-        <md-form-field>
-          <input mdInput formControlName="value" placeholder="Value">
-        </md-form-field>
-        <button md-icon-button (click)="removeLabel(i)">
-          <md-icon>close</md-icon>
-        </button>
-      </md-card-content>
-    </md-card>
-    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
-  </md-expansion-panel>
+  <ng-container formGroupName="meta">
+    <app-labels formControlName="label"></app-labels>
+  </ng-container>
 
   <div>
     <button md-raised-button color="primary"

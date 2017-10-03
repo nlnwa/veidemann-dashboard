@@ -65,7 +65,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: this.fb.array([]),
+        label: [],
       }),
     });
   }
@@ -82,13 +82,13 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       name: crawlConfig.meta.name as string,
       description: crawlConfig.meta.description as string,
     });
+    this.crawlConfigFG.get('meta.label').setValue(crawlConfig.meta.label);
     this.setSelectedDropdown();
   }
 
   ngOnChanges() {
     this.selectedPolitenessConfigItems = [];
     this.selectedBrowserConfigItems = [];
-    this.setLabel(this.crawlConfig.meta.label);
 
     // what the bug?! pre-filled radiobuttons aint working without this.
     setTimeout(() => {
@@ -129,10 +129,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   prepareSaveCrawlConfig(): CrawlConfig {
     const formModel = this.crawlConfigFG.value;
-
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
@@ -149,7 +146,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
-        label: labelsDeepCopy
+        label: labelsDeepCopy,
 
       }
     };
@@ -217,34 +214,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       text: 'Velg browserConfig',
       enableSearchFilter: true
     };
-  }
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.crawlConfigFG.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.crawlConfigFG.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.crawlConfigFG.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.crawlConfigFG.get('label') as FormArray;
-  }
-  ;
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
   }
 
   revert() {

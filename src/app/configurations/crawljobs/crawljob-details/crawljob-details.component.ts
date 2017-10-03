@@ -63,6 +63,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
+        label: [],
       }),
     });
 
@@ -79,7 +80,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       name: crawljob.meta.name as string,
       description: crawljob.meta.description as string,
     });
-    this.setLabel(crawljob.meta.label);
+    this.crawlJobForm.get('meta.label').setValue(crawljob.meta.label);
     this.setDropdown();
     this.selectedScheduleItems = [];
     this.selectedCrawlConfigItems = [];
@@ -122,9 +123,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   prepareSaveCrawljob(): CrawlJob {
     const formModel = this.crawlJobForm.value;
 
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     return {
       id: this.crawlJob.id,
@@ -208,33 +207,6 @@ export class CrawljobDetailsComponent implements OnChanges {
       text: 'Velg crawlConfig',
       enableSearchFilter: true
     };
-  }
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.crawlJobForm.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.crawlJobForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.crawlJobForm.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.crawlJobForm.get('label') as FormArray;
-  };
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
   }
 
   revert() {

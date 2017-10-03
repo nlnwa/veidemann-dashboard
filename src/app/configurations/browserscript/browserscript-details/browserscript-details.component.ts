@@ -37,7 +37,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-//        label: this.fb.array([]),
+        label: [],
       }),
     });
   }
@@ -49,7 +49,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       name: browserScript.meta.name as string,
       description: browserScript.meta.description as string,
     });
-    this.setLabel(browserScript.meta.label);
+    this.browserScriptFG.get('meta.label').setValue(this.browserScript.meta.label);
   };
 
   ngOnChanges() {
@@ -88,41 +88,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       });
   }
 
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.browserScriptFG.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.browserScriptFG.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.browserScriptFG.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.browserScriptFG.get('label') as FormArray;
-  }
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
-  }
-
   prepareSaveBrowserScript(): BrowserScript {
     const formModel = this.browserScriptFG.value;
-    // deep copy of form model lairs
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
-
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.browserScript.id,
       script: formModel.script,

@@ -13,6 +13,8 @@
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="description" placeholder="Beskrivelse">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Legg til en fritekst om konfigurasjonen">info
+    </md-icon>
   </md-form-field>
 
   <md-expansion-panel formArrayName="ip_range">
@@ -24,20 +26,20 @@
         IP-range som skal benyttes
       </md-panel-description>
     </md-expansion-panel-header>
-    <md-card *ngFor="let ip_range of ip_range.controls; let i=index" [formGroupName]="i">
+    <md-card *ngFor="let ip_range of ip_ranges.controls; let i=index" [formGroupName]="i">
       <md-card-header>
         <md-card-title>IP-range #{{i + 1}}</md-card-title>
       </md-card-header>
       <md-card-content>
         <md-form-field>
           <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:">
-          <md-error *ngIf="! crawlHostGroupConfigFG.controls['ip_range'].controls[i].controls.ip_from.valid">
+          <md-error *ngIf="! ip_ranges.controls[i].controls.ip_from.valid">
             En gyldig IP-addresse er påkrevd.
           </md-error>
         </md-form-field>
         <md-form-field>
           <input mdInput formControlName="ip_to" placeholder="Til IP-addresse">
-          <md-error *ngIf="! crawlHostGroupConfigFG.controls.ip_range.controls[i].controls.ip_to.valid">
+          <md-error *ngIf="! ip_ranges.controls[i].controls.ip_to.valid">
             En gyldig IP-addresse er påkrevd.
           </md-error>
         </md-form-field>
@@ -49,35 +51,11 @@
     <button md-raised-button color="accent" (click)="addIpRange()">Legg til IP-range</button>
   </md-expansion-panel>
 
-  <md-expansion-panel formArrayName="label">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        Merkelapp
-      </md-panel-title>
-      <md-panel-description>
-        Merkelapp beskrivelse
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-      <md-card-header>
-        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <md-form-field>
-          <input mdInput formControlName="key" placeholder="Type">
-        </md-form-field>
-        <md-form-field>
-          <input mdInput formControlName="value" placeholder="Verdi">
-        </md-form-field>
-        <button md-icon-button (click)="removeLabel(i)">
-          <md-icon>close</md-icon>
-        </button>
-      </md-card-content>
-    </md-card>
-    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
-  </md-expansion-panel>
+  <ng-container formGroupName="meta">
+    <app-labels formControlName="label"></app-labels>
+  </ng-container>
 
-  <div>
+  <div class="commitButtons">
     <button md-raised-button color="primary"
             [disabled]="!crawlHostGroupConfigFG.valid"
             *ngIf="!crawlHostGroupConfig.id"
