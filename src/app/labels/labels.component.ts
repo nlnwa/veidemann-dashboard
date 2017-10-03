@@ -16,6 +16,7 @@ import {Label} from '../commons/models/config.model';
 export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
   @Input() disabled = false;
+  @Input() type;
   public showAddLabelCard = false;
 
   private labels: Label[];
