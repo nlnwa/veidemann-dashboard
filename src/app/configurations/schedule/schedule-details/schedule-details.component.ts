@@ -21,6 +21,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   updateHandler: Function;
   @Input()
   deleteHandler: Function;
+
   private valid_from_unix: any;
   private valid_to_unix: any;
 
@@ -53,7 +54,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-//        label: this.fb.array([]),
+        label: [],
       }),
     });
   }
@@ -101,7 +102,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       name: schedule.meta.name as string,
       description: schedule.meta.description as string,
     });
-    this.setLabel(schedule.meta.label);
+    this.scheduleForm.get('meta.label').setValue(schedule.meta.label);
 
   }
 
@@ -143,9 +144,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   prepareSaveSchedule(): Schedule {
     const formModel = this.scheduleForm.value;
     // deep copy of form model lairs
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     // allow null and from_date
     if (formModel.valid_from.year !== null && formModel.valid_from.month !== null && formModel.valid_from.day !== null) {
@@ -191,34 +190,6 @@ export class ScheduleDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-  }
-
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.scheduleForm.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.scheduleForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.scheduleForm.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.scheduleForm.get('label') as FormArray;
-  };
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
   }
 
   revert() {

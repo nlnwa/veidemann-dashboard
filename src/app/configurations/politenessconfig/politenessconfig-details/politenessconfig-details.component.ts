@@ -47,7 +47,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-//        label: this.fb.array([]),
+        label: [],
       }),
     });
   }
@@ -61,7 +61,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       name: politenessconfig.meta.name as string,
       description: politenessconfig.meta.description as string,
     });
-    this.setLabel(politenessconfig.meta.label);
+    this.politenessConfigFG.get('meta.label').setValue(politenessconfig.meta.label);
     this.setSelectedDropdown();
     this.selectedRobotsPolicyItems = [];
   };
@@ -130,39 +130,11 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   }
 
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.politenessConfigFG.setControl('label', labelFormArray);
-  }
-
-  addLabel() {
-    const control = <FormArray>this.politenessConfigFG.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.politenessConfigFG.controls['label'];
-    control.removeAt(i);
-  }
-
-  get label(): FormArray {
-    return this.politenessConfigFG.get('label') as FormArray;
-  }
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(2)]],
-      value: ['', [Validators.required, Validators.minLength(2)]],
-    });
-  }
-
   prepareSavePolitenessConfig(): PolitenessConfig {
     const formModel = this.politenessConfigFG.value;
+
     // deep copy of form model lairs
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const labelsDeepCopy = formModel.meta.label(label => ({...label}));
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values

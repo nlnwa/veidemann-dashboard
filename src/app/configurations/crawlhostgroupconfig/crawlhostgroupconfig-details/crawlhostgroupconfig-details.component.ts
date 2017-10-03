@@ -22,8 +22,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  labelModel: any;
-
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
               private fb: FormBuilder,
               private mdSnackBar: MdSnackBar) {
@@ -102,7 +100,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
     const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
-    console.log('labelsdeep', labelsDeepCopy);
     return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
