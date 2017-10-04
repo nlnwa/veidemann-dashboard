@@ -1,4 +1,4 @@
-<h2>Merkelapper</h2>
+<h2>{{type}}</h2>
 <div *ngFor="let group of groups" fxLayout="columns" class="labelList">
   <div fxLayout="row" fxLayoutAlign="center center">
     <h2 class="key">{{group.key}}:</h2>
@@ -13,7 +13,7 @@
 </div>
 <md-list-item>
   <button md-raised-button color="accent"
-          (click)="inputNewLabel()"> Legg til merkelapp
+          (click)="inputNewLabel()"> Legg til {{type}}
   </button>
 </md-list-item>
 <br>
@@ -21,14 +21,14 @@
   <br>
   <md-form-field>
     <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput">
-    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Hva skal merkelappen beskrive?
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Hva skal {{type}}en beskrive?
     Eks. Org.nummer, kategorisering, begivenhet">info
     </md-icon>
   </md-form-field>
   <br>
   <md-form-field>
     <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput">
-    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="En verdi gir en {{type}} Den brukes for å merke og identifisere en entitet eller seed.
     Eks. offentlig nettsted, nettavis, Valg 2017">info
     </md-icon>
   </md-form-field>

@@ -4,7 +4,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserScriptService} from '../../browserscript';
 import {BrowserConfigService} from '../browserconfig.service';
-import {BrowserConfig, Label} from '../../../commons/models/config.model';
+import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-browserconfig-details',
@@ -46,8 +46,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       // headers: this.fb.group({''}),
       script_id: [],
-      script_selector: this.fb.array([]),
-
+      script_selector: [],
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
@@ -72,6 +71,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.setSelectedDropdown();
     this.selectedBrowserScriptItems = [];
     this.browserConfigForm.get('meta.label').setValue(browserConfig.meta.label);
+    this.browserConfigForm.get('script_selector').setValue(browserConfig.script_selector.label)
   }
 
   ngOnChanges() {
@@ -146,34 +146,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.browserConfigForm.controls['script_id'].setValue(this.selectedBrowserScriptItems);
   }
 
-  setScriptSelector(scriptSelector) {
-    const scriptSelectorFG = scriptSelector.map(ss => (this.fb.group(ss)));
-    const script_selectorFormArray = this.fb.array(scriptSelectorFG);
-    this.browserConfigForm.setControl('script_selector', script_selectorFormArray);
-  }
-
-  addScriptSelector() {
-    const control = <FormArray>this.browserConfigForm.controls['script_selector'];
-    control.push(this.initScriptSelector());
-  }
-
-  removeScriptSelector(i: number) {
-    const control = <FormArray>this.browserConfigForm.controls['script_selector'];
-    control.removeAt(i);
-  }
-
-  get script_selector(): FormArray {
-    return this.browserConfigForm.get('script_selector') as FormArray;
-  }
-  ;
-
-  initScriptSelector() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(1)]],
-      value: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
   revert() {
     this.ngOnChanges();
     this.mdSnackBar.open('Tilbakestilt');
@@ -182,11 +154,9 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   prepareSaveBrowserconfig(): BrowserConfig {
     const formModel = this.browserConfigForm.value;
 
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
+    const labelsDeepCopy: Label[] = formModel.meta.label.map(label => ({...label}));
 
-    const script_selectorDeepCopy: Label[] = formModel.script_selector.map(
-      (label: Label) => Object.assign({}, label)
-    );
+    const script_selectorDeepCopy: Selector = {label: formModel.script_selector.map(label => ({...label}))};
 
     const script_idlist = [];
     for (const i of formModel.script_id) {
@@ -204,9 +174,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
       script_id: script_idlist,
-      script_selector: {
-        label: script_selectorDeepCopy
-      },
+      script_selector: script_selectorDeepCopy,
       headers: formModel.headers,
       meta: {
         name: formModel.meta.name as string,

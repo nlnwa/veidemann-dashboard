@@ -57,47 +57,15 @@
                             formControlName="script_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="browserConfigForm.controls.script_id.valid">
+    <small [hidden]="browserConfigForm.controls['script_id'].valid">
       Scripts required.
     </small>
   </div>
 
-
-  <md-expansion-panel formArrayName="script_selector">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        Selector
-      </md-panel-title>
-      <md-panel-description>
-        Selector beskrivelse
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-card
-      *ngFor="let script_selector of script_selector.controls; let i=index"
-      [formGroupName]="i">
-      <md-card-header>
-        <md-card-title>Selector #{{i + 1}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <md-form-field>
-          <input mdInput formControlName="key" placeholder="Type">
-        </md-form-field>
-        <md-form-field>
-          <input mdInput formControlName="value" placeholder="Value">
-          <md-error *ngIf="! browserConfigForm.controls.label.valid">
-            Merkelapp er påkrevd.
-          </md-error>
-        </md-form-field>
-        <button md-icon-button (click)="removeScriptSelector(i)">
-          <md-icon>close</md-icon>
-        </button>
-      </md-card-content>
-    </md-card>
-    <button md-raised-button color="accent" (click)="addScriptSelector()">Legg til Selector</button>
-  </md-expansion-panel>
+  <app-labels type="Selector" formControlName="script_selector"></app-labels>
 
   <ng-container formGroupName="meta">
-    <app-labels formControlName="label"></app-labels>
+    <app-labels type="Label" formControlName="label"></app-labels>
   </ng-container>
 
   <div>
