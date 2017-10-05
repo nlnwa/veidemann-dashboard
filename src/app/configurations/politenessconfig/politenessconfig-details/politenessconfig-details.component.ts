@@ -1,16 +1,17 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {isUndefined} from 'util';
 import {PolitenessConfigService} from '../politenessconfig.service';
 import {Label, PolitenessConfig} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
 @Component({
   selector: 'app-politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
-  styleUrls: ['./politenessconfig-details.component.css']
+  styleUrls: ['./politenessconfig-details.component.css'],
+  providers: [SnackBarService]
 })
 
 export class PolitenessconfigDetailsComponent implements OnChanges {
@@ -31,7 +32,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
 
   constructor(private politenessConfigService: PolitenessConfigService,
-              private mdSnackBar: MdSnackBar,
+              private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.filldropdown();
     this.createForm();
@@ -77,7 +78,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       .subscribe((newPolitenessConfig: PolitenessConfig) => {
         this.createHandler(newPolitenessConfig);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
 
@@ -87,7 +88,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       .subscribe((updatedPolitenessConfig: PolitenessConfig) => {
         this.updateHandler(updatedPolitenessConfig);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   deletePolitenessconfig(politenessConfigId) {
@@ -95,9 +96,9 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       .subscribe((deletedPolitenessConfig) => {
         this.deleteHandler(deletedPolitenessConfig);
         if (deletedPolitenessConfig === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
+          this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -134,7 +135,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     const formModel = this.politenessConfigFG.value;
 
     // deep copy of form model lairs
-    const labelsDeepCopy = formModel.meta.label(label => ({...label}));
+    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
@@ -158,6 +159,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }

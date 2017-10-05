@@ -1,14 +1,15 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserScriptService} from '../browserscript.service';
 import {BrowserScript, Label} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
 @Component({
   selector: 'app-browserscript-details',
   templateUrl: './browserscript-details.component.html',
-  styleUrls: ['./browserscript-details.component.css']
+  styleUrls: ['./browserscript-details.component.css'],
+  providers: [SnackBarService]
 })
 
 export class BrowserScriptDetailsComponent implements OnChanges {
@@ -25,7 +26,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
 
   constructor(private browserScriptService: BrowserScriptService,
-              private mdSnackBar: MdSnackBar,
+              private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
   }
@@ -63,7 +64,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       .subscribe(newBrowserScript => {
         this.createHandler(newBrowserScript);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
 
@@ -73,17 +74,17 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       .subscribe(updatedBrowserScript => {
         this.updateHandler(updatedBrowserScript);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   deleteBrowserScript(browserScriptId): void {
     this.browserScriptService.delete(browserScriptId)
       .subscribe(response => {
-        this.deleteHandler(response);
-        if (response === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
+        this.deleteHandler(browserScriptId);
+        if (response instanceof Object) {
+          this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -108,6 +109,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }

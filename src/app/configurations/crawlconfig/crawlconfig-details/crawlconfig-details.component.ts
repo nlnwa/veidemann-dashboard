@@ -3,9 +3,9 @@ import {PolitenessConfigService} from '../../politenessconfig/';
 import {BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators} from '../../../commons/';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
 import {CrawlConfigService} from '../crawlconfig.service';
 import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
 @Component({
@@ -13,6 +13,7 @@ import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../../comm
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
   // encapsulation: ViewEncapsulation.None,
+  providers: [SnackBarService]
 
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
@@ -41,7 +42,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
               private politenessConfigService: PolitenessConfigService,
               private browserConfigService: BrowserConfigService,
               private fb: FormBuilder,
-              private mdSnackBar: MdSnackBar) {
+              private snackBarService: SnackBarService) {
     this.fillDropdown();
     this.createForm();
   }
@@ -103,7 +104,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       .map((newCrawlConfig: CrawlConfig) => {
         this.createHandler(newCrawlConfig);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   updateCrawlConfig(crawlConfigForm): void {
@@ -112,7 +113,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       .map((updatedCrawlConfig) => {
         this.updateHandler(updatedCrawlConfig);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   };
 
   deleteCrawlConfig(crawlConfigId): void {
@@ -120,9 +121,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       .map((deletedCrawlConfig) => {
         this.deleteHandler(deletedCrawlConfig);
         if (deletedCrawlConfig === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
+          this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -218,7 +219,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
 }

@@ -6,12 +6,14 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {CrawlJobService} from '../crawljob.service';
 import {CrawlConfig, CrawlJob, Label, Schedule} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
   selector: 'app-crawljob-details',
   templateUrl: './crawljob-details.component.html',
   styleUrls: ['./crawljob-details.component.css'],
   encapsulation: ViewEncapsulation.None,
+  providers: [SnackBarService],
 
 })
 export class CrawljobDetailsComponent implements OnChanges {
@@ -41,7 +43,7 @@ export class CrawljobDetailsComponent implements OnChanges {
               private crawlconfigService: CrawlConfigService,
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
-              private mdSnackBar: MdSnackBar) {
+              private snackBarService: SnackBarService) {
     this.fillDropdown();
     this.createForm();
   }
@@ -96,7 +98,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       .map((updatedCrawljob) => {
         this.updateHandler(updatedCrawljob);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   };
 
   deleteCrawljob(crawljobId): void {
@@ -104,9 +106,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       .map((deletedCrawljob) => {
         this.deleteHandler(deletedCrawljob);
         if (deletedCrawljob === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
+          this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -117,7 +119,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       .map((newCrawljob: CrawlJob) => {
         this.createHandler(newCrawljob);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   prepareSaveCrawljob(): CrawlJob {
@@ -211,6 +213,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }
