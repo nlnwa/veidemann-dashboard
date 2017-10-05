@@ -1,15 +1,16 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserScriptService} from '../../browserscript';
 import {BrowserConfigService} from '../browserconfig.service';
 import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
   selector: 'app-browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
-  styleUrls: ['./browserconfig-details.component.css']
+  styleUrls: ['./browserconfig-details.component.css'],
+  providers: [SnackBarService],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()
@@ -29,7 +30,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   deleteHandler: Function;
 
   constructor(private browserConfigService: BrowserConfigService,
-              private mdSnackBar: MdSnackBar,
+              private snackBarService: SnackBarService,
               private fb: FormBuilder,
               private browserScriptService: BrowserScriptService) {
     this.createForm();
@@ -84,7 +85,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       .subscribe(newBrowserConfig => {
         this.createHandler(newBrowserConfig);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   };
 
 
@@ -93,18 +94,18 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.browserConfigService.update(this.browserConfig)
       .subscribe(updatedBrowserConfig => {
         this.updateHandler(updatedBrowserConfig);
-        this.mdSnackBar.open('Lagret');
+        this.snackBarService.openSnackBar('Lagret');
       });
   }
 
   deleteBrowserConfig(browserConfigId): void {
     this.browserConfigService.delete(browserConfigId)
-      .subscribe(deletedBrowserConfig => {
-        this.deleteHandler(deletedBrowserConfig);
-        if (deletedBrowserConfig === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet..');
+      .subscribe((response) => {
+        this.deleteHandler(browserConfigId);
+        if (response instanceof Object) {
+          this.snackBarService.openSnackBar('Feil: Ikke slettet..');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -148,17 +149,15 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   prepareSaveBrowserconfig(): BrowserConfig {
     const formModel = this.browserConfigForm.value;
-
     const labelsDeepCopy: Label[] = formModel.meta.label.map(label => ({...label}));
-
     const script_selectorDeepCopy: Selector = {label: formModel.script_selector.map(label => ({...label}))};
-
     const script_idlist = [];
+
     for (const i of formModel.script_id) {
       const script_id = i.id;
       script_idlist.push(script_id);
@@ -169,8 +168,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     return {
       id: this.browserConfig.id,
       user_agent: formModel.user_agent,
-      window_width: formModel.window_width,
-      window_height: formModel.window_height,
+      window_width: parseInt(formModel.window_width, 10),
+      window_height: parseInt(formModel.window_height, 10),
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
       script_id: script_idlist,
