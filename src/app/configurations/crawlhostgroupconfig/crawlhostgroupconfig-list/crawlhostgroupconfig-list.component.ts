@@ -46,8 +46,8 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
     this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
   }
 
-  deleteCrawlHostGroupConfig = (crawlHostGroupConfig: String) => {
-    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig);
+  deleteCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
+    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfigId);
     if (idx !== -1) {
       this.crawlHostGroupConfigs.splice(idx, 1);
       this.selectCrawlHostGroupConfig(null);
