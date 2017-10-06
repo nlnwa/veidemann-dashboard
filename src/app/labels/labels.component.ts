@@ -36,6 +36,9 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   onTouched = () => {};
 
   ngOnChanges(): void {
+    this.newKeyInput =  '';
+    this.newValueInput = '';
+    this.showAddLabelCard = false;
   }
 
   writeValue(labels: Label[]): void {
@@ -44,7 +47,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     } else {
       this.labels = labels;
     }
-    console.log('writeValue', this.labels);
+    this.ngOnChanges();
   }
 
   registerOnChange(fn: (labels: Label[]) => void): void {
@@ -79,13 +82,12 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       key: key,
       value: value
     });
-    this.newKeyInput =  '';
-    this.newValueInput = '';
+    this.ngOnChanges();
     this.onChange(this.labels);
   }
 
-  inputNewLabel() {
-    this.showAddLabelCard = true;
+  newLabelCard(value: boolean) {
+    this.showAddLabelCard = value;
   }
 
   removeLabel(key: string, value: string): void {
