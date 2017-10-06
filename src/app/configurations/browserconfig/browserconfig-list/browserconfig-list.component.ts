@@ -37,12 +37,14 @@ export class BrowserConfigListComponent implements OnInit {
       user_agent: '',
       page_load_timeout_ms: '',
       sleep_after_pageload_ms: '',
-      script_selector: null,
+      script_selector: {
+        label: []
+      },
       meta: {
         name: '',
         description: '',
         label: [],
-      }
+      },
     };
     // By default, a newly-created  will have the selected state.
     this.selectBrowserConfig(browserConfig);
