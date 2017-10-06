@@ -67,8 +67,8 @@ export class CrawljobDetailsComponent implements OnChanges {
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
+      disabled: false,
     });
-
   }
 
   updateData(crawljob: CrawlJob) {
@@ -86,16 +86,20 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.setDropdown();
     this.selectedScheduleItems = [];
     this.selectedCrawlConfigItems = [];
+    this.crawlJobForm.controls['disabled'].setValue((crawljob.disabled)as boolean);
   };
 
   ngOnChanges() {
     this.updateData(this.crawlJob);
+    setTimeout(() => {
+      this.updateData(this.crawlJob);
+    });
   }
 
   updateCrawljob(crawljobForm): void {
     this.crawlJob = this.prepareSaveCrawljob();
     this.crawlJobService.update(this.crawlJob)
-      .map((updatedCrawljob) => {
+      .subscribe((updatedCrawljob) => {
         this.updateHandler(updatedCrawljob);
       });
     this.snackBarService.openSnackBar('Lagret');
@@ -103,9 +107,9 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   deleteCrawljob(crawljobId): void {
     this.crawlJobService.delete(crawljobId)
-      .map((deletedCrawljob) => {
-        this.deleteHandler(deletedCrawljob);
-        if (deletedCrawljob === 'not_allowed') {
+      .subscribe((response) => {
+        this.deleteHandler(crawljobId);
+        if (response instanceof Object) {
           this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
           this.snackBarService.openSnackBar('Slettet');
@@ -116,7 +120,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   createCrawljob() {
     this.crawlJob = this.prepareSaveCrawljob();
     this.crawlJobService.create(this.crawlJob)
-      .map((newCrawljob: CrawlJob) => {
+      .subscribe((newCrawljob: CrawlJob) => {
         this.createHandler(newCrawljob);
       });
     this.snackBarService.openSnackBar('Lagret');
@@ -124,9 +128,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   prepareSaveCrawljob(): CrawlJob {
     const formModel = this.crawlJobForm.value;
-
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
-
     return {
       id: this.crawlJob.id,
       schedule_id: formModel.schedule_id[0].id as string,
@@ -140,7 +142,8 @@ export class CrawljobDetailsComponent implements OnChanges {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
         label: labelsDeepCopy
-      }
+      },
+      disabled: formModel.disabled as boolean,
     };
   }
 
