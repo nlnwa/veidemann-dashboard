@@ -2,11 +2,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/do';
 import {Entity, Seed} from '../commons/models/config.model';
 import {SearchService} from '../search-service/search.service';
 import {BaseListComponent} from '../base-list/base-list.component';
 import {EntityDetailsComponent} from '../entities/entity-details/entity-details.component';
-import 'rxjs/add/operator/do';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.searchTerm
-      .distinctUntilChanged()
+      // .distinctUntilChanged()
       .do(() => this.listComponent.reset())
       .switchMap((entity) => this.searchService.search(entity))
       .subscribe((entity) => this.listComponent.addItem(entity));
