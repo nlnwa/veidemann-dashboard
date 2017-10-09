@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutGap="16px">
-  <div fxFlex fxLayout="column">
+  <div fxLayout="column">
     <div fxLayout="row">
       <md-form-field fxFlex>
         <input mdInput
@@ -19,7 +19,7 @@
       <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>
     </div>
   </div>
-  <div fxFlex fxLayout="row" fxLayoutGap="16px">
+  <div fxLayout="row" fxLayoutGap="16px">
     <div fxFlex>
       <app-entity-details
         [entity]="selectedEntity"

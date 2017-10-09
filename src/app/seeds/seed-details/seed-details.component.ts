@@ -6,7 +6,7 @@ import {CustomValidators, DateTime} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
 import {Label, Seed} from '../../commons/models/config.model';
 import {UrlHelper} from '../../commons/url-util';
-import {isNull} from 'util';
+import 'rxjs/add/operator/concat';
 
 @Component({
   selector: 'app-seed-details',
@@ -16,12 +16,30 @@ import {isNull} from 'util';
 })
 
 export class SeedDetailComponent {
-
   @Output()
   seedCreated = new EventEmitter<Seed>();
-
   @Output()
   seedDeleted = new EventEmitter<Seed>();
+
+  dropdownCrawlJobSettings = {};
+  selectedCrawlJobItems = [];
+  crawlJobList = [];
+
+  private _seed: Seed;
+
+  private _form: FormGroup;
+
+  constructor(private seedService: SeedService,
+              private fb: FormBuilder,
+              private crawlJobService: CrawlJobService,
+              private mdSnackBar: MdSnackBar) {
+    this.createForm();
+    this.getCrawlJobs();
+  }
+
+  get seed() {
+    return this._seed;
+  }
 
   @Input()
   set seed(seed: Seed) {
@@ -33,30 +51,12 @@ export class SeedDetailComponent {
     }
   }
 
-  get seed() { return this._seed; }
-
   get form() {
     return this._form;
   }
 
   set form(fg: FormGroup) {
     this._form = fg;
-  }
-
-  private _seed: Seed;
-  private _form: FormGroup;
-
-  dropdownCrawlJobSettings = {};
-  selectedCrawlJobItems = [];
-  crawlJobList = [];
-
-
-  constructor(private seedService: SeedService,
-              private fb: FormBuilder,
-              private crawljobService: CrawlJobService,
-              private mdSnackBar: MdSnackBar) {
-    this.createForm();
-    this.getCrawlJobs();
   }
 
   createForm() {
@@ -107,7 +107,7 @@ export class SeedDetailComponent {
   }
 
   /**
-   * form disabled values must be copied from model and not the view model (form model)
+   * Disabled values in form must be copied from model and not the view model (form model)
    * @param {Seed} viewModel
    * @returns {Seed}
    */
@@ -116,7 +116,6 @@ export class SeedDetailComponent {
       id: this.seed.id,
       entity_id: this.seed.entity_id,
       scope: {surt_prefix: viewModel.scope.surt_prefix},
-      // TODO this is a showstopper for return {...viewModel}
       job_id: viewModel.job_id.map(element => (element as any).jobId),
       disabled: !viewModel.disabled,
       meta: {
@@ -133,8 +132,13 @@ export class SeedDetailComponent {
 
   setSelectedDropdown(jobIds) {
     this.selectedCrawlJobItems = [];
+    if (!jobIds.length) {
+      return;
+    } else {
+      console.log('setSelectedDropdown', jobIds);
+    }
     jobIds
-      .map((jobId) => this.crawljobService.get(jobId))
+      .map((jobId) => this.crawlJobService.get(jobId))
       .reduce((acc, curr) => acc.concat(curr))
       .subscribe((crawlJob) =>
         this.selectedCrawlJobItems.push({
@@ -152,7 +156,7 @@ export class SeedDetailComponent {
       enableSearchFilter: true
     };
 
-    this.crawljobService.list()
+    this.crawlJobService.list()
       .map(reply => reply.value)
       .subscribe(crawlJobs => {
         crawlJobs.forEach((crawlJob, index) => {

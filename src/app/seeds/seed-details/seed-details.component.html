@@ -24,6 +24,12 @@
           </md-form-field>
         </ng-container>
 
+        <md-form-field formGroupName="scope" *ngIf="seed.id">
+          <input mdInput
+                 formControlName="surt_prefix"
+                 placeholder="Surt prefix">
+        </md-form-field>
+
         <md-form-field *ngIf="seed.id">
           <input mdInput formControlName="id" placeholder="Id">
         </md-form-field>
@@ -53,12 +59,6 @@
                    placeholder="Last modified by">
           </md-form-field>
         </ng-container>
-
-        <md-form-field formGroupName="scope" *ngIf="seed.id">
-          <input mdInput
-                 formControlName="surt_prefix"
-                 placeholder="Surt prefix">
-        </md-form-field>
 
         <md-form-field>
           <input mdInput formControlName="entity_id" placeholder="Entitetens Id">
