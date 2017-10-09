@@ -54,21 +54,6 @@ export class EntityDetailsComponent {
   _form: FormGroup;
   seeds: BehaviorSubject<Seed[]> = new BehaviorSubject<Seed[]>([]);
 
-  private static prepareSaveEntity(formModel: Entity): Entity {
-    return {
-      id: formModel.id,
-      meta: {
-        name: formModel.meta.name,
-        description: formModel.meta.description,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        // last_modified_by: '',
-        label: formModel.meta.label.map((label: Label) => ({...label})),
-      }
-    };
-  }
-
   constructor(private entityService: EntityService,
               private seedService: SeedService,
               private mdSnackBar: MdSnackBar,
@@ -111,8 +96,23 @@ export class EntityDetailsComponent {
     this.form.markAsPristine();
   }
 
+  private prepareSaveEntity(formModel: Entity): Entity {
+    return {
+      id: this.entity.id,
+      meta: {
+        name: formModel.meta.name,
+        description: formModel.meta.description,
+        // created: '',
+        // created_by: '',
+        // last_modified: null,
+        // last_modified_by: '',
+        label: formModel.meta.label.map((label: Label) => ({...label})),
+      }
+    };
+  }
+
   onSave() {
-    const entity = EntityDetailsComponent.prepareSaveEntity(this.form.value);
+    const entity = this.prepareSaveEntity(this.form.value);
     this.entityService.create(entity)
       .subscribe((newEntity: Entity) => {
         this.entity = newEntity;
@@ -122,7 +122,7 @@ export class EntityDetailsComponent {
 
 
   onUpdate() {
-    const entity = EntityDetailsComponent.prepareSaveEntity(this.form.value);
+    const entity = this.prepareSaveEntity(this.form.value);
     this.entityService.update(entity)
       .subscribe((updatedEntity: Entity) => {
         this.entity = updatedEntity;
@@ -133,7 +133,7 @@ export class EntityDetailsComponent {
   onDelete(): void {
     this.entityService.delete(this.entity.id)
       .subscribe((deletedEntity) => {
-        this.entity = null;
+        this.entity = deletedEntity;
         this.mdSnackBar.open('Slettet');
       });
   }
