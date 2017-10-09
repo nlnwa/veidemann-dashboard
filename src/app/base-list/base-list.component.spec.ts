@@ -1,19 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {SeedsearchComponent} from './seedsearch.component';
+import {BaseListComponent} from './base-list.component';
 
-describe('SeedsearchComponent', () => {
-  let component: SeedsearchComponent;
-  let fixture: ComponentFixture<SeedsearchComponent>;
+describe('BaseListComponent', () => {
+  let component: BaseListComponent;
+  let fixture: ComponentFixture<BaseListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SeedsearchComponent]
+      declarations: [BaseListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SeedsearchComponent);
+    fixture = TestBed.createComponent(BaseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

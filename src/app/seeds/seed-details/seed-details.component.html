@@ -1,141 +1,102 @@
-<button md-raised-button (click)="goBack()">Tilbake</button>
+<form [formGroup]="form"
+      fxLayout="column">
+  <md-card *ngIf="seed">
+    <md-card-header fxLayout="row">
+      <md-card-title>
+        <span>SEED</span>
+      </md-card-title>
+      <md-card-subtitle *ngIf="!seed.id">
+        <span>Ny (ikke lagret)</span>
+      </md-card-subtitle>
+      <span class="fill-space"></span>
+      <md-slide-toggle formControlName="disabled">Aktiv</md-slide-toggle>
+    </md-card-header>
+    <md-card-content fxLayout="row">
+      <div fxFlex fxLayout="column">
 
-<h2>Seed Details</h2>
-<form [formGroup]="seedForm" fxLayout="column">
+        <ng-container formGroupName="meta">
+          <md-form-field>
+            <input mdInput formControlName="name" placeholder="URL">
+          </md-form-field>
 
-  <div class="switch">
-    <md-slide-toggle>Aktiv</md-slide-toggle>
-  </div>
+          <md-form-field>
+            <input mdInput formControlName="description" placeholder="Beskrivelse">
+          </md-form-field>
+        </ng-container>
 
-
-  <ng-container formGroupName="entity_id">
-    <md-form-field>
-      <input mdInput formControlName="entity_name" (click)="goToEntity()" placeholder="Entitet">
-    </md-form-field>
-  </ng-container>
-
-  <ng-container formGroupName="meta">
-    <md-form-field>
-      <input mdInput formControlName="name" placeholder="Seed">
-    </md-form-field>
-  </ng-container>
-
-  <div>
-    <label>Høstejobb:
-      <angular2-multiselect [data]="crawljobList"
-                            [(ngModel)]="selectedCrawljobItems"
-                            [settings]="dropdownCrawljobSettings"
-                            formControlName="job_id">
-      </angular2-multiselect>
-    </label>
-  </div>
-
-  <ng-container formGroupName="meta">
-    <md-form-field>
-      <input mdInput formControlName="description" placeholder="Description">
-    </md-form-field>
-  </ng-container>
-
-  <!-- Labels -->
-
-  <md-expansion-panel formArrayName="label">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        Merkelapp
-      </md-panel-title>
-      <md-panel-description>
-        Merkelapp beskrivelse
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-card *ngFor="let label of label.controls; let i=index" [formGroupName]="i">
-      <md-card-header>
-        <md-card-title>Merkelapp #{{i + 1}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <md-form-field>
-          <input mdInput formControlName="key" placeholder="Type">
+        <md-form-field *ngIf="seed.id">
+          <input mdInput formControlName="id" placeholder="Id">
         </md-form-field>
 
-        <md-form-field>
-          <input mdInput formControlName="value" placeholder="Value">
-        </md-form-field>
-        <button md-icon-button (click)="removeLabel(i)">
-          <md-icon>close</md-icon>
-        </button>
-      </md-card-content>
-    </md-card>
-    <button md-raised-button color="accent" (click)="addLabel()">Legg til merkelapp</button>
-  </md-expansion-panel>
+        <ng-container formGroupName="meta" *ngIf="seed.id">
+          <md-form-field formGroupName="created">
+            <input mdInput
+                   formControlName="seconds"
+                   placeholder="Created">
+          </md-form-field>
 
-  <!-- Flere detaljer -->
+          <md-form-field>
+            <input mdInput
+                   formControlName="created_by"
+                   placeholder="Created by">
+          </md-form-field>
 
-  <md-expansion-panel>
-    <md-expansion-panel-header>
-      <md-panel-title>
-        Flere detaljer
-      </md-panel-title>
-      <md-panel-description>
-        Flere detaljer beskrivelse
-      </md-panel-description>
-    </md-expansion-panel-header>
+          <md-form-field formGroupName="last_modified">
+            <input mdInput
+                   formControlName="seconds"
+                   placeholder="Last modified">
+          </md-form-field>
 
-    <div fxLayout="column">
-      <md-form-field formGroupName="scope">
-        <input mdInput
-               formControlName="surt_prefix"
-               placeholder="Scope">
-      </md-form-field>
+          <md-form-field>
+            <input mdInput
+                   formControlName="last_modified_by"
+                   placeholder="Last modified by">
+          </md-form-field>
+        </ng-container>
 
-      <md-form-field>
-        <input mdInput
-               formControlName="id"
-               placeholder="Id">
-      </md-form-field>
-
-      <ng-container formGroupName="meta">
-
-
-        <md-form-field formGroupName="created">
+        <md-form-field formGroupName="scope" *ngIf="seed.id">
           <input mdInput
-                 formControlName="seconds"
-                 placeholder="Created">
+                 formControlName="surt_prefix"
+                 placeholder="Surt prefix">
         </md-form-field>
 
         <md-form-field>
-          <input mdInput
-                 formControlName="created_by"
-                 placeholder="Created by">
+          <input mdInput formControlName="entity_id" placeholder="Entitetens Id">
         </md-form-field>
+      </div>
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+        <div>
+          <span>Høstejobb:</span>
+          <angular2-multiselect [data]="crawlJobList"
+                                [(ngModel)]="selectedCrawlJobItems"
+                                [settings]="dropdownCrawlJobSettings"
+                                formControlName="job_id">
+          </angular2-multiselect>
+        </div>
+      </div>
+    </md-card-content>
 
-
-        <md-form-field formGroupName="last_modified">
-          <input mdInput
-                 formControlName="seconds"
-                 placeholder="Last modified">
-        </md-form-field>
-
-
-        <md-form-field>
-          <input mdInput
-                 formControlName="last_modified_by"
-                 placeholder="Last modified by">
-        </md-form-field>
-
-      </ng-container>
-    </div>
-  </md-expansion-panel>
-
-  <div>
-    <button md-raised-button color="primary"
-            [disabled]="!seedForm.valid"
-            (click)="updateSeed(seedForm.value)">Lagre
-    </button>
-    <button md-raised-button color="accent"
-            (click)="revert()">Tilbakestill
-    </button>
-    <button md-raised-button color="warn"
-            (click)="deleteSeed()">Slett
-    </button>
-  </div>
+    <md-card-actions>
+      <button md-raised-button color="primary"
+              *ngIf="!seed.id"
+              [disabled]="!form.valid"
+              (click)="onSave()">Lagre
+      </button>
+      <button md-raised-button color="primary"
+              *ngIf="seed.id"
+              [disabled]="!form.dirty"
+              (click)="onUpdate()">Lagre
+      </button>
+      <button md-raised-button color="accent"
+              [disabled]="!form.dirty"
+              (click)="onRevert()">Tilbakestill
+      </button>
+      <button md-raised-button color="warn"
+              (click)="onDelete()">Slett
+      </button>
+    </md-card-actions>
+  </md-card>
 </form>
-

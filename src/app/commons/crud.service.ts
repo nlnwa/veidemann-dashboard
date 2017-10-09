@@ -5,18 +5,31 @@ import 'rxjs/add/operator/catch';
 import {ListReply, ListRequest} from './models/controller.model';
 
 export abstract class CrudService<T extends ListRequest> {
+
+  private static requestToParams(listRequest: ListRequest): HttpParams {
+    let params = new HttpParams()
+    Object.keys(listRequest).forEach(key => {
+      let value = listRequest[key];
+      switch (key) {
+        case 'selector':
+          value = JSON.stringify(value);
+          break;
+      }
+      params = params.append(key, value);
+    });
+    return params;
+  }
+
   constructor(protected http: HttpClient,
-              protected url: string) {}
+              protected url: string) {
+  }
 
   list(): Observable<ListReply<T>> {
     return this.http.get<ListReply<T>>(this.url);
   }
 
   search(listRequest: ListRequest): Observable<ListReply<T>> {
-    let params = new HttpParams()
-    Object.keys(listRequest).forEach(key => {
-      params = params.append(key, listRequest[key]);
-    });
+    const params = CrudService.requestToParams(listRequest);
     return this.http.get<ListReply<T>>(this.url, {params});
   }
 

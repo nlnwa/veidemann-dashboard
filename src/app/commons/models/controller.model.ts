@@ -19,3 +19,7 @@ export interface ListRequest {
   page_size?: number;
   page?: number;
 }
+
+export interface RunCrawlReply {
+  seed_execution_id: string[];
+}

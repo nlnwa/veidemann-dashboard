@@ -1,0 +1,38 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  <div fxFlex fxLayout="column">
+    <div fxLayout="row">
+      <md-form-field fxFlex>
+        <input mdInput
+               (keyup.enter)="onEnterKey($event)"
+               placeholder="Søk"
+               autofocus>
+      </md-form-field>
+    </div>
+    <div>
+      <md-toolbar>
+        <h1>Entitet</h1>
+        <span class="fill-space"></span>
+        <button md-mini-fab (click)="onCreateEntity()">
+          <md-icon>add</md-icon>
+        </button>
+      </md-toolbar>
+      <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>
+    </div>
+  </div>
+  <div fxFlex fxLayout="row" fxLayoutGap="16px">
+    <div fxFlex>
+      <app-entity-details
+        [entity]="selectedEntity"
+        (selectSeed)="onSelectSeed($event)"
+        (createSeed)="onCreateSeed($event)">
+      </app-entity-details>
+    </div>
+    <div fxFlex>
+      <app-seed-details
+        [seed]="selectedSeed"
+        (seedCreated)="onSeedCreated($event)"
+        (seedDeleted)="onSeedDeleted($event)">
+      </app-seed-details>
+    </div>
+  </div>
+</div>

@@ -41,9 +41,6 @@
          [routerLinkActive]="['is-active']">
         <md-icon>dashboard</md-icon>
         Aktivitet</a>
-      <a md-list-item [routerLink]="['/seeds']" [routerLinkActive]="['is-active']">
-        <md-icon>assignment</md-icon>
-        Legg til Seeds</a>
       <a md-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
         <md-icon>assessment</md-icon>
         Statistikk</a>
@@ -51,14 +48,13 @@
          [routerLinkActive]="['is-active']">
         <md-icon>help</md-icon>
         Dokumentasjon</a>
-      <a md-list-item [routerLink]="['/seedsearch']" [routerLinkActiveOptions]="{ exact: true }"
+      <a md-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>search</md-icon>
         Søk</a>
-      <a md-list-item [routerLink]="['/entities']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">
-        <md-icon>domain</md-icon>
-        Entities</a>
+      <md-list-item [disableRipple]="true">
+      <h3>Konfigurasjon</h3>
+      </md-list-item>
       <a md-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>work</md-icon>

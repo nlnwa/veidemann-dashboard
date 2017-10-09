@@ -1,12 +1,12 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {SeedService} from '../seeds.service';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {CustomValidators, DateTime} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
-import {EntityService} from '../../entities/entity.service';
-import {CrawlJob, Label, Seed} from '../../commons/models/config.model';
+import {Label, Seed} from '../../commons/models/config.model';
+import {UrlHelper} from '../../commons/url-util';
+import {isNull} from 'util';
 
 @Component({
   selector: 'app-seed-details',
@@ -15,132 +15,138 @@ import {CrawlJob, Label, Seed} from '../../commons/models/config.model';
 
 })
 
-export class SeedDetailComponent implements OnChanges {
+export class SeedDetailComponent {
 
-  private readonly urlPattern =
-    '(http|https)(://)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)' +
-    '|(http|https)(://)([^www.][a-z0-9-]+[.]{1}[A-z]+.+)';
+  @Output()
+  seedCreated = new EventEmitter<Seed>();
 
-  @Input() seed: Seed;
-  seedForm: FormGroup;
+  @Output()
+  seedDeleted = new EventEmitter<Seed>();
 
   @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
+  set seed(seed: Seed) {
+    if (seed) {
+      this._seed = seed;
+      setTimeout(() => this.updateForm(seed), 0);
+    } else {
+      this._seed = null;
+    }
+  }
 
-  dropdownCrawljobSettings = {};
-  selectedCrawljobItems = [];
-  crawljobList: any = [];
-  crawljob: CrawlJob;
+  get seed() { return this._seed; }
+
+  get form() {
+    return this._form;
+  }
+
+  set form(fg: FormGroup) {
+    this._form = fg;
+  }
+
+  private _seed: Seed;
+  private _form: FormGroup;
+
+  dropdownCrawlJobSettings = {};
+  selectedCrawlJobItems = [];
+  crawlJobList = [];
+
 
   constructor(private seedService: SeedService,
-              private router: Router,
               private fb: FormBuilder,
               private crawljobService: CrawlJobService,
-              private route: ActivatedRoute,
-              private mdSnackBar: MdSnackBar,
-              private entityService: EntityService) {
+              private mdSnackBar: MdSnackBar) {
     this.createForm();
-    this.getParams();
     this.getCrawlJobs();
   }
 
-  getParams() {
-    this.route.paramMap.subscribe(params => {
-      if (params.has('seed')) {
-        this.seedService.get(params.get('seed'))
-          .subscribe(seed => {
-            this.seed = seed;
-            this.ngOnChanges();
-          })
-      } else {
-        // TODO fix this
-      }
-    });
-  }
-
   createForm() {
-    this.seedForm = this.fb.group({
+    this.form = this.fb.group({
         id: {value: '', disabled: true},
-        entity_id: this.fb.group({
-          entity_name: {value: '', disabled: true},
-          entity_ids: ''
-        }),
-        job_id: ['', CustomValidators.nonEmpty],
-        scope: this.fb.group(
-          {surt_prefix: ['', [Validators.required, Validators.minLength(2)]]}),
+        disabled: true,
+        entity_id: {value: '', disabled: true},
+        job_id: [[], CustomValidators.nonEmpty],
+        scope: this.fb.group({surt_prefix: ''}),
         meta: this.fb.group({
-          name: ['http://', [Validators.required, Validators.pattern(this.urlPattern)]],
+          name: ['', [Validators.required, Validators.pattern(UrlHelper.URL_PATTERN)]],
           description: '',
           created: this.fb.group({seconds: {value: '', disabled: true}}),
           created_by: {value: '', disabled: true},
           last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
           last_modified_by: {value: '', disabled: true},
+          label: [],
         }),
-        label: this.fb.array([]),
       }
     );
   }
 
-  updateData(seed: Seed) {
-    this.seedForm.controls['id'].setValue(seed.id);
-    this.seedForm.controls['scope'].patchValue({
-      surt_prefix: seed.scope.surt_prefix
-    });
-    this.seedForm.controls['meta'].patchValue({
-      name: seed.meta.name,
-      description: seed.meta.description,
-      created: {
-        seconds: DateTime.convertFullTimestamp(seed.meta.created.seconds),
+  updateForm(seed: Seed) {
+    this.form.patchValue({
+      id: seed.id,
+      entity_id: seed.entity_id,
+      disabled: !seed.disabled, // disabled is named active in the view
+      job_id: seed.job_id,
+      scope: {
+        surt_prefix: seed.scope.surt_prefix,
       },
-      created_by: seed.meta.created_by,
-      last_modified: {
-        seconds: DateTime.convertFullTimestamp(seed.meta.last_modified.seconds),
-      },
-      last_modified_by: seed.meta.last_modified_by,
-    });
-    this.setLabel(this.seed.meta.label);
-    this.setSelectedDropdown()
-  }
-
-  getEntityName(entity_id) {
-    this.entityService.get(entity_id)
-      .subscribe(entity => {
-        this.seedForm.get('entity_id').setValue({entity_name: entity.meta.name, entity_ids: this.seed.entity_id});
-      });
-  }
-
-  ngOnChanges() {
-    setTimeout(() => {
-      this.getEntityName(this.seed.entity_id);
-    }, 0);
-    this.updateData(this.seed);
-  }
-
-  setSelectedDropdown() {
-    this.selectedCrawljobItems = [];
-    if (this.seed.job_id) {
-      for (const i of this.seed.job_id) {
-        this.crawljobService.get(i)
-          .subscribe(crawlJob => {
-            this.selectedCrawljobItems.push({
-              id: crawlJob.id,
-              itemName: crawlJob.meta.name,
-              description: crawlJob.meta.description
-            });
-          });
+      meta: {
+        name: seed.meta.name,
+        description: seed.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(seed.meta.created.seconds),
+        },
+        created_by: seed.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(seed.meta.last_modified.seconds),
+        },
+        last_modified_by: seed.meta.last_modified_by,
+        label: seed.meta.label,
       }
-    }
-    // this.seedForm.controls['job_id'].setValue(this.selectedCrawlJobItems);
+    });
+    this.form.markAsPristine();
+    this.setSelectedDropdown(seed.job_id);
   }
 
+  /**
+   * form disabled values must be copied from model and not the view model (form model)
+   * @param {Seed} viewModel
+   * @returns {Seed}
+   */
+  prepareSaveSeed(viewModel: Seed): Seed {
+    return {
+      id: this.seed.id,
+      entity_id: this.seed.entity_id,
+      scope: {surt_prefix: viewModel.scope.surt_prefix},
+      // TODO this is a showstopper for return {...viewModel}
+      job_id: viewModel.job_id.map(element => (element as any).jobId),
+      disabled: !viewModel.disabled,
+      meta: {
+        name: viewModel.meta.name,
+        description: viewModel.meta.description,
+        // created: this.seed.meta.created,
+        // created_by: this.seed.meta.created_by,
+        // last_modified: this.seed.meta.last_modified,
+        // last_modified_by: this.seed.meta.last_modified_by,
+        label: viewModel.meta.label.map((label: Label) => ({...label})),
+      }
+    };
+  }
+
+  setSelectedDropdown(jobIds) {
+    this.selectedCrawlJobItems = [];
+    jobIds
+      .map((jobId) => this.crawljobService.get(jobId))
+      .reduce((acc, curr) => acc.concat(curr))
+      .subscribe((crawlJob) =>
+        this.selectedCrawlJobItems.push({
+          id: this.selectedCrawlJobItems.length,
+          itemName: crawlJob.meta.name,
+          jobId: crawlJob.id
+        }));
+  }
 
   getCrawlJobs() {
-    this.selectedCrawljobItems = [];
-    this.dropdownCrawljobSettings = {
+    this.selectedCrawlJobItems = [];
+    this.dropdownCrawlJobSettings = {
       singleSelection: false,
       text: 'Velg høstejobb',
       enableSearchFilter: true
@@ -149,116 +155,54 @@ export class SeedDetailComponent implements OnChanges {
     this.crawljobService.list()
       .map(reply => reply.value)
       .subscribe(crawlJobs => {
-        crawlJobs.forEach((crawlJob) => {
-          this.crawljobList.push({
-            id: crawlJob.id,
+        crawlJobs.forEach((crawlJob, index) => {
+          this.crawlJobList.push({
+            id: index,
             itemName: crawlJob.meta.name,
-            description: crawlJob.meta.description
+            jobId: crawlJob.id,
           });
         });
       });
   }
 
-
-  updateSeed(seedForm): void {
-    this.seed = this.prepareSaveSeed();
-    this.seedService.update(this.seed)
-      .subscribe((updatedSeed) => {
-        // this.updateHandler(updatedSeed);
-        this.updateData(updatedSeed);
+  onSave(): void {
+    const seed = this.prepareSaveSeed(this.form.value);
+    this.seedService.create(seed)
+      .subscribe((createdSeed) => {
+        this.seed = createdSeed;
+        this.seedCreated.emit(createdSeed);
       });
 
     this.mdSnackBar.open('Lagret');
   }
 
-  deleteSeed(): void {
+  onUpdate(): void {
+    const seed = this.prepareSaveSeed(this.form.value);
+    this.seedService.update(seed)
+      .subscribe((updatedSeed) => {
+        this.seed = updatedSeed;
+      });
+
+    this.mdSnackBar.open('Lagret');
+  }
+
+  onDelete(): void {
     this.seedService.delete(this.seed.id)
       .subscribe((deletedSeed) => {
+        this.seedDeleted.emit({...this.seed});
+        this.seed = deletedSeed;
         if (deletedSeed === 'not_allowed') {
           this.mdSnackBar.open('Feil: Ikke slettet');
         } else {
           this.mdSnackBar.open('Slettet');
         }
       });
-    this.goBack()
   }
 
-  prepareSaveSeed(): Seed {
-    const formModel = this.seedForm.value;
-    const job_idlist = [];
-    for (const i of formModel.job_id) {
-      const job_id = i.id;
-      job_idlist.push(job_id);
-    }
-
-    // deep copy of form
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
-
-    // return new `Seed` object containing a combination of original seed value(s)
-    // and deep copies of changed form model values
-    return {
-      id: this.seed.id,
-      entity_id: this.seed.entity_id,
-      scope: {surt_prefix: formModel.scope.surt_prefix as string},
-      job_id: job_idlist,
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        created: this.seed.meta.created,
-        created_by: this.seed.meta.created_by,
-        last_modified: this.seed.meta.last_modified,
-        last_modified_by: this.seed.meta.last_modified_by,
-        label: labelsDeepCopy
-      }
-    };
-  }
-
-  setLabel(label) {
-    const labelFGs = label.map(lbl => (this.fb.group(lbl)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.seedForm.setControl('label', labelFormArray);
-  }
-
-  initLabel() {
-    return this.fb.group({
-      key: 'Label',
-      value: '',
-    });
-  }
-
-  get label(): FormArray {
-    return this.seedForm.get('label') as FormArray;
-  }
-
-
-  addLabel() {
-    const control = <FormArray>this.seedForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.seedForm.controls['label'];
-    control.removeAt(i);
-  }
-
-  revert() {
-    this.updateData(this.seed);
+  onRevert() {
+    this.updateForm(this.seed);
     this.mdSnackBar.open('Tilbakestilt');
   }
 
-  goToEntity() {
-    this.router.navigate(['/entities/', this.seed.entity_id])
-  }
-
-  goBack(): void {
-    setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 0);
-    setTimeout(() => {
-      this.router.navigate(['/seedsearch']);
-    }, 0);
-  }
 
 }

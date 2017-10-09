@@ -1,11 +1,12 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {EntityService} from '../entity.service';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {DateTime} from '../../commons/';
-import {ActivatedRoute, Router} from '@angular/router';
 import {SeedService} from '../../seeds/seeds.service';
-import {Entity, Label} from '../../commons/models/config.model';
+import {Entity, Label, Seed} from '../../commons/models/config.model';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/take';
 
 
 @Component({
@@ -13,35 +14,71 @@ import {Entity, Label} from '../../commons/models/config.model';
   templateUrl: './entity-details.component.html',
   styleUrls: ['./entity-details.component.css']
 })
-export class EntityDetailsComponent implements OnChanges {
+export class EntityDetailsComponent {
 
   @Input()
-  entity: Entity;
+  set entity(entity: Entity) {
+    if (entity) {
+      this._entity = entity;
+      this.seedService.search({entity_id: this.entity.id})
+        .map(reply => reply.value)
+        .subscribe(seeds => {
+          this.seeds.next(seeds);
+        });
+      setTimeout(() => this.updateForm(entity), 0);
+    } else {
+      this._entity = null;
+    }
+  }
 
-  entityForm: FormGroup;
-  seedList = [];
+  get form(): FormGroup {
+    return this._form;
+  }
 
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
+  set form(form: FormGroup) {
+    this._form = form;
+  }
+
+  get entity(): Entity {
+    return this._entity;
+  }
+
+  @Output()
+  selectSeed = new EventEmitter<Seed>();
+
+  @Output()
+  createSeed = new EventEmitter<string>();
+
+  private _entity: Entity;
+
+  _form: FormGroup;
+  seeds: BehaviorSubject<Seed[]> = new BehaviorSubject<Seed[]>([]);
+
+  private static prepareSaveEntity(formModel: Entity): Entity {
+    return {
+      id: formModel.id,
+      meta: {
+        name: formModel.meta.name,
+        description: formModel.meta.description,
+        // created: '',
+        // created_by: '',
+        // last_modified: null,
+        // last_modified_by: '',
+        label: formModel.meta.label.map((label: Label) => ({...label})),
+      }
+    };
+  }
 
   constructor(private entityService: EntityService,
               private seedService: SeedService,
-              private route: ActivatedRoute,
               private mdSnackBar: MdSnackBar,
-              private fb: FormBuilder,
-              private router: Router) {
+              private fb: FormBuilder) {
     this.createForm();
-    this.getParams();
   }
 
   createForm() {
-    this.entityForm = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
-      seedcount: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
@@ -49,171 +86,85 @@ export class EntityDetailsComponent implements OnChanges {
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
+        label: [],
       }),
-      seedlist: this.fb.array([]),
-      label: this.fb.array([], Validators.minLength(1)),
     });
   }
 
-  getParams() {
-    this.route.paramMap.subscribe(params => {
-      if (params.has('entity')) {
-        this.entityService.get(params.get('entity')).subscribe(entity => {
-          this.entity = entity[0];
-          this.ngOnChanges();
-        })
-      } else {
-
-      }
-    });
-  }
-
-  ngOnChanges() {
-    this.getSeedsOfEntity(this.entity.id);
-    this.updateData(this.entity);
-    setTimeout(() => {
-      this.updateData(this.entity);
-    }, 500);
-  }
-
-  getSeedsOfEntity(entityId) {
-    if (entityId) {
-      this.seedService.search({entity_id: entityId})
-        .subscribe((reply) => {
-          this.entityForm.controls['seedcount'].setValue(reply.count);
-          reply.value.forEach((seed) => {
-            this.seedList.push({
-              name: seed.meta.name,
-              id: seed.id,
-              label: seed.meta.label,
-              description: seed.meta.description
-            })
-          });
-        });
-    }
-  }
-
-  updateData(entity: Entity) {
-    this.entityForm.controls['id'].setValue(entity.id);
-    this.entityForm.controls['meta'].patchValue({
-      name: entity.meta.name,
-      description: entity.meta.description,
-      created: {
-        seconds: DateTime.convertFullTimestamp(entity.meta.created.seconds),
+  updateForm(entity: Entity) {
+    this.form.patchValue({
+      id: entity.id,
+      meta: {
+        name: entity.meta.name,
+        description: entity.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(entity.meta.created.seconds),
+        },
+        created_by: entity.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(entity.meta.last_modified.seconds),
+        },
+        last_modified_by: entity.meta.last_modified_by,
+        label: entity.meta.label,
       },
-      created_by: entity.meta.created_by,
-      last_modified: {
-        seconds: DateTime.convertFullTimestamp(entity.meta.last_modified.seconds),
-      },
-      last_modified_by: entity.meta.last_modified_by,
     });
-    this.setSeedlist(this.seedList);
-    this.setLabel(this.entity.meta.label);
-
-
+    this.form.markAsPristine();
   }
 
-  createEntity(entity) {
-    this.entity = this.prepareSaveEntity();
-    this.entityService.create(this.entity)
+  onSave() {
+    const entity = EntityDetailsComponent.prepareSaveEntity(this.form.value);
+    this.entityService.create(entity)
       .subscribe((newEntity: Entity) => {
-        this.createHandler(newEntity);
+        this.entity = newEntity;
       });
     this.mdSnackBar.open('Lagret');
   };
 
 
-  updateEntity(entity: Entity): void {
-    this.entity = this.prepareSaveEntity();
-    this.entityService.update(this.entity)
+  onUpdate() {
+    const entity = EntityDetailsComponent.prepareSaveEntity(this.form.value);
+    this.entityService.update(entity)
       .subscribe((updatedEntity: Entity) => {
-        this.updateHandler(updatedEntity);
+        this.entity = updatedEntity;
       });
     this.mdSnackBar.open('Lagret');
   }
 
-  deleteEntity(): void {
+  onDelete(): void {
     this.entityService.delete(this.entity.id)
       .subscribe((deletedEntity) => {
-        this.deleteHandler(deletedEntity);
-        if (deletedEntity === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
-        } else {
-          this.mdSnackBar.open('Slettet');
-        }
+        this.entity = null;
+        this.mdSnackBar.open('Slettet');
       });
   }
 
-
-  setSeedlist(seedlist) {
-    this.seedList = [];
-    const seedlistFG = seedlist.map(sl => (this.fb.group(sl)));
-    const seedlistFormArray = this.fb.array(seedlistFG);
-    this.entityForm.setControl('seedlist', seedlistFormArray);
-  }
-
-  get seedlist(): FormArray {
-    return this.entityForm.get('seedlist') as FormArray;
-  };
-
-
-  setLabel(label) {
-    const labelFGs = label.map(l => (this.fb.group(l)));
-    const labelFormArray = this.fb.array(labelFGs);
-    this.entityForm.setControl('label', labelFormArray);
-  }
-
-  get label(): FormArray {
-    return this.entityForm.get('label') as FormArray;
-  };
-
-  initLabel() {
-    return this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(1)]],
-      value: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
-  addLabel() {
-    const control = <FormArray>this.entityForm.controls['label'];
-    control.push(this.initLabel());
-  }
-
-  removeLabel(i: number) {
-    const control = <FormArray>this.entityForm.controls['label'];
-    control.removeAt(i);
-  }
-
-  revert() {
-    this.ngOnChanges();
+  onRevert() {
+    this.updateForm(this.entity);
     this.mdSnackBar.open('Tilbakestilt');
   }
 
-  prepareSaveEntity(): Entity {
 
-    const formModel = this.entityForm.value;
-    // deep copy of form model lairs
-    const labelsDeepCopy: Label[] = formModel.label.map(
-      (label: Label) => Object.assign({}, label)
-    );
-
-    // return new `Hero` object containing a combination of original hero value(s)
-    // and deep copies of changed form model values
-    return {
-      id: this.entity.id,
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        // last_modified_by: '',
-        label: labelsDeepCopy
-      }
-    };
+  onSelectSeed(seed: Seed) {
+    this.selectSeed.emit(seed);
   }
 
-  goToSeed(seed_id) {
-    this.router.navigate(['/seeds/', seed_id])
+  onCreateSeed() {
+    this.createSeed.emit(this.entity.id);
+  }
+
+  addSeed(seed: Seed) {
+    this.seeds
+      .take(1)
+      .subscribe((seeds) => {
+        this.seeds.next([...seeds, seed]);
+      });
+  }
+
+  removeSeed(seed: Seed) {
+    this.seeds
+      .take(1)
+      .subscribe((seeds) => {
+        this.seeds.next([...seeds.filter((s) => s.id !== seed.id)]);
+      });
   }
 }

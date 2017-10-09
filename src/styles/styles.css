@@ -9,4 +9,6 @@ html, body {
   padding: 0;
 }
 
-
+.fill-space {
+  flex: 1 1 auto;
+}
