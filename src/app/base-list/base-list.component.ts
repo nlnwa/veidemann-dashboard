@@ -18,7 +18,7 @@ export class BaseListComponent {
 
   selectedRowIndex = '';
 
-  constructor(private dataSource: ListDataSource) {}
+  constructor(readonly dataSource: ListDataSource) {}
 
   trackById = (index: number, item: ListItem) => item.id;
 
