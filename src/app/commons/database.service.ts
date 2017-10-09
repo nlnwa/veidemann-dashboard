@@ -57,6 +57,7 @@ export class ListDataSource extends DataSource<ListItem> {
   }
 
   set data(items) {
+    items.forEach((item) => this.dataSet.add(item.id));
     this.database.data = items;
   }
 
