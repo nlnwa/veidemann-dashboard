@@ -44,8 +44,8 @@ export class CrawlJobListComponent implements OnInit {
         name: '',
         description: '',
         label: [],
-
       },
+      disabled: false,
     };
     // By default, a newly-created  will have the selected state.
     this.selectCrawlJob(crawlJob);

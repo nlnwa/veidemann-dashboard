@@ -3,6 +3,10 @@
 
 <form [formGroup]="crawlJobForm" fxLayout="column">
 
+  <md-slide-toggle formControlName = "disabled">
+    Deaktivert
+  </md-slide-toggle>
+
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn">
     <md-error *ngIf="! crawlJobForm['controls'].meta['controls'].name.valid">
