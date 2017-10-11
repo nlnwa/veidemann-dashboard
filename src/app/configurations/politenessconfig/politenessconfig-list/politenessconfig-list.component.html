@@ -1,4 +1,4 @@
-<h2>Politenessconfigs</h2>
+<h2 i18n="@@politenessconfigListHeader">Politenessconfigs</h2>
 
 <md-nav-list>
   <md-list-item
@@ -9,8 +9,9 @@
   </md-list-item>
 </md-nav-list>
 
-<button md-raised-button color="warn"
-        (click)="createNewPolitenessConfig()">New
+<button md-raised-button color="primary"
+        (click)="createNewPolitenessConfig()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedPolitenessConfig">
