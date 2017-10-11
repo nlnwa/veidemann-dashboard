@@ -7,12 +7,14 @@ import {SeedService} from '../../seeds/seeds.service';
 import {Entity, Label, Seed} from '../../commons/models/config.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/take';
+import {EntityDetailsText} from './entity-details.text';
 
 
 @Component({
   selector: 'app-entity-details',
   templateUrl: './entity-details.component.html',
-  styleUrls: ['./entity-details.component.css']
+  styleUrls: ['./entity-details.component.css'],
+  providers: [EntityDetailsText]
 })
 export class EntityDetailsComponent {
 
@@ -57,7 +59,8 @@ export class EntityDetailsComponent {
   constructor(private entityService: EntityService,
               private seedService: SeedService,
               private mdSnackBar: MdSnackBar,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              public entityDetailsText: EntityDetailsText) {
     this.createForm();
   }
 

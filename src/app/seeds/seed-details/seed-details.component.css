@@ -1,3 +1,14 @@
 .switch {
   float: right;
 }
+
+.ttInfo {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.ttInfo:hover {
+  opacity: 0.7;
+  filter: alpha(opacity=50);
+  color: #0066ff !important;
+}

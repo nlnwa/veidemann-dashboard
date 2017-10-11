@@ -1,5 +1,5 @@
-<h2 *ngIf="crawlHostGroupConfig.id">Crawlhostgroupconfig Details</h2>
-<h2 *ngIf="!crawlHostGroupConfig.id">New Crawlhostgroupconfig</h2>
+<h2  *ngIf="crawlHostGroupConfig.id">Crawlhostgroupconfig Details</h2>
+<h2  *ngIf="!crawlHostGroupConfig.id">New Crawlhostgroupconfig</h2>
 
 <md-card>
   <form [formGroup]="crawlHostGroupConfigFG" fxLayout="column">
@@ -13,7 +13,7 @@
 
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="description" placeholder="Beskrivelse">
-      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Legg til en fritekst om konfigurasjonen">info
+      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip= {{crawlHostGroupConfigText.descriptionTooltip}}>info
       </md-icon>
     </md-form-field>
 

@@ -7,11 +7,14 @@ import {CrawlJobService} from '../../configurations/crawljobs/';
 import {Label, Seed} from '../../commons/models/config.model';
 import {UrlHelper} from '../../commons/url-util';
 import 'rxjs/add/operator/concat';
+import {SeedDetailsText} from './seed-details.text';
+
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   styleUrls: ['./seed-details.component.css'],
+  providers: [SeedDetailsText]
 
 })
 
@@ -32,7 +35,8 @@ export class SeedDetailComponent {
   constructor(private seedService: SeedService,
               private fb: FormBuilder,
               private crawlJobService: CrawlJobService,
-              private mdSnackBar: MdSnackBar) {
+              private mdSnackBar: MdSnackBar,
+              public seedDetailsText: SeedDetailsText) {
     this.createForm();
     this.getCrawlJobs();
   }

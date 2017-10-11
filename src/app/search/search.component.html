@@ -13,7 +13,7 @@
         <h1>Entitet</h1>
         <span class="fill-space"></span>
         <button md-mini-fab (click)="onCreateEntity()">
-          <md-icon>add</md-icon>
+          <md-icon mdTooltipShowDelay="500" mdTooltip={{searchText.addEntityTooltip}}>add</md-icon>
         </button>
       </md-toolbar>
       <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>
