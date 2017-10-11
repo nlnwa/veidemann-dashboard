@@ -1,23 +1,33 @@
-<h2 *ngIf="browserScript.id">Browserscript Details</h2>
-<h2 *ngIf="!browserScript.id">New Browserscript</h2>
+<h2 *ngIf="browserScript.id" i18n="@@browserscriptDetailsHeader">
+  Browserscript Detaljer
+</h2>
+<h2 *ngIf="!browserScript.id" i18n="@@browserscriptNewBrowserscriptHeader">
+  Ny Browserscript
+</h2>
 
 
 <form [formGroup]="browserScriptFG" fxLayout="column">
 
   <md-form-field formGroupName="meta">
-    <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! browserScriptFG.controls.meta.valid">
+    <input mdInput formControlName="name" placeholder="Navn"
+            i18n-placeholder="@@browserscriptFormNamePlaceholder">
+    <md-error *ngIf="! browserScriptFG.controls.meta.valid"
+              i18n="@@browserscriptFormRequiredNameError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
-    <input mdInput formControlName="description" placeholder="Beskrivelse">
+    <input mdInput formControlName="description" placeholder="Beskrivelse"
+           i18n-placeholder="@@browserscriptFormDescriptionPlaceholder">
   </md-form-field>
 
   <md-form-field>
-    <textarea mdInput formControlName="script" placeholder="Script"></textarea>
-    <md-error *ngIf="! browserScriptFG.controls.script.valid">
+    <textarea mdInput formControlName="script" placeholder="Script"
+              i18n-placeholder="@@browserscriptFormScriptPlaceholder">
+    </textarea>
+    <md-error *ngIf="! browserScriptFG.controls.script.valid"
+              i18n="@@browserscriptFormRequiredScriptError">
       Script er påkrevd.
     </md-error>
   </md-form-field>
@@ -31,19 +41,26 @@
               [disabled]="!browserScriptFG.valid"
               *ngIf="!browserScript.id"
               (click)="createBrowserScript(browserScriptFG.value)"
-              novalidate>Lagre
+              novalidate
+              i18n="@@commonButtonSave">
+        Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="browserScript.id" [disabled]="!browserScriptFG.valid"
-              (click)="updateBrowserScript(browserScriptFG.value)">
+              (click)="updateBrowserScript(browserScriptFG.value)"
+              i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
-              (click)="revert()">Tilbakestill
+              (click)="revert()"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
       </button>
       <button md-raised-button color="warn"
               *ngIf="browserScript.id"
-              (click)="deleteBrowserScript(browserScript.id); $event.stopPropagation()">Slett
+              (click)="deleteBrowserScript(browserScript.id); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">
+        Slett
       </button>
     </div>
   </form>
