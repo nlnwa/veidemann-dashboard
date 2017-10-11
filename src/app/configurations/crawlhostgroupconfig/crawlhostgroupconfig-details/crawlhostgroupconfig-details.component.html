@@ -1,37 +1,48 @@
-<h2  *ngIf="crawlHostGroupConfig.id">Crawlhostgroupconfig Details</h2>
-<h2  *ngIf="!crawlHostGroupConfig.id">New Crawlhostgroupconfig</h2>
+<h2  *ngIf="crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigDetailsHeader">
+  Crawlhostgroupconfig Detaljer
+</h2>
+<h2  *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">
+  Ny Crawlhostgroupconfig
+</h2>
 
 <md-card>
   <form [formGroup]="crawlHostGroupConfigFG" fxLayout="column">
 
     <md-form-field formGroupName="meta">
-      <input mdInput formControlName="name" placeholder="Navn">
-      <md-error *ngIf="!name.valid">
+      <input mdInput formControlName="name" placeholder="Navn"
+             i18n-placeholder="@@crawlhostgroupconfigFormNamePlaceholder">
+      <md-error *ngIf="!name.valid"
+                i18n="@@crawlhostgroupconfigFormRequiredNameError">
         Navn er påkrevd.
       </md-error>
     </md-form-field>
 
     <md-form-field formGroupName="meta">
-      <input mdInput formControlName="description" placeholder="Beskrivelse">
+      <input mdInput formControlName="description" placeholder="Beskrivelse"
+             i18n-placeholder="@@crawlhostgroupconfigFormDescriptionPlaceholder">
       <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip= {{crawlHostGroupConfigText.descriptionTooltip}}>info
       </md-icon>
     </md-form-field>
 
     <md-card-content formArrayName="ip_range">
       <md-card-header>
-        <md-card-title>IP-range</md-card-title>
+        <md-card-title i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</md-card-title>
       </md-card-header>
       <md-card-content *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
         <div [formGroupName]="i">
           <md-form-field>
-            <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:">
-            <md-error *ngIf="!ipFromControl?.valid">
+            <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:"
+                   i18n-placeholder="@@crawlhostgroupconfigFormFromIpPlaceholder">
+            <md-error *ngIf="!ipFromControl?.valid"
+                      i18n="crawlhostgroupconfigFormRequiredValidFromIpError">
               En gyldig IP-addresse er påkrevd.
             </md-error>
           </md-form-field>
           <md-form-field>
-            <input mdInput formControlName="ip_to" placeholder="Til IP-addresse">
-            <md-error *ngIf="!ipToControl?.valid">
+            <input mdInput formControlName="ip_to" placeholder="Til IP-addresse"
+                   i18n-placeholder="@@crawlhostgroupconfigFormToIpPlaceholder">
+            <md-error *ngIf="!ipToControl?.valid"
+                      i18n="crawlhostgroupconfigFormRequiredValidToIpError">
               En gyldig IP-addresse er påkrevd.
             </md-error>
           </md-form-field>
@@ -41,7 +52,10 @@
         </div>
       </md-card-content>
       <md-card-actions>
-        <button md-button color="accent" (click)="addIpRange()">Legg til IP-range</button>
+        <button md-button color="accent" (click)="addIpRange()"
+                i18n="@@crawlhostgroupconfigFormAddIpRangeBtn">
+          Legg til IP-range
+        </button>
       </md-card-actions>
     </md-card-content>
 
@@ -54,22 +68,28 @@
   <button md-button color="primary"
           [disabled]="!crawlHostGroupConfigFG.valid"
           *ngIf="!crawlHostGroupConfig.id"
-          (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)">
+          (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
+          i18n="@@commonButtonsSave">
     Lagre
   </button>
   <button md-button color="primary"
           *ngIf="crawlHostGroupConfig.id"
           [disabled]="!crawlHostGroupConfigFG.valid"
-          (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)">
+          (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
+          i18n="@@commonButtonsSave">
     Lagre
   </button>
   <button md-button color="accent"
-          (click)="revert()">Tilbakestill
+          (click)="revert()"
+          i18n="@@commonButtonsRevert">
+    Tilbakestill
   </button>
 
   <button md-button color="warn"
           *ngIf="crawlHostGroupConfig.id"
-          (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()">Slett
+          (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
+          i18n="@@commonButtonsDelete">
+    Slett
   </button>
 </md-card-actions>
 </form>
