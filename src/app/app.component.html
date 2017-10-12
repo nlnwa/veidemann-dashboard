@@ -18,8 +18,10 @@
   <!-- Toolbar menu-->
 
   <md-menu x-position="before" #menu>
-    <button md-menu-item (click)="setExpertMode(true)">Kurator</button>
-    <button md-menu-item (click)="setExpertMode(false)">Expert</button>
+    <button md-menu-item (click)="setExpertMode(true)"
+            i18n="@@toolbarMenuSetUserModeCurator">Kurator</button>
+    <button md-menu-item (click)="setExpertMode(false)"
+            i18n="@@toolbarMenuSetUserModeExpert">Expert</button>
   </md-menu>
 
   <!-- Sidenav -->
@@ -31,7 +33,7 @@
     <md-toolbar color="primary">
       <a color="primary" md-raised-button [routerLink]="['/logon']">
         <md-icon>person</md-icon>
-        Logg på</a>
+        <ng-container i18n="@@toolbarLogon">Logg på</ng-container></a>
     </md-toolbar>
 
     <!-- Navigation -->
@@ -40,59 +42,59 @@
       <a md-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>dashboard</md-icon>
-        Aktivitet</a>
+        <ng-container i18n="@@navigationSidebarActivity">Aktivitet</ng-container></a>
       <a md-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
         <md-icon>assessment</md-icon>
-        Statistikk</a>
+        <ng-container i18n="@@navigationSidebarStatistics">Statistikk</ng-container></a>
       <a md-list-item [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>help</md-icon>
-        Dokumentasjon</a>
+        <ng-container  i18n="@@navigationSidebarDocumentation">Dokumentasjon</ng-container></a>
       <a md-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
-         [routerLinkActive]="['is-active']">
+         [routerLinkActive]="['is-active']" >
         <md-icon>search</md-icon>
-        Søk</a>
+        <ng-container i18n="@@navigationSidebarSearch">Søk</ng-container></a>
       <md-list-item [disableRipple]="true">
-      <h3>Konfigurasjon</h3>
+      <h3 i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
       </md-list-item>
       <a md-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>work</md-icon>
-        Crawljobs</a>
+        <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container></a>
       <a md-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>schedule</md-icon>
-        Schedule</a>
+        <ng-container i18n="@@navigationSidebarSchedule">Schedule</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>build</md-icon>
-        Crawlconfig</a>
+        <ng-container i18n="@@navigationSidebarCrawlconfig">Crawlconfig</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlhostgroupconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>build</md-icon>
-        Crawlhostgroupconfig</a>
+        <ng-container i18n="@@navigationSidebarCrawlhostgroupconfig">Crawlhostgroupconfig</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>build</md-icon>
-        Browserconfig</a>
+        <ng-container i18n="@@navigationSidebarBrowserconfig">Browserconfig</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserscript']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>build</md-icon>
-        Browserscript</a>
+        <ng-container i18n="@@navigationSidebarBrowserscript">Browserscript</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/politenessconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>sentiment_neutral</md-icon>
-        Politenessconfig</a>
+        <ng-container i18n="@@navigationSidebarPolitenessconfig">Politenessconfig</ng-container></a>
       <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/logconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <md-icon>receipt</md-icon>
-        Logconfig</a>
+        <ng-container i18n="@@navigationSidebarLogconfig">Logconfig</ng-container></a>
     </md-nav-list>
   </md-sidenav>
 
