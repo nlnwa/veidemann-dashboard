@@ -3,66 +3,81 @@
   <md-card *ngIf="seed">
     <md-card-header fxLayout="row">
       <md-card-title>
-        <span>SEED</span>
+        <span i18n="@@seedDetailsCardTitle">SEED</span>
       </md-card-title>
       <md-card-subtitle *ngIf="!seed.id">
-        <span>Ny (ikke lagret)</span>
+        <span i18n="@@seedDetailsCardSubtitle">Ny (ikke lagret)</span>
       </md-card-subtitle>
       <span class="fill-space"></span>
-      <md-slide-toggle formControlName="disabled">Aktiv</md-slide-toggle>
+      <md-slide-toggle formControlName="disabled" i18n="@@seedDisabledToggleSwitch">
+        Aktiv
+      </md-slide-toggle>
     </md-card-header>
     <md-card-content fxLayout="row">
       <div fxFlex fxLayout="column">
 
         <ng-container formGroupName="meta">
           <md-form-field>
-            <input mdInput formControlName="name" placeholder="URL">
+            <input mdInput formControlName="name" placeholder="URL"
+                   i18n-placeholder="@@seedFormUrlPlaceholder">
           </md-form-field>
 
           <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse">
-            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip={{seedDetailsText.addDescriptionTooltip}}>info</md-icon>
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@seedFormAddDescriptionPlaceholder">
+            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+                     mdTooltip={{seedDetailsText.addDescriptionTooltip}}
+                     i18n-mdTooltip="@@seedAddDescriptionTooltip">info
+            </md-icon>
           </md-form-field>
         </ng-container>
 
         <md-form-field formGroupName="scope" *ngIf="seed.id">
           <input mdInput
                  formControlName="surt_prefix"
-                 placeholder="Surt prefix">
+                 placeholder="Surt prefiks"
+                 i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
         </md-form-field>
 
         <md-form-field *ngIf="seed.id">
-          <input mdInput formControlName="id" placeholder="Id">
+          <input mdInput formControlName="id" placeholder="Id"
+                 i18n-placeholder="@@seedFormIdPlaceholder">
         </md-form-field>
 
         <ng-container formGroupName="meta" *ngIf="seed.id">
           <md-form-field formGroupName="created">
             <input mdInput
                    formControlName="seconds"
-                   placeholder="Created">
+                   placeholder="Opprettet"
+                   i18n-placeholder="@@seedFormCreatedPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput
                    formControlName="created_by"
-                   placeholder="Created by">
+                   placeholder="Opprettet av"
+                   i18n-placeholder="@@seedFormCreatedByPlaceholder">
           </md-form-field>
 
           <md-form-field formGroupName="last_modified">
             <input mdInput
                    formControlName="seconds"
-                   placeholder="Last modified">
+                   placeholder="Sist endret"
+                   i18n-placeholder="@@seedFormLastModifiedPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput
                    formControlName="last_modified_by"
-                   placeholder="Last modified by">
+                   placeholder="Sist endret av"
+                   i18n-placeholder="@@seedFormLastModifiedByPlaceholder">
           </md-form-field>
         </ng-container>
 
         <md-form-field>
-          <input mdInput formControlName="entity_id" placeholder="Entitetens Id">
+          <input mdInput formControlName="entity_id"
+                 placeholder="Entitetens Id"
+                 i18n-placeholder="@@seedFormEntityIdPlaceholder">
         </md-form-field>
       </div>
       <div fxFlex fxLayout="column">
@@ -70,7 +85,7 @@
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
         <div>
-          <span>Høstejobb:</span>
+          <span i18n="@@seedFormCrawljobMultiSelectHeader">Høstejobb:</span>
           <angular2-multiselect [data]="crawlJobList"
                                 [(ngModel)]="selectedCrawlJobItems"
                                 [settings]="dropdownCrawlJobSettings"
@@ -84,19 +99,23 @@
       <button md-raised-button color="primary"
               *ngIf="!seed.id"
               [disabled]="!form.valid"
-              (click)="onSave()">Lagre
+              (click)="onSave()"
+              i18n="@@commonButtonSave">Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="seed.id"
               [disabled]="!form.dirty"
-              (click)="onUpdate()">Lagre
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">Lagre
       </button>
       <button md-raised-button color="accent"
               [disabled]="!form.dirty"
-              (click)="onRevert()">Tilbakestill
+              (click)="onRevert()"
+              i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button md-raised-button color="warn"
-              (click)="onDelete()">Slett
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">Slett
       </button>
     </md-card-actions>
   </md-card>
