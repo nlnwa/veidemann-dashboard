@@ -1,5 +1,12 @@
 <md-toolbar>
-  <h1>{{type}}</h1>
+  <h1 *ngIf="type =='Label'">
+    <ng-container i18n="@@labelToolbarHeader">Merkelapp
+    </ng-container>
+  </h1>
+  <h1 *ngIf="type =='Selector'">
+    <ng-container i18n="@@labelSelectorToolbarHeader">Selector
+    </ng-container>
+  </h1>
   <span class="fill-space"></span>
   <button md-mini-fab (click)="newLabelCard(true)">
     <md-icon>add</md-icon>
@@ -21,21 +28,27 @@
 
 <md-card-content *ngIf="showAddLabelCard" class="newLabelCard">
   <md-form-field>
-    <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput">
-    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" i18n-mdTooltip="=@@newLabelKeyTooltip" mdTooltip={{labelText.newLabelKeyTooltip}}>info
+    <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput"
+           i18n-placeholder="@@labelFormAddNewTypePlaceholder">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+             i18n-mdTooltip="=@@labelNewLabelKeyTooltip"
+             mdTooltip={{labelText.newLabelKeyTooltip}}>info
     </md-icon>
   </md-form-field>
   <md-form-field>
-    <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput">
-    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip={{labelText.newLabelValueTooltip}}>info
+    <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput"
+           i18n-placeholder="@@labelFormAddNewValuePlaceholder">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+             i18n-mdTooltip="@@labelNewLabelValueTooltip"
+             mdTooltip={{labelText.newLabelValueTooltip}}>info
     </md-icon>
   </md-form-field>
   <md-card-actions>
-    <button i18n="@@addLabelBtn" md-button color="accent"
-            (click)="onNewLabel(newKey.value, newValue.value)">{{labelText.addLabelBtn}}
+    <button i18n="@@commonButtonAdd" md-button color="accent"
+            (click)="onNewLabel(newKey.value, newValue.value)">Legg til
     </button>
-    <button i18n="@@cancelAddLabelBtn"md-button color="warn"
-            (click)="newLabelCard(false)">{{labelText.cancelAddLabelBtn}}
+    <button i18n="@@commonButtonCancel"md-button color="warn"
+            (click)="newLabelCard(false)">Avbryt
     </button>
   </md-card-actions>
 </md-card-content>
