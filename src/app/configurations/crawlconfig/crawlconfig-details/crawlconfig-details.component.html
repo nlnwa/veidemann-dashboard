@@ -10,20 +10,21 @@
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn"
-           i18n-placeholder="@@crawlconfigFormNamePlaceholder">
+           i18n-placeholder="@@metaNameInputPlaceholder">
     <md-error *ngIf="! crawlConfigFG.controls.meta.valid"
-              i18n="@@crawlconfigFormNameRequiredError">
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="description" placeholder="Beskrivelse"
-           i18n-placeholder="@@crawlconfigFormDescriptionPlaceholder">
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <div>
-    <label>Browserconfig:
+    <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
+      Browserconfig:
       <angular2-multiselect [data]="browserConfigList"
                             [(ngModel)]="selectedBrowserConfigItems"
                             [settings]="dropdownBrowserConfigSettings"
@@ -37,7 +38,8 @@
   </div>
 
   <div>
-    <label>Politenessconfig:
+    <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
+      Politenessconfig:
       <angular2-multiselect [data]="politenessConfigList"
                             [(ngModel)]="selectedPolitenessConfigItems"
                             [settings]="dropdownPolitenessConfigSettings"
@@ -62,7 +64,7 @@
 
   <div formGroupName="extra">
     <md-radio-group formControlName="extract_text">
-      Ekstraher tekst
+      <ng-container i18n="@@crawlconfigFormExtractTextLabel">Ekstraher tekst</ng-container>
       <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
       <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
     </md-radio-group>
@@ -70,14 +72,14 @@
 
   <div formGroupName="extra">
     <md-radio-group formControlName="create_snapshot">
-      Lag snapshots
+      <ng-container i18n="@@crawlconfigFormCreateSnapshotLabel">Lag snapshots</ng-container>
       <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
       <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
     </md-radio-group>
   </div>
 
   <md-radio-group formControlName="depth_first">
-    Dybde først
+    <ng-container i18n="@@crawlconfigFormDepthFirstLabel">Dybde først</ng-container>
     <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
     <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
   </md-radio-group>

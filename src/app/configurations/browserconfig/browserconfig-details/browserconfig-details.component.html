@@ -1,7 +1,7 @@
-<h2 *ngIf="browserConfig.id" i18n="browserconfigDetailsHeader">
+<h2 *ngIf="browserConfig.id" i18n="@@browserconfigDetailsHeader">
   Browserconfig Detaljer
 </h2>
-<h2 *ngIf="!browserConfig.id" i18n="browserconfigNewConfigHeader">
+<h2 *ngIf="!browserConfig.id" i18n="@@browserconfigNewConfigHeader">
   Ny Browserconfig
 </h2>
 
@@ -9,23 +9,23 @@
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn"
-           i18n-placeholder="@@browserconfigFormNamePlaceholder">
+           i18n-placeholder="@@metaNameInputPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.meta.valid"
-              i18n="@@browserconfigFormRequiredNameError">
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="description" placeholder="Beskrivelse"
-           i18n-placeholder="@@browserconfigFormDescriptionPlaceholder">
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <md-form-field>
     <input mdInput formControlName="user_agent" placeholder="Brukeragent"
            i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.user_agent.valid"
-              i18n="@@browserconfigFormRequiredUserAgentError">
+              i18n="@@browserconfigFormUserAgentRequiredError">
       Brukeragent er påkrevd.
     </md-error>
   </md-form-field>
@@ -34,7 +34,7 @@
     <input mdInput formControlName="window_width" placeholder="Vindusbredde"
            i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.window_width.valid"
-              i18n="@@browserconfigFormRequiredWindowWidthError">
+              i18n="@@browserconfigFormWindowWidthRequiredError">
       Vindusbredde er påkrevd.
     </md-error>
   </md-form-field>
@@ -43,7 +43,7 @@
     <input mdInput formControlName="window_height" placeholder="Vindushøyde"
            i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.window_height.valid"
-              i18n="@@browserconfigFormRequiredWindowHeightError">
+              i18n="@@browserconfigFormWindowHeightRequiredError">
       Vindushøyde er påkrevd.
     </md-error>
   </md-form-field>
@@ -52,7 +52,7 @@
     <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
            i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.page_load_timeout_ms.valid"
-              i18n="@@browserconfigFormRequiredPageLoadTimeoutError">
+              i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
       Page load timeout er påkrevd.
     </md-error>
   </md-form-field>
@@ -61,13 +61,13 @@
     <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
            i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
     <md-error *ngIf="! browserConfigForm.controls.sleep_after_pageload_ms.valid"
-              i18n="@@browserconfigFormRequiredSleepAfterPageLoadError">
+              i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
       Sleep after pageload er påkrevd.
     </md-error>
   </md-form-field>
 
   <div>
-    <label>Scripts:
+    <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
       <angular2-multiselect [data]="browserScriptList"
                             [(ngModel)]="selectedBrowserScriptItems"
                             [settings]="browserScriptDropdownSettings"
@@ -75,7 +75,7 @@
       </angular2-multiselect>
     </label>
     <small [hidden]="browserConfigForm.controls['script_id'].valid"
-           i18n="@@browserconfigFormRequiredScriptsError">
+           i18n="@@browserconfigFormScriptsRequiredError">
       Scripts påkrevd.
     </small>
   </div>

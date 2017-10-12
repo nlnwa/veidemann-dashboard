@@ -19,12 +19,12 @@
         <ng-container formGroupName="meta">
           <md-form-field>
             <input mdInput formControlName="name" placeholder="URL"
-                   i18n-placeholder="@@seedFormUrlPlaceholder">
+                   i18n-placeholder="@@metaUrlInputPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput formControlName="description" placeholder="Beskrivelse"
-                   i18n-placeholder="@@seedFormAddDescriptionPlaceholder">
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
             <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
                      mdTooltip={{seedDetailsText.addDescriptionTooltip}}
                      i18n-mdTooltip="@@seedAddDescriptionTooltip">info
@@ -49,35 +49,35 @@
             <input mdInput
                    formControlName="seconds"
                    placeholder="Opprettet"
-                   i18n-placeholder="@@seedFormCreatedPlaceholder">
+                   i18n-placeholder="@@metaCreatedInputPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput
                    formControlName="created_by"
                    placeholder="Opprettet av"
-                   i18n-placeholder="@@seedFormCreatedByPlaceholder">
+                   i18n-placeholder="@@metaCreatedByInputPlaceholder">
           </md-form-field>
 
           <md-form-field formGroupName="last_modified">
             <input mdInput
                    formControlName="seconds"
                    placeholder="Sist endret"
-                   i18n-placeholder="@@seedFormLastModifiedPlaceholder">
+                   i18n-placeholder="@@metaLastModifiedInputPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput
                    formControlName="last_modified_by"
                    placeholder="Sist endret av"
-                   i18n-placeholder="@@seedFormLastModifiedByPlaceholder">
+                   i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
           </md-form-field>
         </ng-container>
 
         <md-form-field>
           <input mdInput formControlName="entity_id"
                  placeholder="Entitetens Id"
-                 i18n-placeholder="@@seedFormEntityIdPlaceholder">
+                 i18n-placeholder="@@metaEntityIdIputPlaceholder">
         </md-form-field>
       </div>
       <div fxFlex fxLayout="column">

@@ -16,7 +16,7 @@
             <input mdInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
             <md-error *ngIf="!form.get('meta.name').valid"
-                      i18n="@@metaRequiredNameError">
+                      i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
           </md-form-field>
@@ -24,7 +24,9 @@
           <md-form-field>
             <input mdInput formControlName="description" placeholder="Beskrivelse"
                     i18n-placeholder="@@metaDescriptionInputPlaceholder">
-            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip={{entityDetailsText.addDescriptionTooltip}}>info</md-icon>
+            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+                     mdTooltip={{entityDetailsText.addDescriptionTooltip}}
+                     i18n="@@entityAddDescriptionTooltip">info</md-icon>
           </md-form-field>
         </ng-container>
 
@@ -63,7 +65,7 @@
             <input mdInput
                    formControlName="last_modified_by"
                    placeholder="Sist endret av"
-                   i18n="@@metaLastModisfiedByInputPlaceholder">
+                   i18n="@@metaLastModifiedByInputPlaceholder">
           </md-form-field>
         </ng-container>
       </div>

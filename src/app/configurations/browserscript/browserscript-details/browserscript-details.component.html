@@ -10,16 +10,16 @@
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="name" placeholder="Navn"
-            i18n-placeholder="@@browserscriptFormNamePlaceholder">
+            i18n-placeholder="@@metaNameInputPlaceholder">
     <md-error *ngIf="! browserScriptFG.controls.meta.valid"
-              i18n="@@browserscriptFormRequiredNameError">
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
     <input mdInput formControlName="description" placeholder="Beskrivelse"
-           i18n-placeholder="@@browserscriptFormDescriptionPlaceholder">
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <md-form-field>
@@ -27,7 +27,7 @@
               i18n-placeholder="@@browserscriptFormScriptPlaceholder">
     </textarea>
     <md-error *ngIf="! browserScriptFG.controls.script.valid"
-              i18n="@@browserscriptFormRequiredScriptError">
+              i18n="@@browserscriptFormScriptRequiredError">
       Script er påkrevd.
     </md-error>
   </md-form-field>

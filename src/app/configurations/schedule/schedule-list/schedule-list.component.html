@@ -2,7 +2,7 @@
   <div fxFlex="30%">
     <h2>
       <md-icon>schedule</md-icon>
-      Schedules
+      <ng-container i18n="@@scheduleListNavHeader">Schedules</ng-container>
     </h2>
     <md-nav-list>
       <md-list-item
@@ -13,7 +13,8 @@
     </md-nav-list>
 
     <button md-raised-button color="warn"
-            (click)="createNewSchedule()">New
+            (click)="createNewSchedule()"
+            i18n="@@commonButtonNew">New
     </button>
   </div>
 

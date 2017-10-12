@@ -5,9 +5,9 @@
     <input mdInput
            formControlName="name"
            placeholder="Navn"
-           i18n-placeholder="@@scheduleFormNamePlaceholder">
+           i18n-placeholder="@@metaNameInputPlaceholder">
     <md-error *ngIf="! scheduleForm['controls'].meta['controls'].name.valid"
-              i18n="@@scheduleFormRequiredNameError">
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -16,7 +16,7 @@
     <input mdInput
            formControlName="description"
            placeholder="Beskrivelse"
-           i18n-placeholder="@@scheduleFormDescriptionPlaceholder">
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <div formGroupName="cron_expression">
@@ -87,23 +87,26 @@
             [disabled]="!scheduleForm.valid"
             *ngIf="!schedule.id"
             (click)="createSchedule(schedule)" novalidate
-            i18n="@@scheduleFormSaveBtn">Lagre
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="schedule.id"
             [disabled]="!scheduleForm.valid"
             (click)="updateSchedule(schedule)"
-            i18n="@@scheduleFormSaveBtn">Lagre
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()"
-            i18n="@@scheduleFormRevertBtn">Tilbakestill
+            i18n="@@commonButtonRevert">
+      Tilbakestill
     </button>
 
     <button md-raised-button color="warn"
             *ngIf="schedule.id"
             (click)="deleteSchedule(schedule.id); $event.stopPropagation()"
-            i18n="@@scheduleFormDeleteBtn">
+            i18n="@@commonButtonDelete">
       Slett
     </button>
   </div>

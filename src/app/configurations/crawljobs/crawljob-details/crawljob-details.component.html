@@ -12,14 +12,14 @@
   </md-slide-toggle>
 
   <md-form-field formGroupName="meta">
-    <input i18n-placeholder="@@crawljobFormNamePlaceholder" mdInput formControlName="name" placeholder="Navn">
-    <md-error i18n="@@crawljobFormRequieredNameError" *ngIf="! crawlJobForm['controls'].meta['controls'].name.valid">
+    <input i18n-placeholder="@@metaNameInputPlaceholder" mdInput formControlName="name" placeholder="Navn">
+    <md-error i18n="@@metaNameRequiredError" *ngIf="! crawlJobForm['controls'].meta['controls'].name.valid">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
-    <input i18n-placeholder = @@crawljobFormDescriptionPlaceholder
+    <input i18n-placeholder = @@metaDescriptionInputPlaceholder
            mdInput formControlName="description" placeholder="Beskrivelse">
   </md-form-field>
 
@@ -28,7 +28,7 @@
     <md-form-field>
       <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
              mdInput formControlName="depth" type="number" placeholder="Dybde">
-      <md-error i18n="@@crawljobFormRequieredNameError"
+      <md-error i18n="@@crawljobFormDepthRequiredError"
                 *ngIf="! crawlJobForm['controls'].limits['controls'].depth.valid">
         Dybde er påkrevd
       </md-error>
@@ -37,7 +37,7 @@
     <md-form-field>
       <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
              mdInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
-      <md-error i18n="@@crawljobFormRequieredMaxDurationError"
+      <md-error i18n="@@crawljobFormMaxDurationRequiredError"
                 *ngIf="! crawlJobForm['controls'].limits['controls'].max_duration_s.valid">
         Maks tid er påkrevd.
       </md-error>
@@ -46,7 +46,7 @@
     <md-form-field>
       <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
              mdInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
-      <md-error i18n="@@crawljobFormRequiredMaxByteError"
+      <md-error i18n="@@crawljobFormMaxByteRequiredError"
                 *ngIf="! crawlJobForm['controls'].limits['controls'].max_bytes.valid">
         Maks byte er påkrevd.
       </md-error>
@@ -54,7 +54,7 @@
   </div>
 
   <div>
-    <label>Schedule:
+    <label i18n="@@crawljobFormScheduleMultiselectLabel">Schedule:
       <angular2-multiselect [data]="scheduleList"
                             [(ngModel)]="selectedScheduleItems"
                             [settings]="dropdownScheduleSettings"
@@ -62,13 +62,13 @@
       </angular2-multiselect>
     </label>
     <small [hidden]="crawlJobForm['controls'].schedule_id.valid"
-           i18n="@@crawljobFormRequieredScheduleError">
+           i18n="@@crawljobFormScheduleRequiredError">
       Schedule er påkrevd.
     </small>
   </div>
 
   <div>
-    <label>Crawlconfig:
+    <label i18n="@@crawljobFormCrawlconfigMultiselectLabel">Crawlconfig:
       <angular2-multiselect [data]="crawlConfigList"
                             [(ngModel)]="selectedCrawlConfigItems"
                             [settings]="dropdownCrawlConfigSettings"
@@ -76,7 +76,7 @@
       </angular2-multiselect>
     </label>
     <small [hidden]="crawlJobForm['controls'].crawl_config_id.valid"
-            i18n="@@crawljobFormRequieredCrawlconfigError">
+            i18n="@@crawljobFormCrawlconfigRequieredError">
       Crawlconfig er påkrevd.
     </small>
   </div>
@@ -90,22 +90,22 @@
             [disabled]="!crawlJobForm.valid"
             *ngIf="!crawlJob.id"
             (click)="createCrawljob(crawlJobForm.value)" novalidate
-            i18n="@@crawljobFormSaveBtn">Lagre
+            i18n="@@commonButtonSave">Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="crawlJob.id"
             [disabled]="!crawlJobForm.valid"
             (click)="updateCrawljob(crawlJobForm.value)"
-            i18n="@@crawljobFormSaveBtn">Lagre
+            i18n="@@commonButtonSave">Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()"
-            i18n="@@crawljobFormRevertBtn">Tilbakestill
+            i18n="@@commonButtonRevert">Tilbakestill
     </button>
     <button md-raised-button color="warn"
             *ngIf="crawlJob.id"
             (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()"
-            i18n="@@crawljobFormDeleteBtn">Slett
+            i18n="@@commonButtonDelete">Slett
     </button>
   </div>
 </form>

@@ -10,17 +10,19 @@
 
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="name" placeholder="Navn"
-             i18n-placeholder="@@crawlhostgroupconfigFormNamePlaceholder">
+             i18n-placeholder="@@metaNameInputPlaceholder">
       <md-error *ngIf="!name.valid"
-                i18n="@@crawlhostgroupconfigFormRequiredNameError">
+                i18n="@@metaNameRequiredError">
         Navn er påkrevd.
       </md-error>
     </md-form-field>
 
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="description" placeholder="Beskrivelse"
-             i18n-placeholder="@@crawlhostgroupconfigFormDescriptionPlaceholder">
-      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip= {{crawlHostGroupConfigText.descriptionTooltip}}>info
+             i18n-placeholder="@@metaDescriptionInputPlaceholder">
+      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+               mdTooltip= {{crawlHostGroupConfigText.descriptionTooltip}}
+               i18n-mdTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
       </md-icon>
     </md-form-field>
 
@@ -32,17 +34,17 @@
         <div [formGroupName]="i">
           <md-form-field>
             <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:"
-                   i18n-placeholder="@@crawlhostgroupconfigFormFromIpPlaceholder">
+                   i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
             <md-error *ngIf="!ipFromControl?.valid"
-                      i18n="crawlhostgroupconfigFormRequiredValidFromIpError">
+                      i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
               En gyldig IP-addresse er påkrevd.
             </md-error>
           </md-form-field>
           <md-form-field>
             <input mdInput formControlName="ip_to" placeholder="Til IP-addresse"
-                   i18n-placeholder="@@crawlhostgroupconfigFormToIpPlaceholder">
+                   i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
             <md-error *ngIf="!ipToControl?.valid"
-                      i18n="crawlhostgroupconfigFormRequiredValidToIpError">
+                      i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
               En gyldig IP-addresse er påkrevd.
             </md-error>
           </md-form-field>
@@ -53,8 +55,8 @@
       </md-card-content>
       <md-card-actions>
         <button md-button color="accent" (click)="addIpRange()"
-                i18n="@@crawlhostgroupconfigFormAddIpRangeBtn">
-          Legg til IP-range
+                i18n="@@commonButtonAdd">
+          Legg til
         </button>
       </md-card-actions>
     </md-card-content>
@@ -69,26 +71,26 @@
           [disabled]="!crawlHostGroupConfigFG.valid"
           *ngIf="!crawlHostGroupConfig.id"
           (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
-          i18n="@@commonButtonsSave">
+          i18n="@@commonButtonSave">
     Lagre
   </button>
   <button md-button color="primary"
           *ngIf="crawlHostGroupConfig.id"
           [disabled]="!crawlHostGroupConfigFG.valid"
           (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
-          i18n="@@commonButtonsSave">
+          i18n="@@commonButtonSave">
     Lagre
   </button>
   <button md-button color="accent"
           (click)="revert()"
-          i18n="@@commonButtonsRevert">
+          i18n="@@commonButtonRevert">
     Tilbakestill
   </button>
 
   <button md-button color="warn"
           *ngIf="crawlHostGroupConfig.id"
           (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
-          i18n="@@commonButtonsDelete">
+          i18n="@@commonButtonDelete">
     Slett
   </button>
 </md-card-actions>

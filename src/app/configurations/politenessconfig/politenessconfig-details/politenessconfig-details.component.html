@@ -2,7 +2,7 @@
   Politenessconfig Detaljer
 </h2>
 <h2 *ngIf="!politenessConfig.id" i18n="@@politenessconfigNewPolitenessConfigHeader">
-  New Politenessconfig
+  Ny Politenessconfig
 </h2>
 
 <form [formGroup]="politenessConfigFG" fxLayout="column">
@@ -10,21 +10,21 @@
   <div fxLayout="row">
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="name" placeholder="Navn"
-             i18n-placeholder="@@politenessconfigFormNamePlaceholder">
+             i18n-placeholder="@@metaNameInputPlaceholder">
       <md-error *ngIf="! politenessConfigFG.controls.meta.valid"
-                i18n="@@politenessconfigFormRequiredNameError">
+                i18n="@@metaNameRequiredError">
         Navn er påkrevd.
       </md-error>
     </md-form-field>
 
     <md-form-field formGroupName="meta">
       <input mdInput formControlName="description" placeholder="Beskrivelse"
-             i18n-placeholder="@@politenessconfigFormDescriptionPlaceholder">
+             i18n-placeholder="@@metaDescriptionInputPlaceholder">
     </md-form-field>
   </div>
 
   <div>
-    <label>Robots policy:
+    <label i18n="@@politenessconfigFormRobotPolicyMultiselectLabel">Robots policy:
       <angular2-multiselect [data]="robotsPolicyList"
                             [(ngModel)]="selectedRobotsPolicyItems"
                             [settings]="robetsPolicyDropdownSettings"
@@ -32,7 +32,7 @@
       </angular2-multiselect>
     </label>
     <small [hidden]="politenessConfigFG.controls.robots_policy.valid"
-           i18n="@@politenessconfigFormRequiredRobotPolicyError">
+           i18n="@@politenessconfigFormRobotPolicyErrorRequired">
       Robots policy er påkrevd.
     </small>
   </div>
@@ -43,7 +43,7 @@
                 formControlName="custom_robots"
                 placeholder="robots.txt"></textarea>
       <md-error *ngIf="!politenessConfigFG.controls.custom_robots.valid"
-                i18n="@@politenessconfigFormRequiredValidityDurationError">
+                i18n="@@politenessconfigFormValidityDurationRequiredError">
         Validity duration er påkrevd.
       </md-error>
     </md-form-field>
@@ -55,7 +55,7 @@
            placeholder="Minimum robots validity (seconds)"
            i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
     <md-error *ngIf="! politenessConfigFG.controls.minimum_robots_validity_duration_s.valid"
-              i18n="@@politenessconfigFormRequiredMinRobotsValidDurationError">
+              i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
       Validity duration required.
     </md-error>
   </md-form-field>
@@ -66,7 +66,7 @@
            placeholder="Minimum time between page load (ms)"
            i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
     <md-error *ngIf="! politenessConfigFG.controls.min_time_between_page_load_ms.valid"
-              i18n="@@politenessconfigFormRequiredMinTimeBetweenPageloadError">
+              i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
       En minimums tid mellom sideinnlastning er påkrevd.
     </md-error>
   </md-form-field>
@@ -80,7 +80,8 @@
             [disabled]="!politenessConfigFG.valid" *ngIf="!politenessConfig.id"
             (click)="createPolitenessconfig(politenessConfigFG.value)"
             novalidate
-            i18n="@@commonButtonSave">Lagre
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="politenessConfig.id" [disabled]="!politenessConfigFG.valid"
@@ -90,12 +91,14 @@
     </button>
     <button md-raised-button color="accent"
             (click)="revert()"
-            i18n="commonButtonRevert">Tilbakestill
+            i18n="@@commonButtonRevert">
+      Tilbakestill
     </button>
     <button md-raised-button color="warn"
             *ngIf="politenessConfig.id"
             (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()"
-            i18n="@@commonButtonDelete">Slett
+            i18n="@@commonButtonDelete">
+      Slett
     </button>
   </div>
 </form>
