@@ -3,17 +3,26 @@
           [trackBy]="trackById">
 
   <ng-container mdColumnDef="name">
-    <md-header-cell *mdHeaderCellDef>Name</md-header-cell>
+    <md-header-cell *mdHeaderCellDef
+                    i18n="@@baselistNameHeaderCell">
+      Navn
+    </md-header-cell>
     <md-cell *mdCellDef="let row">{{row.meta.name}}</md-cell>
   </ng-container>
 
   <ng-container mdColumnDef="description">
-    <md-header-cell *mdHeaderCellDef>Description</md-header-cell>
+    <md-header-cell *mdHeaderCellDef
+                    i18n="@@baselistDescriptionHeaderCell">
+      Description
+    </md-header-cell>
     <md-cell *mdCellDef="let row">{{row.meta.description}}</md-cell>
   </ng-container>
 
   <ng-container mdColumnDef="id">
-    <md-header-cell *mdHeaderCellDef>ID</md-header-cell>
+    <md-header-cell *mdHeaderCellDef
+                    i18n="@@baselistIdHeaderCell">
+      ID
+    </md-header-cell>
     <md-cell *mdCellDef="let row">{{row.id}}</md-cell>
   </ng-container>
 
