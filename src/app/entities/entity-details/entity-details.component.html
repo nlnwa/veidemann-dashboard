@@ -2,24 +2,28 @@
   <md-card *ngIf="entity">
     <md-card-header>
       <md-card-title>
-        <span>ENTITET</span>
+        <span i18n="@@entityDetailsCardTitle">ENTITET</span>
       </md-card-title>
       <md-card-subtitle>
-        <span *ngIf="!entity.id">Ny (ikke lagret)</span>
+        <span *ngIf="!entity.id"
+              i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)</span>
       </md-card-subtitle>
     </md-card-header>
     <md-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
           <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn">
-            <md-error *ngIf="!form.get('meta.name').valid">
+            <input mdInput formControlName="name" placeholder="Navn"
+                   i18n-placeholder="@@metaNameInputPlaceholder">
+            <md-error *ngIf="!form.get('meta.name').valid"
+                      i18n="@@metaRequiredNameError">
               Navn er påkrevd.
             </md-error>
           </md-form-field>
 
           <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse">
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
             <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip={{entityDetailsText.addDescriptionTooltip}}>info</md-icon>
           </md-form-field>
         </ng-container>
@@ -27,34 +31,39 @@
         <md-form-field>
           <input mdInput
                  formControlName="id"
-                 placeholder="Id">
+                 placeholder="Id"
+                 i18n-placeholder="@@metaIdInputPlaceholder">
         </md-form-field>
 
         <ng-container formGroupName="meta">
           <md-form-field formGroupName="created">
             <input mdInput
                    formControlName="seconds"
-                   placeholder="Created">
+                   placeholder="Opprettet"
+                   i18n-placeholder="@@metaCreatedInputPlaceholder">
           </md-form-field>
 
           <md-form-field>
             <input mdInput
                    formControlName="created_by"
-                   placeholder="Created by">
+                   placeholder="Opprettet av"
+                   i18n-placeholder="@@metaCreatedByInputPlaceholder">
           </md-form-field>
 
 
           <md-form-field formGroupName="last_modified">
             <input mdInput
                    formControlName="seconds"
-                   placeholder="Last modified">
+                   placeholder="Sist endret"
+                   i18n-placeholder="@@metaLastModifiedInputPlaceholder">
           </md-form-field>
 
 
           <md-form-field>
             <input mdInput
                    formControlName="last_modified_by"
-                   placeholder="Last modified by">
+                   placeholder="Sist endret av"
+                   i18n="@@metaLastModisfiedByInputPlaceholder">
           </md-form-field>
         </ng-container>
       </div>
@@ -65,7 +74,7 @@
         </ng-container>
         <!-- Seedlist -->
         <md-toolbar>
-          <span>Seed</span>
+          <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
           <span class="fill-space"></span>
           <button md-mini-fab (click)="onCreateSeed()">
             <md-icon>add</md-icon>
@@ -78,19 +87,23 @@
     <md-card-actions>
       <button md-raised-button color="primary"
               *ngIf="!entity.id" [disabled]="!form.valid"
-              (click)="onSave()">
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="entity.id" [disabled]="!form.dirty || !form.valid"
-              (click)="onUpdate()">Lagre
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">Lagre
       </button>
       <button md-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!form.dirty">Tilbakestill
+              [disabled]="!form.dirty"
+              i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button md-raised-button color="warn"
-              (click)="onDelete()">Slett
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">Slett
       </button>
     </md-card-actions>
   </md-card>
