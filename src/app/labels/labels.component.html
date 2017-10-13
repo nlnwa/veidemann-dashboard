@@ -32,7 +32,9 @@
            i18n-placeholder="@@labelFormAddNewTypePlaceholder">
     <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
              i18n-mdTooltip="=@@labelNewLabelKeyTooltip"
-             mdTooltip={{labelText.newLabelKeyTooltip}}>info
+             mdTooltip='Hva skal merkelappen beskrive?
+             Eks. Org.nummer, kategorisering, begivenhet'>
+    info
     </md-icon>
   </md-form-field>
   <md-form-field>
@@ -40,14 +42,16 @@
            i18n-placeholder="@@labelFormAddNewValuePlaceholder">
     <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
              i18n-mdTooltip="@@labelNewLabelValueTooltip"
-             mdTooltip={{labelText.newLabelValueTooltip}}>info
+             mdTooltip='En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
+             Eks. offentlig nettsted, nettavis, Valg 2017'>
+      info
     </md-icon>
   </md-form-field>
   <md-card-actions>
     <button i18n="@@commonButtonAdd" md-button color="accent"
             (click)="onNewLabel(newKey.value, newValue.value)">Legg til
     </button>
-    <button i18n="@@commonButtonCancel"md-button color="warn"
+    <button i18n="@@commonButtonCancel" md-button color="warn"
             (click)="newLabelCard(false)">Avbryt
     </button>
   </md-card-actions>

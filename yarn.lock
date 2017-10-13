@@ -165,6 +165,14 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/platform-server@^4.4.5":
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-4.4.5.tgz#76f23b2c384ed7395dc1793cf85978883ba2cb50"
+  dependencies:
+    parse5 "^3.0.1"
+    tslib "^1.7.1"
+    xhr2 "^0.1.4"
+
 "@angular/router@4.4.3":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.4.3.tgz#26cc94775a3860946aeaf1c2e8f60f4d44e90991"
@@ -3761,6 +3769,12 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
+parse5@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-3.0.2.tgz#05eff57f0ef4577fb144a79f8b9a967a6cc44510"
+  dependencies:
+    "@types/node" "^6.0.46"
+
 parsejson@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/parsejson/-/parsejson-0.0.3.tgz#ab7e3759f209ece99437973f7d0f1f64ae0e64ab"
@@ -5666,6 +5680,10 @@ ws@^1.0.1:
 wtf-8@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wtf-8/-/wtf-8-1.0.0.tgz#392d8ba2d0f1c34d1ee2d630f15d0efb68e1048a"
+
+xhr2@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
 
 xml-char-classes@^1.0.0:
   version "1.0.0"

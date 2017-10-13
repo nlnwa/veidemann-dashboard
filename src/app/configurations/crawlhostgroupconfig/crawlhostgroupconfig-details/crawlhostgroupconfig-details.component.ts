@@ -4,14 +4,13 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange, Label} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 import {Observable} from 'rxjs/Observable';
-import {CrawlHostGroupConfigText} from '../crawlhostgroupconfig-text';
 
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css'],
-  providers: [SnackBarService, CrawlHostGroupConfigText],
+  providers: [SnackBarService],
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   @Input()
@@ -43,8 +42,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
               private fb: FormBuilder,
-              private snackBarService: SnackBarService,
-              public crawlHostGroupConfigText: CrawlHostGroupConfigText) {
+              private snackBarService: SnackBarService) {
     this.createForm();
   }
 

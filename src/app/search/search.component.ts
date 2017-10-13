@@ -7,15 +7,13 @@ import {Entity, Seed} from '../commons/models/config.model';
 import {SearchService} from '../search-service/search.service';
 import {BaseListComponent} from '../base-list/base-list.component';
 import {EntityDetailsComponent} from '../entities/entity-details/entity-details.component';
-import {SearchText} from './search-text/search-text';
 
 
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
-  providers: [SearchText]
+  styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
   @ViewChild(BaseListComponent)
@@ -34,7 +32,7 @@ export class SearchComponent implements OnInit {
   selectedEntity: Entity = null;
   selectedSeed: Seed = null;
 
-  constructor(private searchService: SearchService, public searchText: SearchText) {}
+  constructor(private searchService: SearchService) {}
 
   ngOnInit() {
     this.searchTerm
