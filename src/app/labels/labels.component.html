@@ -1,48 +1,59 @@
-<md-card-content>
-  <md-card-header>
-    <md-card-title>{{type}}</md-card-title>
-  </md-card-header>
+<md-toolbar>
+  <h1 *ngIf="type =='Label'">
+    <ng-container i18n="@@labelToolbarHeader">Merkelapp
+    </ng-container>
+  </h1>
+  <h1 *ngIf="type =='Selector'">
+    <ng-container i18n="@@labelSelectorToolbarHeader">Selector
+    </ng-container>
+  </h1>
+  <span class="fill-space"></span>
+  <button md-mini-fab (click)="newLabelCard(true)">
+    <md-icon>add</md-icon>
+  </button>
+</md-toolbar>
 
-  <md-card-content *ngFor="let group of groups" fxLayout="columns" class="labelList">
-    <div fxLayout="row" fxLayoutAlign="center center">
-      <p class="key">{{group.key}}:</p>
-      <ng-container *ngFor="let value of group.values">
-        <div class="chip">{{value}}
-          <button class="removeValueIcon" md-icon-button (click)="removeLabel(group.key, value)">
-            <md-icon class="md-24">cancel</md-icon>
-          </button>
-        </div>
-      </ng-container>
-    </div>
-  </md-card-content>
-  <md-card-actions>
-    <button md-button color="accent"
-            (click)="newLabelCard(true)"> Legg til {{type}}
-    </button>
-  </md-card-actions>
-
-  <md-card-content *ngIf="showAddLabelCard" class="newLabelCard">
-    <md-form-field>
-      <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput">
-      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="Hva skal {{type}}en beskrive?
-    Eks. Org.nummer, kategorisering, begivenhet">info
-      </md-icon>
-    </md-form-field>
-    <md-form-field>
-      <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput">
-      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500" mdTooltip="En verdi gir en {{type}} Den brukes for å merke og identifisere en entitet eller seed.
-    Eks. offentlig nettsted, nettavis, Valg 2017">info
-      </md-icon>
-    </md-form-field>
-    <md-card-actions>
-      <button md-button color="accent"
-              (click)="onNewLabel(newKey.value, newValue.value)">Legg til
-      </button>
-      <button md-button color="warn"
-              (click)="newLabelCard(false)">Avbryt
-      </button>
-    </md-card-actions>
-  </md-card-content>
+<md-card-content *ngFor="let group of groups" fxLayout="columns" class="labelList">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <p class="key">{{group.key}}:</p>
+    <ng-container *ngFor="let value of group.values">
+      <div class="chip">{{value}}
+        <button class="removeValueIcon" md-icon-button (click)="removeLabel(group.key, value)">
+          <md-icon class="md-24">cancel</md-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </md-card-content>
 
+<md-card-content *ngIf="showAddLabelCard" class="newLabelCard">
+  <md-form-field>
+    <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput"
+           i18n-placeholder="@@labelFormAddNewTypePlaceholder">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+             i18n-mdTooltip="=@@labelNewLabelKeyTooltip"
+             mdTooltip='Hva skal merkelappen beskrive?
+             Eks. Org.nummer, kategorisering, begivenhet'>
+    info
+    </md-icon>
+  </md-form-field>
+  <md-form-field>
+    <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput"
+           i18n-placeholder="@@labelFormAddNewValuePlaceholder">
+    <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+             i18n-mdTooltip="@@labelNewLabelValueTooltip"
+             mdTooltip='En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
+             Eks. offentlig nettsted, nettavis, Valg 2017'>
+      info
+    </md-icon>
+  </md-form-field>
+  <md-card-actions>
+    <button i18n="@@commonButtonAdd" md-button color="accent"
+            (click)="onNewLabel(newKey.value, newValue.value)">Legg til
+    </button>
+    <button i18n="@@commonButtonCancel" md-button color="warn"
+            (click)="newLabelCard(false)">Avbryt
+    </button>
+  </md-card-actions>
+</md-card-content>
 

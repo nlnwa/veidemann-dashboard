@@ -12,7 +12,7 @@ import 'rxjs/add/operator/take';
 @Component({
   selector: 'app-entity-details',
   templateUrl: './entity-details.component.html',
-  styleUrls: ['./entity-details.component.css']
+  styleUrls: ['./entity-details.component.css'],
 })
 export class EntityDetailsComponent {
 

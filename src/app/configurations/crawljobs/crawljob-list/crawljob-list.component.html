@@ -1,4 +1,4 @@
-<h2>Crawljobs</h2>
+<h2 i18n="@@crawljobsListHeader ">Crawljobs</h2>
 
 <md-nav-list>
   <md-list-item
@@ -9,7 +9,8 @@
 </md-nav-list>
 
 <button md-raised-button color="warn"
-        (click)="createNewCrawlJob()">New
+        (click)="createNewCrawlJob()"
+        i18n="@@commonButtonNew">New
 </button>
 
 <ng-container *ngIf="selectedCrawlJob">

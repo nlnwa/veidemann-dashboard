@@ -1,31 +1,39 @@
-<h2 *ngIf="politenessConfig.id">Politenessconfig Details</h2>
-<h2 *ngIf="!politenessConfig.id">New Politenessconfig</h2>
+<h2 *ngIf="politenessConfig.id" i18n="@@politenessconfigDetailsHeader">
+  Politenessconfig Detaljer
+</h2>
+<h2 *ngIf="!politenessConfig.id" i18n="@@politenessconfigNewPolitenessConfigHeader">
+  Ny Politenessconfig
+</h2>
 
 <form [formGroup]="politenessConfigFG" fxLayout="column">
 
   <div fxLayout="row">
     <md-form-field formGroupName="meta">
-      <input mdInput formControlName="name" placeholder="Navn">
-      <md-error *ngIf="! politenessConfigFG.controls.meta.valid">
+      <input mdInput formControlName="name" placeholder="Navn"
+             i18n-placeholder="@@metaNameInputPlaceholder">
+      <md-error *ngIf="! politenessConfigFG.controls.meta.valid"
+                i18n="@@metaNameRequiredError">
         Navn er påkrevd.
       </md-error>
     </md-form-field>
 
     <md-form-field formGroupName="meta">
-      <input mdInput formControlName="description" placeholder="Beskrivelse">
+      <input mdInput formControlName="description" placeholder="Beskrivelse"
+             i18n-placeholder="@@metaDescriptionInputPlaceholder">
     </md-form-field>
   </div>
 
   <div>
-    <label>Robots policy:
+    <label i18n="@@politenessconfigFormRobotPolicyMultiselectLabel">Robots policy:
       <angular2-multiselect [data]="robotsPolicyList"
                             [(ngModel)]="selectedRobotsPolicyItems"
                             [settings]="robetsPolicyDropdownSettings"
                             formControlName="robots_policy">
       </angular2-multiselect>
     </label>
-    <small [hidden]="politenessConfigFG.controls.robots_policy.valid">
-      Robots policy required.
+    <small [hidden]="politenessConfigFG.controls.robots_policy.valid"
+           i18n="@@politenessconfigFormRobotPolicyErrorRequired">
+      Robots policy er påkrevd.
     </small>
   </div>
   <ng-container
@@ -34,8 +42,9 @@
       <textarea mdInput
                 formControlName="custom_robots"
                 placeholder="robots.txt"></textarea>
-      <md-error *ngIf="!politenessConfigFG.controls.custom_robots.valid">
-        Validity duration required.
+      <md-error *ngIf="!politenessConfigFG.controls.custom_robots.valid"
+                i18n="@@politenessconfigFormValidityDurationRequiredError">
+        Validity duration er påkrevd.
       </md-error>
     </md-form-field>
   </ng-container>
@@ -43,8 +52,10 @@
   <md-form-field>
     <input mdInput
            formControlName="minimum_robots_validity_duration_s"
-           placeholder="Minimum robots validity (seconds)">
-    <md-error *ngIf="! politenessConfigFG.controls.minimum_robots_validity_duration_s.valid">
+           placeholder="Minimum robots validity (seconds)"
+           i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
+    <md-error *ngIf="! politenessConfigFG.controls.minimum_robots_validity_duration_s.valid"
+              i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
       Validity duration required.
     </md-error>
   </md-form-field>
@@ -52,9 +63,11 @@
   <md-form-field>
     <input mdInput
            formControlName="min_time_between_page_load_ms"
-           placeholder="Minimum time between page load (ms)">
-    <md-error *ngIf="! politenessConfigFG.controls.min_time_between_page_load_ms.valid">
-      Minimum time between page load is required.
+           placeholder="Minimum time between page load (ms)"
+           i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
+    <md-error *ngIf="! politenessConfigFG.controls.min_time_between_page_load_ms.valid"
+              i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
+      En minimums tid mellom sideinnlastning er påkrevd.
     </md-error>
   </md-form-field>
 
@@ -66,19 +79,26 @@
     <button md-raised-button color="primary"
             [disabled]="!politenessConfigFG.valid" *ngIf="!politenessConfig.id"
             (click)="createPolitenessconfig(politenessConfigFG.value)"
-            novalidate>Lagre
+            novalidate
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="politenessConfig.id" [disabled]="!politenessConfigFG.valid"
-            (click)="updatePolitenessconfig(politenessConfigFG.value)">
+            (click)="updatePolitenessconfig(politenessConfigFG.value)"
+            i18n="@@commonButtonSave">
       Lagre
     </button>
     <button md-raised-button color="accent"
-            (click)="revert()">Tilbakestill
+            (click)="revert()"
+            i18n="@@commonButtonRevert">
+      Tilbakestill
     </button>
     <button md-raised-button color="warn"
             *ngIf="politenessConfig.id"
-            (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()">Slett
+            (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()"
+            i18n="@@commonButtonDelete">
+      Slett
     </button>
   </div>
 </form>

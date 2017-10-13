@@ -1,11 +1,13 @@
-<h2 *ngIf="schedule.id">Schedule Details</h2>
-<h2 *ngIf="!schedule.id">New Schedule</h2>
+<h2 i18n="@@scheduleDetailsHeader" *ngIf="schedule.id">Schedule Detaljer</h2>
+<h2 i18n="@@newScheduleHeader" *ngIf="!schedule.id">Ny Schedule</h2>
 <form [formGroup]="scheduleForm" fxLayout="column">
   <md-form-field formGroupName="meta">
     <input mdInput
            formControlName="name"
-           placeholder="Navn">
-    <md-error *ngIf="! scheduleForm['controls'].meta['controls'].name.valid">
+           placeholder="Navn"
+           i18n-placeholder="@@metaNameInputPlaceholder">
+    <md-error *ngIf="! scheduleForm['controls'].meta['controls'].name.valid"
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
@@ -13,53 +15,66 @@
   <md-form-field formGroupName="meta">
     <input mdInput
            formControlName="description"
-           placeholder="Beskrivelse">
+           placeholder="Beskrivelse"
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <div formGroupName="cron_expression">
-    <h3>Cron expression</h3>
+    <h3 i18n="@@scheduleFormCronExpressionHeader">Cron expression</h3>
     <md-form-field>
-      <input mdInput formControlName="minute" placeholder="Minute">
+      <input mdInput formControlName="minute" placeholder="Minutt"
+             i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="hour" placeholder="Hour">
+      <input mdInput formControlName="hour" placeholder="Time"
+             i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="dom" placeholder="Dom">
+      <input mdInput formControlName="dom" placeholder="Dom"
+             i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="month" placeholder="Month">
+      <input mdInput formControlName="month" placeholder="Måned"
+             i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="dow" placeholder="Dow">
+      <input mdInput formControlName="dow" placeholder="Dow"
+             i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
     </md-form-field>
-    <md-error *ngIf="!scheduleForm['controls'].cron_expression.valid">
-      Cron expression required.
+    <md-error *ngIf="!scheduleForm['controls'].cron_expression.valid"
+              i18n="@@scheduleFormCronExpressionRequiredError">
+      Cron expression er påkrevd.
     </md-error>
   </div>
 
   <div formGroupName="valid_from">
-    <h3>Valid from</h3>
+    <h3 i18n="@@scheduleFormValidFromHeader">Gyldig fra</h3>
     <md-form-field>
-      <input mdInput formControlName="year" placeholder="Year">
+      <input mdInput formControlName="year" placeholder="År"
+             i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="month" placeholder="Month">
+      <input mdInput formControlName="month" placeholder="Måned"
+             i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="day" placeholder="Day">
+      <input mdInput formControlName="day" placeholder="Dag"
+             i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
     </md-form-field>
   </div>
   <div formGroupName="valid_to">
-    <h3>Valid to</h3>
+    <h3 i18n="@@scheduleFormValidToHeader">Gyldig til</h3>
     <md-form-field>
-      <input mdInput formControlName="year" placeholder="Year">
+      <input mdInput formControlName="year" placeholder="År"
+             i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="month" placeholder="Month">
+      <input mdInput formControlName="month" placeholder="Måned"
+             i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
     </md-form-field>
     <md-form-field>
-      <input mdInput formControlName="day" placeholder="Day">
+      <input mdInput formControlName="day" placeholder="Dag"
+             i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
     </md-form-field>
   </div>
 
@@ -71,20 +86,27 @@
     <button md-raised-button color="primary"
             [disabled]="!scheduleForm.valid"
             *ngIf="!schedule.id"
-            (click)="createSchedule(schedule)" novalidate>Lagre
+            (click)="createSchedule(schedule)" novalidate
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="schedule.id"
             [disabled]="!scheduleForm.valid"
-            (click)="updateSchedule(schedule)">Lagre
+            (click)="updateSchedule(schedule)"
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="accent"
-            (click)="revert()">Tilbakestill
+            (click)="revert()"
+            i18n="@@commonButtonRevert">
+      Tilbakestill
     </button>
 
     <button md-raised-button color="warn"
             *ngIf="schedule.id"
-            (click)="deleteSchedule(schedule.id); $event.stopPropagation()">
+            (click)="deleteSchedule(schedule.id); $event.stopPropagation()"
+            i18n="@@commonButtonDelete">
       Slett
     </button>
   </div>

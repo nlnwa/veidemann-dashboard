@@ -1,4 +1,4 @@
-<h2>Browserscripts</h2>
+<h2 i18n="@@browserscriptListHeader">Browserscripts</h2>
 <md-nav-list>
   <md-list-item
     *ngFor="let browserscript of browserScripts" (click)="selectBrowserScript(browserscript)"
@@ -8,7 +8,8 @@
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewBrowserScript()">New
+        (click)="createNewBrowserScript()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedBrowserScript">

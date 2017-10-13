@@ -5,15 +5,20 @@
         <input mdInput
                (keyup.enter)="onEnterKey($event)"
                placeholder="Søk"
-               autofocus>
+               autofocus
+               i18n-placeholder="@@searchSearchFieldPlaceholder">
       </md-form-field>
     </div>
     <div>
       <md-toolbar>
-        <h1>Entitet</h1>
+        <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
         <span class="fill-space"></span>
         <button md-mini-fab (click)="onCreateEntity()">
-          <md-icon>add</md-icon>
+          <md-icon mdTooltipShowDelay="500"
+                   mdTooltip='En entitet besitter et eller flere nettsted.
+                   Eks. VG (vg.no) eller Nasjonalbiblioteket (nb.no, ibsen.no, pliktavlevering.no)'
+                   i18n-mdTooltip="@@searchAddNewEntityTooltip">add
+          </md-icon>
         </button>
       </md-toolbar>
       <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>

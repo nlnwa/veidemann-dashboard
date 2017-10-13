@@ -1,4 +1,4 @@
-<h2>Crawlhostgroupconfigs</h2>
+<h2 i18n="@@crawlhostgroupconfigListHeader">Crawlhostgroupconfigs</h2>
 <md-nav-list>
   <md-list-item
     *ngFor="let crawlhostgroupconfig of crawlHostGroupConfigs"
@@ -8,7 +8,8 @@
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewCrawlHostGroupConfig()">New
+        (click)="createNewCrawlHostGroupConfig()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedCrawlHostGroupConfig">

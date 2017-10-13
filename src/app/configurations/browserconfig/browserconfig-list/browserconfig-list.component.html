@@ -1,4 +1,4 @@
-<h2>Browserconfigs</h2>
+<h2 i18n="@@browserconfigListHeader">Browserconfigs</h2>
 <md-nav-list>
   <md-list-item
     *ngFor="let browserconfig of browserConfigs" (click)="selectBrowserConfig(browserconfig)"
@@ -8,7 +8,8 @@
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewBrowserConfig()">New
+        (click)="createNewBrowserConfig()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedBrowserConfig">

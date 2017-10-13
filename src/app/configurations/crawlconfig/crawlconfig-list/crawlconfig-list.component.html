@@ -1,4 +1,4 @@
-<h2>Crawlconfigs</h2>
+<h2 i18n="@@crawlconfigListHeader">Crawlconfigs</h2>
 <md-nav-list>
   <md-list-item
     *ngFor="let crawlconfig of crawlConfigs" (click)="selectCrawlConfig(crawlconfig)"
@@ -7,7 +7,8 @@
   </md-list-item>
 </md-nav-list>
 <button md-raised-button color="primary"
-        (click)="createNewCrawlConfig()">New
+        (click)="createNewCrawlConfig()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedCrawlConfig">

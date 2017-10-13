@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnChanges} from '@angular/core';
+import {Component, forwardRef, Input, OnChanges,} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
 
@@ -11,22 +11,20 @@ import {Label} from '../commons/models/config.model';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => LabelsComponent),
     multi: true
-  }]
+  }],
 })
+
 export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
   @Input() disabled = false;
   @Input() type;
+
   public showAddLabelCard = false;
-
   private labels: Label[];
-
   newKeyInput: string;
   newValueInput: string;
 
-
   constructor() {
-
   }
 
   // Function to call when the rating changes.
@@ -36,7 +34,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   onTouched = () => {};
 
   ngOnChanges(): void {
-    this.newKeyInput =  '';
+    this.newKeyInput = '';
     this.newValueInput = '';
     this.showAddLabelCard = false;
   }
@@ -103,4 +101,6 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.labels.splice(index, 1);
     this.onChange(this.labels);
   }
+
 }
+

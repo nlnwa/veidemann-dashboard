@@ -8,11 +8,11 @@ import {Label, Seed} from '../../commons/models/config.model';
 import {UrlHelper} from '../../commons/url-util';
 import 'rxjs/add/operator/concat';
 
+
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
-  styleUrls: ['./seed-details.component.css'],
-
+  styleUrls: ['./seed-details.component.css']
 })
 
 export class SeedDetailComponent {

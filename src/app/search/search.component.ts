@@ -9,6 +9,7 @@ import {BaseListComponent} from '../base-list/base-list.component';
 import {EntityDetailsComponent} from '../entities/entity-details/entity-details.component';
 
 
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',

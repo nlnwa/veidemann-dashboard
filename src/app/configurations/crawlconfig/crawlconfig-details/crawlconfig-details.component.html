@@ -1,43 +1,54 @@
-<h2 *ngIf="crawlConfig.id">Crawlconfig Details</h2>
-<h2 *ngIf="!crawlConfig.id">New Crawlconfig</h2>
+<h2 *ngIf="crawlConfig.id"
+    i18n="@@crawlconfigDetailsHeader">Crawlconfig Detaljer
+</h2>
+<h2 *ngIf="!crawlConfig.id"
+    i18n="@@crawlconfigNewCrawlconfigHeader">Ny Crawlconfig
+</h2>
 
 
 <form [formGroup]="crawlConfigFG" fxLayout="column">
 
   <md-form-field formGroupName="meta">
-    <input mdInput formControlName="name" placeholder="Navn">
-    <md-error *ngIf="! crawlConfigFG.controls.meta.valid">
+    <input mdInput formControlName="name" placeholder="Navn"
+           i18n-placeholder="@@metaNameInputPlaceholder">
+    <md-error *ngIf="! crawlConfigFG.controls.meta.valid"
+              i18n="@@metaNameRequiredError">
       Navn er påkrevd.
     </md-error>
   </md-form-field>
 
   <md-form-field formGroupName="meta">
-    <input mdInput formControlName="description" placeholder="Beskrivelse">
+    <input mdInput formControlName="description" placeholder="Beskrivelse"
+           i18n-placeholder="@@metaDescriptionInputPlaceholder">
   </md-form-field>
 
   <div>
-    <label>Browserconfig:
+    <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
+      Browserconfig:
       <angular2-multiselect [data]="browserConfigList"
                             [(ngModel)]="selectedBrowserConfigItems"
                             [settings]="dropdownBrowserConfigSettings"
                             formControlName="browser_config_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawlConfigFG.controls.browser_config_id.valid">
-      Browserconfig required.
+    <small [hidden]="crawlConfigFG.controls.browser_config_id.valid"
+           i18n="@@crawlconfigFormBrowserconfigRequiredError">
+      Browserconfig er påkrevd.
     </small>
   </div>
 
   <div>
-    <label>Politenessconfig:
+    <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
+      Politenessconfig:
       <angular2-multiselect [data]="politenessConfigList"
                             [(ngModel)]="selectedPolitenessConfigItems"
                             [settings]="dropdownPolitenessConfigSettings"
                             formControlName="politeness_id">
       </angular2-multiselect>
     </label>
-    <small [hidden]="crawlConfigFG.controls.politeness_id.valid">
-      Politenessconfig required.
+    <small [hidden]="crawlConfigFG.controls.politeness_id.valid"
+           i18n="@@crawlconfigFormPolitenessconfigRequiredError">
+      Politenessconfig er påkrevd.
     </small>
   </div>
 
@@ -45,55 +56,63 @@
     <input mdInput
            formControlName="minimum_dns_ttl_s"
            placeholder="DNS TTL">
-    <md-error *ngIf="! crawlConfigFG.controls.minimum_dns_ttl_s.valid">
-      minimum_dns_ttl_s required.
+    <md-error *ngIf="! crawlConfigFG.controls.minimum_dns_ttl_s.valid"
+              i18n="@@crawlconfigFormMinDNSTTLRequiredError">
+      minimum_dns_ttl_s er påkrevd.
     </md-error>
   </md-form-field>
 
   <div formGroupName="extra">
     <md-radio-group formControlName="extract_text">
-      Ekstraher tekst
-      <md-radio-button value="true">Ja</md-radio-button>
-      <md-radio-button value="false">Nei</md-radio-button>
+      <ng-container i18n="@@crawlconfigFormExtractTextLabel">Ekstraher tekst</ng-container>
+      <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
+      <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
     </md-radio-group>
   </div>
 
   <div formGroupName="extra">
     <md-radio-group formControlName="create_snapshot">
-      Lag snapshots
-      <md-radio-button value="true">Ja</md-radio-button>
-      <md-radio-button value="false">Nei</md-radio-button>
+      <ng-container i18n="@@crawlconfigFormCreateSnapshotLabel">Lag snapshots</ng-container>
+      <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
+      <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
     </md-radio-group>
   </div>
 
   <md-radio-group formControlName="depth_first">
-    Dybde først
-    <md-radio-button value="true">Ja</md-radio-button>
-    <md-radio-button value="false">Nei</md-radio-button>
+    <ng-container i18n="@@crawlconfigFormDepthFirstLabel">Dybde først</ng-container>
+    <md-radio-button value="true" i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
+    <md-radio-button value="false" i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
   </md-radio-group>
 
   <ng-container formGroupName="meta">
-  <app-labels type="Label" formControlName="label"></app-labels>
+    <app-labels type="Label" formControlName="label"></app-labels>
   </ng-container>
 
   <div>
     <button md-raised-button color="primary"
             [disabled]="!crawlConfigFG.valid"
             *ngIf="!crawlConfig.id"
-            (click)="createCrawlConfig(crawlConfigFG.value)" novalidate>
+            (click)="createCrawlConfig(crawlConfigFG.value)" novalidate
+            i18n="@@commonButtonSave">
       Lagre
     </button>
     <button md-raised-button color="primary"
             *ngIf="crawlConfig.id"
             [disabled]="!crawlConfigFG.valid"
-            (click)="updateCrawlConfig(crawlConfigFG.value)">Lagre
+            (click)="updateCrawlConfig(crawlConfigFG.value)"
+            i18n="@@commonButtonSave">
+      Lagre
     </button>
     <button md-raised-button color="accent"
-            (click)="revert()">Tilbakestill
+            (click)="revert()"
+            i18n="@@commonButtonRevert">
+      Tilbakestill
     </button>
     <button md-raised-button color="warn"
             *ngIf="crawlConfig.id"
-            (click)="deleteCrawlConfig(crawlConfig.id); $event.stopPropagation()">Slett
+            (click)="deleteCrawlConfig(crawlConfig.id); $event.stopPropagation()"
+            i18n="@@commonButtonDelete">
+      Slett
     </button>
   </div>
 </form>
