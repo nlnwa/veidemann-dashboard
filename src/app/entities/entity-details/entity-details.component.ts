@@ -90,7 +90,7 @@ export class EntityDetailsComponent {
           seconds: DateTime.convertFullTimestamp(entity.meta.last_modified.seconds),
         },
         last_modified_by: entity.meta.last_modified_by,
-        label: entity.meta.label,
+        label: [...entity.meta.label],
       },
     });
     this.form.markAsPristine();
