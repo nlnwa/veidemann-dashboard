@@ -99,7 +99,7 @@ export class SeedDetailComponent {
           seconds: DateTime.convertFullTimestamp(seed.meta.last_modified.seconds),
         },
         last_modified_by: seed.meta.last_modified_by,
-        label: seed.meta.label,
+        label: [...seed.meta.label],
       }
     });
     this.form.markAsPristine();
