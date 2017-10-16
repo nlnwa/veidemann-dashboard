@@ -81,12 +81,13 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.crawlJobForm.controls['meta'].patchValue({
       name: crawljob.meta.name as string,
       description: crawljob.meta.description as string,
+      label: [...crawljob.meta.label]
     });
-    this.crawlJobForm.get('meta.label').setValue(crawljob.meta.label);
     this.setDropdown();
     this.selectedScheduleItems = [];
     this.selectedCrawlConfigItems = [];
     this.crawlJobForm.controls['disabled'].setValue((crawljob.disabled)as boolean);
+    this.crawlJobForm.markAsPristine();
   };
 
   ngOnChanges() {

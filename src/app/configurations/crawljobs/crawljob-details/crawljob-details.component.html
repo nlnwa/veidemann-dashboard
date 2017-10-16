@@ -1,91 +1,90 @@
-<h2 i18n="@@crawljobDetailsHeader"*ngIf="crawlJob.id">
-  Crawljob Detaljer
-</h2>
-<h2 i18n="@@newCrawljobHeader"*ngIf="!crawlJob.id">
-  Ny Crawljob
-</h2>
+<form [formGroup]="crawlJobForm">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <span *ngIf="crawlJob" i18n="@@crawljobDetailsHeader">Crawljob</span>
+      </md-card-title>
+      <md-card-subtitle>
+        <span *ngIf="!crawlJob.id" i18n="@@newCrawljobHeader">Ny (ikke lagret)</span>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content fxLayout="row" fxLayoutWrap>
+      <div fxFlex fxLayout="column" fxLayoutWrap>
 
-<form [formGroup]="crawlJobForm" fxLayout="column">
+        <md-slide-toggle i18n="@@disableCrawljobToggleSwitch" formControlName="disabled">
+          Deaktivert
+        </md-slide-toggle>
 
-  <md-slide-toggle i18n="@@disableCrawljobToggleSwitch" formControlName = "disabled">
-    Deaktivert
-  </md-slide-toggle>
+        <md-form-field formGroupName="meta">
+          <input i18n-placeholder=@@metaDescriptionInputPlaceholder
+                 mdInput formControlName="description" placeholder="Beskrivelse">
+        </md-form-field>
 
-  <md-form-field formGroupName="meta">
-    <input i18n-placeholder="@@metaNameInputPlaceholder" mdInput formControlName="name" placeholder="Navn">
-    <md-error i18n="@@metaNameRequiredError" *ngIf="! crawlJobForm['controls'].meta['controls'].name.valid">
-      Navn er påkrevd.
-    </md-error>
-  </md-form-field>
+        <ng-container formGroupName="limits">
+          <md-form-field>
+            <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
+                   mdInput formControlName="depth" type="number" placeholder="Dybde">
+            <md-error i18n="@@crawljobFormDepthRequiredError"
+                      *ngIf="! crawlJobForm['controls'].limits['controls'].depth.valid">
+              Dybde er påkrevd
+            </md-error>
+          </md-form-field>
+          <md-form-field>
+            <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
+                   mdInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
+            <md-error i18n="@@crawljobFormMaxDurationRequiredError"
+                      *ngIf="! crawlJobForm['controls'].limits['controls'].max_duration_s.valid">
+              Maks tid er påkrevd.
+            </md-error>
+          </md-form-field>
+          <md-form-field>
+            <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
+                   mdInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
+            <md-error i18n="@@crawljobFormMaxByteRequiredError"
+                      *ngIf="! crawlJobForm['controls'].limits['controls'].max_bytes.valid">
+              Maks byte er påkrevd.
+            </md-error>
+          </md-form-field>
+        </ng-container>
+      </div>
 
-  <md-form-field formGroupName="meta">
-    <input i18n-placeholder = @@metaDescriptionInputPlaceholder
-           mdInput formControlName="description" placeholder="Beskrivelse">
-  </md-form-field>
+      <div fxFlex fxLayout="column">
+        <div>
+          <label i18n="@@crawljobFormScheduleMultiselectLabel">Schedule:
+            <angular2-multiselect [data]="scheduleList"
+                                  [(ngModel)]="selectedScheduleItems"
+                                  [settings]="dropdownScheduleSettings"
+                                  formControlName="schedule_id">
+            </angular2-multiselect>
+          </label>
+          <small [hidden]="crawlJobForm['controls'].schedule_id.valid"
+                 i18n="@@crawljobFormScheduleRequiredError">
+            Schedule er påkrevd.
+          </small>
+        </div>
 
-  <div formGroupName="limits" fxLayout="column">
+        <div>
+          <label i18n="@@crawljobFormCrawlconfigMultiselectLabel">Crawlconfig:
+            <angular2-multiselect [data]="crawlConfigList"
+                                  [(ngModel)]="selectedCrawlConfigItems"
+                                  [settings]="dropdownCrawlConfigSettings"
+                                  formControlName="crawl_config_id">
+            </angular2-multiselect>
+          </label>
+          <small [hidden]="crawlJobForm['controls'].crawl_config_id.valid"
+                 i18n="@@crawljobFormCrawlconfigRequieredError">
+            Crawlconfig er påkrevd.
+          </small>
+        </div>
 
-    <md-form-field>
-      <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-             mdInput formControlName="depth" type="number" placeholder="Dybde">
-      <md-error i18n="@@crawljobFormDepthRequiredError"
-                *ngIf="! crawlJobForm['controls'].limits['controls'].depth.valid">
-        Dybde er påkrevd
-      </md-error>
-    </md-form-field>
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+      </div>
+    </md-card-content>
+  </md-card>
 
-    <md-form-field>
-      <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-             mdInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
-      <md-error i18n="@@crawljobFormMaxDurationRequiredError"
-                *ngIf="! crawlJobForm['controls'].limits['controls'].max_duration_s.valid">
-        Maks tid er påkrevd.
-      </md-error>
-    </md-form-field>
-
-    <md-form-field>
-      <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-             mdInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
-      <md-error i18n="@@crawljobFormMaxByteRequiredError"
-                *ngIf="! crawlJobForm['controls'].limits['controls'].max_bytes.valid">
-        Maks byte er påkrevd.
-      </md-error>
-    </md-form-field>
-  </div>
-
-  <div>
-    <label i18n="@@crawljobFormScheduleMultiselectLabel">Schedule:
-      <angular2-multiselect [data]="scheduleList"
-                            [(ngModel)]="selectedScheduleItems"
-                            [settings]="dropdownScheduleSettings"
-                            formControlName="schedule_id">
-      </angular2-multiselect>
-    </label>
-    <small [hidden]="crawlJobForm['controls'].schedule_id.valid"
-           i18n="@@crawljobFormScheduleRequiredError">
-      Schedule er påkrevd.
-    </small>
-  </div>
-
-  <div>
-    <label i18n="@@crawljobFormCrawlconfigMultiselectLabel">Crawlconfig:
-      <angular2-multiselect [data]="crawlConfigList"
-                            [(ngModel)]="selectedCrawlConfigItems"
-                            [settings]="dropdownCrawlConfigSettings"
-                            formControlName="crawl_config_id">
-      </angular2-multiselect>
-    </label>
-    <small [hidden]="crawlJobForm['controls'].crawl_config_id.valid"
-            i18n="@@crawljobFormCrawlconfigRequieredError">
-      Crawlconfig er påkrevd.
-    </small>
-  </div>
-
-  <ng-container formGroupName="meta">
-    <app-labels type="Label" formControlName="label"></app-labels>
-  </ng-container>
-
-  <div>
+  <md-card-actions>
     <button md-raised-button color="primary"
             [disabled]="!crawlJobForm.valid"
             *ngIf="!crawlJob.id"
@@ -94,12 +93,13 @@
     </button>
     <button md-raised-button color="primary"
             *ngIf="crawlJob.id"
-            [disabled]="!crawlJobForm.valid"
+            [disabled]="!crawlJobForm.valid || !crawlJobForm.dirty"
             (click)="updateCrawljob(crawlJobForm.value)"
             i18n="@@commonButtonSave">Lagre
     </button>
     <button md-raised-button color="accent"
             (click)="revert()"
+            [disabled]="!crawlJobForm.dirty"
             i18n="@@commonButtonRevert">Tilbakestill
     </button>
     <button md-raised-button color="warn"
@@ -107,6 +107,6 @@
             (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()"
             i18n="@@commonButtonDelete">Slett
     </button>
-  </div>
+  </md-card-actions>
 </form>
 
