@@ -101,8 +101,10 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.scheduleForm.controls['meta'].patchValue({
       name: schedule.meta.name as string,
       description: schedule.meta.description as string,
+      label: [...schedule.meta.label],
     });
-    this.scheduleForm.get('meta.label').setValue(schedule.meta.label);
+    this.scheduleForm.markAsPristine();
+    //this.scheduleForm.get('meta.label').setValue(schedule.meta.label);
 
   }
 
