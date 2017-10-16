@@ -222,6 +222,10 @@
   version "2.53.42"
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.42.tgz#74cb77fb6052edaff2a8984ddafd88d419f25cac"
 
+"@types/xmldom@^0.1.29":
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@types/xmldom/-/xmldom-0.1.29.tgz#c4428b0ca86d3b881475726fd94980b38a27c381"
+
 abbrev@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.0.tgz#d0554c2256636e2f56e7c2e5ad183f859428d81f"
@@ -3418,6 +3422,24 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+ngx-i18nsupport-lib@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.6.1.tgz#02f20a330b44c3fa14a4aab089bd2195de199618"
+  dependencies:
+    "@types/xmldom" "^0.1.29"
+    tokenizr "^1.1.4"
+    xmldom "^0.1.27"
+
+ngx-i18nsupport@^0.8.6:
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport/-/ngx-i18nsupport-0.8.6.tgz#e1a0e59bb83382bd9ebe7888add795534f61f42a"
+  dependencies:
+    chalk "^2.0.1"
+    commander "^2.9.0"
+    ngx-i18nsupport-lib "^1.6.1"
+    request "^2.81.0"
+    rxjs "^5.4.2"
+
 no-case@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"
@@ -5194,6 +5216,10 @@ to-fast-properties@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
 
+tokenizr@^1.1.4:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/tokenizr/-/tokenizr-1.1.6.tgz#63fdd6343ea8b5ab07610628d379bb910d4a6874"
+
 toposort@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.3.tgz#f02cd8a74bd8be2fc0e98611c3bacb95a171869c"
@@ -5707,7 +5733,7 @@ xmlbuilder@>=1.0.0, xmlbuilder@~9.0.1:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.4.tgz#519cb4ca686d005a8420d3496f3f0caeecca580f"
 
-xmldom@^0.1.19:
+xmldom@^0.1.19, xmldom@^0.1.27:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 
