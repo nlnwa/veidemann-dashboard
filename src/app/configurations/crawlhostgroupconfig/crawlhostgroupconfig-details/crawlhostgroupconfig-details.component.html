@@ -1,98 +1,110 @@
-<h2  *ngIf="crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigDetailsHeader">
-  Crawlhostgroupconfig Detaljer
-</h2>
-<h2  *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">
-  Ny Crawlhostgroupconfig
-</h2>
-
-<md-card>
-  <form [formGroup]="crawlHostGroupConfigFG" fxLayout="column">
-
-    <md-form-field formGroupName="meta">
-      <input mdInput formControlName="name" placeholder="Navn"
-             i18n-placeholder="@@metaNameInputPlaceholder">
-      <md-error *ngIf="!name.valid"
-                i18n="@@metaNameRequiredError">
-        Navn er påkrevd.
-      </md-error>
-    </md-form-field>
-
-    <md-form-field formGroupName="meta">
-      <input mdInput formControlName="description" placeholder="Beskrivelse"
-             i18n-placeholder="@@metaDescriptionInputPlaceholder">
-      <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
-               mdTooltip= 'Legg til en fritekst om konfigurasjonen'
-               i18n-mdTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
-      </md-icon>
-    </md-form-field>
-
-    <md-card-content formArrayName="ip_range">
-      <md-card-header>
-        <md-card-title i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</md-card-title>
-      </md-card-header>
-      <md-card-content *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
-        <div [formGroupName]="i">
+<form [formGroup]="crawlHostGroupConfigFG">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <span *ngIf="crawlHostGroupConfig" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
+      </md-card-title>
+      <md-card-subtitle>
+        <span *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content fxLayout="row" fxLayoutWrap>
+      <div fxFlex fxLayout="column" fxLayoutWrap>
+        <ng-container formGroupName="meta">
           <md-form-field>
-            <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:"
-                   i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-            <md-error *ngIf="!ipFromControl?.valid"
-                      i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
-              En gyldig IP-addresse er påkrevd.
+            <input mdInput formControlName="name" placeholder="Navn"
+                   i18n-placeholder="@@metaNameInputPlaceholder">
+            <md-error *ngIf="!name.valid"
+                      i18n="@@metaNameRequiredError">
+              Navn er påkrevd.
             </md-error>
           </md-form-field>
+
           <md-form-field>
-            <input mdInput formControlName="ip_to" placeholder="Til IP-addresse"
-                   i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-            <md-error *ngIf="!ipToControl?.valid"
-                      i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
-              En gyldig IP-addresse er påkrevd.
-            </md-error>
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
+            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
+                     mdTooltip='Legg til en fritekst om konfigurasjonen'
+                     i18n-mdTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
+            </md-icon>
           </md-form-field>
-          <button mdSuffix md-icon-button (click)="removeIpRange(i)">
-            <md-icon color="warn">close</md-icon>
+        </ng-container>
+      </div>
+
+      <div fxFlex fxLayout="column">
+        <!-- IP Range -->
+        <md-toolbar>
+          <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
+          <span class="fill-space"></span>
+          <button md-mini-fab (click)="addIpRange()">
+            <md-icon>add</md-icon>
           </button>
-        </div>
-      </md-card-content>
-      <md-card-actions>
-        <button md-button color="accent" (click)="addIpRange()"
-                i18n="@@commonButtonAdd">
-          Legg til
-        </button>
-      </md-card-actions>
+        </md-toolbar>
+
+        <ng-container formArrayName="ip_range">
+          <md-card-header>
+            <md-card-title></md-card-title>
+          </md-card-header>
+          <ng-container *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
+            <div [formGroupName]="i">
+              <md-form-field>
+                <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:"
+                       i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
+                <md-error *ngIf="!ipFromControl?.valid"
+                          i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
+                  En gyldig IP-addresse er påkrevd.
+                </md-error>
+              </md-form-field>
+              <md-form-field>
+                <input mdInput formControlName="ip_to" placeholder="Til IP-addresse"
+                       i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
+                <md-error *ngIf="!ipToControl?.valid"
+                          i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
+                  En gyldig IP-addresse er påkrevd.
+                </md-error>
+              </md-form-field>
+              <button mdSuffix md-icon-button (click)="removeIpRange(i)">
+                <md-icon color="warn">close</md-icon>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <!-- Labels -->
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+      </div>
     </md-card-content>
+    <md-card-actions>
+      <button md-button color="primary"
+              *ngIf="!crawlHostGroupConfig.id"
+              [disabled]="!crawlHostGroupConfigFG.valid"
+              (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-button color="primary"
+              *ngIf="crawlHostGroupConfig.id"
+              [disabled]="!crawlHostGroupConfigFG.valid || !crawlHostGroupConfigFG.dirty"
+              (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-button color="accent"
+              (click)="revert()"
+              [disabled]="!crawlHostGroupConfigFG.dirty"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
+      </button>
 
-
-    <ng-container formGroupName="meta">
-      <app-labels type="Label" formControlName="label"></app-labels>
-    </ng-container>
-
-<md-card-actions>
-  <button md-button color="primary"
-          [disabled]="!crawlHostGroupConfigFG.valid"
-          *ngIf="!crawlHostGroupConfig.id"
-          (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
-          i18n="@@commonButtonSave">
-    Lagre
-  </button>
-  <button md-button color="primary"
-          *ngIf="crawlHostGroupConfig.id"
-          [disabled]="!crawlHostGroupConfigFG.valid"
-          (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
-          i18n="@@commonButtonSave">
-    Lagre
-  </button>
-  <button md-button color="accent"
-          (click)="revert()"
-          i18n="@@commonButtonRevert">
-    Tilbakestill
-  </button>
-
-  <button md-button color="warn"
-          *ngIf="crawlHostGroupConfig.id"
-          (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
-          i18n="@@commonButtonDelete">
-    Slett
-  </button>
-</md-card-actions>
+      <button md-button color="warn"
+              *ngIf="crawlHostGroupConfig.id"
+              (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">
+        Slett
+      </button>
+    </md-card-actions>
+  </md-card>
 </form>
-</md-card>
+

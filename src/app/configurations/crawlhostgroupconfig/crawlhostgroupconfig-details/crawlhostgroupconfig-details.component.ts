@@ -13,6 +13,7 @@ import {Observable} from 'rxjs/Observable';
   providers: [SnackBarService],
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
+
   @Input()
   crawlHostGroupConfig: CrawlHostGroupConfig;
   crawlHostGroupConfigFG: FormGroup;
@@ -77,7 +78,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
         description: this.crawlHostGroupConfig.meta.description,
-        label: crawlHostGroupConfig.meta.label,
+        label: [...crawlHostGroupConfig.meta.label],
       }
     });
     this.crawlHostGroupConfigFG.setControl('ip_range', ipRangeFGArray);
