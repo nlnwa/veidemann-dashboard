@@ -2,9 +2,9 @@ import {Component, Input, OnChanges} from '@angular/core';
 import {PolitenessConfigService} from '../../politenessconfig/';
 import {BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators} from '../../../commons/';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlConfigService} from '../crawlconfig.service';
-import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../../commons/models/config.model';
+import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
@@ -19,7 +19,16 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class CrawlConfigDetailsComponent implements OnChanges {
   @Input()
   crawlConfig: CrawlConfig;
-  crawlConfigFG: FormGroup;
+
+  _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
 
   browserConfig: BrowserConfig;
   politenessConfig: PolitenessConfig;
@@ -49,12 +58,12 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   createForm() {
-    this.crawlConfigFG = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
       browser_config_id: ['', CustomValidators.nonEmpty],
       politeness_id: ['', CustomValidators.nonEmpty],
       extra: this.fb.group({
-        extract_text: true,
+        extract_text: '',
         create_snapshot: '',
       }),
       minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
@@ -72,19 +81,20 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   updateData(crawlConfig: CrawlConfig) {
-    this.crawlConfigFG.controls['id'].setValue(crawlConfig.id);
-    this.crawlConfigFG.controls['extra'].setValue({
-      extract_text: crawlConfig.extra.extract_text,
-      create_snapshot: crawlConfig.extra.create_snapshot,
+    this.form.controls['id'].setValue(crawlConfig.id);
+    this.form.controls['extra'].setValue({
+      extract_text: crawlConfig.extra.extract_text as boolean,
+      create_snapshot: crawlConfig.extra.create_snapshot as boolean,
     });
-    this.crawlConfigFG.controls['minimum_dns_ttl_s'].setValue(crawlConfig.minimum_dns_ttl_s);
-    this.crawlConfigFG.controls['depth_first'].setValue(crawlConfig.depth_first);
-    this.crawlConfigFG.controls['meta'].patchValue({
+    this.form.controls['minimum_dns_ttl_s'].setValue(crawlConfig.minimum_dns_ttl_s);
+    this.form.controls['depth_first'].setValue(crawlConfig.depth_first as boolean);
+    this.form.controls['meta'].patchValue({
       name: crawlConfig.meta.name as string,
       description: crawlConfig.meta.description as string,
+      label: [...crawlConfig.meta.label],
     });
-    this.crawlConfigFG.get('meta.label').setValue(crawlConfig.meta.label);
     this.setSelectedDropdown();
+    this.form.markAsPristine();
   }
 
   ngOnChanges() {
@@ -101,7 +111,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   createCrawlConfig() {
     this.crawlConfig = this.prepareSaveCrawlConfig();
     this.crawlConfigService.create(this.crawlConfig)
-      .map((newCrawlConfig: CrawlConfig) => {
+      .subscribe((newCrawlConfig: CrawlConfig) => {
         this.createHandler(newCrawlConfig);
       });
     this.snackBarService.openSnackBar('Lagret');
@@ -110,7 +120,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   updateCrawlConfig(crawlConfigForm): void {
     this.crawlConfig = this.prepareSaveCrawlConfig();
     this.crawlConfigService.update(this.crawlConfig)
-      .map((updatedCrawlConfig) => {
+      .subscribe((updatedCrawlConfig) => {
         this.updateHandler(updatedCrawlConfig);
       });
     this.snackBarService.openSnackBar('Lagret');
@@ -118,9 +128,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   deleteCrawlConfig(crawlConfigId): void {
     this.crawlConfigService.delete(crawlConfigId)
-      .map((deletedCrawlConfig) => {
-        this.deleteHandler(deletedCrawlConfig);
-        if (deletedCrawlConfig === 'not_allowed') {
+      .subscribe((response) => {
+        this.deleteHandler(crawlConfigId);
+        if (response instanceof Object) {
           this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
           this.snackBarService.openSnackBar('Slettet');
@@ -129,7 +139,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   prepareSaveCrawlConfig(): CrawlConfig {
-    const formModel = this.crawlConfigFG.value;
+    const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 
     // return new `Hero` object containing a combination of original hero value(s)
@@ -142,13 +152,12 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         extract_text: formModel.extra.extract_text as boolean,
         create_snapshot: formModel.extra.create_snapshot as boolean,
       },
-      minimum_dns_ttl_s: formModel.minimum_dns_ttl_s as number,
+      minimum_dns_ttl_s: parseInt(formModel.minimum_dns_ttl_s, 10),
       depth_first: formModel.depth_first as boolean,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
         label: labelsDeepCopy,
-
       }
     };
   }
@@ -163,8 +172,8 @@ export class CrawlConfigDetailsComponent implements OnChanges {
             itemName: browserConfig.meta.name,
             description: browserConfig.meta.description
           })
+          this.form.controls['browser_config_id'].setValue(this.selectedBrowserConfigItems);
         });
-      this.crawlConfigFG.controls['browser_config_id'].setValue(this.selectedBrowserConfigItems);
     }
 
     if (this.crawlConfig.politeness_id !== '') {
@@ -175,7 +184,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
             itemName: politenessConfig.meta.name,
             description: politenessConfig.meta.description
           });
-          this.crawlConfigFG.controls['politeness_id'].setValue(this.selectedPolitenessConfigItems);
+          this.form.controls['politeness_id'].setValue(this.selectedPolitenessConfigItems);
         });
     }
   }
