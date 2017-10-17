@@ -1,42 +1,49 @@
-<h2 *ngIf="browserScript.id" i18n="@@browserscriptDetailsHeader">
-  Browserscript Detaljer
-</h2>
-<h2 *ngIf="!browserScript.id" i18n="@@browserscriptNewBrowserscriptHeader">
-  Ny Browserscript
-</h2>
+<form [formGroup]="browserScriptFG">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <span i18n="@@browserscriptDetailsHeader">Browserscript</span>
+      </md-card-title>
+      <md-card-subtitle>
+        <span *ngIf="!browserScript.id"
+              i18n="@@browserscriptNewBrowserscriptHeader"> Ny (ikke lagret)</span>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content fxLayout="row" fxLayoutWrap>
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
 
+          <md-form-field>
+            <input mdInput formControlName="name" placeholder="Navn"
+                   i18n-placeholder="@@metaNameInputPlaceholder">
+            <md-error *ngIf="! browserScriptFG.controls.meta.valid"
+                      i18n="@@metaNameRequiredError">
+              Navn er påkrevd.
+            </md-error>
+          </md-form-field>
 
-<form [formGroup]="browserScriptFG" fxLayout="column">
-
-  <md-form-field formGroupName="meta">
-    <input mdInput formControlName="name" placeholder="Navn"
-            i18n-placeholder="@@metaNameInputPlaceholder">
-    <md-error *ngIf="! browserScriptFG.controls.meta.valid"
-              i18n="@@metaNameRequiredError">
-      Navn er påkrevd.
-    </md-error>
-  </md-form-field>
-
-  <md-form-field formGroupName="meta">
-    <input mdInput formControlName="description" placeholder="Beskrivelse"
-           i18n-placeholder="@@metaDescriptionInputPlaceholder">
-  </md-form-field>
-
-  <md-form-field>
+          <md-form-field>
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
+          </md-form-field>
+        </ng-container>
+        <md-form-field>
     <textarea mdInput formControlName="script" placeholder="Script"
               i18n-placeholder="@@browserscriptFormScriptPlaceholder">
     </textarea>
-    <md-error *ngIf="! browserScriptFG.controls.script.valid"
-              i18n="@@browserscriptFormScriptRequiredError">
-      Script er påkrevd.
-    </md-error>
-  </md-form-field>
-
-  <ng-container formGroupName="meta">
-    <app-labels type="Label" formControlName="label"></app-labels>
-  </ng-container>
-
-    <div>
+          <md-error *ngIf="! browserScriptFG.controls.script.valid"
+                    i18n="@@browserscriptFormScriptRequiredError">
+            Script er påkrevd.
+          </md-error>
+        </md-form-field>
+      </div>
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+      </div>
+    </md-card-content>
+    <md-card-actions>
       <button md-raised-button color="primary"
               [disabled]="!browserScriptFG.valid"
               *ngIf="!browserScript.id"
@@ -46,13 +53,15 @@
         Lagre
       </button>
       <button md-raised-button color="primary"
-              *ngIf="browserScript.id" [disabled]="!browserScriptFG.valid"
+              *ngIf="browserScript.id"
+              [disabled]="!browserScriptFG.valid || !browserScriptFG.dirty"
               (click)="updateBrowserScript(browserScriptFG.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
               (click)="revert()"
+              [disabled]="!browserScriptFG.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
@@ -62,5 +71,6 @@
               i18n="@@commonButtonDelete">
         Slett
       </button>
-    </div>
-  </form>
+    </md-card-actions>
+  </md-card>
+</form>

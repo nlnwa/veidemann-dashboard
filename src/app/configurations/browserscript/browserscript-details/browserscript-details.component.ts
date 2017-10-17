@@ -49,8 +49,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.browserScriptFG.controls['meta'].patchValue({
       name: browserScript.meta.name as string,
       description: browserScript.meta.description as string,
+      label: [...browserScript.meta.label],
     });
-    this.browserScriptFG.get('meta.label').setValue(this.browserScript.meta.label);
+    this.browserScriptFG.markAsPristine();
   };
 
   ngOnChanges() {
