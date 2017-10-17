@@ -29,11 +29,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     return this.crawlHostGroupConfigFG.get('meta.name');
   }
 
-  get ipFromControl () {
+  get ipFromControl() {
     return this.crawlHostGroupConfigFG.get('ip_range.ip_from');
   }
 
-  get ipToControl () {
+  get ipToControl() {
     return this.crawlHostGroupConfigFG.get('ip_range.ip_to');
   }
 
@@ -82,6 +82,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       }
     });
     this.crawlHostGroupConfigFG.setControl('ip_range', ipRangeFGArray);
+    this.crawlHostGroupConfigFG.markAsPristine();
   }
 
   createCrawlHostGroupConfig() {

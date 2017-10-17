@@ -68,11 +68,12 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.browserConfigForm.controls['meta'].patchValue({
       name: browserConfig.meta.name as string,
       description: browserConfig.meta.description as string,
+      label: [...browserConfig.meta.label],
     });
     this.setSelectedDropdown();
     this.selectedBrowserScriptItems = [];
-    this.browserConfigForm.get('meta.label').setValue(browserConfig.meta.label);
-    this.browserConfigForm.get('script_selector').setValue(browserConfig.script_selector.label)
+    this.browserConfigForm.get('script_selector').setValue([...browserConfig.script_selector.label]);
+    this.browserConfigForm.markAsPristine();
   }
 
   ngOnChanges() {

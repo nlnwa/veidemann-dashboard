@@ -1,116 +1,128 @@
-<h2 *ngIf="browserConfig.id" i18n="@@browserconfigDetailsHeader">
-  Browserconfig Detaljer
-</h2>
-<h2 *ngIf="!browserConfig.id" i18n="@@browserconfigNewConfigHeader">
-  Ny Browserconfig
-</h2>
+<form [formGroup]="browserConfigForm">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <span i18n="@@browserconfigDetailsHeader">Browserconfig</span>
+      </md-card-title>
+      <md-card-subtitle>
+        <span *ngIf="!browserConfig.id"
+              i18n="@@browserconfigNewConfigHeader">
+        Ny (ikke lagret)</span>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content fxLayout="row" fxLayoutWrap>
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
 
-<form [formGroup]="browserConfigForm" fxLayout="column">
+          <md-form-field>
+            <input mdInput formControlName="name" placeholder="Navn"
+                   i18n-placeholder="@@metaNameInputPlaceholder">
+            <md-error *ngIf="! browserConfigForm.controls.meta.valid"
+                      i18n="@@metaNameRequiredError">
+              Navn er påkrevd.
+            </md-error>
+          </md-form-field>
 
-  <md-form-field formGroupName="meta">
-    <input mdInput formControlName="name" placeholder="Navn"
-           i18n-placeholder="@@metaNameInputPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.meta.valid"
-              i18n="@@metaNameRequiredError">
-      Navn er påkrevd.
-    </md-error>
-  </md-form-field>
+          <md-form-field>
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
+          </md-form-field>
+        </ng-container>
 
-  <md-form-field formGroupName="meta">
-    <input mdInput formControlName="description" placeholder="Beskrivelse"
-           i18n-placeholder="@@metaDescriptionInputPlaceholder">
-  </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="user_agent" placeholder="Brukeragent"
+                 i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
+          <md-error *ngIf="! browserConfigForm.controls.user_agent.valid"
+                    i18n="@@browserconfigFormUserAgentRequiredError">
+            Brukeragent er påkrevd.
+          </md-error>
+        </md-form-field>
 
-  <md-form-field>
-    <input mdInput formControlName="user_agent" placeholder="Brukeragent"
-           i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.user_agent.valid"
-              i18n="@@browserconfigFormUserAgentRequiredError">
-      Brukeragent er påkrevd.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="window_width" placeholder="Vindusbredde"
+                 i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
+          <md-error *ngIf="! browserConfigForm.controls.window_width.valid"
+                    i18n="@@browserconfigFormWindowWidthRequiredError">
+            Vindusbredde er påkrevd.
+          </md-error>
+        </md-form-field>
 
-  <md-form-field>
-    <input mdInput formControlName="window_width" placeholder="Vindusbredde"
-           i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.window_width.valid"
-              i18n="@@browserconfigFormWindowWidthRequiredError">
-      Vindusbredde er påkrevd.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="window_height" placeholder="Vindushøyde"
+                 i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
+          <md-error *ngIf="! browserConfigForm.controls.window_height.valid"
+                    i18n="@@browserconfigFormWindowHeightRequiredError">
+            Vindushøyde er påkrevd.
+          </md-error>
+        </md-form-field>
 
-  <md-form-field>
-    <input mdInput formControlName="window_height" placeholder="Vindushøyde"
-           i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.window_height.valid"
-              i18n="@@browserconfigFormWindowHeightRequiredError">
-      Vindushøyde er påkrevd.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
+                 i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
+          <md-error *ngIf="! browserConfigForm.controls.page_load_timeout_ms.valid"
+                    i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
+            Page load timeout er påkrevd.
+          </md-error>
+        </md-form-field>
 
-  <md-form-field>
-    <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
-           i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.page_load_timeout_ms.valid"
-              i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
-      Page load timeout er påkrevd.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
+                 i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
+          <md-error *ngIf="! browserConfigForm.controls.sleep_after_pageload_ms.valid"
+                    i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
+            Sleep after pageload er påkrevd.
+          </md-error>
+        </md-form-field>
+      </div>
+      <div fxFlex fxLayout="column">
+        <div>
+          <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
+            <angular2-multiselect [data]="browserScriptList"
+                                  [(ngModel)]="selectedBrowserScriptItems"
+                                  [settings]="browserScriptDropdownSettings"
+                                  formControlName="script_id">
+            </angular2-multiselect>
+          </label>
+          <small [hidden]="browserConfigForm.controls['script_id'].valid"
+                 i18n="@@browserconfigFormScriptsRequiredError">
+            Scripts påkrevd.
+          </small>
+        </div>
 
-  <md-form-field>
-    <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
-           i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-    <md-error *ngIf="! browserConfigForm.controls.sleep_after_pageload_ms.valid"
-              i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
-      Sleep after pageload er påkrevd.
-    </md-error>
-  </md-form-field>
+        <app-labels type="Selector" formControlName="script_selector"></app-labels>
 
-  <div>
-    <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
-      <angular2-multiselect [data]="browserScriptList"
-                            [(ngModel)]="selectedBrowserScriptItems"
-                            [settings]="browserScriptDropdownSettings"
-                            formControlName="script_id">
-      </angular2-multiselect>
-    </label>
-    <small [hidden]="browserConfigForm.controls['script_id'].valid"
-           i18n="@@browserconfigFormScriptsRequiredError">
-      Scripts påkrevd.
-    </small>
-  </div>
-
-  <app-labels type="Selector" formControlName="script_selector"></app-labels>
-
-  <ng-container formGroupName="meta">
-    <app-labels type="Label" formControlName="label"></app-labels>
-  </ng-container>
-
-  <div>
-    <button md-raised-button color="primary"
-            [disabled]="!browserConfigForm.valid"
-            *ngIf="!browserConfig.id"
-            (click)="createBrowserConfig(browserConfigForm.value)" novalidate
-            i18n="@@commonButtonSave">
-      Lagre
-    </button>
-    <button md-raised-button color="primary"
-            *ngIf="browserConfig.id"
-            [disabled]="!browserConfigForm.valid"
-            (click)="updateBrowserConfig(browserConfigForm.value)"
-            i18n="@@commonButtonSave">
-      Lagre
-    </button>
-    <button md-raised-button color="accent"
-            (click)="revert()"
-            i18n="@@commonButtonRevert">
-      Tilbakestill
-    </button>
-    <button md-raised-button color="warn"
-            *ngIf="browserConfig.id"
-            (click)="deleteBrowserConfig(browserConfig.id); $event.stopPropagation()"
-            i18n="@@commonButtonDelete">
-      Slett
-    </button>
-  </div>
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+      </div>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="primary"
+              [disabled]="!browserConfigForm.valid"
+              *ngIf="!browserConfig.id"
+              (click)="createBrowserConfig(browserConfigForm.value)" novalidate
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-raised-button color="primary"
+              *ngIf="browserConfig.id"
+              [disabled]="!browserConfigForm.valid || !browserConfigForm.dirty"
+              (click)="updateBrowserConfig(browserConfigForm.value)"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-raised-button color="accent"
+              (click)="revert()"
+              [disabled]="!browserConfigForm.dirty"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
+      </button>
+      <button md-raised-button color="warn"
+              *ngIf="browserConfig.id"
+              (click)="deleteBrowserConfig(browserConfig.id); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">
+        Slett
+      </button>
+    </md-card-actions>
+  </md-card>
 </form>
