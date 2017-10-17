@@ -61,10 +61,11 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     this.politenessConfigFG.controls['meta'].patchValue({
       name: politenessconfig.meta.name as string,
       description: politenessconfig.meta.description as string,
+      label: [...politenessconfig.meta.label],
     });
-    this.politenessConfigFG.get('meta.label').setValue(politenessconfig.meta.label);
     this.setSelectedDropdown();
     this.selectedRobotsPolicyItems = [];
+    this.politenessConfigFG.markAsPristine();
   };
 
   ngOnChanges() {

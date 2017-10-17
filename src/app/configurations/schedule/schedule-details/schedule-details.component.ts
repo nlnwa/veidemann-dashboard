@@ -1,14 +1,15 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
 import {DateTime} from '../../../commons/';
 import {ScheduleService} from '../schedule.service';
 import {Label, Schedule} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
   selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
-  styleUrls: ['./schedule-details.component.css']
+  styleUrls: ['./schedule-details.component.css'],
+  providers: [SnackBarService],
 })
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()
@@ -26,7 +27,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   private valid_to_unix: any;
 
   constructor(private scheduleService: ScheduleService,
-              private mdSnackBar: MdSnackBar,
+              private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
   }
@@ -101,8 +102,9 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.scheduleForm.controls['meta'].patchValue({
       name: schedule.meta.name as string,
       description: schedule.meta.description as string,
+      label: [...schedule.meta.label],
     });
-    this.scheduleForm.get('meta.label').setValue(schedule.meta.label);
+    this.scheduleForm.markAsPristine();
 
   }
 
@@ -116,7 +118,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       .subscribe((newSchedule: Schedule) => {
         this.createHandler(newSchedule);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   updateSchedule(schedule: Schedule): void {
@@ -125,7 +127,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       .subscribe((updatedSchedule: Schedule) => {
         this.updateHandler(updatedSchedule);
       });
-    this.mdSnackBar.open('Lagret');
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   deleteSchedule(scheduleId): void {
@@ -133,9 +135,9 @@ export class ScheduleDetailsComponent implements OnChanges {
       .subscribe((deletedSchedule) => {
         this.deleteHandler(deletedSchedule).subscribe();
         if (deletedSchedule === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet..');
+          this.snackBarService.openSnackBar('Feil: Ikke slettet..');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarService.openSnackBar('Slettet');
         }
       });
   }
@@ -194,7 +196,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   revert() {
     this.ngOnChanges();
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }
 
