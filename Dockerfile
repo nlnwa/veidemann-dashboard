@@ -26,7 +26,10 @@ RUN apt-get remove nodejs yarn -y \
 && apt-get autoremove -y
 
 
-ENV PROXY_ADDR localhost:3010
+ENV PROXY_ADDR=localhost:3010 \
+    EXTERNAL_HOSTNAME=host:32000
 
 CMD envsubst '${PROXY_ADDR}' < /usr/src/app/nginx/default.conf > /etc/nginx/conf.d/default.conf \
+&& MAIN_BUNDLE=$(basename "$(ls /usr/src/app/dist/main.*.bundle.js)") \
+&& envsubst '${EXTERNAL_HOSTNAME}' < /usr/src/app/dist/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
 && nginx -g "daemon off;"

@@ -50,6 +50,8 @@ import {
 import {LabelsComponent} from './labels/labels.component';
 import {SearchService} from './search-service/search.service';
 import {BaseListComponent} from './base-list/base-list.component';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {HttpModule} from "@angular/http";
 
 
 @NgModule({
@@ -90,6 +92,8 @@ import {BaseListComponent} from './base-list/base-list.component';
     AngularMultiSelectModule,
     MaterialModule,
     FlexLayoutModule,
+    HttpModule,
+    OAuthModule.forRoot()
   ],
   providers: [
     SearchService,
