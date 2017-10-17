@@ -1,104 +1,117 @@
-<h2 *ngIf="politenessConfig.id" i18n="@@politenessconfigDetailsHeader">
-  Politenessconfig Detaljer
-</h2>
-<h2 *ngIf="!politenessConfig.id" i18n="@@politenessconfigNewPolitenessConfigHeader">
-  Ny Politenessconfig
-</h2>
+<form [formGroup]="politenessConfigFG">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <span i18n="@@politenessconfigDetailsHeader">Politenessconfig</span>
+      </md-card-title>
+      <md-card-subtitle>
+        <span *ngIf="!politenessConfig.id"
+              i18n="@@politenessconfigNewPolitenessConfigHeader">Ny (ikke lagret)</span>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content fxLayout="row">
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
+          <md-form-field>
+            <input mdInput formControlName="name" placeholder="Navn"
+                   i18n-placeholder="@@metaNameInputPlaceholder">
+            <md-error *ngIf="! politenessConfigFG.get('meta').valid"
+                      i18n="@@metaNameRequiredError">
+              Navn er påkrevd.
+            </md-error>
+          </md-form-field>
 
-<form [formGroup]="politenessConfigFG" fxLayout="column">
+          <md-form-field>
+            <input mdInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
+          </md-form-field>
+        </ng-container>
 
-  <div fxLayout="row">
-    <md-form-field formGroupName="meta">
-      <input mdInput formControlName="name" placeholder="Navn"
-             i18n-placeholder="@@metaNameInputPlaceholder">
-      <md-error *ngIf="! politenessConfigFG.controls.meta.valid"
-                i18n="@@metaNameRequiredError">
-        Navn er påkrevd.
-      </md-error>
-    </md-form-field>
+        <div>
+          <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
+          <angular2-multiselect [data]="robotsPolicyList"
+                                [(ngModel)]="selectedRobotsPolicyItems"
+                                [settings]="robetsPolicyDropdownSettings"
+                                formControlName="robots_policy">
+          </angular2-multiselect>
 
-    <md-form-field formGroupName="meta">
-      <input mdInput formControlName="description" placeholder="Beskrivelse"
-             i18n-placeholder="@@metaDescriptionInputPlaceholder">
-    </md-form-field>
-  </div>
+          <small [hidden]="politenessConfigFG.get('robots_policy').valid"
+                 i18n="@@politenessconfigFormRobotPolicyErrorRequired">
+            Robots policy er påkrevd.
+          </small>
+        </div>
 
-  <div>
-    <label i18n="@@politenessconfigFormRobotPolicyMultiselectLabel">Robots policy:
-      <angular2-multiselect [data]="robotsPolicyList"
-                            [(ngModel)]="selectedRobotsPolicyItems"
-                            [settings]="robetsPolicyDropdownSettings"
-                            formControlName="robots_policy">
-      </angular2-multiselect>
-    </label>
-    <small [hidden]="politenessConfigFG.controls.robots_policy.valid"
-           i18n="@@politenessconfigFormRobotPolicyErrorRequired">
-      Robots policy er påkrevd.
-    </small>
-  </div>
-  <ng-container
-    *ngIf="politenessConfigFG.value.robots_policy[0] && politenessConfigFG.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
-    <md-form-field>
-      <textarea mdInput
-                formControlName="custom_robots"
-                placeholder="robots.txt"></textarea>
-      <md-error *ngIf="!politenessConfigFG.controls.custom_robots.valid"
-                i18n="@@politenessconfigFormValidityDurationRequiredError">
-        Validity duration er påkrevd.
-      </md-error>
-    </md-form-field>
-  </ng-container>
+        <ng-container
+          *ngIf="politenessConfigFG.value.robots_policy[0] && politenessConfigFG.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
+          <md-form-field>
+            <textarea mdInput
+                      formControlName="custom_robots"
+                      placeholder="robots.txt">
+            </textarea>
+            <md-error *ngIf="!politenessConfigFG.get('custom_robots').valid"
+                      i18n="@@politenessconfigFormValidityDurationRequiredError">
+              Validity duration er påkrevd.
+            </md-error>
+          </md-form-field>
+        </ng-container>
 
-  <md-form-field>
-    <input mdInput
-           formControlName="minimum_robots_validity_duration_s"
-           placeholder="Minimum robots validity (seconds)"
-           i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-    <md-error *ngIf="! politenessConfigFG.controls.minimum_robots_validity_duration_s.valid"
-              i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
-      Validity duration required.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput
+                 formControlName="minimum_robots_validity_duration_s"
+                 placeholder="Minimum robots validity (seconds)"
+                 i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
+          <md-error *ngIf="! politenessConfigFG.get('minimum_robots_validity_duration_s').valid"
+                    i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
+            Validity duration required.
+          </md-error>
+        </md-form-field>
 
-  <md-form-field>
-    <input mdInput
-           formControlName="min_time_between_page_load_ms"
-           placeholder="Minimum time between page load (ms)"
-           i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-    <md-error *ngIf="! politenessConfigFG.controls.min_time_between_page_load_ms.valid"
-              i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
-      En minimums tid mellom sideinnlastning er påkrevd.
-    </md-error>
-  </md-form-field>
+        <md-form-field>
+          <input mdInput
+                 formControlName="min_time_between_page_load_ms"
+                 placeholder="Minimum time between page load (ms)"
+                 i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
+          <md-error *ngIf="! politenessConfigFG.get('min_time_between_page_load_ms').valid"
+                    i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
+            En minimums tid mellom sideinnlastning er påkrevd.
+          </md-error>
+        </md-form-field>
+      </div>
 
-  <ng-container formGroupName="meta">
-    <app-labels type="Label" formControlName="label"></app-labels>
-  </ng-container>
-
-  <div>
-    <button md-raised-button color="primary"
-            [disabled]="!politenessConfigFG.valid" *ngIf="!politenessConfig.id"
-            (click)="createPolitenessconfig(politenessConfigFG.value)"
-            novalidate
-            i18n="@@commonButtonSave">
-      Lagre
-    </button>
-    <button md-raised-button color="primary"
-            *ngIf="politenessConfig.id" [disabled]="!politenessConfigFG.valid"
-            (click)="updatePolitenessconfig(politenessConfigFG.value)"
-            i18n="@@commonButtonSave">
-      Lagre
-    </button>
-    <button md-raised-button color="accent"
-            (click)="revert()"
-            i18n="@@commonButtonRevert">
-      Tilbakestill
-    </button>
-    <button md-raised-button color="warn"
-            *ngIf="politenessConfig.id"
-            (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()"
-            i18n="@@commonButtonDelete">
-      Slett
-    </button>
-  </div>
+      <div fxFlex fxLayout="column">
+        <ng-container formGroupName="meta">
+          <app-labels type="Label" formControlName="label"></app-labels>
+        </ng-container>
+      </div>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="primary"
+              *ngIf="!politenessConfig.id"
+              [disabled]="!politenessConfigFG.valid"
+              (click)="createPolitenessconfig(politenessConfigFG.value)"
+              novalidate
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-raised-button color="primary"
+              *ngIf="politenessConfig.id"
+              [disabled]="!politenessConfigFG.valid || !politenessConfigFG.dirty"
+              (click)="updatePolitenessconfig(politenessConfigFG.value)"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button md-raised-button color="accent"
+              (click)="revert()"
+              [disabled]="!politenessConfigFG.dirty"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
+      </button>
+      <button md-raised-button color="warn"
+              *ngIf="politenessConfig.id"
+              (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">
+        Slett
+      </button>
+    </md-card-actions>
+  </md-card>
 </form>
