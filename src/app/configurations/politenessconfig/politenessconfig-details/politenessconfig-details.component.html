@@ -1,4 +1,4 @@
-<form [formGroup]="politenessConfigFG">
+<form [formGroup]="form">
   <md-card>
     <md-card-header>
       <md-card-title>
@@ -15,7 +15,7 @@
           <md-form-field>
             <input mdInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! politenessConfigFG.get('meta').valid"
+            <md-error *ngIf="! form.get('meta').valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
@@ -35,20 +35,20 @@
                                 formControlName="robots_policy">
           </angular2-multiselect>
 
-          <small [hidden]="politenessConfigFG.get('robots_policy').valid"
+          <small [hidden]="form.get('robots_policy').valid"
                  i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </small>
         </div>
 
         <ng-container
-          *ngIf="politenessConfigFG.value.robots_policy[0] && politenessConfigFG.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
+          *ngIf="form.value.robots_policy[0] && form.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
           <md-form-field>
             <textarea mdInput
                       formControlName="custom_robots"
                       placeholder="robots.txt">
             </textarea>
-            <md-error *ngIf="!politenessConfigFG.get('custom_robots').valid"
+            <md-error *ngIf="!form.get('custom_robots').valid"
                       i18n="@@politenessconfigFormValidityDurationRequiredError">
               Validity duration er påkrevd.
             </md-error>
@@ -60,7 +60,7 @@
                  formControlName="minimum_robots_validity_duration_s"
                  placeholder="Minimum robots validity (seconds)"
                  i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-          <md-error *ngIf="! politenessConfigFG.get('minimum_robots_validity_duration_s').valid"
+          <md-error *ngIf="! form.get('minimum_robots_validity_duration_s').valid"
                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
             Validity duration required.
           </md-error>
@@ -71,10 +71,42 @@
                  formControlName="min_time_between_page_load_ms"
                  placeholder="Minimum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-          <md-error *ngIf="! politenessConfigFG.get('min_time_between_page_load_ms').valid"
+          <md-error *ngIf="! form.get('min_time_between_page_load_ms').valid"
                     i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
-            En minimums tid mellom sideinnlastning er påkrevd.
+            En minimum tid mellom sideinnlastning er påkrevd.
           </md-error>
+        </md-form-field>
+
+        <md-form-field>
+          <input mdInput
+                 formControlName="max_time_between_page_load_ms"
+                 placeholder="Maximum time between page load (ms)"
+                 i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
+          <md-error *ngIf="! form.get('max_time_between_page_load_ms').valid"
+                    i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+            En maksimum tid mellom sideinnlastning er påkrevd.
+          </md-error>
+        </md-form-field>
+
+        <md-form-field>
+          <input mdInput
+                 formControlName="delay_factor"
+                 placeholder="Delay factor"
+                 i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
+        </md-form-field>
+
+        <md-form-field>
+          <input mdInput
+                 formControlName="max_retries"
+                 placeholder="Maximum retries"
+                 i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
+        </md-form-field>
+
+        <md-form-field>
+          <input mdInput
+                 formControlName="retry_delay_seconds"
+                 placeholder="Retry delay (s)"
+                 i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
         </md-form-field>
       </div>
 
@@ -82,27 +114,30 @@
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
+        <ng-container>
+          <app-labels type="Selector" formControlName="crawl_host_group_selector"></app-labels>
+        </ng-container>
       </div>
     </md-card-content>
     <md-card-actions>
       <button md-raised-button color="primary"
               *ngIf="!politenessConfig.id"
-              [disabled]="!politenessConfigFG.valid"
-              (click)="createPolitenessconfig(politenessConfigFG.value)"
+              [disabled]="!form.valid"
+              (click)="createPolitenessconfig(form.value)"
               novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="politenessConfig.id"
-              [disabled]="!politenessConfigFG.valid || !politenessConfigFG.dirty"
-              (click)="updatePolitenessconfig(politenessConfigFG.value)"
+              [disabled]="!form.valid || !form.dirty"
+              (click)="updatePolitenessconfig(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
               (click)="revert()"
-              [disabled]="!politenessConfigFG.dirty"
+              [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>

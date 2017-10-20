@@ -17,7 +17,9 @@ export class PolitenessConfigListComponent implements OnInit {
   ngOnInit() {
     this.politenessConfigService.list()
       .map(reply => reply.value)
-      .subscribe(politenessConfigs => this.politenessConfigs = politenessConfigs);
+      .subscribe(politenessConfigs =>
+        this.politenessConfigs = politenessConfigs
+      );
   }
 
   private getIndexOfPolitenessConfig = (politenessConfigId: String) => {
@@ -40,19 +42,26 @@ export class PolitenessConfigListComponent implements OnInit {
   };
 
   createNewPolitenessConfig() {
-    const politenessConfig: PolitenessConfig = {
+    /*const politenessConfig: PolitenessConfig = {
       robots_policy: 'OBEY_ROBOTS',
       minimum_robots_validity_duration_s: null,
       custom_robots: '',
       min_time_between_page_load_ms: null,
+      max_time_between_page_load_ms: null,
+      delay_factor: null,
+      max_retries: null,
+      retry_delay_seconds: null,
+      crawl_host_group_selector: {
+        label: []
+      },
       meta: {
         name: '',
         description: '',
         label: [],
       }
-    };
+    };*/
     // By default, a newly-created  will have the selected state.
-    this.selectPolitenessConfig(politenessConfig);
+    this.selectPolitenessConfig(new PolitenessConfig('OBEY_ROBOTS'));
   }
 
   addPolitenessConfig = (politenessConfig: PolitenessConfig) => {
