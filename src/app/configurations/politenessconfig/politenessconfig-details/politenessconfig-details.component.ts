@@ -3,7 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {isUndefined} from 'util';
 import {PolitenessConfigService} from '../politenessconfig.service';
-import {Label, PolitenessConfig} from '../../../commons/models/config.model';
+import {Label, PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
@@ -17,7 +17,7 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
   politenessConfig: PolitenessConfig;
-  politenessConfigFG: FormGroup;
+  form: FormGroup;
 
   robotsPolicyList: any = [];
   robetsPolicyDropdownSettings = {};
@@ -38,13 +38,18 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  createForm() {
-    this.politenessConfigFG = this.fb.group({
+  private createForm() {
+    this.form = this.fb.group({
       id: '',
       robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
       minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
       custom_robots: null,
       min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      max_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      delay_factor: '',
+      max_retries: '',
+      retry_delay_seconds: '',
+      crawl_host_group_selector: [],
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
@@ -54,23 +59,30 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   updateData(politenessconfig: PolitenessConfig) {
-    this.politenessConfigFG.controls['id'].setValue(politenessconfig.id);
-    this.politenessConfigFG.controls['minimum_robots_validity_duration_s'].setValue(politenessconfig.minimum_robots_validity_duration_s);
-    this.politenessConfigFG.controls['custom_robots'].setValue(politenessconfig.custom_robots);
-    this.politenessConfigFG.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
-    this.politenessConfigFG.controls['meta'].patchValue({
+    this.form.controls['id'].setValue(politenessconfig.id);
+    this.form.controls['minimum_robots_validity_duration_s'].setValue(politenessconfig.minimum_robots_validity_duration_s);
+    this.form.controls['custom_robots'].setValue(politenessconfig.custom_robots);
+    this.form.controls['min_time_between_page_load_ms'].setValue(politenessconfig.min_time_between_page_load_ms);
+    this.form.controls['max_time_between_page_load_ms'].setValue(politenessconfig.max_time_between_page_load_ms);
+    this.form.controls['delay_factor'].setValue(politenessconfig.delay_factor);
+    this.form.controls['max_retries'].setValue(politenessconfig.max_retries);
+    this.form.controls['retry_delay_seconds'].setValue(politenessconfig.retry_delay_seconds);
+    this.form.controls['meta'].patchValue({
       name: politenessconfig.meta.name as string,
       description: politenessconfig.meta.description as string,
       label: [...politenessconfig.meta.label],
     });
+    this.form.get('crawl_host_group_selector').setValue([...politenessconfig.crawl_host_group_selector.label]);
     this.setSelectedDropdown();
     this.selectedRobotsPolicyItems = [];
-    this.politenessConfigFG.markAsPristine();
+    this.form.markAsPristine();
   };
 
   ngOnChanges() {
+    if (!this.politenessConfig.crawl_host_group_selector) {
+      this.politenessConfig.crawl_host_group_selector = new Selector();
+    }
     this.updateData(this.politenessConfig);
-
   }
 
   createPolitenessconfig() {
@@ -94,9 +106,9 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   deletePolitenessconfig(politenessConfigId) {
     this.politenessConfigService.delete(politenessConfigId)
-      .subscribe((deletedPolitenessConfig) => {
-        this.deleteHandler(deletedPolitenessConfig);
-        if (deletedPolitenessConfig === 'not_allowed') {
+      .subscribe((response) => {
+        this.deleteHandler(politenessConfigId);
+        if (response instanceof Object) {
           this.snackBarService.openSnackBar('Feil: Ikke slettet');
         } else {
           this.snackBarService.openSnackBar('Slettet');
@@ -122,7 +134,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
               this.selectedRobotsPolicyItems.push({id: robotsPolicy.id, itemName: politenessConfig.robots_policy})
             }
           }
-          this.politenessConfigFG.controls['robots_policy'].setValue(this.selectedRobotsPolicyItems);
+          this.form.controls['robots_policy'].setValue(this.selectedRobotsPolicyItems);
         });
     }
     this.robetsPolicyDropdownSettings = {
@@ -133,26 +145,32 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   prepareSavePolitenessConfig(): PolitenessConfig {
-    const formModel = this.politenessConfigFG.value;
+    const formModel = this.form.value;
 
     // deep copy of form model lairs
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
+    const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
 
     // return new `Hero` object containing a combination of original hero value(s)
     // and deep copies of changed form model values
     return {
       id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy[0].itemName,
-      minimum_robots_validity_duration_s: formModel.minimum_robots_validity_duration_s,
+      minimum_robots_validity_duration_s: parseInt(formModel.minimum_robots_validity_duration_s, 10),
       custom_robots: formModel.custom_robots,
       min_time_between_page_load_ms: formModel.min_time_between_page_load_ms,
+      max_time_between_page_load_ms: formModel.max_time_between_page_load_ms,
+      delay_factor: parseFloat(formModel.delay_factor) || 0,
+      max_retries: parseInt(formModel.max_retries, 10) || 0,
+      retry_delay_seconds: parseInt(formModel.retry_delay_seconds, 10) || 0,
+      crawl_host_group_selector: crawlHostGroup_selectorDeepCopy,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
         // created: '',
-        created_by: '',
+        // created_by: '',
         // last_modified: null,
-        last_modified_by: '',
+        // last_modified_by: '',
         label: labelsDeepCopy
       }
     };

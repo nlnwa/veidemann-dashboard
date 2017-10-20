@@ -21,6 +21,10 @@ export class Label {
 
 export class Selector {
   label: Label[];
+
+  constructor() {
+    this.label = [];
+  }
 }
 
 export class Entity {
@@ -127,10 +131,18 @@ export class PolitenessConfig {
   custom_robots: string;
   min_time_between_page_load_ms?: string; // int64
   max_time_between_page_load_ms?: string; // int64
-  delay_factor?: number;
-  max_retries?: number;
-  retry_delay_seconds?: number;
-  crawl_host_group_selector?: Selector;
+  delay_factor: number;
+  max_retries: number;
+  retry_delay_seconds: number;
+  crawl_host_group_selector: Selector;
+
+  constructor(robotsPolicy: string) {
+    this.robots_policy = robotsPolicy;
+    this.meta = new Meta();
+    this.crawl_host_group_selector = new Selector();
+  }
+
+
 }
 
 export class Extra {
