@@ -52,6 +52,7 @@ import {SearchService} from './search-service/search.service';
 import {BaseListComponent} from './base-list/base-list.component';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {HttpModule} from "@angular/http";
+import {SnackBarService} from "./snack-bar-service/snack-bar.service";
 
 
 @NgModule({
@@ -109,6 +110,7 @@ import {HttpModule} from "@angular/http";
     EntityService,
     BrowserScriptService,
     LogService,
+    SnackBarService,
   ],
   bootstrap: [AppComponent]
 })

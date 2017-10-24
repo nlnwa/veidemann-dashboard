@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserScriptService} from '../../browserscript';
 import {BrowserConfigService} from '../browserconfig.service';
@@ -10,7 +10,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   selector: 'app-browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
   styleUrls: ['./browserconfig-details.component.css'],
-  providers: [SnackBarService],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()

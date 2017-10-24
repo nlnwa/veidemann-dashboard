@@ -2,10 +2,9 @@ import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
 import {CrawlConfigService} from '../../crawlconfig/';
 import {ScheduleService} from '../../schedule/';
 import {CustomValidators} from '../../../commons/';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJobService} from '../crawljob.service';
-import {CrawlConfig, CrawlJob, Label, Schedule} from '../../../commons/models/config.model';
+import {CrawlConfig, CrawlJob, Schedule} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
@@ -13,7 +12,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   templateUrl: './crawljob-details.component.html',
   styleUrls: ['./crawljob-details.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [SnackBarService],
 
 })
 export class CrawljobDetailsComponent implements OnChanges {
@@ -44,8 +42,9 @@ export class CrawljobDetailsComponent implements OnChanges {
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
               private snackBarService: SnackBarService) {
-    this.fillDropdown();
     this.createForm();
+    this.fillDropdown();
+
   }
 
   createForm() {
@@ -92,9 +91,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   ngOnChanges() {
     this.updateData(this.crawlJob);
-    setTimeout(() => {
-      this.updateData(this.crawlJob);
-    });
   }
 
   updateCrawljob(crawljobForm): void {

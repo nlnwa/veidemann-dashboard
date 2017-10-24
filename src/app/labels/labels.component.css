@@ -5,6 +5,8 @@
 .key {
   display: inline-block;
   min-width: 200px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .chip{

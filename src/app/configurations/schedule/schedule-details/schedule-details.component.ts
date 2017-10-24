@@ -1,15 +1,14 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/';
 import {ScheduleService} from '../schedule.service';
-import {Label, Schedule} from '../../../commons/models/config.model';
+import {Schedule} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
   selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
   styleUrls: ['./schedule-details.component.css'],
-  providers: [SnackBarService],
 })
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()

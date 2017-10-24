@@ -26,7 +26,9 @@ export class LoglevelComponent implements OnInit {
     this.logService.getLogConfig()
       .map(response => response.log_level)
       .subscribe(logLevels => {
-        logLevels.forEach((logLevel) => { this.logLevels.push(logLevel); });
+        logLevels.forEach((logLevel) => {
+          this.logLevels.push(logLevel);
+        });
         this.setLogconfig(this.logLevels);
       });
   }

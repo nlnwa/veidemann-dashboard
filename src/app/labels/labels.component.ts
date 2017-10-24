@@ -1,6 +1,7 @@
-import {Component, forwardRef, Input, OnChanges,} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, forwardRef, Input, OnChanges,} from '@angular/core';
+import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 
 @Component({
@@ -12,6 +13,7 @@ import {Label} from '../commons/models/config.model';
     useExisting: forwardRef(() => LabelsComponent),
     multi: true
   }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class LabelsComponent implements OnChanges, ControlValueAccessor {
@@ -21,21 +23,34 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
   public showAddLabelCard = false;
   private labels: Label[];
-  newKeyInput: string;
-  newValueInput: string;
 
-  constructor() {
+  labelForm: FormGroup;
+
+  groups: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  groups$ = this.groups.asObservable();
+
+  constructor(private formbuilder: FormBuilder) {
+    this.createForm()
   }
 
   // Function to call when the rating changes.
-  onChange = (labels: Label[]) => {};
+  onChange = (labels: Label[]) => {
+  };
 
   // Function to call when the input is touched (when a star is clicked).
-  onTouched = () => {};
+  onTouched = () => {
+  };
+
+  createForm() {
+    this.labelForm = this.formbuilder.group({
+      newKeyInput: ['', [Validators.required, Validators.minLength(1)]],
+      newValueInput: ['', [Validators.required, Validators.minLength(1)]],
+    });
+  }
 
   ngOnChanges(): void {
-    this.newKeyInput = '';
-    this.newValueInput = '';
+    this.labelForm.controls['newKeyInput'].setValue('');
+    this.labelForm.controls['newValueInput'].setValue('');
     this.showAddLabelCard = false;
   }
 
@@ -44,6 +59,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       this.labels = [];
     } else {
       this.labels = labels;
+      this.regroup();
     }
     this.ngOnChanges();
   }
@@ -60,8 +76,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  get groups() {
-
+  regroup() {
     const grouping = {};
 
     this.labels.forEach(label => {
@@ -69,10 +84,10 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
         grouping[label.key].push(label.value);
       } else {
         grouping[label.key] = [label.value];
+
       }
     });
-
-    return Object.keys(grouping).map(key => ({key, values: grouping[key]}));
+    this.groups.next(Object.keys(grouping).map(key => ({key, values: grouping[key]})));
   }
 
   onNewLabel(key: string, value: string) {
@@ -80,6 +95,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       key: key,
       value: value
     });
+    this.regroup();
     this.ngOnChanges();
     this.onChange(this.labels);
   }
@@ -99,6 +115,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     });
 
     this.labels.splice(index, 1);
+    this.regroup();
     this.onChange(this.labels);
   }
 

@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {isUndefined} from 'util';
 import {PolitenessConfigService} from '../politenessconfig.service';
-import {Label, PolitenessConfig, Selector} from '../../../commons/models/config.model';
+import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 

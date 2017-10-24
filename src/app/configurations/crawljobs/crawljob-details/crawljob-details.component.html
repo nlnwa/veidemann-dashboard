@@ -83,30 +83,30 @@
       </div>
     </md-card-content>
 
-  <md-card-actions>
-    <button md-raised-button color="primary"
-            [disabled]="!crawlJobForm.valid"
-            *ngIf="!crawlJob.id"
-            (click)="createCrawljob(crawlJobForm.value)" novalidate
-            i18n="@@commonButtonSave">Lagre
-    </button>
-    <button md-raised-button color="primary"
-            *ngIf="crawlJob.id"
-            [disabled]="!crawlJobForm.valid || !crawlJobForm.dirty"
-            (click)="updateCrawljob(crawlJobForm.value)"
-            i18n="@@commonButtonSave">Lagre
-    </button>
-    <button md-raised-button color="accent"
-            (click)="revert()"
-            [disabled]="!crawlJobForm.dirty"
-            i18n="@@commonButtonRevert">Tilbakestill
-    </button>
-    <button md-raised-button color="warn"
-            *ngIf="crawlJob.id"
-            (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()"
-            i18n="@@commonButtonDelete">Slett
-    </button>
-  </md-card-actions>
+    <md-card-actions>
+      <button md-raised-button color="primary"
+              [disabled]="!crawlJobForm.valid"
+              *ngIf="!crawlJob.id"
+              (click)="createCrawljob(crawlJobForm.value)" novalidate
+              i18n="@@commonButtonSave">Lagre
+      </button>
+      <button md-raised-button color="primary"
+              *ngIf="crawlJob.id"
+              [disabled]="!crawlJobForm.valid || !crawlJobForm.dirty"
+              (click)="updateCrawljob(crawlJobForm.value)"
+              i18n="@@commonButtonSave">Lagre
+      </button>
+      <button md-raised-button color="accent"
+              (click)="revert()"
+              [disabled]="!crawlJobForm.dirty"
+              i18n="@@commonButtonRevert">Tilbakestill
+      </button>
+      <button md-raised-button color="warn"
+              *ngIf="crawlJob.id"
+              (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">Slett
+      </button>
+    </md-card-actions>
   </md-card>
 </form>
 

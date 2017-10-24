@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserScriptService} from '../browserscript.service';
-import {BrowserScript, Label} from '../../../commons/models/config.model';
+import {BrowserScript} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
