@@ -27,7 +27,8 @@ export class AuthService {
   }
 
   public get authorizationHeader() {
-      return this.oauthService.authorizationHeader();
+    const token = this.oauthService.getIdToken();
+    return `Bearer ${token}`;
   }
 
   public login() {
