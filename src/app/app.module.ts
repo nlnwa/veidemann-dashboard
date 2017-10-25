@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -51,7 +51,14 @@ import {LabelsComponent} from './labels/labels.component';
 import {SearchService} from './search-service/search.service';
 import {BaseListComponent} from './base-list/base-list.component';
 import {OAuthModule} from 'angular-oauth2-oidc';
-import {HttpModule} from "@angular/http";
+/**
+ * Need to import this old HttpModule because angular-oauth2-oidc use it
+ * but does not import it.
+ * @see https://github.com/manfredsteyer/angular-oauth2-oidc/issues/130
+ */
+import {HttpModule} from '@angular/http';
+import {TokenInterceptor} from './auth/token.interceptor';
+import {AuthService} from './auth/auth.service';
 
 
 @NgModule({
@@ -93,9 +100,10 @@ import {HttpModule} from "@angular/http";
     MaterialModule,
     FlexLayoutModule,
     HttpModule,
-    OAuthModule.forRoot()
+    OAuthModule.forRoot(),
   ],
   providers: [
+    AuthService,
     SearchService,
     SeedService,
     CrawlJobService,
@@ -109,6 +117,11 @@ import {HttpModule} from "@angular/http";
     EntityService,
     BrowserScriptService,
     LogService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })
