@@ -13,17 +13,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()
   schedule: Schedule;
-
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
   @Input()
   createHandler: Function;
   @Input()
@@ -31,8 +20,33 @@ export class ScheduleDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
-  private valid_from_unix: any;
-  private valid_to_unix: any;
+  form: FormGroup;
+
+  // Regular expressions for cron expression
+  minuteRegEx = new RegExp([/^[*]$|^(([*][\/])?([0-9]|[1-5]?[0-9]))$/
+    , /|^([0-9]|[1-5]?[0-9])((,([0-9]|[1-5]?[0-9]))|(-([0-9]|[1-5]?[0-9])))*$/
+  ].map(r => r.source).join(''));
+
+  hourRegEx = new RegExp([/^[*]$|^([0-9]|1[0-9]|2[0-3])/
+    , /((,([0-9]|1[0-9]|2[0-3]))|(-([0-9]|1[0-9]|2[0-3])))*$/
+  ].map(r => r.source).join(''));
+
+  domRegEx = new RegExp([/^[*]$|^([1-9]|1[0-9]|2[0-9]|3[0-1])/
+    , /((,([1-9]|1[0-9]|2[0-9]|3[0-1]))|(-(([1-9]|1[0-9]|2[0-9]|3[0-1]))))*$/
+  ].map(r => r.source).join(''));
+
+  monthRegEx = new RegExp(['^[*]$|^([1-9]|1[0-2]|(jan)|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec))',
+    '((,([1-9]|1[0-2]|(jan)|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec)))|(-([1-9]|1[0-2]|(jan)',
+    '|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec))))*$'].join(''));
+
+  dowRegEx = new RegExp([/^[*]$|^([0-6]|(mon)|(tue)|(wed)|(thu)|(fri)|(sat)|(sun))/
+    , /((,([0-6]|(mon)|(tue)|(wed)|(thu)|(fri)|(sat)|(sun)))|(-([0-6]|(mon)|(tue)|(wed)|(thu)|(fri)|(sat)|(sun))))*$/
+  ].map(r => r.source).join(''));
+
+  // Regular expression for valid from/to
+  yyyyRegEx = /[2-9][0-9][0-9][0-9]/;
+  mmRegEx = /^0?[1-9]$|^1[0-2]$/;
+  ddRegEx = /^0?[1-9]$|^1[0-9]$|^2[0-9]$|^3[0-1]$/;
 
   constructor(private scheduleService: ScheduleService,
               private snackBarService: SnackBarService,
@@ -44,21 +58,21 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
-        minute: ['', [Validators.required, Validators.minLength(1)]],
-        hour: ['', [Validators.required, Validators.minLength(1)]],
-        dom: ['', [Validators.required, Validators.minLength(1)]],
-        month: ['', [Validators.required, Validators.minLength(1)]],
-        dow: ['', [Validators.required, Validators.minLength(1)]],
+        minute: ['', [Validators.required, Validators.pattern(this.minuteRegEx)]],
+        hour: ['', [Validators.required, Validators.pattern(this.hourRegEx)]],
+        dom: ['', [Validators.required, Validators.pattern(this.domRegEx)]],
+        month: ['', [Validators.required, Validators.pattern(this.monthRegEx)]],
+        dow: ['', [Validators.required, Validators.pattern(this.dowRegEx)]],
       }),
       valid_from: this.fb.group({
-        year: null,
-        month: null,
-        day: null,
+        year: ['', [Validators.maxLength(4), Validators.pattern(this.yyyyRegEx)]],
+        month: ['', [Validators.maxLength(2), Validators.pattern(this.mmRegEx)]],
+        day: ['', [Validators.maxLength(2), Validators.pattern(this.ddRegEx)]]
       }),
       valid_to: this.fb.group({
-        year: null,
-        month: null,
-        day: null,
+        year: ['', [Validators.maxLength(4), Validators.pattern(this.yyyyRegEx)]],
+        month: ['', [Validators.maxLength(2), Validators.pattern(this.mmRegEx)]],
+        day: ['', [Validators.maxLength(2), Validators.pattern(this.ddRegEx)]]
       }),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
@@ -68,35 +82,37 @@ export class ScheduleDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(schedule: Schedule) {
+  updateForm(schedule: Schedule) {
     const cron_splitted = schedule.cron_expression.split(' ');
+    const validFromInSeconds = this.schedule.valid_from.seconds;
     if (schedule.valid_from !== null) {
-      const valid_from_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_from.seconds).split('-');
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validFromInSeconds);
       this.form.controls['valid_from'].setValue({
-        year: valid_from_splitted[0],
-        month: valid_from_splitted[1],
-        day: valid_from_splitted[2],
+        year: year,
+        month: month + 1,
+        day: day,
       });
     } else {
       this.form.controls['valid_from'].setValue({
-        year: null,
-        month: null,
-        day: null,
+        year: '',
+        month: '',
+        day: '',
       });
     }
 
     if (schedule.valid_to !== null) {
-      const valid_to_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_to.seconds).split('-');
+      const validToInSeconds = this.schedule.valid_to.seconds;
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validToInSeconds)
       this.form.controls['valid_to'].setValue({
-        year: valid_to_splitted[0],
-        month: valid_to_splitted[1],
-        day: valid_to_splitted[2],
+        year: year,
+        month: month + 1,
+        day: day,
       });
     } else {
       this.form.controls['valid_to'].setValue({
-        year: null,
-        month: null,
-        day: null,
+        year: '',
+        month: '',
+        day: '',
       });
     }
     this.form.controls['id'].setValue(schedule.id);
@@ -117,7 +133,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.updateData(this.schedule);
+    this.updateForm(this.schedule);
   }
 
   createSchedule() {
@@ -140,9 +156,9 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   deleteSchedule(scheduleId): void {
     this.scheduleService.delete(scheduleId)
-      .subscribe((deletedSchedule) => {
-        this.deleteHandler(deletedSchedule).subscribe();
-        if (deletedSchedule === 'not_allowed') {
+      .subscribe((response) => {
+        this.deleteHandler(scheduleId);
+        if (response instanceof Object) {
           this.snackBarService.openSnackBar('Feil: Ikke slettet..');
         } else {
           this.snackBarService.openSnackBar('Slettet');
@@ -150,46 +166,28 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
   }
 
+  setCronExpression(formModel) {
+    return formModel.minute + ' '
+      + formModel.hour + ' '
+      + formModel.dom + ' '
+      + formModel.month + ' '
+      + formModel.dow;
+  }
 
   prepareSaveSchedule(): Schedule {
     const formModel = this.form.value;
-    // deep copy of form model lairs
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
+    const formCronExpression = this.form.value.cron_expression;
+    const formValidFrom = this.form.value.valid_from;
+    const formValidTo = this.form.value.valid_to;
+    const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
+    const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
+    const cronExpression = this.setCronExpression(formCronExpression)
 
-    // allow null and from_date
-    if (formModel.valid_from.year !== null && formModel.valid_from.month !== null && formModel.valid_from.day !== null) {
-      const
-        valid_from = formModel.valid_from.year +
-          '-' + formModel.valid_from.month +
-          '-' + formModel.valid_from.day;
-      this.valid_from_unix = {seconds: (DateTime.convertTimestamp_yyyymmddhhmm_to_unix(valid_from) / 1000)};
-    } else {
-      this.valid_from_unix = null;
-    }
-
-    // allow null and a to date
-    if (formModel.valid_to.year !== null && formModel.valid_to.month !== null && formModel.valid_to.day !== null) {
-      const valid_to = formModel.valid_to.year + '-'
-        + formModel.valid_to.month + '-'
-        + formModel.valid_to.day;
-      this.valid_to_unix = {seconds: (DateTime.convertTimestamp_yyyymmddhhmm_to_unix(valid_to) / 1000)};
-    } else {
-      this.valid_to_unix = null;
-    }
-
-    const cron_expression = formModel.cron_expression.minute + ' '
-      + formModel.cron_expression.hour + ' '
-      + formModel.cron_expression.dom + ' '
-      + formModel.cron_expression.month + ' '
-      + formModel.cron_expression.dow;
-
-    // return new `Hero` object containing a combination of original hero value(s)
-    // and deep copies of changed form model values
     return {
       id: this.schedule.id,
-      cron_expression: cron_expression,
-      valid_from: this.valid_from_unix,
-      valid_to: this.valid_to_unix,
+      cron_expression: cronExpression,
+      valid_from: {seconds: validFrom},
+      valid_to: {seconds: validTo},
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
@@ -197,7 +195,7 @@ export class ScheduleDetailsComponent implements OnChanges {
         // created_by: '',
         // last_modified: null,
         last_modified_by: '',
-        label: labelsDeepCopy
+        label: formModel.meta.label.map(label => ({...label})),
       }
     };
   }

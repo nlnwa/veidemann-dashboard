@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DateTime} from './commons/';
-import {JwksValidationHandler, OAuthService} from "angular-oauth2-oidc";
-import {authConfig} from './auth.config';
+import {AuthService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +11,19 @@ export class AppComponent implements OnInit {
   myDate: String;
   isExpertMode: boolean;
 
-  constructor(private oauthService: OAuthService) {
-    this.configureAuth();
+  constructor(private authService: AuthService) {
+  }
+
+  get name(): string {
+    return this.authService.name;
+  }
+
+  onLogin() {
+    this.authService.login();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 
   setExpertMode(bool: boolean) {
@@ -30,29 +40,4 @@ export class AppComponent implements OnInit {
     this.getTimestamp();
   }
 
-  public login() {
-    this.oauthService.initImplicitFlow();
-  }
-
-  public logout() {
-    this.oauthService.logOut();
-  }
-
-  public get groups() {
-    let claims = this.oauthService.getIdentityClaims();
-    if (!claims) return null;
-    return claims['groups'];
-  }
-
-  public get name() {
-    let claims = this.oauthService.getIdentityClaims();
-    if (!claims) return null;
-    return claims['name'];
-  }
-
-  private configureAuth() {
-    this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
-  }
 }

@@ -31,10 +31,10 @@
 
     <!-- Toolbar -->
     <md-toolbar color="primary">
-      <a color="primary" md-raised-button (click)="login()" *ngIf="!name">
+      <a color="primary" md-raised-button (click)="onLogin()" *ngIf="!name">
         <md-icon>person</md-icon>
         <ng-container i18n="@@toolbarLogon">Logg på</ng-container></a>
-      <a color="primary" md-raised-button (click)="logout()" *ngIf="name">
+      <a color="primary" md-raised-button (click)="onLogout()" *ngIf="name">
         <md-icon>person</md-icon>
         <ng-container i18n="@@toolbarLogon">Logg av</ng-container></a>
     </md-toolbar>
