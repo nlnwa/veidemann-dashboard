@@ -23,10 +23,11 @@
           </md-form-field>
 
           <md-form-field>
-            <input mdInput
+            <textarea mdInput
                    formControlName="description"
                    placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
+            </textarea>
           </md-form-field>
         </ng-container>
       </div>
@@ -34,64 +35,73 @@
 
         <div formGroupName="cron_expression">
           <h3 i18n="@@scheduleFormCronExpressionHeader">Cron expression</h3>
-          <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
-            <md-form-field>
-              <input mdInput formControlName="minute" placeholder="Minutt"
+          <div fxLayout="row" fxLayoutGap="1em">
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="minute"
+                     placeholder="Minutt"
                      i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
             </md-form-field>
-            <md-form-field>
-              <input mdInput formControlName="hour" placeholder="Time"
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="hour"
+                     placeholder="Time"
                      i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
             </md-form-field>
-            <md-form-field>
-              <input mdInput formControlName="dom" placeholder="Dom"
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="dom"
+                     placeholder="Dom"
                      i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
             </md-form-field>
-            <md-form-field>
-              <input mdInput formControlName="month" placeholder="Måned"
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="month"
+                     placeholder="Måned"
                      i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
             </md-form-field>
-            <md-form-field>
-              <input mdInput formControlName="dow" placeholder="Dow"
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="dow"
+                     placeholder="Dow"
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </md-form-field>
-            <md-error *ngIf="!scheduleForm['controls'].cron_expression.valid"
-                      i18n="@@scheduleFormCronExpressionRequiredError">
-              Cron expression er påkrevd.
-            </md-error>
           </div>
+          <md-error fxLayout="row" *ngIf="!scheduleForm['controls'].cron_expression.valid"
+                    i18n="@@scheduleFormCronExpressionRequiredError">
+            Cron expression er påkrevd.
+          </md-error>
         </div>
 
         <div formGroupName="valid_from">
           <h3 i18n="@@scheduleFormValidFromHeader">Gyldig fra</h3>
-          <md-form-field>
-            <input mdInput formControlName="year" placeholder="År"
+          <div fxLayout="row" fxLayoutGap="1em">
+          <md-form-field class="form-control_cron">
+            <input mdInput formControlName="year" placeholder="År" type="number"
                    i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
           </md-form-field>
-          <md-form-field>
-            <input mdInput formControlName="month" placeholder="Måned"
+          <md-form-field class="form-control_cron">
+            <input mdInput formControlName="month" placeholder="Måned" type="number"
                    i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
           </md-form-field>
-          <md-form-field>
-            <input mdInput formControlName="day" placeholder="Dag"
+          <md-form-field class="form-control_cron">
+            <input mdInput formControlName="day" placeholder="Dag" type="number"
                    i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
           </md-form-field>
+          </div>
         </div>
 
         <div formGroupName="valid_to">
           <h3 i18n="@@scheduleFormValidToHeader">Gyldig til</h3>
-          <md-form-field>
-            <input mdInput formControlName="year" placeholder="År"
-                   i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
-          </md-form-field>
-          <md-form-field>
-            <input mdInput formControlName="month" placeholder="Måned"
-                   i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
-          </md-form-field>
-          <md-form-field>
-            <input mdInput formControlName="day" placeholder="Dag"
-                   i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
-          </md-form-field>
+          <div fxLayout="row" fxLayoutGap="1em">
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="year" placeholder="År" type="number"
+                     i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
+            </md-form-field>
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="month" placeholder="Måned" type="number"
+                     i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
+            </md-form-field>
+            <md-form-field class="form-control_cron">
+              <input mdInput formControlName="day" placeholder="Dag" type="number"
+                     i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
+            </md-form-field>
+          </div>
         </div>
 
         <ng-container formGroupName="meta">
