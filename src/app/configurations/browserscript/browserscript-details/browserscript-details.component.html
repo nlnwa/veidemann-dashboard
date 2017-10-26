@@ -1,50 +1,50 @@
 <form [formGroup]="form">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <span i18n="@@browserscriptDetailsHeader">Browserscript</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="!browserScript.id"
               i18n="@@browserscriptNewBrowserscriptHeader"> Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
 
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! form.controls.meta.valid"
+            <mat-error *ngIf="! form.controls.meta.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
         </ng-container>
-        <md-form-field>
-    <textarea mdInput formControlName="script" placeholder="Script"
+        <mat-form-field>
+    <textarea matInput formControlName="script" placeholder="Script"
               i18n-placeholder="@@browserscriptFormScriptPlaceholder">
     </textarea>
-          <md-error *ngIf="! form.controls.script.valid"
+          <mat-error *ngIf="! form.controls.script.valid"
                     i18n="@@browserscriptFormScriptRequiredError">
             Script er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
       </div>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!browserScript.id"
               (click)="createBrowserScript(form.value)"
@@ -52,25 +52,25 @@
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="browserScript.id"
               [disabled]="!form.valid || !form.dirty"
               (click)="updateBrowserScript(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="revert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               *ngIf="browserScript.id"
               (click)="deleteBrowserScript(browserScript.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>

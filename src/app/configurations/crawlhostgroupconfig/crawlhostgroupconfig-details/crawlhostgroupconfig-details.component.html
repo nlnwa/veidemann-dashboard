@@ -1,70 +1,70 @@
 <form [formGroup]="crawlHostGroupConfigFG">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <span *ngIf="crawlHostGroupConfig" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column" fxLayoutWrap>
         <ng-container formGroupName="meta">
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="!name.valid"
+            <mat-error *ngIf="!name.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
-            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
-                     mdTooltip='Legg til en fritekst om konfigurasjonen'
-                     i18n-mdTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
-            </md-icon>
-          </md-form-field>
+            <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
+                     matTooltip='Legg til en fritekst om konfigurasjonen'
+                     i18n-matTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
+            </mat-icon>
+          </mat-form-field>
         </ng-container>
       </div>
 
       <div fxFlex fxLayout="column">
         <!-- IP Range -->
-        <md-toolbar>
+        <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
-          <button md-mini-fab (click)="addIpRange()">
-            <md-icon>add</md-icon>
+          <button mat-mini-fab (click)="addIpRange()">
+            <mat-icon>add</mat-icon>
           </button>
-        </md-toolbar>
+        </mat-toolbar>
 
         <ng-container formArrayName="ip_range">
-          <md-card-header>
-            <md-card-title></md-card-title>
-          </md-card-header>
+          <mat-card-header>
+            <mat-card-title></mat-card-title>
+          </mat-card-header>
           <ng-container *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
             <div [formGroupName]="i">
-              <md-form-field>
-                <input mdInput formControlName="ip_from" placeholder="Fra IP-addresse:"
+              <mat-form-field>
+                <input matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-                <md-error *ngIf="!ipFromControl?.valid"
+                <mat-error *ngIf="!ipFromControl?.valid"
                           i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
                   En gyldig IP-addresse er påkrevd.
-                </md-error>
-              </md-form-field>
-              <md-form-field>
-                <input mdInput formControlName="ip_to" placeholder="Til IP-addresse"
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="ip_to" placeholder="Til IP-addresse"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-                <md-error *ngIf="!ipToControl?.valid"
+                <mat-error *ngIf="!ipToControl?.valid"
                           i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
                   En gyldig IP-addresse er påkrevd.
-                </md-error>
-              </md-form-field>
-              <button mdSuffix md-icon-button (click)="removeIpRange(i)">
-                <md-icon color="warn">close</md-icon>
+                </mat-error>
+              </mat-form-field>
+              <button matSuffix mat-icon-button (click)="removeIpRange(i)">
+                <mat-icon color="warn">close</mat-icon>
               </button>
             </div>
           </ng-container>
@@ -75,36 +75,36 @@
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-button color="primary"
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary"
               *ngIf="!crawlHostGroupConfig.id"
               [disabled]="!crawlHostGroupConfigFG.valid"
               (click)="createCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-button color="primary"
+      <button mat-button color="primary"
               *ngIf="crawlHostGroupConfig.id"
               [disabled]="!crawlHostGroupConfigFG.valid || !crawlHostGroupConfigFG.dirty"
               (click)="updateCrawlHostGroupConfig(crawlHostGroupConfigFG.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-button color="accent"
+      <button mat-button color="accent"
               (click)="revert()"
               [disabled]="!crawlHostGroupConfigFG.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
 
-      <button md-button color="warn"
+      <button mat-button color="warn"
               *ngIf="crawlHostGroupConfig.id"
               (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>
 

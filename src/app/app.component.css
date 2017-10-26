@@ -3,10 +3,10 @@ main {
   padding: 1em 1.5em 2em 1.3em;
 }
 
-md-sidenav {
+mat-sidenav {
 }
 
-md-nav-list .material-icons {
+mat-nav-list .material-icons {
   margin-right: 0.5em;
 }
 

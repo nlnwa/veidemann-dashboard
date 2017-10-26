@@ -2,34 +2,34 @@
 <form [formGroup]="form">
   <ng-container formArrayName="log_level">
     <div *ngFor="let log_level of log_level.controls; let i=index" [formGroupName]="i">
-      <md-form-field>
-        <input mdInput formControlName="logger" placeholder="Logger"
+      <mat-form-field>
+        <input matInput formControlName="logger" placeholder="Logger"
                i18n-placeholder="@@logconfigFormLoggerPlaceholder">
-      </md-form-field>
+      </mat-form-field>
 
-      <md-select formControlName="level" placeholder="Level"
+      <mat-select formControlName="level" placeholder="Level"
                  i18n-placeholder="@@logconfigFormLevelPlaceholder">
-        <md-option *ngFor="let level of levels | async" [value]="level">{{level}}</md-option>
-      </md-select>
+        <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
+      </mat-select>
 
-      <button md-icon-button color="warn" (click)="removeLogconfig(i)">
-        <md-icon>close</md-icon>
+      <button mat-icon-button color="warn" (click)="removeLogconfig(i)">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
   </ng-container>
 
 
-  <button md-raised-button color="warn"
+  <button mat-raised-button color="warn"
           (click)="addLogconfig()"
           i18n="@@commonButtonAdd">Legg til
   </button>
-  <button md-raised-button color="accent"
+  <button mat-raised-button color="accent"
           (click)="revert()"
           [disabled]="!form.dirty"
           i18n="@@commonButtonRevert">
     Tilbakestill
   </button>
-  <button md-raised-button color="primary"
+  <button mat-raised-button color="primary"
           (click)="saveLogConfig(form.value)" novalidate
           i18n="@@commonButtonSave">Lagre
   </button>

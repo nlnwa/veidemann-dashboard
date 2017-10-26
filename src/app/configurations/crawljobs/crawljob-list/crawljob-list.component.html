@@ -1,14 +1,14 @@
 <h2 i18n="@@crawljobsListHeader ">Crawljobs</h2>
 
-<md-nav-list>
-  <md-list-item
+<mat-nav-list>
+  <mat-list-item
     *ngFor="let crawljob of crawljobs" (click)="selectCrawlJob(crawljob)"
     [class.active]="crawljob === selectedCrawlJob">
     {{crawljob.meta.name}}
-  </md-list-item>
-</md-nav-list>
+  </mat-list-item>
+</mat-nav-list>
 
-<button md-raised-button color="warn"
+<button mat-raised-button color="warn"
         (click)="createNewCrawlJob()"
         i18n="@@commonButtonNew">New
 </button>

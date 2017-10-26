@@ -1,73 +1,73 @@
 <form [formGroup]="form">
-  <md-card *ngIf="entity">
-    <md-card-header>
-      <md-card-title>
+  <mat-card *ngIf="entity">
+    <mat-card-header>
+      <mat-card-title>
         <span i18n="@@entityDetailsCardTitle">ENTITET</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="!entity.id"
               i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="!form.get('meta.name').valid"
+            <mat-error *ngIf="!form.get('meta.name').valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                     i18n-placeholder="@@metaDescriptionInputPlaceholder">
-            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
-                     mdTooltip='Legg til fritekst om entiteten.
+            <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
+                     matTooltip='Legg til fritekst om entiteten.
                      Eks. Kontaktinformasjon eller bemerkninger'
-                     i18n-mdTooltip="@@entityAddDescriptionTooltip">info</md-icon>
-          </md-form-field>
+                     i18n-matTooltip="@@entityAddDescriptionTooltip">info</mat-icon>
+          </mat-form-field>
         </ng-container>
 
-        <md-form-field>
-          <input mdInput
+        <mat-form-field>
+          <input matInput
                  formControlName="id"
                  placeholder="Id"
                  i18n-placeholder="@@metaIdInputPlaceholder">
-        </md-form-field>
+        </mat-form-field>
 
         <ng-container formGroupName="meta">
-          <md-form-field formGroupName="created">
-            <input mdInput
+          <mat-form-field formGroupName="created">
+            <input matInput
                    formControlName="seconds"
                    placeholder="Opprettet"
                    i18n-placeholder="@@metaCreatedInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput
+          <mat-form-field>
+            <input matInput
                    formControlName="created_by"
                    placeholder="Opprettet av"
                    i18n-placeholder="@@metaCreatedByInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
 
-          <md-form-field formGroupName="last_modified">
-            <input mdInput
+          <mat-form-field formGroupName="last_modified">
+            <input matInput
                    formControlName="seconds"
                    placeholder="Sist endret"
                    i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
 
-          <md-form-field>
-            <input mdInput
+          <mat-form-field>
+            <input matInput
                    formControlName="last_modified_by"
                    placeholder="Sist endret av"
                    i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
         </ng-container>
       </div>
       <div fxFlex fxLayout="column">
@@ -76,40 +76,40 @@
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
         <!-- Seedlist -->
-        <md-toolbar>
+        <mat-toolbar>
           <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
           <span class="fill-space"></span>
-          <button md-mini-fab (click)="onCreateSeed()">
-            <md-icon>add</md-icon>
+          <button mat-mini-fab (click)="onCreateSeed()">
+            <mat-icon>add</mat-icon>
           </button>
-        </md-toolbar>
+        </mat-toolbar>
         <app-base-list (onRowClick)="onSelectSeed($event)" [items]="seeds | async"></app-base-list>
       </div>
-    </md-card-content>
+    </mat-card-content>
 
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               *ngIf="!entity.id" [disabled]="!form.valid"
               (click)="onSave()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="entity.id" [disabled]="!form.dirty || !form.valid"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>
 
 

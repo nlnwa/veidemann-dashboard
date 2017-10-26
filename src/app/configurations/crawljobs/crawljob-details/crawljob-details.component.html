@@ -1,59 +1,59 @@
 <form [formGroup]="form">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <span *ngIf="crawlJob" i18n="@@crawljobDetailsHeader">Crawljob</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="!crawlJob.id" i18n="@@newCrawljobHeader">Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column" fxLayoutWrap>
 
-        <md-slide-toggle i18n="@@disableCrawljobToggleSwitch" formControlName="disabled">
+        <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch" formControlName="disabled">
           Deaktivert
-        </md-slide-toggle>
+        </mat-slide-toggle>
 
-        <md-form-field formGroupName="meta">
-          <input mdInput formControlName="name" placeholder="Navn"
+        <mat-form-field formGroupName="meta">
+          <input matInput formControlName="name" placeholder="Navn"
                  i18n-placeholder="@@metaNameInputPlaceholder">
-          <md-error *ngIf="! form.controls.meta.controls.name.valid"
+          <mat-error *ngIf="! form.controls.meta.controls.name.valid"
                     i18n="@@metaNameRequiredError">
             Navn er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
-        <md-form-field formGroupName="meta">
+        <mat-form-field formGroupName="meta">
           <input i18n-placeholder=@@metaDescriptionInputPlaceholder
-                 mdInput formControlName="description" placeholder="Beskrivelse">
-        </md-form-field>
+                 matInput formControlName="description" placeholder="Beskrivelse">
+        </mat-form-field>
 
         <ng-container formGroupName="limits">
-          <md-form-field>
+          <mat-form-field>
             <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                   mdInput formControlName="depth" type="number" placeholder="Dybde">
-            <md-error i18n="@@crawljobFormDepthRequiredError"
+                   matInput formControlName="depth" type="number" placeholder="Dybde">
+            <mat-error i18n="@@crawljobFormDepthRequiredError"
                       *ngIf="! form.controls.limits.controls.depth.valid">
               Dybde er påkrevd
-            </md-error>
-          </md-form-field>
-          <md-form-field>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                   mdInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
-            <md-error i18n="@@crawljobFormMaxDurationRequiredError"
+                   matInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
+            <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
                       *ngIf="! form.controls.limits.controls.max_duration_s.valid">
               Maks tid er påkrevd.
-            </md-error>
-          </md-form-field>
-          <md-form-field>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                   mdInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
-            <md-error i18n="@@crawljobFormMaxByteRequiredError"
+                   matInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
+            <mat-error i18n="@@crawljobFormMaxByteRequiredError"
                       *ngIf="! form.controls.limits.controls.max_bytes.valid">
               Maks byte er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
         </ng-container>
       </div>
 
@@ -66,10 +66,10 @@
                                   formControlName="schedule_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="! form.controls.schedule_id.valid"
+          <mat-error *ngIf="! form.controls.schedule_id.valid"
                     i18n="@@crawljobFormScheduleRequiredError">
             Schedule er påkrevd.
-          </md-error>
+          </mat-error>
         </div>
 
         <div>
@@ -80,42 +80,42 @@
                                   formControlName="crawl_config_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="! form.controls.crawl_config_id.valid"
+          <mat-error *ngIf="! form.controls.crawl_config_id.valid"
                     i18n="@@crawljobFormCrawlconfigRequieredError">
             Crawlconfig er påkrevd.
-          </md-error>
+          </mat-error>
         </div>
 
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
       </div>
-    </md-card-content>
+    </mat-card-content>
 
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!crawlJob.id"
               (click)="createCrawljob(form.value)" novalidate
               i18n="@@commonButtonSave">Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="crawlJob.id"
               [disabled]="!form.valid || !form.dirty"
               (click)="updateCrawljob(form.value)"
               i18n="@@commonButtonSave">Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="revert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               *ngIf="crawlJob.id"
               (click)="deleteCrawljob(crawlJob.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>
 

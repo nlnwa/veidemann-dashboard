@@ -1,78 +1,78 @@
 <form [formGroup]="form">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <span i18n="@@browserconfigDetailsHeader">Browserconfig</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="!browserConfig.id"
               i18n="@@browserconfigNewConfigHeader">
         Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
 
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! form.controls.meta.valid"
+            <mat-error *ngIf="! form.controls.meta.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
         </ng-container>
 
-        <md-form-field>
-          <input mdInput formControlName="user_agent" placeholder="Brukeragent"
+        <mat-form-field>
+          <input matInput formControlName="user_agent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
-          <md-error *ngIf="! form.controls.user_agent.valid"
+          <mat-error *ngIf="! form.controls.user_agent.valid"
                     i18n="@@browserconfigFormUserAgentRequiredError">
             Brukeragent er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
-        <md-form-field>
-          <input mdInput formControlName="window_width" placeholder="Vindusbredde"
+        <mat-form-field>
+          <input matInput formControlName="window_width" placeholder="Vindusbredde"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
-          <md-error *ngIf="! form.controls.window_width.valid"
+          <mat-error *ngIf="! form.controls.window_width.valid"
                     i18n="@@browserconfigFormWindowWidthRequiredError">
             Vindusbredde er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
-        <md-form-field>
-          <input mdInput formControlName="window_height" placeholder="Vindushøyde"
+        <mat-form-field>
+          <input matInput formControlName="window_height" placeholder="Vindushøyde"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
-          <md-error *ngIf="! form.controls.window_height.valid"
+          <mat-error *ngIf="! form.controls.window_height.valid"
                     i18n="@@browserconfigFormWindowHeightRequiredError">
             Vindushøyde er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
-        <md-form-field>
-          <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
+        <mat-form-field>
+          <input matInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-          <md-error *ngIf="! form.controls.page_load_timeout_ms.valid"
+          <mat-error *ngIf="! form.controls.page_load_timeout_ms.valid"
                     i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
             Page load timeout er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
-        <md-form-field>
-          <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
+        <mat-form-field>
+          <input matInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-          <md-error *ngIf="! form.controls.sleep_after_pageload_ms.valid"
+          <mat-error *ngIf="! form.controls.sleep_after_pageload_ms.valid"
                     i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
             Sleep after pageload er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
       </div>
       <div fxFlex fxLayout="column">
         <div>
@@ -83,10 +83,10 @@
                                   formControlName="script_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="! form.controls.script_id.valid"
+          <mat-error *ngIf="! form.controls.script_id.valid"
                     i18n="@@browserconfigFormScriptsRequiredError">
             Scripts påkrevd.
-          </md-error>
+          </mat-error>
         </div>
 
         <app-labels type="Selector" formControlName="script_selector"></app-labels>
@@ -95,34 +95,34 @@
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!browserConfig.id"
               (click)="createBrowserConfig(form.value)" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="browserConfig.id"
               [disabled]="!form.valid || !form.dirty"
               (click)="updateBrowserConfig(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="revert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               *ngIf="browserConfig.id"
               (click)="deleteBrowserConfig(browserConfig.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>

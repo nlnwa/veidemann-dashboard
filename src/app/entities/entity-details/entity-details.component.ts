@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {EntityService} from '../entity.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {DateTime} from '../../commons/';
 import {SeedService} from '../../seeds/seeds.service';
 import {Entity, Label, Seed} from '../../commons/models/config.model';
@@ -56,7 +56,7 @@ export class EntityDetailsComponent {
 
   constructor(private entityService: EntityService,
               private seedService: SeedService,
-              private mdSnackBar: MdSnackBar,
+              private mdSnackBar: MatSnackBar,
               private fb: FormBuilder) {
     this.createForm();
   }

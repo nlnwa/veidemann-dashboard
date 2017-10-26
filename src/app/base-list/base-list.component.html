@@ -1,35 +1,35 @@
 <!-- Table of search results -->
-<md-table [dataSource]="dataSource"
+<mat-table [dataSource]="dataSource"
           [trackBy]="trackById">
 
-  <ng-container mdColumnDef="name">
-    <md-header-cell *mdHeaderCellDef
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef
                     i18n="@@baselistNameHeaderCell">
       Navn
-    </md-header-cell>
-    <md-cell *mdCellDef="let row">{{row.meta.name}}</md-cell>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
   </ng-container>
 
-  <ng-container mdColumnDef="description">
-    <md-header-cell *mdHeaderCellDef
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef
                     i18n="@@baselistDescriptionHeaderCell">
       Beskrivelse
-    </md-header-cell>
-    <md-cell *mdCellDef="let row">{{row.meta.description}}</md-cell>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
   </ng-container>
 
-  <ng-container mdColumnDef="id">
-    <md-header-cell *mdHeaderCellDef
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef
                     i18n="@@baselistIdHeaderCell">
       ID
-    </md-header-cell>
-    <md-cell *mdCellDef="let row">{{row.id}}</md-cell>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
   </ng-container>
 
-  <md-header-row *mdHeaderRowDef="['name', 'description']"></md-header-row>
+  <mat-header-row *matHeaderRowDef="['name', 'description']"></mat-header-row>
 
-  <md-row *mdRowDef="let row; columns: ['name', 'description']"
+  <mat-row *matRowDef="let row; columns: ['name', 'description']"
           [ngClass]="{'highlight': selectedRowIndex == row.id}"
           (click)="handleRowClick(row)">
-  </md-row>
-</md-table>
+  </mat-row>
+</mat-table>
