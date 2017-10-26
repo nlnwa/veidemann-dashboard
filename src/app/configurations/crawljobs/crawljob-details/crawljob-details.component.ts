@@ -12,7 +12,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   templateUrl: './crawljob-details.component.html',
   styleUrls: ['./crawljob-details.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [SnackBarService],
 
 })
 export class CrawljobDetailsComponent implements OnChanges {

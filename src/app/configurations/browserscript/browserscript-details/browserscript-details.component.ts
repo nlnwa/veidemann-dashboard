@@ -9,7 +9,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   selector: 'app-browserscript-details',
   templateUrl: './browserscript-details.component.html',
   styleUrls: ['./browserscript-details.component.css'],
-  providers: [SnackBarService]
 })
 
 export class BrowserScriptDetailsComponent implements OnChanges {

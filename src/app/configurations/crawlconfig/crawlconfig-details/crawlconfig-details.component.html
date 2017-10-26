@@ -54,7 +54,7 @@
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="form.controls.politeness_id.valid"
+          <md-error *ngIf="! form.controls.politeness_id.valid"
                  i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
           </md-error>

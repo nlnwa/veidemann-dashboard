@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
 import {LogLevel} from '../../../commons/models/config.model';
+import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
 @Component({
@@ -9,44 +10,54 @@ import {LogLevel} from '../../../commons/models/config.model';
   templateUrl: './loglevel.component.html',
   styleUrls: ['./loglevel.component.css']
 })
-export class LoglevelComponent implements OnInit {
+export class LoglevelComponent implements OnChanges {
 
-  logForm: FormGroup;
-  logLevels: LogLevel[] = [];
+  _form: FormGroup;
 
-  constructor(private logService: LogService,
-              private fb: FormBuilder) {
-
-    this.logForm = this.fb.group({
-      log_level: this.fb.array([]),
-    })
-  }
-
-  ngOnInit() {
-    this.logService.getLogConfig()
-      .map(response => response.log_level)
-      .subscribe(logLevels => {
-        logLevels.forEach((logLevel) => {
-          this.logLevels.push(logLevel);
-        });
-        this.setLogconfig(this.logLevels);
-      });
+  get form(): FormGroup {
+    return this._form;
   }
 
   get levels() {
     return this.logService.getLevels();
   }
 
-  setLogconfig(logconfig) {
-    this.logLevels = [];
-    const logconfigFGs = logconfig.map(config => (this.fb.group(config)));
-    const logconfigFormArray = this.fb.array(logconfigFGs);
-    this.logForm.setControl('log_level', logconfigFormArray);
+  get log_level(): FormArray {
+    return this.form.get('log_level') as FormArray;
+  };
+
+  get log_levelArray() {
+    return <FormArray>this.form.get('log_level');
   }
 
-  get log_level(): FormArray {
-    return this.logForm.get('log_level') as FormArray;
-  };
+  set form(form: FormGroup) {
+    this._form = form;
+  }
+
+  logLevels: LogLevel[] = [];
+
+  constructor(private logService: LogService,
+              private fb: FormBuilder,
+              private snackBarService: SnackBarService) {
+
+    this.form = this.fb.group({
+      log_level: this.fb.array([]),
+    });
+    this.ngOnChanges();
+  }
+
+  ngOnChanges() {
+    this.logService.getLogConfig()
+      .map(response => response.log_level)
+      .subscribe(logLevels => {
+        logLevels.forEach((logLevel) => {
+          this.logLevels.push(logLevel);
+        });
+        const logconfigFG: FormGroup[] = this.logLevels.map(config => (this.fb.group(config)));
+        const logconfigFormArray = this.fb.array(logconfigFG);
+        this.form.setControl('log_level', logconfigFormArray);
+      });
+  }
 
   initLogconfig() {
     return this.fb.group({
@@ -57,16 +68,20 @@ export class LoglevelComponent implements OnInit {
 
   saveLogConfig(logconfig) {
     this.logService.saveLogConfig(logconfig).subscribe();
+    this.snackBarService.openSnackBar('Lagret');
   }
 
   addLogconfig() {
-    const control = <FormArray>this.logForm.controls['log_level'];
-    control.push(this.initLogconfig());
+    this.log_levelArray.push(this.initLogconfig());
   }
 
   removeLogconfig(i: number) {
-    const control = <FormArray>this.logForm.controls['log_level'];
-    control.removeAt(i);
+    this.log_levelArray.removeAt(i);
+  }
+
+  revert() {
+    this.ngOnChanges();
+    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
 }

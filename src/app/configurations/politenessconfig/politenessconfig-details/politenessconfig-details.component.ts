@@ -11,7 +11,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   selector: 'app-politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
   styleUrls: ['./politenessconfig-details.component.css'],
-  providers: [SnackBarService]
 })
 
 export class PolitenessconfigDetailsComponent implements OnChanges {
