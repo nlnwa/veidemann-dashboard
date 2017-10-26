@@ -1,10 +1,9 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/';
 import {ScheduleService} from '../schedule.service';
-import {Label, Schedule} from '../../../commons/models/config.model';
+import {Schedule} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-schedule-details',
@@ -54,7 +53,6 @@ export class ScheduleDetailsComponent implements OnChanges {
               private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
-    moment.utc();
   }
 
   createForm() {
@@ -87,12 +85,13 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   updateForm(schedule: Schedule) {
     const cron_splitted = schedule.cron_expression.split(' ');
+    const validFromInSeconds = this.schedule.valid_from.seconds;
     if (schedule.valid_from !== null) {
-      const validFrom = moment.utc(this.schedule.valid_from.seconds, 'X');
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validFromInSeconds);
       this.scheduleForm.controls['valid_from'].setValue({
-        year: validFrom.year(),
-        month: validFrom.month() + 1,
-        day: validFrom.date(),
+        year: year,
+        month: month + 1,
+        day: day,
       });
     } else {
       this.scheduleForm.controls['valid_from'].setValue({
@@ -103,11 +102,12 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
 
     if (schedule.valid_to !== null) {
-      const validTo = moment.utc(this.schedule.valid_to.seconds, 'X');
+      const validToInSeconds = this.schedule.valid_to.seconds;
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validToInSeconds)
       this.scheduleForm.controls['valid_to'].setValue({
-        year: validTo.year(),
-        month: validTo.month() + 1,
-        day: validTo.date(),
+        year: year,
+        month: month + 1,
+        day: day,
       });
     } else {
       this.scheduleForm.controls['valid_to'].setValue({
@@ -167,20 +167,28 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
   }
 
+  setCronExpression(formModel) {
+    return formModel.minute + ' '
+      + formModel.hour + ' '
+      + formModel.dom + ' '
+      + formModel.month + ' '
+      + formModel.dow;
+  }
+
   prepareSaveSchedule(): Schedule {
     const formModel = this.scheduleForm.value;
     const formCronExpression = this.scheduleForm.value.cron_expression;
     const formValidFrom = this.scheduleForm.value.valid_from;
     const formValidTo = this.scheduleForm.value.valid_to;
-    const validFrom = DateTime.scheduleSetValidFrom(formValidFrom);
-    const validTo = DateTime.scheduleSetValidTo(formValidTo);
-    const cronExpression = DateTime.scheduleSetCronExpression(formCronExpression)
+    const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
+    const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
+    const cronExpression = this.setCronExpression(formCronExpression)
 
     return {
       id: this.schedule.id,
       cron_expression: cronExpression,
-      valid_from: validFrom,
-      valid_to: validTo,
+      valid_from: {seconds: validFrom},
+      valid_to: {seconds: validTo},
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,

@@ -14,68 +14,64 @@ export class DateTime {
     return new Date().toUTCString();
   }
 
-  static scheduleSetValidFrom(formModel) {
-    if (formModel.year && formModel.month && formModel.day) {
+  static fromSecondsToDateUTC(seconds) {
+    const m =  moment.utc(seconds, 'X')
+    return { year: m.year(), month: m.month(), day: m.date()};
+  }
+
+  static setValidFromSecondsUTC(year, month, day) {
+    if (year && month && day) {
       const validFromInSeconds = moment.utc()
-        .year(formModel.year)
-        .month(formModel.month - 1)
-        .date(formModel.day)
+        .year(year)
+        .month(month - 1)
+        .date(day)
         .startOf('date')
         .unix();
-      return {seconds: validFromInSeconds};
-    } else if (formModel.year && formModel.month) {
+      return validFromInSeconds;
+    } else if (year && month) {
       const validFromInSeconds = moment.utc()
-        .year(formModel.year)
-        .month(formModel.valid_from.month - 1)
+        .year(year)
+        .month(month - 1)
         .startOf('month')
         .unix();
-      return {seconds: validFromInSeconds}
-    } else if (formModel.year) {
+      return validFromInSeconds;
+    } else if (year) {
       const validFromInSeconds = moment.utc()
-        .year(formModel.year)
+        .year(year)
         .startOf('year')
         .unix();
-      return {seconds: validFromInSeconds}
+      return validFromInSeconds;
     } else {
       return null;
     }
   }
 
-  static scheduleSetValidTo(formModel) {
-    if (formModel.year && formModel.month && formModel.day) {
+  static setValidToSecondsUTC(year, month, day) {
+    if (year && month && day) {
       const validToInSeconds = moment.utc()
-        .year(formModel.year)
-        .month(formModel.month - 1)
-        .date(formModel.day).startOf('date')
+        .year(year)
+        .month(month - 1)
+        .date(day).startOf('date')
         .endOf('date')
         .unix();
-      return {seconds: validToInSeconds};
+      return validToInSeconds;
 
-    } else if (formModel.year && formModel.month) {
+    } else if (year && month) {
       const validToInSeconds = moment.utc()
-        .year(formModel.year)
-        .month(formModel.month - 1)
+        .year(year)
+        .month(month - 1)
         .endOf('month')
         .unix();
-      return {seconds: validToInSeconds}
-    } else if (formModel.year) {
+      return validToInSeconds;
+    } else if (year) {
       const validToInSeconds = moment.utc()
-        .year(formModel.year)
+        .year(year)
         .endOf('year')
         .unix();
-      return {seconds: validToInSeconds}
+      return validToInSeconds;
 
     } else {
       return null;
     }
   }
-
-  static scheduleSetCronExpression(formModel) {
-    return formModel.minute + ' '
-      + formModel.hour + ' '
-      + formModel.dom + ' '
-      + formModel.month + ' '
-      + formModel.dow;
-  }
-
 }
