@@ -42,20 +42,29 @@ export class LoglevelComponent implements OnChanges {
 
     this.form = this.fb.group({
       log_level: this.fb.array([]),
+
     });
-    this.ngOnChanges();
+    this.getLogLevels();
   }
 
   ngOnChanges() {
+    this.updateData(this.logLevels)
+  }
+
+  updateData(loglevels) {
+    const logconfigFG: FormGroup[] = this.logLevels.map(config => (this.fb.group(config)));
+    const logconfigFormArray = this.fb.array(logconfigFG);
+    this.form.setControl('log_level', logconfigFormArray);
+  }
+
+  getLogLevels() {
     this.logService.getLogConfig()
       .map(response => response.log_level)
       .subscribe(logLevels => {
         logLevels.forEach((logLevel) => {
           this.logLevels.push(logLevel);
         });
-        const logconfigFG: FormGroup[] = this.logLevels.map(config => (this.fb.group(config)));
-        const logconfigFormArray = this.fb.array(logconfigFG);
-        this.form.setControl('log_level', logconfigFormArray);
+        this.ngOnChanges();
       });
   }
 
