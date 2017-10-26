@@ -1,15 +1,15 @@
 <h2 i18n="@@politenessconfigListHeader">Politenessconfigs</h2>
 
-<md-nav-list>
-  <md-list-item
+<mat-nav-list>
+  <mat-list-item
     *ngFor="let politenessconfig of politenessConfigs" (click)="selectPolitenessConfig(politenessconfig)"
     [class.active]="politenessconfig === selectedPolitenessConfig">
     {{politenessconfig.meta.name}}
 
-  </md-list-item>
-</md-nav-list>
+  </mat-list-item>
+</mat-nav-list>
 
-<button md-raised-button color="primary"
+<button mat-raised-button color="primary"
         (click)="createNewPolitenessConfig()"
         i18n="@@commonButtonNew">Ny
 </button>

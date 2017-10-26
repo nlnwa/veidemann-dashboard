@@ -1,84 +1,84 @@
 <form [formGroup]="form"
       fxLayout="column">
-  <md-card *ngIf="seed">
-    <md-card-header fxLayout="row">
-      <md-card-title>
+  <mat-card *ngIf="seed">
+    <mat-card-header fxLayout="row">
+      <mat-card-title>
         <span i18n="@@seedDetailsCardTitle">SEED</span>
-      </md-card-title>
-      <md-card-subtitle *ngIf="!seed.id">
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="!seed.id">
         <span i18n="@@seedDetailsCardSubtitle">Ny (ikke lagret)</span>
-      </md-card-subtitle>
+      </mat-card-subtitle>
       <span class="fill-space"></span>
-      <md-slide-toggle formControlName="disabled" i18n="@@seedDisabledToggleSwitch">
+      <mat-slide-toggle formControlName="disabled" i18n="@@seedDisabledToggleSwitch">
         Aktiv
-      </md-slide-toggle>
-    </md-card-header>
-    <md-card-content fxLayout="row">
+      </mat-slide-toggle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row">
       <div fxFlex fxLayout="column">
 
         <ng-container formGroupName="meta">
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="URL"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="URL"
                    i18n-placeholder="@@metaUrlInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
-            <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
-                     mdTooltip='Legg til fritekst om en seed'
-                     i18n-mdTooltip="@@seedAddDescriptionTooltip">info
-            </md-icon>
-          </md-form-field>
+            <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
+                     matTooltip='Legg til fritekst om en seed'
+                     i18n-matTooltip="@@seedAddDescriptionTooltip">info
+            </mat-icon>
+          </mat-form-field>
         </ng-container>
 
-        <md-form-field formGroupName="scope" *ngIf="seed.id">
-          <input mdInput
+        <mat-form-field formGroupName="scope" *ngIf="seed.id">
+          <input matInput
                  formControlName="surt_prefix"
                  placeholder="Surt prefiks"
                  i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
-        </md-form-field>
+        </mat-form-field>
 
-        <md-form-field *ngIf="seed.id">
-          <input mdInput formControlName="id" placeholder="Id"
+        <mat-form-field *ngIf="seed.id">
+          <input matInput formControlName="id" placeholder="Id"
                  i18n-placeholder="@@seedFormIdPlaceholder">
-        </md-form-field>
+        </mat-form-field>
 
         <ng-container formGroupName="meta" *ngIf="seed.id">
-          <md-form-field formGroupName="created">
-            <input mdInput
+          <mat-form-field formGroupName="created">
+            <input matInput
                    formControlName="seconds"
                    placeholder="Opprettet"
                    i18n-placeholder="@@metaCreatedInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput
+          <mat-form-field>
+            <input matInput
                    formControlName="created_by"
                    placeholder="Opprettet av"
                    i18n-placeholder="@@metaCreatedByInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
-          <md-form-field formGroupName="last_modified">
-            <input mdInput
+          <mat-form-field formGroupName="last_modified">
+            <input matInput
                    formControlName="seconds"
                    placeholder="Sist endret"
                    i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput
+          <mat-form-field>
+            <input matInput
                    formControlName="last_modified_by"
                    placeholder="Sist endret av"
                    i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
         </ng-container>
 
-        <md-form-field>
-          <input mdInput formControlName="entity_id"
+        <mat-form-field>
+          <input matInput formControlName="entity_id"
                  placeholder="Entitetens Id"
                  i18n-placeholder="@@metaEntityIdIputPlaceholder">
-        </md-form-field>
+        </mat-form-field>
       </div>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
@@ -93,30 +93,30 @@
           </angular2-multiselect>
         </div>
       </div>
-    </md-card-content>
+    </mat-card-content>
 
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               *ngIf="!seed.id"
               [disabled]="!form.valid"
               (click)="onSave()"
               i18n="@@commonButtonSave">Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="seed.id"
               [disabled]="!form.dirty"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               [disabled]="!form.dirty"
               (click)="onRevert()"
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>

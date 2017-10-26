@@ -1,13 +1,13 @@
 <h2 i18n="@@crawlhostgroupconfigListHeader">Crawlhostgroupconfigs</h2>
-<md-nav-list>
-  <md-list-item
+<mat-nav-list>
+  <mat-list-item
     *ngFor="let crawlhostgroupconfig of crawlHostGroupConfigs"
     (click)="selectCrawlHostGroupConfig(crawlhostgroupconfig)"
     [class.active]="crawlhostgroupconfig === selectedCrawlHostGroupConfig">
     {{crawlhostgroupconfig.meta.name}}
-  </md-list-item>
-</md-nav-list>
-<button md-raised-button color="primary"
+  </mat-list-item>
+</mat-nav-list>
+<button mat-raised-button color="primary"
         (click)="createNewCrawlHostGroupConfig()"
         i18n="@@commonButtonNew">Ny
 </button>

@@ -1,16 +1,16 @@
 <h2>
-  <md-icon>schedule</md-icon>
+  <mat-icon>schedule</mat-icon>
   <ng-container i18n="@@scheduleListHeader">Schedules</ng-container>
 </h2>
-<md-nav-list>
-  <md-list-item
+<mat-nav-list>
+  <mat-list-item
     *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)"
     [class.active]="schedule === selectedSchedule">
     {{schedule.meta.name}}
-  </md-list-item>
-</md-nav-list>
+  </mat-list-item>
+</mat-nav-list>
 
-<button md-raised-button color="warn"
+<button mat-raised-button color="warn"
         (click)="createNewSchedule()"
         i18n="@@commonButtonNew">New
 </button>

@@ -1,30 +1,30 @@
 <form [formGroup]="form">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <span *ngIf="crawlConfig" i18n="@@crawlconfigDetailsHeader">Crawlconfig</span>
-      </md-card-title>
-      <md-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle>
       <span *ngIf="!crawlConfig.id"
             i18n="@@crawlconfigNewCrawlconfigHeader"> Ny (ikke lagret)</span>
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content fxLayout="row" fxLayoutWrap>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
-          <md-form-field>
-            <input mdInput formControlName="name" placeholder="Navn"
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! form.controls.meta.valid"
+            <mat-error *ngIf="! form.controls.meta.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
-            </md-error>
-          </md-form-field>
+            </mat-error>
+          </mat-form-field>
 
-          <md-form-field>
-            <input mdInput formControlName="description" placeholder="Beskrivelse"
+          <mat-form-field>
+            <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
-          </md-form-field>
+          </mat-form-field>
         </ng-container>
       </div>
 
@@ -39,10 +39,10 @@
                                   formControlName="browser_config_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="! form.controls.browser_config_id.valid"
+          <mat-error *ngIf="! form.controls.browser_config_id.valid"
                  i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
-          </md-error>
+          </mat-error>
         </div>
 
         <div>
@@ -54,78 +54,78 @@
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <md-error *ngIf="! form.controls.politeness_id.valid"
+          <mat-error *ngIf="! form.controls.politeness_id.valid"
                  i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
-          </md-error>
+          </mat-error>
         </div>
 
-        <md-form-field>
-          <input mdInput
+        <mat-form-field>
+          <input matInput
                  formControlName="minimum_dns_ttl_s"
                  placeholder="DNS TTL">
-          <md-error *ngIf="! form.controls.minimum_dns_ttl_s.valid"
+          <mat-error *ngIf="! form.controls.minimum_dns_ttl_s.valid"
                     i18n="@@crawlconfigFormMinDNSTTLRequiredError">
             minimum_dns_ttl_s er påkrevd.
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
 
         <div formGroupName="extra">
-          <md-radio-group formControlName="extract_text">
+          <mat-radio-group formControlName="extract_text">
             <ng-container i18n="@@crawlconfigFormExtractTextLabel">Ekstraher tekst</ng-container>
-            <md-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
-            <md-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
-          </md-radio-group>
+            <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
+            <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
+          </mat-radio-group>
         </div>
 
         <div formGroupName="extra">
-          <md-radio-group formControlName="create_snapshot">
+          <mat-radio-group formControlName="create_snapshot">
             <ng-container i18n="@@crawlconfigFormCreateSnapshotLabel">Lag snapshots</ng-container>
-            <md-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
-            <md-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
-          </md-radio-group>
+            <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
+            <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
+          </mat-radio-group>
         </div>
 
-        <md-radio-group formControlName="depth_first">
+        <mat-radio-group formControlName="depth_first">
           <ng-container i18n="@@crawlconfigFormDepthFirstLabel">Dybde først</ng-container>
-          <md-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</md-radio-button>
-          <md-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</md-radio-button>
-        </md-radio-group>
+          <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
+          <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
+        </mat-radio-group>
 
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
       </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button color="primary"
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!crawlConfig.id"
               (click)="createCrawlConfig(crawlConfig)" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="crawlConfig.id"
               [disabled]="!form.dirty || !form.valid"
               (click)="updateCrawlConfig(crawlConfig)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button md-raised-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="revert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
-      <button md-raised-button color="warn"
+      <button mat-raised-button color="warn"
               *ngIf="crawlConfig.id"
               (click)="deleteCrawlConfig(crawlConfig.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-actions>
+  </mat-card>
 </form>
 
 

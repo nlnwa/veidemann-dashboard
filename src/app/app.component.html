@@ -1,8 +1,8 @@
-<md-sidenav-container>
+<mat-sidenav-container>
 
   <!-- Toolbar -->
 
-  <md-toolbar color="primary">
+  <mat-toolbar color="primary">
     <a routerLink="/" class="title"><h1>Veidemann</h1></a>
     <span fxFlex fxFlexFill></span>
     <span>{{myDate}}</span>
@@ -11,97 +11,97 @@
 
     <!-- Toolbar menu button -->
 
-    <button md-icon-button [md-menu-trigger-for]="menu">
-      <md-icon>more_vert</md-icon>
+    <button mat-icon-button [mat-menu-trigger-for]="menu">
+      <mat-icon>more_vert</mat-icon>
     </button>
-  </md-toolbar>
+  </mat-toolbar>
 
   <!-- Toolbar menu-->
 
-  <md-menu x-position="before" #menu>
-    <button md-menu-item (click)="setExpertMode(true)"
+  <mat-menu x-position="before" #menu>
+    <button mat-menu-item (click)="setExpertMode(true)"
             i18n="@@toolbarMenuSetUserModeCurator">Kurator</button>
-    <button md-menu-item (click)="setExpertMode(false)"
+    <button mat-menu-item (click)="setExpertMode(false)"
             i18n="@@toolbarMenuSetUserModeExpert">Expert</button>
-  </md-menu>
+  </mat-menu>
 
   <!-- Sidenav -->
 
-  <md-sidenav mode="side" opened="true">
+  <mat-sidenav mode="side" opened="true">
 
     <!-- Toolbar -->
-    <md-toolbar color="primary">
-      <a color="primary" md-raised-button (click)="onLogin()" *ngIf="!name">
-        <md-icon>person</md-icon>
+    <mat-toolbar color="primary">
+      <a color="primary" mat-raised-button (click)="onLogin()" *ngIf="!name">
+        <mat-icon>person</mat-icon>
         <ng-container i18n="@@toolbarLogon">Logg på</ng-container></a>
-      <a color="primary" md-raised-button (click)="onLogout()" *ngIf="name">
-        <md-icon>person</md-icon>
+      <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name">
+        <mat-icon>person</mat-icon>
         <ng-container i18n="@@toolbarLogon">Logg av</ng-container></a>
-    </md-toolbar>
+    </mat-toolbar>
 
     <!-- Navigation -->
 
-    <md-nav-list>
-      <a md-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>dashboard</md-icon>
+        <mat-icon>dashboard</mat-icon>
         <ng-container i18n="@@navigationSidebarActivity">Aktivitet</ng-container></a>
-      <a md-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
-        <md-icon>assessment</md-icon>
+      <a mat-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
+        <mat-icon>assessment</mat-icon>
         <ng-container i18n="@@navigationSidebarStatistics">Statistikk</ng-container></a>
-      <a md-list-item [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
+      <a mat-list-item [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>help</md-icon>
+        <mat-icon>help</mat-icon>
         <ng-container  i18n="@@navigationSidebarDocumentation">Dokumentasjon</ng-container></a>
-      <a md-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
+      <a mat-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']" >
-        <md-icon>search</md-icon>
+        <mat-icon>search</mat-icon>
         <ng-container i18n="@@navigationSidebarSearch">Søk</ng-container></a>
-      <md-list-item [disableRipple]="true">
+      <mat-list-item [disableRipple]="true">
       <h3 i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
-      </md-list-item>
-      <a md-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
+      </mat-list-item>
+      <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>work</md-icon>
+        <mat-icon>work</mat-icon>
         <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container></a>
-      <a md-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
+      <a mat-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>schedule</md-icon>
+        <mat-icon>schedule</mat-icon>
         <ng-container i18n="@@navigationSidebarSchedule">Schedule</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlconfig']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>build</md-icon>
+        <mat-icon>build</mat-icon>
         <ng-container i18n="@@navigationSidebarCrawlconfig">Crawlconfig</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlhostgroupconfig']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlhostgroupconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>build</md-icon>
+        <mat-icon>build</mat-icon>
         <ng-container i18n="@@navigationSidebarCrawlhostgroupconfig">Crawlhostgroupconfig</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>build</md-icon>
+        <mat-icon>build</mat-icon>
         <ng-container i18n="@@navigationSidebarBrowserconfig">Browserconfig</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/browserscript']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/browserscript']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>build</md-icon>
+        <mat-icon>build</mat-icon>
         <ng-container i18n="@@navigationSidebarBrowserscript">Browserscript</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/politenessconfig']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/politenessconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>sentiment_neutral</md-icon>
+        <mat-icon>sentiment_neutral</mat-icon>
         <ng-container i18n="@@navigationSidebarPolitenessconfig">Politenessconfig</ng-container></a>
-      <a md-list-item [fxHide]="isExpertMode" [routerLink]="['/logconfig']"
+      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/logconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
-        <md-icon>receipt</md-icon>
+        <mat-icon>receipt</mat-icon>
         <ng-container i18n="@@navigationSidebarLogconfig">Logconfig</ng-container></a>
-    </md-nav-list>
-  </md-sidenav>
+    </mat-nav-list>
+  </mat-sidenav>
 
   <main class="mat-typography">
     <router-outlet></router-outlet>
   </main>
-</md-sidenav-container>
+</mat-sidenav-container>

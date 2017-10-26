@@ -1,26 +1,26 @@
 <div fxLayout="column" fxLayoutGap="16px">
   <div fxLayout="column">
     <div fxLayout="row">
-      <md-form-field fxFlex>
-        <input mdInput
+      <mat-form-field fxFlex>
+        <input matInput
                (keyup.enter)="onEnterKey($event)"
                placeholder="Søk"
                autofocus
                i18n-placeholder="@@searchSearchFieldPlaceholder">
-      </md-form-field>
+      </mat-form-field>
     </div>
     <div>
-      <md-toolbar>
+      <mat-toolbar>
         <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
         <span class="fill-space"></span>
-        <button md-mini-fab (click)="onCreateEntity()">
-          <md-icon mdTooltipShowDelay="500"
-                   mdTooltip='En entitet besitter et eller flere nettsted.
+        <button mat-mini-fab (click)="onCreateEntity()">
+          <mat-icon matTooltipShowDelay="500"
+                   matTooltip='En entitet besitter et eller flere nettsted.
                    Eks. VG (vg.no) eller Nasjonalbiblioteket (nb.no, ibsen.no, pliktavlevering.no)'
-                   i18n-mdTooltip="@@searchAddNewEntityTooltip">add
-          </md-icon>
+                   i18n-matTooltip="@@searchAddNewEntityTooltip">add
+          </mat-icon>
         </button>
-      </md-toolbar>
+      </mat-toolbar>
       <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>
     </div>
   </div>

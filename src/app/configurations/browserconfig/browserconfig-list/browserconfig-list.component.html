@@ -1,13 +1,13 @@
 <h2 i18n="@@browserconfigListHeader">Browserconfigs</h2>
-<md-nav-list>
-  <md-list-item
+<mat-nav-list>
+  <mat-list-item
     *ngFor="let browserconfig of browserConfigs" (click)="selectBrowserConfig(browserconfig)"
     [class.active]="browserconfig === selectedBrowserConfig">
     {{browserconfig.meta.name}}
 
-  </md-list-item>
-</md-nav-list>
-<button md-raised-button color="primary"
+  </mat-list-item>
+</mat-nav-list>
+<button mat-raised-button color="primary"
         (click)="createNewBrowserConfig()"
         i18n="@@commonButtonNew">Ny
 </button>
