@@ -39,10 +39,10 @@
                                   formControlName="browser_config_id">
             </angular2-multiselect>
           </label>
-          <small [hidden]="form.get('browser_config_id').valid"
+          <md-error *ngIf="! form.controls.browser_config_id.valid"
                  i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
-          </small>
+          </md-error>
         </div>
 
         <div>
@@ -54,10 +54,10 @@
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <small [hidden]="form.get('politeness_id').valid"
+          <md-error *ngIf="form.controls.politeness_id.valid"
                  i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
-          </small>
+          </md-error>
         </div>
 
         <md-form-field>

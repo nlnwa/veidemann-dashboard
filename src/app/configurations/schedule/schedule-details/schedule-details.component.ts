@@ -13,7 +13,16 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()
   schedule: Schedule;
-  scheduleForm: FormGroup;
+
+  _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
 
   @Input()
   createHandler: Function;
@@ -32,7 +41,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   createForm() {
-    this.scheduleForm = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
         minute: ['', [Validators.required, Validators.minLength(1)]],
@@ -63,13 +72,13 @@ export class ScheduleDetailsComponent implements OnChanges {
     const cron_splitted = schedule.cron_expression.split(' ');
     if (schedule.valid_from !== null) {
       const valid_from_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_from.seconds).split('-');
-      this.scheduleForm.controls['valid_from'].setValue({
+      this.form.controls['valid_from'].setValue({
         year: valid_from_splitted[0],
         month: valid_from_splitted[1],
         day: valid_from_splitted[2],
       });
     } else {
-      this.scheduleForm.controls['valid_from'].setValue({
+      this.form.controls['valid_from'].setValue({
         year: null,
         month: null,
         day: null,
@@ -78,32 +87,32 @@ export class ScheduleDetailsComponent implements OnChanges {
 
     if (schedule.valid_to !== null) {
       const valid_to_splitted = DateTime.convertTimestamp_s_to_yyyymmddhhmm(schedule.valid_to.seconds).split('-');
-      this.scheduleForm.controls['valid_to'].setValue({
+      this.form.controls['valid_to'].setValue({
         year: valid_to_splitted[0],
         month: valid_to_splitted[1],
         day: valid_to_splitted[2],
       });
     } else {
-      this.scheduleForm.controls['valid_to'].setValue({
+      this.form.controls['valid_to'].setValue({
         year: null,
         month: null,
         day: null,
       });
     }
-    this.scheduleForm.controls['id'].setValue(schedule.id);
-    this.scheduleForm.controls['cron_expression'].setValue({
+    this.form.controls['id'].setValue(schedule.id);
+    this.form.controls['cron_expression'].setValue({
       minute: cron_splitted[0],
       hour: cron_splitted[1],
       dom: cron_splitted[2],
       month: cron_splitted[3],
       dow: cron_splitted[4],
     });
-    this.scheduleForm.controls['meta'].patchValue({
+    this.form.controls['meta'].patchValue({
       name: schedule.meta.name as string,
       description: schedule.meta.description as string,
       label: [...schedule.meta.label],
     });
-    this.scheduleForm.markAsPristine();
+    this.form.markAsPristine();
 
   }
 
@@ -143,7 +152,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
 
   prepareSaveSchedule(): Schedule {
-    const formModel = this.scheduleForm.value;
+    const formModel = this.form.value;
     // deep copy of form model lairs
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
 

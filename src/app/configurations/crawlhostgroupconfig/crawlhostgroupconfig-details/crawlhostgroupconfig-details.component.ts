@@ -135,7 +135,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   removeIpRange(i: number) {
-    const control = <FormArray>this.crawlHostGroupConfigFG.controls['ip_range'];
     this.ipRangeControlArray.removeAt(i);
   }
 

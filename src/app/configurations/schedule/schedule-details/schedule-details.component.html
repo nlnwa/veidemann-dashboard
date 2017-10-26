@@ -1,4 +1,4 @@
-<form [formGroup]="scheduleForm">
+<form [formGroup]="form">
   <md-card>
     <md-card-header>
       <md-card-title>
@@ -16,7 +16,7 @@
                    formControlName="name"
                    placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! scheduleForm['controls'].meta['controls'].name.valid"
+            <md-error *ngIf="! form.controls.meta.controls.name.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
@@ -33,7 +33,7 @@
       <div fxFlex fxLayout="column" fxLayoutWrap>
 
         <div formGroupName="cron_expression">
-          <h3 i18n="@@scheduleFormCronExpressionHeader">Cron expression</h3>
+          <h3 i18n="@@formCronExpressionHeader">Cron expression</h3>
           <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
             <md-form-field>
               <input mdInput formControlName="minute" placeholder="Minutt"
@@ -55,42 +55,42 @@
               <input mdInput formControlName="dow" placeholder="Dow"
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </md-form-field>
-            <md-error *ngIf="!scheduleForm['controls'].cron_expression.valid"
-                      i18n="@@scheduleFormCronExpressionRequiredError">
+            <md-error *ngIf="!form.controls.cron_expression.valid"
+                      i18n="@@formCronExpressionRequiredError">
               Cron expression er påkrevd.
             </md-error>
           </div>
         </div>
 
         <div formGroupName="valid_from">
-          <h3 i18n="@@scheduleFormValidFromHeader">Gyldig fra</h3>
+          <h3 i18n="@@formValidFromHeader">Gyldig fra</h3>
           <md-form-field>
             <input mdInput formControlName="year" placeholder="År"
-                   i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
+                   i18n-placeholder="@@formValidFromYearPlaceholder">
           </md-form-field>
           <md-form-field>
             <input mdInput formControlName="month" placeholder="Måned"
-                   i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
+                   i18n-placeholder="@@formValidFromMonthPlaceholder">
           </md-form-field>
           <md-form-field>
             <input mdInput formControlName="day" placeholder="Dag"
-                   i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
+                   i18n-placeholder="@@formValidFromDayPlaceholder">
           </md-form-field>
         </div>
 
         <div formGroupName="valid_to">
-          <h3 i18n="@@scheduleFormValidToHeader">Gyldig til</h3>
+          <h3 i18n="@@formValidToHeader">Gyldig til</h3>
           <md-form-field>
             <input mdInput formControlName="year" placeholder="År"
-                   i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
+                   i18n-placeholder="@@formValidToYearPlaceholder">
           </md-form-field>
           <md-form-field>
             <input mdInput formControlName="month" placeholder="Måned"
-                   i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
+                   i18n-placeholder="@@formValidToMonthPlaceholder">
           </md-form-field>
           <md-form-field>
             <input mdInput formControlName="day" placeholder="Dag"
-                   i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
+                   i18n-placeholder="@@formValidToDayPlaceholder">
           </md-form-field>
         </div>
 
@@ -105,7 +105,7 @@
     <md-card-actions>
 
       <button md-raised-button color="primary"
-              [disabled]="!scheduleForm.valid"
+              [disabled]="!form.valid"
               *ngIf="!schedule.id"
               (click)="createSchedule(schedule)" novalidate
               i18n="@@commonButtonSave">
@@ -113,13 +113,13 @@
       </button>
       <button md-raised-button color="primary"
               *ngIf="schedule.id"
-              [disabled]="!scheduleForm.valid || !scheduleForm.dirty"
+              [disabled]="!form.valid || !form.dirty"
               (click)="updateSchedule(schedule)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
-              [disabled]="!scheduleForm.dirty"
+              [disabled]="!form.dirty"
               (click)="revert()"
               i18n="@@commonButtonRevert">
         Tilbakestill

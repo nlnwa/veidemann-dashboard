@@ -17,7 +17,16 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
   politenessConfig: PolitenessConfig;
-  form: FormGroup;
+
+  _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
 
   robotsPolicyList: any = [];
   robetsPolicyDropdownSettings = {};

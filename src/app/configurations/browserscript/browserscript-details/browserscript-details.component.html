@@ -1,4 +1,4 @@
-<form [formGroup]="browserScriptFG">
+<form [formGroup]="form">
   <md-card>
     <md-card-header>
       <md-card-title>
@@ -16,7 +16,7 @@
           <md-form-field>
             <input mdInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! browserScriptFG.controls.meta.valid"
+            <md-error *ngIf="! form.controls.meta.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
@@ -31,7 +31,7 @@
     <textarea mdInput formControlName="script" placeholder="Script"
               i18n-placeholder="@@browserscriptFormScriptPlaceholder">
     </textarea>
-          <md-error *ngIf="! browserScriptFG.controls.script.valid"
+          <md-error *ngIf="! form.controls.script.valid"
                     i18n="@@browserscriptFormScriptRequiredError">
             Script er påkrevd.
           </md-error>
@@ -45,23 +45,23 @@
     </md-card-content>
     <md-card-actions>
       <button md-raised-button color="primary"
-              [disabled]="!browserScriptFG.valid"
+              [disabled]="!form.valid"
               *ngIf="!browserScript.id"
-              (click)="createBrowserScript(browserScriptFG.value)"
+              (click)="createBrowserScript(form.value)"
               novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="browserScript.id"
-              [disabled]="!browserScriptFG.valid || !browserScriptFG.dirty"
-              (click)="updateBrowserScript(browserScriptFG.value)"
+              [disabled]="!form.valid || !form.dirty"
+              (click)="updateBrowserScript(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
               (click)="revert()"
-              [disabled]="!browserScriptFG.dirty"
+              [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>

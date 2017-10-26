@@ -4,7 +4,7 @@ import {ScheduleService} from '../../schedule/';
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJobService} from '../crawljob.service';
-import {CrawlConfig, CrawlJob, Schedule} from '../../../commons/models/config.model';
+import {CrawlJob, Schedule} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
@@ -12,16 +12,25 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   templateUrl: './crawljob-details.component.html',
   styleUrls: ['./crawljob-details.component.css'],
   encapsulation: ViewEncapsulation.None,
+  providers: [SnackBarService],
 
 })
 export class CrawljobDetailsComponent implements OnChanges {
-
-  crawlJobForm: FormGroup;
-
   @Input()
   crawlJob: CrawlJob;
   schedule: Schedule;
-  crawlConfig: CrawlConfig;
+
+  private _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
+
+
   scheduleList: any = [];
   crawlConfigList: any = [];
 
@@ -29,6 +38,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   dropdownScheduleSettings = {};
   dropdownCrawlConfigSettings = {};
   selectedCrawlConfigItems = [];
+
 
   @Input()
   createHandler: Function;
@@ -42,15 +52,14 @@ export class CrawljobDetailsComponent implements OnChanges {
               private scheduleService: ScheduleService,
               private fb: FormBuilder,
               private snackBarService: SnackBarService) {
-    this.createForm();
     this.fillDropdown();
-
+    this.createForm();
   }
 
   createForm() {
-    this.crawlJobForm = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
-      schedule_id: ['', CustomValidators.nonEmpty],
+      schedule_id: [''],
       crawl_config_id: ['', CustomValidators.nonEmpty],
       limits: this.fb.group({
         depth: ['', [Validators.required, CustomValidators.min(0)]],
@@ -71,13 +80,13 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   updateData(crawljob: CrawlJob) {
-    this.crawlJobForm.controls['id'].setValue(crawljob.id);
-    this.crawlJobForm.controls['limits'].setValue({
+    this.form.controls['id'].setValue(crawljob.id);
+    this.form.controls['limits'].setValue({
       depth: crawljob.limits.depth,
       max_duration_s: crawljob.limits.max_duration_s,
       max_bytes: crawljob.limits.max_bytes,
     });
-    this.crawlJobForm.controls['meta'].patchValue({
+    this.form.controls['meta'].patchValue({
       name: crawljob.meta.name as string,
       description: crawljob.meta.description as string,
       label: [...crawljob.meta.label]
@@ -85,15 +94,17 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.setDropdown();
     this.selectedScheduleItems = [];
     this.selectedCrawlConfigItems = [];
-    this.crawlJobForm.controls['disabled'].setValue((crawljob.disabled)as boolean);
-    this.crawlJobForm.markAsPristine();
+    this.form.controls['disabled'].setValue((crawljob.disabled)as boolean);
+    this.form.markAsPristine();
   };
 
   ngOnChanges() {
-    this.updateData(this.crawlJob);
+    setTimeout(() => {
+      this.updateData(this.crawlJob);
+    });
   }
 
-  updateCrawljob(crawljobForm): void {
+  updateCrawljob(): void {
     this.crawlJob = this.prepareSaveCrawljob();
     this.crawlJobService.update(this.crawlJob)
       .subscribe((updatedCrawljob) => {
@@ -124,7 +135,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   prepareSaveCrawljob(): CrawlJob {
-    const formModel = this.crawlJobForm.value;
+    const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlJob.id,
@@ -154,7 +165,7 @@ export class CrawljobDetailsComponent implements OnChanges {
             description: schedule.meta.description
           });
 
-          this.crawlJobForm.controls['schedule_id'].setValue(this.selectedScheduleItems);
+          this.form.controls['schedule_id'].setValue(this.selectedScheduleItems);
         });
     }
 
@@ -166,7 +177,7 @@ export class CrawljobDetailsComponent implements OnChanges {
             itemName: crawlConfig.meta.name,
             description: crawlConfig.meta.description
           });
-          this.crawlJobForm.controls['crawl_config_id'].setValue(this.selectedCrawlConfigItems);
+          this.form.controls['crawl_config_id'].setValue(this.selectedCrawlConfigItems);
         });
     }
   }

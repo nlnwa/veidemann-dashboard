@@ -1,4 +1,4 @@
-<form [formGroup]="browserConfigForm">
+<form [formGroup]="form">
   <md-card>
     <md-card-header>
       <md-card-title>
@@ -17,7 +17,7 @@
           <md-form-field>
             <input mdInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! browserConfigForm.controls.meta.valid"
+            <md-error *ngIf="! form.controls.meta.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
@@ -32,7 +32,7 @@
         <md-form-field>
           <input mdInput formControlName="user_agent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
-          <md-error *ngIf="! browserConfigForm.controls.user_agent.valid"
+          <md-error *ngIf="! form.controls.user_agent.valid"
                     i18n="@@browserconfigFormUserAgentRequiredError">
             Brukeragent er påkrevd.
           </md-error>
@@ -41,7 +41,7 @@
         <md-form-field>
           <input mdInput formControlName="window_width" placeholder="Vindusbredde"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
-          <md-error *ngIf="! browserConfigForm.controls.window_width.valid"
+          <md-error *ngIf="! form.controls.window_width.valid"
                     i18n="@@browserconfigFormWindowWidthRequiredError">
             Vindusbredde er påkrevd.
           </md-error>
@@ -50,7 +50,7 @@
         <md-form-field>
           <input mdInput formControlName="window_height" placeholder="Vindushøyde"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
-          <md-error *ngIf="! browserConfigForm.controls.window_height.valid"
+          <md-error *ngIf="! form.controls.window_height.valid"
                     i18n="@@browserconfigFormWindowHeightRequiredError">
             Vindushøyde er påkrevd.
           </md-error>
@@ -59,7 +59,7 @@
         <md-form-field>
           <input mdInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-          <md-error *ngIf="! browserConfigForm.controls.page_load_timeout_ms.valid"
+          <md-error *ngIf="! form.controls.page_load_timeout_ms.valid"
                     i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
             Page load timeout er påkrevd.
           </md-error>
@@ -68,7 +68,7 @@
         <md-form-field>
           <input mdInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-          <md-error *ngIf="! browserConfigForm.controls.sleep_after_pageload_ms.valid"
+          <md-error *ngIf="! form.controls.sleep_after_pageload_ms.valid"
                     i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
             Sleep after pageload er påkrevd.
           </md-error>
@@ -83,10 +83,10 @@
                                   formControlName="script_id">
             </angular2-multiselect>
           </label>
-          <small [hidden]="browserConfigForm.controls['script_id'].valid"
-                 i18n="@@browserconfigFormScriptsRequiredError">
+          <md-error *ngIf="! form.controls.script_id.valid"
+                    i18n="@@browserconfigFormScriptsRequiredError">
             Scripts påkrevd.
-          </small>
+          </md-error>
         </div>
 
         <app-labels type="Selector" formControlName="script_selector"></app-labels>
@@ -98,22 +98,22 @@
     </md-card-content>
     <md-card-actions>
       <button md-raised-button color="primary"
-              [disabled]="!browserConfigForm.valid"
+              [disabled]="!form.valid"
               *ngIf="!browserConfig.id"
-              (click)="createBrowserConfig(browserConfigForm.value)" novalidate
+              (click)="createBrowserConfig(form.value)" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="primary"
               *ngIf="browserConfig.id"
-              [disabled]="!browserConfigForm.valid || !browserConfigForm.dirty"
-              (click)="updateBrowserConfig(browserConfigForm.value)"
+              [disabled]="!form.valid || !form.dirty"
+              (click)="updateBrowserConfig(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
               (click)="revert()"
-              [disabled]="!browserConfigForm.dirty"
+              [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>

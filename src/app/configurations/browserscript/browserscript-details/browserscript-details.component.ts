@@ -15,7 +15,15 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class BrowserScriptDetailsComponent implements OnChanges {
   @Input()
   browserScript: BrowserScript;
-  browserScriptFG: FormGroup;
+  _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
 
   @Input()
   createHandler: Function;
@@ -32,7 +40,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   createForm() {
-    this.browserScriptFG = this.fb.group({
+    this.form = this.fb.group({
       id: '',
       script: '',
       meta: this.fb.group({
@@ -44,14 +52,14 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   updateData(browserScript: BrowserScript) {
-    this.browserScriptFG.controls['id'].setValue(browserScript.id);
-    this.browserScriptFG.controls['script'].setValue(browserScript.script);
-    this.browserScriptFG.controls['meta'].patchValue({
+    this.form.controls['id'].setValue(browserScript.id);
+    this.form.controls['script'].setValue(browserScript.script);
+    this.form.controls['meta'].patchValue({
       name: browserScript.meta.name as string,
       description: browserScript.meta.description as string,
       label: [...browserScript.meta.label],
     });
-    this.browserScriptFG.markAsPristine();
+    this.form.markAsPristine();
   };
 
   ngOnChanges() {
@@ -91,7 +99,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   prepareSaveBrowserScript(): BrowserScript {
-    const formModel = this.browserScriptFG.value;
+    const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.browserScript.id,
