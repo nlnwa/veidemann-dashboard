@@ -12,7 +12,8 @@ export class PolitenessConfigListComponent implements OnInit {
   politenessConfigs: PolitenessConfig[];
   selectedPolitenessConfig: PolitenessConfig;
 
-  constructor(private politenessConfigService: PolitenessConfigService) {}
+  constructor(private politenessConfigService: PolitenessConfigService) {
+  }
 
   ngOnInit() {
     this.politenessConfigService.list()

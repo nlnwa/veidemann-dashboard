@@ -49,7 +49,7 @@ export class Seed {
     this.scope = new Scope();
     this.meta = new Meta();
     this.job_id = [];
-    this.disabled = true;
+    this.disabled = false;
   }
 }
 

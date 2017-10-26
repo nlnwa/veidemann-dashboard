@@ -1,4 +1,4 @@
-<form [formGroup]="scheduleForm">
+<form [formGroup]="form">
   <md-card>
     <md-card-header>
       <md-card-title>
@@ -16,7 +16,7 @@
                    formControlName="name"
                    placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <md-error *ngIf="! scheduleForm['controls'].meta['controls'].name.valid"
+            <md-error *ngIf="! form.controls.meta.controls.name.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </md-error>
@@ -62,7 +62,7 @@
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </md-form-field>
           </div>
-          <md-error fxLayout="row" *ngIf="!scheduleForm['controls'].cron_expression.valid"
+          <md-error fxLayout="row" *ngIf="!form.controls.cron_expression.valid"
                     i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </md-error>
@@ -115,7 +115,7 @@
     <md-card-actions>
 
       <button md-raised-button color="primary"
-              [disabled]="!scheduleForm.valid"
+              [disabled]="!form.valid"
               *ngIf="!schedule.id"
               (click)="createSchedule(schedule)" novalidate
               i18n="@@commonButtonSave">
@@ -123,13 +123,13 @@
       </button>
       <button md-raised-button color="primary"
               *ngIf="schedule.id"
-              [disabled]="!scheduleForm.valid || !scheduleForm.dirty"
+              [disabled]="!form.valid || !form.dirty"
               (click)="updateSchedule(schedule)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button md-raised-button color="accent"
-              [disabled]="!scheduleForm.dirty"
+              [disabled]="!form.dirty"
               (click)="revert()"
               i18n="@@commonButtonRevert">
         Tilbakestill

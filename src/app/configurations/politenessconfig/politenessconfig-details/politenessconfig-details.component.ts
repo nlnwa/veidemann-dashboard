@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {isUndefined} from 'util';
 import {PolitenessConfigService} from '../politenessconfig.service';
-import {Label, PolitenessConfig, Selector} from '../../../commons/models/config.model';
+import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
@@ -11,13 +11,21 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   selector: 'app-politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
   styleUrls: ['./politenessconfig-details.component.css'],
-  providers: [SnackBarService]
 })
 
 export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
   politenessConfig: PolitenessConfig;
-  form: FormGroup;
+
+  _form: FormGroup;
+
+  get form(): FormGroup {
+    return this._form;
+  }
+
+  set form(form: FormGroup) {
+    this._form = form;
+  }
 
   robotsPolicyList: any = [];
   robetsPolicyDropdownSettings = {};

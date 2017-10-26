@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {SeedService} from '../seeds.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
 import {CustomValidators, DateTime} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
 import {Label, Seed} from '../../commons/models/config.model';
@@ -32,7 +32,7 @@ export class SeedDetailComponent {
   constructor(private seedService: SeedService,
               private fb: FormBuilder,
               private crawlJobService: CrawlJobService,
-              private mdSnackBar: MdSnackBar) {
+              private snackBarservice: SnackBarService) {
     this.createForm();
     this.getCrawlJobs();
   }
@@ -177,7 +177,7 @@ export class SeedDetailComponent {
         this.seedCreated.emit(createdSeed);
       });
 
-    this.mdSnackBar.open('Lagret');
+    this.snackBarservice.openSnackBar('Lagret');
   }
 
   onUpdate(): void {
@@ -187,7 +187,7 @@ export class SeedDetailComponent {
         this.seed = updatedSeed;
       });
 
-    this.mdSnackBar.open('Lagret');
+    this.snackBarservice.openSnackBar('Lagret');
   }
 
   onDelete(): void {
@@ -196,16 +196,16 @@ export class SeedDetailComponent {
         this.seedDeleted.emit({...this.seed});
         this.seed = deletedSeed;
         if (deletedSeed === 'not_allowed') {
-          this.mdSnackBar.open('Feil: Ikke slettet');
+          this.snackBarservice.openSnackBar('Feil: Ikke slettet');
         } else {
-          this.mdSnackBar.open('Slettet');
+          this.snackBarservice.openSnackBar('Slettet');
         }
       });
   }
 
   onRevert() {
     this.updateForm(this.seed);
-    this.mdSnackBar.open('Tilbakestilt');
+    this.snackBarservice.openSnackBar('Tilbakestilt');
   }
 
 

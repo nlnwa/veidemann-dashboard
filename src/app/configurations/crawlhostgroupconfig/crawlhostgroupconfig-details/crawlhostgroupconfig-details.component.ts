@@ -1,16 +1,14 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlHostGroupConfig, IpRange, Label} from '../../../commons/models/config.model';
+import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
-import {Observable} from 'rxjs/Observable';
 
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css'],
-  providers: [SnackBarService],
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
@@ -137,7 +135,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   removeIpRange(i: number) {
-    const control = <FormArray>this.crawlHostGroupConfigFG.controls['ip_range'];
     this.ipRangeControlArray.removeAt(i);
   }
 

@@ -13,9 +13,10 @@
   </button>
 </md-toolbar>
 
-<md-card-content *ngFor="let group of groups" fxLayout="columns" class="labelList">
+
+<md-card-content *ngFor="let group of groups$ | async;" class="labelList" fxLayout="columns">
   <div fxLayout="row" fxLayoutAlign="center center">
-    <p class="key">{{group.key}}:</p>
+    <p class="key">{{group.key}} :</p>
     <ng-container *ngFor="let value of group.values">
       <div class="chip">{{value}}
         <button class="removeValueIcon" md-icon-button (click)="removeLabel(group.key, value)">
@@ -26,9 +27,10 @@
   </div>
 </md-card-content>
 
+<form [formGroup]="labelForm">
 <md-card-content *ngIf="showAddLabelCard" class="newLabelCard">
   <md-form-field>
-    <input #newKey mdInput placeholder="Type" [(ngModel)]="newKeyInput"
+    <input #newKey mdInput placeholder="Type" formControlName="newKeyInput"
            i18n-placeholder="@@labelFormAddNewTypePlaceholder">
     <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
              i18n-mdTooltip="=@@labelNewLabelKeyTooltip"
@@ -38,7 +40,7 @@
     </md-icon>
   </md-form-field>
   <md-form-field>
-    <input #newValue mdInput placeholder="Verdi" [(ngModel)]="newValueInput"
+    <input #newValue mdInput placeholder="Verdi" formControlName="newValueInput"
            i18n-placeholder="@@labelFormAddNewValuePlaceholder">
     <md-icon class="ttInfo" mdSuffix mdTooltipShowDelay="500"
              i18n-mdTooltip="@@labelNewLabelValueTooltip"
@@ -48,7 +50,8 @@
     </md-icon>
   </md-form-field>
   <md-card-actions>
-    <button i18n="@@commonButtonAdd" md-button color="accent"
+    <button i18n="@@commonButtonAdd"  md-button color="accent"
+            [disabled]="!labelForm.valid"
             (click)="onNewLabel(newKey.value, newValue.value)">Legg til
     </button>
     <button i18n="@@commonButtonCancel" md-button color="warn"
@@ -56,4 +59,4 @@
     </button>
   </md-card-actions>
 </md-card-content>
-
+</form>

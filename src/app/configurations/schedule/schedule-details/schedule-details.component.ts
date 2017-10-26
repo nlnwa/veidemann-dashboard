@@ -9,19 +9,18 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
   styleUrls: ['./schedule-details.component.css'],
-  providers: [SnackBarService],
 })
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()
   schedule: Schedule;
-  scheduleForm: FormGroup;
-
   @Input()
   createHandler: Function;
   @Input()
   updateHandler: Function;
   @Input()
   deleteHandler: Function;
+
+  form: FormGroup;
 
   // Regular expressions for cron expression
   minuteRegEx = new RegExp([/^[*]$|^(([*][\/])?([0-9]|[1-5]?[0-9]))$/
@@ -56,7 +55,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   createForm() {
-    this.scheduleForm = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
         minute: ['', [Validators.required, Validators.pattern(this.minuteRegEx)]],
@@ -88,13 +87,13 @@ export class ScheduleDetailsComponent implements OnChanges {
     const validFromInSeconds = this.schedule.valid_from.seconds;
     if (schedule.valid_from !== null) {
       const {year, month, day, } = DateTime.fromSecondsToDateUTC(validFromInSeconds);
-      this.scheduleForm.controls['valid_from'].setValue({
+      this.form.controls['valid_from'].setValue({
         year: year,
         month: month + 1,
         day: day,
       });
     } else {
-      this.scheduleForm.controls['valid_from'].setValue({
+      this.form.controls['valid_from'].setValue({
         year: '',
         month: '',
         day: '',
@@ -104,32 +103,32 @@ export class ScheduleDetailsComponent implements OnChanges {
     if (schedule.valid_to !== null) {
       const validToInSeconds = this.schedule.valid_to.seconds;
       const {year, month, day, } = DateTime.fromSecondsToDateUTC(validToInSeconds)
-      this.scheduleForm.controls['valid_to'].setValue({
+      this.form.controls['valid_to'].setValue({
         year: year,
         month: month + 1,
         day: day,
       });
     } else {
-      this.scheduleForm.controls['valid_to'].setValue({
+      this.form.controls['valid_to'].setValue({
         year: '',
         month: '',
         day: '',
       });
     }
-    this.scheduleForm.controls['id'].setValue(schedule.id);
-    this.scheduleForm.controls['cron_expression'].setValue({
+    this.form.controls['id'].setValue(schedule.id);
+    this.form.controls['cron_expression'].setValue({
       minute: cron_splitted[0],
       hour: cron_splitted[1],
       dom: cron_splitted[2],
       month: cron_splitted[3],
       dow: cron_splitted[4],
     });
-    this.scheduleForm.controls['meta'].patchValue({
+    this.form.controls['meta'].patchValue({
       name: schedule.meta.name as string,
       description: schedule.meta.description as string,
       label: [...schedule.meta.label],
     });
-    this.scheduleForm.markAsPristine();
+    this.form.markAsPristine();
 
   }
 
@@ -176,10 +175,10 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   prepareSaveSchedule(): Schedule {
-    const formModel = this.scheduleForm.value;
-    const formCronExpression = this.scheduleForm.value.cron_expression;
-    const formValidFrom = this.scheduleForm.value.valid_from;
-    const formValidTo = this.scheduleForm.value.valid_to;
+    const formModel = this.form.value;
+    const formCronExpression = this.form.value.cron_expression;
+    const formValidFrom = this.form.value.valid_from;
+    const formValidTo = this.form.value.valid_to;
     const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
     const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
     const cronExpression = this.setCronExpression(formCronExpression)

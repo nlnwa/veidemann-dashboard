@@ -51,6 +51,7 @@ import {LabelsComponent} from './labels/labels.component';
 import {SearchService} from './search-service/search.service';
 import {BaseListComponent} from './base-list/base-list.component';
 import {OAuthModule} from 'angular-oauth2-oidc';
+import {SnackBarService} from './snack-bar-service/snack-bar.service';
 /**
  * Need to import this old HttpModule because angular-oauth2-oidc use it
  * but does not import it.
@@ -117,6 +118,7 @@ import {AuthService} from './auth/auth.service';
     EntityService,
     BrowserScriptService,
     LogService,
+    SnackBarService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -1,5 +1,5 @@
 <h2 i18n="@@logconfigHeader">Logconfig</h2>
-<form [formGroup]="logForm">
+<form [formGroup]="form">
   <ng-container formArrayName="log_level">
     <div *ngFor="let log_level of log_level.controls; let i=index" [formGroupName]="i">
       <md-form-field>
@@ -18,12 +18,19 @@
     </div>
   </ng-container>
 
-  <button md-raised-button color="accent"
+
+  <button md-raised-button color="warn"
           (click)="addLogconfig()"
           i18n="@@commonButtonAdd">Legg til
   </button>
+  <button md-raised-button color="accent"
+          (click)="revert()"
+          [disabled]="!form.dirty"
+          i18n="@@commonButtonRevert">
+    Tilbakestill
+  </button>
   <button md-raised-button color="primary"
-          (click)="saveLogConfig(logForm.value)" novalidate
+          (click)="saveLogConfig(form.value)" novalidate
           i18n="@@commonButtonSave">Lagre
   </button>
 

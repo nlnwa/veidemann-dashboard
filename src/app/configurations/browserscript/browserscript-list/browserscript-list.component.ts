@@ -12,7 +12,8 @@ export class BrowserscriptListComponent implements OnInit {
   browserScripts: BrowserScript[];
   selectedBrowserScript: BrowserScript;
 
-  constructor(private browserScriptService: BrowserScriptService) {}
+  constructor(private browserScriptService: BrowserScriptService) {
+  }
 
   ngOnInit() {
     this.browserScriptService.list()

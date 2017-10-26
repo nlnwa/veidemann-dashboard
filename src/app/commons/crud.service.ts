@@ -7,7 +7,7 @@ import {ListReply, ListRequest} from './models/controller.model';
 export abstract class CrudService<T extends ListRequest> {
 
   private static requestToParams(listRequest: ListRequest): HttpParams {
-    let params = new HttpParams()
+    let params = new HttpParams();
     Object.keys(listRequest).forEach(key => {
       let value = listRequest[key];
       switch (key) {

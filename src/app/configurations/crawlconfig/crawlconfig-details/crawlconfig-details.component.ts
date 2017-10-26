@@ -4,7 +4,7 @@ import {BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlConfigService} from '../crawlconfig.service';
-import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
+import {CrawlConfig} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 
@@ -13,8 +13,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
   // encapsulation: ViewEncapsulation.None,
-  providers: [SnackBarService]
-
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
   @Input()
@@ -30,11 +28,8 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     this._form = form;
   }
 
-  browserConfig: BrowserConfig;
-  politenessConfig: PolitenessConfig;
   browserConfigList: any = [];
   politenessConfigList: any = [];
-
   selectedBrowserConfigItems = [];
   dropdownBrowserConfigSettings = {};
   dropdownPolitenessConfigSettings = {};
@@ -100,11 +95,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   ngOnChanges() {
     this.selectedPolitenessConfigItems = [];
     this.selectedBrowserConfigItems = [];
-
-    // what the bug?! pre-filled radiobuttons aint working without this.
-    setTimeout(() => {
-      this.updateData(this.crawlConfig);
-    });
+    this.updateData(this.crawlConfig);
   }
 
 
@@ -171,7 +162,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
             id: browserConfig.id,
             itemName: browserConfig.meta.name,
             description: browserConfig.meta.description
-          })
+          });
           this.form.controls['browser_config_id'].setValue(this.selectedBrowserConfigItems);
         });
     }
