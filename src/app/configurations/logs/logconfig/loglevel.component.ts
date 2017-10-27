@@ -55,6 +55,7 @@ export class LoglevelComponent implements OnChanges {
     const logconfigFG: FormGroup[] = this.logLevels.map(config => (this.fb.group(config)));
     const logconfigFormArray = this.fb.array(logconfigFG);
     this.form.setControl('log_level', logconfigFormArray);
+    this.form.markAsPristine();
   }
 
   getLogLevels() {
@@ -77,6 +78,7 @@ export class LoglevelComponent implements OnChanges {
 
   saveLogConfig(logconfig) {
     this.logService.saveLogConfig(logconfig).subscribe();
+    this.form.markAsPristine();
     this.snackBarService.openSnackBar('Lagret');
   }
 
@@ -86,6 +88,7 @@ export class LoglevelComponent implements OnChanges {
 
   removeLogconfig(i: number) {
     this.log_levelArray.removeAt(i);
+    this.form.markAsDirty();
   }
 
   revert() {
