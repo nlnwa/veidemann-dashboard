@@ -12,11 +12,7 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 })
 export class LoglevelComponent implements OnChanges {
 
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
+  form: FormGroup;
 
   get levels() {
     return this.logService.getLevels();
@@ -28,10 +24,6 @@ export class LoglevelComponent implements OnChanges {
 
   get log_levelArray() {
     return <FormArray>this.form.get('log_level');
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
   }
 
   logLevels: LogLevel[] = [];

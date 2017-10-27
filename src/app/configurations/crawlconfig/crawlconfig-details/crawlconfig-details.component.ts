@@ -17,16 +17,14 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class CrawlConfigDetailsComponent implements OnChanges {
   @Input()
   crawlConfig: CrawlConfig;
+  @Input()
+  createHandler: Function;
+  @Input()
+  updateHandler: Function;
+  @Input()
+  deleteHandler: Function;
 
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
+  form: FormGroup;
 
   browserConfigList: any = [];
   politenessConfigList: any = [];
@@ -34,13 +32,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   dropdownBrowserConfigSettings = {};
   dropdownPolitenessConfigSettings = {};
   selectedPolitenessConfigItems = [];
-
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
 
   constructor(private crawlConfigService: CrawlConfigService,
               private politenessConfigService: PolitenessConfigService,

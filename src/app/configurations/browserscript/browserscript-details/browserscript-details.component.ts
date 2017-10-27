@@ -14,16 +14,6 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class BrowserScriptDetailsComponent implements OnChanges {
   @Input()
   browserScript: BrowserScript;
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
   @Input()
   createHandler: Function;
   @Input()
@@ -31,6 +21,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
+  form: FormGroup;
 
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
