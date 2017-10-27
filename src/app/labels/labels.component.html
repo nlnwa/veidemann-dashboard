@@ -13,7 +13,6 @@
   </button>
 </mat-toolbar>
 
-
 <mat-card-content *ngFor="let group of groups$ | async;" class="labelList" fxLayout="columns">
   <div fxLayout="row" fxLayoutAlign="center center">
     <p class="key">{{group.key}} :</p>
@@ -28,35 +27,35 @@
 </mat-card-content>
 
 <form [formGroup]="labelForm">
-<mat-card-content *ngIf="showAddLabelCard" class="newLabelCard">
-  <mat-form-field>
-    <input #newKey matInput placeholder="Type" formControlName="newKeyInput"
-           i18n-placeholder="@@labelFormAddNewTypePlaceholder">
-    <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
-             i18n-matTooltip="=@@labelNewLabelKeyTooltip"
-             matTooltip='Hva skal merkelappen beskrive?
+  <mat-card-content *ngIf="showAddLabelCard" class="newLabelCard">
+    <mat-form-field>
+      <input #newKey matInput placeholder="Type" formControlName="newKeyInput"
+             i18n-placeholder="@@labelFormAddNewTypePlaceholder">
+      <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
+                i18n-matTooltip="=@@labelNewLabelKeyTooltip"
+                matTooltip='Hva skal merkelappen beskrive?
              Eks. Org.nummer, kategorisering, begivenhet'>
-    info
-    </mat-icon>
-  </mat-form-field>
-  <mat-form-field>
-    <input #newValue matInput placeholder="Verdi" formControlName="newValueInput"
-           i18n-placeholder="@@labelFormAddNewValuePlaceholder">
-    <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
-             i18n-matTooltip="@@labelNewLabelValueTooltip"
-             matTooltip='En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
+        info
+      </mat-icon>
+    </mat-form-field>
+    <mat-form-field>
+      <input #newValue matInput placeholder="Verdi" formControlName="newValueInput"
+             i18n-placeholder="@@labelFormAddNewValuePlaceholder">
+      <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
+                i18n-matTooltip="@@labelNewLabelValueTooltip"
+                matTooltip='En verdi gir en merkelapp. Den brukes for å merke og identifisere en entitet eller seed.
              Eks. offentlig nettsted, nettavis, Valg 2017'>
-      info
-    </mat-icon>
-  </mat-form-field>
-  <mat-card-actions>
-    <button i18n="@@commonButtonAdd"  mat-button color="accent"
-            [disabled]="!labelForm.valid"
-            (click)="onNewLabel(newKey.value, newValue.value)">Legg til
-    </button>
-    <button i18n="@@commonButtonCancel" mat-button color="warn"
-            (click)="newLabelCard(false)">Avbryt
-    </button>
-  </mat-card-actions>
-</mat-card-content>
+        info
+      </mat-icon>
+    </mat-form-field>
+    <mat-card-actions>
+      <button i18n="@@commonButtonAdd" mat-button color="accent"
+              [disabled]="!labelForm.valid"
+              (click)="onNewLabel(newKey.value, newValue.value)">Legg til
+      </button>
+      <button i18n="@@commonButtonCancel" mat-button color="warn"
+              (click)="newLabelCard(false)">Avbryt
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
 </form>
