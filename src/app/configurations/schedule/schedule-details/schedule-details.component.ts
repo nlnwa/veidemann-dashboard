@@ -32,7 +32,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   ].map(r => r.source).join(''));
 
   domRegEx = new RegExp([/^[*]$|^([1-9]|1[0-9]|2[0-9]|3[0-1])/
-    , /((,([1-9]|1[0-9]|2[0-9]|3[0-1]))|(-(([1-9]|1[0-9]|2[0-9]|3[0-1]))))*$/
+    , /((,([1-9]|1[0-9]|2[0-9]|3[0-1]))|(-([1-9]|1[0-9]|2[0-9]|3[0-1])))*$/
   ].map(r => r.source).join(''));
 
   monthRegEx = new RegExp(['^[*]$|^([1-9]|1[0-2]|(jan)|(feb)|(mar)|(apr)|(may)|(jun)|(jul)|(aug)|(sep)|(oct)|(nov)|(dec))',
@@ -84,9 +84,8 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   updateForm(schedule: Schedule) {
     const cron_splitted = schedule.cron_expression.split(' ');
-    const validFromInSeconds = this.schedule.valid_from.seconds;
     if (schedule.valid_from !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validFromInSeconds);
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.controls['valid_from'].setValue({
         year: year,
         month: month + 1,
@@ -101,8 +100,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
 
     if (schedule.valid_to !== null) {
-      const validToInSeconds = this.schedule.valid_to.seconds;
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(validToInSeconds)
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.controls['valid_to'].setValue({
         year: year,
         month: month + 1,
@@ -181,7 +179,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     const formValidTo = this.form.value.valid_to;
     const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
     const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
-    const cronExpression = this.setCronExpression(formCronExpression)
+    const cronExpression = this.setCronExpression(formCronExpression);
 
     return {
       id: this.schedule.id,
