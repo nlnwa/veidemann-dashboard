@@ -1,37 +1,47 @@
-<h2 i18n="@@logconfigHeader">Logconfig</h2>
 <form [formGroup]="form">
-  <ng-container formArrayName="log_level">
-    <div *ngFor="let log_level of log_level.controls; let i=index" [formGroupName]="i">
-      <mat-form-field>
-        <input matInput formControlName="logger" placeholder="Logger"
-               i18n-placeholder="@@logconfigFormLoggerPlaceholder">
-      </mat-form-field>
-
-      <mat-select formControlName="level" placeholder="Level"
-                 i18n-placeholder="@@logconfigFormLevelPlaceholder">
-        <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
-      </mat-select>
-
-      <button mat-icon-button color="warn" (click)="removeLogconfig(i)">
-        <mat-icon>close</mat-icon>
+  <mat-card>
+    <mat-card-content fxLayout="row">
+      <div fxLayout="column">
+        <mat-toolbar>
+          <span i18n="@@logconfigHeader">Logconfig</span>
+          <span class="fill-space"></span>
+          <button mat-mini-fab (click)="addLogconfig()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-toolbar>
+        <ng-container formArrayName="log_level">
+          <ng-container *ngFor="let log_level of log_levelArray.controls;let i=index">
+            <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field>
+                <input matInput formControlName="logger" placeholder="Logger"
+                       i18n-placeholder="@@logconfigFormLoggerPlaceholder">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="level" placeholder="Level"
+                            i18n-placeholder="@@logconfigFormLevelPlaceholder">
+                  <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-icon-button color="warn" (click)="removeLogconfig(i)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+              [disabled]="!form.valid ||!form.dirty"
+              (click)="saveLogConfig(form.value)" novalidate
+              i18n="@@commonButtonSave">Lagre
       </button>
-    </div>
-  </ng-container>
-
-
-  <button mat-raised-button color="warn"
-          (click)="addLogconfig()"
-          i18n="@@commonButtonAdd">Legg til
-  </button>
-  <button mat-raised-button color="accent"
-          (click)="revert()"
-          [disabled]="!form.dirty"
-          i18n="@@commonButtonRevert">
-    Tilbakestill
-  </button>
-  <button mat-raised-button color="primary"
-          (click)="saveLogConfig(form.value)" novalidate
-          i18n="@@commonButtonSave">Lagre
-  </button>
-
+      <button mat-raised-button color="accent"
+              (click)="revert()"
+              [disabled]="!form.dirty"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </form>
