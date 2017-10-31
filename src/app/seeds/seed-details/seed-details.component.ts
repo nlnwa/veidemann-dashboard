@@ -6,7 +6,7 @@ import {CustomValidators, DateTime} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
 import {Label, Seed} from '../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
-import {VALID_URL_PATTERN} from '../../commons/url-util';
+import {VALID_URL_PATTERN} from '../../commons/util';
 
 
 @Component({
