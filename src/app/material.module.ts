@@ -3,6 +3,8 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
+  MatDialogModule,
   MatExpansionModule,
   MatIconModule,
   MatInputModule,
@@ -15,9 +17,7 @@ import {
   MatSnackBarModule,
   MatTableModule,
   MatToolbarModule,
-  MatChipsModule,
   MatTooltipModule,
-  MatGridListModule,
 } from '@angular/material';
 
 const modules = [
@@ -38,7 +38,7 @@ const modules = [
   MatRadioModule,
   MatChipsModule,
   MatTooltipModule,
-  MatGridListModule,
+  MatDialogModule,
 ];
 
 @NgModule({
