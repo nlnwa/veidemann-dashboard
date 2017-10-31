@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {authConfig} from './auth.config';
+import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -10,20 +10,12 @@ export class AuthService {
 
   public get groups() {
     const claims = this.oauthService.getIdentityClaims();
-    if (!claims) {
-      return null;
-    } else {
-      return claims['groups'];
-    }
+    return claims ? claims['groups'] : null;
   }
 
   public get name() {
     const claims = this.oauthService.getIdentityClaims();
-    if (!claims) {
-      return null;
-    } else {
-      return claims['name'];
-    }
+    return claims ? claims['name'] : null;
   }
 
   public get authorizationHeader() {
@@ -40,7 +32,7 @@ export class AuthService {
   }
 
   private configureAuth() {
-    this.oauthService.configure(authConfig);
+    this.oauthService.configure(environment.auth as AuthConfig);
     this.oauthService.tokenValidationHandler = new JwksValidationHandler();
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
   }
