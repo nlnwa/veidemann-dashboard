@@ -5,8 +5,8 @@ import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
 import {CustomValidators, DateTime} from '../../commons/';
 import {CrawlJobService} from '../../configurations/crawljobs/';
 import {Label, Seed} from '../../commons/models/config.model';
-import {UrlHelper} from '../../commons/url-util';
 import 'rxjs/add/operator/concat';
+import {VALID_URL_PATTERN} from '../../commons/url-util';
 
 
 @Component({
@@ -67,7 +67,7 @@ export class SeedDetailComponent {
         job_id: [[], CustomValidators.nonEmpty],
         scope: this.fb.group({surt_prefix: ''}),
         meta: this.fb.group({
-          name: ['', [Validators.required, Validators.pattern(UrlHelper.URL_PATTERN)]],
+          name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
           description: '',
           created: this.fb.group({seconds: {value: '', disabled: true}}),
           created_by: {value: '', disabled: true},
