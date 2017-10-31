@@ -8,6 +8,7 @@ import 'brace/index';
 import 'brace/theme/chrome';
 import 'brace/mode/javascript';
 import 'brace/ext/language_tools.js';
+
 declare var ace: any;
 
 
@@ -20,16 +21,6 @@ declare var ace: any;
 export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   @Input()
   browserScript: BrowserScript;
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
   @Input()
   createHandler: Function;
   @Input()
@@ -39,17 +30,18 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('editor') editor;
 
-
-  ngAfterViewInit() {
-    this.editor.setTheme('chrome');
-    this.editor.setMode('javascript');
-
-  }
+  form: FormGroup;
 
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
+  }
+
+  ngAfterViewInit() {
+    this.editor.setTheme('chrome');
+    this.editor.setMode('javascript');
+
   }
 
   createForm() {

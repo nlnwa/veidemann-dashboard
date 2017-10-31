@@ -14,8 +14,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   @Input()
   crawlHostGroupConfig: CrawlHostGroupConfig;
-  crawlHostGroupConfigFG: FormGroup;
-
   @Input()
   createHandler: Function;
   @Input()
@@ -23,20 +21,22 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
+  form: FormGroup;
+
   get name() {
-    return this.crawlHostGroupConfigFG.get('meta.name');
+    return this.form.get('meta.name');
   }
 
   get ipFromControl() {
-    return this.crawlHostGroupConfigFG.get('ip_range.ip_from');
+    return this.form.get('ip_range.ip_from');
   }
 
   get ipToControl() {
-    return this.crawlHostGroupConfigFG.get('ip_range.ip_to');
+    return this.form.get('ip_range.ip_to');
   }
 
   get ipRangeControlArray() {
-    return <FormArray>this.crawlHostGroupConfigFG.get('ip_range');
+    return <FormArray>this.form.get('ip_range');
   }
 
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
@@ -52,7 +52,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   createForm() {
-    this.crawlHostGroupConfigFG = this.fb.group({
+    this.form = this.fb.group({
       id: {value: '', disabled: true},
       ip_range: this.fb.array([]),
       meta: this.fb.group({
@@ -71,7 +71,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     const ipRangeFG: FormGroup[] = crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
 
-    this.crawlHostGroupConfigFG.patchValue({
+    this.form.patchValue({
       id: crawlHostGroupConfig.id,
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
@@ -79,8 +79,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         label: [...crawlHostGroupConfig.meta.label],
       }
     });
-    this.crawlHostGroupConfigFG.setControl('ip_range', ipRangeFGArray);
-    this.crawlHostGroupConfigFG.markAsPristine();
+    this.form.setControl('ip_range', ipRangeFGArray);
+    this.form.markAsPristine();
   }
 
   createCrawlHostGroupConfig() {
@@ -115,7 +115,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   };
 
   prepareSaveCrawlHostGroupConfig(): CrawlHostGroupConfig {
-    const formModel = this.crawlHostGroupConfigFG.value;
+    const formModel = this.form.value;
 
     const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));

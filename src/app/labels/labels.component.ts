@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnChanges,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnChanges,} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {ENTER} from "@angular/cdk/keycodes";
 
+const COMMA = 188;
 
 @Component({
   selector: 'app-labels',
@@ -24,10 +26,16 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   public showAddLabelCard = false;
   private labels: Label[];
 
+  public myFocusTriggeringEventEmitter = new EventEmitter<boolean>();
+
   labelForm: FormGroup;
 
   groups: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$ = this.groups.asObservable();
+
+  selectable: boolean = true;
+  separatorKeysCodes = [ENTER, COMMA];
+
 
   constructor(private formbuilder: FormBuilder) {
     this.createForm()
@@ -64,6 +72,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.ngOnChanges();
   }
 
+
   registerOnChange(fn: (labels: Label[]) => void): void {
     this.onChange = fn;
   }
@@ -91,6 +100,23 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   }
 
   onNewLabel(key: string, value: string) {
+    if ((value || '').trim()) {
+      this.labels.push({
+        key: key,
+        value: value
+      });
+    }
+
+    if (value) {
+      value = '';
+    }
+    //regroup causes the "type" field to lose focus, and you have to click on fields every time
+    this.regroup();
+    this.ngOnChanges();
+    this.onChange(this.labels);
+  }
+
+  /*onNewLabel(key: string, value: string) {
     this.labels.push({
       key: key,
       value: value
@@ -98,7 +124,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.regroup();
     this.ngOnChanges();
     this.onChange(this.labels);
-  }
+  }*/
 
   newLabelCard(value: boolean) {
     this.showAddLabelCard = value;

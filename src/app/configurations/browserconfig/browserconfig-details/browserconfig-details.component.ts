@@ -14,28 +14,18 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()
   browserConfig: BrowserConfig;
-
-  _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
-  browserScriptList: any = [];
-  browserScriptDropdownSettings = {};
-  selectedBrowserScriptItems = [];
-
-
   @Input()
   createHandler: Function;
   @Input()
   updateHandler: Function;
   @Input()
   deleteHandler: Function;
+
+  form: FormGroup;
+
+  browserScriptList: any = [];
+  browserScriptDropdownSettings = {};
+  selectedBrowserScriptItems = [];
 
   constructor(private browserConfigService: BrowserConfigService,
               private snackBarService: SnackBarService,

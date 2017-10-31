@@ -1,12 +1,15 @@
 .labelList {
-  margin-bottom: 1em;
+  margin: 1em;
 }
 
 .key {
   display: inline-block;
   min-width: 200px;
   font-size: 20px;
-  font-weight: bold;
+}
+.mat-divider {
+  min-width: 100%;
+  margin: auto;
 }
 
 .chip{

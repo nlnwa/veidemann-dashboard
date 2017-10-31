@@ -17,18 +17,16 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 export class CrawljobDetailsComponent implements OnChanges {
   @Input()
   crawlJob: CrawlJob;
+  @Input()
+  createHandler: Function;
+  @Input()
+  updateHandler: Function;
+  @Input()
+  deleteHandler: Function;
+
   schedule: Schedule;
 
-  private _form: FormGroup;
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
+  private form: FormGroup;
 
   scheduleList: any = [];
   crawlConfigList: any = [];
@@ -37,14 +35,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   dropdownScheduleSettings = {};
   dropdownCrawlConfigSettings = {};
   selectedCrawlConfigItems = [];
-
-
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
 
   constructor(private crawlJobService: CrawlJobService,
               private crawlconfigService: CrawlConfigService,
