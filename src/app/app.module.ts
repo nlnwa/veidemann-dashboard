@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -39,7 +39,6 @@ import {
   ScheduleService,
   ScheduleSidebarComponent
 } from './configurations/schedule';
-import {DateTime, ErrorHandlerService} from './commons';
 import {EntityDetailsComponent, EntityService} from './entities';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {
@@ -60,6 +59,10 @@ import {SnackBarService} from './snack-bar-service/snack-bar.service';
 import {HttpModule} from '@angular/http';
 import {TokenInterceptor} from './auth/token.interceptor';
 import {AuthService} from './auth/auth.service';
+import {ErrorDialogComponent} from './error/error-dialog/error-dialog.component';
+import {ErrorComponent} from './error/error.component';
+import {ErrorService} from './commons/error.service';
+import {ApplicationErrorHandler} from './commons/error-handler';
 import {AceEditorModule} from 'ng2-ace-editor';
 
 
@@ -90,7 +93,10 @@ import {AceEditorModule} from 'ng2-ace-editor';
     CrawlHostGroupConfigDetailsComponent,
     CrawlHostGroupConfigListComponent,
     LabelsComponent,
+    ErrorDialogComponent,
+    ErrorComponent,
   ],
+  entryComponents: [ErrorDialogComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -114,19 +120,16 @@ import {AceEditorModule} from 'ng2-ace-editor';
     CrawlHostGroupConfigService,
     PolitenessConfigService,
     BrowserConfigService,
-    DateTime,
-    ErrorHandlerService,
     ScheduleService,
     EntityService,
     BrowserScriptService,
     LogService,
     SnackBarService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true,
-    }
+    ErrorService,
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: ErrorHandler, useClass: ApplicationErrorHandler},
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
