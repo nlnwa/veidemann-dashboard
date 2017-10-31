@@ -60,6 +60,7 @@ import {SnackBarService} from './snack-bar-service/snack-bar.service';
 import {HttpModule} from '@angular/http';
 import {TokenInterceptor} from './auth/token.interceptor';
 import {AuthService} from './auth/auth.service';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 
 @NgModule({
@@ -102,6 +103,7 @@ import {AuthService} from './auth/auth.service';
     FlexLayoutModule,
     HttpModule,
     OAuthModule.forRoot(),
+    AceEditorModule,
   ],
   providers: [
     AuthService,
