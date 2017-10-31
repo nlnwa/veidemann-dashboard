@@ -17,25 +17,30 @@
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
             <mat-error *ngIf="! form.controls.meta.valid"
-                      i18n="@@metaNameRequiredError">
+                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput formControlName="description" placeholder="Beskrivelse"
-                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
+            <textarea matInput formControlName="description" placeholder="Beskrivelse"
+                   i18n-placeholder="@@metaDescriptionInputPlaceholder"
+                   style="width: auto">
+            </textarea>
           </mat-form-field>
         </ng-container>
-        <mat-form-field>
-    <textarea matInput formControlName="script" placeholder="Script"
-              i18n-placeholder="@@browserscriptFormScriptPlaceholder">
-    </textarea>
-          <mat-error *ngIf="! form.controls.script.valid"
-                    i18n="@@browserscriptFormScriptRequiredError">
-            Script er påkrevd.
-          </mat-error>
-        </mat-form-field>
+
+        <mat-toolbar>
+          <span i18n="@@browserscriptFormScriptHeader"> Script</span>
+          <span class="fill-space"></span>
+        </mat-toolbar>
+        <ace-editor formControlName="script"
+                    #editor style="height:200px;">
+        </ace-editor>
+        <mat-error *ngIf="editor.value === ''"
+                   i18n="@@browserscriptFormScriptRequiredError">
+          Script er påkrevd.
+        </mat-error>
       </div>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">

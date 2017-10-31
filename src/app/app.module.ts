@@ -63,6 +63,7 @@ import {ErrorDialogComponent} from './error/error-dialog/error-dialog.component'
 import {ErrorComponent} from './error/error.component';
 import {ErrorService} from './commons/error.service';
 import {ApplicationErrorHandler} from './commons/error-handler';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 
 @NgModule({
@@ -108,6 +109,7 @@ import {ApplicationErrorHandler} from './commons/error-handler';
     FlexLayoutModule,
     HttpModule,
     OAuthModule.forRoot(),
+    AceEditorModule,
   ],
   providers: [
     AuthService,
