@@ -77,28 +77,28 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="!crawlHostGroupConfig.id"
               [disabled]="!form.valid"
               (click)="createCrawlHostGroupConfig(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button mat-button color="primary"
+      <button mat-raised-button color="primary"
               *ngIf="crawlHostGroupConfig.id"
               [disabled]="!form.valid || !form.dirty"
               (click)="updateCrawlHostGroupConfig(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
-      <button mat-button color="accent"
+      <button mat-raised-button color="accent"
               (click)="revert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
 
-      <button mat-button color="warn"
+      <button mat-raised-button color="warn"
               *ngIf="crawlHostGroupConfig.id"
               (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">

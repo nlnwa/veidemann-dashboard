@@ -26,3 +26,16 @@
   filter: alpha(opacity=50);
   color: #0066ff !important;
 }
+
+.left-menu {
+  max-width: 350px;
+}
+
+.right-menu {
+  max-width: 450px;
+  margin-left: 1em;
+}
+
+.mat-form-field {
+  width: 100%;
+}
