@@ -1,8 +1,14 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserScriptService} from '../browserscript.service';
 import {BrowserScript} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+
+import 'brace/index';
+import 'brace/theme/chrome';
+import 'brace/mode/javascript';
+import 'brace/ext/language_tools.js';
+declare var ace: any;
 
 
 @Component({
@@ -11,7 +17,7 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   styleUrls: ['./browserscript-details.component.css'],
 })
 
-export class BrowserScriptDetailsComponent implements OnChanges {
+export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   @Input()
   browserScript: BrowserScript;
   _form: FormGroup;
@@ -31,6 +37,14 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   @Input()
   deleteHandler: Function;
 
+  @ViewChild('editor') editor;
+
+
+  ngAfterViewInit() {
+    this.editor.setTheme('chrome');
+    this.editor.setMode('javascript');
+
+  }
 
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
