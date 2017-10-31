@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -48,9 +48,6 @@ export abstract class CrudService<T extends ListRequest> {
 
   // noinspection ReservedWordAsName
   delete(id: string): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`)
-      .catch((err) => {
-        return Observable.of(err as HttpErrorResponse);
-      });
+    return this.http.delete<any>(`${this.url}/${id}`);
   }
 }
