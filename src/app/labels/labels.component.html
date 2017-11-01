@@ -13,20 +13,21 @@
   </button>
 </mat-toolbar>
 
-
 <mat-card-content *ngFor="let group of groups$ | async;" class="labelList" fxLayout="columns">
-  <div fxLayout="row">
-    <p class="key">{{group.key}} :</p>
-    <mat-chip-list #chipList>
-      <mat-chip *ngFor="let value of group.values" [selectable]="selectable">
-        {{value}}
-        <mat-icon matChipRemove (click)="removeLabel(group.key, value)">cancel</mat-icon>
-      </mat-chip>
-      <input placeholder="Ny Chip.."
-             [matChipInputFor]="chipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             (matChipInputTokenEnd)="onNewLabel(group.key, $event.value)" />
-    </mat-chip-list>
+  <div class="chiplist" fxLayout="row">
+    <p class="key">{{group.key}}:</p>
+    <mat-form-field>
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let value of group.values" [selectable]="selectable">
+          {{value}}
+          <mat-icon matChipRemove (click)="removeLabel(group.key, value)">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="NewChip"
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               (matChipInputTokenEnd)="onNewLabel(group.key, $event.value)"/>
+      </mat-chip-list>
+    </mat-form-field>
   </div>
 </mat-card-content>
 

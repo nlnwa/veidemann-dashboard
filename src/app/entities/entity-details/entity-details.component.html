@@ -10,7 +10,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row" fxLayoutWrap>
-      <div fxFlex fxLayout="column">
+      <div class="left-menu" fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
@@ -70,7 +70,7 @@
           </mat-form-field>
         </ng-container>
       </div>
-      <div fxFlex fxLayout="column">
+      <div class="right-menu" fxFlex fxLayout="column">
         <!-- Labels -->
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>

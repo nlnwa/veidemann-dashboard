@@ -4,14 +4,15 @@
 
 .key {
   display: inline-block;
-  min-width: 200px;
+  #min-width: 200px;
   font-size: 20px;
-}
-.mat-divider {
-  min-width: 100%;
   margin: auto;
 }
 
+.mat-expansion-panel {
+  background: rgb(245, 245, 245);
+  margin-bottom: 1em;
+}
 .chip{
   padding-left: 1em;
   border-radius: 20px;
@@ -19,6 +20,9 @@
   margin-left: 1em;
 }
 
+.chiplist {
+  width: 100%;
+}
 .removeValueIcon {
   opacity: 0.5;
   filter: alpha(opacity=50); /* For IE8 and earlier */
@@ -40,4 +44,6 @@
   color: #0066ff !important;
 }
 
-
+.mat-form-field {
+  width: 100%;
+}
