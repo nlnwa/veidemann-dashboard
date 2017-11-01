@@ -5,3 +5,16 @@
 .ttIcon:hover {
   opacity: 70;
 }
+
+.metaNameInput > * {
+  width: 40%;
+}
+
+.metaDescriptionInput > * {
+  width: 80%;
+}
+
+.marginDropdown {
+  margin-bottom: 1em;
+}
+

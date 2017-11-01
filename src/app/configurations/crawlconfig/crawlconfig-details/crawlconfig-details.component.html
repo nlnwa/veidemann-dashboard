@@ -12,25 +12,30 @@
     <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
-          <mat-form-field>
-            <input matInput formControlName="name" placeholder="Navn"
-                   i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! form.controls.meta.valid"
-                      i18n="@@metaNameRequiredError">
-              Navn er påkrevd.
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput formControlName="description" placeholder="Beskrivelse"
-                   i18n-placeholder="@@metaDescriptionInputPlaceholder">
-          </mat-form-field>
+          <div class=" metaNameInput">
+            <mat-form-field>
+              <input matInput formControlName="name" placeholder="Navn"
+                     class="metaNameInput"
+                     i18n-placeholder="@@metaNameInputPlaceholder">
+              <mat-error *ngIf="! form.controls.meta.valid"
+                         i18n="@@metaNameRequiredError">
+                Navn er påkrevd.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="metaDescriptionInput">
+            <mat-form-field>
+            <textarea matInput formControlName="description" placeholder="Beskrivelse"
+                      i18n-placeholder="@@metaDescriptionInputPlaceholder">
+              </textarea>
+            </mat-form-field>
+          </div>
         </ng-container>
       </div>
 
 
       <div fxFlex fxLayout="column">
-        <div>
+        <div class="marginDropdown">
           <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
             Browserconfig:
             <angular2-multiselect [data]="browserConfigList"
@@ -39,13 +44,13 @@
                                   formControlName="browser_config_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.browser_config_id.valid"
-                 i18n="@@crawlconfigFormBrowserconfigRequiredError">
+          <mat-error *ngIf="! form.controls.browser_config_id.valid && form.controls['browser_config_id'].dirty"
+                     i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
           </mat-error>
         </div>
 
-        <div>
+        <div class="marginDropdown">
           <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
             Politenessconfig:
             <angular2-multiselect [data]="politenessConfigList"
@@ -54,8 +59,8 @@
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.politeness_id.valid"
-                 i18n="@@crawlconfigFormPolitenessconfigRequiredError">
+          <mat-error *ngIf="! form.controls.politeness_id.valid && form.controls['politeness_id'].dirty"
+                     i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
           </mat-error>
         </div>
@@ -65,32 +70,36 @@
                  formControlName="minimum_dns_ttl_s"
                  placeholder="DNS TTL">
           <mat-error *ngIf="! form.controls.minimum_dns_ttl_s.valid"
-                    i18n="@@crawlconfigFormMinDNSTTLRequiredError">
+                     i18n="@@crawlconfigFormMinDNSTTLRequiredError">
             minimum_dns_ttl_s er påkrevd.
           </mat-error>
         </mat-form-field>
 
+
         <div formGroupName="extra">
-          <mat-radio-group formControlName="extract_text">
-            <ng-container i18n="@@crawlconfigFormExtractTextLabel">Ekstraher tekst</ng-container>
-            <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
-            <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
-          </mat-radio-group>
+          <mat-checkbox formControlName="extract_text"
+                        labelPosition="before"
+                        i18n="@@crawlconfigFormExtractTextLabel"
+                        color="accent">
+            Ekstraher tekst
+          </mat-checkbox>
         </div>
 
         <div formGroupName="extra">
-          <mat-radio-group formControlName="create_snapshot">
-            <ng-container i18n="@@crawlconfigFormCreateSnapshotLabel">Lag snapshots</ng-container>
-            <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
-            <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
-          </mat-radio-group>
+          <mat-checkbox formControlName="create_snapshot"
+                        labelPosition="before"
+                        i18n="@@crawlconfigFormCreateSnapshotLabel"
+                        color="accent">
+            Lag snapshot
+          </mat-checkbox>
         </div>
 
-        <mat-radio-group formControlName="depth_first">
-          <ng-container i18n="@@crawlconfigFormDepthFirstLabel">Dybde først</ng-container>
-          <mat-radio-button [value]=true i18n="@@commonButtonYesRadioBtn">Ja</mat-radio-button>
-          <mat-radio-button [value]=false i18n="@@commonButtonNoRadioBtn">Nei</mat-radio-button>
-        </mat-radio-group>
+        <mat-checkbox formControlName="depth_first"
+                      labelPosition="before"
+                      i18n="@@crawlconfigFormDepthFirstLabel"
+                      color="accent">
+          Dybde først
+        </mat-checkbox>
 
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
