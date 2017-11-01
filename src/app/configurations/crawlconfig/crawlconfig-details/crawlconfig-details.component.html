@@ -34,8 +34,8 @@
       </div>
 
 
-      <div fxFlex fxLayout="column" fxLayoutGap="1em">
-        <div>
+      <div fxFlex fxLayout="column">
+        <div class="marginDropdown">
           <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
             Browserconfig:
             <angular2-multiselect [data]="browserConfigList"
@@ -44,13 +44,13 @@
                                   formControlName="browser_config_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.browser_config_id.valid"
+          <mat-error *ngIf="! form.controls.browser_config_id.valid && form.controls['browser_config_id'].dirty"
                      i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
           </mat-error>
         </div>
 
-        <div>
+        <div class="marginDropdown">
           <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
             Politenessconfig:
             <angular2-multiselect [data]="politenessConfigList"
@@ -59,7 +59,7 @@
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.politeness_id.valid"
+          <mat-error *ngIf="! form.controls.politeness_id.valid && form.controls['politeness_id'].dirty"
                      i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
           </mat-error>
