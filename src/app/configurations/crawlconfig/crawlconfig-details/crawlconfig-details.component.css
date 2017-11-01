@@ -5,3 +5,13 @@
 .ttIcon:hover {
   opacity: 70;
 }
+
+.metaNameInput > * {
+  width: 40%;
+}
+
+.metaDescriptionInput > * {
+  width: 80%;
+}
+
+
