@@ -1,67 +1,82 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {EntityService} from '../entity.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material';
 import {DateTime} from '../../commons/';
-import {SeedService} from '../../seeds/seeds.service';
-import {Entity, Label, Seed} from '../../commons/models/config.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/take';
+import {Entity, Label} from '../../commons/models/config.model';
+import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
 
 
 @Component({
   selector: 'app-entity-details',
   templateUrl: './entity-details.component.html',
   styleUrls: ['./entity-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EntityDetailsComponent {
+export class EntityDetailsComponent implements OnChanges {
 
   @Input()
-  set entity(entity: Entity) {
-    if (entity) {
-      this._entity = entity;
-      this.seedService.search({entity_id: this.entity.id})
-        .map(reply => reply.value)
-        .subscribe(seeds => {
-          this.seeds.next(seeds);
-        });
-      setTimeout(() => this.updateForm(entity), 0);
-    } else {
-      this._entity = null;
-    }
-  }
-
-  get form(): FormGroup {
-    return this._form;
-  }
-
-  set form(form: FormGroup) {
-    this._form = form;
-  }
-
-  get entity(): Entity {
-    return this._entity;
-  }
+  entity: Entity;
 
   @Output()
-  selectSeed = new EventEmitter<Seed>();
-
+  created = new EventEmitter<Entity>();
   @Output()
-  createSeed = new EventEmitter<string>();
+  updated = new EventEmitter<Entity>();
+  @Output()
+  deleted = new EventEmitter<Entity>();
 
-  private _entity: Entity;
-
-  _form: FormGroup;
-  seeds: BehaviorSubject<Seed[]> = new BehaviorSubject<Seed[]>([]);
+  form: FormGroup;
 
   constructor(private entityService: EntityService,
-              private seedService: SeedService,
-              private mdSnackBar: MatSnackBar,
+              private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
   }
 
-  createForm() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.entity.currentValue) {
+      this.updateForm();
+    }
+  }
+
+  onSave() {
+    const entity = this.prepareSaveEntity();
+    this.entityService.create(entity)
+      .subscribe((newEntity: Entity) => {
+        this.entity = newEntity;
+        this.updateForm();
+        this.created.emit(newEntity);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onUpdate() {
+    const entity = this.prepareSaveEntity();
+    this.entityService.update(entity)
+      .subscribe((updatedEntity: Entity) => {
+        this.entity = updatedEntity;
+        this.updateForm();
+        this.updated.emit(updatedEntity);
+        this.snackBarService.openSnackBar('Oppdatert');
+      });
+  }
+
+  onDelete(): void {
+    this.entityService.delete(this.entity.id)
+      .subscribe((deletedEntity) => {
+        this.deleted.emit(this.entity);
+        this.entity = deletedEntity;
+        this.form.reset();
+        this.snackBarService.openSnackBar('Slettet');
+      })
+
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       meta: this.fb.group({
@@ -76,8 +91,9 @@ export class EntityDetailsComponent {
     });
   }
 
-  updateForm(entity: Entity) {
-    this.form.patchValue({
+  private updateForm() {
+    const entity = this.entity;
+    this.form.setValue({
       id: entity.id,
       meta: {
         name: entity.meta.name,
@@ -94,9 +110,11 @@ export class EntityDetailsComponent {
       },
     });
     this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
-  private prepareSaveEntity(formModel: Entity): Entity {
+  private prepareSaveEntity(): Entity {
+    const formModel = this.form.value;
     return {
       id: this.entity.id,
       meta: {
@@ -109,62 +127,5 @@ export class EntityDetailsComponent {
         label: formModel.meta.label.map((label: Label) => ({...label})),
       }
     };
-  }
-
-  onSave() {
-    const entity = this.prepareSaveEntity(this.form.value);
-    this.entityService.create(entity)
-      .subscribe((newEntity: Entity) => {
-        this.entity = newEntity;
-      });
-    this.mdSnackBar.open('Lagret');
-  };
-
-
-  onUpdate() {
-    const entity = this.prepareSaveEntity(this.form.value);
-    this.entityService.update(entity)
-      .subscribe((updatedEntity: Entity) => {
-        this.entity = updatedEntity;
-      });
-    this.mdSnackBar.open('Lagret');
-  }
-
-  onDelete(): void {
-    this.entityService.delete(this.entity.id)
-      .subscribe((deletedEntity) => {
-        this.entity = deletedEntity;
-        this.mdSnackBar.open('Slettet');
-      });
-  }
-
-  onRevert() {
-    this.updateForm(this.entity);
-    this.mdSnackBar.open('Tilbakestilt');
-  }
-
-
-  onSelectSeed(seed: Seed) {
-    this.selectSeed.emit(seed);
-  }
-
-  onCreateSeed() {
-    this.createSeed.emit(this.entity.id);
-  }
-
-  addSeed(seed: Seed) {
-    this.seeds
-      .take(1)
-      .subscribe((seeds) => {
-        this.seeds.next([...seeds, seed]);
-      });
-  }
-
-  removeSeed(seed: Seed) {
-    this.seeds
-      .take(1)
-      .subscribe((seeds) => {
-        this.seeds.next([...seeds.filter((s) => s.id !== seed.id)]);
-      });
   }
 }
