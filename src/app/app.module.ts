@@ -48,7 +48,6 @@ import {
 } from './configurations/crawlhostgroupconfig';
 import {LabelsComponent} from './labels/labels.component';
 import {SearchService} from './search-service/search.service';
-import {BaseListComponent} from './base-list/base-list.component';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {SnackBarService} from './snack-bar-service/snack-bar.service';
 /**
@@ -59,17 +58,18 @@ import {SnackBarService} from './snack-bar-service/snack-bar.service';
 import {HttpModule} from '@angular/http';
 import {TokenInterceptor} from './auth/token.interceptor';
 import {AuthService} from './auth/auth.service';
-import {ErrorDialogComponent} from './error/error-dialog/error-dialog.component';
-import {ErrorComponent} from './error/error.component';
+import {ErrorDialogComponent} from './dialog/error-dialog/error-dialog.component';
 import {ErrorService} from './commons/error.service';
 import {ApplicationErrorHandler} from './commons/error-handler';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {SeedListComponent} from './seeds/seed-list/seed-list.component';
+import {EntityListComponent} from './entities/entity-list/entity-list.component';
+import {DialogComponent} from './dialog/dialog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    BaseListComponent,
     DocumentationComponent,
     StatisticsComponent,
     SearchComponent,
@@ -94,7 +94,9 @@ import {AceEditorModule} from 'ng2-ace-editor';
     CrawlHostGroupConfigListComponent,
     LabelsComponent,
     ErrorDialogComponent,
-    ErrorComponent,
+    DialogComponent,
+    SeedListComponent,
+    EntityListComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [
