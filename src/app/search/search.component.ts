@@ -94,6 +94,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onEntityCreated(entity) {
+    this.selectedEntity = entity;
     // noop
   }
 
