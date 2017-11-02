@@ -12,7 +12,11 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
 
   crawlHostGroupConfigs: CrawlHostGroupConfig[];
   selectedCrawlHostGroupConfig: CrawlHostGroupConfig;
-
+  private getIndexOfCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
+    return this.crawlHostGroupConfigs.findIndex((crawlHostGroupConfig) => {
+      return crawlHostGroupConfig.id === crawlHostGroupConfigId;
+    });
+  };
 
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService) {
   }
@@ -22,12 +26,6 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
       .map(reply => reply.value)
       .subscribe(crawlHostGroupConfigs => this.crawlHostGroupConfigs = crawlHostGroupConfigs);
   }
-
-  private getIndexOfCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
-    return this.crawlHostGroupConfigs.findIndex((crawlHostGroupConfig) => {
-      return crawlHostGroupConfig.id === crawlHostGroupConfigId;
-    });
-  };
 
   selectCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.selectedCrawlHostGroupConfig = crawlHostGroupConfig;
@@ -46,8 +44,8 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
     this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
   }
 
-  deleteCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
-    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfigId);
+  onCrawlHostGroupConfigDeleted(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
     if (idx !== -1) {
       this.crawlHostGroupConfigs.splice(idx, 1);
       this.selectCrawlHostGroupConfig(null);
@@ -55,13 +53,13 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
     return this.crawlHostGroupConfigs
   };
 
-  addCrawlHostGroupConfig = (crawlHostGroupConfig: CrawlHostGroupConfig) => {
+  onCrawlHostGroupConfigCreated(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigs.push(crawlHostGroupConfig);
     this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
     return this.crawlHostGroupConfigs;
   };
 
-  updateCrawlHostGroupConfig = (crawlHostGroupConfig: CrawlHostGroupConfig) => {
+  onCrawlHostGroupConfigUpdated(crawlHostGroupConfig: CrawlHostGroupConfig) {
     const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
     if (idx !== -1) {
       this.crawlHostGroupConfigs[idx] = crawlHostGroupConfig;

@@ -1,8 +1,9 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {VALID_IP_PATTERN} from '../../../commons/util';
 
 
 @Component({
@@ -14,14 +15,21 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   @Input()
   crawlHostGroupConfig: CrawlHostGroupConfig;
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
+
+  @Output()
+  created = new EventEmitter<CrawlHostGroupConfig>();
+  @Output()
+  updated = new EventEmitter<CrawlHostGroupConfig>();
+  @Output()
+  deleted = new EventEmitter<CrawlHostGroupConfig>();
 
   form: FormGroup;
+
+  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
+              private fb: FormBuilder,
+              private snackBarService: SnackBarService) {
+    this.createForm();
+  }
 
   get name() {
     return this.form.get('meta.name');
@@ -39,19 +47,58 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     return <FormArray>this.form.get('ip_range');
   }
 
-  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
-              private fb: FormBuilder,
-              private snackBarService: SnackBarService) {
-    this.createForm();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.crawlHostGroupConfig.currentValue) {
+      this.updateForm();
+    }
   }
 
-  ngOnChanges() {
-    setTimeout(() => {
-      this.updateData(this.crawlHostGroupConfig);
-    });
+  onSave() {
+    this.crawlHostGroupConfig = this.prepareSave();
+    this.crawlHostGroupConfigService.create(this.crawlHostGroupConfig)
+      .subscribe((newCrawlHostGroupConfig) => {
+        this.crawlHostGroupConfig = newCrawlHostGroupConfig;
+        this.updateForm();
+        this.created.emit(newCrawlHostGroupConfig);
+        this.snackBarService.openSnackBar('Lagret');
+      });
   }
 
-  createForm() {
+  onUpdate(): void {
+    this.crawlHostGroupConfig = this.prepareSave();
+    this.crawlHostGroupConfigService.update(this.crawlHostGroupConfig)
+      .subscribe((updatedCrawlHostGroupConfig) => {
+        this.crawlHostGroupConfig = updatedCrawlHostGroupConfig;
+        this.updateForm();
+        this.updated.emit(updatedCrawlHostGroupConfig);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onDelete(crawlHostGroupConfigId): void {
+    this.crawlHostGroupConfigService.delete(crawlHostGroupConfigId)
+      .subscribe((response) => {
+        this.deleted.emit(this.crawlHostGroupConfig);
+        this.crawlHostGroupConfig = response;
+        this.form.reset();
+        this.snackBarService.openSnackBar('Slettet');
+      });
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  onAddIpRange() {
+    this.ipRangeControlArray.push(this.initIpRange());
+  }
+
+  onRemoveIpRange(i: number) {
+    this.ipRangeControlArray.removeAt(i);
+  }
+
+  private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       ip_range: this.fb.array([]),
@@ -67,54 +114,24 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(crawlHostGroupConfig: CrawlHostGroupConfig) {
-    const ipRangeFG: FormGroup[] = crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
+  private updateForm() {
+    const ipRangeFG: FormGroup[] = this.crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
 
     this.form.patchValue({
-      id: crawlHostGroupConfig.id,
+      id: this.crawlHostGroupConfig.id,
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
         description: this.crawlHostGroupConfig.meta.description,
-        label: [...crawlHostGroupConfig.meta.label],
+        label: [...this.crawlHostGroupConfig.meta.label],
       }
     });
     this.form.setControl('ip_range', ipRangeFGArray);
     this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
-  createCrawlHostGroupConfig() {
-    this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
-    this.crawlHostGroupConfigService.create(this.crawlHostGroupConfig)
-      .subscribe(
-        (crawlHostGroupConfig: CrawlHostGroupConfig) => {
-          this.createHandler(crawlHostGroupConfig);
-        });
-    this.snackBarService.openSnackBar('Lagret');
-  };
-
-  updateCrawlHostGroupConfig(crawlHostGroupConfigForm): void {
-    this.crawlHostGroupConfig = this.prepareSaveCrawlHostGroupConfig();
-    this.crawlHostGroupConfigService.update(this.crawlHostGroupConfig)
-      .subscribe((updatedCrawlHostGroupConfig) => {
-        this.updateHandler(updatedCrawlHostGroupConfig);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  };
-
-  deleteCrawlHostGroupConfig(crawlHostGroupConfigId): void {
-    this.crawlHostGroupConfigService.delete(crawlHostGroupConfigId)
-      .subscribe((response) => {
-        this.deleteHandler(crawlHostGroupConfigId);
-        if (response instanceof Object) {
-          this.snackBarService.openSnackBar('Feil: Ikke slettet');
-        } else {
-          this.snackBarService.openSnackBar('Slettet');
-        }
-      });
-  };
-
-  prepareSaveCrawlHostGroupConfig(): CrawlHostGroupConfig {
+  private prepareSave(): CrawlHostGroupConfig {
     const formModel = this.form.value;
 
     const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
@@ -130,26 +147,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     };
   }
 
-  addIpRange() {
-    this.ipRangeControlArray.push(this.initIpRange());
-  }
-
-  removeIpRange(i: number) {
-    this.ipRangeControlArray.removeAt(i);
-  }
-
-  initIpRange() {
+  private initIpRange() {
     return this.fb.group({
-      ip_from: ['', [Validators.required, Validators.pattern(
-        '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')]],
-      ip_to: ['', [Validators.required, Validators.pattern(
-        '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')]],
+      ip_from: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
+      ip_to: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
     });
-  }
-
-  revert() {
-    this.ngOnChanges();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
 }
