@@ -1,0 +1,16 @@
+.highlight {
+  background-color: #eee;
+}
+
+.list-row:hover {
+  background: rgba(0, 1, 0, 0.5);
+}
+
+.list {
+  margin-bottom: 1em;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 400px;
+}
