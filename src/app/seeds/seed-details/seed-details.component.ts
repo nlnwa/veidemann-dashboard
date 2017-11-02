@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {SeedService} from '../seeds.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
@@ -14,20 +14,23 @@ import {VALID_URL_PATTERN} from '../../commons/util';
   templateUrl: './seed-details.component.html',
   styleUrls: ['./seed-details.component.css']
 })
+export class SeedDetailComponent implements OnChanges {
 
-export class SeedDetailComponent {
+  @Input()
+  seed: Seed;
+
   @Output()
-  seedCreated = new EventEmitter<Seed>();
+  created = new EventEmitter<Seed>();
   @Output()
-  seedDeleted = new EventEmitter<Seed>();
+  updated = new EventEmitter<Seed>();
+  @Output()
+  deleted = new EventEmitter<Seed>();
 
   dropdownCrawlJobSettings = {};
   selectedCrawlJobItems = [];
   crawlJobList = [];
 
-  private _seed: Seed;
-
-  private _form: FormGroup;
+  form: FormGroup;
 
   constructor(private seedService: SeedService,
               private fb: FormBuilder,
@@ -37,29 +40,52 @@ export class SeedDetailComponent {
     this.getCrawlJobs();
   }
 
-  get seed() {
-    return this._seed;
-  }
-
-  @Input()
-  set seed(seed: Seed) {
-    if (seed) {
-      this._seed = seed;
-      setTimeout(() => this.updateForm(seed), 0);
-    } else {
-      this._seed = null;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.seed.currentValue) {
+      this.updateForm();
     }
   }
 
-  get form() {
-    return this._form;
+  onSave(): void {
+    const seed = this.prepareSaveSeed();
+    this.seedService.create(seed)
+      .subscribe((createdSeed) => {
+        this.seed = createdSeed;
+        this.updateForm();
+        this.created.emit(createdSeed);
+        this.snackBarservice.openSnackBar('Lagret');
+      });
+
   }
 
-  set form(fg: FormGroup) {
-    this._form = fg;
+  onUpdate(): void {
+    const seed = this.prepareSaveSeed();
+    this.seedService.update(seed)
+      .subscribe((updatedSeed) => {
+        this.seed = updatedSeed;
+        this.updateForm();
+        this.updated.emit(updatedSeed);
+        this.snackBarservice.openSnackBar('Lagret');
+      });
+
   }
 
-  createForm() {
+  onDelete(): void {
+    this.seedService.delete(this.seed.id)
+      .subscribe((deletedSeed) => {
+        this.deleted.emit(this.seed);
+        this.seed = deletedSeed;
+        this.form.reset();
+        this.snackBarservice.openSnackBar('Slettet');
+      });
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarservice.openSnackBar('Tilbakestilt');
+  }
+
+  private createForm() {
     this.form = this.fb.group({
         id: {value: '', disabled: true},
         disabled: true,
@@ -79,8 +105,9 @@ export class SeedDetailComponent {
     );
   }
 
-  updateForm(seed: Seed) {
-    this.form.patchValue({
+  private updateForm() {
+    const seed = this.seed;
+    this.form.setValue({
       id: seed.id,
       entity_id: seed.entity_id,
       disabled: !seed.disabled, // disabled is named active in the view
@@ -103,15 +130,17 @@ export class SeedDetailComponent {
       }
     });
     this.form.markAsPristine();
+    this.form.markAsUntouched();
     this.setSelectedDropdown(seed.job_id);
   }
 
   /**
    * Disabled values in form must be copied from model and not the view model (form model)
-   * @param {Seed} viewModel
+   *
    * @returns {Seed}
    */
-  prepareSaveSeed(viewModel: Seed): Seed {
+  private prepareSaveSeed(): Seed {
+    const viewModel = this.form.value;
     return {
       id: this.seed.id,
       entity_id: this.seed.entity_id,
@@ -130,12 +159,12 @@ export class SeedDetailComponent {
     };
   }
 
-  setSelectedDropdown(jobIds) {
+  private setSelectedDropdown(jobIds) {
     this.selectedCrawlJobItems = [];
     if (!jobIds.length) {
       return;
     } else {
-      console.log('setSelectedDropdown', jobIds);
+      // console.log('setSelectedDropdown', jobIds);
     }
     jobIds
       .map((jobId) => this.crawlJobService.get(jobId))
@@ -148,7 +177,7 @@ export class SeedDetailComponent {
         }));
   }
 
-  getCrawlJobs() {
+  private getCrawlJobs() {
     this.selectedCrawlJobItems = [];
     this.dropdownCrawlJobSettings = {
       singleSelection: false,
@@ -168,45 +197,4 @@ export class SeedDetailComponent {
         });
       });
   }
-
-  onSave(): void {
-    const seed = this.prepareSaveSeed(this.form.value);
-    this.seedService.create(seed)
-      .subscribe((createdSeed) => {
-        this.seed = createdSeed;
-        this.seedCreated.emit(createdSeed);
-      });
-
-    this.snackBarservice.openSnackBar('Lagret');
-  }
-
-  onUpdate(): void {
-    const seed = this.prepareSaveSeed(this.form.value);
-    this.seedService.update(seed)
-      .subscribe((updatedSeed) => {
-        this.seed = updatedSeed;
-      });
-
-    this.snackBarservice.openSnackBar('Lagret');
-  }
-
-  onDelete(): void {
-    this.seedService.delete(this.seed.id)
-      .subscribe((deletedSeed) => {
-        this.seedDeleted.emit({...this.seed});
-        this.seed = deletedSeed;
-        if (deletedSeed === 'not_allowed') {
-          this.snackBarservice.openSnackBar('Feil: Ikke slettet');
-        } else {
-          this.snackBarservice.openSnackBar('Slettet');
-        }
-      });
-  }
-
-  onRevert() {
-    this.updateForm(this.seed);
-    this.snackBarservice.openSnackBar('Tilbakestilt');
-  }
-
-
 }

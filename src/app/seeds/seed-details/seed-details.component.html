@@ -114,6 +114,7 @@
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button mat-raised-button color="warn"
+              *ngIf="seed.id"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>

@@ -7,8 +7,12 @@ export class Meta {
   last_modified_by?: string;
   label: Label[];
 
-  constructor() {
+  constructor(name = '') {
+    this.name = name;
+    this.description = '';
+    this.created_by = '';
     this.created = new Timestamp();
+    this.last_modified_by = '';
     this.last_modified = new Timestamp();
     this.label = [];
   }
@@ -31,8 +35,9 @@ export class Entity {
   id: string;
   meta: Meta;
 
-  constructor() {
-    this.meta = new Meta();
+  constructor(name = '') {
+    this.id = '';
+    this.meta = new Meta(name);
   }
 }
 
@@ -45,6 +50,7 @@ export class Seed {
   disabled: boolean;
 
   constructor(entityId: string) {
+    this.id = '';
     this.entity_id = entityId;
     this.scope = new Scope();
     this.meta = new Meta();
@@ -101,6 +107,11 @@ export class Schedule {
 
 export class Scope {
   surt_prefix: string;
+
+  constructor() {
+    this.surt_prefix = '';
+  }
+
 }
 
 export class CrawlLimits {
