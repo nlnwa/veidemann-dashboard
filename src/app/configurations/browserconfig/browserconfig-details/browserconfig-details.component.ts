@@ -99,8 +99,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       });
   }
 
-  onDelete(browserConfigId): void {
-    this.browserConfigService.delete(browserConfigId)
+  onDelete(): void {
+    this.browserConfigService.delete(this.browserConfig.id)
       .subscribe((response) => {
         this.deleted.emit(this.browserConfig);
         this.browserConfig = response;
@@ -116,7 +116,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   private createForm() {
     this.form = this.fb.group({
-      id: '',
+      id: {value: '', disabled: true},
       user_agent: ['', [Validators.required, Validators.minLength(1)]],
       window_width: ['', [Validators.required, CustomValidators.min(1)]],
       window_height: ['', [Validators.required, CustomValidators.min(1)]],

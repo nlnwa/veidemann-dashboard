@@ -72,7 +72,7 @@
       </button>
       <button mat-raised-button color="warn"
               *ngIf="browserScript.id"
-              (click)="onDelete(browserScript.id); $event.stopPropagation()"
+              (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

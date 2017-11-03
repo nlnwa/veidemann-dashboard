@@ -43,18 +43,7 @@ export class BrowserConfigListComponent implements OnInit {
     return this.browserConfigs;
   }
 
-
-  private getIndexOfBrowserConfig(browserConfigId: String) {
-    return this.browserConfigs.findIndex((browserconfig) => {
-      return browserconfig.id === browserConfigId;
-    });
-  }
-
-  private selectBrowserConfig(browserConfig: BrowserConfig) {
-    this.selectedBrowserConfig = browserConfig
-  }
-
-  private createNewBrowserConfig() {
+  onCreateNewBrowserConfig() {
     const browserConfig: BrowserConfig = {
       user_agent: '',
       page_load_timeout_ms: '',
@@ -70,5 +59,15 @@ export class BrowserConfigListComponent implements OnInit {
     };
     // By default, a newly-created  will have the selected state.
     this.selectBrowserConfig(browserConfig);
+  }
+
+  private getIndexOfBrowserConfig(browserConfigId: String) {
+    return this.browserConfigs.findIndex((browserconfig) => {
+      return browserconfig.id === browserConfigId;
+    });
+  }
+
+  private selectBrowserConfig(browserConfig: BrowserConfig) {
+    this.selectedBrowserConfig = browserConfig
   }
 }

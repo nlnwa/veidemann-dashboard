@@ -124,13 +124,6 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
         label: [...this.browserScript.meta.label],
       }
     });
-    //this.form.controls['id'].setValue(browserScript.id);
-    //this.form.controls['script'].setValue(browserScript.script);
-    //this.form.controls['meta'].patchValue({
-    //  name: browserScript.meta.name as string,
-    //  description: browserScript.meta.description as string,
-    //  label: [...browserScript.meta.label],
-    //});
     this.form.markAsPristine();
     this.form.markAsUntouched();
   };
