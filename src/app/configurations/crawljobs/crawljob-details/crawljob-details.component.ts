@@ -158,21 +158,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         label: [...this.crawlJob.meta.label],
       },
     });
-    //this.form.controls['id'].setValue(crawljob.id);
-    //this.form.controls['limits'].setValue({
-    //  depth: crawljob.limits.depth,
-    //  max_duration_s: crawljob.limits.max_duration_s,
-    //  max_bytes: crawljob.limits.max_bytes,
-    //});
-    //this.form.controls['meta'].patchValue({
-    //  name: crawljob.meta.name as string,
-    //  description: crawljob.meta.description as string,
-    //  label: [...crawljob.meta.label]
-    //});
     this.setSelectedDropdown();
-    //this.selectedScheduleItems = [];
-    //this.selectedCrawlConfigItems = [];
-   // this.form.controls['disabled'].setValue((crawljob.disabled)as boolean);
     this.form.markAsPristine();
     this.form.markAsUntouched();
   };
