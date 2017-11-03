@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, Input, OnChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserScriptService} from '../browserscript.service';
 import {BrowserScript} from '../../../commons/models/config.model';
@@ -19,14 +28,16 @@ declare var ace: any;
 })
 
 export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
+
   @Input()
   browserScript: BrowserScript;
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
+
+  @Output()
+  created = new EventEmitter<BrowserScript>();
+  @Output()
+  updated = new EventEmitter<BrowserScript>();
+  @Output()
+  deleted = new EventEmitter<BrowserScript>();
 
   @ViewChild('editor') editor;
 
@@ -38,15 +49,62 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     this.createForm();
   }
 
+  get name() {
+    return this.form.get('meta.name');
+  }
+
   ngAfterViewInit() {
     this.editor.setTheme('chrome');
     this.editor.setMode('javascript');
 
   }
 
-  createForm() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.browserScript.currentValue) {
+      this.updateForm();
+    }
+  }
+
+  onSave() {
+    this.browserScript = this.prepareSave();
+    this.browserScriptService.create(this.browserScript)
+      .subscribe(newBrowserScript => {
+        this.browserScript = newBrowserScript;
+        this.updateForm();
+        this.created.emit(newBrowserScript);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onUpdate(): void {
+    this.browserScript = this.prepareSave();
+    this.browserScriptService.update(this.browserScript)
+      .subscribe(updatedBrowserScript => {
+        this.browserScript = updatedBrowserScript;
+        this.updateForm();
+        this.updated.emit(updatedBrowserScript);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onDelete(): void {
+    this.browserScriptService.delete(this.browserScript.id)
+      .subscribe(response => {
+        this.deleted.emit(this.browserScript);
+        this.browserScript = response;
+        this.form.reset();
+        this.snackBarService.openSnackBar('Slettet');
+      });
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  private createForm() {
     this.form = this.fb.group({
-      id: '',
+      id: {value: '', disabled: true},
       script: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
@@ -56,54 +114,28 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     });
   }
 
-  updateData(browserScript: BrowserScript) {
-    this.form.controls['id'].setValue(browserScript.id);
-    this.form.controls['script'].setValue(browserScript.script);
-    this.form.controls['meta'].patchValue({
-      name: browserScript.meta.name as string,
-      description: browserScript.meta.description as string,
-      label: [...browserScript.meta.label],
+  private updateForm() {
+    this.form.patchValue({
+      id: this.browserScript.id,
+      script: this.browserScript.script,
+      meta: {
+        name: this.browserScript.meta.name,
+        description: this.browserScript.meta.description,
+        label: [...this.browserScript.meta.label],
+      }
     });
+    //this.form.controls['id'].setValue(browserScript.id);
+    //this.form.controls['script'].setValue(browserScript.script);
+    //this.form.controls['meta'].patchValue({
+    //  name: browserScript.meta.name as string,
+    //  description: browserScript.meta.description as string,
+    //  label: [...browserScript.meta.label],
+    //});
     this.form.markAsPristine();
+    this.form.markAsUntouched();
   };
 
-  ngOnChanges() {
-    this.updateData(this.browserScript);
-
-  }
-
-  createBrowserScript() {
-    this.browserScript = this.prepareSaveBrowserScript();
-    this.browserScriptService.create(this.browserScript)
-      .subscribe(newBrowserScript => {
-        this.createHandler(newBrowserScript);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  }
-
-
-  updateBrowserScript(browserScript: BrowserScript): void {
-    this.browserScript = this.prepareSaveBrowserScript();
-    this.browserScriptService.update(this.browserScript)
-      .subscribe(updatedBrowserScript => {
-        this.updateHandler(updatedBrowserScript);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  }
-
-  deleteBrowserScript(browserScriptId): void {
-    this.browserScriptService.delete(browserScriptId)
-      .subscribe(response => {
-        this.deleteHandler(browserScriptId);
-        if (response instanceof Object) {
-          this.snackBarService.openSnackBar('Feil: Ikke slettet');
-        } else {
-          this.snackBarService.openSnackBar('Slettet');
-        }
-      });
-  }
-
-  prepareSaveBrowserScript(): BrowserScript {
+  private prepareSave(): BrowserScript {
     const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
@@ -119,10 +151,5 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
         label: labelsDeepCopy
       }
     };
-  }
-
-  revert() {
-    this.ngOnChanges();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }
