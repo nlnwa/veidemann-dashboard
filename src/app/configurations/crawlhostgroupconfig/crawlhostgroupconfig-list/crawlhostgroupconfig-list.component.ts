@@ -12,14 +12,8 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
 
   crawlHostGroupConfigs: CrawlHostGroupConfig[];
   selectedCrawlHostGroupConfig: CrawlHostGroupConfig;
-  private getIndexOfCrawlHostGroupConfig = (crawlHostGroupConfigId: String) => {
-    return this.crawlHostGroupConfigs.findIndex((crawlHostGroupConfig) => {
-      return crawlHostGroupConfig.id === crawlHostGroupConfigId;
-    });
-  };
 
-  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService) {
-  }
+  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService) {}
 
   ngOnInit() {
     this.crawlHostGroupConfigService.list()
@@ -27,11 +21,11 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
       .subscribe(crawlHostGroupConfigs => this.crawlHostGroupConfigs = crawlHostGroupConfigs);
   }
 
-  selectCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
+  onSelectCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.selectedCrawlHostGroupConfig = crawlHostGroupConfig;
   }
 
-  createNewCrawlHostGroupConfig() {
+  onCreateNewCrawlHostGroupConfig() {
     const crawlHostGroupConfig: CrawlHostGroupConfig = {
       ip_range: [],
       meta: {
@@ -41,21 +35,12 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
       }
     };
     // By default, a newly-created  will have the selected state.
-    this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
+    this.onSelectCrawlHostGroupConfig(crawlHostGroupConfig);
   }
-
-  onCrawlHostGroupConfigDeleted(crawlHostGroupConfig: CrawlHostGroupConfig) {
-    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
-    if (idx !== -1) {
-      this.crawlHostGroupConfigs.splice(idx, 1);
-      this.selectCrawlHostGroupConfig(null);
-    }
-    return this.crawlHostGroupConfigs
-  };
 
   onCrawlHostGroupConfigCreated(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigs.push(crawlHostGroupConfig);
-    this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
+    this.onSelectCrawlHostGroupConfig(crawlHostGroupConfig);
     return this.crawlHostGroupConfigs;
   };
 
@@ -63,8 +48,23 @@ export class CrawlHostGroupConfigListComponent implements OnInit {
     const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
     if (idx !== -1) {
       this.crawlHostGroupConfigs[idx] = crawlHostGroupConfig;
-      this.selectCrawlHostGroupConfig(crawlHostGroupConfig);
+      this.onSelectCrawlHostGroupConfig(crawlHostGroupConfig);
     }
     return this.crawlHostGroupConfigs;
   }
+
+  onCrawlHostGroupConfigDeleted(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    const idx = this.getIndexOfCrawlHostGroupConfig(crawlHostGroupConfig.id);
+    if (idx !== -1) {
+      this.crawlHostGroupConfigs.splice(idx, 1);
+      this.onSelectCrawlHostGroupConfig(null);
+    }
+    return this.crawlHostGroupConfigs
+  };
+
+  private getIndexOfCrawlHostGroupConfig(crawlHostGroupConfigId: String) {
+    return this.crawlHostGroupConfigs.findIndex((crawlHostGroupConfig) => {
+      return crawlHostGroupConfig.id === crawlHostGroupConfigId;
+    });
+  };
 }
