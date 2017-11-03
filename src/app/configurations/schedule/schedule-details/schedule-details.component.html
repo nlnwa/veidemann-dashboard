@@ -16,7 +16,7 @@
                    formControlName="name"
                    placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! form.controls.meta.controls.name.valid"
+            <mat-error *ngIf="!form.get('meta.name').valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>

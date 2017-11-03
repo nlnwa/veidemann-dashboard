@@ -26,7 +26,7 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   schedule: Schedule;
 
-  private form: FormGroup;
+  form: FormGroup;
 
   scheduleList: any = [];
   crawlConfigList: any = [];

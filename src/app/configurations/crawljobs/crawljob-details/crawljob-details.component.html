@@ -18,7 +18,7 @@
         <mat-form-field formGroupName="meta">
           <input matInput formControlName="name" placeholder="Navn"
                  i18n-placeholder="@@metaNameInputPlaceholder">
-          <mat-error *ngIf="! form.controls.meta.controls.name.valid"
+          <mat-error *ngIf="! form.get('meta.name').valid"
                     i18n="@@metaNameRequiredError">
             Navn er påkrevd.
           </mat-error>
@@ -34,7 +34,7 @@
             <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
                    matInput formControlName="depth" type="number" placeholder="Dybde">
             <mat-error i18n="@@crawljobFormDepthRequiredError"
-                      *ngIf="! form.controls.limits.controls.depth.valid">
+                      *ngIf="! form.get('limits.depth.valid')">
               Dybde er påkrevd
             </mat-error>
           </mat-form-field>
@@ -42,7 +42,7 @@
             <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
                    matInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
             <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
-                      *ngIf="! form.controls.limits.controls.max_duration_s.valid">
+                      *ngIf="! form.get('limits.max_duration_s.valid')">
               Maks tid er påkrevd.
             </mat-error>
           </mat-form-field>
@@ -50,7 +50,7 @@
             <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
                    matInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
             <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                      *ngIf="! form.controls.limits.controls.max_bytes.valid">
+                      *ngIf="! form.get('limits.max_bytes').valid">
               Maks byte er påkrevd.
             </mat-error>
           </mat-form-field>
@@ -66,7 +66,7 @@
                                   formControlName="schedule_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.schedule_id.valid"
+          <mat-error *ngIf="! form.get('schedule_id').valid"
                     i18n="@@crawljobFormScheduleRequiredError">
             Schedule er påkrevd.
           </mat-error>
@@ -80,7 +80,7 @@
                                   formControlName="crawl_config_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.crawl_config_id.valid"
+          <mat-error *ngIf="! form.get('crawl_config_id').valid"
                     i18n="@@crawljobFormCrawlconfigRequieredError">
             Crawlconfig er påkrevd.
           </mat-error>

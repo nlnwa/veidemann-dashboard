@@ -4,12 +4,12 @@ import {Item} from '../list-database';
 
 export abstract class BaseListComponent {
 
+  public dataSource: DataSource<any>;
+  public displayedColumns = ['id', 'name', 'description'];
   @Output()
   protected rowClick = new EventEmitter<Item | Item[]>();
-  protected dataSource: DataSource<any>;
   protected multiSelect = false;
   protected selectedItems: Set<Item> = new Set();
-  protected displayedColumns = ['id', 'name', 'description'];
 
   constructor(protected changeDetectorRef: ChangeDetectorRef) {}
 
@@ -33,11 +33,11 @@ export abstract class BaseListComponent {
     this.changeDetectorRef.detectChanges()
   }
 
-  protected isSelected(item: Item) {
-    return this.selectedItems.has(item);
+  public trackById(index: number, item: Item) {
+    return item.id;
   }
 
-  protected trackById(index: number, item: Item) {
-    return item.id;
+  public isSelected(item: Item) {
+    return this.selectedItems.has(item);
   }
 }

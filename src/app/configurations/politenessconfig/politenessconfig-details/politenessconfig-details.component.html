@@ -15,7 +15,7 @@
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! form.controls.meta.controls.name.valid"
+            <mat-error *ngIf="! form.get('meta.name').valid"
                        i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
@@ -34,7 +34,7 @@
                                 [settings]="robetsPolicyDropdownSettings"
                                 formControlName="robots_policy">
           </angular2-multiselect>
-          <mat-error *ngIf="! form.controls.robots_policy.valid && form.controls['robots_policy'].dirty"
+          <mat-error *ngIf="! form.get('robots_policy').valid && form.get('robots_policy').dirty"
                      i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </mat-error>
@@ -48,7 +48,7 @@
                       formControlName="custom_robots"
                       placeholder="robots.txt">
             </textarea>
-              <mat-error *ngIf="!form.controls.custom_robots.valid"
+              <mat-error *ngIf="!form.get('custom_robots').valid"
                          i18n="@@politenessconfigFormValidityDurationRequiredError">
                 Validity duration er påkrevd.
               </mat-error>
@@ -61,7 +61,7 @@
                  formControlName="minimum_robots_validity_duration_s"
                  placeholder="Minimum robots validity (seconds)"
                  i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-          <mat-error *ngIf="! form.controls.minimum_robots_validity_duration_s.valid"
+          <mat-error *ngIf="! form.get('minimum_robots_validity_duration_s').valid"
                      i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
             Validity duration required.
           </mat-error>
@@ -72,7 +72,7 @@
                  formControlName="min_time_between_page_load_ms"
                  placeholder="Minimum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! form.controls.min_time_between_page_load_ms.valid"
+          <mat-error *ngIf="! form.get('min_time_between_page_load_ms').valid"
                      i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
             En minimum tid mellom sideinnlastning er påkrevd.
           </mat-error>
@@ -83,7 +83,7 @@
                  formControlName="max_time_between_page_load_ms"
                  placeholder="Maximum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! form.controls.max_time_between_page_load_ms.valid"
+          <mat-error *ngIf="! form.get('max_time_between_page_load_ms').valid"
                      i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
             En maksimum tid mellom sideinnlastning er påkrevd.
           </mat-error>
