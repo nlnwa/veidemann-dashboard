@@ -75,8 +75,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       });
   }
 
-  onDelete(crawlHostGroupConfigId): void {
-    this.crawlHostGroupConfigService.delete(crawlHostGroupConfigId)
+  onDelete(): void {
+    this.crawlHostGroupConfigService.delete(this.crawlHostGroupConfig.id)
       .subscribe((response) => {
         this.deleted.emit(this.crawlHostGroupConfig);
         this.crawlHostGroupConfig = response;
