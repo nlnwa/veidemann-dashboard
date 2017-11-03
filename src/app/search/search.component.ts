@@ -11,21 +11,24 @@ import {SnackBarService} from '../snack-bar-service/snack-bar.service';
 import 'rxjs/add/operator/finally';
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Item} from '../commons/list/list-database';
+import {SearchDatabase} from './search-database';
 
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  providers: [EntityDatabase, SeedDatabase],
+  providers: [{provide: EntityDatabase, useClass: SearchDatabase}, SeedDatabase],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   selectedEntity: Entity = null;
   selectedSeed: Seed = null;
-  @ViewChild(EntityListComponent) entityList;
-  @ViewChild(SeedListComponent) seedList;
+  @ViewChild(SeedListComponent) private seedList;
+  @ViewChild(EntityListComponent) private entityList;
   private searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private completedSubscription: Subscription;
+  private items: Item[] = [];
 
   constructor(private searchService: SearchService,
               private seedService: SeedService,
@@ -33,31 +36,27 @@ export class SearchComponent implements OnInit, OnDestroy {
               private seedDatabase: SeedDatabase,
               private snackBarService: SnackBarService) {}
 
-
   ngOnInit() {
     this.completedSubscription = this.searchService.completed$.subscribe(() => {
-      if (this.entityDatabase.isEmpty()) {
+      if (this.items.length < 1) {
         this.selectedEntity = new Entity(this.searchTerm.value);
+      } else {
+        this.entityDatabase.items = this.items;
+        this.entityList.onRowClick(this.items[0]);
+        this.items = [];
       }
     });
 
-    let isFirstHit = true;
-
     this.searchTerm
-      .do((term: string) => {
+      .do(() => {
         this.selectedEntity = null;
         this.selectedSeed = null;
         this.entityDatabase.clear();
         this.seedDatabase.clear();
-        isFirstHit = true;
       })
       .switchMap((term: string) => this.searchService.search(term))
-      .subscribe((entity) => {
-        this.entityDatabase.add(entity);
-        if (isFirstHit) {
-          this.entityList.onRowClick(entity);
-          isFirstHit = false;
-        }
+      .subscribe((item) => {
+        this.items.push(item)
       });
   }
 
@@ -72,15 +71,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   onSelectEntity(entity: Entity) {
     this.selectedEntity = entity;
     this.selectedSeed = null;
-    let isFirstHit = true;
 
+    let isFirstHit = true;
     this.seedService.search({entity_id: entity.id})
       .map(reply => reply.value)
       .do(() => isFirstHit = true)
       .subscribe(seeds => {
         this.seedDatabase.items = seeds;
         if (isFirstHit && seeds.length) {
-          this.seedList.onRowClick(seeds[0])
+          this.seedList.onRowClick(seeds[0]);
           isFirstHit = false;
         }
       });

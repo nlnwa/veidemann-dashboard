@@ -25,7 +25,7 @@ export class ListDatabase implements Database {
   }
 
   set items(items: Item[]) {
-    this.dataSet = new Set(items.map((item) => item.id));
+    this.dataSet = new Set(items);
     this.dataChange.next(items);
   }
 
@@ -37,17 +37,19 @@ export class ListDatabase implements Database {
   add(item: Item): void {
     if (this.dataSet.has(item.id)) {
       return;
+    } else {
+      this.dataSet.add(item.id);
+      const copy = this.items.slice();
+      copy.push(item);
+      this.items = copy;
     }
-    const copy = this.items.slice();
-    copy.push(item);
-    this.items = copy;
   }
 
   update(item: Item) {
     if (!this.dataSet.has(item.id)) {
       return;
     }
-    const index = this.items.findIndex((element) => element.id === item.id);
+    const index = this.findIndex(item);
     if (index > -1) {
       const copy = this.items;
       copy[index] = item;
@@ -59,7 +61,7 @@ export class ListDatabase implements Database {
     if (!this.dataSet.has(item.id)) {
       return;
     }
-    const index = this.items.findIndex((element) => element.id === item.id);
+    const index = this.findIndex(item);
     if (index > -1) {
       const copy = this.items.slice();
       copy.splice(index, 1);
@@ -69,6 +71,10 @@ export class ListDatabase implements Database {
 
   isEmpty() {
     return this.dataSet.size < 1;
+  }
+
+  findIndex(item: Item) {
+    return this.items.findIndex((element) => element.id === item.id);
   }
 }
 
