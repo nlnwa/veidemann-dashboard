@@ -1,22 +1,22 @@
 <h2 i18n="@@crawlconfigListHeader">Crawlconfigs</h2>
 <mat-nav-list>
   <mat-list-item
-    *ngFor="let crawlconfig of crawlConfigs" (click)="selectCrawlConfig(crawlconfig)"
+    *ngFor="let crawlconfig of crawlConfigs" (click)="onSelectCrawlConfig(crawlconfig)"
     [class.active]="crawlconfig === selectedCrawlConfig">
     {{crawlconfig.meta.name}}
   </mat-list-item>
 </mat-nav-list>
 <button mat-raised-button color="primary"
-        (click)="createNewCrawlConfig()"
+        (click)="onCreateNewCrawlConfig()"
         i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedCrawlConfig">
   <app-crawlconfig-details
     [crawlConfig]="selectedCrawlConfig"
-    [createHandler]="addCrawlConfig"
-    [updateHandler]="updateCrawlConfig"
-    [deleteHandler]="deleteCrawlConfig">
+    (created)="onCrawlConfigCreated($event)"
+    (updated)="onCrawlConfigUpdated($event)"
+    (deleted)="onCrawlConfigDeleted($event)">
   </app-crawlconfig-details>
 </ng-container>
 

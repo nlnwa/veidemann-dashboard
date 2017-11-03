@@ -17,7 +17,7 @@
               <input matInput formControlName="name" placeholder="Navn"
                      class="metaNameInput"
                      i18n-placeholder="@@metaNameInputPlaceholder">
-              <mat-error *ngIf="! form.controls.meta.valid"
+              <mat-error *ngIf="!name.valid"
                          i18n="@@metaNameRequiredError">
                 Navn er påkrevd.
               </mat-error>
@@ -40,11 +40,11 @@
             Browserconfig:
             <angular2-multiselect [data]="browserConfigList"
                                   [(ngModel)]="selectedBrowserConfigItems"
-                                  [settings]="dropdownBrowserConfigSettings"
+                                  [settings]="browserConfigDropdownSettings"
                                   formControlName="browser_config_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.browser_config_id.valid && form.controls['browser_config_id'].dirty"
+          <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
                      i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
           </mat-error>
@@ -55,11 +55,11 @@
             Politenessconfig:
             <angular2-multiselect [data]="politenessConfigList"
                                   [(ngModel)]="selectedPolitenessConfigItems"
-                                  [settings]="dropdownPolitenessConfigSettings"
+                                  [settings]="politenessConfigDropdownSettings"
                                   formControlName="politeness_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.politeness_id.valid && form.controls['politeness_id'].dirty"
+          <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
                      i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
           </mat-error>
@@ -69,7 +69,7 @@
           <input matInput
                  formControlName="minimum_dns_ttl_s"
                  placeholder="DNS TTL">
-          <mat-error *ngIf="! form.controls.minimum_dns_ttl_s.valid"
+          <mat-error *ngIf="!minDnsTtlSeconds.valid"
                      i18n="@@crawlconfigFormMinDNSTTLRequiredError">
             minimum_dns_ttl_s er påkrevd.
           </mat-error>
@@ -110,26 +110,26 @@
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!crawlConfig.id"
-              (click)="createCrawlConfig(crawlConfig)" novalidate
+              (click)="onSave()" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
               *ngIf="crawlConfig.id"
               [disabled]="!form.dirty || !form.valid"
-              (click)="updateCrawlConfig(crawlConfig)"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
-              (click)="revert()"
+              (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
               *ngIf="crawlConfig.id"
-              (click)="deleteCrawlConfig(crawlConfig.id); $event.stopPropagation()"
+              (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
