@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {CrawlConfigService} from '../../crawlconfig/';
 import {ScheduleService} from '../../schedule/';
 import {CustomValidators} from '../../../commons/';
@@ -15,26 +15,35 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 })
 export class CrawljobDetailsComponent implements OnChanges {
+
   @Input()
   crawlJob: CrawlJob;
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
 
+  @Output()
+  created = new EventEmitter<CrawlJob>();
+  @Output()
+  updated = new EventEmitter<CrawlJob>();
+  @Output()
+  deleted = new EventEmitter<CrawlJob>();
+
+  form: FormGroup;
   schedule: Schedule;
 
-  private form: FormGroup;
-
   scheduleList: any = [];
-  crawlConfigList: any = [];
-
   selectedScheduleItems = [];
-  dropdownScheduleSettings = {};
-  dropdownCrawlConfigSettings = {};
+  scheduleDropdownSettings = {
+    singleSelection: true,
+    text: 'Velg Schedule',
+    enableSearchFilter: true
+  };
+
+  crawlConfigList: any = [];
   selectedCrawlConfigItems = [];
+  crawlConfigDropdownSettings = {
+    singleSelection: true,
+    text: 'Velg crawlConfig',
+    enableSearchFilter: true
+  };
 
   constructor(private crawlJobService: CrawlJobService,
               private crawlconfigService: CrawlConfigService,
@@ -45,11 +54,78 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  createForm() {
+  get name() {
+    return this.form.get('meta.name');
+  }
+
+  get depth() {
+    return this.form.get('limits.depth');
+  }
+
+  get maxDurationSeconds() {
+    return this.form.get('limits.max_duration_s');
+  }
+
+  get maxBytes() {
+    return this.form.get('limits.max_bytes');
+  }
+  get scheduleId() {
+    return this.form.get('schedule_id');
+  }
+
+  get crawlConfigId() {
+    return this.form.get('crawl_config_id');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.crawlJob.currentValue) {
+      this.updateForm();
+    }
+  }
+
+  onSave() {
+    this.crawlJob = this.prepareSave();
+    this.crawlJobService.create(this.crawlJob)
+      .subscribe(newCrawljob => {
+        this.crawlJob = newCrawljob;
+        this.updateForm();
+        this.created.emit(newCrawljob);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onUpdate(): void {
+    this.crawlJob = this.prepareSave();
+    this.crawlJobService.update(this.crawlJob)
+      .subscribe(updatedCrawljob => {
+        this.crawlJob = updatedCrawljob;
+        this.updateForm();
+        this.updated.emit(updatedCrawljob);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  };
+
+  onDelete(): void {
+    this.crawlJobService.delete(this.crawlJob.id)
+      .subscribe((response) => {
+        this.deleted.emit(this.crawlJob);
+        this.crawlJob = response;
+        this.form.reset();
+        this.snackBarService.openSnackBar('Slettet');
+      });
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       schedule_id: [''],
       crawl_config_id: ['', CustomValidators.nonEmpty],
+      disabled: false,
       limits: this.fb.group({
         depth: ['', [Validators.required, CustomValidators.min(0)]],
         max_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
@@ -64,72 +140,51 @@ export class CrawljobDetailsComponent implements OnChanges {
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
-      disabled: false,
     });
   }
 
-  updateData(crawljob: CrawlJob) {
-    this.form.controls['id'].setValue(crawljob.id);
-    this.form.controls['limits'].setValue({
-      depth: crawljob.limits.depth,
-      max_duration_s: crawljob.limits.max_duration_s,
-      max_bytes: crawljob.limits.max_bytes,
+  private updateForm() {
+    this.form.patchValue({
+      id: this.crawlJob.id,
+      disabled: this.crawlJob.disabled,
+      limits: {
+        depth: this.crawlJob.limits.depth,
+        max_duration_s: this.crawlJob.limits.max_duration_s,
+        max_bytes: this.crawlJob.limits.max_bytes,
+      },
+      meta: {
+        name: this.crawlJob.meta.name,
+        description: this.crawlJob.meta.description,
+        label: [...this.crawlJob.meta.label],
+      },
     });
-    this.form.controls['meta'].patchValue({
-      name: crawljob.meta.name as string,
-      description: crawljob.meta.description as string,
-      label: [...crawljob.meta.label]
-    });
-    this.setDropdown();
-    this.selectedScheduleItems = [];
-    this.selectedCrawlConfigItems = [];
-    this.form.controls['disabled'].setValue((crawljob.disabled)as boolean);
+    //this.form.controls['id'].setValue(crawljob.id);
+    //this.form.controls['limits'].setValue({
+    //  depth: crawljob.limits.depth,
+    //  max_duration_s: crawljob.limits.max_duration_s,
+    //  max_bytes: crawljob.limits.max_bytes,
+    //});
+    //this.form.controls['meta'].patchValue({
+    //  name: crawljob.meta.name as string,
+    //  description: crawljob.meta.description as string,
+    //  label: [...crawljob.meta.label]
+    //});
+    this.setSelectedDropdown();
+    //this.selectedScheduleItems = [];
+    //this.selectedCrawlConfigItems = [];
+   // this.form.controls['disabled'].setValue((crawljob.disabled)as boolean);
     this.form.markAsPristine();
+    this.form.markAsUntouched();
   };
 
-  ngOnChanges() {
-    setTimeout(() => {
-      this.updateData(this.crawlJob);
-    });
-  }
-
-  updateCrawljob(): void {
-    this.crawlJob = this.prepareSaveCrawljob();
-    this.crawlJobService.update(this.crawlJob)
-      .subscribe((updatedCrawljob) => {
-        this.updateHandler(updatedCrawljob);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  };
-
-  deleteCrawljob(crawljobId): void {
-    this.crawlJobService.delete(crawljobId)
-      .subscribe((response) => {
-        this.deleteHandler(crawljobId);
-        if (response instanceof Object) {
-          this.snackBarService.openSnackBar('Feil: Ikke slettet');
-        } else {
-          this.snackBarService.openSnackBar('Slettet');
-        }
-      });
-  }
-
-  createCrawljob() {
-    this.crawlJob = this.prepareSaveCrawljob();
-    this.crawlJobService.create(this.crawlJob)
-      .subscribe((newCrawljob: CrawlJob) => {
-        this.createHandler(newCrawljob);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  }
-
-  prepareSaveCrawljob(): CrawlJob {
+  private prepareSave(): CrawlJob {
     const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlJob.id,
       schedule_id: formModel.schedule_id[0].id as string,
       crawl_config_id: formModel.crawl_config_id[0].id as string,
+      disabled: formModel.disabled as boolean,
       limits: {
         depth: formModel.limits.depth as number,
         max_duration_s: formModel.limits.max_duration_s as string,
@@ -140,21 +195,44 @@ export class CrawljobDetailsComponent implements OnChanges {
         description: formModel.meta.description as string,
         label: labelsDeepCopy
       },
-      disabled: formModel.disabled as boolean,
     };
   }
 
-  setDropdown() {
+  private fillDropdown() {
+    this.scheduleService.list()
+      .map(reply => reply.value)
+      .subscribe(schedules => {
+        schedules.forEach((schedule) => {
+          this.scheduleList.push({
+            id: schedule.id,
+            itemName: schedule.meta.name,
+          });
+        });
+      });
+    this.crawlconfigService.list()
+      .map(reply => reply.value)
+      .subscribe(crawlConfigs => {
+        crawlConfigs.forEach((crawlConfig) => {
+          this.crawlConfigList.push({
+              id: crawlConfig.id,
+              itemName: crawlConfig.meta.name,
+            });
+        });
+      });
+  }
+
+  private setSelectedDropdown() {
+    this.selectedCrawlConfigItems = [];
+    this.selectedScheduleItems = [];
+
     if (this.crawlJob.schedule_id !== '') {
       this.scheduleService.get(this.crawlJob.schedule_id)
-        .subscribe((schedule) => {
+        .subscribe(schedule => {
           this.selectedScheduleItems.push({
             id: schedule.id,
             itemName: schedule.meta.name,
-            description: schedule.meta.description
           });
-
-          this.form.controls['schedule_id'].setValue(this.selectedScheduleItems);
+          this.scheduleId.setValue(this.selectedScheduleItems);
         });
     }
 
@@ -164,55 +242,9 @@ export class CrawljobDetailsComponent implements OnChanges {
           this.selectedCrawlConfigItems.push({
             id: crawlConfig.id,
             itemName: crawlConfig.meta.name,
-            description: crawlConfig.meta.description
           });
-          this.form.controls['crawl_config_id'].setValue(this.selectedCrawlConfigItems);
+          this.crawlConfigId.setValue(this.selectedCrawlConfigItems);
         });
     }
-  }
-
-  fillDropdown() {
-    this.scheduleService.list()
-      .map(reply => reply.value)
-      .subscribe(schedules => {
-        schedules.forEach((schedule) => {
-          this.scheduleList.push({
-            id: schedule.id,
-            itemName: schedule.meta.name,
-            description: schedule.meta.description
-          })
-        });
-      });
-
-    this.crawlconfigService.list()
-      .map(reply => reply.value)
-      .subscribe(crawlConfigs => {
-        crawlConfigs.forEach((crawlConfig) => {
-          this.crawlConfigList.push(
-            {
-              id: crawlConfig.id,
-              itemName: crawlConfig.meta.name,
-              description: crawlConfig.meta.description
-            });
-        });
-      });
-
-    this.dropdownScheduleSettings = {
-      singleSelection: true,
-      text: 'Velg Schedule',
-      enableSearchFilter: true
-    };
-
-
-    this.dropdownCrawlConfigSettings = {
-      singleSelection: true,
-      text: 'Velg crawlConfig',
-      enableSearchFilter: true
-    };
-  }
-
-  revert() {
-    this.ngOnChanges();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 }
