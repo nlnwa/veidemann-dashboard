@@ -17,7 +17,7 @@
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! form.controls.meta.valid"
+            <mat-error *ngIf="!name.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
@@ -32,7 +32,7 @@
         <mat-form-field>
           <input matInput formControlName="user_agent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
-          <mat-error *ngIf="! form.controls.user_agent.valid"
+          <mat-error *ngIf="!user_agent.valid"
                     i18n="@@browserconfigFormUserAgentRequiredError">
             Brukeragent er påkrevd.
           </mat-error>
@@ -41,7 +41,7 @@
         <mat-form-field>
           <input matInput formControlName="window_width" placeholder="Vindusbredde"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
-          <mat-error *ngIf="! form.controls.window_width.valid"
+          <mat-error *ngIf="!window_width.valid"
                     i18n="@@browserconfigFormWindowWidthRequiredError">
             Vindusbredde er påkrevd.
           </mat-error>
@@ -50,7 +50,7 @@
         <mat-form-field>
           <input matInput formControlName="window_height" placeholder="Vindushøyde"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
-          <mat-error *ngIf="! form.controls.window_height.valid"
+          <mat-error *ngIf="!window_height.valid"
                     i18n="@@browserconfigFormWindowHeightRequiredError">
             Vindushøyde er påkrevd.
           </mat-error>
@@ -59,7 +59,7 @@
         <mat-form-field>
           <input matInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-          <mat-error *ngIf="! form.controls.page_load_timeout_ms.valid"
+          <mat-error *ngIf="!page_load_timeout_ms.valid"
                     i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
             Page load timeout er påkrevd.
           </mat-error>
@@ -68,7 +68,7 @@
         <mat-form-field>
           <input matInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-          <mat-error *ngIf="! form.controls.sleep_after_pageload_ms.valid"
+          <mat-error *ngIf="!sleep_after_pageload_ms.valid"
                     i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
             Sleep after pageload er påkrevd.
           </mat-error>
@@ -83,7 +83,7 @@
                                   formControlName="script_id">
             </angular2-multiselect>
           </label>
-          <mat-error *ngIf="! form.controls.script_id.valid"
+          <mat-error *ngIf="!script_id.valid"
                     i18n="@@browserconfigFormScriptsRequiredError">
             Scripts påkrevd.
           </mat-error>
@@ -100,26 +100,26 @@
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!browserConfig.id"
-              (click)="createBrowserConfig(form.value)" novalidate
+              (click)="onSave(form.value)" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
               *ngIf="browserConfig.id"
               [disabled]="!form.valid || !form.dirty"
-              (click)="updateBrowserConfig(form.value)"
+              (click)="onUpdate(form.value)"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
-              (click)="revert()"
+              (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
               *ngIf="browserConfig.id"
-              (click)="deleteBrowserConfig(browserConfig.id); $event.stopPropagation()"
+              (click)="onDelete(browserConfig.id); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>
