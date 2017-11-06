@@ -27,23 +27,23 @@
           </mat-form-field>
         </ng-container>
 
-        <div>
+        <div class="robotPolicyDropdown">
           <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
           <angular2-multiselect [data]="robotsPolicyList"
                                 [(ngModel)]="selectedRobotsPolicyItems"
                                 [settings]="robotsPolicyDropdownSettings"
                                 formControlName="robots_policy">
           </angular2-multiselect>
-
           <mat-error *ngIf="! robotsPolicy.valid"
                  i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </mat-error>
         </div>
-
+        <span></span>
         <ng-container
           *ngIf="form.value.robots_policy[0] && form.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
-          <mat-form-field>
+          <div class="customRobotTxtInput">
+            <mat-form-field>
             <textarea matInput
                       formControlName="custom_robots"
                       placeholder="robots.txt">
@@ -53,6 +53,7 @@
               Validity duration er påkrevd.
             </mat-error>
           </mat-form-field>
+          </div>
         </ng-container>
 
         <mat-form-field>

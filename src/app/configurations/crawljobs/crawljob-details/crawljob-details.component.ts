@@ -4,7 +4,7 @@ import {ScheduleService} from '../../schedule/';
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJobService} from '../crawljob.service';
-import {CrawlJob, Schedule} from '../../../commons/models/config.model';
+import {CrawlJob} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 @Component({
@@ -27,7 +27,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   deleted = new EventEmitter<CrawlJob>();
 
   form: FormGroup;
-  schedule: Schedule;
 
   scheduleList: any = [];
   selectedScheduleItems = [];
@@ -69,6 +68,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   get maxBytes() {
     return this.form.get('limits.max_bytes');
   }
+
   get scheduleId() {
     return this.form.get('schedule_id');
   }
@@ -200,9 +200,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       .subscribe(crawlConfigs => {
         crawlConfigs.forEach((crawlConfig) => {
           this.crawlConfigList.push({
-              id: crawlConfig.id,
-              itemName: crawlConfig.meta.name,
-            });
+            id: crawlConfig.id,
+            itemName: crawlConfig.meta.name,
+          });
         });
       });
   }

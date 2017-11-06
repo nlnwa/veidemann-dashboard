@@ -4,11 +4,11 @@ import {ErrorService} from '../commons/error.service';
 import {ErrorDialogComponent} from './error-dialog/error-dialog.component';
 
 @Component({
-  selector: 'app-error',
-  templateUrl: './error.component.html',
+  selector: 'app-dialog',
+  templateUrl: './dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ErrorComponent implements OnInit {
+export class DialogComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private errorService: ErrorService) {
     // noop

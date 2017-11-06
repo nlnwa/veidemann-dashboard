@@ -2,3 +2,11 @@ textarea.form-control {
   height: 350px;
 }
 
+.customRobotTxtInput > * {
+  width: 80%;
+}
+
+.robotPolicyDropdown {
+  margin-bottom: 1em;
+  width: 50%;
+}

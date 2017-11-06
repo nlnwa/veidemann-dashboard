@@ -21,22 +21,33 @@
           </mat-icon>
         </button>
       </mat-toolbar>
-      <app-base-list (onRowClick)="onSelectEntity($event)"></app-base-list>
+      <app-entity-list (rowClick)="onSelectEntity($event)"></app-entity-list>
     </div>
   </div>
   <div fxLayout="row" fxLayoutGap="16px">
     <div fxFlex>
       <app-entity-details
         [entity]="selectedEntity"
-        (selectSeed)="onSelectSeed($event)"
-        (createSeed)="onCreateSeed($event)">
+        (created)="onEntityCreated($event)"
+        (updated)="onEntityUpdated($event)"
+        (deleted)="onEntityDeleted($event)">
+        <!-- Seedlist -->
+        <mat-toolbar>
+          <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
+          <span class="fill-space"></span>
+          <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-toolbar>
+        <app-seed-list (rowClick)="onSelectSeed($event)"></app-seed-list>
       </app-entity-details>
     </div>
     <div fxFlex>
       <app-seed-details
         [seed]="selectedSeed"
-        (seedCreated)="onSeedCreated($event)"
-        (seedDeleted)="onSeedDeleted($event)">
+        (created)="onSeedCreated($event)"
+        (updated)="onSeedUpdated($event)"
+        (deleted)="onSeedDeleted($event)">
       </app-seed-details>
     </div>
   </div>
