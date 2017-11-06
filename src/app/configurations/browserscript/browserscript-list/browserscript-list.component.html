@@ -8,15 +8,15 @@
   </mat-list-item>
 </mat-nav-list>
 <button mat-raised-button color="primary"
-        (click)="createNewBrowserScript()"
+        (click)="onCreateNewBrowserScript()"
         i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedBrowserScript">
   <app-browserscript-details
     [browserScript]="selectedBrowserScript"
-    [createHandler]="addBrowserScript"
-    [updateHandler]="updateBrowserScript"
-    [deleteHandler]="deleteBrowserScript">
+    (created)="onBrowserScriptCreated($event)"
+    (updated)="onBrowserScriptUpdated($event)"
+    (deleted)="onBrowserScriptDeleted($event)">
   </app-browserscript-details>
 </ng-container>

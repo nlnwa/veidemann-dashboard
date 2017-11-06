@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserScriptService} from '../../browserscript';
@@ -6,25 +6,33 @@ import {BrowserConfigService} from '../browserconfig.service';
 import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
+
 @Component({
   selector: 'app-browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
   styleUrls: ['./browserconfig-details.component.css'],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
+
   @Input()
   browserConfig: BrowserConfig;
-  @Input()
-  createHandler: Function;
-  @Input()
-  updateHandler: Function;
-  @Input()
-  deleteHandler: Function;
+
+  @Output()
+  created = new EventEmitter<BrowserConfig>();
+  @Output()
+  updated = new EventEmitter<BrowserConfig>();
+  @Output()
+  deleted = new EventEmitter<BrowserConfig>();
 
   form: FormGroup;
 
   browserScriptList: any = [];
-  browserScriptDropdownSettings = {};
+  browserScriptDropdownSettings = {
+    singleSelection: false,
+    text: 'Velg Script',
+    enableCheckAll: false,
+    enableSearchFilter: true,
+  };
   selectedBrowserScriptItems = [];
 
   constructor(private browserConfigService: BrowserConfigService,
@@ -35,9 +43,80 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.fillDropdown();
   }
 
-  createForm() {
+  get name() {
+    return this.form.get('meta.name');
+  }
+
+  get user_agent() {
+    return this.form.get('user_agent');
+  }
+
+  get window_width() {
+    return this.form.get('window_width');
+  }
+
+  get window_height() {
+    return this.form.get('window_height');
+  }
+
+  get page_load_timeout_ms() {
+    return this.form.get('page_load_timeout_ms');
+  }
+
+  get sleep_after_pageload_ms() {
+    return this.form.get('sleep_after_pageload_ms');
+  }
+
+  get script_id() {
+    return this.form.get('script_id');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.browserConfig.currentValue) {
+      this.updateForm();
+    }
+  }
+
+  onSave() {
+    this.browserConfig = this.prepareSave();
+    this.browserConfigService.create(this.browserConfig)
+      .subscribe(newBrowserConfig => {
+        this.browserConfig = newBrowserConfig;
+        this.updateForm();
+        this.created.emit(newBrowserConfig);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  };
+
+  onUpdate(): void {
+    this.browserConfig = this.prepareSave();
+    this.browserConfigService.update(this.browserConfig)
+      .subscribe(updatedBrowserConfig => {
+        this.browserConfig = updatedBrowserConfig;
+        this.updateForm();
+        this.updated.emit(updatedBrowserConfig);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+  }
+
+  onDelete(): void {
+    this.browserConfigService.delete(this.browserConfig.id)
+      .subscribe((response) => {
+        this.deleted.emit(this.browserConfig);
+        this.browserConfig = response;
+        this.form.reset();
+        this.snackBarService.openSnackBar('Slettet');
+      });
+  }
+
+  onRevert() {
+    this.updateForm();
+    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  private createForm() {
     this.form = this.fb.group({
-      id: '',
+      id: {value: '', disabled: true},
       user_agent: ['', [Validators.required, Validators.minLength(1)]],
       window_width: ['', [Validators.required, CustomValidators.min(1)]],
       window_height: ['', [Validators.required, CustomValidators.min(1)]],
@@ -55,116 +134,34 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     });
   }
 
-  updateData(browserConfig: BrowserConfig) {
-    this.form.controls['id'].setValue(browserConfig.id);
-    this.form.controls['user_agent'].setValue(browserConfig.user_agent);
-    this.form.controls['window_width'].setValue(browserConfig.window_width);
-    this.form.controls['window_height'].setValue(browserConfig.window_height);
-    this.form.controls['page_load_timeout_ms'].setValue(browserConfig.page_load_timeout_ms);
-    this.form.controls['sleep_after_pageload_ms'].setValue(browserConfig.sleep_after_pageload_ms);
-    // this.form.controls['headers'].patchValue(browserConfig.headers);
-    this.form.controls['meta'].patchValue({
-      name: browserConfig.meta.name as string,
-      description: browserConfig.meta.description as string,
-      label: [...browserConfig.meta.label],
-    });
+  private updateForm() {
     this.setSelectedDropdown();
-    this.selectedBrowserScriptItems = [];
-    this.form.get('script_selector').setValue([...browserConfig.script_selector.label]);
-    this.form.markAsPristine();
-  }
 
-  ngOnChanges() {
-    this.updateData(this.browserConfig);
-  }
-
-  createBrowserConfig() {
-    this.browserConfig = this.prepareSaveBrowserconfig();
-    this.browserConfigService.create(this.browserConfig)
-      .subscribe(newBrowserConfig => {
-        this.createHandler(newBrowserConfig);
-      });
-    this.snackBarService.openSnackBar('Lagret');
-  };
-
-
-  updateBrowserConfig(browserConfig: BrowserConfig): void {
-    this.browserConfig = this.prepareSaveBrowserconfig();
-    this.browserConfigService.update(this.browserConfig)
-      .subscribe(updatedBrowserConfig => {
-        this.updateHandler(updatedBrowserConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
-  }
-
-  deleteBrowserConfig(browserConfigId): void {
-    this.browserConfigService.delete(browserConfigId)
-      .subscribe((response) => {
-        this.deleteHandler(browserConfigId);
-        if (response instanceof Object) {
-          this.snackBarService.openSnackBar('Feil: Ikke slettet..');
-        } else {
-          this.snackBarService.openSnackBar('Slettet');
-        }
-      });
-  }
-
-  fillDropdown() {
-    this.browserScriptService.list()
-      .map(reply => reply.value)
-      .subscribe((browserScripts) => {
-        browserScripts.forEach((browserScript) => {
-          this.browserScriptList.push({
-            id: browserScript.id,
-            itemName: browserScript.meta.name,
-            description: browserScript.meta.description
-          })
-        });
-      });
-    this.browserScriptDropdownSettings = {
-      singleSelection: false,
-      text: 'Velg Script',
-      enableCheckAll: false,
-      enableSearchFilter: true,
-    };
-  }
-
-  setSelectedDropdown() {
-    this.selectedBrowserScriptItems = [];
-    if (this.browserConfig.script_id) {
-      for (const i of this.browserConfig.script_id) {
-        this.browserScriptService.get(i)
-          .subscribe(browserScript => {
-            this.selectedBrowserScriptItems.push({
-              id: browserScript.id,
-              itemName: browserScript.meta.name,
-              description: browserScript.meta.description
-            });
-            this.form.controls['script_id'].setValue(this.selectedBrowserScriptItems);
-          });
+    this.form.patchValue({
+      id: this.browserConfig.id,
+      user_agent: this.browserConfig.user_agent,
+      window_width: this.browserConfig.window_width,
+      window_height: this.browserConfig.window_height,
+      page_load_timeout_ms: this.browserConfig.page_load_timeout_ms,
+      sleep_after_pageload_ms: this.browserConfig.sleep_after_pageload_ms,
+      //headers: this.browserConfig.headers;
+      script_selector: [...this.browserConfig.script_selector.label],
+      meta: {
+        name: this.browserConfig.meta.name,
+        description: this.browserConfig.meta.description,
+        label: [...this.browserConfig.meta.label]
       }
-    }
+    });
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
 
   }
 
-  revert() {
-    this.ngOnChanges();
-    this.snackBarService.openSnackBar('Tilbakestilt');
-  }
-
-  prepareSaveBrowserconfig(): BrowserConfig {
+  private prepareSave(): BrowserConfig {
     const formModel = this.form.value;
     const labelsDeepCopy: Label[] = formModel.meta.label.map(label => ({...label}));
     const script_selectorDeepCopy: Selector = {label: formModel.script_selector.map(label => ({...label}))};
-    const script_idlist = [];
-
-    for (const i of formModel.script_id) {
-      const script_id = i.id;
-      script_idlist.push(script_id);
-    }
-
-    // return new `Hero` object containing a combination of original hero value(s)
-    // and deep copies of changed form model values
+    const scriptIdList = formModel.script_id.map((listItem) => listItem.id);
     return {
       id: this.browserConfig.id,
       user_agent: formModel.user_agent,
@@ -172,7 +169,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       window_height: parseInt(formModel.window_height, 10),
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
-      script_id: script_idlist,
+      script_id: scriptIdList,
       script_selector: script_selectorDeepCopy,
       headers: formModel.headers,
       meta: {
@@ -185,5 +182,35 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
+  }
+
+  private fillDropdown() {
+    this.browserScriptService.list()
+      .map(reply => reply.value)
+      .subscribe((browserScripts) => {
+        browserScripts.forEach((browserScript) => {
+          this.browserScriptList.push({
+            id: browserScript.id,
+            itemName: browserScript.meta.name
+          })
+        });
+      });
+
+  }
+
+  private setSelectedDropdown() {
+    this.selectedBrowserScriptItems = [];
+    if (this.browserConfig.script_id) {
+      for (const i of this.browserConfig.script_id) {
+        this.browserScriptService.get(i)
+          .subscribe(browserScript => {
+            this.selectedBrowserScriptItems.push({
+              id: browserScript.id,
+              itemName: browserScript.meta.name
+            });
+            this.script_id.setValue(this.selectedBrowserScriptItems);
+          });
+      }
+    }
   }
 }

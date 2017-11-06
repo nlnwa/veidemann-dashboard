@@ -16,7 +16,7 @@
                    formControlName="name"
                    placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="!form.get('meta.name').valid"
+            <mat-error *ngIf="! name.valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
@@ -62,7 +62,7 @@
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </mat-form-field>
           </div>
-          <mat-error fxLayout="row" *ngIf="!form.controls.cron_expression.valid"
+          <mat-error fxLayout="row" *ngIf="! cronExpression.valid"
                     i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </mat-error>
@@ -117,27 +117,27 @@
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="!schedule.id"
-              (click)="createSchedule(schedule)" novalidate
+              (click)="onSave()" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
               *ngIf="schedule.id"
               [disabled]="!form.valid || !form.dirty"
-              (click)="updateSchedule(schedule)"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
               [disabled]="!form.dirty"
-              (click)="revert()"
+              (click)="onRevert()"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
 
       <button mat-raised-button color="warn"
               *ngIf="schedule.id"
-              (click)="deleteSchedule(schedule.id); $event.stopPropagation()"
+              (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

@@ -5,7 +5,7 @@
         <mat-toolbar>
           <span i18n="@@logconfigHeader">Logconfig</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab (click)="addLogconfig()">
+          <button mat-mini-fab (click)="onAdd()">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -22,7 +22,7 @@
                   <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <button mat-icon-button color="warn" (click)="removeLogconfig(i)">
+              <button mat-icon-button color="warn" (click)="onDelete(i)">
                 <mat-icon>close</mat-icon>
               </button>
             </div>
@@ -33,11 +33,11 @@
     <mat-card-actions>
       <button mat-raised-button color="primary"
               [disabled]="!form.valid ||!form.dirty"
-              (click)="saveLogConfig(form.value)" novalidate
+              (click)="onSave(form.value)" novalidate
               i18n="@@commonButtonSave">Lagre
       </button>
       <button mat-raised-button color="accent"
-              (click)="revert()"
+              (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill

@@ -12,8 +12,7 @@ export class CrawlJobListComponent implements OnInit {
   crawljobs: CrawlJob[];
   selectedCrawlJob: CrawlJob;
 
-  constructor(private crawlJobService: CrawlJobService) {
-  }
+  constructor(private crawlJobService: CrawlJobService) {}
 
   ngOnInit() {
     this.crawlJobService.list()
@@ -21,17 +20,7 @@ export class CrawlJobListComponent implements OnInit {
       .subscribe(crawlJobs => this.crawljobs = crawlJobs);
   }
 
-  private getIndexOfCrawlJob = (crawlJobId: String) => {
-    return this.crawljobs.findIndex((crawlJob) => {
-      return crawlJob.id === crawlJobId;
-    });
-  };
-
-  selectCrawlJob(crawlJob: CrawlJob) {
-    this.selectedCrawlJob = crawlJob
-  }
-
-  createNewCrawlJob() {
+  onCreateNewCrawlJob() {
     const crawlJob: CrawlJob = {
       schedule_id: '',
       crawl_config_id: '',
@@ -48,30 +37,39 @@ export class CrawlJobListComponent implements OnInit {
       disabled: false,
     };
     // By default, a newly-created  will have the selected state.
-    this.selectCrawlJob(crawlJob);
+    this.onSelectCrawlJob(crawlJob);
   }
 
-  deleteCrawlJob = (crawlJobId: String) => {
-    const idx = this.getIndexOfCrawlJob(crawlJobId);
-    if (idx !== -1) {
-      this.crawljobs.splice(idx, 1);
-      this.selectCrawlJob(null);
-    }
-    return this.crawljobs;
-  };
-
-  addCrawlJob = (crawlJob: CrawlJob) => {
+  onCrawlJobCreated(crawlJob: CrawlJob) {
     this.crawljobs.push(crawlJob);
-    this.selectCrawlJob(crawlJob);
+    this.onSelectCrawlJob(crawlJob);
     return this.crawljobs;
   };
 
-  updateCrawlJob = (crawlJob: CrawlJob) => {
+  onCrawlJobUpdated(crawlJob: CrawlJob) {
     const idx = this.getIndexOfCrawlJob(crawlJob.id);
     if (idx !== -1) {
       this.crawljobs[idx] = crawlJob;
-      this.selectCrawlJob(crawlJob);
     }
     return this.crawljobs;
   }
+
+  onCrawlJobDeleted(crawlJob: CrawlJob) {
+    const idx = this.getIndexOfCrawlJob(crawlJob.id);
+    if (idx !== -1) {
+      this.crawljobs.splice(idx, 1);
+      this.onSelectCrawlJob(null);
+    }
+    return this.crawljobs;
+  };
+
+  onSelectCrawlJob(crawlJob: CrawlJob) {
+    this.selectedCrawlJob = crawlJob
+  }
+
+  private getIndexOfCrawlJob(crawlJobId: String) {
+    return this.crawljobs.findIndex((crawlJob) => {
+      return crawlJob.id === crawlJobId;
+    });
+  };
 }

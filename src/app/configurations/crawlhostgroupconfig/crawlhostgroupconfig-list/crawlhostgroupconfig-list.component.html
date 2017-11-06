@@ -2,21 +2,21 @@
 <mat-nav-list>
   <mat-list-item
     *ngFor="let crawlhostgroupconfig of crawlHostGroupConfigs"
-    (click)="selectCrawlHostGroupConfig(crawlhostgroupconfig)"
+    (click)="onSelectCrawlHostGroupConfig(crawlhostgroupconfig)"
     [class.active]="crawlhostgroupconfig === selectedCrawlHostGroupConfig">
     {{crawlhostgroupconfig.meta.name}}
   </mat-list-item>
 </mat-nav-list>
 <button mat-raised-button color="primary"
-        (click)="createNewCrawlHostGroupConfig()"
+        (click)="onCreateNewCrawlHostGroupConfig()"
         i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedCrawlHostGroupConfig">
   <app-crawlhostgroupconfig-details
     [crawlHostGroupConfig]="selectedCrawlHostGroupConfig"
-    [createHandler]="addCrawlHostGroupConfig"
-    [updateHandler]="updateCrawlHostGroupConfig"
-    [deleteHandler]="deleteCrawlHostGroupConfig">
+    (created)="onCrawlHostGroupConfigCreated($event)"
+    (updated)="onCrawlHostGroupConfigUpdated($event)"
+    (deleted)="onCrawlHostGroupConfigDeleted($event)">
   </app-crawlhostgroupconfig-details>
 </ng-container>

@@ -13,8 +13,7 @@ export class ScheduleListComponent implements OnInit {
   schedules: Schedule[];
   selectedSchedule: Schedule;
 
-  constructor(private scheduleService: ScheduleService) {
-  }
+  constructor(private scheduleService: ScheduleService) {}
 
   ngOnInit() {
     this.scheduleService.list()
@@ -22,17 +21,11 @@ export class ScheduleListComponent implements OnInit {
       .subscribe(schedules => this.schedules = schedules);
   }
 
-  private getIndexOfEntity = (scheduleId: String) => {
-    return this.schedules.findIndex((schedule) => {
-      return schedule.id === scheduleId;
-    });
-  };
-
-  selectSchedule(schedule: Schedule) {
+  onSelectSchedule(schedule: Schedule) {
     this.selectedSchedule = schedule
   }
 
-  createNewSchedule() {
+  onCreateNewSchedule() {
     const schedule: Schedule = {
       id: '',
       cron_expression: '     ',
@@ -46,32 +39,35 @@ export class ScheduleListComponent implements OnInit {
 
     };
     // By default, a newly-created  will have the selected state.
-    this.selectSchedule(schedule);
+    this.onSelectSchedule(schedule);
   }
 
-  deleteSchedule = (scheduleId: String) => {
-    const idx = this.getIndexOfEntity(scheduleId);
-    if (idx !== -1) {
-      this.schedules.splice(idx, 1);
-      this.selectSchedule(null);
-    }
-    return this.schedules;
-  };
-
-  addSchedule = (schedule: Schedule) => {
+  onScheduleCreated(schedule: Schedule) {
     this.schedules.push(schedule);
-    this.selectSchedule(schedule);
+    this.onSelectSchedule(schedule);
     return this.schedules;
   };
 
-  updateSchedule = (schedule: Schedule) => {
-    const idx = this.getIndexOfEntity(schedule.id);
+  onScheduleUpdated(schedule: Schedule) {
+    const idx = this.getIndexOfSchedule(schedule.id);
     if (idx !== -1) {
       this.schedules[idx] = schedule;
-      this.selectSchedule(schedule);
     }
     return this.schedules;
   }
 
+  onScheduleDeleted(schedule: Schedule) {
+    const idx = this.getIndexOfSchedule(schedule.id);
+    if (idx !== -1) {
+      this.schedules.splice(idx, 1);
+      this.onSelectSchedule(null);
+    }
+    return this.schedules;
+  };
 
+  private getIndexOfSchedule(scheduleId: String) {
+    return this.schedules.findIndex((schedule) => {
+      return schedule.id === scheduleId;
+    });
+  };
 }

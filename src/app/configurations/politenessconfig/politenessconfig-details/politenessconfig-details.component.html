@@ -15,8 +15,8 @@
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! form.get('meta.name').valid"
-                       i18n="@@metaNameRequiredError">
+            <mat-error *ngIf="! name.valid"
+                      i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
           </mat-form-field>
@@ -31,11 +31,11 @@
           <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
           <angular2-multiselect [data]="robotsPolicyList"
                                 [(ngModel)]="selectedRobotsPolicyItems"
-                                [settings]="robetsPolicyDropdownSettings"
+                                [settings]="robotsPolicyDropdownSettings"
                                 formControlName="robots_policy">
           </angular2-multiselect>
-          <mat-error *ngIf="! form.get('robots_policy').valid && form.get('robots_policy').dirty"
-                     i18n="@@politenessconfigFormRobotPolicyErrorRequired">
+          <mat-error *ngIf="! robotsPolicy.valid"
+                 i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </mat-error>
         </div>
@@ -48,11 +48,11 @@
                       formControlName="custom_robots"
                       placeholder="robots.txt">
             </textarea>
-              <mat-error *ngIf="!form.get('custom_robots').valid"
-                         i18n="@@politenessconfigFormValidityDurationRequiredError">
-                Validity duration er påkrevd.
-              </mat-error>
-            </mat-form-field>
+            <mat-error *ngIf="!customRobots.valid"
+                      i18n="@@politenessconfigFormValidityDurationRequiredError">
+              Validity duration er påkrevd.
+            </mat-error>
+          </mat-form-field>
           </div>
         </ng-container>
 
@@ -61,8 +61,8 @@
                  formControlName="minimum_robots_validity_duration_s"
                  placeholder="Minimum robots validity (seconds)"
                  i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-          <mat-error *ngIf="! form.get('minimum_robots_validity_duration_s').valid"
-                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
+          <mat-error *ngIf="! minRobotsValidDurationSec.valid"
+                    i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
             Validity duration required.
           </mat-error>
         </mat-form-field>
@@ -72,8 +72,8 @@
                  formControlName="min_time_between_page_load_ms"
                  placeholder="Minimum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! form.get('min_time_between_page_load_ms').valid"
-                     i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
+          <mat-error *ngIf="! minTimeBetweenPageloadMs.valid"
+                    i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
             En minimum tid mellom sideinnlastning er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -83,8 +83,8 @@
                  formControlName="max_time_between_page_load_ms"
                  placeholder="Maximum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! form.get('max_time_between_page_load_ms').valid"
-                     i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+          <mat-error *ngIf="! maxTimeBetweenPageloadMs.valid"
+                    i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
             En maksimum tid mellom sideinnlastning er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -124,7 +124,7 @@
       <button mat-raised-button color="primary"
               *ngIf="!politenessConfig.id"
               [disabled]="!form.valid"
-              (click)="createPolitenessconfig(form.value)"
+              (click)="onSave()"
               novalidate
               i18n="@@commonButtonSave">
         Lagre
@@ -132,19 +132,19 @@
       <button mat-raised-button color="primary"
               *ngIf="politenessConfig.id"
               [disabled]="!form.valid || !form.dirty"
-              (click)="updatePolitenessconfig(form.value)"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
-              (click)="revert()"
+              (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
               *ngIf="politenessConfig.id"
-              (click)="deletePolitenessconfig(politenessConfig.id); $event.stopPropagation()"
+              (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

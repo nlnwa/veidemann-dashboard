@@ -2,23 +2,23 @@
 
 <mat-nav-list>
   <mat-list-item
-    *ngFor="let crawljob of crawljobs" (click)="selectCrawlJob(crawljob)"
+    *ngFor="let crawljob of crawljobs" (click)="onSelectCrawlJob(crawljob)"
     [class.active]="crawljob === selectedCrawlJob">
     {{crawljob.meta.name}}
   </mat-list-item>
 </mat-nav-list>
 
 <button mat-raised-button color="warn"
-        (click)="createNewCrawlJob()"
-        i18n="@@commonButtonNew">New
+        (click)="onCreateNewCrawlJob()"
+        i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedCrawlJob">
   <app-crawljob-details
     [crawlJob]="selectedCrawlJob"
-    [createHandler]="addCrawlJob"
-    [updateHandler]="updateCrawlJob"
-    [deleteHandler]="deleteCrawlJob">
+    (created)="onCrawlJobCreated($event)"
+    (updated)="onCrawlJobUpdated($event)"
+    (deleted)="onCrawlJobDeleted($event)">
   </app-crawljob-details>
 </ng-container>
 

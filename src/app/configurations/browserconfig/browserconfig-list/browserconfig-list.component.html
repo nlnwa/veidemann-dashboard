@@ -8,15 +8,15 @@
   </mat-list-item>
 </mat-nav-list>
 <button mat-raised-button color="primary"
-        (click)="createNewBrowserConfig()"
+        (click)="onCreateNewBrowserConfig()"
         i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedBrowserConfig">
   <app-browserconfig-details
     [browserConfig]="selectedBrowserConfig"
-    [createHandler]="addBrowserConfig"
-    [updateHandler]="updateBrowserConfig"
-    [deleteHandler]="deleteBrowserConfig">
+    (created)="onBrowserConfigCreated($event)"
+    (updated)="onBrowserConfigUpdated($event)"
+    (deleted)="onBrowserConfigDeleted($event)">
   </app-browserconfig-details>
 </ng-container>

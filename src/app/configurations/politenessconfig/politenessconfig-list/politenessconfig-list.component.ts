@@ -23,26 +23,11 @@ export class PolitenessConfigListComponent implements OnInit {
       );
   }
 
-  private getIndexOfPolitenessConfig = (politenessConfigId: String) => {
-    return this.politenessConfigs.findIndex((politenessConfig) => {
-      return politenessConfig.id === politenessConfigId;
-    });
-  };
-
-  selectPolitenessConfig(politenessConfig: PolitenessConfig) {
+  onSelectPolitenessConfig(politenessConfig: PolitenessConfig) {
     this.selectedPolitenessConfig = politenessConfig
   }
 
-  deletePolitenessConfig = (politenessConfigId: String) => {
-    const idx = this.getIndexOfPolitenessConfig(politenessConfigId);
-    if (idx !== -1) {
-      this.politenessConfigs.splice(idx, 1);
-      this.selectPolitenessConfig(null);
-    }
-    return this.politenessConfigs
-  };
-
-  createNewPolitenessConfig() {
+  onCreateNewPolitenessConfig() {
     /*const politenessConfig: PolitenessConfig = {
       robots_policy: 'OBEY_ROBOTS',
       minimum_robots_validity_duration_s: null,
@@ -62,21 +47,35 @@ export class PolitenessConfigListComponent implements OnInit {
       }
     };*/
     // By default, a newly-created  will have the selected state.
-    this.selectPolitenessConfig(new PolitenessConfig('OBEY_ROBOTS'));
+    this.onSelectPolitenessConfig(new PolitenessConfig('OBEY_ROBOTS'));
   }
 
-  addPolitenessConfig = (politenessConfig: PolitenessConfig) => {
+  onPolitenessConfigCreated(politenessConfig: PolitenessConfig) {
     this.politenessConfigs.push(politenessConfig);
-    this.selectPolitenessConfig(politenessConfig);
+    this.onSelectPolitenessConfig(politenessConfig);
     return this.politenessConfigs;
   };
 
-  updatePolitenessConfig = (politenessConfig: PolitenessConfig) => {
+  onPolitenessConfigUpdated(politenessConfig: PolitenessConfig) {
     const idx = this.getIndexOfPolitenessConfig(politenessConfig.id);
     if (idx !== -1) {
       this.politenessConfigs[idx] = politenessConfig;
-      this.selectPolitenessConfig(politenessConfig);
     }
     return this.politenessConfigs;
   }
+
+  onPolitenessConfigDeleted(politenessConfig: PolitenessConfig) {
+    const idx = this.getIndexOfPolitenessConfig(politenessConfig.id);
+    if (idx !== -1) {
+      this.politenessConfigs.splice(idx, 1);
+      this.onSelectPolitenessConfig(null);
+    }
+    return this.politenessConfigs
+  };
+
+  private getIndexOfPolitenessConfig(politenessConfigId: String) {
+    return this.politenessConfigs.findIndex((politenessConfig) => {
+      return politenessConfig.id === politenessConfigId;
+    });
+  };
 }

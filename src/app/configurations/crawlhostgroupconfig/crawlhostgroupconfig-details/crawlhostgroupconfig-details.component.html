@@ -14,7 +14,7 @@
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="!name.valid"
+            <mat-error *ngIf="!form.get('meta.name').valid"
                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
@@ -36,7 +36,7 @@
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab (click)="addIpRange()">
+          <button mat-mini-fab (click)="onAddIpRange()">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -63,7 +63,7 @@
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
               </mat-form-field>
-              <button matSuffix mat-icon-button (click)="removeIpRange(i)">
+              <button matSuffix mat-icon-button (click)="onRemoveIpRange(i)">
                 <mat-icon color="warn">close</mat-icon>
               </button>
             </div>
@@ -80,19 +80,19 @@
       <button mat-raised-button color="primary"
               *ngIf="!crawlHostGroupConfig.id"
               [disabled]="!form.valid"
-              (click)="createCrawlHostGroupConfig(form.value)"
+              (click)="onSave()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
               *ngIf="crawlHostGroupConfig.id"
               [disabled]="!form.valid || !form.dirty"
-              (click)="updateCrawlHostGroupConfig(form.value)"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
-              (click)="revert()"
+              (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
@@ -100,7 +100,7 @@
 
       <button mat-raised-button color="warn"
               *ngIf="crawlHostGroupConfig.id"
-              (click)="deleteCrawlHostGroupConfig(crawlHostGroupConfig.id); $event.stopPropagation()"
+              (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

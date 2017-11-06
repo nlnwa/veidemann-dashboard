@@ -12,7 +12,12 @@ export class BrowserConfigListComponent implements OnInit {
   browserConfigs: BrowserConfig[];
   selectedBrowserConfig: BrowserConfig;
 
-  constructor(private browserConfigService: BrowserConfigService) {
+  constructor(private browserConfigService: BrowserConfigService) {}
+
+  onBrowserConfigCreated(browserConfig: BrowserConfig) {
+    this.browserConfigs.push(browserConfig);
+    this.selectBrowserConfig(browserConfig);
+    return this.browserConfigs;
   }
 
   ngOnInit() {
@@ -21,18 +26,24 @@ export class BrowserConfigListComponent implements OnInit {
       .subscribe(browserConfigs => this.browserConfigs = browserConfigs);
   }
 
-  private getIndexOfBrowserConfig = (browserConfigId: String) => {
-    return this.browserConfigs.findIndex((browserconfig) => {
-      return browserconfig.id === browserConfigId;
-    });
-  };
-
-  selectBrowserConfig(browserConfig: BrowserConfig) {
-    this.selectedBrowserConfig = browserConfig
+  onBrowserConfigDeleted(browserConfig: BrowserConfig) {
+    const idx = this.getIndexOfBrowserConfig(browserConfig.id);
+    if (idx !== -1) {
+      this.browserConfigs.splice(idx, 1);
+      this.selectBrowserConfig(null);
+    }
+    return this.browserConfigs
   }
 
+  onBrowserConfigUpdated(browserConfig: BrowserConfig) {
+    const idx = this.getIndexOfBrowserConfig(browserConfig.id);
+    if (idx !== -1) {
+      this.browserConfigs[idx] = browserConfig;
+    }
+    return this.browserConfigs;
+  }
 
-  createNewBrowserConfig() {
+  onCreateNewBrowserConfig() {
     const browserConfig: BrowserConfig = {
       user_agent: '',
       page_load_timeout_ms: '',
@@ -50,27 +61,13 @@ export class BrowserConfigListComponent implements OnInit {
     this.selectBrowserConfig(browserConfig);
   }
 
-  deleteBrowserConfig = (responseId: String) => {
-    const idx = this.getIndexOfBrowserConfig(responseId);
-    if (idx !== -1) {
-      this.browserConfigs.splice(idx, 1);
-      this.selectBrowserConfig(null);
-    }
-    return this.browserConfigs
-  };
+  private getIndexOfBrowserConfig(browserConfigId: String) {
+    return this.browserConfigs.findIndex((browserconfig) => {
+      return browserconfig.id === browserConfigId;
+    });
+  }
 
-  addBrowserConfig = (browserConfig: BrowserConfig) => {
-    this.browserConfigs.push(browserConfig);
-    this.selectBrowserConfig(browserConfig);
-    return this.browserConfigs;
-  };
-
-  updateBrowserConfig = (browserConfig: BrowserConfig) => {
-    const idx = this.getIndexOfBrowserConfig(browserConfig.id);
-    if (idx !== -1) {
-      this.browserConfigs[idx] = browserConfig;
-      this.selectBrowserConfig(browserConfig);
-    }
-    return this.browserConfigs;
+  private selectBrowserConfig(browserConfig: BrowserConfig) {
+    this.selectedBrowserConfig = browserConfig
   }
 }

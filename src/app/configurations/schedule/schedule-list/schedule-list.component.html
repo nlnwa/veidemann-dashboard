@@ -4,23 +4,23 @@
 </h2>
 <mat-nav-list>
   <mat-list-item
-    *ngFor="let schedule of schedules" (click)="selectSchedule(schedule)"
+    *ngFor="let schedule of schedules" (click)="onSelectSchedule(schedule)"
     [class.active]="schedule === selectedSchedule">
     {{schedule.meta.name}}
   </mat-list-item>
 </mat-nav-list>
 
 <button mat-raised-button color="warn"
-        (click)="createNewSchedule()"
+        (click)="onCreateNewSchedule()"
         i18n="@@commonButtonNew">New
 </button>
 
 <ng-container *ngIf="selectedSchedule">
   <app-schedule-details
     [schedule]="selectedSchedule"
-    [createHandler]="addSchedule"
-    [updateHandler]="updateSchedule"
-    [deleteHandler]="deleteSchedule">
+    (created)="onScheduleCreated($event)"
+    (updated)="onScheduleUpdated($event)"
+    (deleted)="onScheduleDeleted($event)">
   </app-schedule-details>
 </ng-container>
 
