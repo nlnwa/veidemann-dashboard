@@ -2,7 +2,7 @@
 
 <mat-nav-list>
   <mat-list-item
-    *ngFor="let politenessconfig of politenessConfigs" (click)="selectPolitenessConfig(politenessconfig)"
+    *ngFor="let politenessconfig of politenessConfigs" (click)="onSelectPolitenessConfig(politenessconfig)"
     [class.active]="politenessconfig === selectedPolitenessConfig">
     {{politenessconfig.meta.name}}
 
@@ -10,16 +10,16 @@
 </mat-nav-list>
 
 <button mat-raised-button color="primary"
-        (click)="createNewPolitenessConfig()"
+        (click)="onCreateNewPolitenessConfig()"
         i18n="@@commonButtonNew">Ny
 </button>
 
 <ng-container *ngIf="selectedPolitenessConfig">
   <app-politenessconfig-details
     [politenessConfig]="selectedPolitenessConfig"
-    [createHandler]="addPolitenessConfig"
-    [updateHandler]="updatePolitenessConfig"
-    [deleteHandler]="deletePolitenessConfig">
+    (created)="onPolitenessConfigCreated($event)"
+    (updated)="onPolitenessConfigUpdated($event)"
+    (deleted)="onPolitenessConfigDeleted($event)">
   </app-politenessconfig-details>
 </ng-container>
 
