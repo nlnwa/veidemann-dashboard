@@ -28,8 +28,8 @@ export class BrowserscriptListComponent implements OnInit {
     return this.browserScripts;
   };
 
-  onBrowserScriptDeleted(browserScriptId: String) {
-    const idx = this.getIndexOfBrowserScript(browserScriptId);
+  onBrowserScriptDeleted(browserScript: BrowserScript) {
+    const idx = this.getIndexOfBrowserScript(browserScript.id);
     if (idx !== -1) {
       this.browserScripts.splice(idx, 1);
       this.selectBrowserScript(null);

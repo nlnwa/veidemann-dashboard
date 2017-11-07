@@ -96,6 +96,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   onRemoveIpRange(i: number) {
     this.ipRangeControlArray.removeAt(i);
+    this.form.markAsDirty();
   }
 
   private createForm() {
