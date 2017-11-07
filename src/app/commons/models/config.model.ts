@@ -189,7 +189,7 @@ export class LogLevel {
 }
 
 export class Timestamp {
-  seconds: number;
+  seconds: string;
   nanos?: number;
 
   constructor() {

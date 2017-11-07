@@ -42,7 +42,7 @@ export class DateTime {
         .unix();
       return validFromInSeconds;
     } else {
-      return null;
+      return undefined;
     }
   }
 
@@ -71,7 +71,7 @@ export class DateTime {
       return validToInSeconds;
 
     } else {
-      return null;
+      return undefined;
     }
   }
 }
