@@ -14,21 +14,7 @@ export class PolitenessConfigService extends CrudService<PolitenessConfig> {
     super(http, PolitenessConfigService.URL);
   }
 
-  getRobotsConfig(): Observable<Object[]> {
-    return Observable.of(
-      [
-        {
-          'id': '1',
-          'itemName': 'OBEY_ROBOTS',
-        },
-        {
-          'id': '2',
-          'itemName': 'IGNORE_ROBOTS',
-        },
-        {
-          'id': '3',
-          'itemName': 'CUSTOM_ROBOTS',
-        },
-      ]);
+  getRobotsConfig(): Observable<string[]> {
+    return Observable.of(['OBEY_ROBOTS', 'IGNORE_ROBOTS', 'CUSTOM_ROBOTS']);
   }
 }

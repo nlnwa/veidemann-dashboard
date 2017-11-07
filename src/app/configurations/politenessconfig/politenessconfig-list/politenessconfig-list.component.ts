@@ -28,25 +28,6 @@ export class PolitenessConfigListComponent implements OnInit {
   }
 
   onCreateNewPolitenessConfig() {
-    /*const politenessConfig: PolitenessConfig = {
-      robots_policy: 'OBEY_ROBOTS',
-      minimum_robots_validity_duration_s: null,
-      custom_robots: '',
-      min_time_between_page_load_ms: null,
-      max_time_between_page_load_ms: null,
-      delay_factor: null,
-      max_retries: null,
-      retry_delay_seconds: null,
-      crawl_host_group_selector: {
-        label: []
-      },
-      meta: {
-        name: '',
-        description: '',
-        label: [],
-      }
-    };*/
-    // By default, a newly-created  will have the selected state.
     this.onSelectPolitenessConfig(new PolitenessConfig('OBEY_ROBOTS'));
   }
 

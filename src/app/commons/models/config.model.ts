@@ -152,8 +152,6 @@ export class PolitenessConfig {
     this.meta = new Meta();
     this.crawl_host_group_selector = new Selector();
   }
-
-
 }
 
 export class Extra {

@@ -30,7 +30,7 @@
         <div class="robotPolicyDropdown">
           <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
           <angular2-multiselect [data]="robotsPolicyList"
-                                [(ngModel)]="selectedRobotsPolicyItems"
+                                [(ngModel)]="selectedRobotsPolicies"
                                 [settings]="robotsPolicyDropdownSettings"
                                 formControlName="robots_policy">
           </angular2-multiselect>
@@ -41,7 +41,7 @@
         </div>
         <span></span>
         <ng-container
-          *ngIf="form.value.robots_policy[0] && form.value.robots_policy[0].itemName=='CUSTOM_ROBOTS'">
+          *ngIf="robotsPolicy.value[0].itemName === 'CUSTOM_ROBOTS'">
           <div class="customRobotTxtInput">
             <mat-form-field>
             <textarea matInput

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
-import {isUndefined} from 'util';
 import {PolitenessConfigService} from '../politenessconfig.service';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
@@ -28,7 +27,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   form: FormGroup;
 
   robotsPolicyList: any = [];
-  selectedRobotsPolicyItems = [];
+  selectedRobotsPolicies = [];
   robotsPolicyDropdownSettings = {
     singleSelection: true,
     text: 'Velg Robots policy',
@@ -158,6 +157,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
+    console.log(formModel.robots_policy);
     return {
       id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy[0].itemName,
@@ -184,28 +184,19 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   private fillDropdown() {
     this.politenessConfigService.getRobotsConfig()
       .subscribe(robotsPolicies => {
-        robotsPolicies.forEach((robotsPolicy) => {
-          this.robotsPolicyList.push(robotsPolicy);
+        robotsPolicies.forEach((robotsPolicy, index) => {
+          this.robotsPolicyList.push({id: index, itemName: robotsPolicy});
         });
       });
   }
 
   private setSelectedDropdown() {
-    this.selectedRobotsPolicyItems = [];
-    if (!isUndefined(this.politenessConfig.id)) {
-      this.politenessConfigService.get(this.politenessConfig.id)
-        .subscribe(politenessConfig => {
-          for (const robotsPolicy of this.robotsPolicyList) {
-            if (robotsPolicy.itemName === politenessConfig.robots_policy) {
-              this.selectedRobotsPolicyItems.push({
-                id: robotsPolicy.id,
-                itemName: politenessConfig.robots_policy})
-            }
-          }
-          this.robotsPolicy.setValue(this.selectedRobotsPolicyItems);
-        });
+    if (this.politenessConfig.id) {
+      this.robotsPolicyList.forEach((robotsPolicy) => {
+        if (robotsPolicy.itemName === this.politenessConfig.robots_policy) {
+          this.selectedRobotsPolicies = [robotsPolicy];
+        }
+      });
     }
   }
-
-
 }
