@@ -165,10 +165,9 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   private prepareSave(): CrawlJob {
     const formModel = this.form.value;
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlJob.id,
-      schedule_id: formModel.schedule_id[0].id as string,
+      schedule_id: formModel.schedule_id.length > 0 ? formModel.schedule_id[0].id : '',
       crawl_config_id: formModel.crawl_config_id[0].id as string,
       disabled: formModel.disabled as boolean,
       limits: {
@@ -179,7 +178,7 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
-        label: labelsDeepCopy
+        label: formModel.meta.label.map(label => ({...label}))
       },
     };
   }
@@ -210,7 +209,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   private setSelectedDropdown() {
     this.selectedCrawlConfigItems = [];
     this.selectedScheduleItems = [];
-
     if (this.crawlJob.schedule_id !== '') {
       this.scheduleService.get(this.crawlJob.schedule_id)
         .subscribe(schedule => {
