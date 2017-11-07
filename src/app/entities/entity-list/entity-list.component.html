@@ -15,6 +15,50 @@
       <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="entityName">
+      <mat-header-cell *matHeaderCellDef
+                       class="list__column--narrow"
+                       i18n="@@baselistIdHeaderCell">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"
+                class="list__column--narrow">
+        <mat-icon *ngIf="isEntityName(row)">business</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="entityLabel">
+      <mat-header-cell *matHeaderCellDef
+                       class="list__column--narrow"
+                       i18n="@@baselistIdHeaderCell">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"
+                class="list__column--narrow">
+        <mat-icon *ngIf="isEntityLabel(row)">label</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="seedName">
+      <mat-header-cell *matHeaderCellDef
+                       class="list__column--narrow"
+                       i18n="@@baselistIdHeaderCell">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"
+                class="list__column--narrow">
+        <mat-icon *ngIf="isSeedName(row)">link</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="seedLabel">
+      <mat-header-cell *matHeaderCellDef
+                       class="list__column--narrow"
+                       i18n="@@baselistIdHeaderCell">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"
+                class="list__column--narrow">
+        <mat-icon *ngIf="isSeedLabel(row)">label_outline</mat-icon>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef
                        i18n="@@baselistIdHeaderCell">ID
