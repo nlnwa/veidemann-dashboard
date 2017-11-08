@@ -5,6 +5,7 @@ import {BrowserScriptService} from '../../browserscript';
 import {BrowserConfigService} from '../browserconfig.service';
 import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {Subject} from 'rxjs/Subject';
 
 
 @Component({
@@ -35,12 +36,24 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   };
   selectedBrowserScriptItems = [];
 
+  private completedSubject = new Subject<any>();
+  private completed$ = this.completedSubject.asObservable();
+  private isReady = false;
+  private isWaiting = false;
+
   constructor(private browserConfigService: BrowserConfigService,
               private snackBarService: SnackBarService,
               private fb: FormBuilder,
               private browserScriptService: BrowserScriptService) {
-    this.createForm();
     this.fillDropdown();
+    const subscription = this.completed$.subscribe(() => {
+      this.isReady = true;
+      if (this.isWaiting) {
+        this.updateForm();
+      }
+      subscription.unsubscribe();
+    });
+    this.createForm();
   }
 
   get name() {
@@ -72,8 +85,12 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserConfig.currentValue) {
-      this.updateForm();
+    if (changes.browserConfig && changes.browserConfig.currentValue) {
+      if (this.isReady) {
+        this.updateForm();
+      } else {
+        this.isWaiting = true;
+      }
     }
   }
 
@@ -135,8 +152,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   private updateForm() {
-    this.setSelectedDropdown();
-
     this.form.patchValue({
       id: this.browserConfig.id,
       user_agent: this.browserConfig.user_agent,
@@ -152,6 +167,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         label: [...this.browserConfig.meta.label]
       }
     });
+    this.setSelectedDropdown();
     this.form.markAsPristine();
     this.form.markAsUntouched();
 
@@ -188,29 +204,25 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.browserScriptService.list()
       .map(reply => reply.value)
       .subscribe((browserScripts) => {
-        browserScripts.forEach((browserScript) => {
-          this.browserScriptList.push({
-            id: browserScript.id,
-            itemName: browserScript.meta.name
-          })
-        });
-      });
-
+          this.browserScriptList = browserScripts.map((browserScript) =>
+            ({
+              id: browserScript.id,
+              itemName: browserScript.meta.name,
+            }));
+        },
+        null,
+        () => this.completedSubject.next());
   }
 
   private setSelectedDropdown() {
-    this.selectedBrowserScriptItems = [];
-    if (this.browserConfig.script_id) {
-      for (const i of this.browserConfig.script_id) {
-        this.browserScriptService.get(i)
-          .subscribe(browserScript => {
-            this.selectedBrowserScriptItems.push({
-              id: browserScript.id,
-              itemName: browserScript.meta.name
-            });
-            this.script_id.setValue(this.selectedBrowserScriptItems);
-          });
+    this.selectedBrowserScriptItems = this.browserScriptList.reduce((acc, curr) => {
+      for (let i = 0; i < this.browserConfig.script_id.length; i++) {
+        if (this.browserConfig.script_id[i] === curr.id) {
+          acc.push(curr);
+          break;
+        }
       }
-    }
+      return acc;
+    }, []);
   }
 }
