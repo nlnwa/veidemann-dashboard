@@ -1,35 +1,25 @@
-FROM nginx
-
-MAINTAINER Norsk Nettarkiv <nettarkivet@nb.no>
-
-RUN apt-get update \
-&& apt-get install curl gnupg -y \
-&& curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-&& curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-&& apt-get update \
-&& apt-get install nodejs yarn -y \
-&& rm -r /var/lib/apt/lists/*
+FROM node:8-alpine
 
 COPY package.json yarn.lock /usr/src/app/
-RUN mkdir -p /usr/src/app \
-&& cd /usr/src/app \
-&& yarn install \
-&& yarn cache clean
+WORKDIR /usr/src/app
 
-COPY . /usr/src/app
-RUN cd /usr/src/app \
-&& node_modules/@angular/cli/bin/ng build --prod \
-&& cp -r /usr/src/app/dist/* /usr/share/nginx/html/
+RUN yarn install && yarn cache clean
+COPY . .
+RUN node_modules/@angular/cli/bin/ng build --target=production
 
-RUN apt-get remove nodejs yarn -y \
-&& apt-get autoremove -y
 
+FROM nginx:alpine
+LABEL maintainer="nettarkivet@nb.no"
+
+COPY --from=0 /usr/src/app/dist/ /usr/src/app/nginx/ /usr/src/app/
+
+RUN cp -r /usr/src/app/* /usr/share/nginx/html/ \
+&& rm -r /usr/share/nginx/html/default.conf
 
 ENV PROXY_ADDR=localhost:3010 \
     EXTERNAL_HOSTNAME=host:32000
 
-CMD envsubst '${PROXY_ADDR}' < /usr/src/app/nginx/default.conf > /etc/nginx/conf.d/default.conf \
-&& MAIN_BUNDLE=$(basename "$(ls /usr/src/app/dist/main.*.bundle.js)") \
-&& envsubst '${EXTERNAL_HOSTNAME}' < /usr/src/app/dist/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
+CMD envsubst '${PROXY_ADDR}' < /usr/src/app/default.conf > /etc/nginx/conf.d/default.conf \
+&& MAIN_BUNDLE=$(basename "$(ls /usr/src/app/main.*.bundle.js)") \
+&& envsubst '${EXTERNAL_HOSTNAME}' < /usr/src/app/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
 && nginx -g "daemon off;"
