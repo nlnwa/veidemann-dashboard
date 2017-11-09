@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {PolitenessConfigService} from '../../politenessconfig/';
 import {BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators} from '../../../commons/';
@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlConfigService} from '../crawlconfig.service';
 import {CrawlConfig} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {Subject} from 'rxjs/Subject';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
   // encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
 
@@ -44,12 +46,25 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     enableSearchFilter: true
   };
 
+  private completedSubject = new Subject<any>();
+  private completed$ = this.completedSubject.asObservable().bufferCount(2);
+  private isReady = false;
+  private isWaiting = false;
+
   constructor(private crawlConfigService: CrawlConfigService,
               private politenessConfigService: PolitenessConfigService,
               private browserConfigService: BrowserConfigService,
               private fb: FormBuilder,
               private snackBarService: SnackBarService) {
-    this.fillDropdown();
+    this.fillBrowserConfigDropdown();
+    this.fillPolitenessConfigDropdown();
+    const subscription = this.completed$.subscribe(() => {
+      this.isReady = true;
+      if (this.isWaiting) {
+        this.updateForm();
+      }
+      subscription.unsubscribe();
+    });
     this.createForm();
   }
 
@@ -71,8 +86,12 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlConfig.currentValue) {
-      this.updateForm();
+    if (changes.crawlConfig && changes.crawlConfig.currentValue) {
+      if (this.isReady) {
+        this.updateForm();
+      } else {
+        this.isWaiting = true;
+      }
     }
   }
 
@@ -151,76 +170,75 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: [...this.crawlConfig.meta.label],
       },
     });
-    this.setSelectedDropdown();
+    this.setSelectedBrowserConfigItem()
+    this.setSelectedPolitenessConfigItem();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
 
   private prepareSave(): CrawlConfig {
     const formModel = this.form.value;
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlConfig.id,
-      browser_config_id: formModel.browser_config_id[0].id as string,
-      politeness_id: formModel.politeness_id[0].id as string,
+      browser_config_id: formModel.browser_config_id[0].id,
+      politeness_id: formModel.politeness_id[0].id,
       extra: {
-        extract_text: formModel.extra.extract_text as boolean,
-        create_snapshot: formModel.extra.create_snapshot as boolean,
+        extract_text: formModel.extra.extract_text,
+        create_snapshot: formModel.extra.create_snapshot,
       },
       minimum_dns_ttl_s: parseInt(formModel.minimum_dns_ttl_s, 10),
-      depth_first: formModel.depth_first as boolean,
+      depth_first: formModel.depth_first,
       meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        label: labelsDeepCopy,
+        name: formModel.meta.name,
+        description: formModel.meta.description,
+        label: formModel.meta.label.map(label => ({...label})),
       }
     };
   }
 
-  private fillDropdown() {
+  private fillBrowserConfigDropdown() {
     this.browserConfigService.list()
       .map(reply => reply.value)
       .subscribe(browserConfigs => {
-        browserConfigs.forEach((browserConfig) =>
-          this.browserConfigList.push({
+        this.browserConfigList = browserConfigs.map((browserConfig) =>
+          ({
             id: browserConfig.id,
             itemName: browserConfig.meta.name,
           }));
-      });
+      },
+      null,
+        () => this.completedSubject.next());
+  }
+
+  private fillPolitenessConfigDropdown() {
     this.politenessConfigService.list()
       .map(reply => reply.value)
       .subscribe(politenessConfigs => {
-        politenessConfigs.forEach((politenessConfig) => {
-          this.politenessConfigList.push({
+        this.politenessConfigList = politenessConfigs.map((politenessConfig) =>
+          ({
             id: politenessConfig.id,
             itemName: politenessConfig.meta.name,
-          });
-        });
-      });
+          }));
+      },
+      null,
+        () => this.completedSubject.next());
   }
 
-  private setSelectedDropdown() {
-    this.selectedBrowserConfigItems = [];
-    this.selectedPolitenessConfigItems = [];
-    if (this.crawlConfig.browser_config_id !== '') {
-          this.browserConfigService.get(this.crawlConfig.browser_config_id)
-        .subscribe(browserConfig => {
-          this.selectedBrowserConfigItems.push({
-            id: browserConfig.id,
-            itemName: browserConfig.meta.name,
-          });
-          this.browserConfigId.setValue(this.selectedBrowserConfigItems);
-        });
-    }
-    if (this.crawlConfig.politeness_id !== '') {
-      this.politenessConfigService.get(this.crawlConfig.politeness_id)
-        .subscribe((politenessConfig) => {
-          this.selectedPolitenessConfigItems.push({
-            id: politenessConfig.id,
-            itemName: politenessConfig.meta.name,
-          });
-          this.politenessId.setValue(this.selectedPolitenessConfigItems);
-        });
-    }
+  private setSelectedBrowserConfigItem() {
+    this.selectedBrowserConfigItems = this.browserConfigList.reduce((acc, curr) => {
+      if (curr.id === this.crawlConfig.browser_config_id) {
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
+  }
+
+  private setSelectedPolitenessConfigItem() {
+    this.selectedPolitenessConfigItems = this.politenessConfigList.reduce((acc, curr) => {
+      if (curr.id === this.crawlConfig.politeness_id) {
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
   }
 }

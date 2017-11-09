@@ -138,7 +138,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       },
     })
     if (this.schedule.valid_from !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -156,7 +156,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
     }
     if (this.schedule.valid_to !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.patchValue({
         valid_to: {
           year: year,
@@ -190,6 +190,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     const formCronExpression = this.form.value.cron_expression;
     const formValidFrom = this.form.value.valid_from;
     const formValidTo = this.form.value.valid_to;
+
     const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
     const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
     const cronExpression = this.setCronExpression(formCronExpression);
@@ -197,8 +198,8 @@ export class ScheduleDetailsComponent implements OnChanges {
     return {
       id: this.schedule.id,
       cron_expression: cronExpression,
-      valid_from: {seconds: validFrom},
-      valid_to: {seconds: validTo},
+      valid_from: validFrom ? {seconds: validFrom.toString()} : null,
+      valid_to: validTo ? {seconds: validTo.toString()} : null,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,

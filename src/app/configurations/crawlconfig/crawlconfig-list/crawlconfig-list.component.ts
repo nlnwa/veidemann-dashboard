@@ -21,23 +21,7 @@ export class CrawlConfigListComponent implements OnInit {
   }
 
   onCreateNewCrawlConfig() {
-    const crawlConfig: CrawlConfig = {
-      browser_config_id: '',
-      politeness_id: '',
-      minimum_dns_ttl_s: null,
-      depth_first: true,
-      extra: {
-        extract_text: true,
-        create_snapshot: true,
-      },
-      meta: {
-        name: '',
-        description: '',
-        label: [],
-      }
-    };
-    // By default, a newly-created  will have the selected state.
-    this.onSelectCrawlConfig(crawlConfig);
+    this.onSelectCrawlConfig(new CrawlConfig());
   }
 
   onCrawlConfigCreated(crawlConfig: CrawlConfig) {

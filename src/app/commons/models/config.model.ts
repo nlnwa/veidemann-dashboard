@@ -79,22 +79,32 @@ export class CrawlJob {
 }
 
 export class CrawlConfig {
-  id?: string;
+  id: string;
   meta: Meta;
 
   // browser_config_or_id
-  browser_config_id?: string;
+  browser_config_id: string;
   browser_config?: BrowserConfig;
   browser_config_selector?: Selector;
 
   // politeness_config_or_id
-  politeness_id?: string;
+  politeness_id: string;
   politeness?: PolitenessConfig;
   politeness_selector?: Selector;
 
   extra: Extra;
   minimum_dns_ttl_s: number;
   depth_first: boolean;
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.browser_config_id = '';
+    this.politeness_id = '';
+    this.extra = new Extra();
+    this.minimum_dns_ttl_s = 0;
+    this.depth_first = true;
+  }
 }
 
 export class Schedule {
@@ -152,13 +162,16 @@ export class PolitenessConfig {
     this.meta = new Meta();
     this.crawl_host_group_selector = new Selector();
   }
-
-
 }
 
 export class Extra {
   extract_text: boolean;
   create_snapshot: boolean;
+
+  constructor() {
+    this.extract_text = true;
+    this.create_snapshot = true;
+  }
 }
 
 export class BrowserScript {
@@ -189,7 +202,7 @@ export class LogLevel {
 }
 
 export class Timestamp {
-  seconds: number;
+  seconds: string;
   nanos?: number;
 
   constructor() {
