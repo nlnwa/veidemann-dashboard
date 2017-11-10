@@ -1,19 +1,6 @@
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Injectable} from '@angular/core';
-
-export interface Item {
-  id: string;
-}
-
-export interface Database {
-  dataChange: BehaviorSubject<Item[]>;
-  items: Item[];
-  clear(): void;
-  isEmpty(): boolean;
-  add(item: Item): void;
-  remove(item: Item): void;
-  update(item: Item): void;
-}
+import {Database, Item} from './database';
 
 @Injectable()
 export class ListDatabase implements Database {
@@ -38,7 +25,6 @@ export class ListDatabase implements Database {
     if (this.dataSet.has(item.id)) {
       return;
     } else {
-      this.dataSet.add(item.id);
       const copy = this.items.slice();
       copy.push(item);
       this.items = copy;
@@ -73,7 +59,7 @@ export class ListDatabase implements Database {
     return this.dataSet.size < 1;
   }
 
-  findIndex(item: Item) {
+  protected findIndex(item: Item) {
     return this.items.findIndex((element) => element.id === item.id);
   }
 }

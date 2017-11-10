@@ -2,18 +2,17 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {ActivityComponent} from './activity';
-import {CrawlJobListComponent} from './configurations/crawljobs/';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {ScheduleListComponent} from './configurations/schedule/';
 import {CrawlConfigListComponent} from './configurations/crawlconfig/';
 import {BrowserConfigListComponent} from './configurations/browserconfig/';
 import {PolitenessConfigListComponent} from './configurations/politenessconfig/';
-import {EntityDetailsComponent} from './entities/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
 import {CrawlHostGroupConfigListComponent} from './configurations/crawlhostgroupconfig/';
 import {SearchComponent} from './search/search.component';
+import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 
 const routes: Routes = [
   {
@@ -27,7 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'crawljobs',
-    component: CrawlJobListComponent
+    component: CrawlJobsComponent
   },
   {
     path: 'documentation',
