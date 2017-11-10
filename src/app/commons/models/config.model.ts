@@ -117,11 +117,19 @@ export class CrawlConfig {
 }
 
 export class Schedule {
-  id?: string;
+  id: string;
   meta: Meta;
   cron_expression: string;
   valid_from?: Timestamp;
   valid_to?: Timestamp;
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.cron_expression = '';
+    this.valid_from = null;
+    this.valid_to = null;
+  }
 }
 
 export class Scope {
@@ -191,9 +199,15 @@ export class BrowserScript {
 }
 
 export class CrawlHostGroupConfig {
-  id?: string;
+  id: string;
   meta: Meta;
   ip_range: IpRange[];
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.ip_range = [];
+  }
 }
 
 export class IpRange {
