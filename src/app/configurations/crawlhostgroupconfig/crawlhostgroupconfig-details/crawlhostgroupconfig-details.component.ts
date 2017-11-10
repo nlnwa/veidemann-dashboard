@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 import {VALID_IP_PATTERN} from '../../../commons/util';
 
 
@@ -17,18 +16,32 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   crawlHostGroupConfig: CrawlHostGroupConfig;
 
   @Output()
-  created = new EventEmitter<CrawlHostGroupConfig>();
+  save = new EventEmitter<CrawlHostGroupConfig>();
   @Output()
-  updated = new EventEmitter<CrawlHostGroupConfig>();
+  update = new EventEmitter<CrawlHostGroupConfig>();
   @Output()
-  deleted = new EventEmitter<CrawlHostGroupConfig>();
+  delete = new EventEmitter<CrawlHostGroupConfig>();
 
   form: FormGroup;
 
-  constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
-              private fb: FormBuilder,
-              private snackBarService: SnackBarService) {
+  constructor(private fb: FormBuilder) {
     this.createForm();
+  }
+
+  get showSave(): boolean {
+    return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id
+  }
+
+  get canSave(): boolean {
+    return this.form.valid;
+  }
+
+  get canUpdate() {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert() {
+    return this.form.dirty;
   }
 
   get name() {
@@ -48,46 +61,29 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlHostGroupConfig.currentValue) {
-      this.updateForm();
+    if (changes.crawlHostGroupConfig) {
+      if (changes.crawlHostGroupConfig.currentValue) {
+        this.updateForm();
+      } else {
+        this.form.reset();
+      }
     }
   }
 
   onSave() {
-    this.crawlHostGroupConfig = this.prepareSave();
-    this.crawlHostGroupConfigService.create(this.crawlHostGroupConfig)
-      .subscribe((newCrawlHostGroupConfig) => {
-        this.crawlHostGroupConfig = newCrawlHostGroupConfig;
-        this.updateForm();
-        this.created.emit(newCrawlHostGroupConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate(): void {
-    this.crawlHostGroupConfig = this.prepareSave();
-    this.crawlHostGroupConfigService.update(this.crawlHostGroupConfig)
-      .subscribe((updatedCrawlHostGroupConfig) => {
-        this.crawlHostGroupConfig = updatedCrawlHostGroupConfig;
-        this.updateForm();
-        this.updated.emit(updatedCrawlHostGroupConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.crawlHostGroupConfigService.delete(this.crawlHostGroupConfig.id)
-      .subscribe((response) => {
-        this.deleted.emit(this.crawlHostGroupConfig);
-        this.crawlHostGroupConfig = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      });
+    this.delete.emit(this.crawlHostGroupConfig);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   onAddIpRange() {
