@@ -32,7 +32,7 @@
       </div>
 
       <div fxFlex fxLayout="column">
-        <!-- IP Range -->
+
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
@@ -70,7 +70,6 @@
           </ng-container>
         </ng-container>
 
-        <!-- Labels -->
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
@@ -78,28 +77,28 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary"
-              *ngIf="!crawlHostGroupConfig.id"
-              [disabled]="!form.valid"
+              *ngIf="showSave"
+              [disabled]="!canSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="crawlHostGroupConfig.id"
-              [disabled]="!form.valid || !form.dirty"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!form.dirty"
+              [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="crawlHostGroupConfig.id"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
