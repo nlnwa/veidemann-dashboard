@@ -13,6 +13,8 @@ import {LoglevelComponent} from './configurations/logs/';
 import {CrawlHostGroupConfigListComponent} from './configurations/crawlhostgroupconfig/';
 import {SearchComponent} from './search/search.component';
 import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
+import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
+import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 
 const routes: Routes = [
   {
@@ -42,7 +44,8 @@ const routes: Routes = [
   },
   {
     path: 'schedule',
-    component: ScheduleListComponent
+    //component: ScheduleListComponent
+    component: SchedulePageComponent
   },
   {
     path: 'crawlconfig',
@@ -50,7 +53,8 @@ const routes: Routes = [
   },
   {
     path: 'crawlhostgroupconfig',
-    component: CrawlHostGroupConfigListComponent
+    //component: CrawlHostGroupConfigListComponent
+    component: CrawlHostGroupConfigPageComponent
   },
   {
     path: 'browserconfig',

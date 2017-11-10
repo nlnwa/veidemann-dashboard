@@ -115,28 +115,28 @@
     <mat-card-actions>
 
       <button mat-raised-button color="primary"
-              [disabled]="!form.valid"
-              *ngIf="!schedule.id"
+              [disabled]="!canSave"
+              *ngIf="showSave"
               (click)="onSave()" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="schedule.id"
-              [disabled]="!form.valid || !form.dirty"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        Lagre
+        Oppdater
       </button>
       <button mat-raised-button color="accent"
-              [disabled]="!form.dirty"
+              [disabled]="!canRevert"
               (click)="onRevert()"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="schedule.id"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

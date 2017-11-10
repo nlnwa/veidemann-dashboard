@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/';
 import {ScheduleService} from '../schedule.service';
 import {Schedule} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
@@ -26,18 +25,33 @@ export class ScheduleDetailsComponent implements OnChanges {
   schedule: Schedule;
 
   @Output()
-  created = new EventEmitter<Schedule>();
+  save = new EventEmitter<Schedule>();
   @Output()
-  updated = new EventEmitter<Schedule>();
+  update = new EventEmitter<Schedule>();
   @Output()
-  deleted = new EventEmitter<Schedule>();
+  delete = new EventEmitter<Schedule>();
 
   form: FormGroup;
 
   constructor(private scheduleService: ScheduleService,
-              private snackBarService: SnackBarService,
               private fb: FormBuilder) {
     this.createForm();
+  }
+
+  get showSave(): boolean {
+    return this.schedule && !this.schedule.id
+  }
+
+  get canSave(): boolean {
+    return this.form.valid;
+  }
+
+  get canUpdate() {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert() {
+    return this.form.dirty;
   }
 
   get name() {
@@ -49,46 +63,29 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.schedule.currentValue) {
-      this.updateForm();
+    if (changes.schedule) {
+      if (changes.schedule.currentValue) {
+        this.updateForm();
+      } else {
+        this.form.reset();
+      }
     }
   }
 
   onSave() {
-    this.schedule = this.prepareSave();
-    this.scheduleService.create(this.schedule)
-      .subscribe(newSchedule => {
-        this.schedule = newSchedule;
-        this.updateForm();
-        this.created.emit(newSchedule);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate(): void {
-    this.schedule = this.prepareSave();
-    this.scheduleService.update(this.schedule)
-      .subscribe(updatedSchedule => {
-        this.schedule = updatedSchedule;
-        this.updateForm();
-        this.updated.emit(updatedSchedule);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.scheduleService.delete(this.schedule.id)
-      .subscribe((response) => {
-        this.deleted.emit(this.schedule);
-        this.schedule = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      });
+  this.delete.emit(this.schedule);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   private createForm() {
@@ -120,15 +117,15 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   private updateForm() {
-    const cronSplitted = this.schedule.cron_expression.split(' ');
+    const cronSplit = this.schedule.cron_expression.split(' ');
     this.form.patchValue({
       id: this.schedule.id,
       cron_expression: {
-        minute: cronSplitted[0],
-        hour: cronSplitted[1],
-        dom: cronSplitted[2],
-        month: cronSplitted[3],
-        dow: cronSplitted[4],
+        minute: cronSplit[0],
+        hour: cronSplit[1],
+        dom: cronSplit[2],
+        month: cronSplit[3],
+        dow: cronSplit[4],
       },
       meta: {
         name: this.schedule.meta.name,

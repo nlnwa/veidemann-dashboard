@@ -1,26 +1,26 @@
-<h2>
-  <mat-icon>schedule</mat-icon>
-  <ng-container i18n="@@scheduleListHeader">Schedules</ng-container>
-</h2>
-<mat-nav-list>
-  <mat-list-item
-    *ngFor="let schedule of schedules" (click)="onSelectSchedule(schedule)"
-    [class.active]="schedule === selectedSchedule">
-    {{schedule.meta.name}}
-  </mat-list-item>
-</mat-nav-list>
+<div>
+  <mat-table [dataSource]="dataSource">
 
-<button mat-raised-button color="warn"
-        (click)="onCreateNewSchedule()"
-        i18n="@@commonButtonNew">New
-</button>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+    </ng-container>
 
-<ng-container *ngIf="selectedSchedule">
-  <app-schedule-details
-    [schedule]="selectedSchedule"
-    (created)="onScheduleCreated($event)"
-    (updated)="onScheduleUpdated($event)"
-    (deleted)="onScheduleDeleted($event)">
-  </app-schedule-details>
-</ng-container>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+    </ng-container>
 
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
