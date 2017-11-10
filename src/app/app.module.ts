@@ -65,6 +65,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {SeedListComponent} from './seeds/seed-list/seed-list.component';
 import {EntityListComponent} from './entities/entity-list/entity-list.component';
 import {DialogComponent} from './dialog/dialog.component';
+import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
+import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 
 
 @NgModule({
@@ -75,6 +77,7 @@ import {DialogComponent} from './dialog/dialog.component';
     SearchComponent,
     ActivityComponent,
     SeedDetailComponent,
+    CrawlJobsComponent,
     CrawljobDetailsComponent,
     CrawlJobListComponent,
     ScheduleListComponent,
@@ -97,6 +100,7 @@ import {DialogComponent} from './dialog/dialog.component';
     DialogComponent,
     SeedListComponent,
     EntityListComponent,
+    ToolbarComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [

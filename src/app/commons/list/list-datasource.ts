@@ -1,9 +1,11 @@
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
-import {Database} from './list-database';
+import {Injectable} from '@angular/core';
+import {ListDatabase} from './list-database';
 
+@Injectable()
 export class ListDataSource extends DataSource<any> {
-  constructor(private database: Database) {
+  constructor(protected database: ListDatabase) {
     super();
   }
 

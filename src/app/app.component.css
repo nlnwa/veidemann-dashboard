@@ -3,10 +3,7 @@ main {
   padding: 1em 1.5em 2em 1.3em;
 }
 
-mat-sidenav {
-}
-
-mat-nav-list .material-icons {
+.sidenav--icon__margin {
   margin-right: 0.5em;
 }
 

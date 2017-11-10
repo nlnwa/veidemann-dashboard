@@ -60,7 +60,7 @@ export class Seed {
 }
 
 export class CrawlJob {
-  id?: string;
+  id: string;
   meta: Meta;
 
   // schedule_config_or_id
@@ -72,10 +72,19 @@ export class CrawlJob {
 
   // crawl_config_or_id
   crawl_config_id?: string;
-  crawl_config?: string;
+  crawl_config?: CrawlConfig;
   crawl_config_selector?: Selector;
 
   disabled?: boolean;
+
+  constructor() {
+    this.id = '';
+    this.schedule = new Schedule();
+    this.meta = new Meta();
+    this.limits = new CrawlLimits();
+    this.schedule_id = '';
+    this.crawl_config_id = '';
+  }
 }
 
 export class CrawlConfig {
