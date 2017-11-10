@@ -1,24 +1,27 @@
-<h2 i18n="@@crawljobsListHeader ">Crawljobs</h2>
+<div>
+  <mat-table [dataSource]="dataSource"
+             [trackBy]="trackById">
 
-<mat-nav-list>
-  <mat-list-item
-    *ngFor="let crawljob of crawljobs" (click)="onSelectCrawlJob(crawljob)"
-    [class.active]="crawljob === selectedCrawlJob">
-    {{crawljob.meta.name}}
-  </mat-list-item>
-</mat-nav-list>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>URL</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+    </ng-container>
 
-<button mat-raised-button color="warn"
-        (click)="onCreateNewCrawlJob()"
-        i18n="@@commonButtonNew">Ny
-</button>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+    </ng-container>
 
-<ng-container *ngIf="selectedCrawlJob">
-  <app-crawljob-details
-    [crawlJob]="selectedCrawlJob"
-    (created)="onCrawlJobCreated($event)"
-    (updated)="onCrawlJobUpdated($event)"
-    (deleted)="onCrawlJobDeleted($event)">
-  </app-crawljob-details>
-</ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
 
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
