@@ -85,7 +85,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
         });
       })
       .map((reply) => {
-        this.pageLength = reply.count;
+        this.pageLength = parseInt(reply.count, 10);
         this.pageSize = reply.page_size;
         this.pageIndex = reply.page;
         return reply.value;
@@ -107,6 +107,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
     this.crawlJobService.create(crawlJob)
       .subscribe(newCrawlJob => {
         this.crawlJob = newCrawlJob;
+        this.changes.next();
         this.snackBarService.openSnackBar('Lagret');
       });
     this.changes.next();
@@ -116,17 +117,17 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
     this.crawlJobService.update(crawlJob)
       .subscribe(updatedCrawljob => {
         this.crawlJob = updatedCrawljob;
+        this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
-    this.changes.next();
   }
 
   onDeleteCrawlJob(crawlJob: CrawlJob) {
     this.crawlJobService.delete(crawlJob.id)
       .subscribe((response) => {
         this.crawlJob = response;
+        this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });
-    this.changes.next();
   }
 }
