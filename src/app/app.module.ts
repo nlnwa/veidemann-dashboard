@@ -66,9 +66,10 @@ import {SeedListComponent} from './seeds/seed-list/seed-list.component';
 import {EntityListComponent} from './entities/entity-list/entity-list.component';
 import {DialogComponent} from './dialog/dialog.component';
 import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
-import {ToolbarComponent} from './commons/toolbar/toolbar.component'
-import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
+import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
+import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
+import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
 
 @NgModule({
   declarations: [
@@ -102,8 +103,9 @@ import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroup
     SeedListComponent,
     EntityListComponent,
     ToolbarComponent,
-    SchedulePageComponent,
     CrawlHostGroupConfigPageComponent,
+    PolitenessConfigPageComponent,
+    SchedulePageComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [

@@ -1,25 +1,28 @@
-<h2 i18n="@@politenessconfigListHeader">Politenessconfigs</h2>
+<div>
+  <mat-table [dataSource]="dataSource">
 
-<mat-nav-list>
-  <mat-list-item
-    *ngFor="let politenessconfig of politenessConfigs" (click)="onSelectPolitenessConfig(politenessconfig)"
-    [class.active]="politenessconfig === selectedPolitenessConfig">
-    {{politenessconfig.meta.name}}
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>URL</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+    </ng-container>
 
-  </mat-list-item>
-</mat-nav-list>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+    </ng-container>
 
-<button mat-raised-button color="primary"
-        (click)="onCreateNewPolitenessConfig()"
-        i18n="@@commonButtonNew">Ny
-</button>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
 
-<ng-container *ngIf="selectedPolitenessConfig">
-  <app-politenessconfig-details
-    [politenessConfig]="selectedPolitenessConfig"
-    (created)="onPolitenessConfigCreated($event)"
-    (updated)="onPolitenessConfigUpdated($event)"
-    (deleted)="onPolitenessConfigDeleted($event)">
-  </app-politenessconfig-details>
-</ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
+
 

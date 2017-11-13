@@ -1,44 +1,59 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
-import {PolitenessConfigService} from '../politenessconfig.service';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
 
 
 @Component({
   selector: 'app-politenessconfig-details',
   templateUrl: './politenessconfig-details.component.html',
   styleUrls: ['./politenessconfig-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class PolitenessconfigDetailsComponent implements OnChanges {
 
   @Input()
   politenessConfig: PolitenessConfig;
+  @Input()
+  robotsPolicies: any[];
 
   @Output()
-  created = new EventEmitter<PolitenessConfig>();
+  save = new EventEmitter<PolitenessConfig>();
   @Output()
-  updated = new EventEmitter<PolitenessConfig>();
+  update = new EventEmitter<PolitenessConfig>();
   @Output()
-  deleted = new EventEmitter<PolitenessConfig>();
+  delete = new EventEmitter<PolitenessConfig>();
 
   form: FormGroup;
+  robotsPolicyList: any[];
 
-  robotsPolicyList: any = [];
-  selectedRobotsPolicies = [];
+  selectedRobotsPolicies: ListItem[];
   robotsPolicyDropdownSettings = {
     singleSelection: true,
     text: 'Velg Robots policy',
   };
 
 
-  constructor(private politenessConfigService: PolitenessConfigService,
-              private snackBarService: SnackBarService,
-              private fb: FormBuilder) {
-    this.fillDropdown();
+  constructor(private fb: FormBuilder) {
     this.createForm();
+  }
+
+  get showSave(): boolean {
+    return (this.politenessConfig && !this.politenessConfig.id);
+  }
+
+  get canSave() {
+    return this.form.valid;
+  }
+
+  get canUpdate() {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert() {
+    return this.form.dirty;
   }
 
   get name() {
@@ -66,49 +81,37 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.politenessConfig.crawl_host_group_selector) {
-      this.politenessConfig.crawl_host_group_selector = new Selector();
-    }
     if (changes.politenessConfig.currentValue) {
+      if (!this.politenessConfig) {
+        this.form.reset();
+      }
+    }
+    if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
+      this.robotsPolicyList = changes.robotsPolicies.currentValue.map((robotPolicy, currentIndex) =>
+        ({
+          id: currentIndex,
+          itemName: robotPolicy,
+        }));
+    }
+    if (this.politenessConfig && this.robotsPolicyList) {
       this.updateForm();
     }
   }
 
   onSave() {
-    this.politenessConfig = this.prepareSave();
-    this.politenessConfigService.create(this.politenessConfig)
-      .subscribe(newPolitenessConfig => {
-        this.politenessConfig = newPolitenessConfig;
-        this.updateForm();
-        this.created.emit(newPolitenessConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate(): void {
-    this.politenessConfig = this.prepareSave();
-    this.politenessConfigService.update(this.politenessConfig)
-      .subscribe(updatedPolitenessConfig => {
-        this.politenessConfig = updatedPolitenessConfig;
-        this.updateForm();
-        this.updated.emit(updatedPolitenessConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete() {
-    this.politenessConfigService.delete(this.politenessConfig.id)
-      .subscribe((response) => {
-        this.deleted.emit(this.politenessConfig);
-        this.politenessConfig = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      });
+    this.delete.emit(this.politenessConfig);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   private createForm() {
@@ -157,10 +160,9 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
-    console.log(formModel.robots_policy);
     return {
       id: this.politenessConfig.id,
-      robots_policy: formModel.robots_policy[0].itemName,
+      robots_policy: formModel.robots_policy.length > 0 ? formModel.robots_policy[0].itemName : '',
       minimum_robots_validity_duration_s: parseInt(formModel.minimum_robots_validity_duration_s, 10),
       custom_robots: formModel.custom_robots,
       min_time_between_page_load_ms: formModel.min_time_between_page_load_ms,
@@ -181,22 +183,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     };
   }
 
-  private fillDropdown() {
-    this.politenessConfigService.getRobotsConfig()
-      .subscribe(robotsPolicies => {
-        robotsPolicies.forEach((robotsPolicy, index) => {
-          this.robotsPolicyList.push({id: index, itemName: robotsPolicy});
-        });
-      });
+  private setSelectedDropdown() {
+    this.selectedRobotsPolicies = this.robotsPolicyList.reduce((acc, curr) => {
+      if (this.politenessConfig.robots_policy === curr.itemName) {
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
   }
 
-  private setSelectedDropdown() {
-    if (this.politenessConfig.id) {
-      this.robotsPolicyList.forEach((robotsPolicy) => {
-        if (robotsPolicy.itemName === this.politenessConfig.robots_policy) {
-          this.selectedRobotsPolicies = [robotsPolicy];
-        }
-      });
-    }
-  }
 }
