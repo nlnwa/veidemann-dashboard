@@ -1,8 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable} from '@angular/core';
-import {BaseListComponent, ListDatabase, ListDataSource} from '../../commons/list/';
-
-@Injectable()
-export class SeedDatabase extends ListDatabase {}
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {BaseListComponent, ListDataSource} from '../../commons/list/';
 
 @Component({
   selector: 'app-seed-list',
@@ -11,10 +8,9 @@ export class SeedDatabase extends ListDatabase {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeedListComponent extends BaseListComponent {
-  constructor(private database: SeedDatabase,
+  constructor(public seedDataSource: ListDataSource,
               protected changeDetectorRef: ChangeDetectorRef) {
-    super(changeDetectorRef);
+    super(seedDataSource, changeDetectorRef);
     this.displayedColumns = ['name'];
-    this.dataSource = new ListDataSource(database);
   }
 }
