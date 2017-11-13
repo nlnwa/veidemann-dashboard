@@ -17,9 +17,9 @@ RUN cp -r /usr/src/app/* /usr/share/nginx/html/ \
 && rm -r /usr/share/nginx/html/default.conf
 
 ENV PROXY_ADDR=localhost:3010 \
-    EXTERNAL_HOSTNAME=host:32000
+    OPENID_CONNECT_ISSUER=http://localhost:32000/dex
 
 CMD envsubst '${PROXY_ADDR}' < /usr/src/app/default.conf > /etc/nginx/conf.d/default.conf \
 && MAIN_BUNDLE=$(basename "$(ls /usr/src/app/main.*.bundle.js)") \
-&& envsubst '${EXTERNAL_HOSTNAME}' < /usr/src/app/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
+&& envsubst '${OPENID_CONNECT_ISSUER}' < /usr/src/app/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
 && nginx -g "daemon off;"
