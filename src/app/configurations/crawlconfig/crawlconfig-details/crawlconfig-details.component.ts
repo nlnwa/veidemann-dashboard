@@ -1,38 +1,36 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {PolitenessConfigService} from '../../politenessconfig/';
-import {BrowserConfigService} from '../../browserconfig/';
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlConfigService} from '../crawlconfig.service';
-import {CrawlConfig} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/bufferCount';
+import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
 
 
 @Component({
   selector: 'app-crawlconfig-details',
   templateUrl: './crawlconfig-details.component.html',
   styleUrls: ['./crawlconfig-details.component.css'],
-  // encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
 
   @Input()
   crawlConfig: CrawlConfig;
+  @Input()
+  browserConfigs: BrowserConfig[];
+  @Input()
+  politenessConfigs: PolitenessConfig[];
 
   @Output()
-  created = new EventEmitter<CrawlConfig>();
+  save = new EventEmitter<CrawlConfig>();
   @Output()
-  updated = new EventEmitter<CrawlConfig>();
+  update = new EventEmitter<CrawlConfig>();
+  // noinspection ReservedWordAsName
   @Output()
-  deleted = new EventEmitter<CrawlConfig>();
+  delete = new EventEmitter<CrawlConfig>();
 
   form: FormGroup;
 
-  browserConfigList: any = [];
-  selectedBrowserConfigItems = [];
+  browserConfigList: any[];
+  selectedBrowserConfigItems: any[];
   browserConfigDropdownSettings = {
     singleSelection: true,
     text: 'Velg browserConfig',
@@ -47,25 +45,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     enableSearchFilter: true
   };
 
-  private completedSubject = new Subject<any>();
-  private completed$ = this.completedSubject.asObservable().bufferCount(2);
-  private isReady = false;
-  private isWaiting = false;
-
-  constructor(private crawlConfigService: CrawlConfigService,
-              private politenessConfigService: PolitenessConfigService,
-              private browserConfigService: BrowserConfigService,
-              private fb: FormBuilder,
-              private snackBarService: SnackBarService) {
-    this.fillBrowserConfigDropdown();
-    this.fillPolitenessConfigDropdown();
-    const subscription = this.completed$.subscribe(() => {
-      this.isReady = true;
-      if (this.isWaiting) {
-        this.updateForm();
-      }
-      subscription.unsubscribe();
-    });
+  constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -87,50 +67,44 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlConfig && changes.crawlConfig.currentValue) {
-      if (this.isReady) {
-        this.updateForm();
-      } else {
-        this.isWaiting = true;
+    if (changes.crawlConfig) {
+      if (!this.crawlConfig) {
+        this.form.reset();
       }
+    }
+    if (changes.browserConfigs) {
+      if (this.browserConfigs) {
+        this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
+          id: browserConfig.id,
+          itemName: browserConfig.meta.name,
+        }));
+      }
+    }
+    if (changes.politenessConfigs) {
+      this.politenessConfigList = this.politenessConfigs.map((politenessConfig) => ({
+        id: politenessConfig.id,
+        itemName: politenessConfig.meta.name,
+      }));
+    }
+    if (this.crawlConfig && this.browserConfigs && this.politenessConfigs) {
+      this.updateForm();
     }
   }
 
   onSave() {
-    this.crawlConfig = this.prepareSave();
-    this.crawlConfigService.create(this.crawlConfig)
-      .subscribe(newCrawlConfig => {
-        this.crawlConfig = newCrawlConfig;
-        this.updateForm();
-        this.created.emit(newCrawlConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate(): void {
-    this.crawlConfig = this.prepareSave();
-    this.crawlConfigService.update(this.crawlConfig)
-      .subscribe(updatedCrawlConfig => {
-        this.crawlConfig = updatedCrawlConfig;
-        this.updateForm();
-        this.updated.emit(updatedCrawlConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.crawlConfigService.delete(this.crawlConfig.id)
-      .subscribe((response) => {
-        this.deleted.emit(this.crawlConfig);
-        this.crawlConfig = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet')
-      });
+    this.delete.emit(this.crawlConfig);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   private createForm() {
@@ -171,7 +145,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: [...this.crawlConfig.meta.label],
       },
     });
-    this.setSelectedBrowserConfigItem()
+    this.setSelectedBrowserConfigItem();
     this.setSelectedPolitenessConfigItem();
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -195,34 +169,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: formModel.meta.label.map(label => ({...label})),
       }
     };
-  }
-
-  private fillBrowserConfigDropdown() {
-    this.browserConfigService.list()
-      .map(reply => reply.value)
-      .subscribe(browserConfigs => {
-        this.browserConfigList = browserConfigs.map((browserConfig) =>
-          ({
-            id: browserConfig.id,
-            itemName: browserConfig.meta.name,
-          }));
-      },
-      null,
-        () => this.completedSubject.next());
-  }
-
-  private fillPolitenessConfigDropdown() {
-    this.politenessConfigService.list()
-      .map(reply => reply.value)
-      .subscribe(politenessConfigs => {
-        this.politenessConfigList = politenessConfigs.map((politenessConfig) =>
-          ({
-            id: politenessConfig.id,
-            itemName: politenessConfig.meta.name,
-          }));
-      },
-      null,
-        () => this.completedSubject.next());
   }
 
   private setSelectedBrowserConfigItem() {

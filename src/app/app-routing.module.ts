@@ -4,16 +4,15 @@ import {RouterModule, Routes} from '@angular/router';
 import {ActivityComponent} from './activity';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {StatisticsComponent} from './statistics/statistics.component';
-import {CrawlConfigListComponent} from './configurations/crawlconfig/';
-import {BrowserConfigListComponent} from './configurations/browserconfig/';
 import {BrowserscriptListComponent} from './configurations/browserscript/';
 import {LoglevelComponent} from './configurations/logs/';
 import {SearchComponent} from './search/search.component';
-import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
+import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
+import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 
 const routes: Routes = [
   {
@@ -47,7 +46,7 @@ const routes: Routes = [
   },
   {
     path: 'crawlconfig',
-    component: CrawlConfigListComponent
+    component: CrawlConfigPageComponent
   },
   {
     path: 'crawlhostgroupconfig',

@@ -129,7 +129,7 @@
       </button>
       <button mat-raised-button color="warn"
               *ngIf="crawlConfig.id"
-              (click)="onDelete(); $event.stopPropagation()"
+              (click)="onDelete()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

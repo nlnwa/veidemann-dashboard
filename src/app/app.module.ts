@@ -25,7 +25,12 @@ import {
   BrowserscriptListComponent,
   BrowserScriptService
 } from './configurations/browserscript';
-import {CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigService} from './configurations/crawlconfig';
+import {
+  CrawlConfigDetailsComponent,
+  CrawlConfigListComponent,
+  CrawlConfigPageComponent,
+  CrawlConfigService
+} from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
@@ -65,13 +70,14 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {SeedListComponent} from './seeds/seed-list/seed-list.component';
 import {EntityListComponent} from './entities/entity-list/entity-list.component';
 import {DialogComponent} from './dialog/dialog.component';
-import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
-import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
+import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
+import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
+
 
 @NgModule({
   declarations: [
@@ -81,7 +87,6 @@ import {BrowserConfigPageComponent} from './configurations/browserconfig/browser
     SearchComponent,
     ActivityComponent,
     SeedDetailComponent,
-    CrawlJobsComponent,
     CrawljobDetailsComponent,
     CrawlJobListComponent,
     ScheduleListComponent,
@@ -110,6 +115,8 @@ import {BrowserConfigPageComponent} from './configurations/browserconfig/browser
     SchedulePageComponent,
     SearchListComponent,
     BrowserConfigPageComponent,
+    CrawlConfigPageComponent,
+    CrawlJobsComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [

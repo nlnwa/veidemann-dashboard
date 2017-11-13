@@ -1,22 +1,26 @@
-<h2 i18n="@@crawlconfigListHeader">Crawlconfigs</h2>
-<mat-nav-list>
-  <mat-list-item
-    *ngFor="let crawlconfig of crawlConfigs" (click)="onSelectCrawlConfig(crawlconfig)"
-    [class.active]="crawlconfig === selectedCrawlConfig">
-    {{crawlconfig.meta.name}}
-  </mat-list-item>
-</mat-nav-list>
-<button mat-raised-button color="primary"
-        (click)="onCreateNewCrawlConfig()"
-        i18n="@@commonButtonNew">Ny
-</button>
+<div>
+  <mat-table [dataSource]="dataSource">
 
-<ng-container *ngIf="selectedCrawlConfig">
-  <app-crawlconfig-details
-    [crawlConfig]="selectedCrawlConfig"
-    (created)="onCrawlConfigCreated($event)"
-    (updated)="onCrawlConfigUpdated($event)"
-    (deleted)="onCrawlConfigDeleted($event)">
-  </app-crawlconfig-details>
-</ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>URL</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+    </ng-container>
 
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
