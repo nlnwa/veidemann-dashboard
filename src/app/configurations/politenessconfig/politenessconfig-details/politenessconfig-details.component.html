@@ -30,7 +30,7 @@
         <div class="robotPolicyDropdown">
           <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
           <angular2-multiselect [data]="robotsPolicyList"
-                                [(ngModel)]="selectedRobotsPolicies"
+                                [ngModel]="selectedRobotsPolicies"
                                 [settings]="robotsPolicyDropdownSettings"
                                 formControlName="robots_policy">
           </angular2-multiselect>
@@ -122,28 +122,28 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary"
-              *ngIf="!politenessConfig.id"
-              [disabled]="!form.valid"
+              *ngIf="showSave"
+              [disabled]="!canSave"
               (click)="onSave()"
               novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="politenessConfig.id"
-              [disabled]="!form.valid || !form.dirty"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!form.dirty"
+              [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="politenessConfig.id"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

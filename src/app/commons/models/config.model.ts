@@ -162,7 +162,7 @@ export class BrowserConfig {
 }
 
 export class PolitenessConfig {
-  id?: string;
+  id: string;
   meta: Meta;
   robots_policy: string;
   minimum_robots_validity_duration_s?: number;
@@ -175,8 +175,13 @@ export class PolitenessConfig {
   crawl_host_group_selector: Selector;
 
   constructor(robotsPolicy: string) {
-    this.robots_policy = robotsPolicy;
+    this.id = '';
     this.meta = new Meta();
+    this.robots_policy = robotsPolicy;
+    this.custom_robots  = '';
+    this.delay_factor = 0;
+    this.max_retries = 0;
+    this.retry_delay_seconds = 0;
     this.crawl_host_group_selector = new Selector();
   }
 }
