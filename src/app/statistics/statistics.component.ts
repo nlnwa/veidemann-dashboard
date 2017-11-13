@@ -8,8 +8,8 @@ import {EntityService} from '../entities/entity.service';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
-  nrOfSeeds: number;
-  nrOfEntities: number;
+  nrOfSeeds: string;
+  nrOfEntities: string;
 
   constructor(private seedsService: SeedService,
               private entityService: EntityService) {}
