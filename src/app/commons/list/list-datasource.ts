@@ -10,7 +10,7 @@ export class ListDataSource extends DataSource<any> {
   }
 
   connect(): Observable<any[]> {
-    return this.database.dataChange;
+    return this.database.dataChange.asObservable();
   }
 
   disconnect() {
