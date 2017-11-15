@@ -77,11 +77,13 @@
       <div fxFlex fxLayout="column">
         <div>
           <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
+
             <angular2-multiselect [data]="browserScriptList"
-                                  [(ngModel)]="selectedBrowserScriptItems"
+                                  [ngModel]="selectedBrowserScriptItems"
                                   [settings]="browserScriptDropdownSettings"
                                   formControlName="script_id">
             </angular2-multiselect>
+
           </label>
           <mat-error *ngIf="!script_id.valid"
                     i18n="@@browserconfigFormScriptsRequiredError">
@@ -98,27 +100,27 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary"
-              [disabled]="!form.valid"
-              *ngIf="!browserConfig.id"
-              (click)="onSave(form.value)" novalidate
+              [disabled]="!canSave"
+              *ngIf="showSave"
+              (click)="onSave()" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="browserConfig.id"
-              [disabled]="!form.valid || !form.dirty"
-              (click)="onUpdate(form.value)"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        Lagre
+        Oppdater
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!form.dirty"
+              [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="browserConfig.id"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

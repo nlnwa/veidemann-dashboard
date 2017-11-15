@@ -71,6 +71,7 @@ import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroup
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
 import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
+import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import {SearchListComponent} from './search/search-entity-list/search-entity-lis
     PolitenessConfigPageComponent,
     SchedulePageComponent,
     SearchListComponent,
+    BrowserConfigPageComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [

@@ -13,6 +13,7 @@ import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.comp
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
+import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 
 const routes: Routes = [
   {
@@ -54,7 +55,7 @@ const routes: Routes = [
   },
   {
     path: 'browserconfig',
-    component: BrowserConfigListComponent
+    component: BrowserConfigPageComponent
   },
   {
     path: 'browserscript',
