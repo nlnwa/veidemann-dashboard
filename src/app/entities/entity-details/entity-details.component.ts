@@ -28,8 +28,12 @@ export class EntityDetailsComponent implements OnChanges {
     this.createForm();
   }
 
+  get showSave() {
+    return this.entity ? !this.entity.id : false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.entity.currentValue) {
+    if (this.entity) {
       this.updateForm();
     }
   }
