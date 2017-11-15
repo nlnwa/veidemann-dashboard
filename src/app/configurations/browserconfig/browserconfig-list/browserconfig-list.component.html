@@ -1,22 +1,26 @@
-<h2 i18n="@@browserconfigListHeader">Browserconfigs</h2>
-<mat-nav-list>
-  <mat-list-item
-    *ngFor="let browserconfig of browserConfigs" (click)="selectBrowserConfig(browserconfig)"
-    [class.active]="browserconfig === selectedBrowserConfig">
-    {{browserconfig.meta.name}}
+<div>
+  <mat-table [dataSource]="dataSource">
 
-  </mat-list-item>
-</mat-nav-list>
-<button mat-raised-button color="primary"
-        (click)="onCreateNewBrowserConfig()"
-        i18n="@@commonButtonNew">Ny
-</button>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>URL</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+    </ng-container>
 
-<ng-container *ngIf="selectedBrowserConfig">
-  <app-browserconfig-details
-    [browserConfig]="selectedBrowserConfig"
-    (created)="onBrowserConfigCreated($event)"
-    (updated)="onBrowserConfigUpdated($event)"
-    (deleted)="onBrowserConfigDeleted($event)">
-  </app-browserconfig-details>
-</ng-container>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>

@@ -1,11 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
-import {BrowserScriptService} from '../../browserscript';
-import {BrowserConfigService} from '../browserconfig.service';
 import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
-import {Subject} from 'rxjs/Subject';
+import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
 
 
 @Component({
@@ -17,43 +14,45 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   @Input()
   browserConfig: BrowserConfig;
+  @Input()
+  browserScripts: any[];
 
   @Output()
-  created = new EventEmitter<BrowserConfig>();
+  save = new EventEmitter<BrowserConfig>();
   @Output()
-  updated = new EventEmitter<BrowserConfig>();
+  update = new EventEmitter<BrowserConfig>();
   @Output()
-  deleted = new EventEmitter<BrowserConfig>();
+  delete = new EventEmitter<BrowserConfig>();
 
   form: FormGroup;
+  browserScriptList: any[];
 
-  browserScriptList: any = [];
+  selectedBrowserScriptItems = ListItem;
   browserScriptDropdownSettings = {
     singleSelection: false,
     text: 'Velg Script',
     enableCheckAll: false,
     enableSearchFilter: true,
   };
-  selectedBrowserScriptItems = [];
 
-  private completedSubject = new Subject<any>();
-  private completed$ = this.completedSubject.asObservable();
-  private isReady = false;
-  private isWaiting = false;
-
-  constructor(private browserConfigService: BrowserConfigService,
-              private snackBarService: SnackBarService,
-              private fb: FormBuilder,
-              private browserScriptService: BrowserScriptService) {
-    this.fillDropdown();
-    const subscription = this.completed$.subscribe(() => {
-      this.isReady = true;
-      if (this.isWaiting) {
-        this.updateForm();
-      }
-      subscription.unsubscribe();
-    });
+  constructor(private fb: FormBuilder) {
     this.createForm();
+  }
+
+  get showSave(): boolean {
+    return (this.browserConfig && !this.browserConfig.id);
+  }
+
+  get canSave() {
+    return this.form.valid;
+  }
+
+  get canUpdate() {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert() {
+    return this.form.dirty;
   }
 
   get name() {
@@ -85,50 +84,38 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserConfig && changes.browserConfig.currentValue) {
-      if (this.isReady) {
-        this.updateForm();
-      } else {
-        this.isWaiting = true;
+    if (changes.browserConfig) {
+      if (!changes.browserConfig.currentValue) {
+        this.form.reset();
       }
+    }
+
+    if (changes.browserScripts && changes.browserScripts.currentValue) {
+      this.browserScriptList = changes.browserScripts.currentValue.map((browserScript) =>
+        ({
+          id: browserScript.id,
+          itemName: browserScript.meta.name,
+        }));
+    }
+    if (this.browserConfig && this.browserScriptList) {
+      this.updateForm();
     }
   }
 
   onSave() {
-    this.browserConfig = this.prepareSave();
-    this.browserConfigService.create(this.browserConfig)
-      .subscribe(newBrowserConfig => {
-        this.browserConfig = newBrowserConfig;
-        this.updateForm();
-        this.created.emit(newBrowserConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
-  };
+    this.save.emit(this.prepareSave());
+  }
 
   onUpdate(): void {
-    this.browserConfig = this.prepareSave();
-    this.browserConfigService.update(this.browserConfig)
-      .subscribe(updatedBrowserConfig => {
-        this.browserConfig = updatedBrowserConfig;
-        this.updateForm();
-        this.updated.emit(updatedBrowserConfig);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.browserConfigService.delete(this.browserConfig.id)
-      .subscribe((response) => {
-        this.deleted.emit(this.browserConfig);
-        this.browserConfig = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      });
+    this.delete.emit(this.browserConfig);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   private createForm() {
@@ -198,20 +185,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-  }
-
-  private fillDropdown() {
-    this.browserScriptService.list()
-      .map(reply => reply.value)
-      .subscribe((browserScripts) => {
-          this.browserScriptList = browserScripts.map((browserScript) =>
-            ({
-              id: browserScript.id,
-              itemName: browserScript.meta.name,
-            }));
-        },
-        null,
-        () => this.completedSubject.next());
   }
 
   private setSelectedDropdown() {
