@@ -1,0 +1,4 @@
+.list__column--narrow {
+  flex: 0 0 auto;
+  margin-left: 1em;
+}
