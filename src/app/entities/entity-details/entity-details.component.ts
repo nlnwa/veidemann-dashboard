@@ -1,9 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {EntityService} from '../entity.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../commons/';
 import {Entity, Label} from '../../commons/models/config.model';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
 
 
 @Component({
@@ -13,67 +11,47 @@ import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityDetailsComponent implements OnChanges {
-
   @Input()
   entity: Entity;
 
   @Output()
-  created = new EventEmitter<Entity>();
+  save = new EventEmitter<Entity>();
   @Output()
-  updated = new EventEmitter<Entity>();
+  update = new EventEmitter<Entity>();
+  // noinspection ReservedWordAsName
   @Output()
-  deleted = new EventEmitter<Entity>();
+  delete = new EventEmitter<Entity>();
 
   form: FormGroup;
 
-  constructor(private entityService: EntityService,
-              private snackBarService: SnackBarService,
-              private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
+  get showSave() {
+    return this.entity ? !this.entity.id : false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.entity.currentValue) {
+    if (this.entity) {
       this.updateForm();
     }
   }
 
   onSave() {
-    const entity = this.prepareSaveEntity();
-    this.entityService.create(entity)
-      .subscribe((newEntity: Entity) => {
-        this.entity = newEntity;
-        this.updateForm();
-        this.created.emit(newEntity);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSaveEntity());
   }
 
   onUpdate() {
-    const entity = this.prepareSaveEntity();
-    this.entityService.update(entity)
-      .subscribe((updatedEntity: Entity) => {
-        this.entity = updatedEntity;
-        this.updateForm();
-        this.updated.emit(updatedEntity);
-        this.snackBarService.openSnackBar('Oppdatert');
-      });
+    this.update.emit(this.prepareSaveEntity());
   }
 
   onDelete(): void {
-    this.entityService.delete(this.entity.id)
-      .subscribe((deletedEntity) => {
-        this.deleted.emit(this.entity);
-        this.entity = deletedEntity;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      })
-
+    this.delete.emit(this.entity);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
   private createForm() {

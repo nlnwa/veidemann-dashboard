@@ -3,8 +3,6 @@ import {DataSource} from '@angular/cdk/collections';
 import {Item} from '../database';
 
 export abstract class BaseListComponent {
-
-  // dataSource: DataSource<any>;
   displayedColumns = ['id', 'name', 'description'];
   @Output()
   protected rowClick = new EventEmitter<Item | Item[]>();

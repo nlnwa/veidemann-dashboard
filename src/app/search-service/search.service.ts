@@ -5,10 +5,10 @@ import 'rxjs/add/operator/merge';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/bufferCount'
 import {EntityService} from '../entities/entity.service';
 import {SeedService} from '../seeds/seeds.service';
-import {Item} from '../commons/list/list-database';
+import {Item} from '../commons/list/';
+
 
 /* tslint:disable:no-bitwise */
 export enum ResultType {
@@ -18,15 +18,14 @@ export enum ResultType {
   SeedLabel = 1 << 3,
 }
 
-
 @Injectable()
 export class SearchService {
 
-  private completedSubject = new Subject<any>();
-  completed$ = this.completedSubject.asObservable().bufferCount(4);
+  private subject: Subject<void> = new Subject<void>();
+  searchCompleted$ = this.subject.asObservable();
 
   private static applyType(item: any, type) {
-    (<any>item).type = type;
+    item.type = type;
     return item;
   }
 
@@ -36,41 +35,49 @@ export class SearchService {
 
   search(term: string): Observable<Item> {
     let selector = {};
+    let completeCount = 1;
     if (term) {
+      completeCount = 4;
       selector = {selector: {label: [{key: term}, {value: term}]}};
     }
+    let count = 0;
+    const complete = () => {
+      count++;
+      if (count >= completeCount) {
+        this.subject.next();
+      }
+    };
 
-    const entities$: Observable<Item> = this.entityService.search({page_size: 100, name: term})
-      .flatMap(
-        (reply) => reply.value,
+    const entities$: Observable<Item> = this.entityService.search({name: term})
+      .flatMap((reply) => reply.value,
         (_, inner) => SearchService.applyType(inner, ResultType.EntityName))
-      .finally(() => this.completedSubject.next());
+      .finally(complete);
 
     const entityLabel$: Observable<Item> = this.entityService.search(selector)
-      .flatMap(
-        (reply) => reply.value,
+      .flatMap((reply) => reply.value,
         (_, inner) => SearchService.applyType(inner, ResultType.EntityLabel))
-      .finally(() => this.completedSubject.next());
+      .finally(complete);
 
     const seedLabel$: Observable<Item> = this.seedService.search(selector)
-      .flatMap(reply =>
-        Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id)))
-          .finally(() => this.completedSubject.next())
-          .flatMap(
-            (entities) => entities,
-            (_, inner) => SearchService.applyType(inner, ResultType.SeedLabel)));
+      .flatMap(reply => Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))))
+      .flatMap(
+        (entities) => entities,
+        (_, inner) => SearchService.applyType(inner, ResultType.SeedLabel))
+      .finally(complete);
+
 
     const seedEntities$: Observable<Item> = this.seedService.search({name: term})
-      .flatMap(reply =>
-        Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id)))
-          .finally(() => this.completedSubject.next())
-          .flatMap(
-            (entities) => entities,
-            (_, inner) => SearchService.applyType(inner, ResultType.SeedName)));
+      .flatMap(reply => Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))))
+      .flatMap(
+        (entities) => entities,
+        (_, inner) => SearchService.applyType(inner, ResultType.SeedName))
+      .finally(complete);
 
-    return entities$
-      .merge(entityLabel$)
-      .merge(seedLabel$)
-      .merge(seedEntities$);
+    return completeCount > 1
+      ? entities$
+        .merge(entityLabel$)
+        .merge(seedLabel$)
+        .merge(seedEntities$)
+      : entities$;
   }
 }

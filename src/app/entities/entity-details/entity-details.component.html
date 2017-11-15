@@ -1,11 +1,11 @@
 <form [formGroup]="form" fxFlex>
-  <mat-card *ngIf="entity">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>
         <span i18n="@@entityDetailsCardTitle">ENTITET</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!entity.id"
+        <span *ngIf="showSave"
               i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -32,7 +32,7 @@
           </mat-form-field>
         </ng-container>
 
-        <div *ngIf="entity.id">
+        <div *ngIf="!showSave">
           <mat-form-field>
             <input matInput
                    formControlName="id"
@@ -84,15 +84,14 @@
 
     <mat-card-actions>
       <button mat-raised-button color="primary"
-              *ngIf="!entity.id" [disabled]="!form.valid"
+              *ngIf="showSave" [disabled]="!form.valid"
               (click)="onSave()"
-              i18n="@@commonButtonSave">
-        Lagre
+              i18n="@@commonButtonSave">Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="entity.id" [disabled]="!form.dirty || !form.valid"
+              *ngIf="!showSave" [disabled]="!form.dirty || !form.valid"
               (click)="onUpdate()"
-              i18n="@@commonButtonSave">Lagre
+              i18n="@@commonButtonSave">Oppdater
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
@@ -100,7 +99,7 @@
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="entity.id"
+              *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>
