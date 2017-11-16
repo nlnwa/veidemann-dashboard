@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators, DateTime} from '../../commons/';
-import {Label, Seed} from '../../commons/models/config.model';
+import {CrawlJob, Label, Seed} from '../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
 import {VALID_URL_PATTERN} from '../../commons/util';
 
@@ -16,7 +16,7 @@ export class SeedDetailComponent implements OnChanges {
   @Input()
   seed: Seed;
   @Input()
-  crawlJobs: any[];
+  crawlJobs: CrawlJob[];
 
   @Output()
   save = new EventEmitter<Seed>();
@@ -31,6 +31,7 @@ export class SeedDetailComponent implements OnChanges {
   dropdownCrawlJobSettings = {
     singleSelection: false,
     text: 'Velg høstejobb',
+    enableCheckAll: false,
     enableSearchFilter: true
   };
   form: FormGroup;
@@ -52,7 +53,7 @@ export class SeedDetailComponent implements OnChanges {
           itemName: crawlJob.meta.name,
         }));
     }
-    if (this.seed && this.crawlJobs) {
+    if (this.seed && this.crawlJobList) {
       this.updateForm();
     }
   }

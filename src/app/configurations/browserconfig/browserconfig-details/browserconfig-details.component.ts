@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
-import {BrowserConfig, Label, Selector} from '../../../commons/models/config.model';
-import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
+import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
 
 
 @Component({
@@ -15,19 +14,20 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()
   browserConfig: BrowserConfig;
   @Input()
-  browserScripts: any[];
+  browserScripts: BrowserScript[];
 
   @Output()
   save = new EventEmitter<BrowserConfig>();
   @Output()
   update = new EventEmitter<BrowserConfig>();
+  // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<BrowserConfig>();
 
   form: FormGroup;
   browserScriptList: any[];
 
-  selectedBrowserScriptItems = ListItem;
+  selectedBrowserScriptItems = [];
   browserScriptDropdownSettings = {
     singleSelection: false,
     text: 'Velg Script',
@@ -146,7 +146,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       window_height: this.browserConfig.window_height,
       page_load_timeout_ms: this.browserConfig.page_load_timeout_ms,
       sleep_after_pageload_ms: this.browserConfig.sleep_after_pageload_ms,
-      //headers: this.browserConfig.headers;
+      // headers: this.browserConfig.headers;
       script_selector: [...this.browserConfig.script_selector.label],
       meta: {
         name: this.browserConfig.meta.name,
