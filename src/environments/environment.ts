@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://localhost:3010/api',
+  API_URL: '/api',
   auth: {
 
     // Url of the Identity Provider

@@ -78,3 +78,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# webpack dev-server proxy configuration file
+proxy.conf.json
