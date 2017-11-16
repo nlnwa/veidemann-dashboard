@@ -9,12 +9,11 @@ import {
   ViewChild
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BrowserScriptService} from '../browserscript.service';
 import {BrowserScript} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 
 import 'brace/index';
 import 'brace/theme/chrome';
+import 'brace/theme/monokai';
 import 'brace/mode/javascript';
 import 'brace/ext/language_tools.js';
 
@@ -29,24 +28,40 @@ declare var ace: any;
 
 export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
 
+  isClassVisible: false;
+
   @Input()
   browserScript: BrowserScript;
 
   @Output()
-  created = new EventEmitter<BrowserScript>();
+  save = new EventEmitter<BrowserScript>();
   @Output()
-  updated = new EventEmitter<BrowserScript>();
+  update = new EventEmitter<BrowserScript>();
   @Output()
-  deleted = new EventEmitter<BrowserScript>();
+  delete = new EventEmitter<BrowserScript>();
 
   @ViewChild('editor') editor;
 
   form: FormGroup;
 
-  constructor(private browserScriptService: BrowserScriptService,
-              private snackBarService: SnackBarService,
-              private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     this.createForm();
+  }
+
+  get showSave(): boolean {
+    return (this.browserScript && !this.browserScript.id);
+  }
+
+  get canSave() {
+    return this.form.valid;
+  }
+
+  get canUpdate() {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert() {
+    return this.form.dirty;
   }
 
   get name() {
@@ -56,50 +71,41 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     this.editor.setTheme('chrome');
     this.editor.setMode('javascript');
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.browserScript.currentValue) {
+      if (!this.browserScript) {
+        this.form.reset();
+      }
+    }
+    if (this.browserScript) {
       this.updateForm();
     }
   }
 
   onSave() {
-    this.browserScript = this.prepareSave();
-    this.browserScriptService.create(this.browserScript)
-      .subscribe(newBrowserScript => {
-        this.browserScript = newBrowserScript;
-        this.updateForm();
-        this.created.emit(newBrowserScript);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate(): void {
-    this.browserScript = this.prepareSave();
-    this.browserScriptService.update(this.browserScript)
-      .subscribe(updatedBrowserScript => {
-        this.browserScript = updatedBrowserScript;
-        this.updateForm();
-        this.updated.emit(updatedBrowserScript);
-        this.snackBarService.openSnackBar('Lagret');
-      });
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.browserScriptService.delete(this.browserScript.id)
-      .subscribe(response => {
-        this.deleted.emit(this.browserScript);
-        this.browserScript = response;
-        this.form.reset();
-        this.snackBarService.openSnackBar('Slettet');
-      });
+    this.delete.emit(this.browserScript);
   }
 
   onRevert() {
     this.updateForm();
-    this.snackBarService.openSnackBar('Tilbakestilt');
+  }
+
+  onEditorDarkTheme() {
+    this.editor.setTheme('monokai');
+  }
+
+  onEditorLightTheme() {
+    this.editor.setTheme('chrome');
   }
 
   private createForm() {

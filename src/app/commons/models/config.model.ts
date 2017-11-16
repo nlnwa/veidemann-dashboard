@@ -197,10 +197,16 @@ export class Extra {
 }
 
 export class BrowserScript {
-  id?: string;
+  id: string;
   meta: Meta;
   script: string;
   url_regexp?: string;
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.script = '';
+  }
 }
 
 export class CrawlHostGroupConfig {

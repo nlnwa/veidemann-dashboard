@@ -5,7 +5,7 @@
         <span i18n="@@browserscriptDetailsHeader">Browserscript</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!browserScript.id"
+        <span *ngIf="showSave"
               i18n="@@browserscriptNewBrowserscriptHeader"> Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -24,23 +24,28 @@
 
           <mat-form-field>
             <textarea matInput formControlName="description" placeholder="Beskrivelse"
-                   i18n-placeholder="@@metaDescriptionInputPlaceholder"
-                   style="width: auto">
+                      i18n-placeholder="@@metaDescriptionInputPlaceholder"
+                      style="width: auto">
             </textarea>
           </mat-form-field>
         </ng-container>
-
-        <mat-toolbar>
-          <span i18n="@@browserscriptFormScriptHeader"> Script</span>
-          <span class="fill-space"></span>
-        </mat-toolbar>
-        <ace-editor formControlName="script"
-                    #editor style="height:200px;">
-        </ace-editor>
-        <mat-error *ngIf="editor.value === '' "
-                   i18n="@@browserscriptFormScriptRequiredError">
-          Script er påkrevd.
-        </mat-error>
+          <mat-toolbar>
+            <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader"> Script</span>
+            <span class="fill-space"></span>
+            <div class="button-row">
+              <button class="darkEditor" mat-mini-fab (click)="onEditorDarkTheme()">
+              </button>
+              <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
+              </button>
+            </div>
+          </mat-toolbar>
+          <ace-editor formControlName="script"
+                      #editor style="height:300px;">
+          </ace-editor>
+          <mat-error *ngIf="editor.value === '' "
+                     i18n="@@browserscriptFormScriptRequiredError">
+            Script er påkrevd.
+          </mat-error>
       </div>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
@@ -50,28 +55,28 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary"
-              [disabled]="!form.valid"
-              *ngIf="!browserScript.id"
-              (click)="onSave(form.value)"
+              [disabled]="!canSave"
+              *ngIf="showSave"
+              (click)="onSave()"
               novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="browserScript.id"
-              [disabled]="!form.valid || !form.dirty"
-              (click)="onUpdate(form.value)"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        Lagre
+        Oppdater
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!form.dirty"
+              [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="browserScript.id"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

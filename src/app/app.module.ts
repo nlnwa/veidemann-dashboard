@@ -22,7 +22,7 @@ import {
 } from './configurations/browserconfig';
 import {
   BrowserScriptDetailsComponent,
-  BrowserscriptListComponent,
+  BrowserScriptListComponent,
   BrowserScriptService
 } from './configurations/browserscript';
 import {CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigService} from './configurations/crawlconfig';
@@ -70,6 +70,7 @@ import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
+import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,7 @@ import {SchedulePageComponent} from './configurations/schedule/schedule-page.com
     PolitenessconfigDetailsComponent,
     PolitenessConfigListComponent,
     ScheduleSidebarComponent,
-    BrowserscriptListComponent,
+    BrowserScriptListComponent,
     BrowserScriptDetailsComponent,
     EntityDetailsComponent,
     LoglevelComponent,
@@ -106,6 +107,7 @@ import {SchedulePageComponent} from './configurations/schedule/schedule-page.com
     CrawlHostGroupConfigPageComponent,
     PolitenessConfigPageComponent,
     SchedulePageComponent,
+    BrowserScriptPageComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [
