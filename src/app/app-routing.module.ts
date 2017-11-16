@@ -4,7 +4,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {ActivityComponent} from './activity';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {StatisticsComponent} from './statistics/statistics.component';
-import {CrawlConfigListComponent} from './configurations/crawlconfig/';
 import {LoglevelComponent} from './configurations/logs/';
 import {SearchComponent} from './search/search.component';
 import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
@@ -13,6 +12,7 @@ import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroup
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
+import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
 
 const routes: Routes = [
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
   },
   {
     path: 'crawlconfig',
-    component: CrawlConfigListComponent
+    component: CrawlConfigPageComponent
   },
   {
     path: 'crawlhostgroupconfig',

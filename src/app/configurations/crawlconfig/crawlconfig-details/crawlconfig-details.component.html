@@ -2,10 +2,10 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <span *ngIf="crawlConfig" i18n="@@crawlconfigDetailsHeader">Crawlconfig</span>
+        <span i18n="@@crawlconfigDetailsHeader">Crawlconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
-      <span *ngIf="!crawlConfig.id"
+      <span *ngIf="showSave"
             i18n="@@crawlconfigNewCrawlconfigHeader"> Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -39,7 +39,7 @@
           <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
             Browserconfig:
             <angular2-multiselect [data]="browserConfigList"
-                                  [(ngModel)]="selectedBrowserConfigItems"
+                                  [ngModel]="selectedBrowserConfigItems"
                                   [settings]="browserConfigDropdownSettings"
                                   formControlName="browser_config_id">
             </angular2-multiselect>
@@ -54,7 +54,7 @@
           <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
             Politenessconfig:
             <angular2-multiselect [data]="politenessConfigList"
-                                  [(ngModel)]="selectedPolitenessConfigItems"
+                                  [ngModel]="selectedPolitenessConfigItems"
                                   [settings]="politenessConfigDropdownSettings"
                                   formControlName="politeness_id">
             </angular2-multiselect>
@@ -109,17 +109,17 @@
     <mat-card-actions>
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"
-              *ngIf="!crawlConfig.id"
+              *ngIf="showSave"
               (click)="onSave()" novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="crawlConfig.id"
+              *ngIf="!showSave"
               [disabled]="!form.dirty || !form.valid"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        Lagre
+        Oppdater
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
@@ -128,8 +128,8 @@
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="crawlConfig.id"
-              (click)="onDelete(); $event.stopPropagation()"
+              *ngIf="!showSave"
+              (click)="onDelete()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

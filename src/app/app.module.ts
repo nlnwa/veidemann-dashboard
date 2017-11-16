@@ -25,7 +25,12 @@ import {
   BrowserScriptListComponent,
   BrowserScriptService
 } from './configurations/browserscript';
-import {CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigService} from './configurations/crawlconfig';
+import {
+  CrawlConfigDetailsComponent,
+  CrawlConfigListComponent,
+  CrawlConfigPageComponent,
+  CrawlConfigService
+} from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
 import {
   PolitenessconfigDetailsComponent,
@@ -112,6 +117,7 @@ import {BrowserScriptPageComponent} from './configurations/browserscript/browser
     SearchListComponent,
     BrowserConfigPageComponent,
     BrowserScriptPageComponent,
+    CrawlConfigPageComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [
