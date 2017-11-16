@@ -70,13 +70,13 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {SeedListComponent} from './seeds/seed-list/seed-list.component';
 import {EntityListComponent} from './entities/entity-list/entity-list.component';
 import {DialogComponent} from './dialog/dialog.component';
+import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
-import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
-import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
 import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
+import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 
 
 @NgModule({
@@ -87,6 +87,7 @@ import {SearchListComponent} from './search/search-entity-list/search-entity-lis
     SearchComponent,
     ActivityComponent,
     SeedDetailComponent,
+    CrawlJobsComponent,
     CrawljobDetailsComponent,
     CrawlJobListComponent,
     ScheduleListComponent,
@@ -116,7 +117,6 @@ import {SearchListComponent} from './search/search-entity-list/search-entity-lis
     SearchListComponent,
     BrowserConfigPageComponent,
     CrawlConfigPageComponent,
-    CrawlJobsComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [

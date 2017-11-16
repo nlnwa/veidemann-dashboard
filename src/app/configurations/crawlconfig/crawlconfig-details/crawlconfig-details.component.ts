@@ -49,6 +49,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
+  get showSave(): boolean {
+    return !this.crawlConfig.id;
+  }
+
   get name() {
     return this.form.get('meta.name');
   }
