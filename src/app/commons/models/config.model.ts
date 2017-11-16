@@ -148,17 +148,30 @@ export class CrawlLimits {
 }
 
 export class BrowserConfig {
-  id?: string;
+  id: string;
   meta: Meta;
-  user_agent?: string;
-  window_width?: number;
-  window_height?: number;
-  page_load_timeout_ms?: string; // int64
+  user_agent: string;
+  window_width: number;
+  window_height: number;
+  page_load_timeout_ms: string; // int64
   script_selector?: Selector;
-  script_id?: string[];
+  script_id: string[];
   headers?: Map<string, string>;
   script_parameters?: Map<string, string>;
-  sleep_after_pageload_ms?: string; // int64
+  sleep_after_pageload_ms: string; // int64
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.user_agent = '';
+    this.window_width = 0;
+    this.window_height = 0;
+    this.page_load_timeout_ms = '';
+    this.script_selector = new Selector();
+    this.script_id = [];
+    this.sleep_after_pageload_ms = '';
+
+  }
 }
 
 export class PolitenessConfig {
@@ -178,7 +191,7 @@ export class PolitenessConfig {
     this.id = '';
     this.meta = new Meta();
     this.robots_policy = robotsPolicy;
-    this.custom_robots  = '';
+    this.custom_robots = '';
     this.delay_factor = 0;
     this.max_retries = 0;
     this.retry_delay_seconds = 0;
@@ -219,6 +232,7 @@ export class CrawlHostGroupConfig {
     this.meta = new Meta();
     this.ip_range = [];
   }
+
 }
 
 export class IpRange {

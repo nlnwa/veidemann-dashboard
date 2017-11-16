@@ -1,71 +1,94 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/do';
-import {Entity, Seed} from '../commons/models/config.model';
+import {CrawlJob, Entity, Seed} from '../commons/models/config.model';
 import {SearchService} from '../search-service/search.service';
-import {EntityDatabase, EntityListComponent} from '../entities/entity-list/entity-list.component';
-import {SeedDatabase, SeedListComponent} from '../seeds/seed-list/seed-list.component';
-import {SeedService} from '../seeds/seeds.service';
+import {SeedListComponent, SeedService} from '../seeds/';
 import {SnackBarService} from '../snack-bar-service/snack-bar.service';
 import 'rxjs/add/operator/finally';
-import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Item} from '../commons/list/list-database';
+import {CrawlJobService} from '../configurations/crawljobs/';
+import {EntityService} from '../entities/';
 import {SearchDatabase} from './search-database';
+import {MatPaginator} from '@angular/material';
+import {ListDatabase, ListDataSource} from '../commons/list/';
+import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
+import 'rxjs/add/operator/buffer';
 
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  providers: [{provide: EntityDatabase, useClass: SearchDatabase}, SeedDatabase],
+  providers: [
+    SearchDataSource,
+    SearchDatabase,
+    ListDataSource,
+    ListDatabase,
+  ],
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, AfterViewInit {
+  pageLength = 0;
+  pageSize = 5;
+  pageIndex = 0;
+  pageOptions = [5, 10];
+
   selectedEntity: Entity = null;
   selectedSeed: Seed = null;
+  crawlJobs: CrawlJob[];
   @ViewChild(SeedListComponent) private seedList;
-  @ViewChild(EntityListComponent) private entityList;
+  @ViewChild(SearchListComponent) private entityList;
+  @ViewChild(MatPaginator) private paginator;
   private searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private completedSubscription: Subscription;
-  private items: Item[] = [];
 
   constructor(private searchService: SearchService,
               private seedService: SeedService,
-              private entityDatabase: EntityDatabase,
-              private seedDatabase: SeedDatabase,
+              private crawlJobService: CrawlJobService,
+              private entityService: EntityService,
+              private searchDatabase: SearchDatabase,
+              private seedDatabase: ListDatabase,
               private snackBarService: SnackBarService) {}
 
   ngOnInit() {
-    this.completedSubscription = this.searchService.completed$.subscribe(() => {
-      if (this.items.length < 1) {
-        this.selectedEntity = new Entity(this.searchTerm.value);
-      } else {
-        this.entityDatabase.items = this.items;
-        this.entityList.onRowClick(this.items[0]);
-        this.items = [];
-      }
-    });
+    // Load prerequisites for app-seed-detail
+    this.crawlJobService.list()
+      .map(reply => reply.value)
+      .subscribe(crawlJobs => this.crawlJobs = crawlJobs);
+  }
+
+  ngAfterViewInit() {
+    this.searchDatabase.paginator = this.paginator;
 
     this.searchTerm
       .do(() => {
         this.selectedEntity = null;
         this.selectedSeed = null;
-        this.entityDatabase.clear();
+        // this.searchDatabase.clear();
         this.seedDatabase.clear();
       })
       .switchMap((term: string) => this.searchService.search(term))
-      .subscribe((item) => {
-        this.items.push(item)
+      .buffer(this.searchService.searchCompleted$)
+      .subscribe((items) => {
+        this.paginator.length = items.length;
+        this.searchDatabase.data = items;
+        if (items.length > 0) {
+          this.entityList.onRowClick(items[0]);
+        } else if (this.searchTerm.value) {
+          this.selectedEntity = new Entity(this.searchTerm.value);
+        }
       });
-  }
-
-  ngOnDestroy() {
-    this.completedSubscription.unsubscribe();
   }
 
   onEnterKey(event) {
     this.searchTerm.next(event.target.value);
+  }
+
+  onCreateEntity() {
+    this.selectedEntity = new Entity();
+    this.selectedSeed = null;
+    this.seedDatabase.clear();
+    this.entityList.clearSelection();
   }
 
   onSelectEntity(entity: Entity) {
@@ -85,24 +108,31 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  onCreateEntity() {
-    this.selectedEntity = new Entity();
-    this.selectedSeed = null;
-    this.seedDatabase.clear();
-    this.entityList.clearSelection();
+  onSaveEntity(entity: Entity) {
+    this.entityService.create(entity)
+      .subscribe((newEntity: Entity) => {
+        this.selectedEntity = newEntity;
+        this.snackBarService.openSnackBar('Lagret');
+        this.searchTerm.next(this.searchTerm.value);
+      });
   }
 
-  onEntityCreated(entity) {
-    this.selectedEntity = entity;
-    // noop
+  onUpdateEntity(entity: Entity) {
+    this.entityService.update(entity)
+      .subscribe((updatedEntity: Entity) => {
+        this.selectedEntity = updatedEntity;
+        this.snackBarService.openSnackBar('Oppdatert');
+        this.searchTerm.next(this.searchTerm.value);
+      });
   }
 
-  onEntityUpdated(entity) {
-    this.entityDatabase.update(entity);
-  }
-
-  onEntityDeleted(entity) {
-    this.entityDatabase.remove(entity);
+  onDeleteEntity(entity: Entity): void {
+    this.entityService.delete(entity.id)
+      .subscribe((deletedEntity) => {
+        this.selectedEntity = deletedEntity;
+        this.snackBarService.openSnackBar('Slettet');
+        this.searchTerm.next(this.searchTerm.value);
+      });
   }
 
   onSelectSeed(seed: Seed) {
@@ -118,16 +148,34 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSeedCreated(seed: Seed) {
-    this.seedDatabase.add(seed);
+  onSaveSeed(seed: Seed): void {
+    this.seedService.create(seed)
+      .subscribe((createdSeed) => {
+        this.selectedSeed = createdSeed;
+        this.seedDatabase.add(createdSeed);
+        this.snackBarService.openSnackBar('Lagret');
+      });
+
   }
 
-  onSeedUpdated(seed: Seed) {
-    this.seedDatabase.update(seed);
+  onUpdateSeed(seed: Seed): void {
+    this.seedService.update(seed)
+      .subscribe((updatedSeed) => {
+        this.selectedSeed = updatedSeed;
+        this.seedDatabase.update(updatedSeed);
+        this.snackBarService.openSnackBar('Lagret');
+      });
   }
 
-  onSeedDeleted(seed: Seed) {
-    this.seedDatabase.remove(seed);
+  onDeleteSeed(seed: Seed): void {
+    this.seedService.delete(seed.id)
+      .subscribe((deletedSeed) => {
+        this.selectedSeed = deletedSeed;
+        this.seedDatabase.remove(seed);
+        this.snackBarService.openSnackBar('Slettet');
+        // Update seed list of entity associated with deleted seed
+        this.onSelectEntity(this.selectedEntity);
+      });
   }
 }
 

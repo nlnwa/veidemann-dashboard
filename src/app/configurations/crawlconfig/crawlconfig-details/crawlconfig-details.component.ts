@@ -7,6 +7,7 @@ import {CrawlConfigService} from '../crawlconfig.service';
 import {CrawlConfig} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
 import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/bufferCount';
 
 
 @Component({

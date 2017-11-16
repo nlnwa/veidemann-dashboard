@@ -70,6 +70,8 @@ import {ToolbarComponent} from './commons/toolbar/toolbar.component';
 import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
 import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
 import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
+import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
+import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
 
 @NgModule({
@@ -107,6 +109,8 @@ import {BrowserScriptPageComponent} from './configurations/browserscript/browser
     CrawlHostGroupConfigPageComponent,
     PolitenessConfigPageComponent,
     SchedulePageComponent,
+    SearchListComponent,
+    BrowserConfigPageComponent,
     BrowserScriptPageComponent,
   ],
   entryComponents: [ErrorDialogComponent],

@@ -86,8 +86,8 @@
         </ng-container>
         <div>
           <span i18n="@@seedFormCrawljobMultiSelectHeader">Høstejobb:</span>
-          <angular2-multiselect [data]="crawlJobList"
-                                [(ngModel)]="selectedCrawlJobItems"
+          <angular2-multiselect [data]="crawlJobs"
+                                [ngModel]="selectedCrawlJobItems"
                                 [settings]="dropdownCrawlJobSettings"
                                 formControlName="job_id">
           </angular2-multiselect>
