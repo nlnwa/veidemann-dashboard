@@ -1,0 +1,18 @@
+.mat-mini-fab.darkEditor{
+  background-color: black;
+  color: white;
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+  text-align: center;
+
+}
+
+.mat-mini-fab.lightEditor{
+  background-color: mintcream;
+  color: black;
+  width:20px;
+  height: 20px;
+  font-size: 10px;
+  text-align: center;
+}
