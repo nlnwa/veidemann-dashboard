@@ -29,8 +29,6 @@ declare var ace: any;
 
 export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
 
-  isFullscreen: false;
-
   @Input()
   browserScript: BrowserScript;
 

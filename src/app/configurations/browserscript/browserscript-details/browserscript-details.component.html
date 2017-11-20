@@ -90,16 +90,11 @@
               </button>
               <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
               </button>
-              <button mat-mini-fab (click)="isFullscreen = !isFullscreen">
-              <!--<button mat-mini-fab (click)="onFullscreen()">-->
-                <mat-icon>fullscreen</mat-icon>
-              </button>
             </div>
           </mat-toolbar>
           <div>
           <ace-editor formControlName="script"
                       #editor style="height:300px;"
-                      [ngClass] = "{'editorFullscreen': isFullscreen }"
                       [options]="{enableBasicAutocompletion: true,
                                   enableLiveAutocompletion: true}">
           </ace-editor>
