@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
+import {DateTime} from '../../../commons/datetime';
 
 
 @Component({
@@ -129,6 +130,10 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created_by: {value: '', disabled: true},
+        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified_by: {value: '', disabled: true},
         label: [],
       }),
     });
@@ -148,6 +153,14 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       meta: {
         name: this.politenessConfig.meta.name,
         description: this.politenessConfig.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.politenessConfig.meta.created.seconds),
+        },
+        created_by: this.politenessConfig.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.politenessConfig.meta.last_modified.seconds),
+        },
+        last_modified_by: this.politenessConfig.meta.last_modified_by,
         label: [...this.politenessConfig.meta.label],
       },
     });

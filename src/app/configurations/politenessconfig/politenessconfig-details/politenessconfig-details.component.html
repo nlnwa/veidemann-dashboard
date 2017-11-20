@@ -109,6 +109,49 @@
                  placeholder="Retry delay (s)"
                  i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
         </mat-form-field>
+
+        <div *ngIf="!showSave" class="extraMetadata">
+          <div fxLayout="row">
+            <mat-form-field>
+              <input matInput
+                     formControlName="id"
+                     placeholder="Id"
+                     i18n-placeholder="@@configIdPlaceholder">
+            </mat-form-field>
+          </div>
+          <ng-container formGroupName="meta">
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="created">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Opprettet"
+                       i18n-placeholder="@@metaCreatedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput
+                       formControlName="created_by"
+                       placeholder="Opprettet av"
+                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="last_modified">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Sist endret"
+                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput
+                       formControlName="last_modified_by"
+                       placeholder="Sist endret av"
+                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </div>
       </div>
 
       <div fxFlex fxLayout="column">

@@ -10,3 +10,7 @@ textarea.form-control {
   margin-bottom: 1em;
   width: 50%;
 }
+
+div.extraMetadata mat-form-field {
+  width: 45%;
+}
