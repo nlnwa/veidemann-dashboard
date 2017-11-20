@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
+import {DateTime} from '../../../commons/datetime';
 
 
 @Component({
@@ -132,6 +133,10 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created_by: {value: '', disabled: true},
+        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified_by: {value: '', disabled: true},
         label: [],
       }),
 
@@ -151,6 +156,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.browserConfig.meta.name,
         description: this.browserConfig.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.browserConfig.meta.created.seconds),
+        },
+        created_by: this.browserConfig.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.browserConfig.meta.last_modified.seconds),
+        },
+        last_modified_by: this.browserConfig.meta.last_modified_by,
         label: [...this.browserConfig.meta.label]
       }
     });

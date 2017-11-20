@@ -18,7 +18,7 @@
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
             <mat-error *ngIf="!name.valid"
-                      i18n="@@metaNameRequiredError">
+                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
           </mat-form-field>
@@ -33,7 +33,7 @@
           <input matInput formControlName="user_agent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
           <mat-error *ngIf="!user_agent.valid"
-                    i18n="@@browserconfigFormUserAgentRequiredError">
+                     i18n="@@browserconfigFormUserAgentRequiredError">
             Brukeragent er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -42,7 +42,7 @@
           <input matInput formControlName="window_width" placeholder="Vindusbredde"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
           <mat-error *ngIf="!window_width.valid"
-                    i18n="@@browserconfigFormWindowWidthRequiredError">
+                     i18n="@@browserconfigFormWindowWidthRequiredError">
             Vindusbredde er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -51,7 +51,7 @@
           <input matInput formControlName="window_height" placeholder="Vindushøyde"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
           <mat-error *ngIf="!window_height.valid"
-                    i18n="@@browserconfigFormWindowHeightRequiredError">
+                     i18n="@@browserconfigFormWindowHeightRequiredError">
             Vindushøyde er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -60,7 +60,7 @@
           <input matInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
           <mat-error *ngIf="!page_load_timeout_ms.valid"
-                    i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
+                     i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
             Page load timeout er påkrevd.
           </mat-error>
         </mat-form-field>
@@ -69,34 +69,76 @@
           <input matInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
           <mat-error *ngIf="!sleep_after_pageload_ms.valid"
-                    i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
+                     i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
             Sleep after pageload er påkrevd.
           </mat-error>
         </mat-form-field>
-      </div>
-      <div fxFlex fxLayout="column">
-        <div>
-          <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
+        <div *ngIf="!showSave" class="extraMetadata">
+          <div fxLayout="row">
+            <mat-form-field>
+              <input matInput
+                     formControlName="id"
+                     placeholder="Id"
+                     i18n-placeholder="@@configIdPlaceholder">
+            </mat-form-field>
+          </div>
+          <ng-container formGroupName="meta">
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="created">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Opprettet"
+                       i18n-placeholder="@@metaCreatedInputPlaceholder">
+              </mat-form-field>
 
-            <angular2-multiselect [data]="browserScriptList"
-                                  [ngModel]="selectedBrowserScriptItems"
-                                  [settings]="browserScriptDropdownSettings"
-                                  formControlName="script_id">
-            </angular2-multiselect>
+              <mat-form-field>
+                <input matInput
+                       formControlName="created_by"
+                       placeholder="Opprettet av"
+                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="last_modified">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Sist endret"
+                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+              </mat-form-field>
 
-          </label>
-          <mat-error *ngIf="!script_id.valid"
-                    i18n="@@browserconfigFormScriptsRequiredError">
-            Scripts påkrevd.
-          </mat-error>
+              <mat-form-field>
+                <input matInput
+                       formControlName="last_modified_by"
+                       placeholder="Sist endret av"
+                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+          </ng-container>
         </div>
-
-        <app-labels type="Selector" formControlName="script_selector"></app-labels>
-
-        <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label"></app-labels>
-        </ng-container>
       </div>
+        <div fxFlex fxLayout="column">
+          <div>
+            <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
+
+              <angular2-multiselect [data]="browserScriptList"
+                                    [ngModel]="selectedBrowserScriptItems"
+                                    [settings]="browserScriptDropdownSettings"
+                                    formControlName="script_id">
+              </angular2-multiselect>
+
+            </label>
+            <mat-error *ngIf="!script_id.valid"
+                       i18n="@@browserconfigFormScriptsRequiredError">
+              Scripts påkrevd.
+            </mat-error>
+          </div>
+
+          <app-labels type="Selector" formControlName="script_selector"></app-labels>
+
+          <ng-container formGroupName="meta">
+            <app-labels type="Label" formControlName="label"></app-labels>
+          </ng-container>
+        </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary"
