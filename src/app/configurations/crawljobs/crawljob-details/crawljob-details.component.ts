@@ -11,6 +11,7 @@ import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
+import {DateTime} from '../../../commons/datetime';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -174,6 +175,14 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlJob.meta.name,
         description: this.crawlJob.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.crawlJob.meta.created.seconds),
+        },
+        created_by: this.crawlJob.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.crawlJob.meta.last_modified.seconds),
+        },
+        last_modified_by: this.crawlJob.meta.last_modified_by,
         label: [...this.crawlJob.meta.label],
       },
     });
