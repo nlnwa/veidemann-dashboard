@@ -111,6 +111,10 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created_by: {value: '', disabled: true},
+        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified_by: {value: '', disabled: true},
         label: [],
       }),
     });
@@ -130,6 +134,14 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: {
         name: this.schedule.meta.name,
         description: this.schedule.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.schedule.meta.created.seconds),
+        },
+        created_by: this.schedule.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.schedule.meta.last_modified.seconds),
+        },
+        last_modified_by: this.schedule.meta.last_modified_by,
         label: [...this.schedule.meta.label],
 
       },
