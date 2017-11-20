@@ -9,26 +9,79 @@
               i18n="@@browserscriptNewBrowserscriptHeader"> Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row" fxLayoutWrap>
-      <div fxFlex fxLayout="column">
-        <ng-container formGroupName="meta">
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutWrap>
+        <div fxFlex fxLayout="column">
+          <ng-container formGroupName="meta">
 
-          <mat-form-field>
-            <input matInput formControlName="name" placeholder="Navn"
-                   i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="!name.valid"
-                       i18n="@@metaNameRequiredError">
-              Navn er påkrevd.
-            </mat-error>
-          </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="name" placeholder="Navn"
+                     i18n-placeholder="@@metaNameInputPlaceholder">
+              <mat-error *ngIf="!name.valid"
+                         i18n="@@metaNameRequiredError">
+                Navn er påkrevd.
+              </mat-error>
+            </mat-form-field>
 
-          <mat-form-field>
+            <mat-form-field>
             <textarea matInput formControlName="description" placeholder="Beskrivelse"
                       i18n-placeholder="@@metaDescriptionInputPlaceholder"
                       style="width: auto">
             </textarea>
-          </mat-form-field>
-        </ng-container>
+            </mat-form-field>
+          </ng-container>
+
+          <div *ngIf="!showSave" class=extraMetadata>
+            <div fxLayout="row">
+              <mat-form-field>
+                <input matInput
+                       formControlName="id"
+                       placeholder="Id"
+                       i18n-placeholder="@@configIdPlaceholder">
+              </mat-form-field>
+            </div>
+            <ng-container formGroupName="meta">
+              <div fxLayout="row" fxLayoutGap="1em">
+                <mat-form-field formGroupName="created">
+                  <input matInput
+                         formControlName="seconds"
+                         placeholder="Opprettet"
+                         i18n-placeholder="@@metaCreatedInputPlaceholder">
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input matInput
+                         formControlName="created_by"
+                         placeholder="Opprettet av"
+                         i18n-placeholder="@@metaCreatedByInputPlaceholder">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutGap="1em">
+                <mat-form-field formGroupName="last_modified">
+                  <input matInput
+                         formControlName="seconds"
+                         placeholder="Sist endret"
+                         i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input matInput
+                         formControlName="last_modified_by"
+                         placeholder="Sist endret av"
+                         i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+                </mat-form-field>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div fxFlex fxLayout="column">
+          <ng-container formGroupName="meta">
+            <app-labels type="Label" formControlName="label"></app-labels>
+          </ng-container>
+        </div>
+      </div>
+      <div fxLayout="row" style="width: 100%">
+        <div style="width: 100%">
           <mat-toolbar>
             <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader"> Script</span>
             <span class="fill-space"></span>
@@ -37,20 +90,25 @@
               </button>
               <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
               </button>
+              <button mat-mini-fab (click)="isFullscreen = !isFullscreen">
+              <!--<button mat-mini-fab (click)="onFullscreen()">-->
+                <mat-icon>fullscreen</mat-icon>
+              </button>
             </div>
           </mat-toolbar>
+          <div>
           <ace-editor formControlName="script"
-                      #editor style="height:300px;">
+                      #editor style="height:300px;"
+                      [ngClass] = "{'editorFullscreen': isFullscreen }"
+                      [options]="{enableBasicAutocompletion: true,
+                                  enableLiveAutocompletion: true}">
           </ace-editor>
           <mat-error *ngIf="editor.value === '' "
                      i18n="@@browserscriptFormScriptRequiredError">
             Script er påkrevd.
           </mat-error>
-      </div>
-      <div fxFlex fxLayout="column">
-        <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label"></app-labels>
-        </ng-container>
+          </div>
+        </div>
       </div>
     </mat-card-content>
     <mat-card-actions>
