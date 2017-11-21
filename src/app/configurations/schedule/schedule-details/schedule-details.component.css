@@ -2,10 +2,3 @@
   width: 7em;
 }
 
-div.extraMetadata {
-  width: 100%;
-}
-div.extraMetadata mat-form-field {
-  width: 45%;
-  font-size: 12px;
-}

@@ -30,9 +30,9 @@
           </mat-form-field>
         </ng-container>
 
-        <div *ngIf="!showSave" class="extraMetadata">
+        <div *ngIf="!showSave">
           <div fxLayout="row">
-            <mat-form-field>
+            <mat-form-field class="extra-metadata__input">
               <input matInput
                      formControlName="id"
                      placeholder="Id"
@@ -41,14 +41,14 @@
           </div>
           <ng-container formGroupName="meta">
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="created">
+              <mat-form-field formGroupName="created" class="extra-metadata__input">
                 <input matInput
                        formControlName="seconds"
                        placeholder="Opprettet"
                        i18n-placeholder="@@metaCreatedInputPlaceholder">
               </mat-form-field>
 
-              <mat-form-field>
+              <mat-form-field class="extra-metadata__input--narrow">
                 <input matInput
                        formControlName="created_by"
                        placeholder="Opprettet av"
@@ -56,14 +56,14 @@
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="last_modified">
+              <mat-form-field formGroupName="last_modified" class="extra-metadata__input">
                 <input matInput
                        formControlName="seconds"
                        placeholder="Sist endret"
                        i18n-placeholder="@@metaLastModifiedInputPlaceholder">
               </mat-form-field>
 
-              <mat-form-field>
+              <mat-form-field class="extra-metadata__input--narrow">
                 <input matInput
                        formControlName="last_modified_by"
                        placeholder="Sist endret av"

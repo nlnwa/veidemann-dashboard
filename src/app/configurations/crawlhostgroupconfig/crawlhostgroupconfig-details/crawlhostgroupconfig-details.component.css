@@ -8,6 +8,3 @@ ttInfo:hover {
   filter: alpha(opacity=50);
 }
 
-div.extraMetadata mat-form-field {
-  width: 35%;
-}
