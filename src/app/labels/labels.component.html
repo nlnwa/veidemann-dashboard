@@ -15,11 +15,11 @@
 
 <mat-card-content *ngFor="let group of groups$ | async;" class="labelList" fxLayout="columns">
   <div class="chiplist" fxLayout="row">
-    <p class="key">{{group.key}}:</p>
+    <!--<p class="key">{{group.key}}:</p> -->
     <mat-form-field>
       <mat-chip-list #chipList>
-        <mat-chip *ngFor="let value of group.values" [selectable]="selectable">
-          {{value}}
+        <mat-chip *ngFor="let value of group.values" [selectable]="selectable" (click)="onChipClick(group.key, value)">
+          {{group.key +': '+value}}
           <mat-icon matChipRemove (click)="removeLabel(group.key, value)">cancel</mat-icon>
         </mat-chip>
         <input placeholder="NewChip"
@@ -54,9 +54,16 @@
       </mat-icon>
     </mat-form-field>
     <mat-card-actions>
-      <button i18n="@@commonButtonAdd" mat-button color="accent"
+      <button i18n="@@commonButtonAdd" mat-button color="primary"
+              *ngIf="!canUpdateLabel"
               [disabled]="!labelForm.valid"
               (click)="onNewLabel(newKey.value, newValue.value)">Legg til
+      </button>
+      <button mat-button color="accent"
+              *ngIf="canUpdateLabel"
+              [disabled]="!labelForm.valid"
+      (click)="onUpdateLabel(newKey.value, newValue.value)"> Oppdater
+
       </button>
       <button i18n="@@commonButtonCancel" mat-button color="warn"
               (click)="newLabelCard(false)">Avbryt

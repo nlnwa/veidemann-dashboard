@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnChanges,} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {ENTER} from "@angular/cdk/keycodes";
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {ENTER} from '@angular/cdk/keycodes';
 
 const COMMA = 188;
 
@@ -24,6 +24,8 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   @Input() type;
 
   public showAddLabelCard = false;
+  public canUpdateLabel = false;
+  private indexOfClickedLabel;
   private labels: Label[];
 
   public myFocusTriggeringEventEmitter = new EventEmitter<boolean>();
@@ -110,7 +112,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     if (value) {
       value = '';
     }
-    //regroup causes the "type" field to lose focus, and you have to click on fields every time
+    // regroup causes the "type" field to lose focus, and you have to click on fields every time
     this.regroup();
     this.ngOnChanges();
     this.onChange(this.labels);
@@ -126,9 +128,47 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
     this.onChange(this.labels);
   }*/
 
-  newLabelCard(value: boolean) {
-    this.showAddLabelCard = value;
+  onChipClick(key: string, value: string): void {
+    const index = this.labels.findIndex((element) => {
+      if (element.key === key && element.value === value) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    this.indexOfClickedLabel = index;
+    this.showAddLabelCard = true;
+    this.canUpdateLabel = true;
+    this.labelForm.controls['newKeyInput'].setValue(key);
+    this.labelForm.controls['newValueInput'].setValue(value);
   }
+
+  onUpdateLabel(key: string, value: string) {
+    if ((value || '').trim()) {
+      this.labels.push({
+        key: key,
+        value: value
+      });
+    }
+    if (value) {
+      value = '';
+    }
+    // regroup causes the "type" field to lose focus, and you have to click on fields every time
+    this.labels.splice(this.indexOfClickedLabel, 1);
+    this.canUpdateLabel = false;
+    this.regroup();
+    this.ngOnChanges();
+    this.onChange(this.labels);
+  }
+
+
+  newLabelCard(value: boolean) {
+      this.showAddLabelCard = value;
+      this.canUpdateLabel = false;
+      this.labelForm.controls['newKeyInput'].setValue('');
+      this.labelForm.controls['newValueInput'].setValue('');
+  }
+
 
   removeLabel(key: string, value: string): void {
 
