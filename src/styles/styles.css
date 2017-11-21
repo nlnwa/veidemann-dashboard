@@ -12,3 +12,21 @@ html, body {
 .fill-space {
   flex: 1 1 auto;
 }
+
+
+.extra-metadata__input.mat-form-field {
+  width: 35%;
+}
+
+.extra-metadata__input--wide.mat-form-field {
+width: 55%;
+}
+
+.extra-metadata__input--narrow.mat-form-field{
+  width: 20%;
+}
+
+.extra-metadata__input--narrow-wide.mat-form-field {
+  width:30%;
+}
+

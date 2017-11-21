@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {CrawlHostGroupConfigService} from '../crawlhostgroupconfig.service';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
 import {VALID_IP_PATTERN} from '../../../commons/util';
+import {DateTime} from '../../../commons/datetime';
 
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
   styleUrls: ['./crawlhostgroupconfig-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
@@ -120,6 +121,14 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
         description: this.crawlHostGroupConfig.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.crawlHostGroupConfig.meta.created.seconds),
+        },
+        created_by: this.crawlHostGroupConfig.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.crawlHostGroupConfig.meta.last_modified.seconds),
+        },
+        last_modified_by: this.crawlHostGroupConfig.meta.last_modified_by,
         label: [...this.crawlHostGroupConfig.meta.label],
       }
     });
@@ -130,16 +139,14 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   private prepareSave(): CrawlHostGroupConfig {
     const formModel = this.form.value;
-
     const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
       meta: {
         name: formModel.meta.name,
         description: formModel.meta.description,
-        label: labelsDeepCopy,
+        label: formModel.meta.label.map(label => ({...label})),
       }
     };
   }

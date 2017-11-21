@@ -17,7 +17,7 @@ import {PolitenessConfigService} from '../politenessconfig/politenessconfig.serv
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
-          <span class="toolbar--title">Crawljobs</span>
+          <span class="toolbar--title">Crawlconfigs</span>
           <button mat-mini-fab (click)="onCreateCrawlConfig()">
             <mat-icon>add</mat-icon>
           </button>

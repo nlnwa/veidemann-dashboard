@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
+import {DateTime} from '../../../commons/datetime';
 
 
 @Component({
@@ -146,6 +147,14 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlConfig.meta.name,
         description: this.crawlConfig.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.created.seconds),
+        },
+        created_by: this.crawlConfig.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.last_modified.seconds),
+        },
+        last_modified_by: this.crawlConfig.meta.last_modified_by,
         label: [...this.crawlConfig.meta.label],
       },
     });

@@ -16,6 +16,7 @@ import 'brace/theme/chrome';
 import 'brace/theme/monokai';
 import 'brace/mode/javascript';
 import 'brace/ext/language_tools.js';
+import {DateTime} from '../../../commons/datetime';
 
 declare var ace: any;
 
@@ -27,8 +28,6 @@ declare var ace: any;
 })
 
 export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
-
-  isClassVisible: false;
 
   @Input()
   browserScript: BrowserScript;
@@ -115,6 +114,10 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created_by: {value: '', disabled: true},
+        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified_by: {value: '', disabled: true},
         label: [],
       }),
     });
@@ -127,6 +130,14 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
       meta: {
         name: this.browserScript.meta.name,
         description: this.browserScript.meta.description,
+        created: {
+          seconds: DateTime.convertFullTimestamp(this.browserScript.meta.created.seconds),
+        },
+        created_by: this.browserScript.meta.created_by,
+        last_modified: {
+          seconds: DateTime.convertFullTimestamp(this.browserScript.meta.last_modified.seconds),
+        },
+        last_modified_by: this.browserScript.meta.last_modified_by,
         label: [...this.browserScript.meta.label],
       }
     });
@@ -143,10 +154,6 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
-        // created: '',
-        created_by: '',
-        // last_modified: null,
-        last_modified_by: '',
         label: labelsDeepCopy
       }
     };

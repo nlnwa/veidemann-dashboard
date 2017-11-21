@@ -2,12 +2,12 @@
   <mat-table [dataSource]="dataSource">
 
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>URL</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Navn</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Beskrivelse</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
     </ng-container>
 

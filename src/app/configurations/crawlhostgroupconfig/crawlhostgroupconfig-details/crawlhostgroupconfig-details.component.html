@@ -9,13 +9,13 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row" fxLayoutWrap>
-      <div fxFlex fxLayout="column" fxLayoutWrap>
+      <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="!form.get('meta.name').valid"
-                      i18n="@@metaNameRequiredError">
+            <mat-error *ngIf="!name.valid"
+                       i18n="@@metaNameRequiredError">
               Navn er påkrevd.
             </mat-error>
           </mat-form-field>
@@ -24,15 +24,57 @@
             <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
             <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
-                     matTooltip='Legg til en fritekst om konfigurasjonen'
-                     i18n-matTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
+                      matTooltip='Legg til en fritekst om konfigurasjonen'
+                      i18n-matTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
             </mat-icon>
           </mat-form-field>
         </ng-container>
+
+        <div *ngIf="!showSave">
+          <div fxLayout="row">
+            <mat-form-field class="extra-metadata__input">
+              <input matInput
+                     formControlName="id"
+                     placeholder="Id"
+                     i18n-placeholder="@@configIdPlaceholder">
+            </mat-form-field>
+          </div>
+          <ng-container formGroupName="meta">
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="created" class="extra-metadata__input">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Opprettet"
+                       i18n-placeholder="@@metaCreatedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field class="extra-metadata__input--narrow">
+                <input matInput
+                       formControlName="created_by"
+                       placeholder="Opprettet av"
+                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="last_modified" class="extra-metadata__input">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Sist endret"
+                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field class="extra-metadata__input--narrow">
+                <input matInput
+                       formControlName="last_modified_by"
+                       placeholder="Sist endret av"
+                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </div>
       </div>
 
       <div fxFlex fxLayout="column">
-
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
@@ -51,7 +93,7 @@
                 <input matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
                 <mat-error *ngIf="!ipFromControl?.valid"
-                          i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
+                           i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
               </mat-form-field>
@@ -59,7 +101,7 @@
                 <input matInput formControlName="ip_to" placeholder="Til IP-addresse"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
                 <mat-error *ngIf="!ipToControl?.valid"
-                          i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
+                           i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
               </mat-form-field>
