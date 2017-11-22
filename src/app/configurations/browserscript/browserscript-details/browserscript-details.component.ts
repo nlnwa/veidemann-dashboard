@@ -113,13 +113,6 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  onEditorFontSizeDecrease() {
-    const currentFontSize = this.editor.getEditor().getFontSize();
-    this.editor.setOptions({
-      fontSize: currentFontSize - 1,
-    })
-  }
-
   onEditorDarkTheme() {
     this.editor.setTheme('monokai');
   }
