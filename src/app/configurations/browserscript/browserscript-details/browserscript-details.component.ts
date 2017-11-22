@@ -99,6 +99,27 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     this.updateForm();
   }
 
+  onEditorChangeFontSize(value) {
+    const currentFontSize = this.editor.getEditor().getFontSize();
+    if (value === 'up') {
+      this.editor.setOptions({
+        fontSize: currentFontSize + 1,
+      })
+    }
+    if (value === 'down') {
+      this.editor.setOptions({
+        fontSize: currentFontSize - 1,
+      })
+    }
+  }
+
+  onEditorFontSizeDecrease() {
+    const currentFontSize = this.editor.getEditor().getFontSize();
+    this.editor.setOptions({
+      fontSize: currentFontSize - 1,
+    })
+  }
+
   onEditorDarkTheme() {
     this.editor.setTheme('monokai');
   }

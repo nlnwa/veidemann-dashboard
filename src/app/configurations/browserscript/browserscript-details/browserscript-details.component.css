@@ -1,4 +1,4 @@
-.mat-mini-fab.darkEditor{
+.mat-mini-fab.darkEditor {
   background-color: black;
   color: white;
   width: 20px;
@@ -8,11 +8,29 @@
 
 }
 
-.mat-mini-fab.lightEditor{
+.mat-mini-fab.lightEditor {
   background-color: mintcream;
   color: black;
-  width:20px;
+  width: 20px;
   height: 20px;
   font-size: 10px;
   text-align: center;
 }
+
+.icon-black.mat-icon {
+  color: black;
+}
+
+.vertical-divider {
+  border-right: inset;
+  border-right-width: 1px;
+}
+
+.button-icon--spacing {
+  margin-left: -10px;
+}
+
+.button-row--margin {
+  margin-left: 20px;
+}
+
