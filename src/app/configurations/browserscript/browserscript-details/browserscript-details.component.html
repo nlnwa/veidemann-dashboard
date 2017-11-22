@@ -85,23 +85,35 @@
           <mat-toolbar>
             <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader"> Script</span>
             <span class="fill-space"></span>
+            <div class="vertical-divider">
+              <button mat-icon-button (click)="onEditorChangeFontSize('up')">
+                <mat-icon>format_size</mat-icon>
+                <mat-icon class="button-icon--spacing">arrow_drop_up</mat-icon>
+              </button>
+              <button mat-icon-button (click)="onEditorChangeFontSize('down')">
+                <mat-icon>format_size</mat-icon>
+                <mat-icon class="button-icon--spacing">arrow_drop_down</mat-icon>
+              </button>
+            </div>
             <div class="button-row">
-              <button class="darkEditor" mat-mini-fab (click)="onEditorDarkTheme()">
-              </button>
-              <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
-              </button>
+              <div class="button-row--margin">
+                <button class="darkEditor" mat-mini-fab (click)="onEditorDarkTheme()">
+                </button>
+                <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
+                </button>
+              </div>
             </div>
           </mat-toolbar>
           <div>
-          <ace-editor formControlName="script"
-                      #editor style="height:300px;"
-                      [options]="{enableBasicAutocompletion: true,
+            <ace-editor formControlName="script"
+                        #editor style="height:300px;"
+                        [options]="{enableBasicAutocompletion: true,
                                   enableLiveAutocompletion: true}">
-          </ace-editor>
-          <mat-error *ngIf="editor.value === '' "
-                     i18n="@@browserscriptFormScriptRequiredError">
-            Script er påkrevd.
-          </mat-error>
+            </ace-editor>
+            <mat-error *ngIf="editor.value === '' "
+                       i18n="@@browserscriptFormScriptRequiredError">
+              Script er påkrevd.
+            </mat-error>
           </div>
         </div>
       </div>
