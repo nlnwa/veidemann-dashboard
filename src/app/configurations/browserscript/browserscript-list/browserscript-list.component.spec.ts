@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserScriptListComponent} from './browserscript-list.component';
 
-describe('BrowserscriptListComponent', () => {
+xdescribe('BrowserscriptListComponent', () => {
   let component: BrowserScriptListComponent;
   let fixture: ComponentFixture<BrowserScriptListComponent>;
 

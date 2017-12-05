@@ -3,19 +3,21 @@ import {BrowserScriptDetailsComponent} from './browserscript-details.component';
 import {BrowserScript, Label} from '../../../commons/models/config.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
+import {DateTime} from '../../../commons/datetime';
+import {AceEditorModule} from "ng2-ace-editor";
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
   let fixture: ComponentFixture<BrowserScriptDetailsComponent>;
   let expectedBrowserScript;
-  let testLabel;
+  let expectedLabel;
 
+  // Async beforeEach needed when using external template
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [BrowserScriptDetailsComponent],
-      providers: [
-        FormBuilder
-      ],
+      providers: [FormBuilder],
+      imports: [AceEditorModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
@@ -28,36 +30,41 @@ describe('BrowserScriptDetailsComponent', () => {
 
     // Pretend that it was wired to something that supplied a browserscript
     expectedBrowserScript = new BrowserScript();
-    testLabel = new Label();
+    expectedLabel = new Label();
 
-    testLabel = {
+    // meta.label mock
+    expectedLabel = {
       type: 'Test',
       value: 'test',
-    }
+    };
+
+    // BrowserScript mock
     expectedBrowserScript = {
       id: '1000',
       script: 'var test=5; console.log(test)',
       meta: {
         name: 'Test',
         description: 'Dette er en test',
-        created: '',
+        created: DateTime.convertFullTimestamp(1511964561),
         created_by: 'admin',
-        last_modified: '',
+        last_modified: DateTime.convertFullTimestamp(1511964561),
         last_modified_by: 'admin',
-        label: [testLabel]
+        label: [expectedLabel]
       }
-    }
+    };
 
+    // Setting the @Input for the component to be our mocked  browserscript object
     component.browserScript = expectedBrowserScript;
+
+    // Triggering ngOnchanges which in turn calls updateForm() and fills the form
     component.ngOnChanges({
       browserScript: new SimpleChange(null, component.browserScript, null)
     });
 
     fixture.detectChanges();
-    // component.ngAfterViewInit();
-    console.log(component.browserScript);
   });
 
+  // Tests
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -68,65 +75,79 @@ describe('BrowserScriptDetailsComponent', () => {
 
   it('should have the correct data from @Input ', () => {
     expect(component.browserScript.id).toEqual('1000');
-    expect(component.browserScript.script).toContain('var');
+    expect(component.browserScript.script).toEqual('var test=5; console.log(test)');
     expect(component.browserScript.meta.name).toEqual('Test');
     expect(component.browserScript.meta.description).toEqual('Dette er en test');
-    expect(component.browserScript.meta.label).toEqual([testLabel]);
+    expect(component.browserScript.meta.label).toEqual([expectedLabel]);
   });
 
   it('should create a "FormGroup"', () => {
     expect(component.form instanceof FormGroup).toBe(true);
   });
 
-  it('form should contain data', () => {
-    console.log(component.form);
-  });
-
-
-  it('Form should be valid', () => {
+  it('should have a valid form', () => {
     expect(component.form.valid).toBe(true);
     expect(component.form.valid).not.toBe(false);
   });
 
-  it('Should not be able to update or save form', () => {
-    expect(component.showSave).toBe(false);
-    expect(component.canUpdate).toBe(false);
-  })
-
-  // Test that data supplied to form is correct and that logic for buttons is correct.
-  it('should disable update button', () => {
-    expect(component.canUpdate).toBe(false);
-    console.log('status update', component.canUpdate);
-  })
-
-
-  // Test update data in form. Buttons should be enabled, and form validation should work
-
-  it('Form should not be valid after removing name', () => {
+  it('Form should not be valid after removing a required field', () => {
     component.form.patchValue({
       meta: {
         name: '',
       }
     });
     expect(component.form.valid).toBe(false);
-  })
+  });
 
-  it('Should enable update button when editing form', () => {
 
-    const compiled = fixture.debugElement.nativeElement;
-    const nameInput = compiled.querySelector('input[formControlName=name]');
-    nameInput.value = 'Test 2';
+  it('Should update correct data', (done) => {
+    // Update the form with an invalid value
+    component.form.patchValue({
+      meta: {
+        name: 'E',
+      }
+    });
+    // Check that form is invalid after update
+    expect(component.form.valid).toBe(false);
 
-    dispatchEvent(nameInput);
-
-    console.log(component.form);
-    console.log('Form valid', component.form.valid);
-    console.log('Kan oppdateres', component.canUpdate);
-    console.log('Form dirty', component.form.dirty);
+    // Update the form with a valid value
+    component.form.patchValue({
+      meta: {
+        name: 'Endret navn',
+      }
+    });
     expect(component.form.valid).toBe(true);
-    expect(component.canUpdate).toBe(true);
-  })
+    // check that the form is valid after update
 
-  // Test that saved updated data is correct
+    // Subscribe to the output of the component and check that emitted values are the same as the ones in the form
+    component.update.subscribe((browserScriptValue: BrowserScript) => {
+      expect(browserScriptValue.id).toBe(expectedBrowserScript.id);
+      expect(browserScriptValue.script).toBe(expectedBrowserScript.script);
+      expect(browserScriptValue.meta.name).toBe('Endret navn');
+      expect(browserScriptValue.meta.description).toBe(expectedBrowserScript.meta.description);
+      expect(browserScriptValue.meta.label).toEqual(expectedBrowserScript.meta.label);
+      done();
+    });
+
+    // trigger the update function
+    component.onUpdate();
+  });
+
+  it('Should save correct data', (done) => {
+    expect(component.form.valid).toBe(true);
+
+    component.save.subscribe((browserScriptValue: BrowserScript) => {
+      expect(browserScriptValue.id).toBe(expectedBrowserScript.id);
+      expect(browserScriptValue.script).toBe(expectedBrowserScript.script);
+      expect(browserScriptValue.meta.name).toBe(expectedBrowserScript.meta.name);
+      expect(browserScriptValue.meta.description).toBe(expectedBrowserScript.meta.description);
+      expect(browserScriptValue.meta.label).toEqual(expectedBrowserScript.meta.label);
+      done();
+    });
+
+    component.onSave();
+
+  });
+
 });
 
