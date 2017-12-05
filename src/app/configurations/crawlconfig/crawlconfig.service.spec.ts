@@ -1,7 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {CrawlConfigService} from './crawlconfig.service';
 
-describe('CrawlConfigService', () => {
+xdescribe('CrawlConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [CrawlConfigService]

@@ -1,7 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {LogService} from './log.service';
 
-describe('LogService', () => {
+xdescribe('LogService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [LogService]
