@@ -4,6 +4,7 @@ import {MatPaginator} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {empty} from 'rxjs/observable/empty';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/startWith';
 import {Subscription} from 'rxjs/Subscription';
 
 @Injectable()
