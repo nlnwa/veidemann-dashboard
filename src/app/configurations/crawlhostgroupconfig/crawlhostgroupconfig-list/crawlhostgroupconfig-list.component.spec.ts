@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {CrawlhostgroupconfigListComponent} from './crawlhostgroupconfig-list.component';
+import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list.component';
 
 describe('CrawlhostgroupconfigListComponent', () => {
-  let component: CrawlhostgroupconfigListComponent;
-  let fixture: ComponentFixture<CrawlhostgroupconfigListComponent>;
+  let component: CrawlHostGroupConfigListComponent;
+  let fixture: ComponentFixture<CrawlHostGroupConfigListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CrawlhostgroupconfigListComponent]
+      declarations: [CrawlHostGroupConfigListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrawlhostgroupconfigListComponent);
+    fixture = TestBed.createComponent(CrawlHostGroupConfigListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

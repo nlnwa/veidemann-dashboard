@@ -68,6 +68,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
     this.editor.setTheme('chrome');
     this.editor.setMode('javascript');
   }
@@ -136,7 +137,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
       }),
     });
   }
-
+  1511964561
   private updateForm() {
     this.form.patchValue({
       id: this.browserScript.id,

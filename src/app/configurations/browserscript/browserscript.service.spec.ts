@@ -1,7 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {BrowserScriptService} from './browserscript.service';
 
-describe('BrowserScriptService', () => {
+xdescribe('BrowserScriptService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [BrowserScriptService]
