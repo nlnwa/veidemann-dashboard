@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/';
-import {ScheduleService} from '../schedule.service';
 import {Schedule} from '../../../commons/models/config.model';
 import {
   VALID_CRON_DOM_PATTERN,
@@ -28,13 +27,13 @@ export class ScheduleDetailsComponent implements OnChanges {
   save = new EventEmitter<Schedule>();
   @Output()
   update = new EventEmitter<Schedule>();
+  // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<Schedule>();
 
   form: FormGroup;
 
-  constructor(private scheduleService: ScheduleService,
-              private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -81,7 +80,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-  this.delete.emit(this.schedule);
+    this.delete.emit(this.schedule);
   }
 
   onRevert() {
@@ -145,9 +144,10 @@ export class ScheduleDetailsComponent implements OnChanges {
         label: [...this.schedule.meta.label],
 
       },
-    })
+    });
+
     if (this.schedule.valid_from !== null) {
-      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -165,7 +165,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
     }
     if (this.schedule.valid_to !== null) {
-      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.patchValue({
         valid_to: {
           year: year,
