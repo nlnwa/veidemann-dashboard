@@ -20,6 +20,5 @@ ENV PROXY_ADDR=localhost:3010 \
     OPENID_CONNECT_ISSUER=http://localhost:32000/dex
 
 CMD envsubst '${PROXY_ADDR}' < /usr/src/app/default.conf > /etc/nginx/conf.d/default.conf \
-&& MAIN_BUNDLE=$(basename "$(ls /usr/src/app/main.*.bundle.js)") \
-&& envsubst '${OPENID_CONNECT_ISSUER}' < /usr/src/app/${MAIN_BUNDLE} > /usr/share/nginx/html/${MAIN_BUNDLE} \
+&& envsubst '${OPENID_CONNECT_ISSUER}' < usr/src/app/assets/auth_config.json > /usr/share/nginx/html/assets/auth_config.json \
 && nginx -g "daemon off;"

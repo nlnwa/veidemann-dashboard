@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
+import {HttpClient} from '@angular/common/http';
+import 'rxjs/add/operator/toPromise';
 import {environment} from '../../environments/environment';
+import {DynamicAuthConfig} from './dynamic.auth.config';
 
 @Injectable()
 export class AuthService {
   constructor(private oauthService: OAuthService) {
-    this.configureAuth();
   }
 
   public get groups() {
@@ -31,9 +33,15 @@ export class AuthService {
     this.oauthService.logOut();
   }
 
-  private configureAuth() {
+  public configureAuth(http: HttpClient) {
     this.oauthService.configure(environment.auth as AuthConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    http.get<DynamicAuthConfig>('assets/auth_config.json')
+      .toPromise()
+      .then((config) => {
+        this.oauthService.issuer = config.issuer;
+        this.oauthService.requireHttps = config.requireHttps;
+        this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+        this.oauthService.loadDiscoveryDocumentAndTryLogin();
+      });
   }
 }
