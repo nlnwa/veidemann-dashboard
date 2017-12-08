@@ -7,7 +7,8 @@ import {DynamicAuthConfig} from './dynamic.auth.config';
 
 @Injectable()
 export class AuthService {
-  constructor(private oauthService: OAuthService) {
+
+  constructor(private http: HttpClient, private oauthService: OAuthService) {
   }
 
   public get groups() {
@@ -33,11 +34,10 @@ export class AuthService {
     this.oauthService.logOut();
   }
 
-  public configureAuth(http: HttpClient) {
+  public configureAuth() {
     this.oauthService.configure(environment.auth as AuthConfig);
-    http.get<DynamicAuthConfig>('assets/auth_config.json')
-      .toPromise()
-      .then((config) => {
+    this.http.get<DynamicAuthConfig>('assets/auth_config.json')
+      .subscribe((config) => {
         this.oauthService.issuer = config.issuer;
         this.oauthService.requireHttps = config.requireHttps;
         this.oauthService.tokenValidationHandler = new JwksValidationHandler();

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DateTime} from './commons/';
 import {AuthService} from './auth/auth.service';
-import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +11,7 @@ export class AppComponent implements OnInit {
   myDate: String;
   isExpertMode: boolean;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private authService: AuthService) {
   }
 
   get name(): string {
@@ -38,7 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.configureAuth(this.http);
+    this.authService.configureAuth();
     this.getTimestamp();
   }
 
