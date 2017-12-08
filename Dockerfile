@@ -5,7 +5,8 @@ WORKDIR /usr/src/app
 
 RUN yarn install && yarn cache clean
 COPY . .
-RUN node_modules/@angular/cli/bin/ng build --target=production
+RUN node_modules/@angular/cli/bin/ng set warnings.typescriptMismatch=false \
+&& node_modules/@angular/cli/bin/ng build --target=production
 
 
 FROM nginx:alpine

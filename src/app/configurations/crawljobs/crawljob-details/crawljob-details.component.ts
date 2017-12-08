@@ -10,7 +10,6 @@ import {
 import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
-import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
 import {DateTime} from '../../../commons/datetime';
 
 @Component({
@@ -38,14 +37,14 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  selectedScheduleItems: ListItem[];
+  selectedScheduleItems: any[];
   scheduleDropdownSettings = {
     singleSelection: true,
     text: 'Velg Schedule',
     enableSearchFilter: true
   };
 
-  selectedCrawlConfigItems: ListItem[];
+  selectedCrawlConfigItems: any[];
   crawlConfigDropdownSettings = {
     singleSelection: true,
     text: 'Velg crawlConfig',
