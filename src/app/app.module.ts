@@ -55,12 +55,6 @@ import {LabelsComponent} from './labels/labels.component';
 import {SearchService} from './search-service/search.service';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {SnackBarService} from './snack-bar-service/snack-bar.service';
-/**
- * Need to import this old HttpModule because angular-oauth2-oidc use it
- * but does not import it.
- * @see https://github.com/manfredsteyer/angular-oauth2-oidc/issues/130
- */
-import {HttpModule} from '@angular/http';
 import {TokenInterceptor} from './auth/token.interceptor';
 import {AuthService} from './auth/auth.service';
 import {ErrorDialogComponent} from './dialog/error-dialog/error-dialog.component';
@@ -130,7 +124,6 @@ import {BrowserScriptPageComponent} from './configurations/browserscript/browser
     AngularMultiSelectModule,
     MaterialModule,
     FlexLayoutModule,
-    HttpModule,
     OAuthModule.forRoot(),
     AceEditorModule,
   ],
