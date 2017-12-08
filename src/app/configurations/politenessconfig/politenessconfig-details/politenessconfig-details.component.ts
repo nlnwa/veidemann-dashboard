@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
-import {ListItem} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown/multiselect.model';
 import {DateTime} from '../../../commons/datetime';
 
 
@@ -30,7 +29,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   form: FormGroup;
   robotsPolicyList: any[];
 
-  selectedRobotsPolicies: ListItem[];
+  selectedRobotsPolicies: any[];
   robotsPolicyDropdownSettings = {
     singleSelection: true,
     text: 'Velg Robots policy',
