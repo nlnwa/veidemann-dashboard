@@ -16,6 +16,6 @@ export const environment = {
     // The first three are defined by OIDC. The 4th is a usecase-specific one
     scope: 'openid profile email groups offline_access audience:server:client_id:veidemann-api',
 
-    requireHttps: true
+    requireHttps: false
   },
 };

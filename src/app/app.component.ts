@@ -37,6 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.configureAuth();
     this.getTimestamp();
   }
 
