@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   isExpertMode: boolean;
 
   constructor(private authService: AuthService) {
+    this.authService.configureAuth();
   }
 
   get name(): string {
@@ -37,7 +38,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.configureAuth();
     this.getTimestamp();
   }
 
