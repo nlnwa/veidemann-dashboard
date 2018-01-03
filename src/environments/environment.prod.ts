@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  API_URL: '/api',
+  API_URL: '/veidemann/api',
   auth: {
 
     // Url of the Identity Provider
