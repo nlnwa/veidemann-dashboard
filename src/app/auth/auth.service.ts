@@ -39,7 +39,7 @@ export class AuthService {
 
   public configureAuth() {
     this.oauthService.configure(environment.auth as AuthConfig);
-    this.http.get<DynamicAuthConfig>('assets/auth_config.json')
+    this.http.get<DynamicAuthConfig>(environment.dynamicAuthConfig)
       .subscribe((config) => {
         this.oauthService.issuer = config.issuer;
         this.oauthService.requireHttps = config.requireHttps;

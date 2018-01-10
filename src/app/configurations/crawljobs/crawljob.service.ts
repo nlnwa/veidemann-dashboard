@@ -7,7 +7,7 @@ import {CrawlJob} from '../../commons/models/config.model';
 @Injectable()
 export class CrawlJobService extends CrudService<CrawlJob> {
 
-  static readonly URL: string = `${environment.API_URL}/crawljobs`;
+  static readonly URL: string = `${environment.apiGateway}/crawljobs`;
 
   constructor(protected http: HttpClient) {
     super(http, CrawlJobService.URL);

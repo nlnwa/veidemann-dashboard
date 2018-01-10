@@ -8,7 +8,7 @@ import {PolitenessConfig} from '../../commons/models/config.model';
 @Injectable()
 export class PolitenessConfigService extends CrudService<PolitenessConfig> {
 
-  static readonly URL: string = `${environment.API_URL}/politenessconfigs`;
+  static readonly URL: string = `${environment.apiGateway}/politenessconfigs`;
 
   constructor(protected http: HttpClient) {
     super(http, PolitenessConfigService.URL);
