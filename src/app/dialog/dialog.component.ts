@@ -16,8 +16,9 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.errorService.error$.subscribe((error) => {
+      console.error(error);
       if (this.dialog.openDialogs.length > 0) {
-        this.dialog.closeAll();
+        // TODO: (marius beck) show all errors explicitly (and not just the first)
       } else {
         this.dialog.open(ErrorDialogComponent, {data: {error}});
       }
