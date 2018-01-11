@@ -14,7 +14,7 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.getAuthService().authorizationHeader) {
+    if (this.getAuthService().authorizationHeader && request.url.indexOf('/api/') !== -1 ) {
       request = request.clone({
         setHeaders: {
           Authorization: this.getAuthService().authorizationHeader

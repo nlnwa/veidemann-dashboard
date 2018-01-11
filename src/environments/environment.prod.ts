@@ -1,13 +1,16 @@
+const basePath = '/veidemann';
+
 export const environment = {
   production: true,
-  API_URL: '/veidemann/api',
+  dynamicAuthConfig: basePath + '/assets/auth_config.json',
+  apiGateway: basePath + '/api',
   auth: {
 
     // Url of the Identity Provider
-    issuer: '$OPENID_CONNECT_ISSUER',
+    issuer: '${OPENID_CONNECT_ISSUER}',
 
     // URL of the SPA to redirect the user to after login
-    redirectUri: window.location.origin + '/activity',
+    redirectUri: window.location.origin + basePath + '/activity',
 
     // The SPA's id. The SPA is registered with this id at the auth-server
     clientId: 'veidemann-gui',

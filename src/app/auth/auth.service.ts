@@ -4,6 +4,8 @@ import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import {environment} from '../../environments/environment';
 import {DynamicAuthConfig} from './dynamic.auth.config';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/empty';
 
 @Injectable()
 export class AuthService {
@@ -39,12 +41,13 @@ export class AuthService {
 
   public configureAuth() {
     this.oauthService.configure(environment.auth as AuthConfig);
-    this.http.get<DynamicAuthConfig>('assets/auth_config.json')
+    this.http.get<DynamicAuthConfig>(environment.dynamicAuthConfig)
       .subscribe((config) => {
         this.oauthService.issuer = config.issuer;
         this.oauthService.requireHttps = config.requireHttps;
         this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-        this.oauthService.loadDiscoveryDocumentAndTryLogin();
+        this.oauthService.loadDiscoveryDocumentAndTryLogin()
+          .catch(_ => Observable.empty());
       });
   }
 }

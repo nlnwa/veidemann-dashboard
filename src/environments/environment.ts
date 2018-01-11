@@ -5,7 +5,8 @@
 
 export const environment = {
   production: false,
-  API_URL: '/api',
+  dynamicAuthConfig: '/assets/auth_config.json',
+  apiGateway: '/api',
   auth: {
 
     // Url of the Identity Provider
