@@ -10,7 +10,7 @@ export const environment = {
     issuer: '${OPENID_CONNECT_ISSUER}',
 
     // URL of the SPA to redirect the user to after login
-    redirectUri: window.location.origin + '/activity',
+    redirectUri: window.location.origin + basePath + '/activity',
 
     // The SPA's id. The SPA is registered with this id at the auth-server
     clientId: 'veidemann-gui',
