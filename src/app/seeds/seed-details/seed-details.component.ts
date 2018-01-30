@@ -79,7 +79,7 @@ export class SeedDetailComponent implements OnChanges {
         id: {value: '', disabled: true},
         disabled: true,
         entity_id: {value: '', disabled: true},
-        job_id: [[], CustomValidators.nonEmpty],
+        job_id: [],
         scope: this.fb.group({surt_prefix: ''}),
         meta: this.fb.group({
           name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
