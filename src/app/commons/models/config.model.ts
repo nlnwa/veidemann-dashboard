@@ -257,3 +257,23 @@ export class Timestamp {
     this.seconds = null;
   }
 }
+
+export class RoleMapping {
+  id: string;
+
+  // email_or_group
+  email?: string;
+  group?: string;
+  role: Role[]
+
+  constructor() {
+    this.id = '';
+    this.email = '';
+    this.group = '';
+    this.role = [];
+  }
+}
+
+export class Role {
+  role: string;
+}

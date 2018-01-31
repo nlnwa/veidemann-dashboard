@@ -72,6 +72,10 @@ import {SchedulePageComponent} from './configurations/schedule/schedule-page.com
 import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
+import {RoleMappingPageComponent} from './rolemapping/rolemapping-page.component';
+import {RoleMappingService} from './rolemapping/rolemapping.service';
+import {RoleMappingListComponent} from './rolemapping/rolemapping-list/rolemapping-list.component';
+import {RoleMappingDetailsComponent} from './rolemapping/rolemapping-details/rolemapping-details.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +116,9 @@ import {BrowserScriptPageComponent} from './configurations/browserscript/browser
     BrowserConfigPageComponent,
     BrowserScriptPageComponent,
     CrawlConfigPageComponent,
+    RoleMappingListComponent,
+    RoleMappingDetailsComponent,
+    RoleMappingPageComponent,
   ],
   entryComponents: [ErrorDialogComponent],
   imports: [
@@ -142,6 +149,7 @@ import {BrowserScriptPageComponent} from './configurations/browserscript/browser
     LogService,
     SnackBarService,
     ErrorService,
+    RoleMappingService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: ErrorHandler, useClass: ApplicationErrorHandler},
   ],
