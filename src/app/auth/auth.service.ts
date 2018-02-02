@@ -41,13 +41,18 @@ export class AuthService {
 
   public configureAuth() {
     this.oauthService.configure(environment.auth as AuthConfig);
-    this.http.get<DynamicAuthConfig>(environment.dynamicAuthConfig)
-      .subscribe((config) => {
-        this.oauthService.issuer = config.issuer;
-        this.oauthService.requireHttps = config.requireHttps;
-        this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-        this.oauthService.loadDiscoveryDocumentAndTryLogin()
-          .catch(_ => Observable.empty());
-      });
+    if (environment.production) {
+      this.http.get<DynamicAuthConfig>(environment.dynamicAuthConfig)
+        .subscribe((config) => {
+          this.oauthService.issuer = config.issuer;
+          this.oauthService.requireHttps = config.requireHttps;
+          this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+          this.oauthService.loadDiscoveryDocumentAndTryLogin()
+            .catch(_ => Observable.empty());
+        });
+    } else {
+      this.oauthService.loadDiscoveryDocumentAndTryLogin()
+        .catch(_ => Observable.empty());
+    }
   }
 }
