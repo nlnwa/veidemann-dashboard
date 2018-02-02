@@ -10,7 +10,7 @@ export const environment = {
   auth: {
 
     // Url of the Identity Provider
-    issuer: 'http://$EXTERNAL_HOSTNAME:32000/dex',
+    issuer: '${OPENID_CONNECT_ISSUER}',
 
     // URL of the SPA to redirect the user to after login
     redirectUri: window.location.origin + '/activity',
