@@ -20,7 +20,7 @@ LABEL maintainer="nettarkivet@nb.no"
 ARG BASE_HREF=/veidemann
 
 COPY --from=0 /usr/src/app/dist/ /usr/share/nginx/html${BASE_HREF}
-COPY nginx/default.conf src/assets/auth_config.json /tmp/
+COPY nginx/default.conf src/assets/config/auth_config.json /tmp/
 
 # RUN cp /usr/share/nginx/html${BASE_HREF}/assets/auth_config.json /tmp/auth_config.json
 ENV BASE_HREF=${BASE_HREF} \
@@ -30,5 +30,5 @@ ENV BASE_HREF=${BASE_HREF} \
 
 
 CMD envsubst '${BASE_HREF} ${API_GATEWAY} ${OPENID_CONNECT_ISSUER_BACKEND}' < /tmp/default.conf > /etc/nginx/conf.d/default.conf \
-&& envsubst '${OPENID_CONNECT_ISSUER}' < /tmp/auth_config.json > /usr/share/nginx/html${BASE_HREF}/assets/auth_config.json \
+&& envsubst '${OPENID_CONNECT_ISSUER}' < /tmp/auth_config.json > /usr/share/nginx/html${BASE_HREF}/assets/config/auth_config.json \
 && nginx -g "daemon off;"

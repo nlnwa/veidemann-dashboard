@@ -2,7 +2,7 @@ const basePath = '/veidemann';
 
 export const environment = {
   production: true,
-  dynamicAuthConfig: basePath + '/assets/auth_config.json',
+  dynamicAuthConfig: basePath + '/assets/config/auth_config.json',
   apiGateway: basePath + '/api',
   auth: {
 

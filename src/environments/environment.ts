@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  dynamicAuthConfig: '/assets/auth_config.json',
+  dynamicAuthConfig: '/assets/config/auth_config.json',
   apiGateway: '/api',
   auth: {
 
