@@ -77,14 +77,12 @@
 
       <div fxFlex fxLayout="column">
         <div class="marginDropdown">
-          <label i18n="@@crawlconfigFormBrowserconfigMultiselectLabel">
-            Browserconfig:
-            <angular2-multiselect [data]="browserConfigList"
-                                  [ngModel]="selectedBrowserConfigItems"
-                                  [settings]="browserConfigDropdownSettings"
-                                  formControlName="browser_config_id">
-            </angular2-multiselect>
-          </label>
+          <mat-form-field>
+            <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
+                        i18n-placeholder="@@@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+              <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">{{browserConfig.itemName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
                      i18n="@@crawlconfigFormBrowserconfigRequiredError">
             Browserconfig er påkrevd.
@@ -92,14 +90,13 @@
         </div>
 
         <div class="marginDropdown">
-          <label i18n="@@crawlconfigFormPolitenessconfigMultiselectLabel">
-            Politenessconfig:
-            <angular2-multiselect [data]="politenessConfigList"
-                                  [ngModel]="selectedPolitenessConfigItems"
-                                  [settings]="politenessConfigDropdownSettings"
-                                  formControlName="politeness_id">
-            </angular2-multiselect>
-          </label>
+          <mat-form-field>
+            <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
+                        i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
+              <mat-option *ngFor="let politenessConfig of politenessConfigList"
+                          [value]="politenessConfig.id">{{politenessConfig.itemName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
                      i18n="@@crawlconfigFormPolitenessconfigRequiredError">
             Politenessconfig er påkrevd.
