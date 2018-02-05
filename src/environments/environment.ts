@@ -5,12 +5,12 @@
 
 export const environment = {
   production: false,
-  dynamicAuthConfig: '/assets/config/auth_config.json',
+  config: '',
   apiGateway: '/api',
   auth: {
 
     // Url of the Identity Provider
-    issuer: '${OPENID_CONNECT_ISSUER}',
+    issuer: '',
 
     // URL of the SPA to redirect the user to after login
     redirectUri: window.location.origin + '/activity',

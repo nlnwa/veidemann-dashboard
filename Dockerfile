@@ -20,15 +20,15 @@ LABEL maintainer="nettarkivet@nb.no"
 ARG BASE_HREF=/veidemann
 
 COPY --from=0 /usr/src/app/dist/ /usr/share/nginx/html${BASE_HREF}
-COPY nginx/default.conf src/assets/config/auth_config.json /tmp/
+COPY nginx/default.conf src/assets/config/environment.json /tmp/
 
 # RUN cp /usr/share/nginx/html${BASE_HREF}/assets/auth_config.json /tmp/auth_config.json
 ENV BASE_HREF=${BASE_HREF} \
     API_GATEWAY=http://localhost:3010/api \
-    OPENID_CONNECT_ISSUER=http://localhost:32000/dex \
-    OPENID_CONNECT_ISSUER_BACKEND=${OPENID_CONNECT_ISSUER}
+    OPENID_CONNECT_ISSUER="" \
+    OPENID_CONNECT_ISSUER_BACKEND=http://dex:5556/dex
 
 
 CMD envsubst '${BASE_HREF} ${API_GATEWAY} ${OPENID_CONNECT_ISSUER_BACKEND}' < /tmp/default.conf > /etc/nginx/conf.d/default.conf \
-&& envsubst '${OPENID_CONNECT_ISSUER}' < /tmp/auth_config.json > /usr/share/nginx/html${BASE_HREF}/assets/config/auth_config.json \
+&& envsubst '${OPENID_CONNECT_ISSUER}' < /tmp/environment.json > /usr/share/nginx/html${BASE_HREF}/assets/config/environment.json \
 && nginx -g "daemon off;"

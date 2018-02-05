@@ -1,16 +1,13 @@
 import {Injectable} from '@angular/core';
-import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {HttpClient} from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
-import {environment} from '../../environments/environment';
-import {DynamicAuthConfig} from './dynamic.auth.config';
+import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/empty';
+import {AppConfig} from '../app.config';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient, private oauthService: OAuthService) {
+  constructor(private appConfig: AppConfig, private oauthService: OAuthService) {
   }
 
   public get groups() {
@@ -40,17 +37,10 @@ export class AuthService {
   }
 
   public configureAuth() {
-    this.oauthService.configure(environment.auth as AuthConfig);
-    if (environment.production) {
-      this.http.get<DynamicAuthConfig>(environment.dynamicAuthConfig)
-        .subscribe((config) => {
-          this.oauthService.issuer = config.issuer;
-          this.oauthService.requireHttps = config.requireHttps;
-          this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-          this.oauthService.loadDiscoveryDocumentAndTryLogin()
-            .catch(_ => Observable.empty());
-        });
-    } else {
+    const auth = this.appConfig.auth;
+    if (auth.issuer !== '') {
+      this.oauthService.configure(auth);
+      this.oauthService.tokenValidationHandler = new JwksValidationHandler();
       this.oauthService.loadDiscoveryDocumentAndTryLogin()
         .catch(_ => Observable.empty());
     }
