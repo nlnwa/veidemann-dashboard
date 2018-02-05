@@ -13,6 +13,7 @@ import {PolitenessConfigPageComponent} from './configurations/politenessconfig/p
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
 import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
+import {RoleMappingPageComponent} from './rolemapping/rolemapping-page.component';
 
 const routes: Routes = [
   {
@@ -67,6 +68,10 @@ const routes: Routes = [
   {
     path: 'logconfig',
     component: LoglevelComponent
+  },
+  {
+    path: 'rolemapping',
+    component: RoleMappingPageComponent
   },
 ];
 

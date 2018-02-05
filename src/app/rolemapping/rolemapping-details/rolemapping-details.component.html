@@ -1,0 +1,71 @@
+<form [formGroup]="form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <span *ngIf="roleMapping" i18n="@@roleMappingHeader">Rolemapping</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <span *ngIf="!roleMapping.id"
+              i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row" fxLayoutWrap>
+      <div fxFlex fxLayout="column">
+        <div fxFlex fxLayout="row" fxLayoutGap="3em">
+          <mat-form-field>
+            <mat-select placeholder="Velg en type" [(value)]="selectedType">
+              <mat-option value="email">E-post</mat-option>
+              <mat-option value="group">Gruppe</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'email'">
+            <input matInput formControlName="email" placeholder="Epost"
+                   i18n-placeholder="@@emailInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'group'">
+            <input matInput formControlName="group" placeholder="Gruppe"
+                   i18n-placeholder="@@groupInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Velg rolle" formControlName="role" multiple
+                        i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+              <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
+            </mat-select>
+            <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
+            <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
+          </mat-form-field>
+          </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+              *ngIf="showSave"
+              [disabled]="!canSave"
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button mat-raised-button color="primary"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        Lagre
+      </button>
+      <button mat-raised-button color="accent"
+              (click)="onRevert()"
+              [disabled]="!canRevert"
+              i18n="@@commonButtonRevert">
+        Tilbakestill
+      </button>
+
+      <button mat-raised-button color="warn"
+              *ngIf="!showSave"
+              (click)="onDelete(); $event.stopPropagation()"
+              i18n="@@commonButtonDelete">
+        Slett
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+

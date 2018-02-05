@@ -1,0 +1,32 @@
+<div>
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.email}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="group" mat-sort-header>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.group}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.role}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{highlight: isSelected(row)}"
+             (click)="onRowClick(row)">
+    </mat-row>
+
+  </mat-table>
+</div>
