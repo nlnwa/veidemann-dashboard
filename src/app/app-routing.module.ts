@@ -18,61 +18,66 @@ import {RoleMappingPageComponent} from './rolemapping/rolemapping-page.component
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/activity',
-    pathMatch: 'full'
-  },
-  {
-    path: 'activity',
-    component: ActivityComponent
-  },
-  {
-    path: 'crawljobs',
-    component: CrawlJobsComponent
-  },
-  {
-    path: 'documentation',
-    component: DocumentationComponent
-  },
-  {
-    path: 'statistics',
-    component: StatisticsComponent
-  },
-  {
-    path: 'search',
-    component: SearchComponent
-  },
-  {
-    path: 'schedule',
-    component: SchedulePageComponent
-  },
-  {
-    path: 'crawlconfig',
-    component: CrawlConfigPageComponent
-  },
-  {
-    path: 'crawlhostgroupconfig',
-    component: CrawlHostGroupConfigPageComponent
-  },
-  {
-    path: 'browserconfig',
-    component: BrowserConfigPageComponent
-  },
-  {
-    path: 'browserscript',
-    component: BrowserScriptPageComponent
-  },
-  {
-    path: 'politenessconfig',
-    component: PolitenessConfigPageComponent
-  },
-  {
-    path: 'logconfig',
-    component: LoglevelComponent
-  },
-  {
-    path: 'rolemapping',
-    component: RoleMappingPageComponent
-  },
+    children: [
+      {
+        path: '',
+        redirectTo: 'activity',
+        pathMatch: 'full',
+      },
+      {
+        path: 'activity',
+        component: ActivityComponent
+      },
+      {
+        path: 'crawljobs',
+        component: CrawlJobsComponent
+      },
+      {
+        path: 'documentation',
+        component: DocumentationComponent
+      },
+      {
+        path: 'statistics',
+        component: StatisticsComponent
+      },
+      {
+        path: 'search',
+        component: SearchComponent
+      },
+      {
+        path: 'schedule',
+        component: SchedulePageComponent
+      },
+      {
+        path: 'crawlconfig',
+        component: CrawlConfigPageComponent
+      },
+      {
+        path: 'crawlhostgroupconfig',
+        component: CrawlHostGroupConfigPageComponent
+      },
+      {
+        path: 'browserconfig',
+        component: BrowserConfigPageComponent
+      },
+      {
+        path: 'browserscript',
+        component: BrowserScriptPageComponent
+      },
+      {
+        path: 'politenessconfig',
+        component: PolitenessConfigPageComponent
+      },
+      {
+        path: 'logconfig',
+        component: LoglevelComponent
+      },
+      {
+        path: 'rolemapping',
+        component: RoleMappingPageComponent
+      },
+    ]
+  }
 ];
 
 @NgModule({
@@ -83,4 +88,5 @@ const routes: Routes = [
     RouterModule,
   ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
