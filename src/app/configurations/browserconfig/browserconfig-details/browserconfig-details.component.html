@@ -116,17 +116,15 @@
           </ng-container>
         </div>
       </div>
-        <div fxFlex fxLayout="column">
-          <div>
-            <label i18n="@@browserconfigFormBrowserScriptMultiselectLabel">Scripts:
+        <div fxFlex fxLayout="column" fxLayoutGap="1em">
 
-              <angular2-multiselect [data]="browserScriptList"
-                                    [ngModel]="selectedBrowserScriptItems"
-                                    [settings]="browserScriptDropdownSettings"
-                                    formControlName="script_id">
-              </angular2-multiselect>
-
-            </label>
+          <div class="browserScriptDropdown">
+            <mat-form-field>
+              <mat-select placeholder="Velg browser script" formControlName="script_id"  multiple
+                          i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+                <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
             <mat-error *ngIf="!script_id.valid"
                        i18n="@@browserconfigFormScriptsRequiredError">
               Scripts påkrevd.
