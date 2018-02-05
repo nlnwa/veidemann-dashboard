@@ -79,7 +79,7 @@
         <div class="marginDropdown">
           <mat-form-field>
             <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
-                        i18n-placeholder="@@@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+                        i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
               <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">{{browserConfig.itemName}}</mat-option>
             </mat-select>
           </mat-form-field>
