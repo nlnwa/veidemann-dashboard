@@ -5,27 +5,36 @@
         <span *ngIf="roleMapping" i18n="@@roleMappingHeader">Rolemapping</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!roleMapping.id" i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
+        <span *ngIf="!roleMapping.id"
+              i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row" fxLayoutWrap>
       <div fxFlex fxLayout="column">
-        <mat-form-field>
-          <input matInput formControlName="email" placeholder="Epost"
-                 i18n-placeholder="@@emailInputPlaceholder">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput formControlName="group" placeholder="Gruppe"
-                 i18n-placeholder="@@groupInputPlaceholder">
-        </mat-form-field>
-        <div class="roleDropdown">
-          <span i18n="@@rolemappingRoleMultiselectHeader">Rolle:</span>
-          <angular2-multiselect [data]="rolesList"
-                                [ngModel]="selectedRoles"
-                                [settings]="roleDropdownSettings"
-                                formControlName="role"
-          ></angular2-multiselect>
-        </div>
+        <div fxFlex fxLayout="row" fxLayoutGap="3em">
+          <mat-form-field>
+            <mat-select placeholder="Velg en type" [(value)]="selectedType">
+              <mat-option value="email">E-post</mat-option>
+              <mat-option value="group">Gruppe</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'email'">
+            <input matInput formControlName="email" placeholder="Epost"
+                   i18n-placeholder="@@emailInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'group'">
+            <input matInput formControlName="group" placeholder="Gruppe"
+                   i18n-placeholder="@@groupInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Velg rolle" formControlName="role" multiple
+                        i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+              <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
+            </mat-select>
+            <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
+            <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
+          </mat-form-field>
+          </div>
       </div>
     </mat-card-content>
     <mat-card-actions>

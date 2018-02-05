@@ -1,18 +1,18 @@
 <div>
-  <mat-table [dataSource]="dataSource">
+  <mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.email}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="group">
-      <mat-header-cell *matHeaderCellDef>Beskrivelse</mat-header-cell>
+    <ng-container matColumnDef="group" mat-sort-header>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.group}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef>Rolle</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.role}}</mat-cell>
     </ng-container>
 

@@ -260,11 +260,9 @@ export class Timestamp {
 
 export class RoleMapping {
   id: string;
-
-  // email_or_group
   email?: string;
   group?: string;
-  role: Role[]
+  role: string[]
 
   constructor() {
     this.id = '';
@@ -274,6 +272,3 @@ export class RoleMapping {
   }
 }
 
-export class Role {
-  role: string;
-}

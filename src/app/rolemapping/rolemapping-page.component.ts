@@ -28,7 +28,8 @@ import {RoleMappingService} from './rolemapping.service';
                        [pageSizeOptions]="pageOptions"></mat-paginator>
       </div>
       <app-rolemapping-details [roleMapping]="roleMapping"
-                               *ngIf="roleMapping"
+                               [roles]="roles"
+                               *ngIf="roleMapping && roles"
                                (update)="onUpdateRoleMapping($event)"
                                (save)="onSaveRoleMapping($event)"
                                (delete)="onDeleteRoleMapping($event)"></app-rolemapping-details>
@@ -47,7 +48,7 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
   @ViewChild(RoleMappingListComponent) list: RoleMappingListComponent;
 
   roleMapping: RoleMapping;
-  role = [];
+  roles: string[] = [];
   changes: Subject<void> = new Subject<void>();
 
   constructor(private roleMappingService: RoleMappingService,
@@ -58,7 +59,7 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.roleMappingService.getRoles()
-      .subscribe(role => this.role = role);
+      .subscribe(roles => this.roles = roles);
   }
 
   ngAfterViewInit() {
@@ -89,6 +90,7 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
 
   onSelectRoleMapping(roleMapping: RoleMapping) {
     this.roleMapping = roleMapping;
+    console.log(this.roleMapping);
   }
 
   onSaveRoleMapping(roleMapping: RoleMapping) {

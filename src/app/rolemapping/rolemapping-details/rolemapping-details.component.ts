@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Input} from '@angular/core';
 import {RoleMapping} from '../../commons/models/config.model';
 import {Component, EventEmitter, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CustomValidators} from '../../commons/customvalidators';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
   @Input()
   roleMapping: RoleMapping;
   @Input()
-  roles: any[];
+  roles: string[];
 
   @Output()
   save = new EventEmitter<RoleMapping>();
@@ -27,17 +28,10 @@ export class RoleMappingDetailsComponent implements OnChanges {
 
   form: FormGroup;
   rolesList: any[];
-
-  selectedRoles: any[];
-  roleDropdownSettings = {
-    singleSelection: false,
-    text: 'Velg rolle',
-  };
-
+  selectedType = '';
 
   constructor(private fb: FormBuilder) {
     this.createForm();
-
   }
 
   get showSave(): boolean {
@@ -64,18 +58,19 @@ export class RoleMappingDetailsComponent implements OnChanges {
     return this.form.get('group');
   }
 
+  get role() {
+    return this.form.get('role')
+  }
+
   ngOnChanges(changes: SimpleChanges) {
+
     if (changes.roleMapping.currentValue) {
       if (!this.roleMapping) {
         this.form.reset();
       }
     }
     if (changes.roles && changes.roles.currentValue) {
-      this.rolesList = changes.roles.currentValue.map((role, currentIndex) =>
-        ({
-          id: currentIndex,
-          itemName: role,
-        }));
+      this.rolesList = changes.roles.currentValue
     }
     if (this.roleMapping && this.rolesList) {
       this.updateForm();
@@ -87,6 +82,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   onUpdate(): void {
+    console.log(this.update.emit(this.prepareSave()));
     this.update.emit(this.prepareSave());
   }
 
@@ -101,9 +97,9 @@ export class RoleMappingDetailsComponent implements OnChanges {
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      email: {value: ''},
-      group: {value: ''},
-      role: this.fb.array([]),
+      email: '',
+      group: '',
+      role: [[], [Validators.required, CustomValidators.nonEmpty]]
     });
   }
 
@@ -112,29 +108,45 @@ export class RoleMappingDetailsComponent implements OnChanges {
       id: this.roleMapping.id,
       email: this.roleMapping.email,
       group: this.roleMapping.group,
-      role: this.roleMapping.role
+      role: this.roleMapping.role,
     });
-    this.setSelectedDropdown();
+    this.setUserType();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
 
   private prepareSave(): RoleMapping {
     const formModel = this.form.value;
-    return {
-      id: this.roleMapping.id,
-      email: formModel.email,
-      group: formModel.group,
-      role: formModel.role.length > 0 ? formModel.role[0].itemName : ''
-    };
+    if (this.selectedType === 'email') {
+      return {
+        id: this.roleMapping.id,
+        email: formModel.email,
+        role: formModel.role,
+      };
+    }
+    if (this.selectedType === 'group') {
+      return {
+        id: this.roleMapping.id,
+        group: formModel.group,
+        role: formModel.role,
+      }
+    }
   }
 
-  private setSelectedDropdown() {
-    this.selectedRoles = this.rolesList.reduce((acc, curr) => {
-      if (this.roleMapping.role === curr.itemName) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
+  private setUserType() {
+    const group = this.roleMapping.group.length > 0;
+    const email = this.roleMapping.email.length > 0;
+
+    if (email) {
+      this.selectedType = 'email';
+    }
+
+    if (group) {
+      this.selectedType = 'group';
+    }
+
+    if (!(group || email)) {
+      this.selectedType = '';
+    }
   }
 }
