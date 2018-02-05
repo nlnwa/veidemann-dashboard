@@ -17,7 +17,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   @Input()
   politenessConfig: PolitenessConfig;
   @Input()
-  robotsPolicies: any[];
+  robotsPolicies: string[];
 
   @Output()
   save = new EventEmitter<PolitenessConfig>();
@@ -28,13 +28,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
   robotsPolicyList: any[];
-
-  selectedRobotsPolicies: any[];
-  robotsPolicyDropdownSettings = {
-    singleSelection: true,
-    text: 'Velg Robots policy',
-  };
-
 
   constructor(private fb: FormBuilder) {
     this.createForm();
@@ -87,11 +80,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       }
     }
     if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
-      this.robotsPolicyList = changes.robotsPolicies.currentValue.map((robotPolicy, currentIndex) =>
-        ({
-          id: currentIndex,
-          itemName: robotPolicy,
-        }));
+      this.robotsPolicyList = changes.robotsPolicies.currentValue;
     }
     if (this.politenessConfig && this.robotsPolicyList) {
       this.updateForm();
@@ -141,6 +130,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   private updateForm() {
     this.form.patchValue({
       id: this.politenessConfig.id,
+      robots_policy: this.politenessConfig.robots_policy,
       minimum_robots_validity_duration_s: this.politenessConfig.minimum_robots_validity_duration_s,
       custom_robots: this.politenessConfig.custom_robots,
       min_time_between_page_load_ms: this.politenessConfig.min_time_between_page_load_ms,
@@ -163,7 +153,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
         label: [...this.politenessConfig.meta.label],
       },
     });
-    this.setSelectedDropdown();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   };
@@ -174,7 +163,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
     return {
       id: this.politenessConfig.id,
-      robots_policy: formModel.robots_policy.length > 0 ? formModel.robots_policy[0].itemName : '',
+      robots_policy: formModel.robots_policy,
       minimum_robots_validity_duration_s: parseInt(formModel.minimum_robots_validity_duration_s, 10),
       custom_robots: formModel.custom_robots,
       min_time_between_page_load_ms: formModel.min_time_between_page_load_ms,
@@ -194,14 +183,4 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       }
     };
   }
-
-  private setSelectedDropdown() {
-    this.selectedRobotsPolicies = this.robotsPolicyList.reduce((acc, curr) => {
-      if (this.politenessConfig.robots_policy === curr.itemName) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-  }
-
 }
