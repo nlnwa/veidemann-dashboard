@@ -101,13 +101,13 @@
 
         <div fxFlex fxLayout="column">
           <div>
-            <label i18n="@@crawljobFormScheduleMultiselectLabel">Schedule:
-              <angular2-multiselect [data]="schedules"
-                                    [ngModel]="selectedScheduleItems"
-                                    [settings]="scheduleDropdownSettings"
-                                    formControlName="schedule_id">
-              </angular2-multiselect>
-            </label>
+            <mat-form-field>
+              <mat-select placeholder="Velg schedule" formControlName="schedule_id"
+                          i18n-placeholder="@@crawljobScheduleDropdownPlaceholder">
+                <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">{{schedule.itemName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
             <mat-error *ngIf="! scheduleId.valid"
                        i18n="@@crawljobFormScheduleRequiredError">
               Schedule er påkrevd.
@@ -115,13 +115,13 @@
           </div>
 
           <div>
-            <label i18n="@@crawljobFormCrawlconfigMultiselectLabel">Crawlconfig:
-              <angular2-multiselect [data]="crawlConfigs"
-                                    [ngModel]="selectedCrawlConfigItems"
-                                    [settings]="crawlConfigDropdownSettings"
-                                    formControlName="crawl_config_id">
-              </angular2-multiselect>
-            </label>
+            <mat-form-field>
+              <mat-select placeholder="Velg crawl config" formControlName="crawl_config_id"
+                          i18n-placeholder="@@crawljobCrawlconfigDropdownPlaceholder">
+                <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
             <mat-error *ngIf="! crawlConfigId.valid"
                        i18n="@@crawljobFormCrawlconfigRequieredError">
               Crawlconfig er påkrevd.

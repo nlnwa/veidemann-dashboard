@@ -37,19 +37,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  selectedScheduleItems: any[];
-  scheduleDropdownSettings = {
-    singleSelection: true,
-    text: 'Velg Schedule',
-    enableSearchFilter: true
-  };
-
-  selectedCrawlConfigItems: any[];
-  crawlConfigDropdownSettings = {
-    singleSelection: true,
-    text: 'Velg crawlConfig',
-    enableSearchFilter: true
-  };
 
   constructor(private fb: FormBuilder) {
     this.createForm();
@@ -160,12 +147,11 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   private updateForm() {
-    this.setSelectedCrawlConfigItem();
-    this.setSelectedScheduleItem();
-
     this.form.patchValue({
       id: this.crawlJob.id,
       disabled: !this.crawlJob.disabled,
+      schedule_id: this.crawlJob.schedule_id,
+      crawl_config_id: this.crawlJob.crawl_config_id,
       limits: {
         depth: this.crawlJob.limits.depth,
         max_duration_s: this.crawlJob.limits.max_duration_s,
@@ -194,8 +180,8 @@ export class CrawljobDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     return {
       id: this.crawlJob.id,
-      schedule_id: formModel.schedule_id.length > 0 ? formModel.schedule_id[0].id : '',
-      crawl_config_id: formModel.crawl_config_id.length > 0 ? formModel.crawl_config_id[0].id : '',
+      schedule_id: formModel.schedule_id,
+      crawl_config_id: formModel.crawl_config_id,
       disabled: !formModel.disabled,
       limits: {
         depth: formModel.limits.depth as number,
@@ -210,21 +196,4 @@ export class CrawljobDetailsComponent implements OnChanges {
     };
   }
 
-  private setSelectedCrawlConfigItem() {
-    this.selectedCrawlConfigItems = this.crawlConfigs.reduce((acc, curr) => {
-      if (this.crawlJob.crawl_config_id === curr.id) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-  }
-
-  private setSelectedScheduleItem() {
-    this.selectedScheduleItems = this.schedules.reduce((acc, curr) => {
-      if (this.crawlJob.schedule_id === curr.id) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-  }
 }
