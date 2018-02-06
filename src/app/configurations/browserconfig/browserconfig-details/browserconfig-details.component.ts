@@ -28,14 +28,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   form: FormGroup;
   browserScriptList: any[];
 
-  selectedBrowserScriptItems = [];
-  browserScriptDropdownSettings = {
-    singleSelection: false,
-    text: 'Velg Script',
-    enableCheckAll: false,
-    enableSearchFilter: true,
-  };
-
   constructor(private fb: FormBuilder) {
     this.createForm();
   }
@@ -165,9 +157,9 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         },
         last_modified_by: this.browserConfig.meta.last_modified_by,
         label: [...this.browserConfig.meta.label]
-      }
+      },
+      script_id: this.browserConfig.script_id,
     });
-    this.setSelectedDropdown();
     this.form.markAsPristine();
     this.form.markAsUntouched();
 
@@ -177,7 +169,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     const labelsDeepCopy: Label[] = formModel.meta.label.map(label => ({...label}));
     const script_selectorDeepCopy: Selector = {label: formModel.script_selector.map(label => ({...label}))};
-    const scriptIdList = formModel.script_id.map((listItem) => listItem.id);
     return {
       id: this.browserConfig.id,
       user_agent: formModel.user_agent,
@@ -185,7 +176,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       window_height: parseInt(formModel.window_height, 10),
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
-      script_id: scriptIdList,
+      script_id: formModel.script_id,
       script_selector: script_selectorDeepCopy,
       headers: formModel.headers,
       meta: {
@@ -198,17 +189,5 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         label: labelsDeepCopy
       }
     };
-  }
-
-  private setSelectedDropdown() {
-    this.selectedBrowserScriptItems = this.browserScriptList.reduce((acc, curr) => {
-      for (let i = 0; i < this.browserConfig.script_id.length; i++) {
-        if (this.browserConfig.script_id[i] === curr.id) {
-          acc.push(curr);
-          break;
-        }
-      }
-      return acc;
-    }, []);
   }
 }

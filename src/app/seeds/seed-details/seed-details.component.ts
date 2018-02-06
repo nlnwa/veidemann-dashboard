@@ -27,6 +27,8 @@ export class SeedDetailComponent implements OnChanges {
   delete = new EventEmitter<Seed>();
 
   crawlJobList: any[];
+
+  /*
   selectedCrawlJobItems = [];
   dropdownCrawlJobSettings = {
     singleSelection: false,
@@ -34,6 +36,7 @@ export class SeedDetailComponent implements OnChanges {
     enableCheckAll: false,
     enableSearchFilter: true
   };
+  */
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -117,7 +120,6 @@ export class SeedDetailComponent implements OnChanges {
         label: [...this.seed.meta.label],
       }
     });
-    this.setSelectedDropdown();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
@@ -133,7 +135,7 @@ export class SeedDetailComponent implements OnChanges {
       id: this.seed.id,
       entity_id: this.seed.entity_id,
       scope: {surt_prefix: viewModel.scope.surt_prefix},
-      job_id: viewModel.job_id.map(element => element.id),
+      job_id: viewModel.job_id,
       disabled: !viewModel.disabled,
       meta: {
         name: viewModel.meta.name,
@@ -146,17 +148,4 @@ export class SeedDetailComponent implements OnChanges {
       }
     };
   }
-
-  private setSelectedDropdown() {
-    this.selectedCrawlJobItems = this.crawlJobList.reduce((acc, curr) => {
-      for (let i = 0; i < this.seed.job_id.length; i++) {
-        if (this.seed.job_id[i] === curr.id) {
-          acc.push(curr);
-          break;
-        }
-      }
-      return acc;
-    }, []);
-  }
-
 }

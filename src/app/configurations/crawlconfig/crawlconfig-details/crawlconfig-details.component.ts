@@ -31,20 +31,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   form: FormGroup;
 
   browserConfigList: any[];
-  selectedBrowserConfigItems: any[];
-  browserConfigDropdownSettings = {
-    singleSelection: true,
-    text: 'Velg browserConfig',
-    enableSearchFilter: true
-  };
-
   politenessConfigList: any = [];
-  selectedPolitenessConfigItems = [];
-  politenessConfigDropdownSettings = {
-    singleSelection: true,
-    text: 'Velg Politeness',
-    enableSearchFilter: true
-  };
+
+
 
   constructor(private fb: FormBuilder) {
     this.createForm();
@@ -140,6 +129,8 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       id: this.crawlConfig.id,
       minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s,
       depth_first: this.crawlConfig.depth_first,
+      politeness_id: this.crawlConfig.politeness_id,
+      browser_config_id: this.crawlConfig.browser_config_id,
       extra: {
         extract_text: this.crawlConfig.extra.extract_text,
         create_snapshot: this.crawlConfig.extra.create_snapshot,
@@ -158,8 +149,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: [...this.crawlConfig.meta.label],
       },
     });
-    this.setSelectedBrowserConfigItem();
-    this.setSelectedPolitenessConfigItem();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
@@ -168,8 +157,8 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     return {
       id: this.crawlConfig.id,
-      browser_config_id: formModel.browser_config_id[0].id,
-      politeness_id: formModel.politeness_id[0].id,
+      browser_config_id: formModel.browser_config_id,
+      politeness_id: formModel.politeness_id,
       extra: {
         extract_text: formModel.extra.extract_text,
         create_snapshot: formModel.extra.create_snapshot,
@@ -182,23 +171,5 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: formModel.meta.label.map(label => ({...label})),
       }
     };
-  }
-
-  private setSelectedBrowserConfigItem() {
-    this.selectedBrowserConfigItems = this.browserConfigList.reduce((acc, curr) => {
-      if (curr.id === this.crawlConfig.browser_config_id) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-  }
-
-  private setSelectedPolitenessConfigItem() {
-    this.selectedPolitenessConfigItems = this.politenessConfigList.reduce((acc, curr) => {
-      if (curr.id === this.crawlConfig.politeness_id) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
   }
 }

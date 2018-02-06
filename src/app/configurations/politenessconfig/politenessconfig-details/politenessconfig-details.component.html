@@ -28,12 +28,12 @@
         </ng-container>
 
         <div class="robotPolicyDropdown">
-          <span i18n="@@politenessconfigFormRobotPolicyMultiselectHeader">Robots policy:</span>
-          <angular2-multiselect [data]="robotsPolicyList"
-                                [ngModel]="selectedRobotsPolicies"
-                                [settings]="robotsPolicyDropdownSettings"
-                                formControlName="robots_policy">
-          </angular2-multiselect>
+          <mat-form-field>
+            <mat-select placeholder="Velg policy" formControlName="robots_policy"
+                        i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+              <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-error *ngIf="! robotsPolicy.valid"
                  i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
@@ -41,7 +41,7 @@
         </div>
         <span></span>
         <ng-container
-          *ngIf="robotsPolicy.value[0].itemName === 'CUSTOM_ROBOTS'">
+          *ngIf="robotsPolicy.value === 'CUSTOM_ROBOTS'">
           <div class="customRobotTxtInput">
             <mat-form-field>
             <textarea matInput
