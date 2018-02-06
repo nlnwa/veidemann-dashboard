@@ -1,9 +1,10 @@
 const basePath = '/veidemann';
 
+
 export const environment = {
   production: true,
   config: basePath + '/assets/config/environment.json',
-  apiGateway: basePath + '/api',
+  apiGateway: '/api',
   auth: {
 
     // Url of the Identity Provider
