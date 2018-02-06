@@ -84,14 +84,10 @@
         <ng-container formGroupName="meta">
           <app-labels type="Label" formControlName="label"></app-labels>
         </ng-container>
-        <div>
-          <span i18n="@@seedFormCrawljobMultiSelectHeader">Høstejobb:</span>
-          <angular2-multiselect [data]="crawlJobList"
-                                [ngModel]="selectedCrawlJobItems"
-                                [settings]="dropdownCrawlJobSettings"
-                                formControlName="job_id">
-          </angular2-multiselect>
-        </div>
+        <mat-select placeholder="Velg jobb" formControlName="job_id"
+                    i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
+          <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
+        </mat-select>
       </div>
     </mat-card-content>
 
