@@ -38,7 +38,7 @@ export class AuthService {
 
   public configureAuth() {
     const auth = this.appConfig.auth;
-    if (auth.issuer !== '') {
+    if (auth && auth.issuer !== '') {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
       this.oauthService.loadDiscoveryDocumentAndTryLogin()
