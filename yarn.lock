@@ -33,9 +33,9 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/cdk@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-5.1.1.tgz#a278b44ec02145a4691aa466dde06a1ae8c0fe88"
+"@angular/cdk@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-5.2.0.tgz#4368f6749e915cdcc75d325ae33fdb3f85a88108"
   dependencies:
     tslib "^1.7.1"
 
@@ -151,9 +151,9 @@
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-5.2.3.tgz#b858c1cd3740b29de145a6d60b2562eef391d3b3"
 
-"@angular/material@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.1.1.tgz#fafbd6bd98f2521ac5e3e2b2f720214386e3f31d"
+"@angular/material@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.2.0.tgz#8599e3149d48487e3e92e941fa9dc55176e3a0cf"
   dependencies:
     tslib "^1.7.1"
 
@@ -365,12 +365,6 @@ angular-oauth2-oidc@~3.1.4:
   resolved "https://registry.yarnpkg.com/angular-oauth2-oidc/-/angular-oauth2-oidc-3.1.4.tgz#0779395616d72f15e9dfdf392ddda9c6963742e8"
   dependencies:
     jsrsasign "^8.0.3"
-
-angular2-multiselect-dropdown@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/angular2-multiselect-dropdown/-/angular2-multiselect-dropdown-2.4.0.tgz#bc2045ef8adac21c63d969ca95ad5185c5557701"
-  dependencies:
-    font-awesome "*"
 
 ansi-html@0.0.7:
   version "0.0.7"
@@ -2702,10 +2696,6 @@ follow-redirects@1.0.0:
   dependencies:
     debug "^2.2.0"
 
-font-awesome@*:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
-
 for-each@~0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.2.tgz#2c40450b9348e97f281322593ba96704b9abd4d4"
@@ -4609,21 +4599,21 @@ ng2-ace-editor@^0.3.4:
     ace-builds "^1.2.9"
     brace "^0.10.0"
 
-ngx-i18nsupport-lib@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.6.2.tgz#a1e57fdb101e5993c9f31d4af781aa19e759f894"
+ngx-i18nsupport-lib@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.7.0.tgz#668abfabae9695ba0ab4fb14712a08fd729dccb6"
   dependencies:
     "@types/xmldom" "^0.1.29"
     tokenizr "^1.1.4"
     xmldom "^0.1.27"
 
-ngx-i18nsupport@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/ngx-i18nsupport/-/ngx-i18nsupport-0.10.0.tgz#0b6559d1d2f942906901ac0e385826ef851f683e"
+ngx-i18nsupport@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport/-/ngx-i18nsupport-0.11.0.tgz#477455519c2dca7aa4f11618ca3e787205f79d8c"
   dependencies:
     chalk "^2.2.0"
     commander "^2.9.0"
-    ngx-i18nsupport-lib "^1.6.2"
+    ngx-i18nsupport-lib "^1.7.0"
     request "^2.81.0"
     rxjs "^5.5.6"
 
