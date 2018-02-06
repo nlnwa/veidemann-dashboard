@@ -1,4 +1,0 @@
-{
-  "issuer": "${OPENID_CONNECT_ISSUER}",
-  "requireHttps": false
-}

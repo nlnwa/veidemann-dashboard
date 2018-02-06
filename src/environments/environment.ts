@@ -5,15 +5,15 @@
 
 export const environment = {
   production: false,
-  dynamicAuthConfig: '/assets/auth_config.json',
+  config: '',
   apiGateway: '/api',
   auth: {
 
     // Url of the Identity Provider
-    issuer: 'http://$EXTERNAL_HOSTNAME:32000/dex',
+    issuer: '',
 
     // URL of the SPA to redirect the user to after login
-    redirectUri: window.location.origin,
+    redirectUri: window.location.origin + '/activity',
 
     // The SPA's id. The SPA is registered with this id at the auth-server
     clientId: 'veidemann-gui',

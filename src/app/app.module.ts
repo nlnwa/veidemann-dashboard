@@ -1,4 +1,4 @@
-import {ErrorHandler, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -8,45 +8,26 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from './material.module';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
+import {AppConfig} from './app.config';
 
 import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';
-import {SeedDetailComponent, SeedService} from './seeds';
+import {SeedDetailComponent, SeedListComponent, SeedService} from './seeds';
 import {SearchComponent} from './search/search.component';
+import {BrowserConfigDetailsComponent, BrowserConfigListComponent, BrowserConfigService} from './configurations/browserconfig';
+import {BrowserScriptDetailsComponent, BrowserScriptListComponent, BrowserScriptService} from './configurations/browserscript';
 import {
-  BrowserConfigDetailsComponent,
-  BrowserConfigListComponent,
-  BrowserConfigService
-} from './configurations/browserconfig';
-import {
-  BrowserScriptDetailsComponent,
-  BrowserScriptListComponent,
-  BrowserScriptService
-} from './configurations/browserscript';
-import {
-  CrawlConfigDetailsComponent,
-  CrawlConfigListComponent,
-  CrawlConfigPageComponent,
+  CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigPageComponent,
   CrawlConfigService
 } from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
-import {
-  PolitenessconfigDetailsComponent,
-  PolitenessConfigListComponent,
-  PolitenessConfigService
-} from './configurations/politenessconfig';
+import {PolitenessconfigDetailsComponent, PolitenessConfigListComponent, PolitenessConfigService} from './configurations/politenessconfig';
 import {LoglevelComponent, LogService} from './configurations/logs/';
-import {
-  ScheduleDetailsComponent,
-  ScheduleListComponent,
-  ScheduleService,
-  ScheduleSidebarComponent
-} from './configurations/schedule';
+import {ScheduleDetailsComponent, ScheduleListComponent, ScheduleService, ScheduleSidebarComponent} from './configurations/schedule';
 import {EntityDetailsComponent, EntityService} from './entities';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {
-  CrawlHostGroupConfigDetailsComponent,
-  CrawlHostGroupConfigListComponent,
+  CrawlHostGroupConfigDetailsComponent, CrawlHostGroupConfigListComponent,
   CrawlHostGroupConfigService
 } from './configurations/crawlhostgroupconfig';
 import {LabelsComponent} from './labels/labels.component';
@@ -59,7 +40,6 @@ import {ErrorDialogComponent} from './dialog/error-dialog/error-dialog.component
 import {ErrorService} from './commons/error.service';
 import {ApplicationErrorHandler} from './commons/error-handler';
 import {AceEditorModule} from 'ng2-ace-editor';
-import {SeedListComponent} from './seeds/seed-list/seed-list.component';
 import {EntityListComponent} from './entities/entity-list/entity-list.component';
 import {DialogComponent} from './dialog/dialog.component';
 import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
@@ -70,10 +50,7 @@ import {SchedulePageComponent} from './configurations/schedule/schedule-page.com
 import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
-import {RoleMappingPageComponent} from './rolemapping/rolemapping-page.component';
-import {RoleMappingService} from './rolemapping/rolemapping.service';
-import {RoleMappingListComponent} from './rolemapping/rolemapping-list/rolemapping-list.component';
-import {RoleMappingDetailsComponent} from './rolemapping/rolemapping-details/rolemapping-details.component';
+import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageComponent, RoleMappingService} from './rolemapping';
 
 @NgModule({
   declarations: [
@@ -132,6 +109,8 @@ import {RoleMappingDetailsComponent} from './rolemapping/rolemapping-details/rol
     AceEditorModule,
   ],
   providers: [
+    AppConfig,
+    {provide: APP_INITIALIZER, useFactory: (appConfig: AppConfig) => () => appConfig.load(), deps: [AppConfig], multi: true},
     AuthService,
     SearchService,
     SeedService,

@@ -1,13 +1,14 @@
 const basePath = '/veidemann';
 
+
 export const environment = {
   production: true,
-  dynamicAuthConfig: basePath + '/assets/auth_config.json',
-  apiGateway: basePath + '/api',
+  config: basePath + '/assets/config/environment.json',
+  apiGateway: '/api',
   auth: {
 
     // Url of the Identity Provider
-    issuer: '${OPENID_CONNECT_ISSUER}',
+    issuer: '',
 
     // URL of the SPA to redirect the user to after login
     redirectUri: window.location.origin + basePath + '/activity',
