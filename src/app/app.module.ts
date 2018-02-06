@@ -9,8 +9,6 @@ import {MaterialModule} from './material.module';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 
-import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
-
 import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {SeedDetailComponent, SeedService} from './seeds';
@@ -128,7 +126,6 @@ import {RoleMappingDetailsComponent} from './rolemapping/rolemapping-details/rol
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    AngularMultiSelectModule,
     MaterialModule,
     FlexLayoutModule,
     OAuthModule.forRoot(),
