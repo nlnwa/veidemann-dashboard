@@ -5,6 +5,9 @@ export class Environment {
   apiGateway: string;
 
   constructor(env: Environment = {} as Environment) {
+    if (env.hasOwnProperty('auth')) {
+      env.auth = new AuthConfig(env.auth);
+    }
     const {
       auth = environment.auth,
       apiGateway = environment.apiGateway,
