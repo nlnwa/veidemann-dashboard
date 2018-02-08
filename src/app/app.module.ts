@@ -52,7 +52,7 @@ import {BrowserConfigPageComponent} from './configurations/browserconfig/browser
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
 import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageComponent, RoleMappingService} from './rolemapping';
 import {GuardService} from './auth/guard.service';
-import {RolesService} from './roles/roles.service';
+import {RoleService} from './roles/roles.service';
 
 @NgModule({
   declarations: [
@@ -115,7 +115,7 @@ import {RolesService} from './roles/roles.service';
     {provide: APP_INITIALIZER, useFactory: (appConfig: AppConfig) => () => appConfig.load(), deps: [AppConfig], multi: true},
     AuthService,
     GuardService,
-    RolesService,
+    RoleService,
     SearchService,
     SeedService,
     CrawlJobService,

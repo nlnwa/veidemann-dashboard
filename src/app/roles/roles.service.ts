@@ -5,7 +5,7 @@ import {Role, RoleList} from '../commons/models/config.model';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
-export class RolesService {
+export class RoleService {
 
   private readonly URL: string = `${environment.apiGateway}/roles`;
 
