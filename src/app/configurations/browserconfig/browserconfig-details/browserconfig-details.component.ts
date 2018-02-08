@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons';
 import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RolesService} from '../../../roles/roles.service';
+import {Observable} from 'rxjs/Observable';
 
 
 @Component({
@@ -28,8 +30,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   form: FormGroup;
   browserScriptList: any[];
 
-  constructor(private fb: FormBuilder) {
+  // private _isAdmin = false;
+
+  constructor(private fb: FormBuilder, private rolesService: RolesService) {
     this.createForm();
+  }
+
+  get isAdmin(): Observable<boolean> {
+    return this.rolesService.isAdmin();
   }
 
   get showSave(): boolean {
