@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DateTime} from './commons/';
 import {AuthService} from './auth/auth.service';
+import {RoleService} from './roles/roles.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,17 @@ import {AuthService} from './auth/auth.service';
 })
 export class AppComponent implements OnInit {
   myDate: String;
-  isExpertMode: boolean;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private roleService: RoleService) {
     this.authService.configureAuth();
+  }
+
+  get canConfigure(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator() || this.roleService.isReadonly();
+  }
+
+  get canAdministrate(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get name(): string {
@@ -25,10 +33,6 @@ export class AppComponent implements OnInit {
 
   onLogout() {
     this.authService.logout();
-  }
-
-  setExpertMode(bool: boolean) {
-    this.isExpertMode = bool;
   }
 
   getTimestamp() {
