@@ -3,11 +3,12 @@ import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/empty';
 import {AppConfig} from '../app.config';
+import {RoleService} from '../roles/roles.service';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private appConfig: AppConfig, private oauthService: OAuthService) {
+  constructor(private appConfig: AppConfig, private oauthService: OAuthService, private roleService: RoleService) {
   }
 
   public get groups() {
@@ -34,6 +35,7 @@ export class AuthService {
 
   public logout() {
     this.oauthService.logOut();
+    this.roleService.resetRoles();
   }
 
   public configureAuth() {
@@ -41,8 +43,11 @@ export class AuthService {
     if (auth && auth.issuer !== '') {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-      this.oauthService.loadDiscoveryDocumentAndTryLogin()
-        .catch(_ => Observable.empty());
+      this.oauthService.loadDiscoveryDocumentAndTryLogin({
+        onTokenReceived: (_) => {
+          this.roleService.fetchRoles();
+        }
+      }).catch(_ => Observable.empty());
     }
   }
 }
