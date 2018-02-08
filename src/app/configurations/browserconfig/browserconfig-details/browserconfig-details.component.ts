@@ -4,7 +4,6 @@ import {CustomValidators} from '../../../commons';
 import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../roles/roles.service';
-import {Observable} from 'rxjs/Observable';
 
 
 @Component({
@@ -13,7 +12,6 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./browserconfig-details.component.css'],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
-
   @Input()
   browserConfig: BrowserConfig;
   @Input()
@@ -34,7 +32,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  get isAdmin(): Observable<boolean> {
+  get isAdmin(): boolean {
     return this.roleService.isAdmin();
   }
 
@@ -118,24 +116,27 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
+    const hasRequiredRole = !(this.roleService.isAdmin());
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      user_agent: ['', [Validators.required, Validators.minLength(1)]],
-      window_width: ['', [Validators.required, CustomValidators.min(1)]],
-      window_height: ['', [Validators.required, CustomValidators.min(1)]],
-      page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      user_agent: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
+      window_width: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(1)]],
+      window_height: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(1)]],
+      page_load_timeout_ms: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
+      sleep_after_pageload_ms: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
       // headers: this.fb.group({''}),
-      script_id: [],
-      script_selector: [],
+      script_id: {value: [], disabled: hasRequiredRole},
+      script_selector: {value: [], disabled: hasRequiredRole},
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(1)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
 
     });
