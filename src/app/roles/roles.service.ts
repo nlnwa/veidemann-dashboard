@@ -16,4 +16,14 @@ export class RolesService {
     return this.http.get<RoleList>(this.URL)
       .map(res => res.role.map(role => Role[role]));
   }
+
+  public isAdmin(): Observable<boolean> {
+    return this.getRoles().map(roles => {
+      if (roles.includes(Role.ADMIN)) {
+        return true
+      } else {
+        return false;
+      }
+    });
+  }
 }
