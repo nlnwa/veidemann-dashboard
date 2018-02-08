@@ -17,6 +17,7 @@ import 'brace/theme/monokai';
 import 'brace/mode/javascript';
 import 'brace/ext/language_tools.js';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 declare var ace: any;
 
@@ -43,8 +44,14 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -123,21 +130,24 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   }
 
   private createForm() {
+
+    const hasRequiredRole = !(this.roleService.isAdmin());
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      script: '',
+      script: {value: '', disabled: hasRequiredRole},
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }
-  1511964561
+
   private updateForm() {
     this.form.patchValue({
       id: this.browserScript.id,
