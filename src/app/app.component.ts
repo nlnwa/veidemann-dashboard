@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
   myDate: String;
 
   constructor(private authService: AuthService, private roleService: RoleService) {
-    this.authService.configureAuth();
   }
 
   get canConfigure(): boolean {
@@ -21,6 +20,10 @@ export class AppComponent implements OnInit {
 
   get canAdministrate(): boolean {
     return this.roleService.isAdmin();
+  }
+
+  get canViewCrawljobs(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
   get name(): string {

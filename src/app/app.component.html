@@ -55,11 +55,14 @@
         <mat-list-item [disableRipple]="true">
           <h3 i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
         </mat-list-item>
+
+        <ng-container *ngIf="canViewCrawljobs">
         <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">work</mat-icon>
           <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container>
         </a>
+        </ng-container>
         <a mat-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">schedule</mat-icon>

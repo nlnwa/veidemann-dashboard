@@ -11,6 +11,7 @@ import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -38,8 +39,13 @@ export class CrawljobDetailsComponent implements OnChanges {
   form: FormGroup;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -124,24 +130,27 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+    
+    const hasRequiredRole = !this.isAdmin;
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      schedule_id: [''],
-      crawl_config_id: ['', CustomValidators.nonEmpty],
-      disabled: false,
+      schedule_id: {value: [''], disabled: hasRequiredRole},
+      crawl_config_id: [{value: '', disabled: hasRequiredRole}, CustomValidators.nonEmpty],
+      disabled: {value: false, disabled: hasRequiredRole},
       limits: this.fb.group({
-        depth: ['', [Validators.required, CustomValidators.min(0)]],
-        max_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
-        max_bytes: ['', [Validators.required, CustomValidators.min(0)]],
+        depth: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
+        max_duration_s: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
+        max_bytes: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
       }),
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }
