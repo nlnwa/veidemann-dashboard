@@ -42,6 +42,9 @@ export class RoleService {
   }
 
   private isRole(role: Role) {
+    if (!environment.production && environment.auth.issuer === '') {
+      return true;
+    }
     if (this.roles.includes(role)) {
       return true
     } else {

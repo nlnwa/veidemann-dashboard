@@ -130,8 +130,9 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-    
-    const hasRequiredRole = !this.isAdmin;
+
+    const hasRequiredRole = !(this.roleService.isAdmin);
+
 
     this.form = this.fb.group({
       id: {value: '', disabled: true},
