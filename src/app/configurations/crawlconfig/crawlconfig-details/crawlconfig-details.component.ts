@@ -3,6 +3,7 @@ import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 
 @Component({
@@ -35,8 +36,13 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -102,24 +108,27 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
+    const hasRequiredRole =  !this.isAdmin;
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      browser_config_id: ['', CustomValidators.nonEmpty],
-      politeness_id: ['', CustomValidators.nonEmpty],
+      browser_config_id: [{value: '', disabled: hasRequiredRole}, CustomValidators.nonEmpty],
+      politeness_id: [{value: '', disabled: hasRequiredRole}, CustomValidators.nonEmpty],
       extra: this.fb.group({
-        extract_text: '',
-        create_snapshot: '',
+        extract_text: {value: '', disabled: hasRequiredRole},
+        create_snapshot: {value: '', disabled: hasRequiredRole},
       }),
-      minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
-      depth_first: '',
+      minimum_dns_ttl_s: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
+      depth_first: {value: '', disabled: hasRequiredRole},
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }
