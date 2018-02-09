@@ -38,16 +38,16 @@ export class AuthService {
     this.roleService.resetRoles();
   }
 
-  public configureAuth() {
+  public configureAuth(): Promise<any> {
     const auth = this.appConfig.auth;
     if (auth && auth.issuer !== '') {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-      this.oauthService.loadDiscoveryDocumentAndTryLogin({
-        onTokenReceived: (_) => {
-          this.roleService.fetchRoles();
-        }
-      }).catch(_ => Observable.empty());
+      return this.oauthService.loadDiscoveryDocumentAndTryLogin()
+        .then(() => this.roleService.fetchRoles())
+        .catch(_ => Observable.empty().toPromise());
+    } else {
+      return Promise.resolve();
     }
   }
 }
