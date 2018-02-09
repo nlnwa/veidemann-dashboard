@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 
 @Component({
@@ -29,8 +30,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   form: FormGroup;
   robotsPolicyList: any[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -104,25 +110,31 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
+    const hasRequiredRole = !this.isAdmin;
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
-      minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
+      robots_policy: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.nonEmpty]],
+      minimum_robots_validity_duration_s: [{value: '', disabled: hasRequiredRole},
+        [Validators.required, CustomValidators.min(0)]],
       custom_robots: null,
-      min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      max_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      delay_factor: '',
-      max_retries: '',
-      retry_delay_seconds: '',
-      crawl_host_group_selector: [],
+      min_time_between_page_load_ms: [{value: '', disabled: hasRequiredRole},
+        [Validators.required, CustomValidators.min(0)]],
+      max_time_between_page_load_ms: [{value: '', disabled: hasRequiredRole},
+        [Validators.required, CustomValidators.min(0)]],
+      delay_factor: {value: '', disabled: hasRequiredRole},
+      max_retries: {value: '', disabled: hasRequiredRole},
+      retry_delay_seconds: {value: '', disabled: hasRequiredRole},
+      crawl_host_group_selector: {value: [], disabled: hasRequiredRole},
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }

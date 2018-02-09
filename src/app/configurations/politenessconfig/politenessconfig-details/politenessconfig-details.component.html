@@ -163,7 +163,7 @@
         </ng-container>
       </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions *ngIf="isAdmin">
       <button mat-raised-button color="primary"
               *ngIf="showSave"
               [disabled]="!canSave"
