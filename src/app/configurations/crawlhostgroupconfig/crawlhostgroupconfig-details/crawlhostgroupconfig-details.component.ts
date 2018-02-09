@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
 import {VALID_IP_PATTERN} from '../../../commons/util';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 
 @Component({
@@ -25,8 +26,17 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
+  }
+
+  get isCurator(): boolean {
+    return this.roleService.isCurator();
   }
 
   get showSave(): boolean {
@@ -97,17 +107,20 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
+    const hasRequiredRole = !( this.isAdmin || this.isCurator);
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       ip_range: this.fb.array([]),
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }
@@ -152,9 +165,12 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   private initIpRange() {
+
+    const hasRequiredRole = !( this.isAdmin || this.isCurator);
+
     return this.fb.group({
-      ip_from: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
-      ip_to: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
+      ip_from: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
+      ip_to: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
     });
   }
 
