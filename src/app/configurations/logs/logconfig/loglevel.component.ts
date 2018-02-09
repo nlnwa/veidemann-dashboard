@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
 import {LogLevel} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {RoleService} from '../../../roles/roles.service';
 
 
 @Component({
@@ -17,13 +18,22 @@ export class LoglevelComponent implements OnChanges {
 
   constructor(private logService: LogService,
               private fb: FormBuilder,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private roleService: RoleService) {
 
     this.form = this.fb.group({
       log_level: this.fb.array([]),
 
     });
     this.getLogLevels();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
+  }
+
+  get isCurator(): boolean {
+    return this.roleService.isCurator();
   }
 
   get levels() {
@@ -86,9 +96,12 @@ export class LoglevelComponent implements OnChanges {
   }
 
   private initLogconfig() {
+
+    const hasRequiredRole = !(this.isAdmin || this.isCurator);
+
     return this.fb.group({
-      logger: ['', [Validators.required, Validators.minLength(1)]],
-      level: ['', [Validators.required, Validators.minLength(1)]],
+      logger: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
+      level: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
     });
   }
 
