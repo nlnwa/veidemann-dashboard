@@ -12,6 +12,7 @@ import {
   VALID_MONTH_PATTERN,
   VALID_YEAR_PATTERN
 } from '../../../commons/util';
+import {RoleService} from '../../../roles/roles.service';
 
 @Component({
   selector: 'app-schedule-details',
@@ -33,8 +34,17 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get isAdmin(): boolean {
+    return this.roleService.isAdmin();
+  }
+
+  get isCurator(): boolean {
+    return this.roleService.isCurator();
   }
 
   get showSave(): boolean {
@@ -42,7 +52,10 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    return this.form.valid;
+    if (this.isAdmin || this.isCurator) {
+      return this.form.valid;
+    }
+    return false;
   }
 
   get canUpdate() {
@@ -50,7 +63,10 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canRevert() {
-    return this.form.dirty;
+    if (this.isAdmin || this.isCurator) {
+      return this.form.dirty;
+    }
+    return false;
   }
 
   get name() {
@@ -88,33 +104,48 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
+    const hasRequiredRole = !(this.isAdmin || this.isCurator)
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
-        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+        minute: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
       }),
       valid_from: this.fb.group({
-        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
+        year: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
+        month: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
+        day: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
       valid_to: this.fb.group({
-        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
+        year: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
+        month: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
+        day: [{value: '', disabled: hasRequiredRole},
+          [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
       meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
+        name: [{value: '', disabled: hasRequiredRole},
+          [Validators.required, Validators.minLength(2)]],
+        description: {value: '', disabled: hasRequiredRole},
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: {value: [], disabled: hasRequiredRole},
       }),
     });
   }
@@ -147,7 +178,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     });
 
     if (this.schedule.valid_from !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -165,7 +196,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
     }
     if (this.schedule.valid_to !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.patchValue({
         valid_to: {
           year: year,
