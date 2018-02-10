@@ -16,7 +16,7 @@ import 'brace/theme/chrome';
 import 'brace/theme/monokai';
 import 'brace/mode/javascript';
 import 'brace/ext/language_tools.js';
-import {DateTime} from '../../../commons/datetime';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 declare var ace: any;
 
@@ -137,7 +137,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
       }),
     });
   }
-  1511964561
+
   private updateForm() {
     this.form.patchValue({
       id: this.browserScript.id,

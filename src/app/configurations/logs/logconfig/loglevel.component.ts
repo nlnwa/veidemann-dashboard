@@ -2,7 +2,7 @@ import {Component, OnChanges, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../log.service';
 import {LogLevel} from '../../../commons/models/config.model';
-import {SnackBarService} from '../../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../../commons/snack-bar/snack-bar.service';
 
 
 @Component({

@@ -4,7 +4,7 @@ import {MatPaginator} from '@angular/material';
 import {BrowserScriptListComponent} from './browserscript-list/browserscript-list.component';
 import {BrowserScript} from '../../commons/models/config.model';
 import {BrowserScriptService} from './browserscript.service';
-import {SnackBarService} from 'app/snack-bar-service/snack-bar.service';
+import {SnackBarService} from 'app/commons/snack-bar/snack-bar.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';

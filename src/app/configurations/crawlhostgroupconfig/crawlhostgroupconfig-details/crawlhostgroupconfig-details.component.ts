@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
-import {VALID_IP_PATTERN} from '../../../commons/util';
-import {DateTime} from '../../../commons/datetime';
+import {VALID_IP_PATTERN} from '../../../commons/validator/patterns';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({

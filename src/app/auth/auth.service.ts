@@ -42,7 +42,7 @@ export class AuthService {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
       this.oauthService.loadDiscoveryDocumentAndTryLogin()
-        .catch(_ => Observable.empty());
+        .catch(() => Observable.empty());
     }
   }
 }

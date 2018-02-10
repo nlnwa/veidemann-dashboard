@@ -2,30 +2,13 @@
 
   <!-- Toolbar -->
 
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" fxFlex>
     <a routerLink="/" class="title"><h1>Veidemann</h1></a>
     <span fxFlex fxFlexFill></span>
-    <span>{{myDate}}</span>
+    <app-time></app-time>
     <span fxFlex fxFlexFill></span>
     <span>{{name}}</span>
-
-    <!-- Toolbar menu button -->
-
-    <button mat-icon-button [mat-menu-trigger-for]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
   </mat-toolbar>
-
-  <!-- Toolbar menu-->
-
-  <mat-menu x-position="before" #menu>
-    <button mat-menu-item (click)="setExpertMode(true)"
-            i18n="@@toolbarMenuSetUserModeCurator">Kurator
-    </button>
-    <button mat-menu-item (click)="setExpertMode(false)"
-            i18n="@@toolbarMenuSetUserModeExpert">Expert
-    </button>
-  </mat-menu>
 
   <!-- Sidenav -->
 
@@ -78,43 +61,43 @@
         <mat-icon class="sidenav--icon__margin">schedule</mat-icon>
         <ng-container i18n="@@navigationSidebarSchedule">Schedule</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlconfig']"
+      <a mat-list-item [routerLink]="['/crawlconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">build</mat-icon>
         <ng-container i18n="@@navigationSidebarCrawlconfig">Crawl</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/crawlhostgroupconfig']"
+      <a mat-list-item [routerLink]="['/crawlhostgroupconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">build</mat-icon>
         <ng-container i18n="@@navigationSidebarCrawlhostgroupconfig">CrawlHostGroup</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/browserconfig']"
+      <a mat-list-item [routerLink]="['/browserconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">build</mat-icon>
         <ng-container i18n="@@navigationSidebarBrowserconfig">Browser</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/browserscript']"
+      <a mat-list-item [routerLink]="['/browserscript']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">build</mat-icon>
         <ng-container i18n="@@navigationSidebarBrowserscript">Script</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/politenessconfig']"
+      <a mat-list-item [routerLink]="['/politenessconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">sentiment_neutral</mat-icon>
         <ng-container i18n="@@navigationSidebarPolitenessconfig">Politeness</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/logconfig']"
+      <a mat-list-item [routerLink]="['/logconfig']"
          [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">receipt</mat-icon>
         <ng-container i18n="@@navigationSidebarLogconfig">Logging</ng-container>
       </a>
-      <a mat-list-item [fxHide]="isExpertMode" [routerLink]="['/rolemapping']"
+      <a mat-list-item [routerLink]="['/rolemapping']"
          [routerLinkActiveOptions]="{ exact: true}"
          [routerLinkActive]="['is-active']">
         <mat-icon class="sidenav--icon__margin">person</mat-icon>

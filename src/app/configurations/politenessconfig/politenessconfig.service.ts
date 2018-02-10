@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
-import {CrudService} from '../../commons/crud.service';
+import {CrudService} from '../shared/crud.service';
 import {PolitenessConfig} from '../../commons/models/config.model';
 
 @Injectable()

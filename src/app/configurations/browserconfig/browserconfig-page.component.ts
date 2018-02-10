@@ -5,7 +5,7 @@ import {BrowserConfigListComponent} from './browserconfig-list/browserconfig-lis
 import {BrowserConfig, BrowserScript} from '../../commons/models/config.model';
 import {BrowserConfigService} from './browserconfig.service';
 import {BrowserScriptService} from '../browserscript/browserscript.service';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';

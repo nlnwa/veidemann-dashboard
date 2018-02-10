@@ -4,7 +4,7 @@ import {MatPaginator} from '@angular/material';
 import {ScheduleListComponent} from './schedule-list/schedule-list.component';
 import {Schedule} from '../../commons/models/config.model';
 import {Subject} from 'rxjs/Subject';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {Observable} from 'rxjs/Observable';
 import {ScheduleService} from './schedule.service';
 import 'rxjs/add/observable/merge';

@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent} from '../../../commons/list/base-list/base-list.component';
-import {ListDataSource} from '../../../commons/list/list-datasource';
+import {BaseListComponent, ListDataSource} from '../../../commons/list';
 
 
 @Component({
