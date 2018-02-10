@@ -1,22 +1,5 @@
 import {environment} from '../../../environments/environment';
 
-export class Environment {
-  auth: AuthConfig;
-  apiGateway: string;
-
-  constructor(env: Environment = {} as Environment) {
-    if (env.hasOwnProperty('auth')) {
-      env.auth = new AuthConfig(env.auth);
-    }
-    const {
-      auth = environment.auth,
-      apiGateway = environment.apiGateway,
-    } = env;
-    this.auth = auth;
-    this.apiGateway = apiGateway;
-  }
-}
-
 export class AuthConfig {
   issuer: string;
   requireHttps: boolean;
@@ -37,5 +20,22 @@ export class AuthConfig {
     this.redirectUri = redirectUri;
     this.clientId = clientId;
     this.scope = scope;
+  }
+}
+
+export class Environment {
+  auth: AuthConfig;
+  apiGateway: string;
+
+  constructor(env: Environment = {} as Environment) {
+    if (env.hasOwnProperty('auth')) {
+      env.auth = new AuthConfig(env.auth);
+    }
+    const {
+      auth = environment.auth,
+      apiGateway = environment.apiGateway,
+    } = env;
+    this.auth = auth;
+    this.apiGateway = apiGateway;
   }
 }

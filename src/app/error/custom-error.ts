@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 /**
  * Naively extending Error class does NOT allow one to do:
  *

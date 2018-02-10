@@ -1,3 +1,12 @@
+export class Timestamp {
+  seconds: string;
+  nanos?: number;
+
+  constructor() {
+    this.seconds = null;
+  }
+}
+
 export class Meta {
   name: string;
   description: string;
@@ -41,6 +50,14 @@ export class Entity {
   }
 }
 
+export class Scope {
+  surt_prefix: string;
+
+  constructor() {
+    this.surt_prefix = '';
+  }
+}
+
 export class Seed {
   id: string;
   meta: Meta;
@@ -57,6 +74,28 @@ export class Seed {
     this.job_id = [];
     this.disabled = false;
   }
+}
+
+export class Schedule {
+  id: string;
+  meta: Meta;
+  cron_expression: string;
+  valid_from?: Timestamp;
+  valid_to?: Timestamp;
+
+  constructor() {
+    this.id = '';
+    this.meta = new Meta();
+    this.cron_expression = '';
+    this.valid_from = null;
+    this.valid_to = null;
+  }
+}
+
+export class CrawlLimits {
+  depth: number;
+  max_duration_s: string; // int64
+  max_bytes: string; // int64
 }
 
 export class CrawlJob {
@@ -87,6 +126,16 @@ export class CrawlJob {
   }
 }
 
+export class Extra {
+  extract_text: boolean;
+  create_snapshot: boolean;
+
+  constructor() {
+    this.extract_text = true;
+    this.create_snapshot = true;
+  }
+}
+
 export class CrawlConfig {
   id: string;
   meta: Meta;
@@ -114,37 +163,6 @@ export class CrawlConfig {
     this.minimum_dns_ttl_s = 0;
     this.depth_first = true;
   }
-}
-
-export class Schedule {
-  id: string;
-  meta: Meta;
-  cron_expression: string;
-  valid_from?: Timestamp;
-  valid_to?: Timestamp;
-
-  constructor() {
-    this.id = '';
-    this.meta = new Meta();
-    this.cron_expression = '';
-    this.valid_from = null;
-    this.valid_to = null;
-  }
-}
-
-export class Scope {
-  surt_prefix: string;
-
-  constructor() {
-    this.surt_prefix = '';
-  }
-
-}
-
-export class CrawlLimits {
-  depth: number;
-  max_duration_s: string; // int64
-  max_bytes: string; // int64
 }
 
 export class BrowserConfig {
@@ -199,16 +217,6 @@ export class PolitenessConfig {
   }
 }
 
-export class Extra {
-  extract_text: boolean;
-  create_snapshot: boolean;
-
-  constructor() {
-    this.extract_text = true;
-    this.create_snapshot = true;
-  }
-}
-
 export class BrowserScript {
   id: string;
   meta: Meta;
@@ -247,15 +255,6 @@ export class LogLevels {
 export class LogLevel {
   logger: string;
   level: string;
-}
-
-export class Timestamp {
-  seconds: string;
-  nanos?: number;
-
-  constructor() {
-    this.seconds = null;
-  }
 }
 
 export class RoleMapping {
