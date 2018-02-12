@@ -26,6 +26,9 @@ export class LoglevelComponent implements OnChanges {
 
     });
     this.getLogLevels();
+    if (!(this.isAdmin || this.isCurator)) {
+      this.form.disable();
+    }
   }
 
   get isAdmin(): boolean {
@@ -79,6 +82,9 @@ export class LoglevelComponent implements OnChanges {
   private updateForm() {
     const logconfigFG: FormGroup[] = this.logLevels.map(config => this.fb.group(config));
     const logconfigFormArray = this.fb.array(logconfigFG);
+    if (this.form.disabled) {
+      logconfigFormArray.disable();
+    }
     this.form.setControl('log_level', logconfigFormArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -96,12 +102,9 @@ export class LoglevelComponent implements OnChanges {
   }
 
   private initLogconfig() {
-
-    const hasRequiredRole = !(this.isAdmin || this.isCurator);
-
     return this.fb.group({
-      logger: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
-      level: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
+      logger: ['', [Validators.required, Validators.minLength(1)]],
+      level: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 

@@ -107,28 +107,31 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-
-    const hasRequiredRole = !( this.isAdmin || this.isCurator);
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       ip_range: this.fb.array([]),
       meta: this.fb.group({
-        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
-        description: {value: '', disabled: hasRequiredRole},
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: {value: [], disabled: hasRequiredRole},
+        label: []
       }),
     });
+
+    if (!( this.isAdmin || this.isCurator)) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {
     const ipRangeFG: FormGroup[] = this.crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
-
+    if (this.form.disabled) {
+      ipRangeFGArray.disable();
+    }
     this.form.patchValue({
       id: this.crawlHostGroupConfig.id,
       meta: {
@@ -165,12 +168,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   private initIpRange() {
-
-    const hasRequiredRole = !( this.isAdmin || this.isCurator);
-
     return this.fb.group({
-      ip_from: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
-      ip_to: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
+      ip_from: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
+      ip_to: ['', [Validators.required, Validators.pattern(VALID_IP_PATTERN)]],
     });
   }
 

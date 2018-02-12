@@ -105,49 +105,39 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   private createForm() {
 
-    const hasRequiredRole = !(this.isAdmin || this.isCurator)
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
-        minute: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
       }),
       valid_from: this.fb.group({
-        year: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
+        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
+        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
+        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
       valid_to: this.fb.group({
-        year: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: [{value: '', disabled: hasRequiredRole},
-          [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
+        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
+        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
+        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
       meta: this.fb.group({
-        name: [{value: '', disabled: hasRequiredRole},
-          [Validators.required, Validators.minLength(2)]],
-        description: {value: '', disabled: hasRequiredRole},
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: {value: [], disabled: hasRequiredRole},
+        label: [],
       }),
     });
+
+    if (!(this.isAdmin || this.isCurator)) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

@@ -22,7 +22,7 @@
                   <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <button mat-icon-button color="warn" (click)="onDelete(i)">
+              <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="isAdmin || isCurator">
                 <mat-icon>close</mat-icon>
               </button>
             </div>

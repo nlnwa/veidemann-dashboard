@@ -125,7 +125,7 @@
                 <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-error *ngIf="!script_id.valid"
+            <mat-error *ngIf="!script_id.valid  && !form.disabled"
                        i18n="@@browserconfigFormScriptsRequiredError">
               Scripts påkrevd.
             </mat-error>

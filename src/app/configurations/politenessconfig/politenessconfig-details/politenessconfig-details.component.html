@@ -34,7 +34,7 @@
               <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-error *ngIf="! robotsPolicy.valid"
+          <mat-error *ngIf="! robotsPolicy.valid && !form.disabled"
                  i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </mat-error>

@@ -130,22 +130,22 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   }
 
   private createForm() {
-
-    const hasRequiredRole = !(this.roleService.isAdmin());
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      script: {value: '', disabled: hasRequiredRole},
+      script: '',
       meta: this.fb.group({
-        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
-        description: {value: '', disabled: hasRequiredRole},
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: {value: [], disabled: hasRequiredRole},
+        label: [],
       }),
     });
+    if (!this.isAdmin) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

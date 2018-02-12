@@ -116,30 +116,30 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-
-    const hasRequiredRole = !(this.roleService.isAdmin());
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      user_agent: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
-      window_width: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(1)]],
-      window_height: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(1)]],
-      page_load_timeout_ms: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
-      sleep_after_pageload_ms: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
+      user_agent: ['', [Validators.required, Validators.minLength(1)]],
+      window_width: ['', [Validators.required, CustomValidators.min(1)]],
+      window_height: ['', [Validators.required, CustomValidators.min(1)]],
+      page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       // headers: this.fb.group({''}),
-      script_id: {value: [], disabled: hasRequiredRole},
-      script_selector: {value: [], disabled: hasRequiredRole},
+      script_id: [],
+      script_selector: [],
       meta: this.fb.group({
-        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(1)]],
-        description: {value: '', disabled: hasRequiredRole},
+        name: ['', [Validators.required, Validators.minLength(1)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: {value: [], disabled: hasRequiredRole},
+        label: [],
       }),
-
     });
+
+    if (!this.isAdmin) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

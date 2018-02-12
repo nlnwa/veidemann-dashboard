@@ -108,7 +108,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-error *ngIf="! scheduleId.valid"
+            <mat-error *ngIf="! scheduleId.valid  && ! form.disabled"
                        i18n="@@crawljobFormScheduleRequiredError">
               Schedule er påkrevd.
             </mat-error>
@@ -122,7 +122,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-error *ngIf="! crawlConfigId.valid"
+            <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
                        i18n="@@crawljobFormCrawlconfigRequieredError">
               Crawlconfig er påkrevd.
             </mat-error>

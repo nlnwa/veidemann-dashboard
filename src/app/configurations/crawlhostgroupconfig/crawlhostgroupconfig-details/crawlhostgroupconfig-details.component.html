@@ -78,7 +78,8 @@
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab (click)="onAddIpRange()" *ngIf="isAdmin || isCurator">
+          <button mat-mini-fab (click)="onAddIpRange()"
+                  *ngIf="isAdmin || isCurator">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -105,7 +106,9 @@
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
               </mat-form-field>
-              <button matSuffix mat-icon-button (click)="onRemoveIpRange(i)">
+              <button matSuffix mat-icon-button
+                      (click)="onRemoveIpRange(i)"
+                      *ngIf="isAdmin || isCurator">
                 <mat-icon color="warn">close</mat-icon>
               </button>
             </div>

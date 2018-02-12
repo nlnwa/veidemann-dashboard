@@ -104,7 +104,7 @@
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </mat-form-field>
           </div>
-          <mat-error fxLayout="row" *ngIf="! cronExpression.valid"
+          <mat-error fxLayout="row" *ngIf="! cronExpression.valid && !form.disabled"
                     i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </mat-error>

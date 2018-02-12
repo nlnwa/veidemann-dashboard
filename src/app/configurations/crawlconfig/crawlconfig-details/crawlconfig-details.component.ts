@@ -108,29 +108,30 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-
-    const hasRequiredRole =  !this.isAdmin;
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      browser_config_id: [{value: '', disabled: hasRequiredRole}, CustomValidators.nonEmpty],
-      politeness_id: [{value: '', disabled: hasRequiredRole}, CustomValidators.nonEmpty],
+      browser_config_id: ['', CustomValidators.nonEmpty],
+      politeness_id: ['', CustomValidators.nonEmpty],
       extra: this.fb.group({
-        extract_text: {value: '', disabled: hasRequiredRole},
-        create_snapshot: {value: '', disabled: hasRequiredRole},
+        extract_text: '',
+        create_snapshot: '',
       }),
-      minimum_dns_ttl_s: [{value: '', disabled: hasRequiredRole}, [Validators.required, CustomValidators.min(0)]],
-      depth_first: {value: '', disabled: hasRequiredRole},
+      minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
+      depth_first: '',
       meta: this.fb.group({
-        name: [{value: '', disabled: hasRequiredRole}, [Validators.required, Validators.minLength(2)]],
-        description: {value: '', disabled: hasRequiredRole},
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        description: '',
         created: this.fb.group({seconds: {value: '', disabled: true}}),
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: {value: [], disabled: hasRequiredRole},
+        label: [],
       }),
     });
+
+    if (!( this.isAdmin )) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {
