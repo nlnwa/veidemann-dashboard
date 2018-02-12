@@ -28,7 +28,6 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor, OnInit 
   public canUpdateLabel = false;
   private indexOfClickedLabel;
   private labels: Label[];
-  public canEditLabel: boolean;
 
   public myFocusTriggeringEventEmitter = new EventEmitter<boolean>();
 
@@ -64,12 +63,11 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor, OnInit 
   }
 
 
-    ngOnInit(): void {
-      this.canEditLabel = this.canEdit;
-      if (!this.canEditLabel) {
-        this.labelForm.disable();
-      }
+  ngOnInit(): void {
+    if (!this.canEdit) {
+      this.labelForm.disable();
     }
+  }
 
   ngOnChanges(): void {
     this.labelForm.controls['newKeyInput'].setValue('');

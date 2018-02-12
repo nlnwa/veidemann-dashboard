@@ -8,7 +8,7 @@
     </ng-container>
   </h1>
   <span class="fill-space"></span>
-  <button mat-mini-fab (click)="newLabelCard(true)" *ngIf="!disabled">
+  <button mat-mini-fab (click)="newLabelCard(true)" *ngIf="canEdit">
     <mat-icon>add</mat-icon>
   </button>
 </mat-toolbar>

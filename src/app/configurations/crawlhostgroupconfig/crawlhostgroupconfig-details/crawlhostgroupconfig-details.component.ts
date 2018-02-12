@@ -30,14 +30,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
               private roleService: RoleService) {
     this.createForm();
   }
-  //
-  // get isAdmin(): boolean {
-  //   return this.roleService.isAdmin();
-  // }
-  //
-  // get isCurator(): boolean {
-  //   return this.roleService.isCurator();
-  // }
 
   get canEdit(): boolean {
     return this.roleService.isAdmin() || this.roleService.isCurator();
