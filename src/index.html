@@ -11,16 +11,18 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
   <style>
     #appLoadingScreen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      align-content: center;
+      height: 100%;
+      width: 100%;
+      display: grid;
+    }
+    #appLoadingText {
+      margin: auto;
     }
   </style>
 </head>
 <body>
 <app-root>
-  <div id="appLoadingScreen">Laster...</div>
+  <div id="appLoadingScreen"><span id="appLoadingText">Laster...</span></div>
 </app-root>
 </body>
 </html>
