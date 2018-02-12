@@ -39,12 +39,12 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  get isAdmin(): boolean {
+  get canDelete(): boolean {
     return this.roleService.isAdmin();
   }
 
-  get isCurator(): boolean {
-    return this.roleService.isCurator();
+  get canEdit(): boolean {
+    return this.roleService.isCurator() || this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -52,21 +52,15 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    if (this.isAdmin || this.isCurator) {
-      return this.form.valid;
-    }
-    return false;
+      return this.form.valid && this.canEdit;
   }
 
   get canUpdate() {
-    return (this.form.valid && this.form.dirty);
+    return this.form.valid && this.form.dirty && this.canEdit;
   }
 
   get canRevert() {
-    if (this.isAdmin || this.isCurator) {
-      return this.form.dirty;
-    }
-    return false;
+    return this.canEdit && this.form.dirty;
   }
 
   get name() {
@@ -135,7 +129,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       }),
     });
 
-    if (!(this.isAdmin || this.isCurator)) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }
@@ -168,7 +162,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     });
 
     if (this.schedule.valid_from !== null) {
-      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -186,7 +180,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
     }
     if (this.schedule.valid_to !== null) {
-      const {year, month, day,} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.patchValue({
         valid_to: {
           year: year,

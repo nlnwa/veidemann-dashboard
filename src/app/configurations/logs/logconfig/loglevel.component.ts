@@ -26,17 +26,13 @@ export class LoglevelComponent implements OnChanges {
 
     });
     this.getLogLevels();
-    if (!(this.isAdmin || this.isCurator)) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }
 
-  get isAdmin(): boolean {
-    return this.roleService.isAdmin();
-  }
-
-  get isCurator(): boolean {
-    return this.roleService.isCurator();
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
   get levels() {

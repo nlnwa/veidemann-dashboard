@@ -5,7 +5,7 @@
         <mat-toolbar>
           <span i18n="@@logconfigHeader">Logconfig</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab *ngIf="isAdmin || isCurator" (click)="onAdd()">
+          <button mat-mini-fab *ngIf="canEdit" (click)="onAdd()">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -22,7 +22,7 @@
                   <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="isAdmin || isCurator">
+              <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="canEdit">
                 <mat-icon>close</mat-icon>
               </button>
             </div>
@@ -30,7 +30,7 @@
         </ng-container>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="isAdmin || isCurator">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!form.valid ||!form.dirty"
               (click)="onSave(form.value)" novalidate

@@ -146,20 +146,22 @@
           </div>
         </div>
 
+        <!-- Label -->
+
         <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label"></app-labels>
+          <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
         </ng-container>
       </div>
       <div fxFlex fxLayout="column">
         <app-schedule-sidebar></app-schedule-sidebar>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="isAdmin || isCurator">
+    <mat-card-actions *ngIf="canEdit">
 
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"
-              (click)="onSave()" novalidate
+              (click)="onSave()"
               i18n="@@commonButtonSave">
         Lagre
       </button>
@@ -178,7 +180,7 @@
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="!showSave && isAdmin"
+              *ngIf="!showSave && canDelete"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
