@@ -20,6 +20,7 @@ const COMMA = 188;
 
 export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
+  @Input() canEdit;
   @Input() disabled = false;
   @Input() type;
 
@@ -35,7 +36,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   groups: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$ = this.groups.asObservable();
 
-  selectable: boolean = true;
+  selectable = true;
   separatorKeysCodes = [ENTER, COMMA];
 
 
@@ -56,6 +57,9 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       newKeyInput: ['', [Validators.required, Validators.minLength(1)]],
       newValueInput: ['', [Validators.required, Validators.minLength(1)]],
     });
+    if (!this.canEdit) {
+      this.labelForm.disable();
+    }
   }
 
   ngOnChanges(): void {
