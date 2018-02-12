@@ -22,10 +22,10 @@
           {{group.key +': '+value}}
           <mat-icon matChipRemove (click)="removeLabel(group.key, value)">cancel</mat-icon>
         </mat-chip>
-        <input placeholder="NewChip"
-               [matChipInputFor]="chipList"
-               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-               (matChipInputTokenEnd)="onNewLabel(group.key, $event.value)"/>
+        <input
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="onNewLabel(group.key, $event.value)"/>
       </mat-chip-list>
     </mat-form-field>
   </div>
@@ -62,7 +62,7 @@
       <button mat-button color="accent"
               *ngIf="canUpdateLabel"
               [disabled]="!labelForm.valid"
-      (click)="onUpdateLabel(newKey.value, newValue.value)"> Oppdater
+              (click)="onUpdateLabel(newKey.value, newValue.value)"> Oppdater
 
       </button>
       <button i18n="@@commonButtonCancel" mat-button color="warn"
