@@ -13,7 +13,6 @@
       <div fxLayout="row" fxLayoutWrap>
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="meta">
-
             <mat-form-field>
               <input matInput formControlName="name" placeholder="Navn"
                      i18n-placeholder="@@metaNameInputPlaceholder">
@@ -76,7 +75,7 @@
         </div>
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
           </ng-container>
         </div>
       </div>
@@ -108,7 +107,8 @@
             <ace-editor formControlName="script"
                         #editor style="height:300px;"
                         [options]="{enableBasicAutocompletion: true,
-                                  enableLiveAutocompletion: true}">
+                                  enableLiveAutocompletion: true}"
+                        [readOnly]="!canEdit">
             </ace-editor>
             <mat-error *ngIf="editor.value === '' "
                        i18n="@@browserscriptFormScriptRequiredError">
@@ -117,8 +117,8 @@
           </div>
         </div>
       </div>
-    </mat-card-content>
-    <mat-card-actions>
+    </mat-card-content >
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

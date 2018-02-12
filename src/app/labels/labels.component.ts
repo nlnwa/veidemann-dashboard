@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnChanges,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit,} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../commons/models/config.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -18,8 +18,9 @@ const COMMA = 188;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class LabelsComponent implements OnChanges, ControlValueAccessor {
+export class LabelsComponent implements OnChanges, ControlValueAccessor, OnInit {
 
+  @Input() canEdit = true;
   @Input() disabled = false;
   @Input() type;
 
@@ -35,7 +36,7 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
   groups: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$ = this.groups.asObservable();
 
-  selectable: boolean = true;
+  selectable = true;
   separatorKeysCodes = [ENTER, COMMA];
 
 
@@ -56,6 +57,16 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       newKeyInput: ['', [Validators.required, Validators.minLength(1)]],
       newValueInput: ['', [Validators.required, Validators.minLength(1)]],
     });
+    if (!this.canEdit) {
+      this.labelForm.disable();
+    }
+  }
+
+
+  ngOnInit(): void {
+    if (!this.canEdit) {
+      this.labelForm.disable();
+    }
   }
 
   ngOnChanges(): void {
@@ -163,10 +174,10 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
 
 
   newLabelCard(value: boolean) {
-      this.showAddLabelCard = value;
-      this.canUpdateLabel = false;
-      this.labelForm.controls['newKeyInput'].setValue('');
-      this.labelForm.controls['newValueInput'].setValue('');
+    this.showAddLabelCard = value;
+    this.canUpdateLabel = false;
+    this.labelForm.controls['newKeyInput'].setValue('');
+    this.labelForm.controls['newValueInput'].setValue('');
   }
 
 

@@ -3,6 +3,7 @@ import {CustomValidators} from '../../../commons/';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../roles/roles.service';
 
 
 @Component({
@@ -35,8 +36,13 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -122,6 +128,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+
+    if (!( this.canEdit )) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

@@ -2,7 +2,7 @@ import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
 import {CrudService} from '../commons/crud.service';
-import {RoleMapping} from '../commons/models/config.model';
+import {Role, RoleMapping} from '../commons/models/config.model';
 import {Injectable} from '@angular/core';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class RoleMappingService extends CrudService<RoleMapping> {
   }
 
   getRoles(): Observable<string[]> {
-    return Observable.of(['ANY_USER', 'ANY', 'ADMIN', 'CURATOR', 'READONLY']);
+   return Observable.of(Object.keys(Role));
   }
 
 }

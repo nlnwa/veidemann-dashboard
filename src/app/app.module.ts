@@ -14,16 +14,33 @@ import {ActivityComponent} from './activity';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {SeedDetailComponent, SeedListComponent, SeedService} from './seeds';
 import {SearchComponent} from './search/search.component';
-import {BrowserConfigDetailsComponent, BrowserConfigListComponent, BrowserConfigService} from './configurations/browserconfig';
-import {BrowserScriptDetailsComponent, BrowserScriptListComponent, BrowserScriptService} from './configurations/browserscript';
+import {
+  BrowserConfigDetailsComponent,
+  BrowserConfigListComponent,
+  BrowserConfigService
+} from './configurations/browserconfig';
+import {
+  BrowserScriptDetailsComponent,
+  BrowserScriptListComponent,
+  BrowserScriptService
+} from './configurations/browserscript';
 import {
   CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigPageComponent,
   CrawlConfigService
 } from './configurations/crawlconfig';
 import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobService} from './configurations/crawljobs';
-import {PolitenessconfigDetailsComponent, PolitenessConfigListComponent, PolitenessConfigService} from './configurations/politenessconfig';
+import {
+  PolitenessconfigDetailsComponent,
+  PolitenessConfigListComponent,
+  PolitenessConfigService
+} from './configurations/politenessconfig';
 import {LoglevelComponent, LogService} from './configurations/logs/';
-import {ScheduleDetailsComponent, ScheduleListComponent, ScheduleService, ScheduleSidebarComponent} from './configurations/schedule';
+import {
+  ScheduleDetailsComponent,
+  ScheduleListComponent,
+  ScheduleService,
+  ScheduleSidebarComponent
+} from './configurations/schedule';
 import {EntityDetailsComponent, EntityService} from './entities';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {
@@ -50,7 +67,14 @@ import {SchedulePageComponent} from './configurations/schedule/schedule-page.com
 import {SearchListComponent} from './search/search-entity-list/search-entity-list.component';
 import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
 import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
-import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageComponent, RoleMappingService} from './rolemapping';
+import {
+  RoleMappingDetailsComponent,
+  RoleMappingListComponent,
+  RoleMappingPageComponent,
+  RoleMappingService
+} from './rolemapping';
+import {GuardService} from './auth/guard.service';
+import {RoleService} from './roles/roles.service';
 
 @NgModule({
   declarations: [
@@ -110,8 +134,21 @@ import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageCo
   ],
   providers: [
     AppConfig,
-    {provide: APP_INITIALIZER, useFactory: (appConfig: AppConfig) => () => appConfig.load(), deps: [AppConfig], multi: true},
     AuthService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (appConfig: AppConfig) => () => appConfig.load(),
+      deps: [AppConfig],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => () => authService.configureAuth(),
+      deps: [AuthService],
+      multi: true
+    },
+    GuardService,
+    RoleService,
     SearchService,
     SeedService,
     CrawlJobService,
