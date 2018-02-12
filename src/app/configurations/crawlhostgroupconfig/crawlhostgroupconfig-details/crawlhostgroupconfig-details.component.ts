@@ -30,15 +30,18 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
               private roleService: RoleService) {
     this.createForm();
   }
+  //
+  // get isAdmin(): boolean {
+  //   return this.roleService.isAdmin();
+  // }
+  //
+  // get isCurator(): boolean {
+  //   return this.roleService.isCurator();
+  // }
 
-  get isAdmin(): boolean {
-    return this.roleService.isAdmin();
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
-
-  get isCurator(): boolean {
-    return this.roleService.isCurator();
-  }
-
   get showSave(): boolean {
     return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id
   }
@@ -121,7 +124,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       }),
     });
 
-    if (!( this.isAdmin || this.isCurator)) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }

@@ -44,7 +44,7 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  get isAdmin(): boolean {
+  get canEdit(): boolean {
     return this.roleService.isAdmin();
   }
 
@@ -150,7 +150,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         label: [],
       }),
     });
-    if (! this.isAdmin) {
+    if (! this.canEdit) {
       this.form.disable();
     }
   }

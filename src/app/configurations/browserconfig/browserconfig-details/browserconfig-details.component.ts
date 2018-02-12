@@ -32,7 +32,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  get isAdmin(): boolean {
+  get canEdit(): boolean {
     return this.roleService.isAdmin();
   }
 
@@ -137,7 +137,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       }),
     });
 
-    if (!this.isAdmin) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }

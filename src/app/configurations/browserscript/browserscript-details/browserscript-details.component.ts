@@ -50,7 +50,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   }
 
 
-  get isAdmin(): boolean {
+  get canEdit(): boolean {
     return this.roleService.isAdmin();
   }
 
@@ -143,7 +143,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
         label: [],
       }),
     });
-    if (!this.isAdmin) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }

@@ -75,7 +75,7 @@
         </div>
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
           </ng-container>
         </div>
       </div>
@@ -108,7 +108,7 @@
                         #editor style="height:300px;"
                         [options]="{enableBasicAutocompletion: true,
                                   enableLiveAutocompletion: true}"
-                        [readOnly]="!isAdmin">
+                        [readOnly]="!canEdit">
             </ace-editor>
             <mat-error *ngIf="editor.value === '' "
                        i18n="@@browserscriptFormScriptRequiredError">
@@ -118,7 +118,7 @@
         </div>
       </div>
     </mat-card-content >
-    <mat-card-actions *ngIf="isAdmin">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

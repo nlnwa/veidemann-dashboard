@@ -129,13 +129,13 @@
           </div>
 
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
           </ng-container>
         </div>
       </div>
     </mat-card-content>
 
-    <mat-card-actions *ngIf="isAdmin">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

@@ -131,14 +131,14 @@
             </mat-error>
           </div>
 
-          <app-labels type="Selector" formControlName="script_selector"></app-labels>
+          <app-labels type="Selector" formControlName="script_selector" [canEdit]="canEdit"></app-labels>
 
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
           </ng-container>
         </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="isAdmin">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

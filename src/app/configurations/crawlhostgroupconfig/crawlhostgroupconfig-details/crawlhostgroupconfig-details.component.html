@@ -79,7 +79,7 @@
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
           <button mat-mini-fab (click)="onAddIpRange()"
-                  *ngIf="isAdmin || isCurator">
+                  *ngIf="canEdit">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -108,7 +108,7 @@
               </mat-form-field>
               <button matSuffix mat-icon-button
                       (click)="onRemoveIpRange(i)"
-                      *ngIf="isAdmin || isCurator">
+                      *ngIf="canEdit">
                 <mat-icon color="warn">close</mat-icon>
               </button>
             </div>
@@ -116,11 +116,11 @@
         </ng-container>
 
         <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label"></app-labels>
+          <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
         </ng-container>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="isAdmin || isCurator">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               *ngIf="showSave"
               [disabled]="!canSave"
@@ -143,7 +143,7 @@
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="!showSave && isAdmin"
+              *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
