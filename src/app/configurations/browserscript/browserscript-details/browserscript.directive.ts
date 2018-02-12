@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Directive, ElementRef, forwardRef} from '@angular/core';
+import {ChangeDetectorRef, Directive, ElementRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {nanoEditor} from 'nano-editor';
@@ -7,7 +7,7 @@ import {nanoEditor} from 'nano-editor';
   selector: '[appScriptEditor]',
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => BrowserScriptDirective),
+    useExisting: BrowserScriptDirective,
     multi: true
   }],
 })
@@ -16,7 +16,7 @@ export class BrowserScriptDirective implements ControlValueAccessor {
   onChange: (value: string) => void;
   onTouched: any;
 
-  private editor: any;
+  private editor: nanoEditor;
 
   constructor(private el: ElementRef, private ref: ChangeDetectorRef) {
     console.log('Constructor');
