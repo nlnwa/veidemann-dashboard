@@ -21,14 +21,6 @@ export class AuthService {
     return claims ? claims['name'] : null;
   }
 
-  public get authorizationHeader(): string | null {
-    const token = this.oauthService.getIdToken();
-    if (token === null) {
-      return token;
-    }
-    return `Bearer ${token}`;
-  }
-
   public login() {
     this.oauthService.initImplicitFlow();
   }
