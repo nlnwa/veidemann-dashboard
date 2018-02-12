@@ -2,8 +2,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 
 import {CommonsModule} from '../commons/commons.module';
 
-import {AceEditorModule} from 'ng2-ace-editor';
-
 import {CrawlConfigDetailsComponent, CrawlConfigListComponent, CrawlConfigPageComponent, CrawlConfigService} from './crawlconfig';
 import {BrowserScriptDetailsComponent, BrowserScriptListComponent, BrowserScriptPageComponent, BrowserScriptService} from './browserscript';
 import {SearchComponent, SearchListComponent, SearchService} from './search';
@@ -32,6 +30,7 @@ import {LoglevelComponent, LogService} from './logs';
 import {BrowserConfigDetailsComponent, BrowserConfigListComponent, BrowserConfigPageComponent, BrowserConfigService} from './browserconfig';
 import {SeedDetailComponent, SeedListComponent, SeedService} from './seeds';
 import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageComponent, RoleMappingService} from './rolemapping';
+import {BrowserScriptDirective} from './browserscript/browserscript-details/browserscript.directive';
 
 @NgModule({
   declarations: [
@@ -61,6 +60,7 @@ import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageCo
     SearchListComponent,
     BrowserConfigPageComponent,
     BrowserScriptPageComponent,
+    BrowserScriptDirective,
     CrawlConfigPageComponent,
     RoleMappingListComponent,
     RoleMappingDetailsComponent,
@@ -69,7 +69,6 @@ import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageCo
     EntityListComponent,
   ],
   imports: [
-    AceEditorModule,
     CommonsModule,
   ],
   exports: [

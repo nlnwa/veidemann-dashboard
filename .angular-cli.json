@@ -19,7 +19,10 @@
       "prefix": "app",
       "styles": [
         "styles/styles.css",
-        "styles/theme.scss"
+        "styles/theme.scss",
+        "../node_modules/prismjs/themes/prism.css",
+        "../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
+        "../node_modules/nano-editor/src/style.css"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

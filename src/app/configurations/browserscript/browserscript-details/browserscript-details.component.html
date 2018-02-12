@@ -9,13 +9,13 @@
               i18n="@@browserscriptNewBrowserscriptHeader"> Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
-      <div fxLayout="row" fxLayoutWrap>
+    <mat-card-content fxLayout="column">
+      <div fxLayout="row" fxFlex fxLayoutGap="8px">
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="meta">
 
             <mat-form-field>
-              <input matInput formControlName="name" placeholder="Navn"
+              <input matInput formControlName="name" #name placeholder="Navn"
                      i18n-placeholder="@@metaNameInputPlaceholder">
               <mat-error *ngIf="!name.valid"
                          i18n="@@metaNameRequiredError">
@@ -25,8 +25,7 @@
 
             <mat-form-field>
             <textarea matInput formControlName="description" placeholder="Beskrivelse"
-                      i18n-placeholder="@@metaDescriptionInputPlaceholder"
-                      style="width: auto">
+                      i18n-placeholder="@@metaDescriptionInputPlaceholder">
             </textarea>
             </mat-form-field>
           </ng-container>
@@ -74,48 +73,24 @@
             </ng-container>
           </div>
         </div>
-        <div fxFlex fxLayout="column">
-          <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
-          </ng-container>
+        <div fxFlex fxLayout="row" formGroupName="meta">
+          <app-labels fxFlex type="Label" formControlName="label"></app-labels>
         </div>
       </div>
-      <div fxLayout="row" style="width: 100%">
-        <div style="width: 100%">
-          <mat-toolbar>
-            <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader"> Script</span>
-            <span class="fill-space"></span>
-            <div class="vertical-divider">
-              <button mat-icon-button (click)="onEditorChangeFontSize('up')">
-                <mat-icon>format_size</mat-icon>
-                <mat-icon class="button-icon--spacing">arrow_drop_up</mat-icon>
-              </button>
-              <button mat-icon-button (click)="onEditorChangeFontSize('down')">
-                <mat-icon>format_size</mat-icon>
-                <mat-icon class="button-icon--spacing">arrow_drop_down</mat-icon>
-              </button>
-            </div>
-            <div class="button-row">
-              <div class="button-row--margin">
-                <button class="darkEditor" mat-mini-fab (click)="onEditorDarkTheme()">
-                </button>
-                <button class="lightEditor" mat-mini-fab (click)="onEditorLightTheme()">
-                </button>
-              </div>
-            </div>
-          </mat-toolbar>
-          <div>
-            <ace-editor formControlName="script"
-                        #editor style="height:300px;"
-                        [options]="{enableBasicAutocompletion: true,
-                                  enableLiveAutocompletion: true}">
-            </ace-editor>
-            <mat-error *ngIf="editor.value === '' "
-                       i18n="@@browserscriptFormScriptRequiredError">
-              Script er påkrevd.
-            </mat-error>
-          </div>
-        </div>
+      <div fxLayout="column" fxFlex>
+        <mat-expansion-panel expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader">{{name.value}}</span>
+            </mat-panel-title>
+            <mat-panel-description>JavaScript</mat-panel-description>
+          </mat-expansion-panel-header>
+          <div appScriptEditor #editor formControlName="script"></div>
+          <mat-error *ngIf="editor.value === ''"
+                     i18n="@@browserscriptFormScriptRequiredError">
+            Script er påkrevd.
+          </mat-error>
+        </mat-expansion-panel>
       </div>
     </mat-card-content>
     <mat-card-actions>
