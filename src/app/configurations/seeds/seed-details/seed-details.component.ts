@@ -29,15 +29,6 @@ export class SeedDetailComponent implements OnChanges {
 
   crawlJobList: any[];
 
-  /*
-  selectedCrawlJobItems = [];
-  dropdownCrawlJobSettings = {
-    singleSelection: false,
-    text: 'Velg høstejobb',
-    enableCheckAll: false,
-    enableSearchFilter: true
-  };
-  */
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
