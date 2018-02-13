@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -29,8 +30,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   form: FormGroup;
   robotsPolicyList: any[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -104,6 +110,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
@@ -125,6 +132,10 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

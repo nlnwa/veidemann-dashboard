@@ -1,33 +1,23 @@
-import {Injectable, Injector} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {AuthService} from './auth.service';
+import {OAuthStorage} from 'angular-oauth2-oidc';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  private authService: AuthService;
-
-  // Would like to inject authService directly but it causes a cyclic dependency error
-  // see https://github.com/angular/angular/issues/18224
-  constructor(private injector: Injector) {
+  constructor(private authStorage: OAuthStorage) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.getAuthService().authorizationHeader && request.url.indexOf('/api/') !== -1 ) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: this.getAuthService().authorizationHeader
-        }
-      });
-    }
-    return next.handle(request);
-  }
 
-  getAuthService(): AuthService {
-    if (typeof this.authService === 'undefined') {
-      this.authService = this.injector.get(AuthService);
+    const token = this.authStorage.getItem('id_token');
+
+    if (request.url.indexOf('/api/') !== -1 && token !== null) {
+      const headers = request.headers.set('Authorization', 'Bearer ' + token)
+      request = request.clone({headers});
     }
-    return this.authService;
+
+    return next.handle(request);
   }
 }

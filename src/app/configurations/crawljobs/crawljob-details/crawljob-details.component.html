@@ -108,7 +108,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-error *ngIf="! scheduleId.valid"
+            <mat-error *ngIf="! scheduleId.valid  && ! form.disabled"
                        i18n="@@crawljobFormScheduleRequiredError">
               Schedule er påkrevd.
             </mat-error>
@@ -122,20 +122,20 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-error *ngIf="! crawlConfigId.valid"
+            <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
                        i18n="@@crawljobFormCrawlconfigRequieredError">
               Crawlconfig er påkrevd.
             </mat-error>
           </div>
 
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
           </ng-container>
         </div>
       </div>
     </mat-card-content>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

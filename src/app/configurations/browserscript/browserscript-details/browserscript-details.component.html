@@ -13,7 +13,6 @@
       <div fxLayout="row" fxFlex fxLayoutGap="8px">
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="meta">
-
             <mat-form-field>
               <input matInput formControlName="name" #name placeholder="Navn"
                      i18n-placeholder="@@metaNameInputPlaceholder">
@@ -74,7 +73,7 @@
           </div>
         </div>
         <div fxFlex fxLayout="row" formGroupName="meta">
-          <app-labels fxFlex type="Label" formControlName="label"></app-labels>
+          <app-labels fxFlex [removable]="editable" formControlName="label"></app-labels>
         </div>
       </div>
       <div fxLayout="column" fxFlex>
@@ -92,32 +91,31 @@
           </mat-error>
         </mat-expansion-panel>
       </div>
-    </mat-card-content>
-    <mat-card-actions>
+    </mat-card-content >
+    <mat-card-actions *ngIf="editable">
       <button mat-raised-button color="primary"
-              [disabled]="!canSave"
+              [disabled]="!form.valid"
               *ngIf="showSave"
               (click)="onSave()"
-              novalidate
               i18n="@@commonButtonSave">
         Lagre
       </button>
       <button mat-raised-button color="primary"
               *ngIf="!showSave"
-              [disabled]="!canUpdate"
+              [disabled]="!(form.valid && form.dirty)"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
         Oppdater
       </button>
       <button mat-raised-button color="accent"
               (click)="onRevert()"
-              [disabled]="!canRevert"
+              [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
               *ngIf="!showSave"
-              (click)="onDelete(); $event.stopPropagation()"
+              (click)="onDelete()"
               i18n="@@commonButtonDelete">
         Slett
       </button>

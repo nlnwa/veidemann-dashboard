@@ -12,6 +12,7 @@ import {
   VALID_MONTH_PATTERN,
   VALID_YEAR_PATTERN
 } from '../../../commons/validator';
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
   selector: 'app-schedule-details',
@@ -33,8 +34,17 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canDelete(): boolean {
+    return this.roleService.isAdmin();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isCurator() || this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -42,15 +52,15 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    return this.form.valid;
+      return this.form.valid && this.canEdit;
   }
 
   get canUpdate() {
-    return (this.form.valid && this.form.dirty);
+    return this.form.valid && this.form.dirty && this.canEdit;
   }
 
   get canRevert() {
-    return this.form.dirty;
+    return this.canEdit && this.form.dirty;
   }
 
   get name() {
@@ -88,6 +98,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   private createForm() {
+
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
@@ -117,6 +128,10 @@ export class ScheduleDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {
@@ -147,7 +162,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     });
 
     if (this.schedule.valid_from !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -165,7 +180,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       });
     }
     if (this.schedule.valid_to !== null) {
-      const {year, month, day, } = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
       this.form.patchValue({
         valid_to: {
           year: year,
@@ -186,7 +201,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.form.markAsUntouched();
   }
 
-  private setCronExpression(formModel) {
+  private setCronExpression(formModel): string {
     return formModel.minute + ' '
       + formModel.hour + ' '
       + formModel.dom + ' '

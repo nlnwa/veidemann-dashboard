@@ -1,59 +1,62 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../models/config.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ENTER} from '@angular/cdk/keycodes';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {Observable} from 'rxjs/Observable';
 
-const COMMA = 188;
+export enum Kind {
+  LABEL = 'label',
+  SELECTOR = 'selector',
+}
 
 @Component({
   selector: 'app-labels',
   templateUrl: './labels.component.html',
   styleUrls: ['./labels.component.css'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => LabelsComponent),
-    multi: true
-  }],
+  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: LabelsComponent, multi: true}],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+export class LabelsComponent implements ControlValueAccessor {
 
-export class LabelsComponent implements OnChanges, ControlValueAccessor {
+  @Input() removable = true;
+  @Input() kind: string = Kind.LABEL;
 
-  @Input() disabled = false;
-  @Input() type;
-
-  showAddLabelCard = false;
-  canUpdateLabel = false;
-  labelForm: FormGroup;
-  groups: BehaviorSubject<any[]> = new BehaviorSubject([]);
-  groups$ = this.groups.asObservable();
-  selectable = true;
-  separatorKeysCodes = [ENTER, COMMA];
-
+  // ControlValueAccessor callback functions
   onChange: (labels: Label[]) => void;
-  onTouched: any;
+  onTouched: (labels: Label[]) => void;
 
-  private indexOfClickedLabel;
+  labelForm: FormGroup;
+  labelInputSeparators = [ENTER, COMMA];
+
+  private isDisabled = false;
+
+  private groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  private groups$: Observable<any> = this.groupsSubject.asObservable();
+
   private labels: Label[];
 
-  constructor(private formbuilder: FormBuilder) {
-    this.createForm()
+  constructor(private fb: FormBuilder) {
+    this.createForm();
   }
 
-  createForm() {
-    this.labelForm = this.formbuilder.group({
-      newKeyInput: ['', [Validators.required, Validators.minLength(1)]],
-      newValueInput: ['', [Validators.required, Validators.minLength(1)]],
-    });
+  get selector(): boolean {
+    return this.kind === Kind.SELECTOR
   }
 
-  ngOnChanges(): void {
-    this.labelForm.controls['newKeyInput'].setValue('');
-    this.labelForm.controls['newValueInput'].setValue('');
-    this.showAddLabelCard = false;
+  get canUpdate(): boolean {
+    return !this.isDisabled;
   }
 
+  get canDelete(): boolean {
+    return this.removable;
+  }
+
+  get groups(): Observable<any> {
+    return this.groups$;
+  }
+
+  // implement ControlValueAccessor
   writeValue(labels: Label[]): void {
     if (labels == null) {
       this.labels = [];
@@ -61,23 +64,107 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
       this.labels = labels;
       this.regroup();
     }
-    this.ngOnChanges();
   }
 
-
+  // implement ControlValueAccessor
   registerOnChange(fn: (labels: Label[]) => void): void {
     this.onChange = fn;
   }
 
+  // implement ControlValueAccessor
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
+  // implement ControlValueAccessor
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.isDisabled = isDisabled;
   }
 
-  regroup() {
+  onCreateLabel() {
+    this.labelForm.enable();
+    this.labelForm.reset({key: '', value: ''});
+  }
+
+  onClickLabel(key: string, value: string): void {
+    this.labelForm.enable();
+    this.labelForm.reset({key, value});
+  }
+
+  onSaveLabel(key: string, value: string): void {
+    key = key.trim();
+    value = value.trim();
+
+    if (value === '' || key === '') {
+      return
+    }
+
+    if (key === null) {
+      const parts = value.split(':', 1);
+      if (parts.length > 1) {
+        key = parts[0];
+        value = parts[1];
+      }
+    }
+
+    if (this.findLabelIndex(key, value) > -1) {
+      return
+    }
+
+    this.labels.push({key, value});
+    this.regroup();
+    this.onChange(this.labels);
+    this.labelForm.disable();
+  }
+
+  onUpdateLabel(key: string, value: string): void {
+    key = key.trim();
+    value = value.trim();
+
+    // remove old
+    const index = this.findLabelIndex(key, value);
+    this.labels.splice(index, 1);
+    // add updated
+    this.labels.push({key, value});
+
+    this.regroup();
+    this.onChange(this.labels);
+    this.labelForm.disable();
+  }
+
+  onRemoveLabel(key: string, value: string): void {
+    const index = this.findLabelIndex(key, value);
+    if (index !== -1) {
+      this.labels.splice(index, 1);
+    }
+    this.regroup();
+    this.onChange(this.labels);
+  }
+
+  onAbort(): void {
+    this.labelForm.disable();
+  }
+
+  private findLabelIndex(key: string, value: string): number {
+    return this.labels.findIndex((element) => {
+      return element.key === key && element.value === value;
+    });
+  }
+
+  private findLabel(key: string, value: string): Label | null {
+    const index = this.findLabelIndex(key, value);
+    return index === -1 ? null : this.labels[index];
+  }
+
+  private createForm(): void {
+    this.labelForm = this.fb.group({
+      key: ['', [Validators.required, Validators.minLength(1)]],
+      value: ['', [Validators.required, Validators.minLength(1)]],
+    });
+    this.labelForm.disable();
+  }
+
+  private regroup(): void {
     const grouping = {};
 
     this.labels.forEach(label => {
@@ -85,69 +172,9 @@ export class LabelsComponent implements OnChanges, ControlValueAccessor {
         grouping[label.key].push(label.value);
       } else {
         grouping[label.key] = [label.value];
-
       }
     });
-    this.groups.next(Object.keys(grouping).map(key => ({key, values: grouping[key]})));
-  }
-
-  onNewLabel(key: string, value: string) {
-    if ((value || '').trim()) {
-      this.labels.push({
-        key: key,
-        value: value
-      });
-    }
-
-    // regroup causes the "type" field to lose focus, and you have to click on fields every time
-    this.regroup();
-    this.ngOnChanges();
-    this.onChange(this.labels);
-  }
-
-  onChipClick(key: string, value: string): void {
-    this.indexOfClickedLabel = this.labels.findIndex((element) => {
-      return element.key === key && element.value === value;
-    });
-    this.showAddLabelCard = true;
-    this.canUpdateLabel = true;
-    this.labelForm.controls['newKeyInput'].setValue(key);
-    this.labelForm.controls['newValueInput'].setValue(value);
-  }
-
-  onUpdateLabel(key: string, value: string) {
-    if ((value || '').trim()) {
-      this.labels.push({
-        key: key,
-        value: value
-      });
-    }
-    // regroup causes the "type" field to lose focus, and you have to click on fields every time
-    this.labels.splice(this.indexOfClickedLabel, 1);
-    this.canUpdateLabel = false;
-    this.regroup();
-    this.ngOnChanges();
-    this.onChange(this.labels);
-  }
-
-
-  newLabelCard(value: boolean) {
-    this.showAddLabelCard = value;
-    this.canUpdateLabel = false;
-    this.labelForm.controls['newKeyInput'].setValue('');
-    this.labelForm.controls['newValueInput'].setValue('');
-  }
-
-
-  removeLabel(key: string, value: string): void {
-
-    const index = this.labels.findIndex((element) => {
-      return element.key === key && element.value === value;
-    });
-
-    this.labels.splice(index, 1);
-    this.regroup();
-    this.onChange(this.labels);
+    this.groupsSubject.next(Object.keys(grouping).map(key => ({key, values: grouping[key]})));
   }
 
 }

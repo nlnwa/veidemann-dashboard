@@ -22,9 +22,6 @@ export class BrowserScriptDirective implements ControlValueAccessor {
     console.log('Constructor');
     this.editor = new nanoEditor(el.nativeElement, 'javascript', true);
     this.editor.setLanguage('javascript');
-    if (el.nativeElement.hasAttribute('disabled')) {
-      this.editor.canEdit(false);
-    }
   }
 
   // Implements ControlValueAccessor
@@ -50,6 +47,11 @@ export class BrowserScriptDirective implements ControlValueAccessor {
   // Implements ControlValueAccessor
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  // implement ControlValueAccessor
+  setDisabledState(isDisabled: boolean): void {
+    this.editor.canEdit(!isDisabled);
   }
 
 }

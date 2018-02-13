@@ -1,8 +1,10 @@
 import {Component, OnChanges, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+
 import {LogService} from '../log.service';
 import {LogLevel} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../commons/snack-bar/snack-bar.service';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -17,13 +19,21 @@ export class LoglevelComponent implements OnChanges {
 
   constructor(private logService: LogService,
               private fb: FormBuilder,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private roleService: RoleService) {
 
     this.form = this.fb.group({
       log_level: this.fb.array([]),
 
     });
     this.getLogLevels();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
   get levels() {
@@ -69,6 +79,9 @@ export class LoglevelComponent implements OnChanges {
   private updateForm() {
     const logconfigFG: FormGroup[] = this.logLevels.map(config => this.fb.group(config));
     const logconfigFormArray = this.fb.array(logconfigFG);
+    if (this.form.disabled) {
+      logconfigFormArray.disable();
+    }
     this.form.setControl('log_level', logconfigFormArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();

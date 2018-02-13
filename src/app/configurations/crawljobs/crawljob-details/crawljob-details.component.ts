@@ -11,6 +11,7 @@ import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -38,8 +39,13 @@ export class CrawljobDetailsComponent implements OnChanges {
   form: FormGroup;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -126,7 +132,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      schedule_id: [''],
+      schedule_id: [],
       crawl_config_id: ['', CustomValidators.nonEmpty],
       disabled: false,
       limits: this.fb.group({
@@ -144,6 +150,9 @@ export class CrawljobDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+    if (! this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

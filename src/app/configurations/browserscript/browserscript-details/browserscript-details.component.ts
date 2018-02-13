@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {BrowserScript} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,24 +25,17 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get editable(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
     return (this.browserScript && !this.browserScript.id);
-  }
-
-  get canSave() {
-    return this.form.valid;
-  }
-
-  get canUpdate() {
-    return (this.form.valid && this.form.dirty);
-  }
-
-  get canRevert() {
-    return this.form.dirty;
   }
 
   get name() {
@@ -89,6 +83,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+    if (!this.editable) {
+      this.form.disable();
+    }
   }
 
   private updateForm(): void {

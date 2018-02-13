@@ -55,7 +55,6 @@ export class BrowserScriptPageComponent implements AfterViewInit {
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
               private database: ListDatabase) {
-
   }
 
   ngAfterViewInit() {

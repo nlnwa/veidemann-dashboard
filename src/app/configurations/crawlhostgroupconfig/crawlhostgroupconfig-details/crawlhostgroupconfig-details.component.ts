@@ -1,8 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
-import {VALID_IP_PATTERN} from '../../../commons/validator/patterns';
-import {DateTime} from '../../../commons/datetime/datetime';
+import {VALID_IP_PATTERN} from '../../../commons/validator';
+import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth';
 
 
 @Component({
@@ -25,10 +26,14 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
   }
 
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
+  }
   get showSave(): boolean {
     return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id
   }
@@ -107,15 +112,21 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         created_by: {value: '', disabled: true},
         last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
         last_modified_by: {value: '', disabled: true},
-        label: [],
+        label: []
       }),
     });
+
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {
     const ipRangeFG: FormGroup[] = this.crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
-
+    if (this.form.disabled) {
+      ipRangeFGArray.disable();
+    }
     this.form.patchValue({
       id: this.crawlHostGroupConfig.id,
       meta: {

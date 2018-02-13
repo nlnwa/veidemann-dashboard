@@ -261,7 +261,7 @@ export class RoleMapping {
   id: string;
   email?: string;
   group?: string;
-  role: string[]
+  role: string[];
 
   constructor() {
     this.id = '';
@@ -269,5 +269,17 @@ export class RoleMapping {
     this.group = '';
     this.role = [];
   }
+}
+
+export class RoleList {
+  role: string[];
+}
+
+export enum Role {
+  ANY_USER = 'ANY_USER',
+  ANY = 'ANY',
+  ADMIN = 'ADMIN',
+  CURATOR = 'CURATOR',
+  READONLY = 'READONLY',
 }
 

@@ -141,11 +141,11 @@
 
 
         <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label"></app-labels>
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
       </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"
               *ngIf="showSave"

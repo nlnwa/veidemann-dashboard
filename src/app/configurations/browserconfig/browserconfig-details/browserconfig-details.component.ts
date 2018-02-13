@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -11,7 +12,6 @@ import {DateTime} from '../../../commons/datetime';
   styleUrls: ['./browserconfig-details.component.css'],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
-
   @Input()
   browserConfig: BrowserConfig;
   @Input()
@@ -28,8 +28,12 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   form: FormGroup;
   browserScriptList: any[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin();
   }
 
   get showSave(): boolean {
@@ -131,8 +135,11 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
-
     });
+
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

@@ -125,20 +125,20 @@
                 <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-error *ngIf="!script_id.valid"
+            <mat-error *ngIf="!script_id.valid  && !form.disabled"
                        i18n="@@browserconfigFormScriptsRequiredError">
               Scripts påkrevd.
             </mat-error>
           </div>
 
-          <app-labels type="Selector" formControlName="script_selector"></app-labels>
+          <app-labels kind="selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
 
           <ng-container formGroupName="meta">
-            <app-labels type="Label" formControlName="label"></app-labels>
+            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
           </ng-container>
         </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"
