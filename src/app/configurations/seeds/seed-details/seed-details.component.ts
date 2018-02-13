@@ -4,6 +4,7 @@ import {CrawlJob, Label, Seed} from '../../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
 import {VALID_URL_PATTERN} from '../../../commons/validator';
 import {DateTime} from '../../../commons/datetime';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -39,8 +40,13 @@ export class SeedDetailComponent implements OnChanges {
   */
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -79,22 +85,24 @@ export class SeedDetailComponent implements OnChanges {
 
   private createForm() {
     this.form = this.fb.group({
-        id: {value: '', disabled: true},
-        disabled: true,
-        entity_id: {value: '', disabled: true},
-        job_id: [],
-        scope: this.fb.group({surt_prefix: ''}),
-        meta: this.fb.group({
-          name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
-          description: '',
-          created: this.fb.group({seconds: {value: '', disabled: true}}),
-          created_by: {value: '', disabled: true},
-          last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
-          last_modified_by: {value: '', disabled: true},
-          label: [],
-        }),
-      }
-    );
+      id: {value: '', disabled: true},
+      disabled: true,
+      entity_id: {value: '', disabled: true},
+      job_id: [],
+      scope: this.fb.group({surt_prefix: ''}),
+      meta: this.fb.group({
+        name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
+        description: '',
+        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created_by: {value: '', disabled: true},
+        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified_by: {value: '', disabled: true},
+        label: [],
+      }),
+    });
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

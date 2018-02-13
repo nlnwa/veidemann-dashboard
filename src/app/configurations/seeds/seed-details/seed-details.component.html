@@ -91,7 +91,7 @@
       </div>
     </mat-card-content>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               *ngIf="!seed.id"
               [disabled]="!form.valid"

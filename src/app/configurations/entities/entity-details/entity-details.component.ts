@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/datetime';
 import {Entity, Label} from '../../../commons/models/config.model';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -24,12 +25,17 @@ export class EntityDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private roleService: RoleService) {
     this.createForm();
   }
 
   get showSave() {
     return this.entity ? !this.entity.id : false;
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -67,6 +73,9 @@ export class EntityDetailsComponent implements OnChanges {
         label: [],
       }),
     });
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private updateForm() {

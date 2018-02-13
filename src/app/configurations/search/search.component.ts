@@ -15,6 +15,7 @@ import {MatPaginator} from '@angular/material';
 import {ListDatabase, ListDataSource} from '../../commons/list';
 import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
 import 'rxjs/add/operator/buffer';
+import {RoleService} from '../../auth/role.service';
 
 
 @Component({
@@ -48,13 +49,23 @@ export class SearchComponent implements OnInit, AfterViewInit {
               private entityService: EntityService,
               private searchDatabase: SearchDatabase,
               private seedDatabase: ListDatabase,
-              private snackBarService: SnackBarService) {}
+              private snackBarService: SnackBarService,
+              private roleService: RoleService) {
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
+  }
 
   ngOnInit() {
     // Load prerequisites for app-seed-detail
-    this.crawlJobService.list()
-      .map(reply => reply.value)
-      .subscribe(crawlJobs => this.crawlJobs = crawlJobs);
+    if (this.canEdit) {
+      this.crawlJobService.list()
+        .map(reply => reply.value)
+        .subscribe(crawlJobs => this.crawlJobs = crawlJobs);
+    } else {
+      this.crawlJobs = [];
+    }
   }
 
   ngAfterViewInit() {
