@@ -6,11 +6,11 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlJobListComponent} from './crawljob-list/crawljob-list.component';
 import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
-import {Database, ListDatabase, ListDataSource} from '../../commons/list/';
+import {ListDatabase, ListDataSource} from '../../commons/list/';
 
 @Component({
   selector: 'app-search',

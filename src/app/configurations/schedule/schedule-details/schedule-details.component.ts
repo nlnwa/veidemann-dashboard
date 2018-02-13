@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DateTime} from '../../../commons/';
+import {DateTime} from '../../../commons/datetime';
 import {Schedule} from '../../../commons/models/config.model';
 import {
   VALID_CRON_DOM_PATTERN,
@@ -11,8 +11,8 @@ import {
   VALID_DAY_PATTERN,
   VALID_MONTH_PATTERN,
   VALID_YEAR_PATTERN
-} from '../../../commons/util';
-import {RoleService} from '../../../roles/roles.service';
+} from '../../../commons/validator';
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
   selector: 'app-schedule-details',
@@ -201,7 +201,7 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.form.markAsUntouched();
   }
 
-  private setCronExpression(formModel) {
+  private setCronExpression(formModel): string {
     return formModel.minute + ' '
       + formModel.hour + ' '
       + formModel.dom + ' '

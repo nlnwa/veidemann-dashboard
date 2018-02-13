@@ -1,34 +1,17 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+
 import {BrowserScript} from '../../../commons/models/config.model';
-
-import 'brace/index';
-import 'brace/theme/chrome';
-import 'brace/theme/monokai';
-import 'brace/mode/javascript';
-import 'brace/ext/language_tools.js';
 import {DateTime} from '../../../commons/datetime';
-import {RoleService} from '../../../roles/roles.service';
-
-declare var ace: any;
-
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-browserscript-details',
   templateUrl: './browserscript-details.component.html',
   styleUrls: ['./browserscript-details.component.css'],
 })
-
-export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
+export class BrowserScriptDetailsComponent implements OnChanges {
 
   @Input()
   browserScript: BrowserScript;
@@ -40,8 +23,6 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
   @Output()
   delete = new EventEmitter<BrowserScript>();
 
-  @ViewChild('editor') editor;
-
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -49,8 +30,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     this.createForm();
   }
 
-
-  get canEdit(): boolean {
+  get editable(): boolean {
     return this.roleService.isAdmin();
   }
 
@@ -58,26 +38,8 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     return (this.browserScript && !this.browserScript.id);
   }
 
-  get canSave() {
-    return this.form.valid;
-  }
-
-  get canUpdate() {
-    return (this.form.valid && this.form.dirty);
-  }
-
-  get canRevert() {
-    return this.form.dirty;
-  }
-
   get name() {
     return this.form.get('meta.name');
-  }
-
-  ngAfterViewInit() {
-
-    this.editor.setTheme('chrome');
-    this.editor.setMode('javascript');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -107,29 +69,7 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
     this.updateForm();
   }
 
-  onEditorChangeFontSize(value) {
-    const currentFontSize = this.editor.getEditor().getFontSize();
-    if (value === 'up') {
-      this.editor.setOptions({
-        fontSize: currentFontSize + 1,
-      })
-    }
-    if (value === 'down') {
-      this.editor.setOptions({
-        fontSize: currentFontSize - 1,
-      })
-    }
-  }
-
-  onEditorDarkTheme() {
-    this.editor.setTheme('monokai');
-  }
-
-  onEditorLightTheme() {
-    this.editor.setTheme('chrome');
-  }
-
-  private createForm() {
+  private createForm(): void {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       script: '',
@@ -143,12 +83,12 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
         label: [],
       }),
     });
-    if (!this.canEdit) {
+    if (!this.editable) {
       this.form.disable();
     }
   }
 
-  private updateForm() {
+  private updateForm(): void {
     this.form.patchValue({
       id: this.browserScript.id,
       script: this.browserScript.script,
@@ -172,14 +112,13 @@ export class BrowserScriptDetailsComponent implements OnChanges, AfterViewInit {
 
   private prepareSave(): BrowserScript {
     const formModel = this.form.value;
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
     return {
       id: this.browserScript.id,
       script: formModel.script,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
-        label: labelsDeepCopy
+        label: formModel.meta.label.map(label => ({...label})) // deepCopy
       }
     };
   }

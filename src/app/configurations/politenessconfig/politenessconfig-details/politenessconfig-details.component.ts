@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from '../../../commons/';
+import {CustomValidators} from '../../../commons/validator';
 import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
-import {RoleService} from '../../../roles/roles.service';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({
@@ -149,7 +149,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       delay_factor: this.politenessConfig.delay_factor,
       max_retries: this.politenessConfig.max_retries,
       retry_delay_seconds: this.politenessConfig.retry_delay_seconds,
-      crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector ? [...this.politenessConfig.crawl_host_group_selector.label] : [],
+      crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector ?
+        [...this.politenessConfig.crawl_host_group_selector.label] : [],
       meta: {
         name: this.politenessConfig.meta.name,
         description: this.politenessConfig.meta.description,

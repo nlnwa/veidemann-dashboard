@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {MatPaginator} from '@angular/material';
 import {Subject} from 'rxjs/Subject';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/startWith';

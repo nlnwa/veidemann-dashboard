@@ -1,0 +1,35 @@
+
+.mdl-data-table tbody {
+  border-top: black;
+  border-top: 2px;
+}
+
+.mdl-data-table th {
+  width: 214px;
+  text-align: left;
+  border-top: 2px;
+}
+
+.ttInfo {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.ttInfo:hover {
+  opacity: 0.7;
+  filter: alpha(opacity=50);
+  color: #0066ff !important;
+}
+
+.left-menu {
+  max-width: 350px;
+}
+
+.right-menu {
+  max-width: 450px;
+  margin-left: 1em;
+}
+
+.mat-form-field {
+  width: 100%;
+}

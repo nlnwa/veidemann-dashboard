@@ -12,9 +12,9 @@ export abstract class Database {
 
   abstract isEmpty(): boolean;
 
-  abstract add(item: Item): void;
+  abstract add(Item): void;
 
-  abstract remove(item: Item): void;
+  abstract remove(Item): void;
 
-  abstract update(item: Item): void;
+  abstract update(Item): void;
 }

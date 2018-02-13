@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from '../../../commons';
+import {CustomValidators} from '../../../commons/validator';
 import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
-import {RoleService} from '../../../roles/roles.service';
+import {RoleService} from '../../../auth/role.service';
 
 
 @Component({

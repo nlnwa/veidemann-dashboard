@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
-import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/empty';
+
+import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
+
 import {AppConfig} from '../app.config';
-import {RoleService} from '../roles/roles.service';
+import {RoleService} from './role.service';
+
 
 @Injectable()
 export class AuthService {

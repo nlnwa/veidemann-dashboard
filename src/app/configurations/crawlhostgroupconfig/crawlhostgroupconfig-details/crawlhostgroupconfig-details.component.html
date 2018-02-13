@@ -116,7 +116,7 @@
         </ng-container>
 
         <ng-container formGroupName="meta">
-          <app-labels type="Label" formControlName="label" [canEdit]="canEdit"></app-labels>
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
       </div>
     </mat-card-content>

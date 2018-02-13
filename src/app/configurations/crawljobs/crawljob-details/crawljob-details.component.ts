@@ -7,11 +7,11 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {CustomValidators} from '../../../commons/';
+import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
-import {RoleService} from '../../../roles/roles.service';
+import {RoleService} from '../../../auth/role.service';
 
 @Component({
   selector: 'app-crawljob-details',

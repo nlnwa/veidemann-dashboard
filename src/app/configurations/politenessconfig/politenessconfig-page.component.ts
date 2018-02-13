@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
-import {SnackBarService} from '../../snack-bar-service/snack-bar.service';
+import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {PolitenessConfigListComponent} from './politenessconfig-list/politenessconfig-list.component';
 import {PolitenessConfigService} from './politenessconfig.service';

@@ -5,7 +5,7 @@
   <mat-toolbar color="primary" fxFlex>
     <a routerLink="/" class="title"><h1>Veidemann</h1></a>
     <span fxFlex fxFlexFill></span>
-    <span>{{myDate}}</span>
+    <app-time></app-time>
     <span fxFlex fxFlexFill></span>
     <span>{{name}}</span>
   </mat-toolbar>
@@ -46,22 +46,22 @@
 
       <ng-container *ngIf="canConfigure">
 
-        <a mat-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">search</mat-icon>
-          <ng-container i18n="@@navigationSidebarSearch">Søk</ng-container>
-        </a>
-
         <mat-list-item [disableRipple]="true">
           <h3 i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
         </mat-list-item>
 
-        <ng-container *ngIf="canViewCrawljobs">
-        <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
+        <a mat-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">work</mat-icon>
-          <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container>
+          <mat-icon class="sidenav--icon__margin">business</mat-icon>
+          <ng-container i18n="@@navigationSidebarSearch">Entiteter/Seeds</ng-container>
         </a>
+
+        <ng-container *ngIf="canViewCrawljobs">
+          <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
+             [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav--icon__margin">work</mat-icon>
+            <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container>
+          </a>
         </ng-container>
         <a mat-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
@@ -71,26 +71,26 @@
         <a mat-list-item [routerLink]="['/crawlconfig']"
            [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">build</mat-icon>
-          <ng-container i18n="@@navigationSidebarCrawlconfig">Crawl</ng-container>
+          <mat-icon class="sidenav--icon__margin">settings</mat-icon>
+          <ng-container i18n="@@navigationSidebarCrawlconfig">CrawlConfig</ng-container>
         </a>
         <a mat-list-item [routerLink]="['/crawlhostgroupconfig']"
            [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">build</mat-icon>
+          <mat-icon class="sidenav--icon__margin">group_work</mat-icon>
           <ng-container i18n="@@navigationSidebarCrawlhostgroupconfig">CrawlHostGroup</ng-container>
         </a>
         <a mat-list-item [routerLink]="['/browserconfig']"
            [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">build</mat-icon>
-          <ng-container i18n="@@navigationSidebarBrowserconfig">Browser</ng-container>
+          <mat-icon class="sidenav--icon__margin">web</mat-icon>
+          <ng-container i18n="@@navigationSidebarBrowserconfig">BrowserConfig</ng-container>
         </a>
         <a mat-list-item [routerLink]="['/browserscript']"
            [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">build</mat-icon>
-          <ng-container i18n="@@navigationSidebarBrowserscript">Script</ng-container>
+          <mat-icon class="sidenav--icon__margin">web_asset</mat-icon>
+          <ng-container i18n="@@navigationSidebarBrowserscript">BrowserScript</ng-container>
         </a>
         <a mat-list-item [routerLink]="['/politenessconfig']"
            [routerLinkActiveOptions]="{ exact: true }"
@@ -112,6 +112,7 @@
         </a>
 
       </ng-container>
+
     </mat-nav-list>
   </mat-sidenav>
 

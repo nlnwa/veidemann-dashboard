@@ -1,21 +1,22 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 
-import {ActivityComponent} from './activity';
-import {DocumentationComponent} from './documentation/documentation.component';
-import {StatisticsComponent} from './statistics/statistics.component';
+import {ActivityComponent} from './core/activity';
+import {DocumentationComponent} from './core/documentation/documentation.component';
+import {StatisticsComponent} from './core/statistics/statistics.component';
 import {LoglevelComponent} from './configurations/logs/';
-import {SearchComponent} from './search/search.component';
-import {CrawlJobsComponent} from './configurations/crawljobs/crawljobs-page.component';
-import {SchedulePageComponent} from './configurations/schedule/schedule-page.component';
-import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig/crawlhostgroupconfig-page.component';
-import {PolitenessConfigPageComponent} from './configurations/politenessconfig/politenessconfig-page.component';
-import {BrowserConfigPageComponent} from './configurations/browserconfig/browserconfig-page.component';
-import {BrowserScriptPageComponent} from './configurations/browserscript/browserscript-page.component';
+import {SearchComponent} from './configurations/search';
+import {CrawlJobsComponent} from './configurations/crawljobs';
+import {SchedulePageComponent} from './configurations/schedule';
+import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig';
+import {PolitenessConfigPageComponent} from './configurations/politenessconfig';
+import {BrowserConfigPageComponent} from './configurations/browserconfig';
+import {BrowserScriptPageComponent} from './configurations/browserscript';
 import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
-import {RoleMappingPageComponent} from './rolemapping/rolemapping-page.component';
+import {RoleMappingPageComponent} from './configurations/rolemapping';
 import {GuardService} from './auth/guard.service';
 import {Role} from './commons/models/config.model';
+
 
 const routes: Routes = [
   {
@@ -31,20 +32,12 @@ const routes: Routes = [
         component: ActivityComponent
       },
       {
-        path: 'crawljobs',
-        component: CrawlJobsComponent,
-        canActivate: [GuardService],
-        data: {
-          roles: [Role.CURATOR, Role.ADMIN],
-        },
-      },
-      {
         path: 'documentation',
         component: DocumentationComponent
       },
       {
         path: 'statistics',
-        component: StatisticsComponent
+        component: StatisticsComponent,
       },
       {
         path: 'search',
@@ -52,6 +45,14 @@ const routes: Routes = [
         canActivate: [GuardService],
         data: {
           roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
+        path: 'crawljobs',
+        component: CrawlJobsComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.CURATOR, Role.ADMIN],
         },
       },
       {
@@ -124,7 +125,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})
   ],
   exports: [
     RouterModule,
