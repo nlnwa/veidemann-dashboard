@@ -13,10 +13,10 @@
           </mat-chip>
         </ng-container>
         <input #chipInput [placeholder]="kind"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="labelInputSeparators"
-          (matChipInputTokenEnd)="onSaveLabel('', $event.value); chipInput.value = ''"
-          [disabled]="canUpdate ? null :  ''"/>
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="labelInputSeparators"
+               (matChipInputTokenEnd)="onSaveLabel('', $event.value); chipInput.value = ''"
+               [attr.disabled]="canUpdate ? null : ''"/>
       </mat-chip-list>
 
     </mat-form-field>

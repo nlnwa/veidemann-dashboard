@@ -76,13 +76,13 @@
       <div class="right-menu" fxFlex fxLayout="column">
         <!-- Labels -->
         <ng-container formGroupName="meta">
-          <app-labels formControlName="label"></app-labels>
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
         <ng-content></ng-content>
       </div>
     </mat-card-content>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               *ngIf="showSave" [disabled]="!form.valid"
               (click)="onSave()"
