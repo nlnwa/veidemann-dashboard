@@ -6,8 +6,8 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Observable} from 'rxjs/Observable';
 
 export enum Kind {
-  LABEL = 'label',
-  SELECTOR = 'selector',
+  LABEL = 'Label',
+  SELECTOR = 'Selector',
 }
 
 @Component({
@@ -31,6 +31,9 @@ export class LabelsComponent implements ControlValueAccessor {
 
   private isDisabled = false;
 
+  private clickedIndex = -1;
+  private showUpdateLabel = false;
+
   private groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
   private groups$: Observable<any> = this.groupsSubject.asObservable();
 
@@ -40,8 +43,12 @@ export class LabelsComponent implements ControlValueAccessor {
     this.createForm();
   }
 
+  get showUpdate(): boolean {
+    return this.showUpdateLabel;
+  }
+
   get selector(): boolean {
-    return this.kind === Kind.SELECTOR
+    return this.kind === Kind.SELECTOR;
   }
 
   get canUpdate(): boolean {
@@ -63,6 +70,7 @@ export class LabelsComponent implements ControlValueAccessor {
     } else {
       this.labels = labels;
       this.regroup();
+      this.labelForm.disable();
     }
   }
 
@@ -81,12 +89,9 @@ export class LabelsComponent implements ControlValueAccessor {
     this.isDisabled = isDisabled;
   }
 
-  onCreateLabel() {
-    this.labelForm.enable();
-    this.labelForm.reset({key: '', value: ''});
-  }
-
   onClickLabel(key: string, value: string): void {
+    this.showUpdateLabel = true;
+    this.clickedIndex = this.findLabelIndex(key, value);
     this.labelForm.enable();
     this.labelForm.reset({key, value});
   }
@@ -95,15 +100,17 @@ export class LabelsComponent implements ControlValueAccessor {
     key = key.trim();
     value = value.trim();
 
-    if (value === '' || key === '') {
+    if (value === '') {
       return
     }
 
-    if (key === null) {
-      const parts = value.split(':', 1);
+    if (key === '') {
+      const parts = value.split(':');
       if (parts.length > 1) {
-        key = parts[0];
-        value = parts[1];
+        key = parts[0].trim();
+        value = parts[1].trim();
+      } else {
+        return
       }
     }
 
@@ -114,6 +121,7 @@ export class LabelsComponent implements ControlValueAccessor {
     this.labels.push({key, value});
     this.regroup();
     this.onChange(this.labels);
+    this.labelForm.reset();
     this.labelForm.disable();
   }
 
@@ -122,17 +130,18 @@ export class LabelsComponent implements ControlValueAccessor {
     value = value.trim();
 
     // remove old
-    const index = this.findLabelIndex(key, value);
-    this.labels.splice(index, 1);
+    this.labels.splice(this.clickedIndex, 1);
     // add updated
     this.labels.push({key, value});
 
     this.regroup();
     this.onChange(this.labels);
+    this.labelForm.reset();
     this.labelForm.disable();
   }
 
   onRemoveLabel(key: string, value: string): void {
+    console.log('remove label');
     const index = this.findLabelIndex(key, value);
     if (index !== -1) {
       this.labels.splice(index, 1);
@@ -149,11 +158,6 @@ export class LabelsComponent implements ControlValueAccessor {
     return this.labels.findIndex((element) => {
       return element.key === key && element.value === value;
     });
-  }
-
-  private findLabel(key: string, value: string): Label | null {
-    const index = this.findLabelIndex(key, value);
-    return index === -1 ? null : this.labels[index];
   }
 
   private createForm(): void {

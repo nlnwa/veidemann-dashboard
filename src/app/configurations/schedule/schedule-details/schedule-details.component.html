@@ -72,11 +72,18 @@
             </div>
           </ng-container>
         </div>
+
+        <!-- Label -->
+
+        <ng-container formGroupName="meta">
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
+        </ng-container>
+
       </div>
       <div fxFlex fxLayout="column" fxLayoutWrap>
 
-        <div formGroupName="cron_expression">
-          <h3 i18n="@@scheduleFormCronExpressionHeader">Cron expression</h3>
+        <fieldset formGroupName="cron_expression">
+          <legend i18n="@@scheduleFormCronExpressionHeader">Cron expression</legend>
           <div fxLayout="row" fxLayoutGap="1em">
             <mat-form-field class="form-control_cron">
               <input matInput formControlName="minute"
@@ -108,10 +115,10 @@
                     i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </mat-error>
-        </div>
+        </fieldset>
 
-        <div formGroupName="valid_from">
-          <h3 i18n="@@scheduleFormValidFromHeader">Gyldig fra</h3>
+        <fieldset formGroupName="valid_from">
+          <legend i18n="@@scheduleFormValidFromHeader">Gyldig fra</legend>
           <div fxLayout="row" fxLayoutGap="1em">
           <mat-form-field class="form-control_cron">
             <input matInput formControlName="year" placeholder="År" type="number"
@@ -126,10 +133,10 @@
                    i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
           </mat-form-field>
           </div>
-        </div>
+        </fieldset>
 
-        <div formGroupName="valid_to">
-          <h3 i18n="@@scheduleFormValidToHeader">Gyldig til</h3>
+        <fieldset formGroupName="valid_to">
+          <legend i18n="@@scheduleFormValidToHeader">Gyldig til</legend>
           <div fxLayout="row" fxLayoutGap="1em">
             <mat-form-field class="form-control_cron">
               <input matInput formControlName="year" placeholder="År" type="number"
@@ -144,13 +151,7 @@
                      i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
             </mat-form-field>
           </div>
-        </div>
-
-        <!-- Label -->
-
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
+        </fieldset>
       </div>
       <div fxFlex fxLayout="column">
         <app-schedule-sidebar></app-schedule-sidebar>

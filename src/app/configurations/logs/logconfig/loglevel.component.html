@@ -1,34 +1,27 @@
 <form [formGroup]="form">
   <mat-card>
-    <mat-card-content fxLayout="row">
-      <div fxLayout="column">
-        <mat-toolbar>
-          <span i18n="@@logconfigHeader">Logconfig</span>
-          <span class="fill-space"></span>
-          <button mat-mini-fab *ngIf="canEdit" (click)="onAdd()">
-            <mat-icon>add</mat-icon>
+    <mat-card-title-group>
+      <mat-card-title><span i18n="@@logconfigHeader">Logconfig</span></mat-card-title>
+    </mat-card-title-group>
+
+    <mat-card-content>
+      <ng-container formArrayName="log_level" *ngFor="let log_level of log_levelArray.controls;let i=index">
+        <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
+          <mat-form-field fxFlex="2 1 100%">
+            <input matInput formControlName="logger" placeholder="Logger"
+                   i18n-placeholder="@@logconfigFormLoggerPlaceholder">
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-select formControlName="level" placeholder="Level"
+                        i18n-placeholder="@@logconfigFormLevelPlaceholder">
+              <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="canEdit">
+            <mat-icon>close</mat-icon>
           </button>
-        </mat-toolbar>
-        <ng-container formArrayName="log_level">
-          <ng-container *ngFor="let log_level of log_levelArray.controls;let i=index">
-            <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field>
-                <input matInput formControlName="logger" placeholder="Logger"
-                       i18n-placeholder="@@logconfigFormLoggerPlaceholder">
-              </mat-form-field>
-              <mat-form-field>
-                <mat-select formControlName="level" placeholder="Level"
-                            i18n-placeholder="@@logconfigFormLevelPlaceholder">
-                  <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="canEdit">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-          </ng-container>
-        </ng-container>
-      </div>
+        </div>
+      </ng-container>
     </mat-card-content>
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
@@ -41,6 +34,9 @@
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
+      </button>
+      <button mat-raised-button color="warn" *ngIf="canEdit" (click)="onAdd()">
+        Legg til
       </button>
     </mat-card-actions>
   </mat-card>

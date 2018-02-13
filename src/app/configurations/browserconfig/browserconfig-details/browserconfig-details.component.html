@@ -10,10 +10,9 @@
         Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row" fxLayoutWrap>
+    <mat-card-content fxLayout="row" fxLayoutGap="16px" fxLayoutWrap>
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="meta">
-
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Navn"
                    i18n-placeholder="@@metaNameInputPlaceholder">
@@ -27,8 +26,57 @@
             <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
           </mat-form-field>
+
         </ng-container>
 
+        <ng-container *ngIf="!showSave">
+          <div fxLayout="row">
+            <mat-form-field class="extra-metadata__input">
+              <input matInput
+                     formControlName="id"
+                     placeholder="Id"
+                     i18n-placeholder="@@configIdPlaceholder">
+            </mat-form-field>
+          </div>
+          <ng-container formGroupName="meta">
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field formGroupName="created" fxFlex>
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Opprettet"
+                       i18n-placeholder="@@metaCreatedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <input matInput
+                       formControlName="created_by"
+                       placeholder="Opprettet av"
+                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="1em">
+              <mat-form-field fxFlex formGroupName="last_modified">
+                <input matInput
+                       formControlName="seconds"
+                       placeholder="Sist endret"
+                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <input matInput
+                       formControlName="last_modified_by"
+                       placeholder="Sist endret av"
+                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+              </mat-form-field>
+            </div>
+
+          </ng-container>
+        </ng-container>
+        <ng-container formGroupName="meta">
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
+        </ng-container>
+      </div>
+      <div fxFlex fxLayout="column" fxLayoutGap="1em">
         <mat-form-field>
           <input matInput formControlName="user_agent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
@@ -73,70 +121,23 @@
             Sleep after pageload er påkrevd.
           </mat-error>
         </mat-form-field>
-        <div *ngIf="!showSave">
-          <div fxLayout="row">
-            <mat-form-field class="extra-metadata__input">
-              <input matInput
-                     formControlName="id"
-                     placeholder="Id"
-                     i18n-placeholder="@@configIdPlaceholder">
-            </mat-form-field>
-          </div>
-          <ng-container formGroupName="meta">
-            <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="created" class="extra-metadata__input">
-                <input matInput
-                       formControlName="seconds"
-                       placeholder="Opprettet"
-                       i18n-placeholder="@@metaCreatedInputPlaceholder">
-              </mat-form-field>
 
-              <mat-form-field class =extra-metadata__input--narrow>
-                <input matInput
-                       formControlName="created_by"
-                       placeholder="Opprettet av"
-                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
-              </mat-form-field>
-            </div>
-            <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="last_modified" class="extra-metadata__input">
-                <input matInput
-                       formControlName="seconds"
-                       placeholder="Sist endret"
-                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-              </mat-form-field>
-
-              <mat-form-field class="extra-metadata__input--narrow">
-                <input matInput
-                       formControlName="last_modified_by"
-                       placeholder="Sist endret av"
-                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-              </mat-form-field>
-            </div>
-          </ng-container>
+        <div class="browserScriptDropdown">
+          <mat-form-field>
+            <mat-select placeholder="Velg browser script" formControlName="script_id" multiple
+                        i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+              <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="!script_id.valid  && !form.disabled"
+                     i18n="@@browserconfigFormScriptsRequiredError">
+            Scripts påkrevd.
+          </mat-error>
         </div>
+
+        <app-labels kind="Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
+
       </div>
-        <div fxFlex fxLayout="column" fxLayoutGap="1em">
-
-          <div class="browserScriptDropdown">
-            <mat-form-field>
-              <mat-select placeholder="Velg browser script" formControlName="script_id"  multiple
-                          i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
-                <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-error *ngIf="!script_id.valid  && !form.disabled"
-                       i18n="@@browserconfigFormScriptsRequiredError">
-              Scripts påkrevd.
-            </mat-error>
-          </div>
-
-          <app-labels kind="selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
-
-          <ng-container formGroupName="meta">
-            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-          </ng-container>
-        </div>
     </mat-card-content>
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"

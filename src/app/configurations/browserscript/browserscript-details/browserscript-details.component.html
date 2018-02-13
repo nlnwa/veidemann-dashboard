@@ -82,7 +82,6 @@
             <mat-panel-title>
               <span class="toolbar--title" i18n="@@browserscriptFormScriptHeader">{{name.value}}</span>
             </mat-panel-title>
-            <mat-panel-description>JavaScript</mat-panel-description>
           </mat-expansion-panel-header>
           <div appScriptEditor #editor formControlName="script"></div>
           <mat-error *ngIf="editor.value === ''"
