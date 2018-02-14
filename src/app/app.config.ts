@@ -21,16 +21,15 @@ export class AppConfig {
     this._env = new Environment(env);
   }
 
-  public load(): Promise<Environment> {
+  public load(): Promise<any> {
     if (environment.config === '') {
-      return Promise.resolve(this.environment = {} as Environment);
+      return Promise.resolve(this.environment)
+        .then(env => this.authService.configure(env.auth));
     }
     return this.http.get<Environment>(environment.config).toPromise()
-      .then(env => {this.environment = env; return this.environment;} )
-      .then(env => this.authService.configure(env.auth))
-      .catch(err => {
-        console.error(err);
-        return this.environment = {} as Environment;
-      })
+      .then(env => {
+        this.environment = env;
+        return this.authService.configure(env.auth);
+      });
   }
 }

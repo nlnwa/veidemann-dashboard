@@ -35,9 +35,9 @@ export class AuthService {
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
       return this.oauthService.loadDiscoveryDocumentAndTryLogin()
         .then(() => this.roleService.fetchRoles())
-        .catch(_ => Promise.resolve());
+        .catch(() => Promise.resolve());
     } else {
-      console.log('WARNING: No idp issuer configured so authentication is not possible.');
+      console.log('No idp issuer configured so authentication is not possible.');
       return Promise.resolve();
     }
   }
