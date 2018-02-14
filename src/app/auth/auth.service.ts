@@ -1,15 +1,13 @@
 import {Injectable} from '@angular/core';
 
-import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-
-import {AppConfig} from '../app.config';
+import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 import {RoleService} from './role.service';
 
 
 @Injectable()
 export class AuthService {
 
-  constructor(private appConfig: AppConfig, private oauthService: OAuthService, private roleService: RoleService) {
+  constructor(private oauthService: OAuthService, private roleService: RoleService) {
   }
 
   public get groups() {
@@ -31,8 +29,7 @@ export class AuthService {
     this.roleService.resetRoles();
   }
 
-  public configureAuth(): Promise<any> {
-    const auth = this.appConfig.auth;
+  public configure(auth: AuthConfig): Promise<any> {
     if (auth && auth.issuer !== '') {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
