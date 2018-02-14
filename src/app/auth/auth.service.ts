@@ -1,6 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/empty';
 
 import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 
@@ -40,8 +38,9 @@ export class AuthService {
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
       return this.oauthService.loadDiscoveryDocumentAndTryLogin()
         .then(() => this.roleService.fetchRoles())
-        .catch(_ => Observable.empty().toPromise());
+        .catch(_ => Promise.resolve());
     } else {
+      console.log('WARNING: No idp issuer configured so authentication is not possible.');
       return Promise.resolve();
     }
   }
