@@ -14,7 +14,7 @@ export class TokenInterceptor implements HttpInterceptor {
     const token = this.authStorage.getItem('id_token');
 
     if (request.url.indexOf('/api/') !== -1 && token !== null) {
-      const headers = request.headers.set('Authorization', 'Bearer ' + token)
+      const headers = request.headers.set('Authorization', 'Bearer ' + token);
       request = request.clone({headers});
     }
 

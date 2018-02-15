@@ -14,7 +14,7 @@ export class RoleService {
   }
 
   public resetRoles() {
-    this.roles = [Role.ANY]
+    this.roles = [Role.ANY];
   }
 
   public fetchRoles() {
@@ -30,25 +30,21 @@ export class RoleService {
   }
 
   public isAdmin(): boolean {
-    return this.isRole(Role.ADMIN)
+    return this.isRole(Role.ADMIN);
   }
 
   public isCurator(): boolean {
-    return this.isRole(Role.CURATOR)
+    return this.isRole(Role.CURATOR);
   }
 
   public isReadonly(): boolean {
-    return this.isRole(Role.READONLY)
+    return this.isRole(Role.READONLY);
   }
 
   private isRole(role: Role) {
     if (!environment.production && environment.auth.issuer === '') {
       return true;
     }
-    if (this.roles.includes(role)) {
-      return true
-    } else {
-      return false;
-    }
+    return this.roles.includes(role);
   }
 }
