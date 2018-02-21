@@ -11,7 +11,7 @@ COPY . .
 RUN node_modules/@angular/cli/bin/ng build --target=production --base-href ${BASE_HREF} --deploy-url ${DEPLOY_URL}
 
 
-FROM nginx:alpine
+FROM nginx:stable-alpine
 LABEL maintainer="nettarkivet@nb.no"
 
 ARG DEPLOY_URL=/veidemann
