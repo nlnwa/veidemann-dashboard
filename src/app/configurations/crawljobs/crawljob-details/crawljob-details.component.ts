@@ -10,7 +10,6 @@ import {
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 @Component({
@@ -89,8 +88,8 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlJob) {
-      if (!changes.crawlJob.currentValue) {
+    if (changes.crawlJob.currentValue) {
+      if (!this.crawlJob) {
         this.form.reset();
       }
     }
@@ -143,14 +142,14 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
     });
-    if (! this.canEdit) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }
@@ -169,18 +168,13 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlJob.meta.name,
         description: this.crawlJob.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.crawlJob.meta.created.seconds),
-        },
+        created: new Date(this.crawlJob.meta.created),
         created_by: this.crawlJob.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.crawlJob.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.crawlJob.meta.last_modified),
         last_modified_by: this.crawlJob.meta.last_modified_by,
-        label: [...this.crawlJob.meta.label],
+        label: this.crawlJob.meta.label || [],
       },
     });
-
     this.form.markAsPristine();
     this.form.markAsUntouched();
   };

@@ -66,9 +66,9 @@
             </div>
             <ng-container formGroupName="meta">
               <div fxLayout="row" fxLayoutGap="1em">
-                <mat-form-field formGroupName="created" class="extra-metadata__input">
+                <mat-form-field class="extra-metadata__input">
                   <input matInput
-                         formControlName="seconds"
+                         formControlName="created"
                          placeholder="Opprettet"
                          i18n-placeholder="@@metaCreatedInputPlaceholder">
                 </mat-form-field>
@@ -81,9 +81,9 @@
                 </mat-form-field>
               </div>
               <div fxLayout="row" fxLayoutGap="1em">
-                <mat-form-field formGroupName="last_modified" class="extra-metadata__input">
+                <mat-form-field class="extra-metadata__input">
                   <input matInput
-                         formControlName="seconds"
+                         formControlName="last_modified"
                          placeholder="Sist endret"
                          i18n-placeholder="@@metaLastModifiedInputPlaceholder">
                 </mat-form-field>
@@ -118,7 +118,8 @@
             <mat-form-field>
               <mat-select placeholder="Velg crawl config" formControlName="crawl_config_id"
                           i18n-placeholder="@@crawljobCrawlconfigDropdownPlaceholder">
-                <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}</mat-option>
+                <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}
+                </mat-option>
               </mat-select>
             </mat-form-field>
 
