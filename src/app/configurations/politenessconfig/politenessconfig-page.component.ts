@@ -85,7 +85,7 @@ export class PolitenessConfigPageComponent implements OnInit, AfterViewInit {
   }
 
   onCreatePolitenessConfig(): void {
-    this.politenessConfig = new PolitenessConfig('OBEY_ROBOTS');
+    this.politenessConfig = new PolitenessConfig();
   }
 
   onSelectPolitenessConfig(politenessConfig: PolitenessConfig) {

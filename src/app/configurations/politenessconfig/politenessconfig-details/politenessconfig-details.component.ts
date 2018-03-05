@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
-import {PolitenessConfig, Selector} from '../../../commons/models/config.model';
+import {Label, PolitenessConfig} from '../../../commons/models/config.model';
 import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
@@ -121,13 +121,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       delay_factor: '',
       max_retries: '',
       retry_delay_seconds: '',
-      crawl_host_group_selector: [],
+      crawl_host_group_selector: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -141,7 +141,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   private updateForm() {
     this.form.patchValue({
       id: this.politenessConfig.id,
-      robots_policy: this.politenessConfig.robots_policy,
+      robots_policy: this.politenessConfig.robots_policy || this.robotsPolicies[0],
       minimum_robots_validity_duration_s: this.politenessConfig.minimum_robots_validity_duration_s,
       custom_robots: this.politenessConfig.custom_robots,
       min_time_between_page_load_ms: this.politenessConfig.min_time_between_page_load_ms,
@@ -149,20 +149,23 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       delay_factor: this.politenessConfig.delay_factor,
       max_retries: this.politenessConfig.max_retries,
       retry_delay_seconds: this.politenessConfig.retry_delay_seconds,
-      crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector ?
-        [...this.politenessConfig.crawl_host_group_selector.label] : [],
+      crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector
+        ? this.politenessConfig.crawl_host_group_selector.map(selector => {
+          const parts = selector.split(':');
+          const label = new Label();
+          label.key = parts[0];
+          label.value = parts[1];
+          return label;
+        })
+        : [],
       meta: {
         name: this.politenessConfig.meta.name,
         description: this.politenessConfig.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.politenessConfig.meta.created.seconds),
-        },
+        created: new Date(this.politenessConfig.meta.created),
         created_by: this.politenessConfig.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.politenessConfig.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.politenessConfig.meta.last_modified),
         last_modified_by: this.politenessConfig.meta.last_modified_by,
-        label: [...this.politenessConfig.meta.label],
+        label: this.politenessConfig.meta.label || [],
       },
     });
     this.form.markAsPristine();
@@ -171,8 +174,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   private prepareSave(): PolitenessConfig {
     const formModel = this.form.value;
-    const labelsDeepCopy = formModel.meta.label.map(label => ({...label}));
-    const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
+    // const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
     return {
       id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy,
@@ -183,7 +185,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       delay_factor: parseFloat(formModel.delay_factor) || 0,
       max_retries: parseInt(formModel.max_retries, 10) || 0,
       retry_delay_seconds: parseInt(formModel.retry_delay_seconds, 10) || 0,
-      crawl_host_group_selector: crawlHostGroup_selectorDeepCopy,
+      crawl_host_group_selector: formModel.crawl_host_group_selector.map(label => label.key + ':' + label.value),
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
@@ -191,7 +193,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
         // created_by: '',
         // last_modified: null,
         // last_modified_by: '',
-        label: labelsDeepCopy
+        label: formModel.meta.label.map(label => ({...label}))
       }
     };
   }
