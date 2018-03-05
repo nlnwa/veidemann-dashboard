@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {Label, PolitenessConfig} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -110,7 +109,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
