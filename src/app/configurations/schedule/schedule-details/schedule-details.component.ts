@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/datetime';
-import {Schedule} from '../../../commons/models/config.model';
+import {CrawlScheduleConfig} from '../../../commons/models/config.model';
 import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
@@ -22,15 +22,15 @@ import {RoleService} from '../../../auth/role.service';
 export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
-  schedule: Schedule;
+  schedule: CrawlScheduleConfig;
 
   @Output()
-  save = new EventEmitter<Schedule>();
+  save = new EventEmitter<CrawlScheduleConfig>();
   @Output()
-  update = new EventEmitter<Schedule>();
+  update = new EventEmitter<CrawlScheduleConfig>();
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<Schedule>();
+  delete = new EventEmitter<CrawlScheduleConfig>();
 
   form: FormGroup;
 
@@ -98,7 +98,6 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   private createForm() {
-
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       cron_expression: this.fb.group({
@@ -121,9 +120,9 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -148,21 +147,17 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: {
         name: this.schedule.meta.name,
         description: this.schedule.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.schedule.meta.created.seconds),
-        },
+        created: new Date(this.schedule.meta.created),
         created_by: this.schedule.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.schedule.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.schedule.meta.last_modified),
         last_modified_by: this.schedule.meta.last_modified_by,
-        label: [...this.schedule.meta.label],
+        label: this.schedule.meta.label || [],
 
       },
     });
 
-    if (this.schedule.valid_from !== null) {
-      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_from.seconds);
+    if (this.schedule.valid_from != null) {
+      const {year, month, day} = DateTime.fromISOToDateUTC(this.schedule.valid_from);
       this.form.patchValue({
         valid_from: {
           year: year,
@@ -179,8 +174,8 @@ export class ScheduleDetailsComponent implements OnChanges {
         },
       });
     }
-    if (this.schedule.valid_to !== null) {
-      const {year, month, day} = DateTime.fromSecondsToDateUTC(this.schedule.valid_to.seconds);
+    if (this.schedule.valid_to != null) {
+      const {year, month, day} = DateTime.fromISOToDateUTC(this.schedule.valid_to);
       this.form.patchValue({
         valid_to: {
           year: year,
@@ -209,7 +204,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       + formModel.dow;
   }
 
-  private prepareSave(): Schedule {
+  private prepareSave(): CrawlScheduleConfig {
     const formModel = this.form.value;
     const formCronExpression = this.form.value.cron_expression;
     const formValidFrom = this.form.value.valid_from;
@@ -218,12 +213,12 @@ export class ScheduleDetailsComponent implements OnChanges {
     const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
     const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
     const cronExpression = this.setCronExpression(formCronExpression);
-
     return {
+
       id: this.schedule.id,
       cron_expression: cronExpression,
-      valid_from: validFrom ? {seconds: validFrom.toString()} : null,
-      valid_to: validTo ? {seconds: validTo.toString()} : null,
+      valid_from: validFrom ? validFrom.toString() : null,
+      valid_to: validTo ? validTo.toString() : null,
       meta: {
         name: formModel.meta.name as string,
         description: formModel.meta.description as string,
