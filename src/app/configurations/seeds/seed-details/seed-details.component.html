@@ -45,9 +45,9 @@
         </mat-form-field>
 
         <ng-container formGroupName="meta" *ngIf="seed.id">
-          <mat-form-field formGroupName="created">
+          <mat-form-field>
             <input matInput
-                   formControlName="seconds"
+                   formControlName="created"
                    placeholder="Opprettet"
                    i18n-placeholder="@@metaCreatedInputPlaceholder">
           </mat-form-field>
@@ -59,9 +59,9 @@
                    i18n-placeholder="@@metaCreatedByInputPlaceholder">
           </mat-form-field>
 
-          <mat-form-field formGroupName="last_modified">
+          <mat-form-field>
             <input matInput
-                   formControlName="seconds"
+                   formControlName="last_modified"
                    placeholder="Sist endret"
                    i18n-placeholder="@@metaLastModifiedInputPlaceholder">
           </mat-form-field>
@@ -84,7 +84,7 @@
         <ng-container formGroupName="meta">
           <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
-        <mat-select placeholder="Velg jobb" formControlName="job_id"
+        <mat-select placeholder="Velg jobb" formControlName="job_id" multiple
                     i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
           <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
         </mat-select>
