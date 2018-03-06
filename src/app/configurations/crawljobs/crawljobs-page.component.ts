@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {CrawlJobService} from './crawljob.service';
 import {MatPaginator} from '@angular/material';
-import {CrawlConfig, CrawlJob, Schedule} from '../../commons/models/config.model';
+import {CrawlConfig, CrawlJob, CrawlScheduleConfig} from '../../commons/models/config.model';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -51,7 +51,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
   @ViewChild(CrawlJobListComponent) list: CrawlJobListComponent;
 
   crawlJob: CrawlJob;
-  schedules: Schedule[];
+  schedules: CrawlScheduleConfig[];
   crawlConfigs: CrawlConfig[]
   changes: Subject<void> = new Subject<void>();
 
