@@ -108,9 +108,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: []
       }),
@@ -132,15 +132,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
         description: this.crawlHostGroupConfig.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.crawlHostGroupConfig.meta.created.seconds),
-        },
+        created: new Date(this.crawlHostGroupConfig.meta.created),
         created_by: this.crawlHostGroupConfig.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.crawlHostGroupConfig.meta.last_modified.seconds),
-        },
+        last_modified: new Date (this.crawlHostGroupConfig.meta.last_modified),
         last_modified_by: this.crawlHostGroupConfig.meta.last_modified_by,
-        label: [...this.crawlHostGroupConfig.meta.label],
+        label: this.crawlHostGroupConfig.meta.label || [],
       }
     });
     this.form.setControl('ip_range', ipRangeFGArray);
