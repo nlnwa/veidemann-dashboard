@@ -113,7 +113,7 @@ export class PolitenessConfigPageComponent implements OnInit, AfterViewInit {
   onDeletePolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfigService.delete(politenessConfig.id)
       .subscribe((response) => {
-        this.politenessConfig = response;
+        this.politenessConfig = null;
         this.snackBarService.openSnackBar('Slettet');
       });
     this.changes.next();

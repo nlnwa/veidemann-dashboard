@@ -34,6 +34,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   get canEdit(): boolean {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
+
   get showSave(): boolean {
     return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id
   }
@@ -67,12 +68,12 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlHostGroupConfig) {
-      if (changes.crawlHostGroupConfig.currentValue) {
-        this.updateForm();
-      } else {
-        this.form.reset();
-      }
+    if (!changes.crawlHostGroupConfig) {
+      this.form.reset();
+      return;
+    }
+    if (this.crawlHostGroupConfig) {
+      this.updateForm();
     }
   }
 
@@ -134,7 +135,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
         description: this.crawlHostGroupConfig.meta.description,
         created: new Date(this.crawlHostGroupConfig.meta.created),
         created_by: this.crawlHostGroupConfig.meta.created_by,
-        last_modified: new Date (this.crawlHostGroupConfig.meta.last_modified),
+        last_modified: new Date(this.crawlHostGroupConfig.meta.last_modified),
         last_modified_by: this.crawlHostGroupConfig.meta.last_modified_by,
         label: this.crawlHostGroupConfig.meta.label || [],
       }

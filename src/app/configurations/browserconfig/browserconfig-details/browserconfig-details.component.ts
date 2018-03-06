@@ -80,12 +80,10 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserConfig) {
-      if (!changes.browserConfig.currentValue) {
-        this.form.reset();
-      }
+    if (!changes.browserConfig) {
+      this.form.reset();
+      return;
     }
-
     if (changes.browserScripts && changes.browserScripts.currentValue) {
       this.browserScriptList = changes.browserScripts.currentValue.map((browserScript) =>
         ({

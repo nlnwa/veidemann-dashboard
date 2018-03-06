@@ -90,7 +90,6 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
 
   onSelectRoleMapping(roleMapping: RoleMapping) {
     this.roleMapping = roleMapping;
-    console.log(this.roleMapping);
   }
 
   onSaveRoleMapping(roleMapping: RoleMapping) {
@@ -114,7 +113,7 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
   onDeleteRoleMapping(roleMapping: RoleMapping) {
     this.roleMappingService.delete(roleMapping.id)
       .subscribe((response) => {
-        this.roleMapping = response;
+        this.roleMapping = null;
         this.snackBarService.openSnackBar('Slettet');
       });
     this.changes.next();

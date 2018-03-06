@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {BrowserScript} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 @Component({
@@ -43,10 +42,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserScript.currentValue) {
-      if (!this.browserScript) {
-        this.form.reset();
-      }
+    if (!changes.browserScript) {
+      this.form.reset();
+      return;
     }
     if (this.browserScript) {
       this.updateForm();

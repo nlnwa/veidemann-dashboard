@@ -12,6 +12,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
+
 @Component({
   selector: 'app-crawljob-details',
   templateUrl: './crawljob-details.component.html',
@@ -88,10 +89,9 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlJob.currentValue) {
-      if (!this.crawlJob) {
+    if (!changes.crawlJob) {
         this.form.reset();
-      }
+        return;
     }
     if (changes.crawlConfigs && changes.crawlJob.currentValue) {
       this.crawlConfigs = changes.crawlConfigs.currentValue.map((crawlConfig) =>

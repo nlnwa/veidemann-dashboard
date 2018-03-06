@@ -52,7 +52,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-      return this.form.valid && this.canEdit;
+    return this.form.valid && this.canEdit;
   }
 
   get canUpdate() {
@@ -72,12 +72,13 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.schedule) {
-      if (changes.schedule.currentValue) {
-        this.updateForm();
-      } else {
-        this.form.reset();
-      }
+    if (!changes.schedule) {
+      this.form.reset();
+      return;
+    }
+
+    if (this.schedule) {
+      this.updateForm();
     }
   }
 

@@ -7,7 +7,6 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {CrawlJobListComponent} from './crawljob-list/crawljob-list.component';
 import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
@@ -48,7 +47,6 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
   pageOptions = [5, 10];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(CrawlJobListComponent) list: CrawlJobListComponent;
 
   crawlJob: CrawlJob;
   schedules: CrawlScheduleConfig[];
@@ -125,7 +123,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
   onDeleteCrawlJob(crawlJob: CrawlJob) {
     this.crawlJobService.delete(crawlJob.id)
       .subscribe((response) => {
-        this.crawlJob = response;
+        this.crawlJob = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

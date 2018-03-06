@@ -79,10 +79,9 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.politenessConfig.currentValue) {
-      if (!this.politenessConfig) {
+    if (!changes.politenessConfig) {
         this.form.reset();
-      }
+        return;
     }
     if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
       this.robotsPolicyList = changes.robotsPolicies.currentValue;

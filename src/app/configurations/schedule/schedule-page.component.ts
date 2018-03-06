@@ -108,7 +108,7 @@ export class SchedulePageComponent implements AfterViewInit {
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
       .subscribe((response) => {
-        this.schedule = response;
+        this.schedule = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

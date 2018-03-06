@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -46,7 +45,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return !this.crawlConfig.id;
+    return (this.crawlConfig && !this.crawlConfig.id);
   }
 
   get name() {
@@ -67,10 +66,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlConfig) {
-      if (!this.crawlConfig) {
+    if (!changes.crawlConfig) {
         this.form.reset();
-      }
+        return;
     }
     if (changes.browserConfigs) {
       if (this.browserConfigs) {
