@@ -47,10 +47,6 @@ export class LabelsComponent implements ControlValueAccessor {
     return this.showUpdateLabel;
   }
 
-  get selector(): boolean {
-    return this.kind === Kind.SELECTOR;
-  }
-
   get canUpdate(): boolean {
     return !this.isDisabled;
   }
@@ -68,7 +64,7 @@ export class LabelsComponent implements ControlValueAccessor {
     if (labels == null) {
       this.labels = [];
     } else {
-      this.labels = labels;
+      this.labels = [...labels];
       this.regroup();
       this.labelForm.disable();
     }
