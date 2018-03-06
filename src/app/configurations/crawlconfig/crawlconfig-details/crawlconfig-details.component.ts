@@ -121,9 +121,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -148,15 +148,11 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlConfig.meta.name,
         description: this.crawlConfig.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.created.seconds),
-        },
+        created:  new Date(this.crawlConfig.meta.created),
         created_by: this.crawlConfig.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.crawlConfig.meta.last_modified),
         last_modified_by: this.crawlConfig.meta.last_modified_by,
-        label: [...this.crawlConfig.meta.label],
+        label: this.crawlConfig.meta.label || [],
       },
     });
     this.form.markAsPristine();
