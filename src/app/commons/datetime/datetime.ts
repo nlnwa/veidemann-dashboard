@@ -2,20 +2,12 @@ import * as moment from 'moment';
 
 export class DateTime {
 
-  static convertFullTimestamp(timestamp) {
-    return new Date(timestamp * 1000);
-  }
-
-  static today() {
-    return Date.now() / 1000;
-  }
-
   static nowUTC() {
     return new Date().toUTCString();
   }
 
-  static fromSecondsToDateUTC(seconds) {
-    const m = moment.utc(seconds, 'X');
+  static fromISOToDateUTC(isoString) {
+    const m = moment.utc(isoString);
     return {year: m.year(), month: m.month(), day: m.date()};
   }
 
@@ -26,18 +18,18 @@ export class DateTime {
         .month(month - 1)
         .date(day)
         .startOf('date')
-        .unix();
+        .toISOString();
     } else if (year && month) {
       return moment.utc()
         .year(year)
         .month(month - 1)
         .startOf('month')
-        .unix();
+        .toISOString();
     } else if (year) {
       return moment.utc()
         .year(year)
         .startOf('year')
-        .unix();
+        .toISOString();
     } else {
       return undefined;
     }
@@ -50,18 +42,18 @@ export class DateTime {
         .month(month - 1)
         .date(day).startOf('date')
         .endOf('date')
-        .unix();
+        .toISOString();
     } else if (year && month) {
       return moment.utc()
         .year(year)
         .month(month - 1)
         .endOf('month')
-        .unix();
+        .toISOString();
     } else if (year) {
       return moment.utc()
         .year(year)
         .endOf('year')
-        .unix();
+        .toISOString();
     } else {
       return undefined;
     }
