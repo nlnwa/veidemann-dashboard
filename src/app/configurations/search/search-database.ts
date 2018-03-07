@@ -28,7 +28,7 @@ export class SearchDatabase extends ListDatabase {
     this.updateChangeSubscription();
   }
 
-  get (): Item[] { return this._data.value; }
+  get data(): Item[] { return this._data.value; }
 
   set data(items: Item[]) {
     if (items.length > 0) {

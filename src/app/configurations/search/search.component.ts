@@ -105,10 +105,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSelectEntity(entity: Entity) {
     this.selectedEntity = entity;
     this.selectedSeed = null;
-
     let isFirstHit = true;
     this.seedService.search({entity_id: entity.id})
-      .map(reply => reply.value)
+      .map(reply => reply.value || [])
       .do(() => isFirstHit = true)
       .subscribe(seeds => {
         this.seedDatabase.items = seeds;
@@ -140,7 +139,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onDeleteEntity(entity: Entity): void {
     this.entityService.delete(entity.id)
       .subscribe((deletedEntity) => {
-        this.selectedEntity = deletedEntity;
+        this.selectedEntity = null;
         this.snackBarService.openSnackBar('Slettet');
         this.searchTerm.next(this.searchTerm.value);
       });
@@ -181,7 +180,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onDeleteSeed(seed: Seed): void {
     this.seedService.delete(seed.id)
       .subscribe((deletedSeed) => {
-        this.selectedSeed = deletedSeed;
+        this.selectedSeed = null;
         this.seedDatabase.remove(seed);
         this.snackBarService.openSnackBar('Slettet');
         // Update seed list of entity associated with deleted seed
