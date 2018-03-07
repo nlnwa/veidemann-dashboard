@@ -66,7 +66,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.crawlConfig) {
+    if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
         this.form.reset();
         return;
     }

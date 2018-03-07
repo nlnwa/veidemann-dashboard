@@ -79,7 +79,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.politenessConfig) {
+    if (changes.politenessConfig && !changes.politenessConfig.currentValue) {
         this.form.reset();
         return;
     }

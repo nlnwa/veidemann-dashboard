@@ -80,7 +80,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.browserConfig) {
+    if (changes.browserConfig && !changes.browserConfig.currentValue) {
       this.form.reset();
       return;
     }

@@ -89,7 +89,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.crawlJob) {
+    if (changes.crawlJob && !changes.crawlJob.currentValue) {
         this.form.reset();
         return;
     }

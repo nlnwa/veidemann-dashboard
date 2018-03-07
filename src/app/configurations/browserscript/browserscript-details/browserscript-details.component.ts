@@ -42,7 +42,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.browserScript) {
+    if (changes.browserScript && !changes.browserScript.currentValue) {
       this.form.reset();
       return;
     }

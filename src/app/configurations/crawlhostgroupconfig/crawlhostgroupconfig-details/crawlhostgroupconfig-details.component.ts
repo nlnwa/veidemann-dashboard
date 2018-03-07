@@ -68,7 +68,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.crawlHostGroupConfig) {
+    if (changes.crawlHostGroupConfig && !changes.crawlHostGroupConfig.currentValue) {
       this.form.reset();
       return;
     }

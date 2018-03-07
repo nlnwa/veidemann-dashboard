@@ -72,7 +72,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.schedule) {
+    if (changes.schedule && !changes.schedule.currentValue) {
       this.form.reset();
       return;
     }
