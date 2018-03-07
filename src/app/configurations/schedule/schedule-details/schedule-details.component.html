@@ -8,8 +8,8 @@
         <span *ngIf="!schedule.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row" fxLayoutWrap>
-      <div fxFlex fxLayout="column" fxLayoutWrap>
+    <mat-card-content fxLayout="row wrap">
+      <div fxFlex fxLayout="column wrap">
         <ng-container formGroupName="meta">
           <mat-form-field>
             <input matInput
@@ -80,7 +80,7 @@
         </ng-container>
 
       </div>
-      <div fxFlex fxLayout="column" fxLayoutWrap>
+      <div fxFlex fxLayout="column wrap">
 
         <fieldset formGroupName="cron_expression">
           <legend i18n="@@scheduleFormCronExpressionHeader">Cron expression</legend>
