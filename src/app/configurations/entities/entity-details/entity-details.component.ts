@@ -79,7 +79,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   private updateForm() {
     const entity = this.entity;
-    this.form.setValue({
+    this.form.patchValue({
       id: entity.id,
       meta: {
         name: entity.meta.name,
