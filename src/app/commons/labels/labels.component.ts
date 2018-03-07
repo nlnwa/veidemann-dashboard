@@ -47,10 +47,6 @@ export class LabelsComponent implements ControlValueAccessor {
     return this.showUpdateLabel;
   }
 
-  get selector(): boolean {
-    return this.kind === Kind.SELECTOR;
-  }
-
   get canUpdate(): boolean {
     return !this.isDisabled;
   }
@@ -68,7 +64,7 @@ export class LabelsComponent implements ControlValueAccessor {
     if (labels == null) {
       this.labels = [];
     } else {
-      this.labels = labels;
+      this.labels = [...labels];
       this.regroup();
       this.labelForm.disable();
     }
@@ -96,22 +92,23 @@ export class LabelsComponent implements ControlValueAccessor {
     this.labelForm.reset({key, value});
   }
 
-  onSaveLabel(key: string, value: string): void {
-    key = key.trim();
+  onSaveLabel(value: string): void {
+    let key = '';
     value = value.trim();
 
     if (value === '') {
       return
     }
 
-    if (key === '') {
-      const parts = value.split(':');
-      if (parts.length > 1) {
-        key = parts[0].trim();
-        value = parts[1].trim();
-      } else {
+    const parts = value.split(':');
+    if (parts.length > 1) {
+      key = parts[0].trim();
+      value = parts[1].trim();
+      if (key.length < 1 || value.length < 1) {
         return
       }
+    } else {
+      return
     }
 
     if (this.findLabelIndex(key, value) > -1) {
@@ -141,7 +138,6 @@ export class LabelsComponent implements ControlValueAccessor {
   }
 
   onRemoveLabel(key: string, value: string): void {
-    console.log('remove label');
     const index = this.findLabelIndex(key, value);
     if (index !== -1) {
       this.labels.splice(index, 1);

@@ -122,7 +122,7 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
   onDeleteBrowserConfig(browserConfig: BrowserConfig) {
     this.browserConfigService.delete(browserConfig.id)
       .subscribe((response) => {
-        this.browserConfig = response;
+        this.browserConfig = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

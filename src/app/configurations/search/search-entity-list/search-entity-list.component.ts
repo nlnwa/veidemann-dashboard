@@ -28,21 +28,21 @@ export class SearchListComponent extends BaseListComponent {
 
   isEntityName(item: Item): boolean {
     /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.EntityName) >= 1;
+    return ((<any>item).type & ResultType.EntityName) > 0;
   }
 
   isEntityLabel(item: Item): boolean {
     /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.EntityLabel) >= 1;
+    return ((<any>item).type & ResultType.EntityLabel) > 0;
   }
 
   isSeedName(item: Item): boolean {
     /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.SeedName) >= 1;
+    return ((<any>item).type & ResultType.SeedName) > 0;
   }
 
   isSeedLabel(item: Item): boolean {
     /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.SeedLabel) >= 1;
+    return ((<any>item).type & ResultType.SeedLabel) > 0;
   }
 }

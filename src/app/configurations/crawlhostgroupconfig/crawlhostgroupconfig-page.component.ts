@@ -21,7 +21,8 @@ import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-crawlhostgroupconfig-list (rowClick)="onSelectCrawlHostGroupConfig($event)"></app-crawlhostgroupconfig-list>
+        <app-crawlhostgroupconfig-list
+          (rowClick)="onSelectCrawlHostGroupConfig($event)"></app-crawlhostgroupconfig-list>
         <mat-paginator [length]="pageLength"
                        [pageIndex]="pageIndex"
                        [pageSize]="pageSize"
@@ -29,10 +30,10 @@ import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
         </mat-paginator>
       </div>
       <app-crawlhostgroupconfig-details [crawlHostGroupConfig]="crawlHostGroupConfig"
-                            *ngIf="crawlHostGroupConfig"
-                            (update)="onUpdateCrawlHostGroupConfig($event)"
-                            (save)="onSaveCrawlHostGroupConfig($event)"
-                            (delete)="onDeleteCrawlHostGroupConfig($event)">
+                                        *ngIf="crawlHostGroupConfig"
+                                        (update)="onUpdateCrawlHostGroupConfig($event)"
+                                        (save)="onSaveCrawlHostGroupConfig($event)"
+                                        (delete)="onDeleteCrawlHostGroupConfig($event)">
       </app-crawlhostgroupconfig-details>
     </div>
   `,
@@ -90,27 +91,27 @@ export class CrawlHostGroupConfigPageComponent implements AfterViewInit {
     this.crawlHostGroupConfigService.create(crawlHostGroupConfig)
       .subscribe(newCrawlHostGroupConfig => {
         this.crawlHostGroupConfig = newCrawlHostGroupConfig;
+        this.changes.next();
         this.snackBarService.openSnackBar('Lagret');
       });
-    this.changes.next();
   }
 
   onUpdateCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigService.update(crawlHostGroupConfig)
       .subscribe(updatedCrawlHostGroupConfig => {
         this.crawlHostGroupConfig = updatedCrawlHostGroupConfig;
+        this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
-    this.changes.next();
   }
 
   onDeleteCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigService.delete(crawlHostGroupConfig.id)
       .subscribe((response) => {
-        this.crawlHostGroupConfig = response;
+        this.crawlHostGroupConfig = null;
+        this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });
-    this.changes.next();
   }
 
 }

@@ -40,9 +40,9 @@
           </div>
           <ng-container formGroupName="meta">
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="created" fxFlex>
+              <mat-form-field fxFlex>
                 <input matInput
-                       formControlName="seconds"
+                       formControlName="created"
                        placeholder="Opprettet"
                        i18n-placeholder="@@metaCreatedInputPlaceholder">
               </mat-form-field>
@@ -55,9 +55,9 @@
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field fxFlex formGroupName="last_modified">
+              <mat-form-field fxFlex>
                 <input matInput
-                       formControlName="seconds"
+                       formControlName="last_modified"
                        placeholder="Sist endret"
                        i18n-placeholder="@@metaLastModifiedInputPlaceholder">
               </mat-form-field>
@@ -135,7 +135,7 @@
           </mat-error>
         </div>
 
-        <app-labels kind="Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
+        <app-labels kind="Script Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
 
       </div>
     </mat-card-content>

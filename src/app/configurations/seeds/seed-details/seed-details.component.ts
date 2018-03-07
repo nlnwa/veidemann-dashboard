@@ -84,9 +84,9 @@ export class SeedDetailComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -97,7 +97,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   private updateForm() {
-    this.form.setValue({
+    this.form.patchValue({
       id: this.seed.id,
       disabled: !this.seed.disabled, // disabled is named active in the view
       entity_id: this.seed.entity_id,
@@ -108,15 +108,11 @@ export class SeedDetailComponent implements OnChanges {
       meta: {
         name: this.seed.meta.name,
         description: this.seed.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.seed.meta.created.seconds),
-        },
+        created: new Date(this.seed.meta.created),
         created_by: this.seed.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.seed.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.seed.meta.last_modified),
         last_modified_by: this.seed.meta.last_modified_by,
-        label: [...this.seed.meta.label],
+        label: this.seed.meta.label || [],
       }
     });
     this.form.markAsPristine();

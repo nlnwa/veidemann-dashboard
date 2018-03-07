@@ -9,12 +9,7 @@ export abstract class CrudService<T extends ListRequest> {
   private static requestToParams(listRequest: ListRequest): HttpParams {
     let params = new HttpParams();
     Object.keys(listRequest).forEach(key => {
-      let value = listRequest[key];
-      switch (key) {
-        case 'selector':
-          value = JSON.stringify(value);
-          break;
-      }
+      const value = listRequest[key];
       params = params.append(key, value);
     });
     return params;
@@ -39,11 +34,11 @@ export abstract class CrudService<T extends ListRequest> {
   }
 
   create(item: T): Observable<T> {
-    return this.http.post<T>(this.url, item);
+    return this.http.put<T>(this.url, item);
   }
 
   update(item: T): Observable<T> {
-    return this.http.put<T>(`${this.url}/${item.id}`, item);
+    return this.http.post<T>(`${this.url}/${item.id}`, item);
   }
 
   // noinspection ReservedWordAsName

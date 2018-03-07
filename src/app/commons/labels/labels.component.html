@@ -15,7 +15,7 @@
         <input #chipInput [placeholder]="kind"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
-               (matChipInputTokenEnd)="onSaveLabel('', $event.value); chipInput.value = ''"
+               (matChipInputTokenEnd)="onSaveLabel($event.value); chipInput.value = ''"
                [attr.disabled]="canUpdate ? null : ''"/>
       </mat-chip-list>
 

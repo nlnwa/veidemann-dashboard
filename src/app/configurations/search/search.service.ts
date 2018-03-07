@@ -34,11 +34,9 @@ export class SearchService {
   }
 
   search(term: string): Observable<Item> {
-    let selector = {};
     let completeCount = 1;
     if (term) {
       completeCount = 4;
-      selector = {selector: {label: [{key: term}, {value: term}]}};
     }
     let count = 0;
     const complete = () => {
@@ -49,25 +47,24 @@ export class SearchService {
     };
 
     const entities$: Observable<Item> = this.entityService.search({name: term})
-      .flatMap((reply) => reply.value,
+      .flatMap((reply) => reply.value || [],
         (_, inner) => SearchService.applyType(inner, ResultType.EntityName))
       .finally(complete);
 
-    const entityLabel$: Observable<Item> = this.entityService.search(selector)
-      .flatMap((reply) => reply.value,
+    const entityLabel$: Observable<Item> = this.entityService.search({label_selector: [term]})
+      .flatMap((reply) => reply.value || [],
         (_, inner) => SearchService.applyType(inner, ResultType.EntityLabel))
       .finally(complete);
 
-    const seedLabel$: Observable<Item> = this.seedService.search(selector)
-      .flatMap(reply => Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))))
+    const seedLabel$: Observable<Item> = this.seedService.search({label_selector: [term]})
+      .flatMap(reply => reply.value ? Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))) : [])
       .flatMap(
         (entities) => entities,
         (_, inner) => SearchService.applyType(inner, ResultType.SeedLabel))
       .finally(complete);
 
-
     const seedEntities$: Observable<Item> = this.seedService.search({name: term})
-      .flatMap(reply => Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))))
+      .flatMap(reply => reply.value ? Observable.forkJoin(reply.value.map(seed => this.entityService.get(seed.entity_id))) : [])
       .flatMap(
         (entities) => entities,
         (_, inner) => SearchService.applyType(inner, ResultType.SeedName))

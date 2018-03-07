@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
-import {BrowserConfig, BrowserScript, Label, Selector} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
+import {BrowserConfig, BrowserScript, Label} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -81,12 +80,10 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserConfig) {
-      if (!changes.browserConfig.currentValue) {
-        this.form.reset();
-      }
+    if (changes.browserConfig && !changes.browserConfig.currentValue) {
+      this.form.reset();
+      return;
     }
-
     if (changes.browserScripts && changes.browserScripts.currentValue) {
       this.browserScriptList = changes.browserScripts.currentValue.map((browserScript) =>
         ({
@@ -124,14 +121,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
       sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
       // headers: this.fb.group({''}),
-      script_id: [],
-      script_selector: [],
+      script_id: '',
+      script_selector: '',
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -151,21 +148,24 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: this.browserConfig.page_load_timeout_ms,
       sleep_after_pageload_ms: this.browserConfig.sleep_after_pageload_ms,
       // headers: this.browserConfig.headers;
-      script_selector: [...this.browserConfig.script_selector.label],
+      script_id: this.browserConfig.script_id,
+      script_selector: this.browserConfig.script_selector ? this.browserConfig.script_selector.map(selector => {
+          const parts = selector.split(':');
+          const label = new Label();
+          label.key = parts[0];
+          label.value = parts[1];
+          return label
+        })
+        : [],
       meta: {
         name: this.browserConfig.meta.name,
         description: this.browserConfig.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.browserConfig.meta.created.seconds),
-        },
+        created: new Date(this.browserConfig.meta.created),
         created_by: this.browserConfig.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.browserConfig.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.browserConfig.meta.last_modified),
         last_modified_by: this.browserConfig.meta.last_modified_by,
-        label: [...this.browserConfig.meta.label]
+        label: this.browserConfig.meta.label || [],
       },
-      script_id: this.browserConfig.script_id,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -174,8 +174,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   private prepareSave(): BrowserConfig {
     const formModel = this.form.value;
-    const labelsDeepCopy: Label[] = formModel.meta.label.map(label => ({...label}));
-    const script_selectorDeepCopy: Selector = {label: formModel.script_selector.map(label => ({...label}))};
     return {
       id: this.browserConfig.id,
       user_agent: formModel.user_agent,
@@ -184,7 +182,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       page_load_timeout_ms: formModel.page_load_timeout_ms,
       sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
       script_id: formModel.script_id,
-      script_selector: script_selectorDeepCopy,
+      script_selector: formModel.script_selector.map(label => label.key + ':' + label.value),
       headers: formModel.headers,
       meta: {
         name: formModel.meta.name as string,
@@ -193,7 +191,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         // created_by: '',
         // last_modified: null,
         last_modified_by: '',
-        label: labelsDeepCopy
+        label: formModel.meta.label.map(label => ({...label}))
       }
     };
   }

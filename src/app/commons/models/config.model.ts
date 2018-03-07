@@ -1,18 +1,11 @@
-export class Timestamp {
-  seconds: string;
-  nanos?: number;
 
-  constructor() {
-    this.seconds = null;
-  }
-}
 
 export class Meta {
   name: string;
   description: string;
-  created?: Timestamp;
+  created?: string ;
   created_by?: string;
-  last_modified?: Timestamp;
+  last_modified?: string;
   last_modified_by?: string;
   label: Label[];
 
@@ -20,9 +13,9 @@ export class Meta {
     this.name = name;
     this.description = '';
     this.created_by = '';
-    this.created = new Timestamp();
+    this.created = '';
     this.last_modified_by = '';
-    this.last_modified = new Timestamp();
+    this.last_modified = '';
     this.label = [];
   }
 }
@@ -30,14 +23,6 @@ export class Meta {
 export class Label {
   key?: string;
   value?: string;
-}
-
-export class Selector {
-  label: Label[];
-
-  constructor() {
-    this.label = [];
-  }
 }
 
 export class Entity {
@@ -76,12 +61,12 @@ export class Seed {
   }
 }
 
-export class Schedule {
+export class CrawlScheduleConfig {
   id: string;
   meta: Meta;
   cron_expression: string;
-  valid_from?: Timestamp;
-  valid_to?: Timestamp;
+  valid_from?: string;
+  valid_to?: string;
 
   constructor() {
     this.id = '';
@@ -92,35 +77,25 @@ export class Schedule {
   }
 }
 
-export class CrawlLimits {
+export class CrawlLimitsConfig {
   depth: number;
   max_duration_s: string; // int64
   max_bytes: string; // int64
 }
 
+
 export class CrawlJob {
   id: string;
   meta: Meta;
-
-  // schedule_config_or_id
   schedule_id?: string;
-  schedule?: Schedule;
-  schedule_selector?: Selector;
-
-  limits: CrawlLimits;
-
-  // crawl_config_or_id
+  limits: CrawlLimitsConfig;
   crawl_config_id?: string;
-  crawl_config?: CrawlConfig;
-  crawl_config_selector?: Selector;
-
   disabled?: boolean;
 
   constructor() {
     this.id = '';
-    this.schedule = new Schedule();
     this.meta = new Meta();
-    this.limits = new CrawlLimits();
+    this.limits = new CrawlLimitsConfig();
     this.schedule_id = '';
     this.crawl_config_id = '';
   }
@@ -139,17 +114,8 @@ export class Extra {
 export class CrawlConfig {
   id: string;
   meta: Meta;
-
-  // browser_config_or_id
   browser_config_id: string;
-  browser_config?: BrowserConfig;
-  browser_config_selector?: Selector;
-
-  // politeness_config_or_id
   politeness_id: string;
-  politeness?: PolitenessConfig;
-  politeness_selector?: Selector;
-
   extra: Extra;
   minimum_dns_ttl_s: number;
   depth_first: boolean;
@@ -172,10 +138,10 @@ export class BrowserConfig {
   window_width: number;
   window_height: number;
   page_load_timeout_ms: string; // int64
-  script_selector?: Selector;
+  script_selector: string [];
   script_id: string[];
   headers?: Map<string, string>;
-  script_parameters?: Map<string, string>;
+  // script_parameters?: Map<string, string>; not implemented
   sleep_after_pageload_ms: string; // int64
 
   constructor() {
@@ -185,11 +151,17 @@ export class BrowserConfig {
     this.window_width = 0;
     this.window_height = 0;
     this.page_load_timeout_ms = '';
-    this.script_selector = new Selector();
+    this.script_selector = [];
     this.script_id = [];
     this.sleep_after_pageload_ms = '';
 
   }
+}
+
+export enum RobotPolicy {
+  OBEY_ROBOTS = 'OBEY_ROBOTS',
+  IGNORE_ROBOTS = 'IGNORE_ROBOTS',
+  CUSTOM_ROBOTS = 'CUSTOM_ROBOTS',
 }
 
 export class PolitenessConfig {
@@ -203,17 +175,17 @@ export class PolitenessConfig {
   delay_factor: number;
   max_retries: number;
   retry_delay_seconds: number;
-  crawl_host_group_selector: Selector;
+  crawl_host_group_selector: string [];
 
-  constructor(robotsPolicy: string) {
+  constructor() {
     this.id = '';
     this.meta = new Meta();
-    this.robots_policy = robotsPolicy;
+    this.robots_policy = RobotPolicy.OBEY_ROBOTS;
     this.custom_robots = '';
     this.delay_factor = 0;
     this.max_retries = 0;
     this.retry_delay_seconds = 0;
-    this.crawl_host_group_selector = new Selector();
+    this.crawl_host_group_selector = [];
   }
 }
 
@@ -221,7 +193,7 @@ export class BrowserScript {
   id: string;
   meta: Meta;
   script: string;
-  url_regexp?: string;
+  // url_regexp?: string; not implemented
 
   constructor() {
     this.id = '';

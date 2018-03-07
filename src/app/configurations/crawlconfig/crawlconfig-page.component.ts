@@ -28,10 +28,10 @@ import {PolitenessConfigService} from '../politenessconfig/politenessconfig.serv
                        [pageSize]="pageSize"
                        [pageSizeOptions]="pageOptions"></mat-paginator>
       </div>
-      <app-crawlconfig-details *ngIf="crawlConfig"
-                               [crawlConfig]="crawlConfig"
+      <app-crawlconfig-details [crawlConfig]="crawlConfig"
                                [browserConfigs]="browserConfigs"
                                [politenessConfigs]="politenessConfigs"
+                               *ngIf="crawlConfig"
                                (update)="onUpdateCrawlConfig($event)"
                                (save)="onSaveCrawlConfig($event)"
                                (delete)="onDeleteCrawlConfig($event)"></app-crawlconfig-details>
@@ -122,7 +122,7 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
   onDeleteCrawlConfig(crawlConfig: CrawlConfig) {
     this.crawlConfigService.delete(crawlConfig.id)
       .subscribe((response) => {
-        this.crawlConfig = response;
+        this.crawlConfig = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

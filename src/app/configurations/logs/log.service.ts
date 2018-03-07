@@ -8,7 +8,7 @@ import {LogLevels} from '../../commons/models/config.model';
 @Injectable()
 export class LogService {
 
-  private logConfigUrl = `${environment.apiGateway}/logconfig`;
+  private logConfigUrl = `${environment.apiGateway}/control/logconfig`;
 
   constructor(private http: HttpClient) {
   }

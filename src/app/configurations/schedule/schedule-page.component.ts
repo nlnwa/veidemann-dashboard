@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {MatPaginator} from '@angular/material';
 import {ScheduleListComponent} from './schedule-list/schedule-list.component';
-import {Schedule} from '../../commons/models/config.model';
+import {CrawlScheduleConfig} from '../../commons/models/config.model';
 import {Subject} from 'rxjs/Subject';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {Observable} from 'rxjs/Observable';
@@ -49,7 +49,7 @@ export class SchedulePageComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(ScheduleListComponent) list: ScheduleListComponent;
 
-  schedule: Schedule;
+  schedule: CrawlScheduleConfig;
   changes: Subject<void> = new Subject<void>();
 
   constructor(private scheduleService: ScheduleService,
@@ -79,23 +79,24 @@ export class SchedulePageComponent implements AfterViewInit {
   }
 
   onCreateSchedule(): void {
-    this.schedule = new Schedule();
+    this.schedule = new CrawlScheduleConfig();
   }
 
-  onSelectSchedule(schedule: Schedule) {
+  onSelectSchedule(schedule: CrawlScheduleConfig) {
     this.schedule = schedule;
   }
 
-  onSaveSchedule(schedule: Schedule) {
+  onSaveSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.create(schedule)
       .subscribe(newSchedule => {
         this.schedule = newSchedule;
+        this.changes.next();
         this.snackBarService.openSnackBar('Lagret');
       });
     this.changes.next();
   }
 
-  onUpdateSchedule(schedule: Schedule) {
+  onUpdateSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.update(schedule)
       .subscribe(updatedSchedule => {
         this.schedule = updatedSchedule;
@@ -104,10 +105,11 @@ export class SchedulePageComponent implements AfterViewInit {
     this.changes.next();
   }
 
-  onDeleteSchedule(schedule: Schedule) {
+  onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
       .subscribe((response) => {
-        this.schedule = response;
+        this.schedule = null;
+        this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });
     this.changes.next();

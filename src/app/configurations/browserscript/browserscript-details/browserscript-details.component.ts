@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {BrowserScript} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 @Component({
@@ -43,10 +42,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.browserScript.currentValue) {
-      if (!this.browserScript) {
-        this.form.reset();
-      }
+    if (changes.browserScript && !changes.browserScript.currentValue) {
+      this.form.reset();
+      return;
     }
     if (this.browserScript) {
       this.updateForm();
@@ -76,9 +74,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -95,15 +93,11 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       meta: {
         name: this.browserScript.meta.name,
         description: this.browserScript.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.browserScript.meta.created.seconds),
-        },
+        created: new Date(this.browserScript.meta.created),
         created_by: this.browserScript.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.browserScript.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.browserScript.meta.last_modified),
         last_modified_by: this.browserScript.meta.last_modified_by,
-        label: [...this.browserScript.meta.label],
+        label: this.browserScript.meta.label || [],
       }
     });
     this.form.markAsPristine();

@@ -108,7 +108,7 @@ export class BrowserScriptPageComponent implements AfterViewInit {
   onDeleteBrowserScript(browserScript: BrowserScript) {
     this.browserScriptService.delete(browserScript.id)
       .subscribe(response => {
-        this.browserScript = response;
+        this.browserScript = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

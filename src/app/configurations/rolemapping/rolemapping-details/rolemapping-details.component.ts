@@ -64,10 +64,9 @@ export class RoleMappingDetailsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 
-    if (changes.roleMapping.currentValue) {
-      if (!this.roleMapping) {
-        this.form.reset();
-      }
+    if (changes.roleMapping && !changes.roleMapping.currentValue) {
+      this.form.reset();
+      return;
     }
     if (changes.roles && changes.roles.currentValue) {
       this.rolesList = changes.roles.currentValue
@@ -82,7 +81,6 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   onUpdate(): void {
-    console.log(this.update.emit(this.prepareSave()));
     this.update.emit(this.prepareSave());
   }
 
@@ -134,8 +132,8 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   private setUserType() {
-    const group = this.roleMapping.group.length > 0;
-    const email = this.roleMapping.email.length > 0;
+    const group = this.roleMapping.hasOwnProperty('group');
+    const email = this.roleMapping.hasOwnProperty('email');
 
     if (email) {
       this.selectedType = 'email';

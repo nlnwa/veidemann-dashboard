@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -46,7 +45,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return !this.crawlConfig.id;
+    return (this.crawlConfig && !this.crawlConfig.id);
   }
 
   get name() {
@@ -67,10 +66,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlConfig) {
-      if (!this.crawlConfig) {
+    if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
         this.form.reset();
-      }
+        return;
     }
     if (changes.browserConfigs) {
       if (this.browserConfigs) {
@@ -121,9 +119,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -148,15 +146,11 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlConfig.meta.name,
         description: this.crawlConfig.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.created.seconds),
-        },
+        created:  new Date(this.crawlConfig.meta.created),
         created_by: this.crawlConfig.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(this.crawlConfig.meta.last_modified.seconds),
-        },
+        last_modified: new Date(this.crawlConfig.meta.last_modified),
         last_modified_by: this.crawlConfig.meta.last_modified_by,
-        label: [...this.crawlConfig.meta.label],
+        label: this.crawlConfig.meta.label || [],
       },
     });
     this.form.markAsPristine();

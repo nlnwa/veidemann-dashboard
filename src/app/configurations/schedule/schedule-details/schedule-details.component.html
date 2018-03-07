@@ -41,9 +41,9 @@
           </div>
           <ng-container formGroupName="meta">
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="created" class="extra-metadata__input--wide">
+              <mat-form-field class="extra-metadata__input--wide">
                 <input matInput
-                       formControlName="seconds"
+                       formControlName="created"
                        placeholder="Opprettet"
                        i18n-placeholder="@@metaCreatedInputPlaceholder">
               </mat-form-field>
@@ -56,9 +56,9 @@
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field formGroupName="last_modified" class="extra-metadata__input--wide">
+              <mat-form-field class="extra-metadata__input--wide">
                 <input matInput
-                       formControlName="seconds"
+                       formControlName="last_modified"
                        placeholder="Sist endret"
                        i18n-placeholder="@@metaLastModifiedInputPlaceholder">
               </mat-form-field>

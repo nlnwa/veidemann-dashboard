@@ -10,7 +10,7 @@ import {environment} from '../../../environments/environment';
 @Injectable()
 export class RoleMappingService extends CrudService<RoleMapping> {
 
-  static readonly URL: string = `${environment.apiGateway}/rolemappings`;
+  static readonly URL: string = `${environment.apiGateway}/control/rolemappings`;
 
   constructor(protected http: HttpClient) {
     super(http, RoleMappingService.URL);

@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DateTime} from '../../../commons/datetime';
 import {Entity, Label} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
@@ -66,9 +65,9 @@ export class EntityDetailsComponent implements OnChanges {
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(1)]],
         description: '',
-        created: this.fb.group({seconds: {value: '', disabled: true}}),
+        created: {value: '', disabled: true},
         created_by: {value: '', disabled: true},
-        last_modified: this.fb.group({seconds: {value: '', disabled: true}}),
+        last_modified: {value: '', disabled: true},
         last_modified_by: {value: '', disabled: true},
         label: [],
       }),
@@ -80,20 +79,16 @@ export class EntityDetailsComponent implements OnChanges {
 
   private updateForm() {
     const entity = this.entity;
-    this.form.setValue({
+    this.form.patchValue({
       id: entity.id,
       meta: {
         name: entity.meta.name,
         description: entity.meta.description,
-        created: {
-          seconds: DateTime.convertFullTimestamp(entity.meta.created.seconds),
-        },
+        created: new Date(entity.meta.created),
         created_by: entity.meta.created_by,
-        last_modified: {
-          seconds: DateTime.convertFullTimestamp(entity.meta.last_modified.seconds),
-        },
+        last_modified: new Date(entity.meta.last_modified),
         last_modified_by: entity.meta.last_modified_by,
-        label: [...entity.meta.label],
+        label: entity.meta.label || [],
       },
     });
     this.form.markAsPristine();
