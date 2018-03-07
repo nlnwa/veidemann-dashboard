@@ -97,7 +97,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   private updateForm() {
-    this.form.setValue({
+    this.form.patchValue({
       id: this.seed.id,
       disabled: !this.seed.disabled, // disabled is named active in the view
       entity_id: this.seed.entity_id,
