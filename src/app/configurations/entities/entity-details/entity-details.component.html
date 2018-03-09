@@ -30,6 +30,9 @@
                       i18n-matTooltip="@@entityAddDescriptionTooltip">info
             </mat-icon>
           </mat-form-field>
+
+          <!-- Labels -->
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
 
         <div *ngIf="!showSave">
@@ -74,10 +77,6 @@
         </div>
       </div>
       <div class="right-menu" fxFlex fxLayout="column">
-        <!-- Labels -->
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
         <ng-content></ng-content>
       </div>
     </mat-card-content>

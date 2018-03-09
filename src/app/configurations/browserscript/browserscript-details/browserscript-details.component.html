@@ -27,6 +27,8 @@
                       i18n-placeholder="@@metaDescriptionInputPlaceholder">
             </textarea>
             </mat-form-field>
+
+            <app-labels [removable]="editable" formControlName="label"></app-labels>
           </ng-container>
 
           <div *ngIf="!showSave">
@@ -72,10 +74,8 @@
             </ng-container>
           </div>
         </div>
-        <div fxFlex fxLayout="row" formGroupName="meta">
-          <app-labels fxFlex [removable]="editable" formControlName="label"></app-labels>
-        </div>
       </div>
+
       <div fxLayout="column" fxFlex>
         <mat-expansion-panel expanded="true">
           <mat-expansion-panel-header>
@@ -90,7 +90,7 @@
           </mat-error>
         </mat-expansion-panel>
       </div>
-    </mat-card-content >
+    </mat-card-content>
     <mat-card-actions *ngIf="editable">
       <button mat-raised-button color="primary"
               [disabled]="!form.valid"

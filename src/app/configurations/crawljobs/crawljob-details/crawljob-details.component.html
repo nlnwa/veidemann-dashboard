@@ -12,49 +12,27 @@
         Aktiv
       </mat-slide-toggle>
     </mat-card-header>
-    <mat-card-content>
-      <div fxLayout="row wrap">
+    <mat-card-content fxLayout="column">
+      <div fxLayout="row wrap" fxFlex fxLayoutGap="8px">
         <div fxFlex fxLayout="column wrap">
-          <mat-form-field formGroupName="meta">
-            <input matInput formControlName="name" placeholder="Navn"
-                   i18n-placeholder="@@metaNameInputPlaceholder">
-            <mat-error *ngIf="! name.valid"
-                       i18n="@@metaNameRequiredError">
-              Navn er påkrevd.
-            </mat-error>
-          </mat-form-field>
+          <ng-container formGroupName="meta">
+            <mat-form-field>
+              <input matInput formControlName="name" placeholder="Navn"
+                     i18n-placeholder="@@metaNameInputPlaceholder">
+              <mat-error *ngIf="! name.valid"
+                         i18n="@@metaNameRequiredError">
+                Navn er påkrevd.
+              </mat-error>
+            </mat-form-field>
 
-          <mat-form-field formGroupName="meta">
-            <input i18n-placeholder=@@metaDescriptionInputPlaceholder
-                   matInput formControlName="description" placeholder="Beskrivelse">
-          </mat-form-field>
+            <mat-form-field>
+              <input i18n-placeholder=@@metaDescriptionInputPlaceholder
+                     matInput formControlName="description" placeholder="Beskrivelse">
+            </mat-form-field>
 
-          <ng-container formGroupName="limits">
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                     matInput formControlName="depth" type="number" placeholder="Dybde">
-              <mat-error i18n="@@crawljobFormDepthRequiredError"
-                         *ngIf="!depth.valid">
-                Dybde er påkrevd
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                     matInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
-              <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
-                         *ngIf="!maxDurationSeconds.valid">
-                Maks tid er påkrevd.
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                     matInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
-              <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                         *ngIf="!maxBytes.valid">
-                Maks byte er påkrevd.
-              </mat-error>
-            </mat-form-field>
+            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
           </ng-container>
+
           <div *ngIf="!showSave">
             <div fxLayout="row">
               <mat-form-field class="extra-metadata__input">
@@ -100,6 +78,34 @@
         </div>
 
         <div fxFlex fxLayout="column">
+
+          <ng-container formGroupName="limits">
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
+                     matInput formControlName="depth" type="number" placeholder="Dybde">
+              <mat-error i18n="@@crawljobFormDepthRequiredError"
+                         *ngIf="!depth.valid">
+                Dybde er påkrevd
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
+                     matInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
+              <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
+                         *ngIf="!maxDurationSeconds.valid">
+                Maks tid er påkrevd.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
+                     matInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
+              <mat-error i18n="@@crawljobFormMaxByteRequiredError"
+                         *ngIf="!maxBytes.valid">
+                Maks byte er påkrevd.
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+
           <div>
             <mat-form-field>
               <mat-select placeholder="Velg schedule" formControlName="schedule_id"
@@ -128,10 +134,6 @@
               Crawlconfig er påkrevd.
             </mat-error>
           </div>
-
-          <ng-container formGroupName="meta">
-            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-          </ng-container>
         </div>
       </div>
     </mat-card-content>

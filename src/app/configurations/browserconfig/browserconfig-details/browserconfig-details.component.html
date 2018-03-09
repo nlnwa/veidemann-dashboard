@@ -26,7 +26,7 @@
             <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
           </mat-form-field>
-
+            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
 
         <ng-container *ngIf="!showSave">
@@ -71,9 +71,6 @@
             </div>
 
           </ng-container>
-        </ng-container>
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
       </div>
       <div fxFlex fxLayout="column" fxLayoutGap="1em">
