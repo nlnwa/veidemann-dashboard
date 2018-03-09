@@ -6,7 +6,7 @@ import {Role, RoleList} from '../commons/models/config.model';
 @Injectable()
 export class RoleService {
 
-  private readonly URL: string = `${environment.apiGateway}/roles`;
+  private readonly URL: string = `${environment.apiGateway}/control/activeroles`;
 
   private roles: Role[] = [Role.ANY];
 
