@@ -6,6 +6,11 @@ export class DateTime {
     return new Date().toUTCString();
   }
 
+  static formatTimestamp(timestamp) {
+    const formattedTimestamp = moment.utc(timestamp).local().format('DD/MM/YYYY  HH:mm:ss' );
+    return formattedTimestamp;
+  }
+
   static fromISOToDateUTC(isoString) {
     const m = moment.utc(isoString);
     return {year: m.year(), month: m.month(), day: m.date()};

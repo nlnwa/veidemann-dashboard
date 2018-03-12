@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Entity, Label} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -84,9 +85,9 @@ export class EntityDetailsComponent implements OnChanges {
       meta: {
         name: entity.meta.name,
         description: entity.meta.description,
-        created: new Date(entity.meta.created),
+        created: DateTime.formatTimestamp(entity.meta.created),
         created_by: entity.meta.created_by,
-        last_modified: new Date(entity.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(entity.meta.last_modified),
         last_modified_by: entity.meta.last_modified_by,
         label: entity.meta.label || [],
       },

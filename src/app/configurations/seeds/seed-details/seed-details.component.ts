@@ -108,9 +108,9 @@ export class SeedDetailComponent implements OnChanges {
       meta: {
         name: this.seed.meta.name,
         description: this.seed.meta.description,
-        created: new Date(this.seed.meta.created),
+        created: DateTime.formatTimestamp(this.seed.meta.created),
         created_by: this.seed.meta.created_by,
-        last_modified: new Date(this.seed.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.seed.meta.last_modified),
         last_modified_by: this.seed.meta.last_modified_by,
         label: this.seed.meta.label || [],
       }

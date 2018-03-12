@@ -148,9 +148,9 @@ export class ScheduleDetailsComponent implements OnChanges {
       meta: {
         name: this.schedule.meta.name,
         description: this.schedule.meta.description,
-        created: new Date(this.schedule.meta.created),
+        created: DateTime.formatTimestamp(this.schedule.meta.created),
         created_by: this.schedule.meta.created_by,
-        last_modified: new Date(this.schedule.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.schedule.meta.last_modified),
         last_modified_by: this.schedule.meta.last_modified_by,
         label: this.schedule.meta.label || [],
 

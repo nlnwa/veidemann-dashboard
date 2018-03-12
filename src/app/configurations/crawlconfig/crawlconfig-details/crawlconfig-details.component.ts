@@ -3,6 +3,8 @@ import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import DateTimeFormat = Intl.DateTimeFormat;
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -146,9 +148,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlConfig.meta.name,
         description: this.crawlConfig.meta.description,
-        created:  new Date(this.crawlConfig.meta.created),
+        created:  DateTime.formatTimestamp(this.crawlConfig.meta.created),
         created_by: this.crawlConfig.meta.created_by,
-        last_modified: new Date(this.crawlConfig.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.crawlConfig.meta.last_modified),
         last_modified_by: this.crawlConfig.meta.last_modified_by,
         label: this.crawlConfig.meta.label || [],
       },

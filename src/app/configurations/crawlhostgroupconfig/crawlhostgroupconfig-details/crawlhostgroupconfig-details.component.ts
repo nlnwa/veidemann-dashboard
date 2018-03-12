@@ -133,9 +133,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlHostGroupConfig.meta.name,
         description: this.crawlHostGroupConfig.meta.description,
-        created: new Date(this.crawlHostGroupConfig.meta.created),
+        created: DateTime.formatTimestamp(this.crawlHostGroupConfig.meta.created),
         created_by: this.crawlHostGroupConfig.meta.created_by,
-        last_modified: new Date(this.crawlHostGroupConfig.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.crawlHostGroupConfig.meta.last_modified),
         last_modified_by: this.crawlHostGroupConfig.meta.last_modified_by,
         label: this.crawlHostGroupConfig.meta.label || [],
       }

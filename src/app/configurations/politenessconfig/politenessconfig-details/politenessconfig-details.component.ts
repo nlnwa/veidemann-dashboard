@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {Label, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -158,9 +159,9 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       meta: {
         name: this.politenessConfig.meta.name,
         description: this.politenessConfig.meta.description,
-        created: new Date(this.politenessConfig.meta.created),
+        created: DateTime.formatTimestamp(this.politenessConfig.meta.created),
         created_by: this.politenessConfig.meta.created_by,
-        last_modified: new Date(this.politenessConfig.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.politenessConfig.meta.last_modified),
         last_modified_by: this.politenessConfig.meta.last_modified_by,
         label: this.politenessConfig.meta.label || [],
       },
