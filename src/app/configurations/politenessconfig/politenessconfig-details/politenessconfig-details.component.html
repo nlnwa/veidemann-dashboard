@@ -25,6 +25,7 @@
             <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
           </mat-form-field>
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
 
         <div *ngIf="!showSave">
@@ -67,12 +68,10 @@
                        i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
               </mat-form-field>
             </div>
-            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
           </ng-container>
         </div>
       </div>
       <div fxFlex fxLayout="column">
-        <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector" [removable]="canEdit"></app-labels>
 
         <div class="robotPolicyDropdown">
           <mat-form-field>
@@ -87,6 +86,10 @@
           </mat-error>
         </div>
         <span></span>
+
+        <!--CrawlHostGroup Selector -->
+        <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector" [removable]="canEdit"></app-labels>
+
         <ng-container
           *ngIf="robotsPolicy.value === 'CUSTOM_ROBOTS'">
           <div class="customRobotTxtInput">

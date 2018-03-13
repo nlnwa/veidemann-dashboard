@@ -29,6 +29,10 @@
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
             </textarea>
           </mat-form-field>
+
+          <!-- Label -->
+            <app-labels formControlName="label" [removable]="canEdit"></app-labels>
+
         </ng-container>
         <div *ngIf="!showSave">
           <div fxLayout="row">
@@ -72,14 +76,8 @@
             </div>
           </ng-container>
         </div>
-
-        <!-- Label -->
-
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
-
       </div>
+
       <div fxFlex fxLayout="column wrap">
 
         <fieldset formGroupName="cron_expression">

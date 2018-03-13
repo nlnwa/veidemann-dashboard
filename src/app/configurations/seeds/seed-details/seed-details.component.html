@@ -26,18 +26,14 @@
             <input matInput formControlName="description" placeholder="Beskrivelse"
                    i18n-placeholder="@@metaDescriptionInputPlaceholder">
             <mat-icon class="ttInfo" matSuffix matTooltipShowDelay="500"
-                     matTooltip='Legg til fritekst om en seed'
-                     i18n-matTooltip="@@seedAddDescriptionTooltip">info
+                      matTooltip='Legg til fritekst om en seed'
+                      i18n-matTooltip="@@seedAddDescriptionTooltip">info
             </mat-icon>
           </mat-form-field>
-        </ng-container>
 
-        <mat-form-field formGroupName="scope" *ngIf="seed.id">
-          <input matInput
-                 formControlName="surt_prefix"
-                 placeholder="Surt prefiks"
-                 i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
-        </mat-form-field>
+          <!-- Label-->
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
+        </ng-container>
 
         <mat-form-field *ngIf="seed.id">
           <input matInput formControlName="id" placeholder="Id"
@@ -81,13 +77,19 @@
         </mat-form-field>
       </div>
       <div class="right-menu" fxFlex fxLayout="column">
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
+
         <mat-select placeholder="Velg jobb" formControlName="job_id" multiple
                     i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
           <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
         </mat-select>
+
+        <mat-form-field formGroupName="scope" *ngIf="seed.id">
+          <input matInput
+                 formControlName="surt_prefix"
+                 placeholder="Surt prefiks"
+                 i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
+        </mat-form-field>
+
       </div>
     </mat-card-content>
 

@@ -28,6 +28,8 @@
                       i18n-matTooltip="@@crawlhostgroupconfigFormDescriptionTooltip">info
             </mat-icon>
           </mat-form-field>
+
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
 
         <div *ngIf="!showSave">
@@ -115,9 +117,6 @@
           </ng-container>
         </ng-container>
 
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
       </div>
     </mat-card-content>
     <mat-card-actions *ngIf="canEdit">

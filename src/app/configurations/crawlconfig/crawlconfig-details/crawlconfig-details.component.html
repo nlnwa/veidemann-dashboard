@@ -30,6 +30,7 @@
               </textarea>
             </mat-form-field>
           </div>
+          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
         </ng-container>
         <div *ngIf="!showSave">
           <div fxLayout="row">
@@ -80,7 +81,9 @@
           <mat-form-field>
             <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
                         i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
-              <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">{{browserConfig.itemName}}</mat-option>
+              <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">
+                {{browserConfig.itemName}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
@@ -94,7 +97,8 @@
             <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
                         i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
               <mat-option *ngFor="let politenessConfig of politenessConfigList"
-                          [value]="politenessConfig.id">{{politenessConfig.itemName}}</mat-option>
+                          [value]="politenessConfig.id">{{politenessConfig.itemName}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
@@ -116,7 +120,7 @@
 
         <div formGroupName="extra">
           <mat-checkbox formControlName="extract_text"
-                        labelPosition="before"
+                        labelPosition="after"
                         i18n="@@crawlconfigFormExtractTextLabel"
                         color="accent">
             Ekstraher tekst
@@ -125,7 +129,7 @@
 
         <div formGroupName="extra">
           <mat-checkbox formControlName="create_snapshot"
-                        labelPosition="before"
+                        labelPosition="after"
                         i18n="@@crawlconfigFormCreateSnapshotLabel"
                         color="accent">
             Lag snapshot
@@ -133,16 +137,11 @@
         </div>
 
         <mat-checkbox formControlName="depth_first"
-                      labelPosition="before"
+                      labelPosition="after"
                       i18n="@@crawlconfigFormDepthFirstLabel"
                       color="accent">
           Dybde først
         </mat-checkbox>
-
-
-        <ng-container formGroupName="meta">
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
       </div>
     </mat-card-content>
     <mat-card-actions *ngIf="canEdit">
