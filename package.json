@@ -31,6 +31,7 @@
     "angular-oauth2-oidc": "~3.1.4",
     "core-js": "^2.5.3",
     "hammerjs": "^2.0.8",
+    "ip-address": "^5.8.9",
     "moment": "^2.21.0",
     "nano-editor": "^1.2.3",
     "prismjs": "^1.11.0",

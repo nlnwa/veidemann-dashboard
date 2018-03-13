@@ -136,9 +136,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       crawl_config_id: ['', CustomValidators.nonEmpty],
       disabled: false,
       limits: this.fb.group({
-        depth: ['', [Validators.required, CustomValidators.min(0)]],
-        max_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
-        max_bytes: ['', [Validators.required, CustomValidators.min(0)]],
+        depth: ['', [CustomValidators.min(0)]],
+        max_duration_s: ['', [CustomValidators.min(0)]],
+        max_bytes: ['', [CustomValidators.min(0)]],
       }),
       meta: this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2)]],
@@ -162,9 +162,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       schedule_id: this.crawlJob.schedule_id,
       crawl_config_id: this.crawlJob.crawl_config_id,
       limits: {
-        depth: this.crawlJob.limits.depth,
-        max_duration_s: this.crawlJob.limits.max_duration_s,
-        max_bytes: this.crawlJob.limits.max_bytes,
+        depth: this.crawlJob.limits.depth || '',
+        max_duration_s: this.crawlJob.limits.max_duration_s || '',
+        max_bytes: this.crawlJob.limits.max_bytes || '',
       },
       meta: {
         name: this.crawlJob.meta.name,
