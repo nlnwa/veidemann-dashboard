@@ -7,7 +7,7 @@ export class DateTime {
   }
 
   static formatTimestamp(timestamp) {
-    const formattedTimestamp = moment.utc(timestamp).local().format('DD/MM/YYYY  HH:mm:ss' );
+    const formattedTimestamp = moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss' );
     return formattedTimestamp;
   }
 
