@@ -19,7 +19,6 @@ export class BrowserScriptDirective implements ControlValueAccessor {
   private editor: nanoEditor;
 
   constructor(private el: ElementRef, private ref: ChangeDetectorRef) {
-    console.log('Constructor');
     this.editor = new nanoEditor(el.nativeElement, 'javascript', true);
     this.editor.setLanguage('javascript');
   }

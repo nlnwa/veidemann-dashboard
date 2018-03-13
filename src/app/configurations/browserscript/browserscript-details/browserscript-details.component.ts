@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {BrowserScript} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -93,9 +94,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       meta: {
         name: this.browserScript.meta.name,
         description: this.browserScript.meta.description,
-        created: new Date(this.browserScript.meta.created),
+        created: DateTime.formatTimestamp(this.browserScript.meta.created),
         created_by: this.browserScript.meta.created_by,
-        last_modified: new Date(this.browserScript.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.browserScript.meta.last_modified),
         last_modified_by: this.browserScript.meta.last_modified_by,
         label: this.browserScript.meta.label || [],
       }

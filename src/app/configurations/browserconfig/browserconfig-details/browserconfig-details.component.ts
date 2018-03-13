@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {BrowserConfig, BrowserScript, Label} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import DateTimeFormat = Intl.DateTimeFormat;
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -160,9 +162,9 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       meta: {
         name: this.browserConfig.meta.name,
         description: this.browserConfig.meta.description,
-        created: new Date(this.browserConfig.meta.created),
+        created: DateTime.formatTimestamp(this.browserConfig.meta.created),
         created_by: this.browserConfig.meta.created_by,
-        last_modified: new Date(this.browserConfig.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.browserConfig.meta.last_modified),
         last_modified_by: this.browserConfig.meta.last_modified_by,
         label: this.browserConfig.meta.label || [],
       },

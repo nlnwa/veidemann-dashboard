@@ -11,6 +11,7 @@ import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -168,9 +169,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       meta: {
         name: this.crawlJob.meta.name,
         description: this.crawlJob.meta.description,
-        created: new Date(this.crawlJob.meta.created),
+        created: DateTime.formatTimestamp(this.crawlJob.meta.created),
         created_by: this.crawlJob.meta.created_by,
-        last_modified: new Date(this.crawlJob.meta.last_modified),
+        last_modified: DateTime.formatTimestamp(this.crawlJob.meta.last_modified),
         last_modified_by: this.crawlJob.meta.last_modified_by,
         label: this.crawlJob.meta.label || [],
       },
