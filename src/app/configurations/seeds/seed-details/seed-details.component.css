@@ -14,12 +14,13 @@
 }
 
 .right-menu {
-  margin-left: 1em;
+  margin-left: 0;
   #max-width: 450px;
   #width: 100%;
 }
 
 .left-menu {
+  margin-right: 1em;
   max-width: 350px;
 }
 
