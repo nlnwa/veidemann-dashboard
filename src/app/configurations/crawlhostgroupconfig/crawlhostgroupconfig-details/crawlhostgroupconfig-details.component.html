@@ -95,7 +95,7 @@
               <mat-form-field>
                 <input #ipFrom matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-                <mat-error *ngIf="!isValidIp(ipFrom.value)"
+                <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
@@ -103,22 +103,21 @@
               <mat-form-field>
                 <input #ipTo matInput formControlName="ip_to" placeholder="Til IP-addresse"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-                <!--<mat-error *ngIf="!ipToControl?.valid"
+                <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
-                <!-- <p *ngIf= "ipToControl.value.length > 0 && !isValidIp(ipTo.value)"> ikke en gyldig ip</p> -->
               </mat-form-field>
               <button matSuffix mat-icon-button
                       (click)="onRemoveIpRange(i)"
                       *ngIf="canEdit">
                 <mat-icon color="warn">close</mat-icon>
               </button>
+              <mat-error *ngIf="!validRange(ipFromControl(i).value, ipToControl(i).value)"
+                         i18n="@@crawlhostgroupconfigFormValidIpRangeError">
+                IP-rangen er ugyldig
+              </mat-error>
             </div>
-            <p>{{isValidIp(ipTo.value)}}</p>
-            <p *ngIf="!validRange(ipFrom.value, ipTo.value)">
-              Ugyldig range
-            </p>
           </ng-container>
         </ng-container>
 
