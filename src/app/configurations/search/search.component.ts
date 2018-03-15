@@ -7,6 +7,7 @@ import {SearchService} from './search.service';
 import {SeedListComponent, SeedService} from '../seeds';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/catch';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {CrawlJobService} from '../crawljobs';
 import {EntityService} from '../entities/';
@@ -16,6 +17,8 @@ import {ListDatabase, ListDataSource} from '../../commons/list';
 import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
 import 'rxjs/add/operator/buffer';
 import {RoleService} from '../../auth/role.service';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/empty';
 
 
 @Component({
@@ -138,6 +141,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   onDeleteEntity(entity: Entity): void {
     this.entityService.delete(entity.id)
+      .catch((err) => {
+        const errorString = err.error.error.split(':')[1];
+        const deleteError = /delete CrawlEntity, there are/g;
+        if (errorString.match(deleteError)) {
+          this.snackBarService.openSnackBar(errorString);
+          return Observable.empty();
+        }
+        return Observable.empty();
+      })
       .subscribe((deletedEntity) => {
         this.selectedEntity = null;
         this.snackBarService.openSnackBar('Slettet');
