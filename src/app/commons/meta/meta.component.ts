@@ -72,9 +72,9 @@ export class MetaComponent implements AfterViewInit, ControlValueAccessor {
     this.meta.patchValue({
       name: meta.name,
       description: meta.description,
-      created: DateTime.formatTimestamp(meta.created),
+      created: meta.created ? DateTime.formatTimestamp(meta.created) : '',
       created_by: meta.created_by,
-      last_modified: DateTime.formatTimestamp(meta.last_modified),
+      last_modified: meta.last_modified ? DateTime.formatTimestamp(meta.last_modified) : '',
       last_modified_by: meta.last_modified_by,
       label: meta.label || [],
     });
