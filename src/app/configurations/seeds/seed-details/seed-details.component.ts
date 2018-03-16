@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlJob, Label, Seed} from '../../../commons/models/config.model';
+import {CrawlJob, Label, Meta, Seed} from '../../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
 import {VALID_URL_PATTERN} from '../../../commons/validator';
 import {DateTime} from '../../../commons/datetime';
@@ -81,15 +81,7 @@ export class SeedDetailComponent implements OnChanges {
       entity_id: {value: '', disabled: true},
       job_id: [],
       scope: this.fb.group({surt_prefix: ''}),
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.pattern(VALID_URL_PATTERN)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
     if (!this.canEdit) {
       this.form.disable();
@@ -105,15 +97,7 @@ export class SeedDetailComponent implements OnChanges {
       scope: {
         surt_prefix: this.seed.scope.surt_prefix,
       },
-      meta: {
-        name: this.seed.meta.name,
-        description: this.seed.meta.description,
-        created: DateTime.formatTimestamp(this.seed.meta.created),
-        created_by: this.seed.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.seed.meta.last_modified),
-        last_modified_by: this.seed.meta.last_modified_by,
-        label: this.seed.meta.label || [],
-      }
+      meta: this.seed.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -132,15 +116,7 @@ export class SeedDetailComponent implements OnChanges {
       scope: {surt_prefix: viewModel.scope.surt_prefix},
       job_id: viewModel.job_id,
       disabled: !viewModel.disabled,
-      meta: {
-        name: viewModel.meta.name,
-        description: viewModel.meta.description,
-        // created: this.seed.meta.created,
-        // created_by: this.seed.meta.created_by,
-        // last_modified: this.seed.meta.last_modified,
-        // last_modified_by: this.seed.meta.last_modified_by,
-        label: viewModel.meta.label.map((label: Label) => ({...label})),
-      }
+      meta: viewModel.meta,
     };
   }
 }
