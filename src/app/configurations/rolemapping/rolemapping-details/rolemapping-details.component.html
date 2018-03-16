@@ -11,7 +11,7 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap">
       <div fxFlex fxLayout="column">
-        <div fxFlex fxLayout="row" fxLayoutGap="3em">
+        <div fxLayout="row wrap" fxLayoutGap="3em">
           <mat-form-field>
             <mat-select placeholder="Velg en type" [(value)]="selectedType">
               <mat-option value="email">E-post</mat-option>
@@ -34,7 +34,7 @@
             <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
             <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
           </mat-form-field>
-          </div>
+         </div>
       </div>
     </mat-card-content>
     <mat-card-actions>

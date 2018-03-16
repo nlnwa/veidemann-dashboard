@@ -1,11 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {CrawlHostGroupConfig, IpRange} from '../../../commons/models/config.model';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CrawlHostGroupConfig, IpRange, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
-import {DateTime} from '../../../commons/datetime/datetime';
-
-
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
@@ -53,7 +50,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   ipFromControl(index: number) {
@@ -111,16 +108,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      ip_range: this.fb.array([this.initIpRange()]),
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: []
-      }),
+      ip_range: this.fb.array([]),
+      meta: new Meta(),
     });
 
     if (!this.canEdit) {
@@ -136,15 +125,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     }
     this.form.patchValue({
       id: this.crawlHostGroupConfig.id,
-      meta: {
-        name: this.crawlHostGroupConfig.meta.name,
-        description: this.crawlHostGroupConfig.meta.description,
-        created: DateTime.formatTimestamp(this.crawlHostGroupConfig.meta.created),
-        created_by: this.crawlHostGroupConfig.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.crawlHostGroupConfig.meta.last_modified),
-        last_modified_by: this.crawlHostGroupConfig.meta.last_modified_by,
-        label: this.crawlHostGroupConfig.meta.label || [],
-      }
+      meta: this.crawlHostGroupConfig.meta,
     });
     this.form.setControl('ip_range', ipRangeFGArray);
     this.form.markAsPristine();
@@ -157,11 +138,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     return {
       id: this.crawlHostGroupConfig.id,
       ip_range: iprangeDeepCopy,
-      meta: {
-        name: formModel.meta.name,
-        description: formModel.meta.description,
-        label: formModel.meta.label.map(label => ({...label})),
-      }
+      meta: formModel.meta,
     };
   }
 

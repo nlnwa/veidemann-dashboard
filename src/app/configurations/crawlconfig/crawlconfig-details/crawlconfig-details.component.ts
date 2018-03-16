@@ -1,10 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../../commons/models/config.model';
+import {BrowserConfig, CrawlConfig, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import DateTimeFormat = Intl.DateTimeFormat;
-import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -51,7 +49,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   get browserConfigId() {
@@ -116,17 +114,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         extract_text: '',
         create_snapshot: '',
       }),
-      minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
+      minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
       depth_first: '',
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
 
     if (!( this.canEdit )) {
@@ -145,15 +135,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         extract_text: this.crawlConfig.extra.extract_text,
         create_snapshot: this.crawlConfig.extra.create_snapshot,
       },
-      meta: {
-        name: this.crawlConfig.meta.name,
-        description: this.crawlConfig.meta.description,
-        created:  DateTime.formatTimestamp(this.crawlConfig.meta.created),
-        created_by: this.crawlConfig.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.crawlConfig.meta.last_modified),
-        last_modified_by: this.crawlConfig.meta.last_modified_by,
-        label: this.crawlConfig.meta.label || [],
-      },
+      meta: this.crawlConfig.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -171,11 +153,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       },
       minimum_dns_ttl_s: parseInt(formModel.minimum_dns_ttl_s, 10),
       depth_first: formModel.depth_first,
-      meta: {
-        name: formModel.meta.name,
-        description: formModel.meta.description,
-        label: formModel.meta.label.map(label => ({...label})),
-      }
+      meta: formModel.meta,
     };
   }
 }

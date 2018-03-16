@@ -1,9 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
-import {BrowserConfig, BrowserScript, Label} from '../../../commons/models/config.model';
+import {BrowserConfig, BrowserScript, Label, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import DateTimeFormat = Intl.DateTimeFormat;
 import {DateTime} from '../../../commons/datetime/datetime';
 
 
@@ -54,7 +53,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   get user_agent() {
@@ -118,22 +117,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       user_agent: ['', [Validators.required, Validators.minLength(1)]],
-      window_width: ['', [Validators.required, CustomValidators.min(1)]],
-      window_height: ['', [Validators.required, CustomValidators.min(1)]],
-      page_load_timeout_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      sleep_after_pageload_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      window_width: ['', [Validators.required, Validators.min(1)]],
+      window_height: ['', [Validators.required, Validators.min(1)]],
+      page_load_timeout_ms: ['', [Validators.required, Validators.min(0)]],
+      sleep_after_pageload_ms: ['', [Validators.required, Validators.min(0)]],
       // headers: this.fb.group({''}),
       script_id: '',
       script_selector: '',
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(1)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
 
     if (!this.canEdit) {
@@ -159,15 +150,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
           return label
         })
         : [],
-      meta: {
-        name: this.browserConfig.meta.name,
-        description: this.browserConfig.meta.description,
-        created: DateTime.formatTimestamp(this.browserConfig.meta.created),
-        created_by: this.browserConfig.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.browserConfig.meta.last_modified),
-        last_modified_by: this.browserConfig.meta.last_modified_by,
-        label: this.browserConfig.meta.label || [],
-      },
+      meta: this.browserConfig.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -186,15 +169,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       script_id: formModel.script_id,
       script_selector: formModel.script_selector.map(label => label.key + ':' + label.value),
       headers: formModel.headers,
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        last_modified_by: '',
-        label: formModel.meta.label.map(label => ({...label}))
-      }
+      meta: formModel.meta,
     };
   }
 }

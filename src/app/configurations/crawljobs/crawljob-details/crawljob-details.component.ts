@@ -9,9 +9,8 @@ import {
 } from '@angular/core';
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlJob} from '../../../commons/models/config.model';
+import {CrawlJob, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -66,7 +65,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   get depth() {
@@ -136,19 +135,11 @@ export class CrawljobDetailsComponent implements OnChanges {
       crawl_config_id: ['', CustomValidators.nonEmpty],
       disabled: false,
       limits: this.fb.group({
-        depth: ['', [CustomValidators.min(0)]],
-        max_duration_s: ['', [CustomValidators.min(0)]],
-        max_bytes: ['', [CustomValidators.min(0)]],
+        depth: ['', [Validators.required, Validators.min(0)]],
+        max_duration_s: ['', [Validators.required, Validators.min(0)]],
+        max_bytes: ['', [Validators.required, Validators.min(0)]],
       }),
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
     if (!this.canEdit) {
       this.form.disable();
@@ -166,15 +157,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         max_duration_s: this.crawlJob.limits.max_duration_s || '',
         max_bytes: this.crawlJob.limits.max_bytes || '',
       },
-      meta: {
-        name: this.crawlJob.meta.name,
-        description: this.crawlJob.meta.description,
-        created: DateTime.formatTimestamp(this.crawlJob.meta.created),
-        created_by: this.crawlJob.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.crawlJob.meta.last_modified),
-        last_modified_by: this.crawlJob.meta.last_modified_by,
-        label: this.crawlJob.meta.label || [],
-      },
+      meta: this.crawlJob.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -192,11 +175,7 @@ export class CrawljobDetailsComponent implements OnChanges {
         max_duration_s: formModel.limits.max_duration_s as string,
         max_bytes: formModel.limits.max_bytes as string,
       },
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        label: formModel.meta.label.map(label => ({...label}))
-      },
+      meta: formModel.meta,
     };
   }
 

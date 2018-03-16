@@ -23,11 +23,12 @@
 
 .left-menu {
   max-width: 350px;
+  margin-right: 1em;
 }
 
 .right-menu {
   max-width: 450px;
-  margin-left: 1em;
+  margin-left: 0px;
 }
 
 .mat-form-field {

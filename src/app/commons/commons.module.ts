@@ -8,12 +8,14 @@ import {MaterialModule} from '../material.module';
 import {SnackBarService} from './snack-bar/snack-bar.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
+import { MetaComponent } from './meta/meta.component';
 
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     LabelsComponent,
+    MetaComponent,
   ],
   imports: [
     MaterialModule,
@@ -25,6 +27,7 @@ import {LabelsComponent} from './labels/labels.component';
   exports: [
     ToolbarComponent,
     LabelsComponent,
+    MetaComponent,
     CommonModule,
     MaterialModule,
     FlexLayoutModule,
