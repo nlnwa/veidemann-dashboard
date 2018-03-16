@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
-import {BrowserScript} from '../../../commons/models/config.model';
+import {BrowserScript, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +38,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,15 +71,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       script: '',
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
     if (!this.editable) {
       this.form.disable();
@@ -91,15 +82,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.form.patchValue({
       id: this.browserScript.id,
       script: this.browserScript.script,
-      meta: {
-        name: this.browserScript.meta.name,
-        description: this.browserScript.meta.description,
-        created: DateTime.formatTimestamp(this.browserScript.meta.created),
-        created_by: this.browserScript.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.browserScript.meta.last_modified),
-        last_modified_by: this.browserScript.meta.last_modified_by,
-        label: this.browserScript.meta.label || [],
-      }
+      meta: this.browserScript.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -110,11 +93,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     return {
       id: this.browserScript.id,
       script: formModel.script,
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        label: formModel.meta.label.map(label => ({...label})) // deepCopy
-      }
+      meta: formModel.meta,
     };
   }
 }
