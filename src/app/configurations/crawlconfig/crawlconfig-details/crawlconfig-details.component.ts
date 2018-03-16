@@ -114,7 +114,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         extract_text: '',
         create_snapshot: '',
       }),
-      minimum_dns_ttl_s: ['', [Validators.required, CustomValidators.min(0)]],
+      minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
       depth_first: '',
       meta: new Meta(),
     });
