@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
-import {Label, PolitenessConfig} from '../../../commons/models/config.model';
+import {Label, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 import {DateTime} from '../../../commons/datetime/datetime';
 
@@ -56,7 +56,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   get robotsPolicy() {
@@ -112,23 +112,15 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
       robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
-      minimum_robots_validity_duration_s: ['', [Validators.required, CustomValidators.min(0)]],
+      minimum_robots_validity_duration_s: ['', [Validators.required, Validators.min(0)]],
       custom_robots: null,
-      min_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
-      max_time_between_page_load_ms: ['', [Validators.required, CustomValidators.min(0)]],
+      min_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
+      max_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
       delay_factor: '',
       max_retries: '',
       retry_delay_seconds: '',
       crawl_host_group_selector: '',
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
 
     if (!this.canEdit) {
@@ -156,15 +148,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
           return label;
         })
         : [],
-      meta: {
-        name: this.politenessConfig.meta.name,
-        description: this.politenessConfig.meta.description,
-        created: DateTime.formatTimestamp(this.politenessConfig.meta.created),
-        created_by: this.politenessConfig.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.politenessConfig.meta.last_modified),
-        last_modified_by: this.politenessConfig.meta.last_modified_by,
-        label: this.politenessConfig.meta.label || [],
-      },
+      meta: this.politenessConfig.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -184,15 +168,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       max_retries: parseInt(formModel.max_retries, 10) || 0,
       retry_delay_seconds: parseInt(formModel.retry_delay_seconds, 10) || 0,
       crawl_host_group_selector: formModel.crawl_host_group_selector.map(label => label.key + ':' + label.value),
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        // last_modified_by: '',
-        label: formModel.meta.label.map(label => ({...label}))
-      }
+      meta: formModel.meta,
     };
   }
 }
