@@ -11,7 +11,6 @@ import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -154,9 +153,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       schedule_id: this.crawlJob.schedule_id,
       crawl_config_id: this.crawlJob.crawl_config_id,
       limits: {
-        depth: this.crawlJob.limits.depth,
-        max_duration_s: this.crawlJob.limits.max_duration_s,
-        max_bytes: this.crawlJob.limits.max_bytes,
+        depth: this.crawlJob.limits.depth || '',
+        max_duration_s: this.crawlJob.limits.max_duration_s || '',
+        max_bytes: this.crawlJob.limits.max_bytes || '',
       },
       meta: this.crawlJob.meta,
     });

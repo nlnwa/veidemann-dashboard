@@ -40,17 +40,17 @@
           <ng-container *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
             <div [formGroupName]="i">
               <mat-form-field>
-                <input matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
+                <input #ipFrom matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-                <mat-error *ngIf="!ipFromControl?.valid"
+                <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="ip_to" placeholder="Til IP-addresse"
+                <input #ipTo matInput formControlName="ip_to" placeholder="Til IP-addresse"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-                <mat-error *ngIf="!ipToControl?.valid"
+                <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
                   En gyldig IP-addresse er påkrevd.
                 </mat-error>
@@ -60,6 +60,10 @@
                       *ngIf="canEdit">
                 <mat-icon color="warn">close</mat-icon>
               </button>
+              <mat-error *ngIf="!validRange(ipFromControl(i).value, ipToControl(i).value)"
+                         i18n="@@crawlhostgroupconfigFormValidIpRangeError">
+                IP-rangen er ugyldig
+              </mat-error>
             </div>
           </ng-container>
         </ng-container>
