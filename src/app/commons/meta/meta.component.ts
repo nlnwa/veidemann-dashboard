@@ -70,7 +70,6 @@ export class MetaComponent implements AfterViewInit, ControlValueAccessor {
 
   private updateForm(meta: Meta): void {
     this.meta.patchValue({
-
       name: meta.name,
       description: meta.description,
       created: DateTime.formatTimestamp(meta.created),
