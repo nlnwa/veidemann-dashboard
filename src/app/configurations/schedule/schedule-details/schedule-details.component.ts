@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/datetime';
-import {CrawlScheduleConfig} from '../../../commons/models/config.model';
+import {CrawlScheduleConfig, Meta} from '../../../commons/models/config.model';
 import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
@@ -64,7 +64,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get name() {
-    return this.form.get('meta.name');
+    return this.form.get('meta').value.name;
   }
 
   get cronExpression() {
@@ -118,15 +118,7 @@ export class ScheduleDetailsComponent implements OnChanges {
         month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
         day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
 
     if (!this.canEdit) {
@@ -145,16 +137,7 @@ export class ScheduleDetailsComponent implements OnChanges {
         month: cronSplit[3],
         dow: cronSplit[4],
       },
-      meta: {
-        name: this.schedule.meta.name,
-        description: this.schedule.meta.description,
-        created: DateTime.formatTimestamp(this.schedule.meta.created),
-        created_by: this.schedule.meta.created_by,
-        last_modified: DateTime.formatTimestamp(this.schedule.meta.last_modified),
-        last_modified_by: this.schedule.meta.last_modified_by,
-        label: this.schedule.meta.label || [],
-
-      },
+      meta: this.schedule.meta,
     });
 
     if (this.schedule.valid_from != null) {
@@ -220,15 +203,7 @@ export class ScheduleDetailsComponent implements OnChanges {
       cron_expression: cronExpression,
       valid_from: validFrom ? validFrom.toString() : null,
       valid_to: validTo ? validTo.toString() : null,
-      meta: {
-        name: formModel.meta.name as string,
-        description: formModel.meta.description as string,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        last_modified_by: '',
-        label: formModel.meta.label.map(label => ({...label})),
-      }
+      meta: formModel.meta,
     };
   }
 }
