@@ -17,7 +17,7 @@ import 'rxjs/add/observable/merge';
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
-          <span class="toolbar--title">Browserconfig</span>
+          <span class="toolbar--title">Browserconfigs</span>
           <button mat-mini-fab (click)="onCreateBrowserConfig()">
             <mat-icon>add</mat-icon>
           </button>

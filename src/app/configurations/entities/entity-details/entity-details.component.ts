@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Entity, Label} from '../../../commons/models/config.model';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {Entity, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -63,15 +62,7 @@ export class EntityDetailsComponent implements OnChanges {
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
-      meta: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(1)]],
-        description: '',
-        created: {value: '', disabled: true},
-        created_by: {value: '', disabled: true},
-        last_modified: {value: '', disabled: true},
-        last_modified_by: {value: '', disabled: true},
-        label: [],
-      }),
+      meta: new Meta(),
     });
     if (!this.canEdit) {
       this.form.disable();
@@ -82,15 +73,7 @@ export class EntityDetailsComponent implements OnChanges {
     const entity = this.entity;
     this.form.patchValue({
       id: entity.id,
-      meta: {
-        name: entity.meta.name,
-        description: entity.meta.description,
-        created: DateTime.formatTimestamp(entity.meta.created),
-        created_by: entity.meta.created_by,
-        last_modified: DateTime.formatTimestamp(entity.meta.last_modified),
-        last_modified_by: entity.meta.last_modified_by,
-        label: entity.meta.label || [],
-      },
+      meta: this.entity.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -100,15 +83,7 @@ export class EntityDetailsComponent implements OnChanges {
     const formModel = this.form.value;
     return {
       id: this.entity.id,
-      meta: {
-        name: formModel.meta.name,
-        description: formModel.meta.description,
-        // created: '',
-        // created_by: '',
-        // last_modified: null,
-        // last_modified_by: '',
-        label: formModel.meta.label.map((label: Label) => ({...label})),
-      }
+      meta: formModel.meta,
     };
   }
 }

@@ -11,27 +11,6 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap">
       <div fxFlex fxLayout="column">
-        <ng-container formGroupName="meta">
-          <div class=" metaNameInput">
-            <mat-form-field>
-              <input matInput formControlName="name" placeholder="Navn"
-                     class="metaNameInput"
-                     i18n-placeholder="@@metaNameInputPlaceholder">
-              <mat-error *ngIf="!name.valid"
-                         i18n="@@metaNameRequiredError">
-                Navn er påkrevd.
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="metaDescriptionInput">
-            <mat-form-field>
-            <textarea matInput formControlName="description" placeholder="Beskrivelse"
-                      i18n-placeholder="@@metaDescriptionInputPlaceholder">
-              </textarea>
-            </mat-form-field>
-          </div>
-          <app-labels formControlName="label" [removable]="canEdit"></app-labels>
-        </ng-container>
         <div *ngIf="!showSave">
           <div fxLayout="row">
             <mat-form-field class="extra-metadata__input">
@@ -41,39 +20,8 @@
                      i18n-placeholder="@@configIdPlaceholder">
             </mat-form-field>
           </div>
-          <ng-container formGroupName="meta">
-            <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field class="extra-metadata__input">
-                <input matInput
-                       formControlName="created"
-                       placeholder="Opprettet"
-                       i18n-placeholder="@@metaCreatedInputPlaceholder">
-              </mat-form-field>
-
-              <mat-form-field class="extra-metadata__input--narrow">
-                <input matInput
-                       formControlName="created_by"
-                       placeholder="Opprettet av"
-                       i18n-placeholder="@@metaCreatedByInputPlaceholder">
-              </mat-form-field>
-            </div>
-            <div fxLayout="row" fxLayoutGap="1em">
-              <mat-form-field class="extra-metadata__input">
-                <input matInput
-                       formControlName="last_modified"
-                       placeholder="Sist endret"
-                       i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-              </mat-form-field>
-
-              <mat-form-field class="extra-metadata__input--narrow">
-                <input matInput
-                       formControlName="last_modified_by"
-                       placeholder="Sist endret av"
-                       i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-              </mat-form-field>
-            </div>
-          </ng-container>
         </div>
+        <app-meta formControlName="meta"></app-meta>
       </div>
 
       <div fxFlex fxLayout="column">
