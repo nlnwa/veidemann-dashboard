@@ -1,6 +1,9 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
 import {DateTime} from '../datetime/datetime';
-import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator,
+  Validators
+} from '@angular/forms';
 import {Meta} from '../models/config.model';
 
 @Component({
@@ -8,9 +11,11 @@ import {Meta} from '../models/config.model';
   selector: 'app-meta',
   templateUrl: './meta.component.html',
   styleUrls: ['./meta.component.css'],
-  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MetaComponent, multi: true}],
+  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MetaComponent, multi: true},
+              {provide: NG_VALIDATORS, useExisting: MetaComponent, multi: true}
+              ],
 })
-export class MetaComponent implements AfterViewInit, ControlValueAccessor {
+export class MetaComponent implements AfterViewInit, ControlValueAccessor , Validator {
 
   meta: FormGroup;
 
@@ -33,6 +38,10 @@ export class MetaComponent implements AfterViewInit, ControlValueAccessor {
       this.updateForm(meta);
     }
   }
+
+  validate(ctrl) {
+   return this.meta.get('name').errors
+ }
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
