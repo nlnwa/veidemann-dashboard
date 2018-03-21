@@ -10,7 +10,7 @@
 
     <mat-form-field>
       <textarea matInput formControlName="description" placeholder="Beskrivelse"
-                i18n-placeholder="@@metaDescriptionInputPlaceholder">
+                i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
       </textarea>
     </mat-form-field>
 
@@ -18,14 +18,14 @@
 
     <div>
       <div fxLayout="row" fxLayoutGap="1em">
-        <mat-form-field class="extra-metadata__input">
+        <mat-form-field>
           <input matInput
                  formControlName="created"
                  placeholder="Opprettet"
                  i18n-placeholder="@@metaCreatedInputPlaceholder">
         </mat-form-field>
 
-        <mat-form-field class="extra-metadata__input--narrow">
+        <mat-form-field>
           <input matInput
                  formControlName="created_by"
                  placeholder="Opprettet av"
@@ -33,14 +33,14 @@
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayoutGap="1em">
-        <mat-form-field class="extra-metadata__input">
+        <mat-form-field>
           <input matInput
                  formControlName=last_modified
                  placeholder="Sist endret"
                  i18n-placeholder="@@metaLastModifiedInputPlaceholder">
         </mat-form-field>
 
-        <mat-form-field class="extra-metadata__input--narrow">
+        <mat-form-field>
           <input matInput
                  formControlName="last_modified_by"
                  placeholder="Sist endret av"

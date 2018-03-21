@@ -1,4 +1,9 @@
-.form-control_cron {
-  width: 40px;
-  float: left;
+/*.form-control_cron {*/
+  /*width: 40px;*/
+  /*float: left;*/
+/*}*/
+
+
+.mat-form-field {
+  width: 100%;
 }
