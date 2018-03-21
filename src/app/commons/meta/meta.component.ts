@@ -1,7 +1,12 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
 import {DateTime} from '../datetime/datetime';
 import {
-  AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator,
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
   Validators
 } from '@angular/forms';
 import {Meta} from '../models/config.model';
