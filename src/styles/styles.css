@@ -30,3 +30,15 @@ width: 55%;
   width:30%;
 }
 
+.config-view__left-menu {
+  margin-right: 1em;
+}
+
+.config-view__left-menu.mat-form-field {
+  width:100%;
+}
+
+.config-view__right-menu {
+  margin-left: 0px;
+}
+

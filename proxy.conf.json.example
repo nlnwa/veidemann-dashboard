@@ -1,6 +1,12 @@
 {
   "/api": {
-    "target": "http://localhost:3010",
-    "secure": false
+    "target": {
+      "host": "veidemann.local",
+      "protocol": "https:",
+      "port": 443
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
   }
 }

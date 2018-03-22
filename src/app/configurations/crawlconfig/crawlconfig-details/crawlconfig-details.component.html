@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" fxFlex>
   <mat-card>
     <mat-card-header>
       <mat-card-title>
@@ -10,50 +10,44 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap">
-      <div fxFlex fxLayout="column">
-        <div *ngIf="!showSave">
-          <div fxLayout="row">
-            <mat-form-field class="extra-metadata__input">
-              <input matInput
-                     formControlName="id"
-                     placeholder="Id"
-                     i18n-placeholder="@@configIdPlaceholder">
-            </mat-form-field>
-          </div>
-        </div>
+      <div class="config-view__left-menu" fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
+        <div *ngIf="!showSave">
+          <mat-form-field>
+            <input matInput
+                   formControlName="id"
+                   placeholder="Id"
+                   i18n-placeholder="@@configIdPlaceholder">
+          </mat-form-field>
+        </div>
       </div>
 
-      <div fxFlex fxLayout="column">
-        <div class="marginDropdown">
-          <mat-form-field>
-            <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
-                        i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
-              <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">
-                {{browserConfig.itemName}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
-                     i18n="@@crawlconfigFormBrowserconfigRequiredError">
-            Browserconfig er påkrevd.
-          </mat-error>
-        </div>
+      <div class="config-view__right-menu" fxFlex fxLayout="column">
+        <mat-form-field>
+          <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
+                      i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+            <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">
+              {{browserConfig.itemName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
+                   i18n="@@crawlconfigFormBrowserconfigRequiredError">
+          Browserconfig er påkrevd.
+        </mat-error>
 
-        <div class="marginDropdown">
-          <mat-form-field>
-            <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
-                        i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
-              <mat-option *ngFor="let politenessConfig of politenessConfigList"
-                          [value]="politenessConfig.id">{{politenessConfig.itemName}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
-                     i18n="@@crawlconfigFormPolitenessconfigRequiredError">
-            Politenessconfig er påkrevd.
-          </mat-error>
-        </div>
+        <mat-form-field>
+          <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
+                      i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
+            <mat-option *ngFor="let politenessConfig of politenessConfigList"
+                        [value]="politenessConfig.id">{{politenessConfig.itemName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
+                   i18n="@@crawlconfigFormPolitenessconfigRequiredError">
+          Politenessconfig er påkrevd.
+        </mat-error>
 
         <mat-form-field>
           <input matInput

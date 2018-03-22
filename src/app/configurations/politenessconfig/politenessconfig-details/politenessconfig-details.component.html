@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" fxFlex>
   <mat-card>
     <mat-card-header>
       <mat-card-title>
@@ -9,23 +9,20 @@
               i18n="@@politenessconfigNewPolitenessConfigHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row" fxLayoutGap="8px">
-      <div fxFlex fxLayout="column">
-        <div *ngIf="!showSave">
-          <div fxLayout="row">
-            <mat-form-field class="extra-metadata__input">
-              <input matInput
-                     formControlName="id"
-                     placeholder="Id"
-                     i18n-placeholder="@@configIdPlaceholder">
-            </mat-form-field>
-          </div>
-        </div>
+    <mat-card-content fxLayout="row wrap">
+      <div class="config-view__left-menu" fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
+        <div *ngIf="!showSave">
+          <mat-form-field class="config-view__left-menu">
+            <input matInput
+                   formControlName="id"
+                   placeholder="Id"
+                   i18n-placeholder="@@configIdPlaceholder">
+          </mat-form-field>
+        </div>
       </div>
 
-      <div fxFlex fxLayout="column">
-        <div class="robotPolicyDropdown">
+      <div class="config-view__right-menu" fxFlex fxLayout="column">
           <mat-form-field>
             <mat-select placeholder="Velg policy" formControlName="robots_policy"
                         i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
@@ -36,8 +33,6 @@
                      i18n="@@politenessconfigFormRobotPolicyErrorRequired">
             Robots policy er påkrevd.
           </mat-error>
-        </div>
-        <span></span>
 
         <!--CrawlHostGroup Selector -->
         <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector"
