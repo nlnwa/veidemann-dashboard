@@ -26,6 +26,7 @@ export class AppConfig {
       return Promise.resolve(this.environment)
         .then(env => this.authService.configure(env.auth));
     }
+    // https://nettarkivet.nb.no/api/control/idp
     return this.http.get<Environment>(environment.config).toPromise()
       .then(env => {
         this.environment = env;
