@@ -20,7 +20,8 @@
         <mat-icon>person</mat-icon>
         <ng-container i18n="@@toolbarLogon">Logg på</ng-container>
       </a>
-      <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name">
+      <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name"
+      [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true}" [routerLinkActive]="['is-active']">
         <mat-icon>person</mat-icon>
         <ng-container i18n="@@toolbarLogon">Logg av</ng-container>
       </a>
