@@ -1,11 +1,13 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
 import {DateTime} from '../datetime/datetime';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  ValidationErrors,
   Validator,
   Validators
 } from '@angular/forms';
@@ -17,10 +19,10 @@ import {Meta} from '../models/config.model';
   templateUrl: './meta.component.html',
   styleUrls: ['./meta.component.css'],
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MetaComponent, multi: true},
-              {provide: NG_VALIDATORS, useExisting: MetaComponent, multi: true}
-              ],
+    {provide: NG_VALIDATORS, useExisting: MetaComponent, multi: true}
+  ],
 })
-export class MetaComponent implements AfterViewInit, ControlValueAccessor , Validator {
+export class MetaComponent implements AfterViewInit, ControlValueAccessor, Validator {
 
   meta: FormGroup;
 
@@ -44,9 +46,9 @@ export class MetaComponent implements AfterViewInit, ControlValueAccessor , Val
     }
   }
 
-  validate(ctrl) {
-   return this.meta.get('name').errors
- }
+  validate(ctrl: AbstractControl): ValidationErrors | null {
+    return this.meta.valid ? null : {'invalidMeta': true};
+  }
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
