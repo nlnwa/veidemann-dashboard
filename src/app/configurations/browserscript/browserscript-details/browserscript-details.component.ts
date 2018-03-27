@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-
 import {BrowserScript, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
@@ -73,9 +72,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       script: '',
       meta: new Meta(),
     });
-    if (!this.editable) {
-      this.form.disable();
-    }
   }
 
   private updateForm(): void {
@@ -86,6 +82,9 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.editable) {
+      this.form.disable();
+    }
   };
 
   private prepareSave(): BrowserScript {

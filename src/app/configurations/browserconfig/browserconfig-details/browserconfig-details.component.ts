@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from '../../../commons/validator';
 import {BrowserConfig, BrowserScript, Label, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
 
 
 @Component({
@@ -126,10 +124,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       script_selector: '',
       meta: new Meta(),
     });
-
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -154,7 +148,9 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private prepareSave(): BrowserConfig {

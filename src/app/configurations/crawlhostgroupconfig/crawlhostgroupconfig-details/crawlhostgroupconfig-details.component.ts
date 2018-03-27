@@ -111,10 +111,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       ip_range: this.fb.array([]),
       meta: new Meta(),
     });
-
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -130,6 +126,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     this.form.setControl('ip_range', ipRangeFGArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private prepareSave(): CrawlHostGroupConfig {

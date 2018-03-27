@@ -3,8 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 import {Label, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {DateTime} from '../../../commons/datetime/datetime';
-
 
 @Component({
   selector: 'app-politenessconfig-details',
@@ -122,10 +120,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       crawl_host_group_selector: '',
       meta: new Meta(),
     });
-
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -152,11 +146,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   };
 
   private prepareSave(): PolitenessConfig {
     const formModel = this.form.value;
-    // const crawlHostGroup_selectorDeepCopy: Selector = {label: formModel.crawl_host_group_selector.map(label => ({...label}))};
     return {
       id: this.politenessConfig.id,
       robots_policy: formModel.robots_policy,

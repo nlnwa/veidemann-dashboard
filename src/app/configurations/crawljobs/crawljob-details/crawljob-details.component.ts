@@ -90,8 +90,8 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.crawlJob && !changes.crawlJob.currentValue) {
-        this.form.reset();
-        return;
+      this.form.reset();
+      return;
     }
     if (changes.crawlConfigs && changes.crawlJob.currentValue) {
       this.crawlConfigs = changes.crawlConfigs.currentValue.map((crawlConfig) =>
@@ -141,9 +141,6 @@ export class CrawljobDetailsComponent implements OnChanges {
       }),
       meta: new Meta(),
     });
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -161,6 +158,9 @@ export class CrawljobDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   };
 
   private prepareSave(): CrawlJob {
