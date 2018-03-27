@@ -8,13 +8,13 @@ export class RoleService {
 
   private readonly URL: string = `${environment.apiGateway}/control/activeroles`;
 
-  private roles: Role[] = [Role.ANY];
+  private roles: Role[] = [];
 
   constructor(private http: HttpClient) {
   }
 
   public resetRoles() {
-    this.roles = [Role.ANY];
+    this.fetchRoles();
   }
 
   public fetchRoles() {
@@ -42,9 +42,6 @@ export class RoleService {
   }
 
   private isRole(role: Role) {
-    if (!environment.production && environment.auth.issuer === '') {
-      return true;
-    }
     return this.roles.includes(role);
   }
 }
