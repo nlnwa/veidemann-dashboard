@@ -1,34 +1,30 @@
+<!-- Toolbar -->
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="onToggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <a routerLink="/" class="title"><h1> Veidemann</h1></a>
+  <span fxFlex fxFlexFill></span>
+  <app-time></app-time>
+  <span fxFlex fxFlexFill></span>
+  <span>{{name}}</span>
+  <a color="primary" mat-raised-button (click)="onLogin()" *ngIf="!name">
+    <mat-icon>person</mat-icon>
+    <ng-container i18n="@@toolbarLogon">Logg på</ng-container>
+  </a>
+  <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name"
+     [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true}" [routerLinkActive]="['is-active']">
+    <mat-icon>person</mat-icon>
+    <ng-container i18n="@@toolbarLogon">Logg av</ng-container>
+  </a>
+</mat-toolbar>
+
+<!-- Sidenav -->
 <mat-sidenav-container>
 
-  <!-- Toolbar -->
-
-  <mat-toolbar color="primary" fxFlex>
-    <a routerLink="/" class="title"><h1>Veidemann</h1></a>
-    <span fxFlex fxFlexFill></span>
-    <app-time></app-time>
-    <span fxFlex fxFlexFill></span>
-    <span>{{name}}</span>
-  </mat-toolbar>
-
-  <!-- Sidenav -->
-
-  <mat-sidenav mode="side" opened="true">
-
-    <!-- Toolbar -->
-    <mat-toolbar color="primary">
-      <a color="primary" mat-raised-button (click)="onLogin()" *ngIf="!name">
-        <mat-icon>person</mat-icon>
-        <ng-container i18n="@@toolbarLogon">Logg på</ng-container>
-      </a>
-      <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name"
-      [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true}" [routerLinkActive]="['is-active']">
-        <mat-icon>person</mat-icon>
-        <ng-container i18n="@@toolbarLogon">Logg av</ng-container>
-      </a>
-    </mat-toolbar>
+  <mat-sidenav mode="side" [(opened)]="showSidenav">
 
     <!-- Navigation -->
-
     <mat-nav-list>
       <a mat-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
          [routerLinkActive]="['is-active']">
@@ -111,9 +107,7 @@
           <mat-icon class="sidenav--icon__margin">person</mat-icon>
           <ng-container i18n="@@navigationSidebarRolemapping">Brukere</ng-container>
         </a>
-
       </ng-container>
-
     </mat-nav-list>
   </mat-sidenav>
 
