@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  config: '',
+  config: '/assets/config/environment.json',
   apiGateway: '/api',
   auth: {
 

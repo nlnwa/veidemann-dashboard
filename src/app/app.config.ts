@@ -2,35 +2,29 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Environment} from './commons/models/environment.model';
 import {environment} from '../environments/environment';
-import {AuthService} from './auth';
+import {IdpReply} from './commons/models/controller.model';
 
 @Injectable()
 export class AppConfig {
 
   private _env: Environment;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-    this.environment = environment;
+  constructor(private http: HttpClient) {
   }
 
   get environment(): Environment {
     return this._env;
   }
 
-  set environment(env: Environment) {
-    this._env = new Environment(env);
+  private getOpenIdConnectIssuer(): Promise<string> {
+    return this.http.get<IdpReply>(this.environment.apiGateway + '/control/idp').toPromise()
+      .then(reply => reply.open_id_connect_issuer || '');
   }
 
   public load(): Promise<any> {
-    if (environment.config === '') {
-      return Promise.resolve(this.environment)
-        .then(env => this.authService.configure(env.auth));
-    }
-    // https://nettarkivet.nb.no/api/control/idp
     return this.http.get<Environment>(environment.config).toPromise()
-      .then(env => {
-        this.environment = env;
-        return this.authService.configure(env.auth);
-      });
+      .then(env => this._env = new Environment(env))
+      .then(() => this.getOpenIdConnectIssuer()
+        .then(issuer => this._env.auth.issuer = issuer));
   }
 }
