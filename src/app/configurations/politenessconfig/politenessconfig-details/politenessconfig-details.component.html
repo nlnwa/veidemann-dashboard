@@ -9,20 +9,18 @@
               i18n="@@politenessconfigNewPolitenessConfigHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap">
-      <div class="config-view__left-menu" fxFlex fxLayout="column">
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-        <div *ngIf="!showSave">
-          <mat-form-field class="config-view__left-menu">
+          <mat-form-field *ngIf="!showSave">
             <input matInput
                    formControlName="id"
                    placeholder="Id"
                    i18n-placeholder="@@configIdPlaceholder">
           </mat-form-field>
-        </div>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
           <mat-form-field>
             <mat-select placeholder="Velg policy" formControlName="robots_policy"
                         i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
@@ -107,9 +105,9 @@
                  placeholder="Retry delay (s)"
                  i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
         </mat-form-field>
-
       </div>
     </mat-card-content>
+
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               *ngIf="showSave"

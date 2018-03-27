@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
-
 @Component({
   selector: 'app-crawlconfig-details',
   templateUrl: './crawlconfig-details.component.html',
@@ -32,7 +31,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   browserConfigList: any[];
   politenessConfigList: any = [];
-
 
 
   constructor(private fb: FormBuilder,
@@ -118,10 +116,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       depth_first: '',
       meta: new Meta(),
     });
-
-    if (!( this.canEdit )) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -139,6 +133,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!( this.canEdit )) {
+      this.form.disable();
+    }
   }
 
   private prepareSave(): CrawlConfig {

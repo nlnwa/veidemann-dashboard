@@ -3,13 +3,13 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Entity, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
-
 @Component({
   selector: 'app-entity-details',
   templateUrl: './entity-details.component.html',
   styleUrls: ['./entity-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class EntityDetailsComponent implements OnChanges {
   @Input()
   entity: Entity;
@@ -64,9 +64,6 @@ export class EntityDetailsComponent implements OnChanges {
       id: {value: '', disabled: true},
       meta: new Meta(),
     });
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -77,6 +74,9 @@ export class EntityDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private prepareSaveEntity(): Entity {

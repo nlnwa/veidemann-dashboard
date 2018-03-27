@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlJob, Label, Meta, Seed} from '../../../commons/models/config.model';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {CrawlJob, Meta, Seed} from '../../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
-import {VALID_URL_PATTERN} from '../../../commons/validator';
-import {DateTime} from '../../../commons/datetime';
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -83,9 +81,6 @@ export class SeedDetailComponent implements OnChanges {
       scope: this.fb.group({surt_prefix: ''}),
       meta: new Meta(),
     });
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -101,6 +96,9 @@ export class SeedDetailComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   /**

@@ -8,20 +8,18 @@
         <span *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap">
-      <div class="config-view__left-menu"fxFlex fxLayout="column">
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-        <div *ngIf="!showSave">
-            <mat-form-field>
+            <mat-form-field *ngIf="!showSave">
               <input matInput
                      formControlName="id"
                      placeholder="Id"
                      i18n-placeholder="@@configIdPlaceholder">
             </mat-form-field>
-        </div>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
           <span class="fill-space"></span>
@@ -31,12 +29,12 @@
           </button>
         </mat-toolbar>
 
-        <ng-container formArrayName="ip_range">
+        <div formArrayName="ip_range">
           <mat-card-header>
             <mat-card-title></mat-card-title>
           </mat-card-header>
           <ng-container *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
-            <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
+            <div [formGroupName]="i" fxLayout="row" fxLayoutGap="24px">
               <mat-form-field>
                 <input #ipFrom matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
@@ -66,10 +64,10 @@
               </mat-error>
             </div>
           </ng-container>
-        </ng-container>
-
+        </div>
       </div>
     </mat-card-content>
+
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               *ngIf="showSave"

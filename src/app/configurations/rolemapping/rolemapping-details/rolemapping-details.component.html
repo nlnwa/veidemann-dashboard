@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" fxFlex>
   <mat-card>
     <mat-card-header>
       <mat-card-title>
@@ -9,9 +9,8 @@
               i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap">
-      <div fxFlex fxLayout="column">
-        <div fxLayout="row wrap" fxLayoutGap="3em">
+    <mat-card-content fxLayout="column">
+        <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
           <mat-form-field>
             <mat-select placeholder="Velg en type" [(value)]="selectedType">
               <mat-option value="email">E-post</mat-option>
@@ -34,9 +33,9 @@
             <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
             <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
           </mat-form-field>
-         </div>
       </div>
     </mat-card-content>
+
     <mat-card-actions>
       <button mat-raised-button color="primary"
               *ngIf="showSave"
@@ -58,7 +57,6 @@
               i18n="@@commonButtonRevert">
         Tilbakestill
       </button>
-
       <button mat-raised-button color="warn"
               *ngIf="!showSave"
               (click)="onDelete(); $event.stopPropagation()"

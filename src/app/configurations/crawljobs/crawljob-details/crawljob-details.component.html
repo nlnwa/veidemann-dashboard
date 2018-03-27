@@ -12,20 +12,18 @@
         Aktiv
       </mat-slide-toggle>
     </mat-card-header>
-    <mat-card-content fxLayout=" row wrap">
-      <div class="config-view__left-menu" fxFlex fxLayout="column">
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-        <div *ngIf="!showSave">
-            <mat-form-field>
-              <input matInput
-                     formControlName="id"
-                     placeholder="Id"
-                     i18n-placeholder="@@configIdPlaceholder">
-            </mat-form-field>
-          </div>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 i18n-placeholder="@@configIdPlaceholder">
+        </mat-form-field>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <ng-container formGroupName="limits">
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
@@ -53,34 +51,30 @@
           </mat-form-field>
         </ng-container>
 
-        <div>
-          <mat-form-field>
-            <mat-select placeholder="Velg schedule" formControlName="schedule_id"
-                        i18n-placeholder="@@crawljobScheduleDropdownPlaceholder">
-              <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">{{schedule.itemName}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Velg schedule" formControlName="schedule_id"
+                      i18n-placeholder="@@crawljobScheduleDropdownPlaceholder">
+            <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">{{schedule.itemName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-error *ngIf="! scheduleId.valid  && ! form.disabled"
-                     i18n="@@crawljobFormScheduleRequiredError">
-            Schedule er påkrevd.
-          </mat-error>
-        </div>
+        <mat-error *ngIf="! scheduleId.valid  && ! form.disabled"
+                   i18n="@@crawljobFormScheduleRequiredError">
+          Schedule er påkrevd.
+        </mat-error>
 
-        <div>
-          <mat-form-field>
-            <mat-select placeholder="Velg crawl config" formControlName="crawl_config_id"
-                        i18n-placeholder="@@crawljobCrawlconfigDropdownPlaceholder">
-              <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Velg crawl config" formControlName="crawl_config_id"
+                      i18n-placeholder="@@crawljobCrawlconfigDropdownPlaceholder">
+            <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
-                     i18n="@@crawljobFormCrawlconfigRequieredError">
-            Crawlconfig er påkrevd.
-          </mat-error>
-        </div>
+        <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
+                   i18n="@@crawljobFormCrawlconfigRequieredError">
+          Crawlconfig er påkrevd.
+        </mat-error>
       </div>
     </mat-card-content>
 

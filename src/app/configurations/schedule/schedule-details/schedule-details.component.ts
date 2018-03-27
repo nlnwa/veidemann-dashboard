@@ -120,10 +120,6 @@ export class ScheduleDetailsComponent implements OnChanges {
       }),
       meta: new Meta(),
     });
-
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   private updateForm() {
@@ -178,6 +174,9 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private setCronExpression(formModel): string {

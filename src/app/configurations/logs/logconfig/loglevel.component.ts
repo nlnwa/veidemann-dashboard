@@ -27,9 +27,6 @@ export class LoglevelComponent implements OnChanges {
 
     });
     this.getLogLevels();
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   get canEdit(): boolean {
@@ -85,6 +82,9 @@ export class LoglevelComponent implements OnChanges {
     this.form.setControl('log_level', logconfigFormArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   private getLogLevels() {

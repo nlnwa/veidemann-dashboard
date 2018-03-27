@@ -1,6 +1,6 @@
-<form [formGroup]="form" fxFlex>
-  <mat-card *ngIf="seed">
-    <mat-card-header fxLayout="row">
+<form [formGroup]="form" *ngIf="seed">
+  <mat-card>
+    <mat-card-header>
       <mat-card-title>
         <span i18n="@@seedDetailsCardTitle">SEED</span>
       </mat-card-title>
@@ -13,7 +13,7 @@
       </mat-slide-toggle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap">
-      <div class="config-view__left-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="seed.id">
           <input matInput formControlName="id" placeholder="Id"
@@ -26,18 +26,17 @@
         </mat-form-field>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
-        <mat-select placeholder="Velg jobb" formControlName="job_id" multiple
-                    i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
-          <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
-        </mat-select>
-
+      <div fxFlex fxLayout="column">
         <mat-form-field formGroupName="scope" *ngIf="seed.id">
           <input matInput
                  formControlName="surt_prefix"
                  placeholder="Surt prefiks"
                  i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
         </mat-form-field>
+        <mat-select placeholder="Velg jobb" formControlName="job_id" multiple
+                    i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
+          <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
+        </mat-select>
       </div>
     </mat-card-content>
 
