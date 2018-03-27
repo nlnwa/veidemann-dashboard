@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 
 import {AuthService} from './auth';
 import {RoleService} from './auth/role.service';
+import {AppConfig} from './app.config';
 
 
 @Component({
@@ -11,7 +12,10 @@ import {RoleService} from './auth/role.service';
 })
 export class AppComponent {
 
-  constructor(private authService: AuthService, private roleService: RoleService) {
+  constructor(private authService: AuthService, private roleService: RoleService, private appConfig: AppConfig) {
+    this.authService.configure(this.appConfig.environment.auth)
+      .then(() => this.roleService.fetchRoles())
+      .catch(() => this.roleService.fetchRoles());
   }
 
   get canConfigure(): boolean {
@@ -36,5 +40,6 @@ export class AppComponent {
 
   onLogout() {
     this.authService.logout();
+    this.roleService.resetRoles();
   }
 }

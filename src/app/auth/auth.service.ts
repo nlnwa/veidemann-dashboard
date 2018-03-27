@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
-
 import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {RoleService} from './role.service';
 
 
 @Injectable()
 export class AuthService {
 
-  constructor(private oauthService: OAuthService, private roleService: RoleService) {
+  constructor(private oauthService: OAuthService) {
   }
 
   public get groups() {
@@ -26,19 +24,11 @@ export class AuthService {
 
   public logout() {
     this.oauthService.logOut();
-    this.roleService.resetRoles();
   }
 
   public configure(auth: AuthConfig): Promise<any> {
-    if (auth && auth.issuer !== '') {
       this.oauthService.configure(auth);
       this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-      return this.oauthService.loadDiscoveryDocumentAndTryLogin()
-        .then(() => this.roleService.fetchRoles())
-        .catch(() => Promise.resolve());
-    } else {
-      console.log('No idp issuer configured so authentication is not possible.');
-      return Promise.resolve();
-    }
+      return this.oauthService.loadDiscoveryDocumentAndTryLogin();
   }
 }

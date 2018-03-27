@@ -19,3 +19,7 @@ export interface ListRequest {
 export interface RunCrawlReply {
   seed_execution_id: string[];
 }
+
+export interface IdpReply {
+  open_id_connect_issuer: string;
+}
