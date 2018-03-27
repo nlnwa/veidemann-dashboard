@@ -8,50 +8,48 @@
         <span *ngIf="!schedule.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap">
-      <div class="config-view__left-menu" fxFlex fxLayout="column">
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-        <div *ngIf="!showSave">
-          <mat-form-field class="config-view__left-menu">
-            <input matInput
-                   formControlName="id"
-                   placeholder="Id"
-                   i18n-placeholder="@@configIdPlaceholder">
-          </mat-form-field>
-        </div>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 i18n-placeholder="@@configIdPlaceholder">
+        </mat-form-field>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <fieldset formGroupName="cron_expression">
           <legend i18n="@@scheduleFormCronExpressionHeader">Cron expression</legend>
-          <div fxLayout="row wrap" fxLayoutGap="1em">
-            <mat-form-field class="form-control_cron">
+          <div fxLayout="row wrap" fxLayoutGap="24px">
+            <mat-form-field>
               <input matInput formControlName="minute"
                      placeholder="Minutt"
                      i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
             </mat-form-field>
-            <mat-form-field class="form-control_cron">
+            <mat-form-field>
               <input matInput formControlName="hour"
                      placeholder="Time"
                      i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
             </mat-form-field>
-            <mat-form-field class="form-control_cron">
+            <mat-form-field>
               <input matInput formControlName="dom"
                      placeholder="Dom"
                      i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
             </mat-form-field>
-            <mat-form-field class="form-control_cron">
+            <mat-form-field>
               <input matInput formControlName="month"
                      placeholder="Måned"
                      i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
             </mat-form-field>
-            <mat-form-field class="form-control_cron">
+            <mat-form-field>
               <input matInput formControlName="dow"
                      placeholder="Dow"
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </mat-form-field>
-          </div>
-          <mat-error fxLayout="row" *ngIf="! cronExpression.valid && !form.disabled"
+         </div>
+          <mat-error *ngIf="! cronExpression.valid && !form.disabled"
                      i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </mat-error>
@@ -59,49 +57,43 @@
 
         <fieldset formGroupName="valid_from">
           <legend i18n="@@scheduleFormValidFromHeader">Gyldig fra</legend>
-          <div fxLayout="row" fxLayoutGap="1em">
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="year" placeholder="År" type="number"
-                     i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
-            </mat-form-field>
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="month" placeholder="Måned" type="number"
-                     i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
-            </mat-form-field>
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="day" placeholder="Dag" type="number"
-                     i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
-            </mat-form-field>
-          </div>
+          <mat-form-field>
+            <input matInput formControlName="year" placeholder="År" type="number"
+                   i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="month" placeholder="Måned" type="number"
+                   i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="day" placeholder="Dag" type="number"
+                   i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
+          </mat-form-field>
         </fieldset>
 
         <fieldset formGroupName="valid_to">
           <legend i18n="@@scheduleFormValidToHeader">Gyldig til</legend>
-          <div fxLayout="row" fxLayoutGap="1em">
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="year" placeholder="År" type="number"
-                     i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
-            </mat-form-field>
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="month" placeholder="Måned" type="number"
-                     i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
-            </mat-form-field>
-            <mat-form-field class="form-control_cron">
-              <input matInput formControlName="day" placeholder="Dag" type="number"
-                     i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
-            </mat-form-field>
-          </div>
+          <mat-form-field>
+            <input matInput formControlName="year" placeholder="År" type="number"
+                   i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="month" placeholder="Måned" type="number"
+                   i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="day" placeholder="Dag" type="number"
+                   i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
+          </mat-form-field>
         </fieldset>
       </div>
 
-
-      <div fxFlex fxLayout="row">
+      <div fxFlex fxLayout="column">
         <app-schedule-sidebar></app-schedule-sidebar>
       </div>
-
     </mat-card-content>
-    <mat-card-actions *ngIf="canEdit">
 
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"
               *ngIf="showSave"

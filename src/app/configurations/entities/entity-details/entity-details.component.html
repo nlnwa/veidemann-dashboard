@@ -10,19 +10,17 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap">
-      <div class="config-view__left-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-        <div *ngIf="!showSave">
-          <mat-form-field>
-            <input matInput
-                   formControlName="id"
-                   placeholder="Id"
-                   i18n-placeholder="@@metaIdInputPlaceholder">
-          </mat-form-field>
-        </div>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 i18n-placeholder="@@metaIdInputPlaceholder">
+        </mat-form-field>
       </div>
 
-      <div class="config-view__right-menu" fxFlex fxLayout="column">
+      <div fxFlex fxLayout="column">
         <ng-content></ng-content>
       </div>
     </mat-card-content>

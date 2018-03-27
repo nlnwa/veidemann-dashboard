@@ -13,32 +13,13 @@ html, body {
   flex: 1 1 auto;
 }
 
-
-.extra-metadata__input.mat-form-field {
-  width: 35%;
+.ttInfo {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
 }
 
-.extra-metadata__input--wide.mat-form-field {
-width: 55%;
+.ttInfo:hover {
+  opacity: 0.7;
+  filter: alpha(opacity=50);
+  color: #0066ff !important;
 }
-
-.extra-metadata__input--narrow.mat-form-field{
-  width: 20%;
-}
-
-.extra-metadata__input--narrow-wide.mat-form-field {
-  width:30%;
-}
-
-.config-view__left-menu {
-  margin-right: 1em;
-}
-
-.config-view__left-menu.mat-form-field {
-  width:100%;
-}
-
-.config-view__right-menu {
-  margin-left: 0px;
-}
-
