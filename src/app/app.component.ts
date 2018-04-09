@@ -12,6 +12,8 @@ import {AppConfig} from './app.config';
 })
 export class AppComponent {
 
+  showSidenav = true;
+
   constructor(private authService: AuthService, private roleService: RoleService, private appConfig: AppConfig) {
     this.authService.configure(this.appConfig.environment.auth)
       .then(() => this.roleService.fetchRoles())
@@ -42,4 +44,13 @@ export class AppComponent {
     this.authService.logout();
     this.roleService.resetRoles();
   }
+
+  onToggleSidenav() {
+    if (this.showSidenav) {
+      this.showSidenav = false;
+    } else {
+      this.showSidenav = true;
+    }
+  }
+
 }
