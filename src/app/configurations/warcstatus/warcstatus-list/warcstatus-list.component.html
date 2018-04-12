@@ -1,0 +1,26 @@
+<div>
+  <mat-table [dataSource]="dataSource"
+             class="validator-list-table">
+    <ng-container matColumnDef="filename">
+      <mat-header-cell *matHeaderCellDef
+                       i18n="@@baselistNameHeaderCell">Filnavn
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.filename}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef
+                       class="validator-list-table__status-column"
+                       i18n="@@baselistDescriptionHeaderCell">Status
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="validator-list-table__status-column">{{row.status}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             [ngClass]="{'highlight': selectedRowIndex == row.filename}"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
