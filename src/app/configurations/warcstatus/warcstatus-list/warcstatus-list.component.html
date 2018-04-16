@@ -1,8 +1,9 @@
 <div>
-  <mat-table [dataSource]="dataSource"
+  <mat-table [dataSource]="dataSource" matSort
              class="validator-list-table">
     <ng-container matColumnDef="filename">
       <mat-header-cell *matHeaderCellDef
+                       mat-sort-header
                        i18n="@@baselistNameHeaderCell">Filnavn
       </mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.filename}}</mat-cell>
@@ -10,6 +11,7 @@
 
     <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef
+                       mat-sort-header
                        class="validator-list-table__status-column"
                        i18n="@@baselistDescriptionHeaderCell">Status
       </mat-header-cell>

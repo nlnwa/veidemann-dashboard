@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {WarcStatusService} from '../warcstatus.service';
 
 @Component({
@@ -7,15 +7,17 @@ import {WarcStatusService} from '../warcstatus.service';
   templateUrl: './warcstatus-list.component.html',
   styleUrls: ['./warcstatus-list.component.css']
 })
-export class WarcStatusListComponent implements OnInit {
+export class WarcStatusListComponent implements OnInit, AfterViewInit {
 
   selectedRowIndex = -1;
 
   @Output()
-    protected rowClick = new EventEmitter<any[]>();
+  protected rowClick = new EventEmitter<any[]>();
 
   dataSource = new MatTableDataSource();
   displayedColumns = ['filename', 'status'];
+
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private warcStatusService: WarcStatusService) {
   }
@@ -27,8 +29,12 @@ export class WarcStatusListComponent implements OnInit {
       });
   }
 
-   onRowClick(row) {
-     this.rowClick.emit(row);
-     this.selectedRowIndex = row.filename;
-   }
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  onRowClick(row) {
+    this.rowClick.emit(row);
+    this.selectedRowIndex = row.filename;
+  }
 }
