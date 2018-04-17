@@ -11,6 +11,7 @@ import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {NUMBER_OR_EMPTY_STRING, VALID_YEAR_PATTERN} from '../../../commons/validator/patterns';
 
 
 @Component({
@@ -135,12 +136,13 @@ export class CrawljobDetailsComponent implements OnChanges {
       crawl_config_id: ['', CustomValidators.nonEmpty],
       disabled: false,
       limits: this.fb.group({
-        depth: ['', [Validators.required, Validators.min(0)]],
-        max_duration_s: ['', [Validators.required, Validators.min(0)]],
-        max_bytes: ['', [Validators.required, Validators.min(0)]],
+        depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        max_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        max_bytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       }),
       meta: new Meta(),
-    });
+    })
+    ;
   }
 
   private updateForm() {
@@ -171,9 +173,9 @@ export class CrawljobDetailsComponent implements OnChanges {
       crawl_config_id: formModel.crawl_config_id,
       disabled: !formModel.disabled,
       limits: {
-        depth: formModel.limits.depth as number,
-        max_duration_s: formModel.limits.max_duration_s as string,
-        max_bytes: formModel.limits.max_bytes as string,
+        depth: parseInt(formModel.limits.depth, 10) || 0,
+        max_duration_s: formModel.limits.max_duration_s || '0',
+        max_bytes: formModel.limits.max_bytes || '0',
       },
       meta: formModel.meta,
     };
