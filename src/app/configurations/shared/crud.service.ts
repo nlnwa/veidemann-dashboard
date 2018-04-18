@@ -29,8 +29,7 @@ export abstract class CrudService<T extends ListRequest> {
   }
 
   get(id: string): Observable<T> {
-    return this.http.get<ListReply<T>>(`${this.url}/${id}`)
-      .map(reply => reply.value.length > 0 ? reply.value[0] : null);
+    return this.http.get<T>(`${this.url}/${id}`);
   }
 
   create(item: T): Observable<T> {
