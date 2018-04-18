@@ -1,0 +1,74 @@
+<mat-card *ngIf="warcError">
+  <mat-card-title>
+    <span i18n="@@warcErrorDetailsHeader">Status</span>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <span>Rapport fra Jhove</span>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutGap="15px">
+      <mat-form-field>
+        <input matInput
+               placeholder="Filnavn"
+               i18n-placeholder="@@warcErrorFilenamePlaceholder"
+               [(ngModel)]="warcError.filename"
+               disabled>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Status"
+               i18n-placeholder="@@warcErrorStatusPlaceholder"
+               [(ngModel)]="warcError.status"
+               disabled>
+      </mat-form-field>
+
+      <mat-toolbar>
+        <span i18n="@@warcErrorMessagesToolbarText">Beskjeder</span>
+        <span class="fill-space"></span>
+      </mat-toolbar>
+      <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="text">
+          <mat-header-cell *matHeaderCellDef
+                           class="validator-message-table__text-column"
+                           i18n="@@warcErrorTextHeaderCell">Tekst
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"
+                    class="validator-message-table__text-column">{{row.text}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="severity">
+          <mat-header-cell *matHeaderCellDef
+                           class="validator-message-table__severity-column"
+                           i18n="@@warcErrorSeverityHeaderCell">Alvorlighetsgrad
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"
+                    class="validator-message-table__severity-column">{{row.severity}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="subMessage">
+          <mat-header-cell *matHeaderCellDef
+                           i18n="@@warcErrorSubMessageHeaderCell">Info
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.subMessage}}</mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns">
+        </mat-row>
+      </mat-table>
+
+      <mat-toolbar>
+        <span i18n="@@@@warcErrorNonCompliantWarcIdToolbarText">Ikke-kompatibel WARC ID</span>
+        <span class="fill-space"></span>
+      </mat-toolbar>
+      <ul>
+        <li *ngFor="let id of warcError.nonCompliantWarcId">
+          {{id}}
+        </li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -107,6 +107,12 @@
           <mat-icon class="sidenav--icon__margin">person</mat-icon>
           <ng-container i18n="@@navigationSidebarRolemapping">Brukere</ng-container>
         </a>
+        <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/validator']"
+           [routerLinkActiveOptions]="{ exact: true}"
+           [routerLinkActive]="['is-active']">
+          <mat-icon class="sidenav--icon__margin">info_outline</mat-icon>
+          <ng-container i18n="@@navigationSidebarRolemapping">WARC status</ng-container>
+        </a>
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>

@@ -16,6 +16,7 @@ import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
 import {RoleMappingPageComponent} from './configurations/rolemapping';
 import {GuardService} from './auth/guard.service';
 import {Role} from './commons/models/config.model';
+import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
 
 
 const routes: Routes = [
@@ -117,6 +118,14 @@ const routes: Routes = [
         canActivate: [GuardService],
         data: {
           roles: [Role.ADMIN],
+        },
+      },
+      {
+        path: 'validator',
+        component: WarcStatusPageComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.CURATOR, Role.ADMIN],
         },
       },
     ]
