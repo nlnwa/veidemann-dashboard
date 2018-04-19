@@ -88,6 +88,45 @@ export class CrawljobDetailsComponent implements OnChanges {
     return this.form.get('crawl_config_id');
   }
 
+  getScheduleName(id): string {
+    for (let i = 0; i < this.schedules.length; i++) {
+      if (id === this.schedules[i].id) {
+        return this.schedules[i].itemName;
+      }
+    }
+  }
+
+  getCrawlConfigName(id): string {
+    for (let i = 0; i < this.crawlConfigs.length; i++) {
+      if (id === this.crawlConfigs[i].id) {
+        return this.crawlConfigs[i].itemName;
+      }
+    }
+  }
+
+  get showSchedule(): boolean {
+    const schedule = this.scheduleId.value;
+    if (schedule != null && schedule !== '') {
+      return true;
+    }
+    return false;
+  }
+
+  get showCrawlConfig(): boolean {
+    const crawlconfig = this.crawlConfigId.value;
+    if (crawlconfig != null && crawlconfig !== '') {
+      return true;
+    }
+    return false;
+  }
+
+  get showShortcuts(): boolean {
+    if (this.showSchedule || this.showCrawlConfig) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.crawlJob && !changes.crawlJob.currentValue) {
       this.form.reset();
@@ -118,7 +157,8 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   onUpdate(): void {
     this.update.emit(this.prepareSave());
-  };
+  }
+  ;
 
   onDelete(): void {
     this.delete.emit(this.crawlJob);
@@ -161,7 +201,8 @@ export class CrawljobDetailsComponent implements OnChanges {
     if (!this.canEdit) {
       this.form.disable();
     }
-  };
+  }
+  ;
 
   private prepareSave(): CrawlJob {
     const formModel = this.form.value;

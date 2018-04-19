@@ -9,6 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import {ScheduleService} from './schedule.service';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/startWith';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -54,7 +55,8 @@ export class SchedulePageComponent implements AfterViewInit {
 
   constructor(private scheduleService: ScheduleService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
 
   }
 
@@ -76,6 +78,13 @@ export class SchedulePageComponent implements AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.scheduleService.get(id)
+        .subscribe(schedule => {
+          this.schedule = schedule
+        });
+    }
   }
 
   onCreateSchedule(): void {

@@ -64,7 +64,23 @@ const routes: Routes = [
         },
       },
       {
+        path: 'schedule/:id',
+        component: SchedulePageComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
         path: 'crawlconfig',
+        component: CrawlConfigPageComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
+        path: 'crawlconfig/:id',
         component: CrawlConfigPageComponent,
         canActivate: [GuardService],
         data: {

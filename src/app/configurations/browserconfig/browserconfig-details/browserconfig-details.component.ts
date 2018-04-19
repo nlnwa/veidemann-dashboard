@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, BrowserScript, Label, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
-import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-browserconfig-details',
@@ -26,7 +25,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   form: FormGroup;
   browserScriptList: any[];
 
-  constructor(private fb: FormBuilder, private roleService: RoleService, private router: Router) {
+  constructor(private fb: FormBuilder, private roleService: RoleService) {
     this.createForm();
   }
 
@@ -116,7 +115,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       if (id === this.browserScriptList[i].id) {
         return this.browserScriptList[i].itemName;
       }
-
     }
   }
 

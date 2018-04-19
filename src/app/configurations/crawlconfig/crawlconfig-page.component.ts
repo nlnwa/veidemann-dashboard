@@ -10,6 +10,7 @@ import {CrawlConfigService} from './crawlconfig.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {BrowserConfigService} from '../browserconfig/browserconfig.service';
 import {PolitenessConfigService} from '../politenessconfig/politenessconfig.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -57,7 +58,8 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
               private politenessConfigService: PolitenessConfigService,
               private browserConfigService: BrowserConfigService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
 
   }
 
@@ -91,6 +93,13 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.crawlConfigService.get(id)
+        .subscribe(crawlConfig => {
+          this.crawlConfig = crawlConfig
+        });
+    }
   }
 
   onCreateCrawlConfig(): void {
