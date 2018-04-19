@@ -56,6 +56,14 @@ const routes: Routes = [
         },
       },
       {
+        path: 'crawljobs/:id',
+        component: CrawlJobsComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
         path: 'schedule',
         component: SchedulePageComponent,
         canActivate: [GuardService],

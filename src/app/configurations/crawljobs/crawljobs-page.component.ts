@@ -10,6 +10,7 @@ import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -57,7 +58,8 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
               private crawlConfigService: CrawlConfigService,
               private scheduleService: ScheduleService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
 
   }
 
@@ -91,6 +93,13 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.crawlJobService.get(id)
+        .subscribe(crawlJob => {
+          this.crawlJob = crawlJob
+        });
+    }
   }
 
   onCreateCrawlJob(): void {

@@ -38,6 +38,18 @@ export class SeedDetailComponent implements OnChanges {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
+  get crawlJobId() {
+    return this.form.get('job_id');
+  }
+
+  get showShortcuts(): boolean {
+    const crawljob = this.crawlJobId.value;
+    if (crawljob.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.seed) {
       if (!changes.seed.currentValue) {
@@ -53,6 +65,14 @@ export class SeedDetailComponent implements OnChanges {
     }
     if (this.seed && this.crawlJobList) {
       this.updateForm();
+    }
+  }
+
+  getCrawlJobName(id): string {
+    for (let i = 0; i < this.crawlJobList.length; i++) {
+      if (id === this.crawlJobList[i].id) {
+        return this.crawlJobList[i].itemName;
+      }
     }
   }
 
