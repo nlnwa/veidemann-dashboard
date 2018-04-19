@@ -11,7 +11,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/startWith';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-schedule',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

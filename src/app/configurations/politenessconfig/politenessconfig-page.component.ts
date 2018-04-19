@@ -11,7 +11,7 @@ import {PolitenessConfigListComponent} from './politenessconfig-list/politenessc
 import {PolitenessConfigService} from './politenessconfig.service';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-politenessconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

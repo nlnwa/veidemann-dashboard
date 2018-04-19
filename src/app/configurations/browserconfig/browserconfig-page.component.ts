@@ -12,7 +12,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-browserconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
