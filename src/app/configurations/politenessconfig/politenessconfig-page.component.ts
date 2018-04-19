@@ -9,6 +9,7 @@ import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {PolitenessConfigListComponent} from './politenessconfig-list/politenessconfig-list.component';
 import {PolitenessConfigService} from './politenessconfig.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -53,7 +54,8 @@ export class PolitenessConfigPageComponent implements OnInit, AfterViewInit {
 
   constructor(private politenessConfigService: PolitenessConfigService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
 
   }
 
@@ -82,6 +84,13 @@ export class PolitenessConfigPageComponent implements OnInit, AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.politenessConfigService.get(id)
+        .subscribe(politenessConfig => {
+          this.politenessConfig = politenessConfig
+        });
+    }
   }
 
   onCreatePolitenessConfig(): void {

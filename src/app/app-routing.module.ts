@@ -104,6 +104,14 @@ const routes: Routes = [
         },
       },
       {
+        path: 'browserconfig/:id',
+        component: BrowserConfigPageComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
         path: 'browserscript',
         component: BrowserScriptPageComponent,
         canActivate: [GuardService],
@@ -121,6 +129,14 @@ const routes: Routes = [
       },
       {
         path: 'politenessconfig',
+        component: PolitenessConfigPageComponent,
+        canActivate: [GuardService],
+        data: {
+          roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+        },
+      },
+      {
+        path: 'politenessconfig/:id',
         component: PolitenessConfigPageComponent,
         canActivate: [GuardService],
         data: {

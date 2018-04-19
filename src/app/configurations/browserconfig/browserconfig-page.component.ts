@@ -10,6 +10,7 @@ import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -56,7 +57,8 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
   constructor(private browserConfigService: BrowserConfigService,
               private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
 
   }
 
@@ -90,6 +92,13 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.browserConfigService.get(id)
+        .subscribe(browserConfig => {
+          this.browserConfig = browserConfig
+        });
+    }
   }
 
   onCreateBrowserConfig(): void {
