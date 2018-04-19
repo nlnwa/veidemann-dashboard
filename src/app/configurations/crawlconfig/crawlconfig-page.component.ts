@@ -12,7 +12,7 @@ import {BrowserConfigService} from '../browserconfig/browserconfig.service';
 import {PolitenessConfigService} from '../politenessconfig/politenessconfig.service';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-crawlconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

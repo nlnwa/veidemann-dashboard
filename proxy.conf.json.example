@@ -1,12 +1,22 @@
 {
-  "/api": {
-    "target": {
-      "host": "veidemann.local",
-      "protocol": "https:",
-      "port": 443
-    },
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "info"
-  }
+ "/api": {
+   "target": {
+     "host": "veidemann.local",
+     "protocol": "https:",
+     "port": 443
+   },
+   "secure": false,
+   "changeOrigin": true,
+   "logLevel": "info"
+ },
+ "/validator/api": {
+   "target": {
+     "host": "veidemann.local",
+     "protocol": "https:",
+     "port": 443
+   },
+   "secure": false,
+   "changeOrigin": true,
+   "logLevel": "info"
+ }
 }

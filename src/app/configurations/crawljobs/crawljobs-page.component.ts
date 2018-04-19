@@ -12,7 +12,7 @@ import {ScheduleService} from '../schedule/schedule.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-crawljobs',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

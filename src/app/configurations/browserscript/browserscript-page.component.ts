@@ -11,7 +11,7 @@ import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-browserscript',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
