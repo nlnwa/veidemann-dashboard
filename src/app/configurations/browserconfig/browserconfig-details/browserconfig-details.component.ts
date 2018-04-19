@@ -77,6 +77,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     return this.form.get('script_id');
   }
 
+  get showShortcuts(): boolean {
+    const script = this.script_id.value;
+    if (script.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.browserConfig && !changes.browserConfig.currentValue) {
       this.form.reset();

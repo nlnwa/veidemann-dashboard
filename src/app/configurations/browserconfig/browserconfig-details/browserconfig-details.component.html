@@ -81,7 +81,7 @@
 
         <app-labels kind="Script Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
 
-        <ng-container *ngIf="script_id.value!=''">
+        <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>

@@ -93,8 +93,8 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
-    if (this.route.snapshot.paramMap.get('id') != null) {
-      const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
       this.crawlConfigService.get(id)
         .subscribe(crawlConfig => {
           this.crawlConfig = crawlConfig

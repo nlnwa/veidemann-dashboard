@@ -79,8 +79,8 @@ export class BrowserScriptPageComponent implements AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
-    if (this.route.snapshot.paramMap.get('id') != null) {
-      const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
       this.browserScriptService.get(id)
         .subscribe(response => {
           this.browserScript = response;
