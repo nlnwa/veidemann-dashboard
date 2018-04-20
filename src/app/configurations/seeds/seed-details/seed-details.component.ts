@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {CrawlJob, Meta, Seed} from '../../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
@@ -8,7 +8,8 @@ import {RoleService} from '../../../auth/role.service';
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
-  styleUrls: ['./seed-details.component.css']
+  styleUrls: ['./seed-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeedDetailComponent implements OnChanges {
 
@@ -56,7 +57,7 @@ export class SeedDetailComponent implements OnChanges {
         this.form.reset();
       }
     }
-    if (changes.crawlJobs && this.crawlJobs) {
+    if (changes.crawlJobs && changes.crawlJobs.currentValue) {
       this.crawlJobList = this.crawlJobs.map((crawlJob) =>
         ({
           id: crawlJob.id,
