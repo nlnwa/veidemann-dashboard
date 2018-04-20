@@ -10,7 +10,8 @@ import {CrawlConfigService} from './crawlconfig.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {BrowserConfigService} from '../browserconfig/browserconfig.service';
 import {PolitenessConfigService} from '../politenessconfig/politenessconfig.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CrawlConfigListComponent} from './crawlconfig-list/crawlconfig-list.component';
 
 @Component({
   selector: 'app-search',
@@ -48,6 +49,7 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
   pageOptions = [5, 10];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(CrawlConfigListComponent) list: CrawlConfigListComponent;
 
   crawlConfig: CrawlConfig;
   browserConfigs: BrowserConfig[];
@@ -59,7 +61,8 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
               private browserConfigService: BrowserConfigService,
               private snackBarService: SnackBarService,
               private database: ListDatabase,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
 
   }
 
@@ -92,14 +95,14 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
       })
       .subscribe((items) => {
         this.database.items = items;
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (!id && items.length > 0) {
+          this.list.onRowClick(items[0]);
+        } else {
+          this.crawlConfig = this.database.get(id);
+        }
       });
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id != null) {
-      this.crawlConfigService.get(id)
-        .subscribe(crawlConfig => {
-          this.crawlConfig = crawlConfig
-        });
-    }
   }
 
   onCreateCrawlConfig(): void {
@@ -107,6 +110,7 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
   }
 
   onSelectCrawlConfig(crawlConfig: CrawlConfig) {
+    this.router.navigate(['crawlconfig', crawlConfig.id]);
     this.crawlConfig = crawlConfig;
   }
 
