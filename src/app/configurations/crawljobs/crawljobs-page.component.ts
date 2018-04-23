@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CrawlJobListComponent} from './crawljob-list/crawljob-list.component';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-crawljobs',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

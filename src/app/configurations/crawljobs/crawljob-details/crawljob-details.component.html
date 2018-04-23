@@ -27,26 +27,27 @@
         <ng-container formGroupName="limits">
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                   matInput formControlName="depth" type="number" placeholder="Dybde">
+                   matInput formControlName="depth" type="text" placeholder="Dybde">
             <mat-error i18n="@@crawljobFormDepthRequiredError"
                        *ngIf="!depth.valid">
-              Dybde er påkrevd
+              Ikke en gyldig dybde
             </mat-error>
           </mat-form-field>
+
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                   matInput formControlName="max_duration_s" type="number" placeholder="Maks tid">
+                   matInput formControlName="max_duration_s" type="text" placeholder="Maks tid">
             <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
                        *ngIf="!maxDurationSeconds.valid">
-              Maks tid er påkrevd.
+              Ikke en gyldig maks tid.
             </mat-error>
           </mat-form-field>
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                   matInput formControlName="max_bytes" type="number" placeholder="Maks bytes">
+                   matInput formControlName="max_bytes" type="text" placeholder="Maks bytes">
             <mat-error i18n="@@crawljobFormMaxByteRequiredError"
                        *ngIf="!maxBytes.valid">
-              Maks byte er påkrevd.
+              ikke en gyldig maks byte.
             </mat-error>
           </mat-form-field>
         </ng-container>

@@ -31,6 +31,10 @@ import {BrowserConfigDetailsComponent, BrowserConfigListComponent, BrowserConfig
 import {SeedDetailComponent, SeedListComponent, SeedService} from './seeds';
 import {RoleMappingDetailsComponent, RoleMappingListComponent, RoleMappingPageComponent, RoleMappingService} from './rolemapping';
 import {BrowserScriptDirective} from './browserscript/browserscript-details/browserscript.directive';
+import {WarcStatusListComponent} from './warcstatus/warcstatus-list/warcstatus-list.component';
+import {WarcStatusDetailsComponent} from './warcstatus/warcstatus-details/warcstatus-details.component';
+import {WarcStatusPageComponent} from './warcstatus/warcstatus-page.component';
+import {WarcStatusService} from './warcstatus/warcstatus.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +71,9 @@ import {BrowserScriptDirective} from './browserscript/browserscript-details/brow
     RoleMappingPageComponent,
     SeedListComponent,
     EntityListComponent,
+    WarcStatusListComponent,
+    WarcStatusDetailsComponent,
+    WarcStatusPageComponent
   ],
   imports: [
     CommonsModule,
@@ -82,6 +89,7 @@ import {BrowserScriptDirective} from './browserscript/browserscript-details/brow
     PolitenessConfigPageComponent,
     LoglevelComponent,
     RoleMappingPageComponent,
+    WarcStatusPageComponent,
   ],
 })
 export class ConfigurationsModule {
@@ -101,6 +109,7 @@ export class ConfigurationsModule {
         BrowserScriptService,
         LogService,
         RoleMappingService,
+        WarcStatusService,
       ],
     };
   }

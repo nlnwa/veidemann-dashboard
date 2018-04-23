@@ -18,6 +18,8 @@ import {GuardService} from './auth/guard.service';
 import {Role} from './commons/models/config.model';
 import {EntityDetailsComponent} from './configurations/entities/entity-details/entity-details.component';
 import {SeedDetailComponent} from './configurations/seeds/seed-details/seed-details.component';
+import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
+
 
 
 const routes: Routes = [
@@ -164,6 +166,14 @@ const routes: Routes = [
     canActivate: [GuardService],
     data: {
       roles: [Role.ADMIN],
+    },
+  },
+  {
+    path: 'validator',
+    component: WarcStatusPageComponent,
+    canActivate: [GuardService],
+    data: {
+      roles: [Role.CURATOR, Role.ADMIN],
     },
   },
 ];

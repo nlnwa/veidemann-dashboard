@@ -20,9 +20,9 @@
                  i18n-placeholder="@@seedFormIdPlaceholder">
         </mat-form-field>
         <mat-form-field>
-        <input matInput formControlName="entity_id"
-               placeholder="Entitetens Id"
-               i18n-placeholder="@@metaEntityIdIputPlaceholder">
+          <input matInput formControlName="entity_id"
+                 placeholder="Entitetens Id"
+                 i18n-placeholder="@@metaEntityIdIputPlaceholder">
         </mat-form-field>
       </div>
 
@@ -33,10 +33,13 @@
                  placeholder="Surt prefiks"
                  i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
         </mat-form-field>
-        <mat-select placeholder="Velg jobb" formControlName="job_id" multiple
-                    i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
-          <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
-        </mat-select>
+        
+       <mat-form-field>
+          <mat-select placeholder="Jobb" formControlName="job_id" multiple
+                      i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
+            <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>

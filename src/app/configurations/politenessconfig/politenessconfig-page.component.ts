@@ -12,7 +12,7 @@ import {PolitenessConfigService} from './politenessconfig.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-politenessconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

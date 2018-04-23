@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CrawlConfigListComponent} from './crawlconfig-list/crawlconfig-list.component';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-crawlconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

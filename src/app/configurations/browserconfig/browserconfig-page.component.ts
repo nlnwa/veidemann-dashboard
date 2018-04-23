@@ -13,7 +13,7 @@ import 'rxjs/add/observable/merge';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-browserconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

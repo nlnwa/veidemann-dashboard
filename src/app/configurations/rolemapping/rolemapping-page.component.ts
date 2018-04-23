@@ -11,7 +11,7 @@ import {RoleMappingListComponent} from './rolemapping-list/rolemapping-list.comp
 import {RoleMappingService} from './rolemapping.service';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-rolemapping',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

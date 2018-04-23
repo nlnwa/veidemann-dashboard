@@ -11,7 +11,7 @@ import {CrawlHostGroupConfig} from '../../commons/models/config.model';
 import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-crawlhostgroupconfig',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

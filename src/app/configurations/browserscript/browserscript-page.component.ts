@@ -12,7 +12,7 @@ import {Subject} from 'rxjs/Subject';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-browserscript',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/startWith';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-schedule',
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
