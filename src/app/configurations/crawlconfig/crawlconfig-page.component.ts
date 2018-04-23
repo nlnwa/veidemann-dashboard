@@ -73,7 +73,9 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
 
     this.politenessConfigService.list()
       .map(reply => reply.value)
-      .subscribe((politenessConfigs) => this.politenessConfigs = politenessConfigs);
+      .subscribe((politenessConfigs) => {
+        this.politenessConfigs = politenessConfigs;
+      });
   }
 
   ngAfterViewInit() {
@@ -99,7 +101,7 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
         const id = this.route.snapshot.paramMap.get('id');
         if (!id && items.length > 0) {
           this.list.onRowClick(items[0]);
-        } else {
+        } else if (id) {
           this.crawlConfig = this.database.get(id);
         }
       });

@@ -85,7 +85,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return false;
   }
 
-  getPolitenessConfigName(id): string{
+  getPolitenessConfigName(id): string {
     for (let i = 0; i < this.politenessConfigList.length; i++) {
       if (id === this.politenessConfigList[i].id) {
         return this.politenessConfigList[i].itemName;
@@ -93,7 +93,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     }
   }
 
-  getBrowserConfigName(id): string{
+  getBrowserConfigName(id): string {
     for (let i = 0; i < this.browserConfigList.length; i++) {
       if (id === this.browserConfigList[i].id) {
         return this.browserConfigList[i].itemName;
@@ -102,19 +102,18 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+
     if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
       this.form.reset();
       return;
     }
-    if (changes.browserConfigs) {
-      if (this.browserConfigs) {
-        this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
-          id: browserConfig.id,
-          itemName: browserConfig.meta.name,
-        }));
-      }
+    if (changes.browserConfigs && changes.browserConfigs.currentValue) {
+      this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
+        id: browserConfig.id,
+        itemName: browserConfig.meta.name,
+      }));
     }
-    if (changes.politenessConfigs) {
+    if (changes.politenessConfigs && changes.politenessConfigs.currentValue) {
       this.politenessConfigList = this.politenessConfigs.map((politenessConfig) => ({
         id: politenessConfig.id,
         itemName: politenessConfig.meta.name,
