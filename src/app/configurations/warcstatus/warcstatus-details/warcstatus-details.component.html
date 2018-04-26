@@ -1,6 +1,6 @@
 <mat-card *ngIf="warcError">
   <mat-card-title>
-    <span i18n="@@warcErrorDetailsHeader">Status</span>
+    <span i18n="@@warcErrorDetailsHeader">Feilmeldinger</span>
   </mat-card-title>
   <mat-card-subtitle>
     <span>Rapport fra Jhove</span>
@@ -21,6 +21,14 @@
                placeholder="Status"
                i18n-placeholder="@@warcErrorStatusPlaceholder"
                [(ngModel)]="warcError.status"
+               disabled>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Opprettet"
+               i18n-placeholder="@@warcErrorTimestampPlaceholder"
+               [(ngModel)]="timestamp"
                disabled>
       </mat-form-field>
 
