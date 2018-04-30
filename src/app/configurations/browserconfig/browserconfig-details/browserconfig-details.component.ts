@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, BrowserScript, Label, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 
-
 @Component({
   selector: 'app-browserconfig-details',
   templateUrl: './browserconfig-details.component.html',
@@ -95,6 +94,18 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     }
   }
 
+  get showShortcuts(): boolean {
+    const script = this.script_id.value;
+    if (script != null && script !== '') {
+      if (script.length != null) {
+        if (script.length > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   onSave() {
     this.save.emit(this.prepareSave());
   }
@@ -109,6 +120,14 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   onRevert() {
     this.updateForm();
+  }
+
+  getScriptName(id): string {
+    for (let i = 0; i < this.browserScriptList.length; i++) {
+      if (id === this.browserScriptList[i].id) {
+        return this.browserScriptList[i].itemName;
+      }
+    }
   }
 
   private createForm() {

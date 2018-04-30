@@ -76,6 +76,33 @@
                    i18n="@@crawljobFormCrawlconfigRequieredError">
           Crawlconfig er påkrevd.
         </mat-error>
+
+        <ng-container *ngIf="showShortcuts">
+          <mat-toolbar>
+            <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
+            <span class="fill-space"></span>
+          </mat-toolbar>
+          <ng-container *ngIf="showSchedule">
+            <mat-form-field>
+              <mat-chip-list placeholder="Schedules">
+                <mat-chip>
+                  <a [routerLink]="['/schedule', scheduleId.value]">
+                    {{getScheduleName(scheduleId.value)}}</a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="showCrawlConfig">
+            <mat-form-field>
+              <mat-chip-list placeholder="Crawlconfigs">
+                <mat-chip>
+                  <a [routerLink]="['/crawlconfig', crawlConfigId.value]">
+                    {{getCrawlConfigName(crawlConfigId.value)}}</a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
       </div>
     </mat-card-content>
 

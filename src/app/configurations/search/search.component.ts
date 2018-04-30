@@ -15,10 +15,11 @@ import {SearchDatabase} from './search-database';
 import {MatPaginator} from '@angular/material';
 import {ListDatabase, ListDataSource} from '../../commons/list';
 import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
-import 'rxjs/add/operator/buffer';
 import {RoleService} from '../../auth/role.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/empty';
+import 'rxjs/add/operator/buffer';
+import {ActivatedRoute, Router} from '@angular/router';
 
 
 @Component({
@@ -53,7 +54,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
               private searchDatabase: SearchDatabase,
               private seedDatabase: ListDatabase,
               private snackBarService: SnackBarService,
-              private roleService: RoleService) {
+              private roleService: RoleService,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   get canEdit(): boolean {
@@ -65,7 +68,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
     if (this.canEdit) {
       this.crawlJobService.list()
         .map(reply => reply.value)
-        .subscribe(crawlJobs => this.crawlJobs = crawlJobs);
+        .subscribe(crawlJobs => {
+          this.crawlJobs = crawlJobs;
+        });
     } else {
       this.crawlJobs = [];
     }
@@ -73,6 +78,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchDatabase.paginator = this.paginator;
+    const id = this.route.snapshot.params['id'];
 
     this.searchTerm
       .do(() => {
@@ -87,7 +93,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
         this.paginator.length = items.length;
         this.searchDatabase.data = items;
         if (items.length > 0) {
-          this.entityList.onRowClick(items[0]);
+          if (id) {
+            const index = items.findIndex((item) => item.id === id);
+            if (index >= 0) {
+              this.entityList.onRowClick(items[index])
+            }
+          } else {
+            this.entityList.onRowClick(items[0]);
+          }
         } else if (this.searchTerm.value) {
           this.selectedEntity = new Entity(this.searchTerm.value);
         }
@@ -108,15 +121,23 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSelectEntity(entity: Entity) {
     this.selectedEntity = entity;
     this.selectedSeed = null;
-    let isFirstHit = true;
     this.seedService.search({entity_id: entity.id})
       .map(reply => reply.value || [])
-      .do(() => isFirstHit = true)
       .subscribe(seeds => {
         this.seedDatabase.items = seeds;
-        if (isFirstHit && seeds.length) {
-          this.seedList.onRowClick(seeds[0]);
-          isFirstHit = false;
+
+        if (seeds.length) {
+          let seedId = this.route.snapshot.params['seedId'];
+          const index = seeds.findIndex((item) => item.id === seedId);
+          if (index >= 0) {
+            this.seedList.onRowClick(seeds[index])
+          } else {
+            seedId = seeds[0].id
+            this.seedList.onRowClick(seeds[0]);
+          }
+          this.router.navigate(['search', {id: entity.id, seedId}]);
+        } else {
+          this.router.navigate(['search', {id: entity.id}]);
         }
       });
   }
@@ -159,6 +180,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   onSelectSeed(seed: Seed) {
     this.selectedSeed = seed;
+    this.router.navigate(['search', {id: this.selectedEntity.id, seedId: seed.id}]);
   }
 
   onCreateSeed(entityId: string) {
@@ -173,7 +195,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSaveSeed(seed: Seed): void {
     this.seedService.create(seed)
       .subscribe((createdSeed) => {
-        this.selectedSeed = createdSeed;
+        this.onSelectSeed(seed);
         this.seedDatabase.add(createdSeed);
         this.snackBarService.openSnackBar('Lagret');
       });

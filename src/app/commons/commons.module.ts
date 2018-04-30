@@ -9,6 +9,7 @@ import {SnackBarService} from './snack-bar/snack-bar.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
 import { MetaComponent } from './meta/meta.component';
+import {RouterModule} from '@angular/router';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { MetaComponent } from './meta/meta.component';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   exports: [
     ToolbarComponent,
@@ -33,6 +35,7 @@ import { MetaComponent } from './meta/meta.component';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
 })
 export class CommonsModule {

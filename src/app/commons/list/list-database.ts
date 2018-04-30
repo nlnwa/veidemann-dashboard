@@ -31,6 +31,11 @@ export class ListDatabase implements Database {
     }
   }
 
+  get(itemId): any {
+    const index = this.items.findIndex((element) => element.id === itemId);
+    return index > -1 ? this.items[index] : null;
+  }
+
   update(item: Item) {
     if (!this.dataSet.has(item.id)) {
       return;

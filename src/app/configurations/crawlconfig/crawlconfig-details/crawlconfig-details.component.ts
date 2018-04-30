@@ -62,21 +62,58 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return this.form.get('minimum_dns_ttl_s');
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
-        this.form.reset();
-        return;
+  get showPolitenessConfig(): boolean {
+    const politenessConfig = this.politenessId.value;
+    if (politenessConfig != null && politenessConfig !== '') {
+      return true;
     }
-    if (changes.browserConfigs) {
-      if (this.browserConfigs) {
-        this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
-          id: browserConfig.id,
-          itemName: browserConfig.meta.name,
-        }));
+    return false;
+  }
+
+  get showBrowserConfig(): boolean {
+    const browserConfig = this.browserConfigId.value;
+    if (browserConfig != null && browserConfig !== '') {
+      return true;
+    }
+    return false;
+  }
+
+  get showShortcuts(): boolean {
+    if (this.showPolitenessConfig || this.showBrowserConfig) {
+      return true;
+    }
+    return false;
+  }
+
+  getPolitenessConfigName(id): string {
+    for (let i = 0; i < this.politenessConfigList.length; i++) {
+      if (id === this.politenessConfigList[i].id) {
+        return this.politenessConfigList[i].itemName;
       }
     }
-    if (changes.politenessConfigs) {
+  }
+
+  getBrowserConfigName(id): string {
+    for (let i = 0; i < this.browserConfigList.length; i++) {
+      if (id === this.browserConfigList[i].id) {
+        return this.browserConfigList[i].itemName;
+      }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
+      this.form.reset();
+      return;
+    }
+    if (changes.browserConfigs && changes.browserConfigs.currentValue) {
+      this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
+        id: browserConfig.id,
+        itemName: browserConfig.meta.name,
+      }));
+    }
+    if (changes.politenessConfigs && changes.politenessConfigs.currentValue) {
       this.politenessConfigList = this.politenessConfigs.map((politenessConfig) => ({
         id: politenessConfig.id,
         itemName: politenessConfig.meta.name,

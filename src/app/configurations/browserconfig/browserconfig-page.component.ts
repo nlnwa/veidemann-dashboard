@@ -10,6 +10,7 @@ import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-browserconfig',
@@ -56,7 +57,9 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
   constructor(private browserConfigService: BrowserConfigService,
               private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute,
+              private router: Router) {
 
   }
 
@@ -89,6 +92,13 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
       })
       .subscribe((items) => {
         this.database.items = items;
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (!id && items.length > 0) {
+          this.list.onRowClick(items[0]);
+        } else {
+          this.browserConfig = this.database.get(id);
+        }
       });
   }
 
@@ -97,6 +107,7 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
   }
 
   onSelectBrowserConfig(browserConfig: BrowserConfig) {
+    this.router.navigate(['browserconfig', browserConfig.id]);
     this.browserConfig = browserConfig;
   }
 

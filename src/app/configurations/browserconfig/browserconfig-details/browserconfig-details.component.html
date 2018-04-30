@@ -70,7 +70,8 @@
         <mat-form-field>
           <mat-select placeholder="Velg browser script" formControlName="script_id" multiple
                       i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
-            <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}</mat-option>
+            <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-error *ngIf="!script_id.valid  && !form.disabled"
@@ -79,9 +80,24 @@
         </mat-error>
 
         <app-labels kind="Script Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
-      </div>
 
+        <ng-container *ngIf="showShortcuts">
+          <mat-toolbar>
+            <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
+            <span class="fill-space"></span>
+          </mat-toolbar>
+          <mat-form-field>
+            <mat-chip-list placeholder="Valgte script">
+              <mat-chip *ngFor="let script of script_id.value" >
+                <a [routerLink]="['/browserscript', script]">
+                {{getScriptName(script)}}</a>
+              </mat-chip>
+            </mat-chip-list>
+          </mat-form-field>
+        </ng-container>
+      </div>
     </mat-card-content>
+
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!canSave"

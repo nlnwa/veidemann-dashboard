@@ -9,6 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import {Subject} from 'rxjs/Subject';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-browserscript',
@@ -47,14 +48,15 @@ export class BrowserScriptPageComponent implements AfterViewInit {
   pageOptions = [5, 10];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(BrowserScriptListComponent) list: BrowserScriptListComponent
+  @ViewChild(BrowserScriptListComponent) list: BrowserScriptListComponent;
 
   browserScript: BrowserScript;
   changes: Subject<void> = new Subject<void>();
 
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase) {
+              private database: ListDatabase,
+              private route: ActivatedRoute) {
   }
 
   ngAfterViewInit() {
@@ -77,6 +79,13 @@ export class BrowserScriptPageComponent implements AfterViewInit {
       .subscribe((items) => {
         this.database.items = items;
       });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.browserScriptService.get(id)
+        .subscribe(response => {
+          this.browserScript = response;
+        })
+    }
   }
 
   onCreateBrowserScript(): void {

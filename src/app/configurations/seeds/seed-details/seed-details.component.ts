@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {CrawlJob, Meta, Seed} from '../../../commons/models/config.model';
 import 'rxjs/add/operator/concat';
@@ -8,7 +8,8 @@ import {RoleService} from '../../../auth/role.service';
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
-  styleUrls: ['./seed-details.component.css']
+  styleUrls: ['./seed-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeedDetailComponent implements OnChanges {
 
@@ -38,13 +39,25 @@ export class SeedDetailComponent implements OnChanges {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
+  get crawlJobId() {
+    return this.form.get('job_id');
+  }
+
+  get showShortcuts(): boolean {
+    const crawljob = this.crawlJobId.value;
+    if (crawljob.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.seed) {
       if (!changes.seed.currentValue) {
         this.form.reset();
       }
     }
-    if (changes.crawlJobs && this.crawlJobs) {
+    if (changes.crawlJobs && changes.crawlJobs.currentValue) {
       this.crawlJobList = this.crawlJobs.map((crawlJob) =>
         ({
           id: crawlJob.id,
@@ -53,6 +66,14 @@ export class SeedDetailComponent implements OnChanges {
     }
     if (this.seed && this.crawlJobList) {
       this.updateForm();
+    }
+  }
+
+  getCrawlJobName(id): string {
+    for (let i = 0; i < this.crawlJobList.length; i++) {
+      if (id === this.crawlJobList[i].id) {
+        return this.crawlJobList[i].itemName;
+      }
     }
   }
 
