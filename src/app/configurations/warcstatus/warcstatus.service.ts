@@ -10,8 +10,16 @@ export class WarcStatusService {
   constructor(private http: HttpClient) {
   }
 
-  getValidationErrors(): Observable <any[]> {
+  getValidationErrors(): Observable<any[]> {
     return this.http.get<any[]>(this.URL);
+  }
+
+  getNumberOfInvalidWarcs(): Observable<any> {
+    return this.http.get<any>(this.URL + '/invalid/');
+  }
+
+  getNumberOfValidWarcs(): Observable<any> {
+    return this.http.get<any>(this.URL + '/valid/');
   }
 
 }

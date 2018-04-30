@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
+import {DateTime} from '../../../commons/datetime/datetime';
 
 @Component({
   selector: 'app-warcstatus-details',
@@ -10,9 +11,12 @@ export class WarcStatusDetailsComponent implements OnChanges {
 
   dataSource = new MatTableDataSource();
   displayedColumns = ['text', 'severity', 'subMessage'];
+  timestamp;
 
   @Input()
   warcError: any;
+
+
 
   constructor() {
   }
@@ -20,6 +24,7 @@ export class WarcStatusDetailsComponent implements OnChanges {
   ngOnChanges() {
     if (this.warcError) {
       this.dataSource.data = this.warcError.messages;
+      this.timestamp = DateTime.formatTimestamp(this.warcError.timestamp);
     }
   }
 }
