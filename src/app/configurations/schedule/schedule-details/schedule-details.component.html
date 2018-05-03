@@ -55,37 +55,17 @@
           </mat-error>
         </fieldset>
 
-        <fieldset formGroupName="valid_from">
-          <legend i18n="@@scheduleFormValidFromHeader">Gyldig fra</legend>
-          <mat-form-field>
-            <input matInput formControlName="year" placeholder="År" type="number"
-                   i18n-placeholder="@@scheduleFormValidFromYearPlaceholder">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="month" placeholder="Måned" type="number"
-                   i18n-placeholder="@@scheduleFormValidFromMonthPlaceholder">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="day" placeholder="Dag" type="number"
-                   i18n-placeholder="@@scheduleFormValidFromDayPlaceholder">
-          </mat-form-field>
-        </fieldset>
+        <mat-form-field>
+          <input matInput [matDatepicker]="validFromDatepicker" formControlName="valid_from" placeholder="Gyldig fra">
+          <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #validFromDatepicker></mat-datepicker>
+        </mat-form-field>
 
-        <fieldset formGroupName="valid_to">
-          <legend i18n="@@scheduleFormValidToHeader">Gyldig til</legend>
-          <mat-form-field>
-            <input matInput formControlName="year" placeholder="År" type="number"
-                   i18n-placeholder="@@scheduleFormValidToYearPlaceholder">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="month" placeholder="Måned" type="number"
-                   i18n-placeholder="@@scheduleFormValidToMonthPlaceholder">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="day" placeholder="Dag" type="number"
-                   i18n-placeholder="@@scheduleFormValidToDayPlaceholder">
-          </mat-form-field>
-        </fieldset>
+        <mat-form-field>
+          <input matInput [matDatepicker]="validToDatepicker" formControlName="valid_to" placeholder="Gyldig til">
+          <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #validToDatepicker></mat-datepicker>
+        </mat-form-field>
       </div>
 
       <div fxFlex fxLayout="column">

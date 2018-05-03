@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import {Moment} from 'moment';
 
 export class DateTime {
 
@@ -10,56 +11,23 @@ export class DateTime {
     return moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss');
   }
 
-  static fromISOToDateUTC(isoString) {
-    const m = moment.utc(isoString);
-    return {year: m.year(), month: m.month(), day: m.date()};
-  }
+  static dateToUtc(momentObj: Moment, startOfDay: boolean): string {
+    if (momentObj.isValid()) {
+      console.log('MomentObj is Moment', typeof momentObj, startOfDay);
+      const utc = moment.utc()
+        .year(momentObj.get('year'))
+        .month(momentObj.get('month'))
+        .date(momentObj.get('date'))
 
-  static setValidFromSecondsUTC(year, month, day) {
-    if (year && month && day) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .date(day)
-        .startOf('date')
-        .toISOString();
-    } else if (year && month) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .startOf('month')
-        .toISOString();
-    } else if (year) {
-      return moment.utc()
-        .year(year)
-        .startOf('year')
-        .toISOString();
+      if (startOfDay) {
+        console.log(utc.startOf('day').toISOString());
+        return utc.startOf('day').toISOString();
+      } else {
+        console.log(utc.endOf('day').toISOString());
+        return utc.endOf('day').toISOString();
+      }
     } else {
-      return undefined;
-    }
-  }
-
-  static setValidToSecondsUTC(year, month, day) {
-    if (year && month && day) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .date(day).startOf('date')
-        .endOf('date')
-        .toISOString();
-    } else if (year && month) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .endOf('month')
-        .toISOString();
-    } else if (year) {
-      return moment.utc()
-        .year(year)
-        .endOf('year')
-        .toISOString();
-    } else {
-      return undefined;
+      return '';
     }
   }
 }
