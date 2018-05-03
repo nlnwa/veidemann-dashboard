@@ -13,31 +13,24 @@ export class RoleService {
   constructor(private http: HttpClient) {
   }
 
-  public resetRoles() {
-    this.fetchRoles();
+  async fetchRoles() {
+    this.roles = await this.http.get<RoleList>(this.URL).toPromise()
+      .then(res => res.role.map(role => Role[role]));
   }
 
-  public fetchRoles() {
-    this.http.get<RoleList>(this.URL)
-      .map(res => res.role.map(role => Role[role]))
-      .subscribe(roles => {
-        this.roles = roles;
-      });
-  }
-
-  public getRoles(): Role[] {
+  getRoles(): Role[] {
     return this.roles;
   }
 
-  public isAdmin(): boolean {
+  isAdmin(): boolean {
     return this.isRole(Role.ADMIN);
   }
 
-  public isCurator(): boolean {
+  isCurator(): boolean {
     return this.isRole(Role.CURATOR);
   }
 
-  public isReadonly(): boolean {
+  isReadonly(): boolean {
     return this.isRole(Role.READONLY);
   }
 

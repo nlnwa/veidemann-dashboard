@@ -7,14 +7,14 @@ export class AuthConfig {
   clientId: string;
   scope: string;
 
-  constructor(auth: AuthConfig = {} as AuthConfig) {
+  constructor(authConfig: AuthConfig = {} as AuthConfig) {
     const {
-      issuer = environment.auth.issuer,
-      requireHttps = environment.auth.requireHttps,
-      redirectUri = environment.auth.redirectUri,
-      clientId = environment.auth.clientId,
-      scope = environment.auth.scope,
-    } = auth;
+      issuer = environment.authConfig.issuer,
+      requireHttps = environment.authConfig.requireHttps,
+      redirectUri = environment.authConfig.redirectUri,
+      clientId = environment.authConfig.clientId,
+      scope = environment.authConfig.scope,
+    } = authConfig;
     this.issuer = issuer;
     this.requireHttps = requireHttps;
     this.redirectUri = redirectUri;
@@ -24,18 +24,18 @@ export class AuthConfig {
 }
 
 export class Environment {
-  auth: AuthConfig;
+  authConfig: AuthConfig;
   apiGateway: string;
 
   constructor(env: Environment = {} as Environment) {
-    if (env.hasOwnProperty('auth')) {
-      env.auth = new AuthConfig(env.auth);
+    if (env.hasOwnProperty('authConfig')) {
+      env.authConfig = new AuthConfig(env.authConfig);
     }
     const {
-      auth = environment.auth,
+      authConfig = environment.authConfig,
       apiGateway = environment.apiGateway,
     } = env;
-    this.auth = auth;
+    this.authConfig = authConfig;
     this.apiGateway = apiGateway;
   }
 }

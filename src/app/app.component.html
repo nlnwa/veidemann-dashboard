@@ -7,7 +7,7 @@
   <span fxFlex fxFlexFill></span>
   <app-time></app-time>
   <span fxFlex fxFlexFill></span>
-  <span>{{name}}</span>
+  <span></span>
   <a color="primary" mat-raised-button (click)="onLogin()" *ngIf="!name">
     <mat-icon>person</mat-icon>
     <ng-container i18n="@@toolbarLogon">Logg på</ng-container>
@@ -15,7 +15,7 @@
   <a color="primary" mat-raised-button (click)="onLogout()" *ngIf="name"
      [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true}" [routerLinkActive]="['is-active']">
     <mat-icon>person</mat-icon>
-    <ng-container i18n="@@toolbarLogon">Logg av</ng-container>
+    <ng-container i18n="@@toolbarLogon">Logg ut {{name}}</ng-container>
   </a>
 </mat-toolbar>
 

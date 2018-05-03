@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Environment} from './commons/models/environment.model';
 import {environment} from '../environments/environment';
 import {IdpReply} from './commons/models/controller.model';
+import {AuthService} from './auth/auth.service';
 
 @Injectable()
 export class AppConfig {
@@ -17,14 +18,18 @@ export class AppConfig {
   }
 
   private getOpenIdConnectIssuer(): Promise<string> {
-    return this.http.get<IdpReply>(this.environment.apiGateway + '/control/idp').toPromise()
+    return this.http.get<IdpReply>(this.environment.apiGateway + '/control/idp')
+      .toPromise()
       .then(reply => reply.open_id_connect_issuer || '');
   }
 
-  public load(): Promise<any> {
-    return this.http.get<Environment>(environment.config).toPromise()
-      .then(env => this._env = new Environment(env))
-      .then(() => this.getOpenIdConnectIssuer()
-        .then(issuer => this._env.auth.issuer = issuer));
+  async load(authService: AuthService): Promise<any> {
+    const config = await this.http.get<Environment>(environment.config).toPromise();
+
+    this._env = new Environment(config);
+
+    this._env.authConfig.issuer = await this.getOpenIdConnectIssuer();
+
+    await authService.initialize(this._env.authConfig);
   }
 }

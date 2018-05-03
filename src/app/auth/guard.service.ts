@@ -25,5 +25,4 @@ export class GuardService implements CanActivate {
     }
     return Observable.of(false);
   }
-
 }
