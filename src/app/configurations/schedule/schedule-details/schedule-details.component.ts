@@ -79,23 +79,13 @@ export class ScheduleDetailsComponent implements OnChanges {
     return this.form.get('cron_expression');
   }
 
-  get validFrom() {
-    return this.form.get('valid_from').value;
-  }
-
-  get validTo() {
-    return this.form.get('valid_to').value;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.schedule && !changes.schedule.currentValue) {
       this.form.reset();
-      console.log('onchanges' , this.form.value)
       return;
     }
 
     if (this.schedule) {
-      console.log(this.form.value);
       this.updateForm();
     }
   }
@@ -136,8 +126,8 @@ export class ScheduleDetailsComponent implements OnChanges {
     const cronSplit = this.schedule.cron_expression.split(' ');
     this.form.patchValue({
       id: this.schedule.id,
-      valid_from: this.schedule.valid_from,
-      valid_to: this.schedule.valid_to,
+      valid_from: this.schedule.valid_from ? DateTime.adjustTime(this.schedule.valid_from) : '',
+      valid_to: this.schedule.valid_to ? DateTime.adjustTime(this.schedule.valid_to) : '',
       cron_expression: {
         minute: cronSplit[0],
         hour: cronSplit[1],
@@ -147,7 +137,6 @@ export class ScheduleDetailsComponent implements OnChanges {
       },
       meta: this.schedule.meta,
     });
-
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
