@@ -2,10 +2,8 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {CrawlJobService} from './crawljob.service';
 import {MatPaginator} from '@angular/material';
 import {CrawlConfig, CrawlJob, CrawlScheduleConfig} from '../../commons/models/config.model';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import {Subject} from 'rxjs/Subject';
+import {merge, Subject} from 'rxjs';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
@@ -68,31 +66,32 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // Load prerequisites for app-crawljob-detail
-    this.crawlConfigService.list()
-      .map(reply => reply.value)
+
+    this.crawlConfigService.list().pipe(map(reply => reply.value))
       .subscribe(crawlConfigs => this.crawlConfigs = crawlConfigs);
-    this.scheduleService.list()
-      .map(reply => reply.value)
+
+    this.scheduleService.list().pipe(map(reply => reply.value))
       .subscribe(schedules => this.schedules = schedules);
   }
 
   ngAfterViewInit() {
     // When paginator has changes or on save/update/delete
     // we reload data for the list
-    Observable.merge(this.paginator.page, this.changes)
-      .startWith(null)
-      .switchMap(() => {
+    merge(this.paginator.page, this.changes).pipe(
+      startWith(null),
+      switchMap(() => {
         return this.crawlJobService.search({
           page_size: this.paginator.pageSize,
           page: this.paginator.pageIndex
         });
-      })
-      .map((reply) => {
+      }),
+      map((reply) => {
         this.pageLength = parseInt(reply.count, 10);
         this.pageSize = reply.page_size;
         this.pageIndex = reply.page;
         return reply.value;
       })
+    )
       .subscribe((items) => {
         this.database.items = items;
 

@@ -1,9 +1,7 @@
-
-
 export class Meta {
   name: string;
   description: string;
-  created?: string ;
+  created?: string;
   created_by?: string;
   last_modified?: string;
   last_modified_by?: string;
@@ -12,10 +10,10 @@ export class Meta {
   constructor(name = '') {
     this.name = name;
     this.description = '';
-    this.created_by = '';
-    this.created = '';
-    this.last_modified_by = '';
-    this.last_modified = '';
+    //this.created_by = '';
+    //this.created = '';
+    //this.last_modified_by = '';
+    //this.last_modified = '';
     this.label = [];
   }
 }
@@ -193,6 +191,7 @@ export class BrowserScript {
   id: string;
   meta: Meta;
   script: string;
+
   // url_regexp?: string; not implemented
 
   constructor() {

@@ -1,5 +1,5 @@
 import {DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {ListDatabase} from './list-database';
 

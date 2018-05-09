@@ -1,10 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../commons/models/config.model';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import {Subject} from 'rxjs/Subject';
+import {merge, Subject} from 'rxjs';
+import {map, switchMap, startWith} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from './crawlconfig.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
@@ -67,12 +65,10 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.browserConfigService.list()
-      .map(reply => reply.value)
+    this.browserConfigService.list().pipe(map(reply => reply.value))
       .subscribe((browserConfigs) => this.browserConfigs = browserConfigs);
 
-    this.politenessConfigService.list()
-      .map(reply => reply.value)
+    this.politenessConfigService.list().pipe(map(reply => reply.value))
       .subscribe((politenessConfigs) => {
         this.politenessConfigs = politenessConfigs;
       });
@@ -81,20 +77,21 @@ export class CrawlConfigPageComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // When paginator has changes or on save/update/delete
     // we reload data for the list
-    Observable.merge(this.paginator.page, this.changes)
-      .startWith(null)
-      .switchMap(() => {
+    merge(this.paginator.page, this.changes).pipe(
+      startWith(null),
+      switchMap(() => {
         return this.crawlConfigService.search({
           page_size: this.paginator.pageSize,
           page: this.paginator.pageIndex
         });
-      })
-      .map((reply) => {
+      }),
+      map((reply) => {
         this.pageLength = parseInt(reply.count, 10);
         this.pageSize = reply.page_size;
         this.pageIndex = reply.page;
         return reply.value;
       })
+    )
       .subscribe((items) => {
         this.database.items = items;
 

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {CrudService} from '../shared/crud.service';
 import {BrowserConfig} from '../../commons/models/config.model';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class BrowserConfigService extends CrudService<BrowserConfig> {
@@ -15,7 +15,7 @@ export class BrowserConfigService extends CrudService<BrowserConfig> {
   }
 
   getBrowserConfig(): Observable<Object[]> {
-    return Observable.of(
+    return of(
       [
         {
           'id': '1',

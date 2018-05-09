@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {CrawlJob, Meta, Seed} from '../../../commons/models/config.model';
-import 'rxjs/add/operator/concat';
+
 import {RoleService} from '../../../auth/role.service';
 
 
@@ -44,11 +44,8 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    const crawljob = this.crawlJobId.value;
-    if (crawljob.length > 0) {
-      return true;
-    }
-    return false;
+    const crawlJob = this.crawlJobId.value;
+    return crawlJob && crawlJob.length > 0;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,11 +67,8 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   getCrawlJobName(id): string {
-    for (let i = 0; i < this.crawlJobList.length; i++) {
-      if (id === this.crawlJobList[i].id) {
-        return this.crawlJobList[i].itemName;
-      }
-    }
+    const found = this.crawlJobList.find((job) => job.id === id);
+    return found ? found.itemName : '';
   }
 
   onSave(): void {
@@ -105,11 +99,14 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   private updateForm() {
-    this.form.patchValue({
+    if (!this.canEdit) {
+      this.form.disable();
+    }
+    this.form.setValue({
       id: this.seed.id,
       disabled: !this.seed.disabled, // disabled is named active in the view
       entity_id: this.seed.entity_id,
-      job_id: this.seed.job_id,
+      job_id: this.seed.job_id || [],
       scope: {
         surt_prefix: this.seed.scope.surt_prefix,
       },
@@ -117,9 +114,6 @@ export class SeedDetailComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   /**

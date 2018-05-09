@@ -1,7 +1,7 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs';
+
+
 import {ListReply, ListRequest} from '../../commons/models/controller.model';
 
 export abstract class CrudService<T extends ListRequest> {

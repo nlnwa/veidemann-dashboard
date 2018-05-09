@@ -1,11 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Item, ListDatabase} from '../../commons/list';
 import {MatPaginator} from '@angular/material';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {empty} from 'rxjs/observable/empty';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/operator/startWith';
-import {Subscription} from 'rxjs/Subscription';
+import {BehaviorSubject, combineLatest, merge, of, Subscription} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class SearchDatabase extends ListDatabase {
@@ -28,7 +25,9 @@ export class SearchDatabase extends ListDatabase {
     this.updateChangeSubscription();
   }
 
-  get data(): Item[] { return this._data.value; }
+  get data(): Item[] {
+    return this._data.value;
+  }
 
   set data(items: Item[]) {
     if (items.length > 0) {
@@ -52,20 +51,23 @@ export class SearchDatabase extends ListDatabase {
   }
 
   private updateChangeSubscription() {
-    const pageChange = this.pager ? this.pager.page : empty();
+    const pageChange = this.pager ? merge(this.pager.page, this.pager.initialized) : of(null);
 
     if (this.changeSubscription) {
+      console.log('unsubscribe');
       this.changeSubscription.unsubscribe();
     }
 
-    this.changeSubscription = this._data
-      .combineLatest(pageChange.startWith(null), (data, page) => data)
-      .map((data) => this.pageData(data))
+    // this.changeSubscription =
+    combineLatest(this._data, pageChange)
+      .pipe(map(([data]) => this.pageData(data)))
       .subscribe((data) => this.dataChange.next(data));
   }
 
   private pageData(data: Item[]): Item[] {
-    if (!this.pager) { return data; }
+    if (!this.pager) {
+      return data;
+    }
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.slice().splice(startIndex, this.paginator.pageSize);
   }
