@@ -15,7 +15,7 @@ import {
 import {RoleService} from '../../../auth/role.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-schedule-details',
