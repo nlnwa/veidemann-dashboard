@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material';
 import {BrowserConfig, CrawlConfig, PolitenessConfig} from '../../commons/models/config.model';
 import {merge, Subject} from 'rxjs';
-import {map, switchMap, startWith} from 'rxjs/operators';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from './crawlconfig.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';

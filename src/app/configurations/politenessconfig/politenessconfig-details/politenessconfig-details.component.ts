@@ -79,8 +79,8 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.politenessConfig && !changes.politenessConfig.currentValue) {
-        this.form.reset();
-        return;
+      this.form.reset();
+      return;
     }
     if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
       this.robotsPolicyList = changes.robotsPolicies.currentValue;
@@ -149,7 +149,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     if (!this.canEdit) {
       this.form.disable();
     }
-  };
+  }
 
   private prepareSave(): PolitenessConfig {
     const formModel = this.form.value;

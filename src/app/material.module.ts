@@ -10,16 +10,16 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatPaginatorModule,
   MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
   MatSlideToggleModule,
   MatSnackBarModule,
+  MatSortModule,
   MatTableModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatPaginatorModule,
-  MatSortModule,
 } from '@angular/material';
 
 const modules = [
@@ -49,4 +49,5 @@ const modules = [
   imports: modules,
   exports: modules
 })
-export class MaterialModule {}
+export class MaterialModule {
+}

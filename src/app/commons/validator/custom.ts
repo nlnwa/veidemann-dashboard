@@ -16,7 +16,7 @@ export class CustomValidators {
         return null;
       }
       return {'max': true};
-    }
+    };
   }
 
   static min(min: number): ValidatorFn {
@@ -31,7 +31,7 @@ export class CustomValidators {
         return null;
       }
       return {'min': true};
-    }
+    };
   }
 
   static nonEmpty(control: any) {

@@ -160,7 +160,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
           const label = new Label();
           label.key = parts[0];
           label.value = parts[1];
-          return label
+          return label;
         })
         : [],
       meta: this.browserConfig.meta,

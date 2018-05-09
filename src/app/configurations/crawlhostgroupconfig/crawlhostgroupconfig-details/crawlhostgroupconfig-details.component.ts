@@ -34,7 +34,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id
+    return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id;
   }
 
   get canSave(): boolean {
@@ -62,8 +62,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   }
 
-  validRange (from_ip, to_ip): boolean {
-    return CrawlHostGroupConfigIpValidation.isValidRange(from_ip, to_ip)
+  validRange(from_ip, to_ip): boolean {
+    return CrawlHostGroupConfigIpValidation.isValidRange(from_ip, to_ip);
   }
 
   get ipRangeControlArray() {

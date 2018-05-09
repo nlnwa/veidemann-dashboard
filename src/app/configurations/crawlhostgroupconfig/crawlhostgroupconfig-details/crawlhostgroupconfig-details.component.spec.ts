@@ -42,9 +42,9 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
       meta: {
         name: 'Test crawlhostgroupconfig',
         description: 'CrawlHostGroupConfig mock',
-        created: {seconds: '1511964561'},
+        created: '1511964561',
         created_by: 'admin',
-        last_modified: {seconds: '1511964561'},
+        last_modified: '1511964561',
         last_modified_by: 'admin',
         label: [expectedLabel]
       }
@@ -64,7 +64,7 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
   });
 
   it('should have a defined component', () => {
-    expect(component).toBeDefined()
+    expect(component).toBeDefined();
   });
 
   it('should have the correct data from @Input ', () => {

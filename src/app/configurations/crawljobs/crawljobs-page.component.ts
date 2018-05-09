@@ -51,7 +51,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
 
   crawlJob: CrawlJob;
   schedules: CrawlScheduleConfig[];
-  crawlConfigs: CrawlConfig[]
+  crawlConfigs: CrawlConfig[];
   changes: Subject<void> = new Subject<void>();
 
   constructor(private crawlJobService: CrawlJobService,
@@ -97,7 +97,7 @@ export class CrawlJobsComponent implements OnInit, AfterViewInit {
 
         const id = this.route.snapshot.paramMap.get('id');
         if (!id && items.length > 0) {
-          this.list.onRowClick(items[0])
+          this.list.onRowClick(items[0]);
         } else {
           this.crawlJob = this.database.get(id);
         }

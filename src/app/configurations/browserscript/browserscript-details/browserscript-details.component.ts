@@ -85,7 +85,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     if (!this.editable) {
       this.form.disable();
     }
-  };
+  }
 
   private prepareSave(): BrowserScript {
     const formModel = this.form.value;

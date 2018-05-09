@@ -118,7 +118,7 @@ export class BrowserConfigPageComponent implements OnInit, AfterViewInit {
         this.snackBarService.openSnackBar('Lagret');
       });
     this.changes.next();
-  };
+  }
 
   onUpdateBrowserConfig(browserConfig: BrowserConfig) {
     this.browserConfigService.update(browserConfig)

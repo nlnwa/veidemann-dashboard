@@ -1,5 +1,5 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { SnackBarService } from './snack-bar.service';
+import {inject, TestBed} from '@angular/core/testing';
+import {SnackBarService} from './snack-bar.service';
 
 xdescribe('SnackBarService', () => {
   beforeEach(() => {

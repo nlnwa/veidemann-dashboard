@@ -19,4 +19,5 @@ import {DocumentationComponent} from './documentation/documentation.component';
     StatisticsComponent,
   ],
 })
-export class CoreModule {}
+export class CoreModule {
+}

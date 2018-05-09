@@ -87,7 +87,7 @@ export class PolitenessConfigPageComponent implements OnInit, AfterViewInit {
     if (id != null) {
       this.politenessConfigService.get(id)
         .subscribe(politenessConfig => {
-          this.politenessConfig = politenessConfig
+          this.politenessConfig = politenessConfig;
         });
     }
   }

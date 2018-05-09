@@ -17,7 +17,6 @@ export class WarcStatusDetailsComponent implements OnChanges {
   warcError: any;
 
 
-
   constructor() {
   }
 

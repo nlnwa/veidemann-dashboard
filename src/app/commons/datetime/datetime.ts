@@ -7,7 +7,7 @@ export class DateTime {
   }
 
   static formatTimestamp(timestamp) {
-    return moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss' );
+    return moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss');
   }
 
   static fromISOToDateUTC(isoString) {

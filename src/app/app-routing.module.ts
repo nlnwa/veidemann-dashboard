@@ -16,10 +16,7 @@ import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
 import {RoleMappingPageComponent} from './configurations/rolemapping';
 import {GuardService} from './auth/guard.service';
 import {Role} from './commons/models/config.model';
-import {EntityDetailsComponent} from './configurations/entities/entity-details/entity-details.component';
-import {SeedDetailComponent} from './configurations/seeds/seed-details/seed-details.component';
 import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
-
 
 
 const routes: Routes = [

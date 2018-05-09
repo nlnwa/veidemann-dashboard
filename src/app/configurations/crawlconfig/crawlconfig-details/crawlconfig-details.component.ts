@@ -170,7 +170,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    if (!( this.canEdit )) {
+    if (!(this.canEdit)) {
       this.form.disable();
     }
   }

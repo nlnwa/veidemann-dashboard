@@ -48,7 +48,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return this.schedule && !this.schedule.id
+    return this.schedule && !this.schedule.id;
   }
 
   get canSave(): boolean {

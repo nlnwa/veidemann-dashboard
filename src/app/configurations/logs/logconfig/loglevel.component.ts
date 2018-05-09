@@ -39,7 +39,7 @@ export class LoglevelComponent implements OnChanges {
 
   get log_level(): FormArray {
     return this.form.get('log_level') as FormArray;
-  };
+  }
 
   get log_levelArray() {
     return <FormArray>this.form.get('log_level');

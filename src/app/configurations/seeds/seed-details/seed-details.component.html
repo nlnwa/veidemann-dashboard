@@ -33,8 +33,8 @@
                  placeholder="Surt prefiks"
                  i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
         </mat-form-field>
-        
-       <mat-form-field>
+
+        <mat-form-field>
           <mat-select placeholder="Jobb" formControlName="job_id" multiple
                       i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
             <mat-option *ngFor="let job of crawlJobList" [value]="job.id">{{job.itemName}}</mat-option>
@@ -46,14 +46,14 @@
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-            <mat-form-field>
-              <mat-chip-list placeholder="Crawljob">
-                <mat-chip *ngFor="let job of crawlJobId.value">
-                  <a [routerLink]="['/crawljobs', job]">
-                    {{getCrawlJobName(job)}}</a>
-                </mat-chip>
-              </mat-chip-list>
-            </mat-form-field>
+          <mat-form-field>
+            <mat-chip-list placeholder="Crawljob">
+              <mat-chip *ngFor="let job of crawlJobId.value">
+                <a [routerLink]="['/crawljobs', job]">
+                  {{getCrawlJobName(job)}}</a>
+              </mat-chip>
+            </mat-chip-list>
+          </mat-form-field>
         </ng-container>
       </div>
     </mat-card-content>

@@ -10,10 +10,10 @@ export class Meta {
   constructor(name = '') {
     this.name = name;
     this.description = '';
-    //this.created_by = '';
-    //this.created = '';
-    //this.last_modified_by = '';
-    //this.last_modified = '';
+    // this.created_by = '';
+    // this.created = '';
+    // this.last_modified_by = '';
+    // this.last_modified = '';
     this.label = [];
   }
 }
@@ -220,7 +220,7 @@ export class IpRange {
 }
 
 export class LogLevels {
-  log_level: LogLevel[]
+  log_level: LogLevel[];
 }
 
 export class LogLevel {

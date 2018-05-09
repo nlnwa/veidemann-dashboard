@@ -8,7 +8,7 @@ import {MaterialModule} from '../material.module';
 import {SnackBarService} from './snack-bar/snack-bar.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
-import { MetaComponent } from './meta/meta.component';
+import {MetaComponent} from './meta/meta.component';
 import {RouterModule} from '@angular/router';
 
 

@@ -1,17 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CrawlJob, Meta} from '../../../commons/models/config.model';
-import {RoleService} from '../../../auth/role.service';
-import {NUMBER_OR_EMPTY_STRING, VALID_YEAR_PATTERN} from '../../../commons/validator/patterns';
+import {RoleService} from '../../../auth';
+import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
 
 
 @Component({
@@ -107,25 +99,16 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   get showSchedule(): boolean {
     const schedule = this.scheduleId.value;
-    if (schedule != null && schedule !== '') {
-      return true;
-    }
-    return false;
+    return schedule != null && schedule !== '';
   }
 
   get showCrawlConfig(): boolean {
     const crawlconfig = this.crawlConfigId.value;
-    if (crawlconfig != null && crawlconfig !== '') {
-      return true;
-    }
-    return false;
+    return crawlconfig != null && crawlconfig !== '';
   }
 
   get showShortcuts(): boolean {
-    if (this.showSchedule || this.showCrawlConfig) {
-      return true;
-    }
-    return false;
+    return this.showSchedule || this.showCrawlConfig;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -159,7 +142,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   onUpdate(): void {
     this.update.emit(this.prepareSave());
   }
-  ;
 
   onDelete(): void {
     this.delete.emit(this.crawlJob);
@@ -204,7 +186,6 @@ export class CrawljobDetailsComponent implements OnChanges {
       this.form.disable();
     }
   }
-  ;
 
   private prepareSave(): CrawlJob {
     const formModel = this.form.value;

@@ -7,6 +7,15 @@ import {SeedService} from '../seeds';
 import {Item} from '../../commons/list';
 import {Seed} from '../../commons/models/config.model';
 
+
+/* tslint:disable:no-bitwise */
+export enum ResultType {
+  EntityName = 1 << 0,
+  EntityLabel = 1 << 1,
+  SeedName = 1 << 2,
+  SeedLabel = 1 << 3,
+}
+
 const applyType = (item: any, type) => {
   item.type = type;
   return item;
@@ -16,14 +25,6 @@ const entityNameType = (item: any) => applyType(item, ResultType.EntityName);
 const entityLabelType = (item: any) => applyType(item, ResultType.EntityLabel);
 const seedNameType = (item: any) => applyType(item, ResultType.SeedName);
 const seedLabelType = (item: any) => applyType(item, ResultType.SeedLabel);
-
-/* tslint:disable:no-bitwise */
-export enum ResultType {
-  EntityName = 1 << 0,
-  EntityLabel = 1 << 1,
-  SeedName = 1 << 2,
-  SeedLabel = 1 << 3,
-}
 
 interface PageQuery {
   page_size: number;

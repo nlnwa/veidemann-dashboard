@@ -84,7 +84,7 @@ export class BrowserScriptPageComponent implements AfterViewInit {
       this.browserScriptService.get(id)
         .subscribe(response => {
           this.browserScript = response;
-        })
+        });
     }
   }
 

@@ -3,8 +3,8 @@ import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {MatPaginator} from '@angular/material';
 import {ScheduleListComponent} from './schedule-list/schedule-list.component';
 import {CrawlScheduleConfig} from '../../commons/models/config.model';
-import {Subject, merge} from 'rxjs';
-import {startWith, switchMap, map} from 'rxjs/operators';
+import {merge, Subject} from 'rxjs';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ScheduleService} from './schedule.service';
 
@@ -83,7 +83,7 @@ export class SchedulePageComponent implements AfterViewInit {
     if (id != null) {
       this.scheduleService.get(id)
         .subscribe(schedule => {
-          this.schedule = schedule
+          this.schedule = schedule;
         });
     }
   }

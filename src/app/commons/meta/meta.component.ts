@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy} from '@angular/core';
 import {DateTime} from '../datetime/datetime';
 import {
   AbstractControl,

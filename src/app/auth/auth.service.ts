@@ -9,34 +9,34 @@ export class AuthService {
   constructor(private oauthService: OAuthService, private roleService: RoleService) {
   }
 
-   get groups() {
+  get groups() {
     const claims = this.oauthService.getIdentityClaims();
     return claims ? claims['groups'] : null;
   }
 
-   get name() {
+  get name() {
     const claims = this.oauthService.getIdentityClaims();
     return claims ? claims['name'] : null;
   }
 
-   login() {
+  login() {
     this.oauthService.initImplicitFlow();
   }
 
-   async logout() {
+  async logout() {
     this.oauthService.logOut();
     await this.roleService.fetchRoles();
   }
 
-  async initialize (authConfig: AuthConfig) {
-      this.oauthService.configure(authConfig);
-      this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-      try {
-        await this.oauthService.loadDiscoveryDocumentAndTryLogin();
-      } catch (err) {
-        // noop
-      } finally {
-        await this.roleService.fetchRoles();
-      }
+  async initialize(authConfig: AuthConfig) {
+    this.oauthService.configure(authConfig);
+    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+    try {
+      await this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    } catch (err) {
+      // noop
+    } finally {
+      await this.roleService.fetchRoles();
+    }
   }
 }

@@ -10,7 +10,8 @@ export abstract class BaseListComponent {
   protected selectedItems: Set<Item> = new Set();
 
   constructor(public dataSource: DataSource<any>,
-              protected changeDetectorRef: ChangeDetectorRef) {}
+              protected changeDetectorRef: ChangeDetectorRef) {
+  }
 
   onRowClick(item: Item) {
     if (this.multiSelect) {
