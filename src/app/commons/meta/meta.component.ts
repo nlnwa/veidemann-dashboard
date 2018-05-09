@@ -26,12 +26,12 @@ import {Subscription} from 'rxjs';
 })
 export class MetaComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
 
+  form: FormGroup;
 
   // ControlValueAccessor callback functions
   onChange: (meta: Meta) => void;
   onTouched: (meta: Meta) => void;
 
-  private form: FormGroup;
   private meta: Meta;
   private valueSubscription: Subscription;
 

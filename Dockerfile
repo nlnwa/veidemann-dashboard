@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 RUN yarn install && yarn cache clean
 
 COPY . .
-RUN node_modules/@angular/cli/bin/ng build --target=production --base-href ${BASE_HREF} --deploy-url ${DEPLOY_URL}
+RUN node_modules/@angular/cli/bin/ng build --configuration=production
 
 
 FROM nginx:stable-alpine
