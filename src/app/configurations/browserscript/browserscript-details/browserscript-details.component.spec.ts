@@ -3,7 +3,6 @@ import {BrowserScriptDetailsComponent} from './browserscript-details.component';
 import {BrowserScript, Label} from '../../../commons/models/config.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
-import {AceEditorModule} from 'ng2-ace-editor';
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
@@ -16,7 +15,6 @@ describe('BrowserScriptDetailsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [BrowserScriptDetailsComponent],
       providers: [FormBuilder],
-      imports: [AceEditorModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
@@ -37,9 +35,9 @@ describe('BrowserScriptDetailsComponent', () => {
       meta: {
         name: 'Test',
         description: 'Dette er en test',
-        created: {seconds: '1511964561'},
+        created: '1511964561',
         created_by: 'admin',
-        last_modified: {seconds: '1511964561'},
+        last_modified: '1511964561',
         last_modified_by: 'admin',
         label: [expectedLabel]
       }
@@ -59,7 +57,7 @@ describe('BrowserScriptDetailsComponent', () => {
   });
 
   it('should have a defined component', () => {
-    expect(component).toBeDefined()
+    expect(component).toBeDefined();
   });
 
   it('should have the correct data from @Input ', () => {

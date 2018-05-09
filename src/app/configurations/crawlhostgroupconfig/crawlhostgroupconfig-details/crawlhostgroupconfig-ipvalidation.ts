@@ -44,7 +44,7 @@ export class CrawlHostGroupConfigIpValidation {
   static ipAddressValidator(control: FormControl) {
     const ip = control.value;
     if (!CrawlHostGroupConfigIpValidation.isValidIp(ip)) {
-      return {ipAddressValidator: true}
+      return {ipAddressValidator: true};
     }
     return null;
   }

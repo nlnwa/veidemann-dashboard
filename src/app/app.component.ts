@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 
 import {AuthService} from './auth';
 import {RoleService} from './auth/role.service';
-import {AppConfig} from './app.config';
 
 
 @Component({
@@ -14,10 +13,7 @@ export class AppComponent {
 
   showSidenav = true;
 
-  constructor(private authService: AuthService, private roleService: RoleService, private appConfig: AppConfig) {
-    this.authService.configure(this.appConfig.environment.auth)
-      .then(() => this.roleService.fetchRoles())
-      .catch(() => this.roleService.fetchRoles());
+  constructor(private authService: AuthService, private roleService: RoleService) {
   }
 
   get canConfigure(): boolean {
@@ -40,9 +36,8 @@ export class AppComponent {
     this.authService.login();
   }
 
-  onLogout() {
-    this.authService.logout();
-    this.roleService.resetRoles();
+  async onLogout() {
+    await this.authService.logout();
   }
 
   onToggleSidenav() {

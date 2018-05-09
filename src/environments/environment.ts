@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   config: '/assets/config/environment.json',
   apiGateway: '/api',
-  auth: {
+  authConfig: {
 
     // Url of the Identity Provider
     issuer: '',

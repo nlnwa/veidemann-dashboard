@@ -12,25 +12,25 @@
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
-          <mat-form-field *ngIf="!showSave">
-            <input matInput
-                   formControlName="id"
-                   placeholder="Id"
-                   i18n-placeholder="@@configIdPlaceholder">
-          </mat-form-field>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 i18n-placeholder="@@configIdPlaceholder">
+        </mat-form-field>
       </div>
 
       <div fxFlex fxLayout="column">
-          <mat-form-field>
-            <mat-select placeholder="Velg policy" formControlName="robots_policy"
-                        i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
-              <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-error *ngIf="! robotsPolicy.valid && !form.disabled"
-                     i18n="@@politenessconfigFormRobotPolicyErrorRequired">
-            Robots policy er påkrevd.
-          </mat-error>
+        <mat-form-field>
+          <mat-select placeholder="Velg policy" formControlName="robots_policy"
+                      i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+            <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error *ngIf="! robotsPolicy.valid && !form.disabled"
+                   i18n="@@politenessconfigFormRobotPolicyErrorRequired">
+          Robots policy er påkrevd.
+        </mat-error>
 
         <!--CrawlHostGroup Selector -->
         <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector"

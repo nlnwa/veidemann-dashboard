@@ -1,6 +1,5 @@
-import {ChangeDetectionStrategy, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {RoleMapping} from '../../../commons/models/config.model';
-import {Component, EventEmitter, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
 
@@ -35,7 +34,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return this.roleMapping && !this.roleMapping.id
+    return this.roleMapping && !this.roleMapping.id;
   }
 
   get canSave(): boolean {
@@ -59,7 +58,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   get role() {
-    return this.form.get('role')
+    return this.form.get('role');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,7 +68,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
       return;
     }
     if (changes.roles && changes.roles.currentValue) {
-      this.rolesList = changes.roles.currentValue
+      this.rolesList = changes.roles.currentValue;
     }
     if (this.roleMapping && this.rolesList) {
       this.updateForm();
@@ -127,7 +126,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
         id: this.roleMapping.id,
         group: formModel.group,
         role: formModel.role,
-      }
+      };
     }
   }
 

@@ -88,9 +88,9 @@
           </mat-toolbar>
           <mat-form-field>
             <mat-chip-list placeholder="Valgte script">
-              <mat-chip *ngFor="let script of script_id.value" >
+              <mat-chip *ngFor="let script of script_id.value">
                 <a [routerLink]="['/browserscript', script]">
-                {{getScriptName(script)}}</a>
+                  {{getScriptName(script)}}</a>
               </mat-chip>
             </mat-chip-list>
           </mat-form-field>

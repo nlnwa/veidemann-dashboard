@@ -44,8 +44,8 @@ import {TimeComponent} from './time/time.component';
     ErrorService,
     {
       provide: APP_INITIALIZER,
-      useFactory: (appConfig: AppConfig) => () => appConfig.load(),
-      deps: [AppConfig],
+      useFactory: (appConfig: AppConfig, authService: AuthService) => () => appConfig.load(authService),
+      deps: [AppConfig, AuthService],
       multi: true
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

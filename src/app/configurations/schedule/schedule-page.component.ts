@@ -3,12 +3,12 @@ import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {MatPaginator} from '@angular/material';
 import {ScheduleListComponent} from './schedule-list/schedule-list.component';
 import {CrawlScheduleConfig} from '../../commons/models/config.model';
-import {Subject} from 'rxjs/Subject';
+import {merge, Subject} from 'rxjs';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {Observable} from 'rxjs/Observable';
 import {ScheduleService} from './schedule.service';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/startWith';
+
+
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -61,20 +61,21 @@ export class SchedulePageComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    Observable.merge(this.paginator.page, this.changes)
-      .startWith(null)
-      .switchMap(() => {
+    merge(this.paginator.page, this.changes).pipe(
+      startWith(null),
+      switchMap(() => {
         return this.scheduleService.search({
           page_size: this.paginator.pageSize,
           page: this.paginator.pageIndex
         });
-      })
-      .map((reply) => {
+      }),
+      map((reply) => {
         this.pageLength = parseInt(reply.count, 10);
         this.pageSize = reply.page_size;
         this.pageIndex = reply.page;
         return reply.value;
       })
+    )
       .subscribe((items) => {
         this.database.items = items;
       });
@@ -82,7 +83,7 @@ export class SchedulePageComponent implements AfterViewInit {
     if (id != null) {
       this.scheduleService.get(id)
         .subscribe(schedule => {
-          this.schedule = schedule
+          this.schedule = schedule;
         });
     }
   }

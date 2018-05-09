@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Label, CrawlScheduleConfig} from '../../../commons/models/config.model';
+import {CrawlScheduleConfig, Label} from '../../../commons/models/config.model';
 
 describe('ScheduleDetailsComponent', () => {
   let component: ScheduleDetailsComponent;
@@ -60,7 +60,7 @@ describe('ScheduleDetailsComponent', () => {
   });
 
   it('should have a defined component', () => {
-    expect(component).toBeDefined()
+    expect(component).toBeDefined();
   });
 
   it('should have the correct data from @Input ', () => {
@@ -93,7 +93,7 @@ describe('ScheduleDetailsComponent', () => {
 
   it('Should not allow invalid cronjob input', () => {
 
-  })
+  });
 
 
   it('Should update correct data', (done) => {

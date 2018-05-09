@@ -1,24 +1,22 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/do';
+
+
 import {CrawlJob, Entity, Seed} from '../../commons/models/config.model';
 import {SearchService} from './search.service';
 import {SeedListComponent, SeedService} from '../seeds';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/catch';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
+
+import {BehaviorSubject, EMPTY as empty} from 'rxjs';
 import {CrawlJobService} from '../crawljobs';
 import {EntityService} from '../entities/';
 import {SearchDatabase} from './search-database';
 import {MatPaginator} from '@angular/material';
-import {ListDatabase, ListDataSource} from '../../commons/list';
+import {Item, ListDatabase, ListDataSource} from '../../commons/list';
 import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
 import {RoleService} from '../../auth/role.service';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/operator/buffer';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
+
 import {ActivatedRoute, Router} from '@angular/router';
 
 
@@ -45,6 +43,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   @ViewChild(SeedListComponent) private seedList;
   @ViewChild(SearchListComponent) private entityList;
   @ViewChild(MatPaginator) private paginator;
+
   private searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private searchService: SearchService,
@@ -66,8 +65,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Load prerequisites for app-seed-detail
     if (this.canEdit) {
-      this.crawlJobService.list()
-        .map(reply => reply.value)
+      this.crawlJobService.list().pipe(map(reply => reply.value))
         .subscribe(crawlJobs => {
           this.crawlJobs = crawlJobs;
         });
@@ -80,23 +78,23 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.searchDatabase.paginator = this.paginator;
     const id = this.route.snapshot.params['id'];
 
-    this.searchTerm
-      .do(() => {
+    this.searchTerm.pipe(
+      tap(() => {
         this.selectedEntity = null;
         this.selectedSeed = null;
         // this.searchDatabase.clear();
         this.seedDatabase.clear();
-      })
-      .switchMap((term: string) => this.searchService.search(term))
-      .buffer(this.searchService.searchCompleted$)
-      .subscribe((items) => {
+      }),
+      switchMap((term: string) => this.searchService.search(term)),
+    )
+      .subscribe((items: any[]) => {
         this.paginator.length = items.length;
         this.searchDatabase.data = items;
         if (items.length > 0) {
           if (id) {
-            const index = items.findIndex((item) => item.id === id);
-            if (index >= 0) {
-              this.entityList.onRowClick(items[index])
+            const found = items.find((item: Item) => item.id === id);
+            if (found) {
+              this.entityList.onRowClick(found);
             }
           } else {
             this.entityList.onRowClick(items[0]);
@@ -121,8 +119,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSelectEntity(entity: Entity) {
     this.selectedEntity = entity;
     this.selectedSeed = null;
-    this.seedService.search({entity_id: entity.id})
-      .map(reply => reply.value || [])
+    this.seedService.search({entity_id: entity.id}).pipe(map(reply => reply.value || []))
       .subscribe(seeds => {
         this.seedDatabase.items = seeds;
 
@@ -130,9 +127,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
           let seedId = this.route.snapshot.params['seedId'];
           const index = seeds.findIndex((item) => item.id === seedId);
           if (index >= 0) {
-            this.seedList.onRowClick(seeds[index])
+            this.seedList.onRowClick(seeds[index]);
           } else {
-            seedId = seeds[0].id
+            seedId = seeds[0].id;
             this.seedList.onRowClick(seeds[0]);
           }
           this.router.navigate(['search', {id: entity.id, seedId}]);
@@ -161,16 +158,17 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   onDeleteEntity(entity: Entity): void {
-    this.entityService.delete(entity.id)
-      .catch((err) => {
+    this.entityService.delete(entity.id).pipe(
+      catchError((err) => {
         const errorString = err.error.error.split(':')[1];
         const deleteError = /delete CrawlEntity, there are/g;
         if (errorString.match(deleteError)) {
           this.snackBarService.openSnackBar(errorString);
-          return Observable.empty();
+          return empty;
         }
-        return Observable.empty();
+        return empty;
       })
+    )
       .subscribe((deletedEntity) => {
         this.selectedEntity = null;
         this.snackBarService.openSnackBar('Slettet');
@@ -195,7 +193,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSaveSeed(seed: Seed): void {
     this.seedService.create(seed)
       .subscribe((createdSeed) => {
-        this.onSelectSeed(seed);
+        this.onSelectSeed(createdSeed);
         this.seedDatabase.add(createdSeed);
         this.snackBarService.openSnackBar('Lagret');
       });

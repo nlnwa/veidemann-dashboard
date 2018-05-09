@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {RoleService} from './role.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 import {Role} from '../commons/models/config.model';
 import {environment} from '../../environments/environment';
 
@@ -15,15 +15,14 @@ export class GuardService implements CanActivate {
     const allowedRoles = route.data.roles as Role[];
 
     if (!environment.production) {
-      return Observable.of(true);
+      return of(true);
     }
 
     for (const role of this.roleService.getRoles()) {
       if (allowedRoles.includes(role)) {
-        return Observable.of(true);
+        return of(true);
       }
     }
-    return Observable.of(false);
+    return of(false);
   }
-
 }

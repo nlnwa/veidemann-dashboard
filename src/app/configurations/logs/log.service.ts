@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import {Observable, of} from 'rxjs';
+
 import {HttpClient} from '@angular/common/http';
 import {LogLevels} from '../../commons/models/config.model';
 
@@ -14,7 +14,7 @@ export class LogService {
   }
 
   getLevels(): Observable<string[]> {
-    return Observable.of(['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF']);
+    return of(['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF']);
   }
 
   getLogConfig(): Observable<LogLevels> {

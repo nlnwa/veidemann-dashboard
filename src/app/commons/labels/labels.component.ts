@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../models/config.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Observable} from 'rxjs/Observable';
 
 export enum Kind {
   LABEL = 'Label',
@@ -97,7 +96,7 @@ export class LabelsComponent implements ControlValueAccessor {
     value = value.trim();
 
     if (value === '') {
-      return
+      return;
     }
 
     const parts = value.split(':');
@@ -105,14 +104,14 @@ export class LabelsComponent implements ControlValueAccessor {
       key = parts[0].trim();
       value = parts[1].trim();
       if (key.length < 1 || value.length < 1) {
-        return
+        return;
       }
     } else {
-      return
+      return;
     }
 
     if (this.findLabelIndex(key, value) > -1) {
-      return
+      return;
     }
 
     this.labels.push({key, value});

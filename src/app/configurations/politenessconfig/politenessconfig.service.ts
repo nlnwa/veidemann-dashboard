@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {CrudService} from '../shared/crud.service';
 import {PolitenessConfig, RobotPolicy} from '../../commons/models/config.model';
@@ -15,6 +15,6 @@ export class PolitenessConfigService extends CrudService<PolitenessConfig> {
   }
 
   getRobotsConfig(): Observable<string[]> {
-    return Observable.of(Object.keys(RobotPolicy));
+    return of(Object.keys(RobotPolicy));
   }
 }
