@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import {Moment} from 'moment';
 
 export class DateTime {
 
@@ -10,56 +11,28 @@ export class DateTime {
     return moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss');
   }
 
-  static fromISOToDateUTC(isoString) {
-    const m = moment.utc(isoString);
-    return {year: m.year(), month: m.month(), day: m.date()};
-  }
+  static dateToUtc(momentObj: Moment, startOfDay: boolean): string {
+    if (momentObj.isValid()) {
+      const utc = moment.utc()
+        .year(momentObj.get('year'))
+        .month(momentObj.get('month'))
+        .date(momentObj.get('date'))
 
-  static setValidFromSecondsUTC(year, month, day) {
-    if (year && month && day) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .date(day)
-        .startOf('date')
-        .toISOString();
-    } else if (year && month) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .startOf('month')
-        .toISOString();
-    } else if (year) {
-      return moment.utc()
-        .year(year)
-        .startOf('year')
-        .toISOString();
+      if (startOfDay) {
+        return utc.startOf('day').toISOString();
+      } else {
+        return utc.endOf('day').toISOString();
+      }
     } else {
-      return undefined;
+      return '';
     }
   }
-
-  static setValidToSecondsUTC(year, month, day) {
-    if (year && month && day) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .date(day).startOf('date')
-        .endOf('date')
-        .toISOString();
-    } else if (year && month) {
-      return moment.utc()
-        .year(year)
-        .month(month - 1)
-        .endOf('month')
-        .toISOString();
-    } else if (year) {
-      return moment.utc()
-        .year(year)
-        .endOf('year')
-        .toISOString();
-    } else {
-      return undefined;
-    }
+ /*
+  *  Convert endOf startOf times from backend to 12pm to avoid that datepicker sets next day based on users timezone
+  */
+  static adjustTime(timestamp) {
+      const m = moment.utc(timestamp);
+      m.set({h: 12, m: 0, s: 0});
+      return m;
   }
 }

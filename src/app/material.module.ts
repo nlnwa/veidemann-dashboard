@@ -20,7 +20,10 @@ import {
   MatTableModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatDatepickerModule,
 } from '@angular/material';
+
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
 
 const modules = [
   MatButtonModule,
@@ -43,6 +46,8 @@ const modules = [
   MatDialogModule,
   MatPaginatorModule,
   MatSortModule,
+  MatDatepickerModule,
+  MatMomentDateModule,
 ];
 
 @NgModule({

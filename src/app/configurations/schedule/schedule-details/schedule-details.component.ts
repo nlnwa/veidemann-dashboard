@@ -13,11 +13,19 @@ import {
   VALID_YEAR_PATTERN
 } from '../../../commons/validator';
 import {RoleService} from '../../../auth/role.service';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import moment = require('moment');
 
 @Component({
   selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
   styleUrls: ['./schedule-details.component.css'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+  ],
 })
 export class ScheduleDetailsComponent implements OnChanges {
 
@@ -101,22 +109,14 @@ export class ScheduleDetailsComponent implements OnChanges {
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
+      valid_from: '',
+      valid_to: '',
       cron_expression: this.fb.group({
         minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
         hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
         dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
         month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
         dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-      }),
-      valid_from: this.fb.group({
-        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
-      }),
-      valid_to: this.fb.group({
-        year: ['', [Validators.maxLength(4), Validators.pattern(VALID_YEAR_PATTERN)]],
-        month: ['', [Validators.maxLength(2), Validators.pattern(VALID_MONTH_PATTERN)]],
-        day: ['', [Validators.maxLength(2), Validators.pattern(VALID_DAY_PATTERN)]]
       }),
       meta: new Meta(),
     });
@@ -126,6 +126,8 @@ export class ScheduleDetailsComponent implements OnChanges {
     const cronSplit = this.schedule.cron_expression.split(' ');
     this.form.patchValue({
       id: this.schedule.id,
+      valid_from: this.schedule.valid_from ? DateTime.adjustTime(this.schedule.valid_from) : '',
+      valid_to: this.schedule.valid_to ? DateTime.adjustTime(this.schedule.valid_to) : '',
       cron_expression: {
         minute: cronSplit[0],
         hour: cronSplit[1],
@@ -135,43 +137,6 @@ export class ScheduleDetailsComponent implements OnChanges {
       },
       meta: this.schedule.meta,
     });
-
-    if (this.schedule.valid_from != null) {
-      const {year, month, day} = DateTime.fromISOToDateUTC(this.schedule.valid_from);
-      this.form.patchValue({
-        valid_from: {
-          year: year,
-          month: month + 1,
-          day: day,
-        },
-      });
-    } else {
-      this.form.patchValue({
-        valid_from: {
-          year: '',
-          month: '',
-          day: '',
-        },
-      });
-    }
-    if (this.schedule.valid_to != null) {
-      const {year, month, day} = DateTime.fromISOToDateUTC(this.schedule.valid_to);
-      this.form.patchValue({
-        valid_to: {
-          year: year,
-          month: month + 1,
-          day: day,
-        },
-      });
-    } else {
-      this.form.patchValue({
-        valid_to: {
-          year: '',
-          month: '',
-          day: '',
-        },
-      });
-    }
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
@@ -190,18 +155,15 @@ export class ScheduleDetailsComponent implements OnChanges {
   private prepareSave(): CrawlScheduleConfig {
     const formModel = this.form.value;
     const formCronExpression = this.form.value.cron_expression;
-    const formValidFrom = this.form.value.valid_from;
-    const formValidTo = this.form.value.valid_to;
-
-    const validFrom = DateTime.setValidFromSecondsUTC(formValidFrom.year, formValidFrom.month, formValidFrom.day);
-    const validTo = DateTime.setValidToSecondsUTC(formValidTo.year, formValidTo.month, formValidTo.day);
+    const validFromUTC = DateTime.dateToUtc(moment(formModel.valid_from), true);
+    const validToUTC = DateTime.dateToUtc(moment(formModel.valid_to), false);
     const cronExpression = this.setCronExpression(formCronExpression);
     return {
 
       id: this.schedule.id,
       cron_expression: cronExpression,
-      valid_from: validFrom ? validFrom.toString() : null,
-      valid_to: validTo ? validTo.toString() : null,
+       valid_from: validFromUTC ? validFromUTC : null,
+       valid_to: validToUTC ? validToUTC : null,
       meta: formModel.meta,
     };
   }
