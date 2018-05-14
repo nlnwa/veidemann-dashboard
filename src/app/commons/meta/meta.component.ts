@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {DateTime} from '../datetime/datetime';
 import {
   AbstractControl,
@@ -24,7 +24,10 @@ import {Subscription} from 'rxjs';
     {provide: NG_VALIDATORS, useExisting: MetaComponent, multi: true}
   ],
 })
-export class MetaComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
+export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
+
+  @Input()
+  nameIsUrl: boolean;
 
   form: FormGroup;
 
@@ -41,6 +44,16 @@ export class MetaComponent implements AfterViewInit, OnDestroy, ControlValueAcce
 
   get editable(): boolean {
     return this.form.enabled;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.nameIsUrl) {
+      if (this.nameIsUrl) {
+        this.form.get('name').setValidators(
+          Validators.compose(
+            [Validators.pattern('^(http[s]?:\\/\\/).*'), this.form.get('name').validator]));
+      }
+    }
   }
 
   ngAfterViewInit() {

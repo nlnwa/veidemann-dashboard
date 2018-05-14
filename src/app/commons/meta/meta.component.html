@@ -1,14 +1,25 @@
 <ng-container [formGroup]="form">
   <div fxFlex fxLayout="column">
-    <mat-form-field>
-      <input matInput formControlName="name" #name placeholder="Navn"
-             i18n-placeholder="@@metaNameInputPlaceholder">
-      <mat-error *ngIf="!name.valid"
-                 i18n="@@metaNameRequiredError">
-        Navn er påkrevd.
-      </mat-error>
-    </mat-form-field>
-
+    <div *ngIf="!nameIsUrl">
+      <mat-form-field>
+        <input matInput formControlName="name" #name placeholder="Navn"
+               i18n-placeholder="@@metaNameInputPlaceholder">
+        <mat-error
+                   i18n="@@metaNameRequiredError">
+          Navn er påkrevd.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="nameIsUrl">
+      <mat-form-field>
+        <input matInput formControlName="name" #name placeholder="URL"
+               i18n="@@metaUrlInputPlaceholder">
+        <mat-error
+                    i18n="@@metaUrlRequiredError">
+          En gyldig URL er påkrevd
+        </mat-error>
+      </mat-form-field>
+    </div>
     <mat-form-field>
       <textarea matInput formControlName="description" placeholder="Beskrivelse"
                 i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
@@ -16,7 +27,6 @@
     </mat-form-field>
 
     <app-labels [removable]="editable" formControlName="label"></app-labels>
-
 
     <mat-form-field>
       <input matInput
