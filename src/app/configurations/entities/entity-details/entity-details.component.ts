@@ -11,22 +11,28 @@ import {RoleService} from '../../../auth/role.service';
 })
 
 export class EntityDetailsComponent implements OnChanges {
+
   @Input()
   entity: Entity;
 
   @Output()
   save = new EventEmitter<Entity>();
+
   @Output()
   update = new EventEmitter<Entity>();
+
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<Entity>();
+
+  @Output()
+  clear = new EventEmitter<void>();
 
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm(new Entity());
   }
 
   get showSave() {
@@ -38,8 +44,12 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.entity) {
-      this.updateForm();
+    if (changes.entity) {
+      if (this.entity) {
+        this.updateForm(this.entity);
+      } else {
+        this.form.reset();
+      }
     }
   }
 
@@ -56,34 +66,30 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   onRevert() {
-    this.updateForm();
+    this.updateForm(this.entity);
   }
 
-  private createForm() {
+  onClearClicked() {
+    this.clear.emit();
+  }
+
+  private createForm(entity: Entity) {
     this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      meta: new Meta(),
+      id: {value: entity.id, disabled: true},
+      meta: entity.meta,
     });
   }
 
-  private updateForm() {
-    const entity = this.entity;
-    this.form.patchValue({
-      id: entity.id,
-      meta: this.entity.meta,
-    });
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+  private updateForm(entity: Entity) {
     if (!this.canEdit) {
       this.form.disable();
     }
+    this.form.setValue(entity);
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   private prepareSaveEntity(): Entity {
-    const formModel = this.form.value;
-    return {
-      id: this.entity.id,
-      meta: formModel.meta,
-    };
+    return this.form.getRawValue();
   }
 }

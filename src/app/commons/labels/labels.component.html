@@ -2,17 +2,18 @@
   <div class="chiplist" fxLayout="row">
     <mat-form-field>
       <mat-chip-list #chipList fxLayout="row wrap" fxLayoutGap="8px">
-        <ng-container *ngFor="let group of groups | async">
+        <ng-container *ngFor="let group of groups$ | async">
           <mat-chip *ngFor="let value of group.values"
                     [selectable]="canUpdate"
-                    [removable]="canDelete"
-                    (remove)="onRemoveLabel(group.key, value)"
+                    [removable]="removable"
+                    (removed)="onRemoveLabel(group.key, value)"
                     (click)="onClickLabel(group.key, value)">
             {{group.key + ':' + value}}
-            <mat-icon matChipRemove *ngIf="canDelete">cancel</mat-icon>
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
         </ng-container>
-        <input #chipInput [placeholder]="kind"
+        <input #chipInput
+               [placeholder]="kind"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
                (matChipInputTokenEnd)="onSaveLabel($event.value); chipInput.value = ''"

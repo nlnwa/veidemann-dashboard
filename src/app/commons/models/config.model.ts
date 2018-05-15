@@ -1,3 +1,13 @@
+export class Label {
+  key?: string;
+  value?: string;
+
+  constructor({key = '', value = ''} = {}) {
+    this.key = key;
+    this.value = value;
+  }
+}
+
 export class Meta {
   name: string;
   description: string;
@@ -7,29 +17,29 @@ export class Meta {
   last_modified_by?: string;
   label: Label[];
 
-  constructor(name = '') {
+  constructor({
+                name = '',
+                description = '',
+                created_by = '',
+                last_modified_by = '',
+                label = []
+              } = {}) {
     this.name = name;
-    this.description = '';
-    // this.created_by = '';
-    // this.created = '';
-    // this.last_modified_by = '';
-    // this.last_modified = '';
-    this.label = [];
+    this.description = description;
+    this.created_by = created_by;
+    this.last_modified_by = last_modified_by;
+    this.label = label.map((l) => new Label(l));
   }
-}
 
-export class Label {
-  key?: string;
-  value?: string;
 }
 
 export class Entity {
   id: string;
   meta: Meta;
 
-  constructor(name = '') {
-    this.id = '';
-    this.meta = new Meta(name);
+  constructor({id = '', name = '', meta = new Meta({name})} = {}) {
+    this.id = id;
+    this.meta = meta;
   }
 }
 
@@ -49,13 +59,20 @@ export class Seed {
   job_id: string[];
   disabled: boolean;
 
-  constructor(entityId: string) {
-    this.id = '';
+  constructor({
+                id = '',
+                entityId = '',
+                scope = new Scope(),
+                meta = new Meta(),
+                job_id = [],
+                disabled = false
+              } = {}) {
+    this.id = id;
     this.entity_id = entityId;
-    this.scope = new Scope();
-    this.meta = new Meta();
-    this.job_id = [];
-    this.disabled = false;
+    this.scope = scope;
+    this.meta = meta;
+    this.job_id = job_id;
+    this.disabled = disabled;
   }
 }
 
@@ -66,12 +83,14 @@ export class CrawlScheduleConfig {
   valid_from?: string;
   valid_to?: string;
 
-  constructor() {
-    this.id = '';
-    this.meta = new Meta();
-    this.cron_expression = '';
-    this.valid_from = null;
-    this.valid_to = null;
+  constructor({
+                id = '',
+                meta = new Meta(),
+                cron_expression = '',
+              } = {}) {
+    this.id = id;
+    this.meta = meta;
+    this.cron_expression = cron_expression;
   }
 }
 
@@ -253,4 +272,3 @@ export enum Role {
   CURATOR = 'CURATOR',
   READONLY = 'READONLY',
 }
-

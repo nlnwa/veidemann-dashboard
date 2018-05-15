@@ -8,7 +8,7 @@ export class DateTime {
   }
 
   static formatTimestamp(timestamp) {
-    return moment.utc(timestamp).format('DD/MM/YYYY  HH:mm:ss');
+    return moment.utc(timestamp).format('DD.MM.YYYY,  HH:mm:ss');
   }
 
   static dateToUtc(momentObj: Moment, startOfDay: boolean): string {
@@ -16,7 +16,7 @@ export class DateTime {
       const utc = moment.utc()
         .year(momentObj.get('year'))
         .month(momentObj.get('month'))
-        .date(momentObj.get('date'))
+        .date(momentObj.get('date'));
 
       if (startOfDay) {
         return utc.startOf('day').toISOString();
@@ -27,12 +27,13 @@ export class DateTime {
       return '';
     }
   }
- /*
-  *  Convert endOf startOf times from backend to 12pm to avoid that datepicker sets next day based on users timezone
-  */
+
+  /*
+   *  Convert endOf startOf times from backend to 12pm to avoid that datepicker sets next day based on users timezone
+   */
   static adjustTime(timestamp) {
-      const m = moment.utc(timestamp);
-      m.set({h: 12, m: 0, s: 0});
-      return m;
+    const m = moment.utc(timestamp);
+    m.set({h: 12, m: 0, s: 0});
+    return m;
   }
 }

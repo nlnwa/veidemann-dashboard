@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {from, merge, Observable, Subject} from 'rxjs';
-import {bufferWhen, finalize, map, mergeMap, tap} from 'rxjs/operators';
+import {bufferWhen, finalize, map, mergeMap, tap, first} from 'rxjs/operators';
 
 import {EntityService} from '../entities';
 import {SeedService} from '../seeds';
 import {Item} from '../../commons/list';
+import {ListReply} from '../../commons/models/controller.model';
 import {Seed} from '../../commons/models/config.model';
 
 
@@ -26,31 +27,44 @@ const entityLabelType = (item: any) => applyType(item, ResultType.EntityLabel);
 const seedNameType = (item: any) => applyType(item, ResultType.SeedName);
 const seedLabelType = (item: any) => applyType(item, ResultType.SeedLabel);
 
+
 interface PageQuery {
-  page_size: number;
-  page: number;
+  pageSize: number;
+  pageIndex: number;
 }
 
 interface Pager extends PageQuery {
-  count: number;
+  length: number;
 }
 
+export interface SearchReply extends Pager {
+  value: Item[];
+}
 
-const page_size = 20;
-const emptyPage = {count: 0, page_size, page: 0};
+export interface SearchQuery extends Pager {
+  term: string;
+}
+
+const emptyPage = {length: 0, pageSize: 0, pageIndex: 0};
 
 // flip page
-const flipPager = (pager: Pager, reply: any) => {
-  return {...emptyPage};
+const flipPager = (pager: Pager, reply: ListReply<any>) => {
+  pager.length = parseInt(reply.count, 10) || 0;
 };
 
+const pagerToQuery = (pager: Pager) => ({
+  page_size: pager.pageSize,
+  page: pager.pageIndex,
+});
+
 // queries utilizing pager
-const labelQuery = (term, pager) => ({label_selector: [term], ...(pager as PageQuery)});
-const nameQuery = (term, pager) => ({name: term, ...(pager as PageQuery)});
+const labelQuery = (term, pager) => ({label_selector: [term], ...pagerToQuery(pager)});
+const nameQuery = (term, pager) => ({name: term, ...pagerToQuery(pager)});
 
 @Injectable()
 export class SearchService {
 
+  private pager: Pager;
   private enPager: Pager;
   private elPager: Pager;
   private snPager: Pager;
@@ -65,7 +79,7 @@ export class SearchService {
     this.slPager = {...emptyPage};
   }
 
-  search(term: string): Observable<Item[]> {
+  search({term = '', length = 0, pageIndex = 0, pageSize = 0}: SearchQuery): Observable<SearchReply> {
     const completeCount = term ? 4 : 1;
     const complete = new Subject<void>();
     const searchCompleted$ = complete.asObservable();
@@ -77,6 +91,8 @@ export class SearchService {
         complete.next();
       }
     };
+
+    this.updatePagers(term, pageIndex, pageSize);
 
     const entityName$: Observable<Item> = this.entityService.search(nameQuery(term, this.enPager))
       .pipe(
@@ -115,10 +131,28 @@ export class SearchService {
       );
 
     return (completeCount > 1
-      ? merge(entityName$, entityLabel$, seedLabel$, seedName$)
-      : entityName$).pipe(
-      // distinct((entity) => entity.id),
-      bufferWhen(() => searchCompleted$)
-    );
+            ? merge(entityName$, entityLabel$, seedLabel$, seedName$)
+            : entityName$)
+      .pipe(
+        bufferWhen(() => searchCompleted$),
+        first(),
+        map((entities) => ({value: entities, ...this.combinePagers()})),
+      );
+  }
+
+  private updatePagers(term, pageIndex: number, pageSize: number): void {
+    this.enPager.pageSize =
+      this.elPager.pageSize =
+      this.slPager.pageSize =
+      this.snPager.pageSize = pageSize;
+    this.enPager.pageIndex = pageIndex;
+  }
+
+  private combinePagers(): Pager {
+    return [this.enPager, this.elPager, this.snPager, this.slPager].reduce((acc, curr) => {
+      acc.length += curr.length;
+      // TODO
+      return acc;
+    }, {length: 0, pageIndex: 0, pageSize: 0});
   }
 }

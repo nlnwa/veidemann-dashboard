@@ -1,47 +1,41 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-
-
+import {Observable, throwError} from 'rxjs';
 import {ListReply, ListRequest} from '../../commons/models/controller.model';
+
+function requestToParams(listRequest: ListRequest): HttpParams {
+  return Object.keys(listRequest).reduce((acc, key) => acc.append(key, listRequest[key]), new HttpParams);
+}
 
 export abstract class CrudService<T extends ListRequest> {
 
-  private static requestToParams(listRequest: ListRequest): HttpParams {
-    let params = new HttpParams();
-    Object.keys(listRequest).forEach(key => {
-      const value = listRequest[key];
-      params = params.append(key, value);
-    });
-    return params;
-  }
+  protected readonly url: string;
 
-  constructor(protected http: HttpClient,
-              protected url: string) {
-  }
+  constructor(protected http: HttpClient) {}
 
   list(): Observable<ListReply<T>> {
     return this.http.get<ListReply<T>>(this.url);
   }
 
   search(listRequest: ListRequest): Observable<ListReply<T>> {
-    const params = CrudService.requestToParams(listRequest);
+    const params = requestToParams(listRequest);
     return this.http.get<ListReply<T>>(this.url, {params});
   }
 
   get(id: string): Observable<T> {
-    return this.http.get<T>(`${this.url}/${id}`);
+    return id ? this.http.get<T>(`${this.url}/${id}`) : throwError('parameter id is falsy');
   }
 
   create(item: T): Observable<T> {
-    return this.http.put<T>(this.url, item);
+    return item ? this.http.put<T>(this.url, item) : throwError('parameter item is falsy');
   }
 
   update(item: T): Observable<T> {
-    return this.http.post<T>(`${this.url}/${item.id}`, item);
+    return item ? this.http.post<T>(`${this.url}/${item.id}`, item) : throwError('parameter item is falsy');
   }
 
   // noinspection ReservedWordAsName
   delete(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.url}/${id}`);
+    return id ? this.http.delete<any>(`${this.url}/${id}`) : throwError('parameter id is falsy');
   }
+
 }

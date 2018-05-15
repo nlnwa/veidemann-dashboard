@@ -7,9 +7,9 @@ import {CrawlScheduleConfig} from '../../commons/models/config.model';
 @Injectable()
 export class ScheduleService extends CrudService<CrawlScheduleConfig> {
 
-  static readonly URL: string = `${environment.apiGateway}/control/crawlscheduleconfigs`;
+  protected readonly url: string = `${environment.apiGateway}/control/crawlscheduleconfigs`;
 
   constructor(protected http: HttpClient) {
-    super(http, ScheduleService.URL);
+    super(http);
   }
 }

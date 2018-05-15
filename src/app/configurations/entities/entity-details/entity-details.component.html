@@ -1,13 +1,16 @@
-<form [formGroup]="form" fxFlex>
+<form [formGroup]="form">
   <mat-card>
     <mat-card-header>
+      <mat-icon mat-card-avatar>business</mat-icon>
       <mat-card-title>
-        <span i18n="@@entityDetailsCardTitle">ENTITET</span>
+        <ng-container i18n="@@entityDetailsCardTitle">ENTITET</ng-container>
       </mat-card-title>
       <mat-card-subtitle>
         <span *ngIf="showSave"
-              i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)</span>
+          i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)</span>
       </mat-card-subtitle>
+      <span class="fill-space"></span>
+      <button mat-icon-button (click)="onClearClicked()"><mat-icon>clear</mat-icon></button>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
@@ -49,5 +52,3 @@
     </mat-card-actions>
   </mat-card>
 </form>
-
-
