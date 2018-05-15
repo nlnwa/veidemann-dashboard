@@ -1,4 +1,4 @@
-<div class="app-container" fxLayout="column">
+<div fxFlexFill fxLayout="column">
 
   <!-- Toolbar -->
   <mat-toolbar fxLayout="row" color="primary" class="app-toolbar">
@@ -6,6 +6,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <a routerLink="/" class="title"><h1> Veidemann</h1></a>
+    <span fxFlex></span>
     <app-time></app-time>
     <span fxFlex></span>
     <a color="primary" mat-raised-button (click)="onLogin()" *ngIf="!name">
@@ -20,7 +21,7 @@
   </mat-toolbar>
 
   <!-- Sidenav -->
-  <mat-drawer-container fxFlex>
+  <mat-drawer-container fxFlex="100%">
 
     <mat-drawer mode="side" [(opened)]="showSidenav">
 

@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
+import {LOCALE_ID, APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -16,7 +16,12 @@ import {AuthService, GuardService, RoleService, TokenInterceptor} from './auth';
 import {ApplicationErrorHandler, ErrorService} from './error';
 import {DialogComponent, ErrorDialogComponent} from './dialog';
 import {TimeComponent} from './time/time.component';
+import {registerLocaleData} from '@angular/common';
 
+import localeNb from '@angular/common/locales/nb';
+import localeNbExtra from '@angular/common/locales/extra/nb';
+
+registerLocaleData(localeNb, 'nb', localeNbExtra);
 
 @NgModule({
   declarations: [
@@ -50,6 +55,7 @@ import {TimeComponent} from './time/time.component';
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: ErrorHandler, useClass: ApplicationErrorHandler},
+    {provide: LOCALE_ID, useValue: 'nb'}
   ],
   bootstrap: [AppComponent]
 })

@@ -3,10 +3,6 @@ main {
   overflow-y: auto;
 }
 
-.app-container {
-  height: 100%;
-}
-
 .app-toolbar {
   min-height: 64px;
 }
