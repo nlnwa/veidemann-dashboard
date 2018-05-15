@@ -41,11 +41,7 @@ export class AppComponent {
   }
 
   onToggleSidenav() {
-    if (this.showSidenav) {
-      this.showSidenav = false;
-    } else {
-      this.showSidenav = true;
-    }
+    this.showSidenav = !this.showSidenav;
   }
 
 }
