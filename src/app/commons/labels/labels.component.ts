@@ -34,7 +34,7 @@ export class LabelsComponent implements ControlValueAccessor {
   private showUpdateLabel = false;
 
   private groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
-  private groups$: Observable<any> = this.groupsSubject.asObservable();
+  groups$: Observable<any> = this.groupsSubject.asObservable();
 
   private labels: Label[];
 
@@ -50,23 +50,14 @@ export class LabelsComponent implements ControlValueAccessor {
     return !this.isDisabled;
   }
 
-  get canDelete(): boolean {
-    return this.removable;
-  }
-
-  get groups(): Observable<any> {
-    return this.groups$;
-  }
-
   // implement ControlValueAccessor
   writeValue(labels: Label[]): void {
-    if (labels == null) {
+    if (labels === null) {
       this.labels = [];
     } else {
-      this.labels = [...labels];
-      this.regroup();
-      this.labelForm.disable();
+      this.labels = labels.map((l) => new Label(l));
     }
+    this.reset();
   }
 
   // implement ControlValueAccessor
@@ -115,10 +106,9 @@ export class LabelsComponent implements ControlValueAccessor {
     }
 
     this.labels.push({key, value});
-    this.regroup();
+
     this.onChange(this.labels);
-    this.labelForm.reset();
-    this.labelForm.disable();
+    this.reset();
   }
 
   onUpdateLabel(key: string, value: string): void {
@@ -130,10 +120,8 @@ export class LabelsComponent implements ControlValueAccessor {
     // add updated
     this.labels.push({key, value});
 
-    this.regroup();
     this.onChange(this.labels);
-    this.labelForm.reset();
-    this.labelForm.disable();
+    this.reset();
   }
 
   onRemoveLabel(key: string, value: string): void {
@@ -141,11 +129,17 @@ export class LabelsComponent implements ControlValueAccessor {
     if (index !== -1) {
       this.labels.splice(index, 1);
     }
-    this.regroup();
     this.onChange(this.labels);
+    this.reset();
   }
 
   onAbort(): void {
+    this.labelForm.disable();
+  }
+
+  private reset() {
+    this.regroup();
+    this.labelForm.reset();
     this.labelForm.disable();
   }
 
@@ -177,4 +171,3 @@ export class LabelsComponent implements ControlValueAccessor {
   }
 
 }
-
