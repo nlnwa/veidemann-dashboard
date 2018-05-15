@@ -8,10 +8,10 @@ import {Observable, of} from 'rxjs';
 @Injectable()
 export class BrowserConfigService extends CrudService<BrowserConfig> {
 
-  static readonly URL: string = `${environment.apiGateway}/control/browserconfigs`;
+  protected readonly url: string = `${environment.apiGateway}/control/browserconfigs`;
 
   constructor(protected http: HttpClient) {
-    super(http, BrowserConfigService.URL);
+    super(http);
   }
 
   getBrowserConfig(): Observable<Object[]> {

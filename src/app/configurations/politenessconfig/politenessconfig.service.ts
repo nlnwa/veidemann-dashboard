@@ -8,10 +8,10 @@ import {PolitenessConfig, RobotPolicy} from '../../commons/models/config.model';
 @Injectable()
 export class PolitenessConfigService extends CrudService<PolitenessConfig> {
 
-  static readonly URL: string = `${environment.apiGateway}/control/politenessconfigs`;
+  protected readonly url: string = `${environment.apiGateway}/control/politenessconfigs`;
 
   constructor(protected http: HttpClient) {
-    super(http, PolitenessConfigService.URL);
+    super(http);
   }
 
   getRobotsConfig(): Observable<string[]> {

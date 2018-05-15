@@ -1,23 +1,20 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatPaginator} from '@angular/material';
 
+import {BehaviorSubject, combineLatest, EMPTY as empty} from 'rxjs';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 
 import {CrawlJob, Entity, Seed} from '../../commons/models/config.model';
-import {SearchService} from './search.service';
+import {SearchReply, SearchService} from './search.service';
 import {SeedListComponent, SeedService} from '../seeds';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-
-
-import {BehaviorSubject, EMPTY as empty} from 'rxjs';
 import {CrawlJobService} from '../crawljobs';
 import {EntityService} from '../entities/';
 import {SearchDatabase} from './search-database';
-import {MatPaginator} from '@angular/material';
-import {Item, ListDatabase, ListDataSource} from '../../commons/list';
+import {ListDatabase, ListDataSource} from '../../commons/list';
 import {SearchDataSource, SearchListComponent} from './search-entity-list/search-entity-list.component';
-import {RoleService} from '../../auth/role.service';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
-
-import {ActivatedRoute, Router} from '@angular/router';
+import {RoleService} from '../../auth';
 
 
 @Component({
@@ -35,7 +32,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   pageLength = 0;
   pageSize = 5;
   pageIndex = 0;
-  pageOptions = [5, 10];
+  pageOptions = [5, 10, 50, 100];
 
   selectedEntity: Entity = null;
   selectedSeed: Seed = null;
@@ -65,44 +62,58 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Load prerequisites for app-seed-detail
     if (this.canEdit) {
-      this.crawlJobService.list().pipe(map(reply => reply.value))
-        .subscribe(crawlJobs => {
-          this.crawlJobs = crawlJobs;
-        });
+      this.crawlJobService.list()
+        .pipe(map(reply => reply.value))
+        .subscribe((crawlJobs) => this.crawlJobs = crawlJobs);
     } else {
       this.crawlJobs = [];
     }
   }
 
   ngAfterViewInit() {
-    this.searchDatabase.paginator = this.paginator;
-    const id = this.route.snapshot.params['id'];
+//    const id = this.route.snapshot.params['id'];
 
-    this.searchTerm.pipe(
-      tap(() => {
-        this.selectedEntity = null;
-        this.selectedSeed = null;
-        // this.searchDatabase.clear();
-        this.seedDatabase.clear();
-      }),
-      switchMap((term: string) => this.searchService.search(term)),
+    combineLatest(
+      this.searchTerm,
+      this.paginator.page
     )
-      .subscribe((items: any[]) => {
-        this.paginator.length = items.length;
-        this.searchDatabase.data = items;
-        if (items.length > 0) {
+      .pipe(
+        tap(() => {
+          // this.selectedEntity = null;
+          // this.selectedSeed = null;
+          // this.searchDatabase.clear();
+          // this.seedDatabase.clear();
+        }),
+        switchMap(([term, pager]) =>
+          this.searchService.search({
+            term,
+            length: pager.length,
+            pageIndex: pager.pageIndex,
+            pageSize: pager.pageSize,
+          })
+        )
+      )
+      .subscribe((reply: SearchReply) => {
+        this.paginator.length = reply.length;
+        this.searchDatabase.data = reply.value;
+        if (reply.length > 0 && this.searchTerm.value.length > 0) {
+          this.entityList.onRowClick(reply.value[0]);
+          /*
           if (id) {
-            const found = items.find((item: Item) => item.id === id);
+            const found = reply.value.find((item: Item) => item.id === id);
             if (found) {
               this.entityList.onRowClick(found);
             }
           } else {
-            this.entityList.onRowClick(items[0]);
+
           }
+          */
         } else if (this.searchTerm.value) {
-          this.selectedEntity = new Entity(this.searchTerm.value);
+          this.selectedEntity = new Entity({name: this.searchTerm.value});
         }
       });
+    // see https://github.com/angular/material2/issues/8417
+    this.paginator._changePageSize(this.paginator.pageSize);
   }
 
   onEnterKey(event) {
@@ -117,24 +128,26 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   onSelectEntity(entity: Entity) {
-    this.selectedEntity = entity;
+    this.selectedEntity = new Entity(entity);
     this.selectedSeed = null;
-    this.seedService.search({entity_id: entity.id}).pipe(map(reply => reply.value || []))
-      .subscribe(seeds => {
+    this.seedService.search({entity_id: entity.id})
+      .pipe(map(reply => reply.value || []))
+      .subscribe((seeds) => {
         this.seedDatabase.items = seeds;
-
-        if (seeds.length) {
-          let seedId = this.route.snapshot.params['seedId'];
+        if (seeds.length > 0) {
+          /*let seedId = this.route.snapshot.params['seedId'];
           const index = seeds.findIndex((item) => item.id === seedId);
           if (index >= 0) {
             this.seedList.onRowClick(seeds[index]);
           } else {
             seedId = seeds[0].id;
-            this.seedList.onRowClick(seeds[0]);
+
           }
-          this.router.navigate(['search', {id: entity.id, seedId}]);
+          */
+          // this.router.navigate(['search', {id: entity.id, seedId}]);
+          this.seedList.onRowClick(seeds[0]);
         } else {
-          this.router.navigate(['search', {id: entity.id}]);
+          // this.router.navigate(['search', {id: entity.id}]);
         }
       });
   }
@@ -143,7 +156,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.entityService.create(entity)
       .subscribe((newEntity: Entity) => {
         this.selectedEntity = newEntity;
-        this.snackBarService.openSnackBar('Lagret');
+        this.snackBarService.openSnackBar('Entitet er lagret');
         this.searchTerm.next(this.searchTerm.value);
       });
   }
@@ -152,7 +165,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.entityService.update(entity)
       .subscribe((updatedEntity: Entity) => {
         this.selectedEntity = updatedEntity;
-        this.snackBarService.openSnackBar('Oppdatert');
+        this.snackBarService.openSnackBar('Entitet oppdatert');
         this.searchTerm.next(this.searchTerm.value);
       });
   }
@@ -170,21 +183,27 @@ export class SearchComponent implements OnInit, AfterViewInit {
       })
     )
       .subscribe((deletedEntity) => {
-        this.selectedEntity = null;
-        this.snackBarService.openSnackBar('Slettet');
+        this.onClearEntity();
+        this.snackBarService.openSnackBar('Entitet slettet');
         this.searchTerm.next(this.searchTerm.value);
       });
   }
 
+  onClearEntity(): void {
+    this.onClearSeed();
+    this.selectedEntity = null;
+    this.entityList.clearSelection();
+  }
+
   onSelectSeed(seed: Seed) {
     this.selectedSeed = seed;
-    this.router.navigate(['search', {id: this.selectedEntity.id, seedId: seed.id}]);
+//    this.router.navigate(['search', {id: this.selectedEntity.id, seedId: seed.id}]);
   }
 
   onCreateSeed(entityId: string) {
     this.seedList.clearSelection();
     if (entityId) {
-      this.selectedSeed = new Seed(entityId);
+      this.selectedSeed = new Seed({entityId});
     } else {
       this.snackBarService.openSnackBar('Kan ikke lage ny seed før gjeldende entitet er lagret');
     }
@@ -193,9 +212,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onSaveSeed(seed: Seed): void {
     this.seedService.create(seed)
       .subscribe((createdSeed) => {
-        this.onSelectSeed(createdSeed);
+        this.selectedSeed = createdSeed;
         this.seedDatabase.add(createdSeed);
-        this.snackBarService.openSnackBar('Lagret');
+        this.snackBarService.openSnackBar('Seed lagret');
       });
 
   }
@@ -205,7 +224,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       .subscribe((updatedSeed) => {
         this.selectedSeed = updatedSeed;
         this.seedDatabase.update(updatedSeed);
-        this.snackBarService.openSnackBar('Lagret');
+        this.snackBarService.openSnackBar('Seed er oppdatert');
       });
   }
 
@@ -214,11 +233,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
       .subscribe((deletedSeed) => {
         this.selectedSeed = null;
         this.seedDatabase.remove(seed);
-        this.snackBarService.openSnackBar('Slettet');
+        this.snackBarService.openSnackBar('Seed er slettet');
         // Update seed list of entity associated with deleted seed
         this.onSelectEntity(this.selectedEntity);
       });
   }
+
+  onClearSeed(): void {
+    this.selectedSeed = null;
+    this.seedList.clearSelection();
+  }
 }
-
-

@@ -1,61 +1,57 @@
-<ng-container [formGroup]="form">
-  <div fxFlex fxLayout="column">
-    <div *ngIf="!nameIsUrl">
-      <mat-form-field>
-        <input matInput formControlName="name" #name placeholder="Navn"
-               i18n-placeholder="@@metaNameInputPlaceholder">
-        <mat-error
-                   i18n="@@metaNameRequiredError">
-          Navn er påkrevd.
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div *ngIf="nameIsUrl">
-      <mat-form-field>
-        <input matInput formControlName="name" #name placeholder="URL"
-               i18n="@@metaUrlInputPlaceholder">
-        <mat-error
-                    i18n="@@metaUrlRequiredError">
-          En gyldig URL er påkrevd
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <mat-form-field>
-      <textarea matInput formControlName="description" placeholder="Beskrivelse"
-                i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
-      </textarea>
-    </mat-form-field>
+<div [formGroup]="form" fxLayout="column">
 
-    <app-labels [removable]="editable" formControlName="label"></app-labels>
+  <mat-form-field *ngIf="!nameIsUrl">
+    <input matInput formControlName="name" placeholder="Navn"
+           i18n-placeholder="@@metaNameInputPlaceholder">
+    <mat-error
+      i18n="@@metaNameRequiredError">
+      Navn er påkrevd
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="created"
-             placeholder="Opprettet"
-             i18n-placeholder="@@metaCreatedInputPlaceholder">
-    </mat-form-field>
+  <mat-form-field *ngIf="nameIsUrl">
+    <input matInput formControlName="name" placeholder="URL"
+           i18n="@@metaUrlInputPlaceholder">
+    <mat-error
+      i18n="@@metaUrlRequiredError">
+      En gyldig URL er påkrevd
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="created_by"
-             placeholder="Opprettet av"
-             i18n-placeholder="@@metaCreatedByInputPlaceholder">
-    </mat-form-field>
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Beskrivelse"
+              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
+    </textarea>
+  </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName=last_modified
-             placeholder="Sist endret"
-             i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-    </mat-form-field>
+  <app-labels [removable]="editable" formControlName="label"></app-labels>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="last_modified_by"
-             placeholder="Sist endret av"
-             i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput
+           formControlName="created"
+           placeholder="Opprettet"
+           i18n-placeholder="@@metaCreatedInputPlaceholder">
+  </mat-form-field>
 
-  </div>
-</ng-container>
+  <mat-form-field>
+    <input matInput
+           formControlName="created_by"
+           placeholder="Opprettet av"
+           i18n-placeholder="@@metaCreatedByInputPlaceholder">
+  </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           formControlName=last_modified
+           placeholder="Sist endret"
+           i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="last_modified_by"
+           placeholder="Sist endret av"
+           i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+  </mat-form-field>
+
+</div>

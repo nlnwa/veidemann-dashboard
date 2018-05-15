@@ -28,13 +28,14 @@
                      [pageSizeOptions]="pageOptions"></mat-paginator>
     </div>
   </div>
-  <div fxLayout="row wrap" fxLayoutGap="16px">
-    <div fxFlex>
-      <app-entity-details *ngIf="selectedEntity"
-                          [entity]="selectedEntity"
-                          (save)="onSaveEntity($event)"
-                          (update)="onUpdateEntity($event)"
-                          (delete)="onDeleteEntity($event)">
+  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
+    <div fxFlex *ngIf="selectedEntity">
+      <app-entity-details
+        [entity]="selectedEntity"
+        (save)="onSaveEntity($event)"
+        (update)="onUpdateEntity($event)"
+        (delete)="onDeleteEntity($event)"
+        (clear)="onClearEntity()">
         <!-- Seedlist -->
         <mat-toolbar>
           <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
@@ -46,13 +47,14 @@
         <app-seed-list (rowClick)="onSelectSeed($event)"></app-seed-list>
       </app-entity-details>
     </div>
-    <div fxFlex>
+    <div fxFlex *ngIf="selectedSeed">
       <app-seed-details
         [seed]="selectedSeed"
         [crawlJobs]="crawlJobs"
         (save)="onSaveSeed($event)"
         (update)="onUpdateSeed($event)"
-        (delete)="onDeleteSeed($event)">
+        (delete)="onDeleteSeed($event)"
+        (clear)="onClearSeed()">
       </app-seed-details>
     </div>
   </div>

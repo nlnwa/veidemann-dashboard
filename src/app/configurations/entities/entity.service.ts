@@ -7,9 +7,9 @@ import {Entity} from '../../commons/models/config.model';
 @Injectable()
 export class EntityService extends CrudService<Entity> {
 
-  static readonly URL: string = `${environment.apiGateway}/control/entities`;
+  protected readonly url: string = `${environment.apiGateway}/control/entities`;
 
   constructor(protected http: HttpClient) {
-    super(http, EntityService.URL);
+    super(http);
   }
 }
