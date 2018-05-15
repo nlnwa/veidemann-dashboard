@@ -1,5 +1,5 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -37,12 +37,14 @@ import {RouterModule} from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
   ],
+  providers: [DatePipe],
 })
 export class CommonsModule {
   public static forRoot(): ModuleWithProviders {
     return {
       ngModule: CommonsModule,
       providers: [
+        DatePipe,
         SnackBarService,
       ],
     };

@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
-import {DateTime} from '../datetime/datetime';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -11,11 +11,12 @@ import {
   Validator,
   Validators
 } from '@angular/forms';
-import {Meta} from '../models/config.model';
 import {Subscription} from 'rxjs';
+import {Meta} from '../models/config.model';
+
 
 @Component({
-//  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-meta',
   templateUrl: './meta.component.html',
   styleUrls: ['./meta.component.css'],
@@ -28,15 +29,14 @@ export class MetaComponent implements AfterViewInit, OnDestroy, ControlValueAcce
 
   form: FormGroup;
 
-  // ControlValueAccessor callback functions
+  // ControlValueAccessor callbacks
   onChange: (meta: Meta) => void;
   onTouched: (meta: Meta) => void;
 
-  private meta: Meta;
   private valueSubscription: Subscription;
 
-  constructor(private fb: FormBuilder) {
-    this.createForm();
+  constructor(private fb: FormBuilder, private datePipe: DatePipe) {
+    this.createForm(new Meta());
   }
 
   get editable(): boolean {
@@ -44,89 +44,72 @@ export class MetaComponent implements AfterViewInit, OnDestroy, ControlValueAcce
   }
 
   ngAfterViewInit() {
-    this.valueSubscription = this.form.valueChanges.subscribe((_) => {
-      if (this.meta === null) {
-        return;
-      }
-      this.updateValue(this.form.value);
-    });
+    this.valueSubscription = this.form.valueChanges.subscribe(this.onChange);
   }
 
   ngOnDestroy() {
-    this.valueSubscription.unsubscribe();
-  }
-
-  updateValue(meta: Meta) {
-    this.onChange(meta);
-  }
-
-  writeValue(meta: Meta): void {
-    if (meta !== null) {
-      this.meta = meta;
-      this.updateForm(meta);
-    } else {
-      this.meta = meta;
-      this.form.reset();
+    if (this.valueSubscription) {
+      this.valueSubscription.unsubscribe();
     }
   }
 
-  validate(ctrl: AbstractControl): ValidationErrors | null {
-    return this.form.valid ? null : {'invalidMeta': true};
+  // implement ControlValueAccessor
+  writeValue(meta: Meta): void {
+    if (meta === null) {
+      this.form.reset();
+    } else {
+      this.updateForm(meta);
+    }
   }
 
+  // implement ControlValueAccessor
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
+  // implement ControlValueAccessor
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
   // implement ControlValueAccessor
   setDisabledState(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.form.disable();
-    } else {
-      this.form.enable();
-    }
+    isDisabled ? this.form.disable() : this.form.enable();
   }
 
-  public createForm(): void {
+  // implement Validator
+  validate(ctrl: AbstractControl): ValidationErrors | null {
+    return this.form.valid ? null : {'invalidMeta': true};
+  }
+
+  private dateFormat(date: string): string {
+    return this.datePipe.transform(date, 'medium', 'UTC');
+  }
+
+  private createForm(meta: Meta): void {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      description: '',
-      created: {value: '', disabled: true},
-      created_by: {value: '', disabled: true},
-      last_modified: {value: '', disabled: true},
-      last_modified_by: {value: '', disabled: true},
-      label: [],
+      name: [meta.name, [Validators.required, Validators.minLength(2)]],
+      description: meta.description,
+      created: {value: meta.created, disabled: true},
+      created_by: {value: meta.created_by, disabled: true},
+      last_modified: {value: meta.last_modified, disabled: true},
+      last_modified_by: {value: meta.last_modified_by, disabled: true},
+      label: meta.label,
     });
   }
 
   private updateForm(meta: Meta): void {
+    // setting the emitEvent option to false  prevents the valueChange subscription above to fire
     this.form.setValue({
       name: meta.name,
       description: meta.description || '',
-      created: meta.created ? DateTime.formatTimestamp(meta.created) : '',
+      created: this.dateFormat(meta.created),
       created_by: meta.created_by || '',
-      last_modified: meta.last_modified ? DateTime.formatTimestamp(meta.last_modified) : '',
+      last_modified: this.dateFormat(meta.last_modified),
       last_modified_by: meta.last_modified_by || '',
       label: meta.label || [],
-    });
+    }, {emitEvent: false});
     this.form.markAsPristine();
     this.form.markAsUntouched();
-  }
-
-  private getValue(): Meta {
-    const formModel = this.form.value;
-    return {
-      name: formModel.name,
-      description: formModel.description,
-      // created: this.meta.created,
-      // created_by: this.meta.created_by,
-      // last_modified: this.meta.last_modified,
-      // last_modified_by: this.meta.last_modified_by,
-      label: formModel.label,
-    };
   }
 }
