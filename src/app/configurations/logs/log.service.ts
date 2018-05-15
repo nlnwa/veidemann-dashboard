@@ -8,7 +8,7 @@ import {LogLevels} from '../../commons/models/config.model';
 @Injectable()
 export class LogService {
 
-  private logConfigUrl = `${environment.apiGateway}/control/logconfig`;
+  private readonly url = `${environment.apiGateway}/control/logconfig`;
 
   constructor(private http: HttpClient) {
   }
@@ -18,10 +18,10 @@ export class LogService {
   }
 
   getLogConfig(): Observable<LogLevels> {
-    return this.http.get<LogLevels>(this.logConfigUrl);
+    return this.http.get<LogLevels>(this.url);
   }
 
   saveLogConfig(logConfig: LogLevels): Observable<LogLevels> {
-    return this.http.post<LogLevels>(this.logConfigUrl, logConfig);
+    return this.http.post<LogLevels>(this.url, logConfig);
   }
 }

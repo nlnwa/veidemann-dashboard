@@ -7,10 +7,9 @@ import {CrawlHostGroupConfig} from '../../commons/models/config.model';
 @Injectable()
 export class CrawlHostGroupConfigService extends CrudService<CrawlHostGroupConfig> {
 
-  static readonly URL: string = `${environment.apiGateway}/control/crawlhostgroupconfigs`;
+  protected readonly url: string = `${environment.apiGateway}/control/crawlhostgroupconfigs`;
 
   constructor(protected http: HttpClient) {
-    super(http, CrawlHostGroupConfigService.URL);
+    super(http);
   }
 }
-

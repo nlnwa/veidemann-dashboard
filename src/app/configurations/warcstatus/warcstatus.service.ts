@@ -5,21 +5,21 @@ import {Observable} from 'rxjs';
 @Injectable()
 export class WarcStatusService {
 
-  private readonly URL: string = '/validator/api';
+  private readonly url: string = '/validator/api';
 
   constructor(private http: HttpClient) {
   }
 
   getValidationErrors(): Observable<any[]> {
-    return this.http.get<any[]>(this.URL);
+    return this.http.get<any[]>(this.url);
   }
 
   getNumberOfInvalidWarcs(): Observable<any> {
-    return this.http.get<any>(this.URL + '/invalid/');
+    return this.http.get<any>(this.url + '/invalid/');
   }
 
   getNumberOfValidWarcs(): Observable<any> {
-    return this.http.get<any>(this.URL + '/valid/');
+    return this.http.get<any>(this.url + '/valid/');
   }
 
 }
