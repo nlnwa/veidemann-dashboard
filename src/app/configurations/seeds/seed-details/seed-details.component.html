@@ -13,7 +13,7 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta"></app-meta>
+        <app-meta formControlName="meta" [nameIsUrl]="true"></app-meta>
         <mat-form-field *ngIf="seed.id">
           <input matInput formControlName="id" placeholder="Id"
                  i18n-placeholder="@@seedFormIdPlaceholder">

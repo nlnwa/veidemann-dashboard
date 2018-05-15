@@ -1,15 +1,26 @@
 <div [formGroup]="form" fxLayout="column">
-  <mat-form-field>
+
+  <mat-form-field *ngIf="!nameIsUrl">
     <input matInput formControlName="name" placeholder="Navn"
-      i18n-placeholder="@@metaNameInputPlaceholder">
-    <mat-error i18n="@@metaNameRequiredError">
-      Navn er påkrevd.
+           i18n-placeholder="@@metaNameInputPlaceholder">
+    <mat-error
+      i18n="@@metaNameRequiredError">
+      Navn er påkrevd
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="nameIsUrl">
+    <input matInput formControlName="name" placeholder="URL"
+           i18n="@@metaUrlInputPlaceholder">
+    <mat-error
+      i18n="@@metaUrlRequiredError">
+      En gyldig URL er påkrevd
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <textarea matInput formControlName="description" placeholder="Beskrivelse"
-      i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
+              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
     </textarea>
   </mat-form-field>
 
@@ -17,30 +28,30 @@
 
   <mat-form-field>
     <input matInput
-      formControlName="created"
-      placeholder="Opprettet"
-      i18n-placeholder="@@metaCreatedInputPlaceholder">
+           formControlName="created"
+           placeholder="Opprettet"
+           i18n-placeholder="@@metaCreatedInputPlaceholder">
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-      formControlName="created_by"
-      placeholder="Opprettet av"
-      i18n-placeholder="@@metaCreatedByInputPlaceholder">
+           formControlName="created_by"
+           placeholder="Opprettet av"
+           i18n-placeholder="@@metaCreatedByInputPlaceholder">
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-      formControlName=last_modified
-      placeholder="Sist endret"
-      i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+           formControlName=last_modified
+           placeholder="Sist endret"
+           i18n-placeholder="@@metaLastModifiedInputPlaceholder">
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-      formControlName="last_modified_by"
-      placeholder="Sist endret av"
-      i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+           formControlName="last_modified_by"
+           placeholder="Sist endret av"
+           i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
   </mat-form-field>
 
 </div>
