@@ -54,18 +54,19 @@
             Cron expression er påkrevd.
           </mat-error>
         </fieldset>
+        <div fxLayout="row wrap" fxLayoutGap="24px">
+          <mat-form-field>
+            <input matInput [matDatepicker]="validFromDatepicker" formControlName="valid_from" placeholder="Gyldig fra">
+            <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #validFromDatepicker></mat-datepicker>
+          </mat-form-field>
 
-        <mat-form-field>
-          <input matInput [matDatepicker]="validFromDatepicker" formControlName="valid_from" placeholder="Gyldig fra">
-          <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #validFromDatepicker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput [matDatepicker]="validToDatepicker" formControlName="valid_to" placeholder="Gyldig til">
-          <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #validToDatepicker></mat-datepicker>
-        </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="validToDatepicker" formControlName="valid_to" placeholder="Gyldig til">
+            <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #validToDatepicker></mat-datepicker>
+          </mat-form-field>
+        </div>
       </div>
 
       <div fxFlex fxLayout="column">
