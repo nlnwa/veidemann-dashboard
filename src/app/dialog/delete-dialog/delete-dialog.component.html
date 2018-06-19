@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Slett konfigurasjoner</h1>
+  <mat-dialog-content fxLayout="column" [formGroup]="form" fxFlex>
+
+    <span>er du sikker på at du vil slette alle {{numberOfConfigs}} konfigurasjoner?</span>
+    <br>
+    <mat-divider></mat-divider>
+    <label>For å bekrefte skriv inn hvor mange konfigurasjoner som blir slettet:</label>
+    <mat-form-field>
+      <input matInput
+             formControlName="delete_confirmation"
+             placeholder="Antall konfigurasjoner">
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-raised-button
+            mat-dialog-close
+            color="accent">Avbryt
+    </button>
+    <button mat-raised-button
+            color="warning"
+            (click)="onDelete()"> Slett
+    </button>
+  </mat-dialog-actions>
