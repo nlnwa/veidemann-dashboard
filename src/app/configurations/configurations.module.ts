@@ -35,6 +35,8 @@ import {WarcStatusListComponent} from './warcstatus/warcstatus-list/warcstatus-l
 import {WarcStatusDetailsComponent} from './warcstatus/warcstatus-details/warcstatus-details.component';
 import {WarcStatusPageComponent} from './warcstatus/warcstatus-page.component';
 import {WarcStatusService} from './warcstatus/warcstatus.service';
+import { SearchConfigComponent } from './search/search-config/search-config.component';
+import {DetailDirective} from './crawlhostgroupconfig/detail.directive';
 
 @NgModule({
   declarations: [
@@ -73,8 +75,11 @@ import {WarcStatusService} from './warcstatus/warcstatus.service';
     EntityListComponent,
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
-    WarcStatusPageComponent
+    WarcStatusPageComponent,
+    SearchConfigComponent,
+    DetailDirective,
   ],
+  entryComponents: [CrawlHostGroupConfigDetailsComponent],
   imports: [
     CommonsModule,
   ],

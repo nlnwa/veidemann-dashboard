@@ -1,5 +1,5 @@
-.highlight {
-  background-color: #eee;
+table {
+  width: 100%;
 }
 
 .list-row:hover {
@@ -11,5 +11,5 @@
 }
 
 .mat-table {
-  overflow: auto;
+  overflow-y: auto;
 }
