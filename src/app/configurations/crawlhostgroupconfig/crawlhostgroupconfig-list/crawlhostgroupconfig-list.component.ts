@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent} from '../../../commons/list/base-list/base-list.component';
-import {ListDataSource} from '../../../commons/list/list-datasource';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {CrawlHostGroupConfig} from '../../../commons/models/config.model';
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list';
+
 
 @Component({
   selector: 'app-crawlhostgroupconfig-list',
@@ -11,11 +12,10 @@ import {ListDataSource} from '../../../commons/list/list-datasource';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+export class CrawlHostGroupConfigListComponent extends SelectionBaseListComponent<CrawlHostGroupConfig> {
+  displayedColumns = ['select', 'name', 'description', 'label'];
 
-export class CrawlHostGroupConfigListComponent extends BaseListComponent {
-  constructor(public dataSource: ListDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description'];
+  constructor() {
+    super();
   }
 }
