@@ -79,7 +79,7 @@ import {DetailDirective} from './crawlhostgroupconfig/detail.directive';
     SearchConfigComponent,
     DetailDirective,
   ],
-  entryComponents: [CrawlHostGroupConfigDetailsComponent],
+  entryComponents: [CrawlHostGroupConfigDetailsComponent, BrowserScriptDetailsComponent],
   imports: [
     CommonsModule,
   ],

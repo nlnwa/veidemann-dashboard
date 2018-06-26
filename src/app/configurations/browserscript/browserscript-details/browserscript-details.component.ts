@@ -12,6 +12,11 @@ import {RoleService} from '../../../auth/role.service';
 export class BrowserScriptDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   browserScript: BrowserScript;
 
   @Output()
@@ -22,10 +27,15 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   delete = new EventEmitter<BrowserScript>();
 
   form: FormGroup;
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm( {
+      id: {value: '', disabled: true},
+      script: '',
+      meta: new Meta(),
+    });
   }
 
   get editable(): boolean {
@@ -66,15 +76,18 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm(): void {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      script: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
+  // private createForm(): void {
+  //   this.form = this.fb.group({
+  //     id: {value: '', disabled: true},
+  //     script: '',
+  //     meta: new Meta(),
+  //   });
+  // }
 
-  private updateForm(): void {
+  updateForm(): void {
     this.form.patchValue({
       id: this.browserScript.id,
       script: this.browserScript.script,
