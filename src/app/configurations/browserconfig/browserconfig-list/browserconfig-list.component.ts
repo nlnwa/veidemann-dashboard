@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent} from '../../../commons/list/base-list/base-list.component';
-import {ListDataSource} from '../../../commons/list/list-datasource';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list';
+import {BrowserConfig} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-browserconfig-list',
@@ -12,11 +12,10 @@ import {ListDataSource} from '../../../commons/list/list-datasource';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class BrowserConfigListComponent extends BaseListComponent {
-  constructor(public dataSource: ListDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description'];
+export class BrowserConfigListComponent extends SelectionBaseListComponent<BrowserConfig> {
+  displayedColumns = ['select', 'name', 'description', 'label'];
+
+  constructor() {
+    super();
   }
 }
-
