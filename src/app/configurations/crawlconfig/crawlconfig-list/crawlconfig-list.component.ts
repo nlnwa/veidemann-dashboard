@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent, ListDataSource} from '../../../commons/list/';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list';
+import {CrawlConfig} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-crawlconfig-list',
@@ -7,10 +8,11 @@ import {BaseListComponent, ListDataSource} from '../../../commons/list/';
   styleUrls: ['../../../commons/list/base-list/base-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CrawlConfigListComponent extends BaseListComponent {
-  constructor(public dataSource: ListDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description'];
+
+export class CrawlConfigListComponent extends SelectionBaseListComponent<CrawlConfig> {
+  displayedColumns = ['select', 'name', 'description', 'label'];
+
+  constructor() {
+    super();
   }
 }

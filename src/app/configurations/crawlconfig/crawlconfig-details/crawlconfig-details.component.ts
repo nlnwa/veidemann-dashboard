@@ -13,6 +13,11 @@ import {RoleService} from '../../../auth/role.service';
 export class CrawlConfigDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   crawlConfig: CrawlConfig;
   @Input()
   browserConfigs: BrowserConfig[];
@@ -28,6 +33,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   delete = new EventEmitter<CrawlConfig>();
 
   form: FormGroup;
+  shouldShow = true;
 
   browserConfigList: any[];
   politenessConfigList: any = [];
@@ -35,7 +41,18 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      browser_config_id: ['', CustomValidators.nonEmpty],
+      politeness_id: ['', CustomValidators.nonEmpty],
+      extra: this.fb.group({
+        extract_text: '',
+        create_snapshot: '',
+      }),
+      minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
+      depth_first: '',
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -140,22 +157,26 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      browser_config_id: ['', CustomValidators.nonEmpty],
-      politeness_id: ['', CustomValidators.nonEmpty],
-      extra: this.fb.group({
-        extract_text: '',
-        create_snapshot: '',
-      }),
-      minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
-      depth_first: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  // private createForm() {
+  //   this.form = this.fb.group({
+  //     id: {value: '', disabled: true},
+  //     browser_config_id: ['', CustomValidators.nonEmpty],
+  //     politeness_id: ['', CustomValidators.nonEmpty],
+  //     extra: this.fb.group({
+  //       extract_text: '',
+  //       create_snapshot: '',
+  //     }),
+  //     minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
+  //     depth_first: '',
+  //     meta: new Meta(),
+  //   });
+  // }
+
+  updateForm() {
     this.form.patchValue({
       id: this.crawlConfig.id,
       minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s,
