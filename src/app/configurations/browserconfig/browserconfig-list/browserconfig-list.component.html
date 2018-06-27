@@ -1,26 +1,65 @@
-<div>
-  <mat-table [dataSource]="dataSource">
+<table class="mat-table" *ngIf="isAllSelected() && dataSource.length > 0">
+  <tr class="mat-row">
+    <td class="mat-cell">
+      <span>Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert. </span>
+      <a *ngIf="pageLength>selection.selected.length" [routerLink]="" (click)="selectAllConfigs()">
+        Marker alle {{pageLength}} konfigurasjoner
+      </a>
+    </td>
+  </tr>
+</table>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)=checkboxToggle(row)
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
 
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Navn</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>Navn</th>
+      <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
     </ng-container>
 
     <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef>Beskrivelse</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>Beskrivelse</th>
+      <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef>Label</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-chip-list>
+          <mat-chip *ngFor="let label of row.meta.label"
+                    (click)="onClickLabel(label.key, label.value)">
+            {{label.key+':'+label.value}}
+          </mat-chip>
+        </mat-chip-list>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></tr>
+</table>
+<mat-paginator (page)="page.emit($event)"
+               [length]="pageLength"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageOptions">
+</mat-paginator>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns"
-             [ngClass]="{highlight: isSelected(row)}"
-             (click)="onRowClick(row)">
-    </mat-row>
-  </mat-table>
-</div>

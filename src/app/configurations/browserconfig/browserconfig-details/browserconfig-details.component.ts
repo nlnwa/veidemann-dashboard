@@ -9,6 +9,11 @@ import {RoleService} from '../../../auth/role.service';
   styleUrls: ['./browserconfig-details.component.css'],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
+
+  @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
   @Input()
   browserConfig: BrowserConfig;
   @Input()
@@ -24,9 +29,21 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
   browserScriptList: any[];
+  shouldShow = true;
 
   constructor(private fb: FormBuilder, private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      user_agent: ['', [Validators.required, Validators.minLength(1)]],
+      window_width: ['', [Validators.required, Validators.min(1)]],
+      window_height: ['', [Validators.required, Validators.min(1)]],
+      page_load_timeout_ms: ['', [Validators.required, Validators.min(0)]],
+      sleep_after_pageload_ms: ['', [Validators.required, Validators.min(0)]],
+      // headers: this.fb.group({''}),
+      script_id: '',
+      script_selector: '',
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -130,22 +147,11 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     }
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      user_agent: ['', [Validators.required, Validators.minLength(1)]],
-      window_width: ['', [Validators.required, Validators.min(1)]],
-      window_height: ['', [Validators.required, Validators.min(1)]],
-      page_load_timeout_ms: ['', [Validators.required, Validators.min(0)]],
-      sleep_after_pageload_ms: ['', [Validators.required, Validators.min(0)]],
-      // headers: this.fb.group({''}),
-      script_id: '',
-      script_selector: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.browserConfig.id,
       user_agent: this.browserConfig.user_agent,

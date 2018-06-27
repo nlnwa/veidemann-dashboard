@@ -82,6 +82,7 @@ import {DetailDirective} from './crawlhostgroupconfig/detail.directive';
   entryComponents: [
     CrawlHostGroupConfigDetailsComponent,
     BrowserScriptDetailsComponent,
+    BrowserConfigDetailsComponent,
     CrawlConfigDetailsComponent,
   ],
   imports: [
