@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent, ListDataSource} from '../../../commons/list';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {CrawlScheduleConfig} from '../../../commons/models/config.model';
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list';
 
 
 @Component({
@@ -12,11 +13,11 @@ import {BaseListComponent, ListDataSource} from '../../../commons/list';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class ScheduleListComponent extends BaseListComponent {
-  constructor(public dataSource: ListDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description'];
+export class ScheduleListComponent extends SelectionBaseListComponent<CrawlScheduleConfig> {
+  displayedColumns = ['select', 'name', 'description', 'label'];
+
+  constructor() {
+    super();
   }
 }
 

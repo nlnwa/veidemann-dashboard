@@ -30,6 +30,11 @@ import * as moment from 'moment';
 export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   schedule: CrawlScheduleConfig;
 
   @Output()
@@ -41,10 +46,23 @@ export class ScheduleDetailsComponent implements OnChanges {
   delete = new EventEmitter<CrawlScheduleConfig>();
 
   form: FormGroup;
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      valid_from: '',
+      valid_to: '',
+      cron_expression: this.fb.group({
+        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+      }),
+      meta: new Meta(),
+    });
   }
 
   get canDelete(): boolean {
@@ -106,23 +124,27 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      valid_from: '',
-      valid_to: '',
-      cron_expression: this.fb.group({
-        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-      }),
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  // private createForm() {
+  //   this.form = this.fb.group({
+  //     id: {value: '', disabled: true},
+  //     valid_from: '',
+  //     valid_to: '',
+  //     cron_expression: this.fb.group({
+  //       minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+  //       hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+  //       dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+  //       month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+  //       dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+  //     }),
+  //     meta: new Meta(),
+  //   });
+  // }
+
+  updateForm() {
     const cronSplit = this.schedule.cron_expression.split(' ');
     this.form.patchValue({
       id: this.schedule.id,
