@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {BaseListComponent} from '../../../commons/list/base-list/base-list.component';
-import {ListDataSource} from '../../../commons/list/list-datasource';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {PolitenessConfig} from '../../../commons/models/config.model';
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list';
 
 
 @Component({
@@ -12,11 +12,11 @@ import {ListDataSource} from '../../../commons/list/list-datasource';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PolitenessConfigListComponent extends BaseListComponent {
-  constructor(public dataSource: ListDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description'];
+
+export class PolitenessConfigListComponent extends SelectionBaseListComponent<PolitenessConfig> {
+  displayedColumns = ['select', 'name', 'description', 'label'];
+
+  constructor() {
+    super();
   }
 }
-

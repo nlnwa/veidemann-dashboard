@@ -14,6 +14,11 @@ import {RoleService} from '../../../auth/role.service';
 export class PolitenessconfigDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   politenessConfig: PolitenessConfig;
   @Input()
   robotsPolicies: string[];
@@ -27,10 +32,23 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
   robotsPolicyList: any[];
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
+      minimum_robots_validity_duration_s: ['', [Validators.required, Validators.min(0)]],
+      custom_robots: null,
+      min_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
+      max_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
+      delay_factor: '',
+      max_retries: '',
+      retry_delay_seconds: '',
+      crawl_host_group_selector: '',
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -106,23 +124,11 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      robots_policy: ['', [Validators.required, CustomValidators.nonEmpty]],
-      minimum_robots_validity_duration_s: ['', [Validators.required, Validators.min(0)]],
-      custom_robots: null,
-      min_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
-      max_time_between_page_load_ms: ['', [Validators.required, Validators.min(0)]],
-      delay_factor: '',
-      max_retries: '',
-      retry_delay_seconds: '',
-      crawl_host_group_selector: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.politenessConfig.id,
       robots_policy: this.politenessConfig.robots_policy || this.robotsPolicies[0],
