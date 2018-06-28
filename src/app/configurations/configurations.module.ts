@@ -84,6 +84,7 @@ import {DetailDirective} from './crawlhostgroupconfig/detail.directive';
     BrowserScriptDetailsComponent,
     BrowserConfigDetailsComponent,
     CrawlConfigDetailsComponent,
+    CrawljobDetailsComponent,
   ],
   imports: [
     CommonsModule,

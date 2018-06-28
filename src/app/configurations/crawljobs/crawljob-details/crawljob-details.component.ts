@@ -13,7 +13,10 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawljobDetailsComponent implements OnChanges {
-
+@Input()
+set data(show) {
+  this.shouldShow = show;
+}
   @Input()
   crawlJob: CrawlJob;
   @Input()
@@ -30,11 +33,23 @@ export class CrawljobDetailsComponent implements OnChanges {
   delete = new EventEmitter<CrawlJob>();
 
   form: FormGroup;
+  shouldShow = true;
 
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      schedule_id: [],
+      crawl_config_id: ['', CustomValidators.nonEmpty],
+      disabled: false,
+      limits: this.fb.group({
+        depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        max_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        max_bytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      }),
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -151,23 +166,11 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      schedule_id: [],
-      crawl_config_id: ['', CustomValidators.nonEmpty],
-      disabled: false,
-      limits: this.fb.group({
-        depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-        max_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-        max_bytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      }),
-      meta: new Meta(),
-    })
-    ;
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.crawlJob.id,
       disabled: !this.crawlJob.disabled,
