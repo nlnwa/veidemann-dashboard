@@ -36,7 +36,7 @@ import {WarcStatusDetailsComponent} from './warcstatus/warcstatus-details/warcst
 import {WarcStatusPageComponent} from './warcstatus/warcstatus-page.component';
 import {WarcStatusService} from './warcstatus/warcstatus.service';
 import { SearchConfigComponent } from './search/search-config/search-config.component';
-import {DetailDirective} from './crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from './shared/detail.directive';
 
 @NgModule({
   declarations: [

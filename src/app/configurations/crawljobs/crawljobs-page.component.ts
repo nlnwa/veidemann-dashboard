@@ -10,7 +10,7 @@ import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.component';
@@ -76,25 +76,8 @@ export class CrawlJobsComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  loadComponent(crawlJob: CrawlJob, schedules: CrawlScheduleConfig[], crawlConfigs: CrawlConfig[]) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawljobDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as CrawljobDetailsComponent;
-    instance.crawlJob = crawlJob;
-    instance.schedules = schedules.map((schedule) => ({
-      id: schedule.id,
-      itemName: schedule.meta.name
-    }));
-    instance.crawlConfigs = crawlConfigs.map((crawlConfig) => ({
-      id: crawlConfig.id,
-      itemName: crawlConfig.meta.name
-    }));
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig));
-    instance.delete.subscribe((crawlJobConfig) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
@@ -121,10 +104,34 @@ export class CrawlJobsComponent implements OnInit {
         pageIndex: reply.page || 0,
       });
     });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.crawlJobService.get(id)
+        .subscribe(crawlJob => {
+          this.crawlJob = crawlJob;
+        });
+    }
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(crawlJob: CrawlJob, schedules: CrawlScheduleConfig[], crawlConfigs: CrawlConfig[]) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawljobDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as CrawljobDetailsComponent;
+    instance.crawlJob = crawlJob;
+    instance.schedules = schedules.map((schedule) => ({
+      id: schedule.id,
+      itemName: schedule.meta.name
+    }));
+    instance.crawlConfigs = crawlConfigs.map((crawlConfig) => ({
+      id: crawlConfig.id,
+      itemName: crawlConfig.meta.name
+    }));
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig));
+    instance.delete.subscribe((crawlJobConfig) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -181,7 +188,6 @@ export class CrawlJobsComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlJob: CrawlJob) => {
-        console.log(crawlJob);
         crawlJob.disabled = crawlJobUpdate.disabled;
         crawlJob.meta.label = updatedLabels(crawlJobUpdate.meta.label.concat(crawlJob.meta.label));
         crawlJob.limits.depth = crawlJobUpdate.limits.depth;

@@ -7,10 +7,8 @@ import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ScheduleService} from './schedule.service';
-
-
 import {ActivatedRoute} from '@angular/router';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {ScheduleDetailsComponent} from './schedule-details/schedule-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -34,11 +32,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                            (labelClicked)="onLabelClick($event)"
                            (page)="onPage($event)">
         </app-schedule-list>
-        <!--<mat-paginator [length]="pageLength"-->
-        <!--[pageIndex]="pageIndex"-->
-        <!--[pageSize]="pageSize"-->
-        <!--[pageSizeOptions]="pageOptions">-->
-        <!--</mat-paginator>-->
       </div>
       <app-schedule-details [schedule]="schedule"
                             *ngIf="schedule && singleMode"
@@ -55,13 +48,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 })
 
 export class SchedulePageComponent implements OnInit {
-  // pageLength = 0;
-  // pageSize = 5;
-  // pageIndex = 0;
-  // pageOptions = [5, 10];
-  //
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(ScheduleListComponent) list: ScheduleListComponent;
 
   selectedConfigs = [];
   term = '';
@@ -83,45 +69,8 @@ export class SchedulePageComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  // ngAfterViewInit() {
-  //   merge(this.paginator.page, this.changes).pipe(
-  //     startWith(null),
-  //     switchMap(() => {
-  //       return this.scheduleService.search({
-  //         page_size: this.paginator.pageSize,
-  //         page: this.paginator.pageIndex
-  //       });
-  //     }),
-  //     map((reply) => {
-  //       this.pageLength = parseInt(reply.count, 10);
-  //       this.pageSize = reply.page_size;
-  //       this.pageIndex = reply.page;
-  //       return reply.value;
-  //     })
-  //   )
-  //     .subscribe((items) => {
-  //       this.database.items = items;
-  //     });
-  //   const id = this.route.snapshot.paramMap.get('id');
-  //   if (id != null) {
-  //     this.scheduleService.get(id)
-  //       .subscribe(schedule => {
-  //         this.schedule = schedule;
-  //       });
-  //   }
-  // }
-
-  loadComponent(schedule: CrawlScheduleConfig) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ScheduleDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as ScheduleDetailsComponent;
-    instance.schedule = schedule;
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig));
-    instance.delete.subscribe((scheduleConfig) => this.onDeleteMultipleSchedules(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
@@ -149,8 +98,17 @@ export class SchedulePageComponent implements OnInit {
     });
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(schedule: CrawlScheduleConfig) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ScheduleDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as ScheduleDetailsComponent;
+    instance.schedule = schedule;
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig));
+    instance.delete.subscribe((scheduleConfig) => this.onDeleteMultipleSchedules(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -205,7 +163,6 @@ export class SchedulePageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
-        console.log(schedule);
         schedule.meta.label = updatedLabels(
           scheduleUpdate.meta.label.concat(schedule.meta.label));
         schedule.cron_expression = scheduleUpdate.cron_expression;
@@ -274,15 +231,15 @@ export class SchedulePageComponent implements OnInit {
     config.meta.name = 'Multi';
 
     const equalCronExpression = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.cron_expression = compareObj.cron_expression;
+      return cfg.cron_expression === compareObj.cron_expression;
     });
 
     const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.valid_from = compareObj.valid_from;
+      return cfg.valid_from === compareObj.valid_from;
     });
 
     const equalValidTo = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.valid_to = compareObj.valid_to;
+      return cfg.valid_to === compareObj.valid_to;
     });
 
     if (equalCronExpression) {
@@ -316,7 +273,6 @@ function intersectLabel(a, b) {
   ));
   return Array.from(intersection);
 }
-
 
 function updatedLabels(labels) {
   const result = labels.reduce((unique, o) => {

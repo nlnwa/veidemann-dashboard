@@ -8,7 +8,7 @@ import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {PolitenessConfigService} from './politenessconfig.service';
 import {ActivatedRoute} from '@angular/router';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {PolitenessconfigDetailsComponent} from './politenessconfig-details/politenessconfig-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -70,18 +70,8 @@ export class PolitenessConfigPageComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  loadComponent(politenessConfig: PolitenessConfig, robotsPolicies: any[]) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PolitenessconfigDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as PolitenessconfigDetailsComponent;
-    instance.robotsPolicyList = robotsPolicies;
-    instance.politenessConfig = politenessConfig;
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs));
-    instance.delete.subscribe((politenessConfigs) => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
@@ -112,8 +102,18 @@ export class PolitenessConfigPageComponent implements OnInit {
     }
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(politenessConfig: PolitenessConfig, robotsPolicies: any[]) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PolitenessconfigDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as PolitenessconfigDetailsComponent;
+    instance.robotsPolicyList = robotsPolicies;
+    instance.politenessConfig = politenessConfig;
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs));
+    instance.delete.subscribe((politenessConfigs) => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -238,7 +238,7 @@ export class PolitenessConfigPageComponent implements OnInit {
     config.meta.name = 'Multi';
 
     const equalRobotPolicy = configs.every(function (cfg: PolitenessConfig) {
-      return cfg.robots_policy = compareObj.robots_policy;
+      return cfg.robots_policy === compareObj.robots_policy;
     });
 
     const equalMinRobotsValidity = configs.every(function (cfg: PolitenessConfig) {
@@ -262,7 +262,7 @@ export class PolitenessConfigPageComponent implements OnInit {
     });
 
     const equalRetryDelay = configs.every(function (cfg: PolitenessConfig) {
-      return cfg.retry_delay_seconds = compareObj.retry_delay_seconds;
+      return cfg.retry_delay_seconds === compareObj.retry_delay_seconds;
     });
 
     if (equalRobotPolicy) {
@@ -308,7 +308,6 @@ function intersectLabel(a, b) {
   ));
   return Array.from(intersection);
 }
-
 
 function updatedLabels(labels) {
   const result = labels.reduce((unique, o) => {

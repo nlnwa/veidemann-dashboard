@@ -7,10 +7,7 @@ import {
   VALID_CRON_DOW_PATTERN,
   VALID_CRON_HOUR_PATTERN,
   VALID_CRON_MINUTE_PATTERN,
-  VALID_CRON_MONTH_PATTERN,
-  VALID_DAY_PATTERN,
-  VALID_MONTH_PATTERN,
-  VALID_YEAR_PATTERN
+  VALID_CRON_MONTH_PATTERN
 } from '../../../commons/validator';
 import {RoleService} from '../../../auth/role.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
@@ -127,22 +124,6 @@ export class ScheduleDetailsComponent implements OnChanges {
   private createForm(controlsConfig: object) {
     this.form = this.fb.group(controlsConfig);
   }
-
-  // private createForm() {
-  //   this.form = this.fb.group({
-  //     id: {value: '', disabled: true},
-  //     valid_from: '',
-  //     valid_to: '',
-  //     cron_expression: this.fb.group({
-  //       minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-  //       hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-  //       dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-  //       month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-  //       dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-  //     }),
-  //     meta: new Meta(),
-  //   });
-  // }
 
   updateForm() {
     const cronSplit = this.schedule.cron_expression.split(' ');
