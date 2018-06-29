@@ -54,7 +54,6 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
 
   onRowClick(item: T) {
     this.rowClick.emit(item);
-
   }
 
   isAllSelected() {
@@ -77,7 +76,6 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   onClickLabel(key: string, value: string) {
-    console.log('label klikk emit');
     this.labelClicked.emit(key + ':' + value);
   }
 

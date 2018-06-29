@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
@@ -39,11 +38,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                             (save)="onSaveSchedule($event)"
                             (delete)="onDeleteSchedule($event)">
       </app-schedule-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="schedule"></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -108,7 +106,7 @@ export class SchedulePageComponent implements OnInit {
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig));
-    instance.delete.subscribe((scheduleConfig) => this.onDeleteMultipleSchedules(this.selectedConfigs));
+    instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -127,9 +125,19 @@ export class SchedulePageComponent implements OnInit {
     console.log('in pageComp ', labelQuery);
   }
 
-  onSelectedChange(configs: CrawlScheduleConfig[]) {
-    this.loadComponent(this.mergeSchedules(configs));
-    this.selectedConfigs = configs;
+  onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
+    this.selectedConfigs = crawlScheduleConfigs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs));
+    } else {
+      this.schedule = crawlScheduleConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.schedule === undefined) {
+        this.schedule = null;
+      }
+    }
   }
 
   onCreateSchedule(): void {
@@ -174,7 +182,7 @@ export class SchedulePageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.schedule = null;
@@ -185,7 +193,7 @@ export class SchedulePageComponent implements OnInit {
 
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
-      .subscribe((response) => {
+      .subscribe(() => {
         this.schedule = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
@@ -211,7 +219,7 @@ export class SchedulePageComponent implements OnInit {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.schedule = null;

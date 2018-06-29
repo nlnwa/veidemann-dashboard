@@ -5,7 +5,6 @@ import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from './crawlconfig.service';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {BrowserConfigService} from '../browserconfig/browserconfig.service';
 import {PolitenessConfigService} from '../politenessconfig/politenessconfig.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -44,11 +43,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                (save)="onSaveCrawlConfig($event)"
                                (delete)="onDeleteCrawlConfig($event)">
       </app-crawlconfig-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="crawlConfig"></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
 })
 export class CrawlConfigPageComponent implements OnInit {
 
@@ -135,7 +133,7 @@ export class CrawlConfigPageComponent implements OnInit {
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs));
-    instance.delete.subscribe((crawlConfigs) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -154,9 +152,19 @@ export class CrawlConfigPageComponent implements OnInit {
     console.log('in pageComp ', labelQuery);
   }
 
-  onSelectedChange(configs: CrawlConfig[]) {
-    this.loadComponent(this.mergeCrawlConfigs(configs), this.browserConfigs, this.politenessConfigs);
-    this.selectedConfigs = configs;
+  onSelectedChange(crawlConfigs: CrawlConfig[]) {
+    this.selectedConfigs = crawlConfigs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs);
+    } else {
+      this.crawlConfig = crawlConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.crawlConfig === undefined) {
+        this.crawlConfig = null;
+      }
+    }
   }
 
   onCreateCrawlConfig(): void {
@@ -203,7 +211,7 @@ export class CrawlConfigPageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.crawlConfig = null;
@@ -214,7 +222,7 @@ export class CrawlConfigPageComponent implements OnInit {
 
   onDeleteCrawlConfig(crawlConfig: CrawlConfig) {
     this.crawlConfigService.delete(crawlConfig.id)
-      .subscribe((response) => {
+      .subscribe(() => {
         this.crawlConfig = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
@@ -239,7 +247,7 @@ export class CrawlConfigPageComponent implements OnInit {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.crawlConfig = null;
