@@ -6,7 +6,7 @@ import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlHostGroupConfig, IpRange, Label} from '../../commons/models/config.model';
 import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 import {of} from 'rxjs/internal/observable/of';
-import {DetailDirective} from './detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-details/crawlhostgroupconfig-details.component';
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
@@ -69,19 +69,9 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  loadComponent(config: CrawlHostGroupConfig) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as CrawlHostGroupConfigDetailsComponent;
-    instance.crawlHostGroupConfig = config;
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((crawlHostGroupConfig) => this.onSaveMultipleCrawlHostGroupConfigs(crawlHostGroupConfig));
-    instance.delete.subscribe((configs) => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
-
 
   ngOnInit() {
     combineLatest(this.page, this.changes.pipe(startWith(null))).pipe(
@@ -101,8 +91,17 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(config: CrawlHostGroupConfig) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as CrawlHostGroupConfigDetailsComponent;
+    instance.crawlHostGroupConfig = config;
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((crawlHostGroupConfig) => this.onSaveMultipleCrawlHostGroupConfigs(crawlHostGroupConfig));
+    instance.delete.subscribe((configs) => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {

@@ -11,7 +11,7 @@ import {PolitenessConfigService} from '../politenessconfig/politenessconfig.serv
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {CrawlConfigDetailsComponent} from './crawlconfig-details/crawlconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -78,26 +78,8 @@ export class CrawlConfigPageComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  loadComponent(crawlConfig: CrawlConfig, browserConfigs: BrowserConfig[], politenessConfigs: PolitenessConfig[]) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlConfigDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as CrawlConfigDetailsComponent;
-    instance.crawlConfig = crawlConfig;
-    instance.browserConfigList = browserConfigs.map((browserConfig) => ({
-      id: browserConfig.id,
-      itemName: browserConfig.meta.name,
-    }));
-    instance.politenessConfigList = politenessConfigs.map((politenessConfig) => ({
-      id: politenessConfig.id,
-      itemName: politenessConfig.meta.name
-    }));
-    console.log('instance', instance.crawlConfig);
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs));
-    instance.delete.subscribe((crawlConfigs) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
@@ -126,10 +108,34 @@ export class CrawlConfigPageComponent implements OnInit {
         pageIndex: reply.page || 0,
       });
     });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.crawlConfigService.get(id)
+        .subscribe(crawlConfig => {
+          this.crawlConfig = crawlConfig;
+        });
+    }
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(crawlConfig: CrawlConfig, browserConfigs: BrowserConfig[], politenessConfigs: PolitenessConfig[]) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlConfigDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as CrawlConfigDetailsComponent;
+    instance.crawlConfig = crawlConfig;
+    instance.browserConfigList = browserConfigs.map((browserConfig) => ({
+      id: browserConfig.id,
+      itemName: browserConfig.meta.name,
+    }));
+    instance.politenessConfigList = politenessConfigs.map((politenessConfig) => ({
+      id: politenessConfig.id,
+      itemName: politenessConfig.meta.name
+    }));
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs));
+    instance.delete.subscribe((crawlConfigs) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -333,7 +339,6 @@ function intersectLabel(a, b) {
   ));
   return Array.from(intersection);
 }
-
 
 function updatedLabels(labels) {
   const result = labels.reduce((unique, o) => {

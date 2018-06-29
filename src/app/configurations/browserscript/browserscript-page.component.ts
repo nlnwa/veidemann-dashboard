@@ -6,7 +6,7 @@ import {SnackBarService} from 'app/commons/snack-bar/snack-bar.service';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -33,11 +33,6 @@ import {ActivatedRoute} from '@angular/router';
                                 (labelClicked)="onLabelClick($event)"
                                 (page)="onPage($event)">
         </app-browserscript-list>
-        <!--<mat-paginator [length]="pageLength"-->
-        <!--[pageIndex]="pageIndex"-->
-        <!--[pageSize]="pageSize"-->
-        <!--[pageSizeOptions]="pageOptions">-->
-        <!--</mat-paginator>-->
       </div>
       <app-browserscript-details [browserScript]="browserScript"
                                  *ngIf="browserScript && singleMode"
@@ -53,10 +48,6 @@ import {ActivatedRoute} from '@angular/router';
 })
 
 export class BrowserScriptPageComponent implements OnInit {
-  // pageLength = 0;
-  // pageSize = 5;
-  // pageIndex = 0;
-  // pageOptions = [5, 10];
 
   selectedConfigs = [];
   term = '';
@@ -68,18 +59,8 @@ export class BrowserScriptPageComponent implements OnInit {
   data = new Subject<any>();
   data$ = this.data.asObservable();
 
-
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(BrowserScriptListComponent) list: BrowserScriptListComponent;
-
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
-
-  // constructor(private browserScriptService: BrowserScriptService,
-  //             private snackBarService: SnackBarService,
-  //             private database: ListDatabase,
-  //             private route: ActivatedRoute) {
-  // }
   constructor(private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
               private componentFactoryResolver: ComponentFactoryResolver,
@@ -87,57 +68,10 @@ export class BrowserScriptPageComponent implements OnInit {
               private roleService: RoleService,
               private dialog: MatDialog,
               private route: ActivatedRoute) {
-
   }
-
-  //
-  // ngAfterViewInit() {
-  //   // When paginator has changes or on save/update/delete
-  //   // we reload data for the list
-  //   merge(this.paginator.page, this.changes).pipe(
-  //     startWith(null),
-  //     switchMap(() => {
-  //       return this.browserScriptService.search({
-  //         page_size: this.paginator.pageSize,
-  //         page: this.paginator.pageIndex
-  //       });
-  //     }),
-  //     map((reply) => {
-  //       this.pageLength = parseInt(reply.count, 10);
-  //       this.pageSize = reply.page_size;
-  //       this.pageIndex = reply.page;
-  //       return reply.value;
-  //     })
-  //   )
-  //     .subscribe((items) => {
-  //       this.database.items = items;
-  //     });
-  //   const id = this.route.snapshot.paramMap.get('id');
-  //   if (id != null) {
-  //     this.browserScriptService.get(id)
-  //       .subscribe(response => {
-  //         this.browserScript = response;
-  //       });
-  //   }
-  // }
-
 
   get singleMode(): boolean {
     return this.selectedConfigs.length < 2;
-  }
-
-  loadComponent(browserScript: BrowserScript) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserScriptDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as BrowserScriptDetailsComponent;
-    instance.browserScript = browserScript;
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((config) => this.onUpdateMultipleBrowserScripts(config));
-    instance.delete.subscribe((config) => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
-
   }
 
   ngOnInit() {
@@ -163,6 +97,20 @@ export class BrowserScriptPageComponent implements OnInit {
           this.browserScript = response;
         });
     }
+  }
+
+  loadComponent(browserScript: BrowserScript) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserScriptDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as BrowserScriptDetailsComponent;
+    instance.browserScript = browserScript;
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((config) => this.onUpdateMultipleBrowserScripts(config));
+    instance.delete.subscribe((config) => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
+
   }
 
   onPage(page: PageEvent) {
@@ -261,7 +209,7 @@ export class BrowserScriptPageComponent implements OnInit {
         if (browserScriptUpdate.script.length > 0) {
           browserScript.script = browserScriptUpdate.script;
         }
-          return this.browserScriptService.update(browserScript);
+        return this.browserScriptService.update(browserScript);
       }),
       catchError((err) => {
         console.log(err);
@@ -280,7 +228,6 @@ export class BrowserScriptPageComponent implements OnInit {
     const config = new BrowserScript();
     config.id = '1234567';
     config.meta.name = 'Multi';
-
     const label = browserScripts.reduce((acc: BrowserScript, curr: BrowserScript) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;

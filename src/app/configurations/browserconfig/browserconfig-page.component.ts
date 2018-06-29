@@ -9,7 +9,7 @@ import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 
 import {ActivatedRoute, Router} from '@angular/router';
-import {DetailDirective} from '../crawlhostgroupconfig/detail.directive';
+import {DetailDirective} from '../shared/detail.directive';
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
@@ -77,22 +77,8 @@ export class BrowserConfigPageComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[]) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserConfigDetailsComponent);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as BrowserConfigDetailsComponent;
-    instance.browserConfig = browserConfig;
-    instance.browserScriptList = browserScripts.map((browserScript) => ({
-      id: browserScript.id,
-      itemName: browserScript.meta.name,
-    }));
-    console.log('loadComp: ', instance.browserConfig);
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs));
-    instance.delete.subscribe((browserConfigs) => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
@@ -117,10 +103,30 @@ export class BrowserConfigPageComponent implements OnInit {
         pageIndex: reply.page || 0,
       });
     });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.browserConfigService.get(id)
+        .subscribe(browserConfig => {
+          this.browserConfig = browserConfig;
+        });
+    }
   }
 
-  get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[]) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserConfigDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as BrowserConfigDetailsComponent;
+    instance.browserConfig = browserConfig;
+    instance.browserScriptList = browserScripts.map((browserScript) => ({
+      id: browserScript.id,
+      itemName: browserScript.meta.name,
+    }));
+    instance.data = false;
+    instance.updateForm();
+    instance.update.subscribe((browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs));
+    instance.delete.subscribe((browserConfigs) => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -176,7 +182,6 @@ export class BrowserConfigPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserConfig: BrowserConfig) => {
-        console.log(browserConfig);
         browserConfig.meta.label = updatedLabels(browserConfigUpdate.meta.label.concat(browserConfig.meta.label));
         browserConfig.user_agent = browserConfigUpdate.user_agent;
         browserConfig.window_width = browserConfigUpdate.window_width;
@@ -312,7 +317,6 @@ function intersectLabel(a, b) {
   ));
   return Array.from(intersection);
 }
-
 
 function updatedLabels(labels) {
   const result = labels.reduce((unique, o) => {

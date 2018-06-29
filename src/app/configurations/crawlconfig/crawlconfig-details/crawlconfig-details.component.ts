@@ -38,7 +38,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   browserConfigList: any[];
   politenessConfigList: any = [];
 
-
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
     this.createForm({
@@ -160,21 +159,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   private createForm(controlsConfig: object) {
     this.form = this.fb.group(controlsConfig);
   }
-
-  // private createForm() {
-  //   this.form = this.fb.group({
-  //     id: {value: '', disabled: true},
-  //     browser_config_id: ['', CustomValidators.nonEmpty],
-  //     politeness_id: ['', CustomValidators.nonEmpty],
-  //     extra: this.fb.group({
-  //       extract_text: '',
-  //       create_snapshot: '',
-  //     }),
-  //     minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
-  //     depth_first: '',
-  //     meta: new Meta(),
-  //   });
-  // }
 
   updateForm() {
     this.form.patchValue({

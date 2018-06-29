@@ -15,7 +15,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   set data(show) {
     this.shouldShow = show;
   }
-
   @Input()
   browserScript: BrowserScript;
 
@@ -79,13 +78,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   private createForm(controlsConfig: object) {
     this.form = this.fb.group(controlsConfig);
   }
-  // private createForm(): void {
-  //   this.form = this.fb.group({
-  //     id: {value: '', disabled: true},
-  //     script: '',
-  //     meta: new Meta(),
-  //   });
-  // }
 
   updateForm(): void {
     this.form.patchValue({
