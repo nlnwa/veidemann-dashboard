@@ -1,6 +1,5 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
-import {MatDialogConfig, PageEvent, MatDialog} from '@angular/material';
+import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {BrowserConfig, BrowserScript, Label} from '../../commons/models/config.model';
 import {BrowserConfigService} from './browserconfig.service';
 import {BrowserScriptService} from '../browserscript/browserscript.service';
@@ -43,11 +42,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                  (save)="onSaveBrowserConfig($event)"
                                  (delete)="onDeleteBrowserConfig($event)">
       </app-browserconfig-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="browserConfig"></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
 })
 
 export class BrowserConfigPageComponent implements OnInit {
@@ -68,7 +66,6 @@ export class BrowserConfigPageComponent implements OnInit {
   constructor(private browserConfigService: BrowserConfigService,
               private browserScriptService: BrowserScriptService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase,
               private route: ActivatedRoute,
               private router: Router,
               private componentFactoryResolver: ComponentFactoryResolver,
@@ -125,8 +122,10 @@ export class BrowserConfigPageComponent implements OnInit {
     }));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs));
-    instance.delete.subscribe((browserConfigs) => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+    instance.update.subscribe(
+      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs));
+    instance.delete.subscribe(
+      () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -145,9 +144,19 @@ export class BrowserConfigPageComponent implements OnInit {
     console.log('in pagecomp ', labelQuery);
   }
 
-  onSelectedChange(configs: BrowserConfig[]) {
-    this.loadComponent(this.mergeBrowserConfigs(configs), this.browserScripts);
-    this.selectedConfigs = configs;
+  onSelectedChange(browserConfigs: BrowserConfig[]) {
+    this.selectedConfigs = browserConfigs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeBrowserConfigs(browserConfigs), this.browserScripts);
+    } else {
+      this.browserConfig = browserConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.browserConfig === undefined) {
+        this.browserConfig = null;
+      }
+    }
   }
 
   onCreateBrowserConfig(): void {
@@ -195,7 +204,7 @@ export class BrowserConfigPageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.browserConfig = null;
@@ -206,15 +215,15 @@ export class BrowserConfigPageComponent implements OnInit {
 
   onDeleteBrowserConfig(browserConfig: BrowserConfig) {
     this.browserConfigService.delete(browserConfig.id)
-      .subscribe((response) => {
+      .subscribe(() => {
         this.browserConfig = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });
   }
 
-  onDeleteMultipleBrowserConfigs(configs: BrowserConfig[]) {
-    const numOfConfigs = configs.length.toString();
+  onDeleteMultipleBrowserConfigs(browserConfigs: BrowserConfig[]) {
+    const numOfConfigs = browserConfigs.length.toString();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -225,13 +234,13 @@ export class BrowserConfigPageComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result) {
-          from(configs).pipe(
+          from(browserConfigs).pipe(
             mergeMap((config) => this.browserConfigService.delete(config.id)),
             catchError((err) => {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.browserConfig = null;
@@ -244,33 +253,33 @@ export class BrowserConfigPageComponent implements OnInit {
       });
   }
 
-  mergeBrowserConfigs(configs: BrowserConfig[]) {
+  mergeBrowserConfigs(browserConfigs: BrowserConfig[]) {
     const config = new BrowserConfig();
-    const compareObj = configs[0];
+    const compareObj = browserConfigs[0];
     config.id = '1234567';
     config.meta.name = 'Multi';
 
-    const equalUserAgent = configs.every(function (cfg) {
+    const equalUserAgent = browserConfigs.every(function (cfg) {
       return cfg.user_agent === compareObj.user_agent;
     });
 
-    const equalWindowWidth = configs.every(function (cfg) {
+    const equalWindowWidth = browserConfigs.every(function (cfg) {
       return cfg.window_width === compareObj.window_width;
     });
 
-    const equalWindowHeight = configs.every(function (cfg) {
+    const equalWindowHeight = browserConfigs.every(function (cfg) {
       return cfg.window_height === compareObj.window_height;
     });
 
-    const equalPageLoadTimeout = configs.every(function (cfg) {
+    const equalPageLoadTimeout = browserConfigs.every(function (cfg) {
       return cfg.page_load_timeout_ms === compareObj.page_load_timeout_ms;
     });
 
-    const equalSleepAfterPageload = configs.every(function (cfg) {
+    const equalSleepAfterPageload = browserConfigs.every(function (cfg) {
       return cfg.sleep_after_pageload_ms === compareObj.sleep_after_pageload_ms;
     });
 
-    const equalBrowserScript = configs.every(function (cfg) {
+    const equalBrowserScript = browserConfigs.every(function (cfg) {
       return cfg.script_id === compareObj.script_id;
     });
 
@@ -298,7 +307,7 @@ export class BrowserConfigPageComponent implements OnInit {
       config.script_id = compareObj.script_id;
     }
 
-    const label = configs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
+    const label = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });

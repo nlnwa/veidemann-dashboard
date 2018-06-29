@@ -40,7 +40,7 @@ import {ActivatedRoute} from '@angular/router';
                                  (save)="onSaveBrowserScript($event)"
                                  (delete)="onDeleteBrowserScript($event)">
       </app-browserscript-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="browserScript"></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -108,8 +108,8 @@ export class BrowserScriptPageComponent implements OnInit {
     instance.browserScript = browserScript;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((config) => this.onUpdateMultipleBrowserScripts(config));
-    instance.delete.subscribe((config) => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
+    instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts));
+    instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
 
   }
 
@@ -130,8 +130,18 @@ export class BrowserScriptPageComponent implements OnInit {
   }
 
   onSelectedChange(browserScripts: BrowserScript[]) {
-    this.loadComponent(this.mergeBrowserScripts(browserScripts));
     this.selectedConfigs = browserScripts;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeBrowserScripts(browserScripts));
+    } else {
+      this.browserScript = browserScripts[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.browserScript === undefined) {
+        this.browserScript = null;
+      }
+    }
   }
 
   onCreateBrowserScript(): void {
@@ -162,7 +172,7 @@ export class BrowserScriptPageComponent implements OnInit {
 
   onDeleteBrowserScript(browserScript: BrowserScript) {
     this.browserScriptService.delete(browserScript.id)
-      .subscribe(response => {
+      .subscribe(() => {
         this.browserScript = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
@@ -187,7 +197,7 @@ export class BrowserScriptPageComponent implements OnInit {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.browserScript = null;
@@ -215,7 +225,7 @@ export class BrowserScriptPageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.browserScript = null;

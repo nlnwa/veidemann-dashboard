@@ -8,7 +8,6 @@ import {of} from 'rxjs/internal/observable/of';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
@@ -43,11 +42,10 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
                             (save)="onSaveCrawlJob($event)"
                             (delete)="onDeleteCrawlJob($event)">
       </app-crawljob-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="crawlJob"></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
 })
 export class CrawlJobsComponent implements OnInit {
 
@@ -131,7 +129,7 @@ export class CrawlJobsComponent implements OnInit {
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig));
-    instance.delete.subscribe((crawlJobConfig) => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -150,11 +148,20 @@ export class CrawlJobsComponent implements OnInit {
     console.log('in pageComp ', labelQuery);
   }
 
-  onSelectedChange(configs: CrawlJob[]) {
-    this.loadComponent(this.mergeCrawlJobs(configs), this.schedules, this.crawlConfigs);
-    this.selectedConfigs = configs;
+  onSelectedChange(crawlJobs: CrawlJob[]) {
+    this.selectedConfigs = crawlJobs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs);
+    } else {
+      this.crawlJob = crawlJobs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.crawlJob === undefined) {
+        this.crawlJob = null;
+      }
+    }
   }
-
 
   onCreateCrawlJob(): void {
     this.crawlJob = new CrawlJob();
@@ -201,7 +208,7 @@ export class CrawlJobsComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.crawlJob = null;
@@ -237,7 +244,7 @@ export class CrawlJobsComponent implements OnInit {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.crawlJob = null;

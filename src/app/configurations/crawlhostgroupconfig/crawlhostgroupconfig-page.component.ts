@@ -41,7 +41,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                         (save)="onSaveCrawlHostGroupConfig($event)"
                                         (delete)="onDeleteCrawlHostGroupConfig($event)">
       </app-crawlhostgroupconfig-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host ngIf="crawlHostGroupConfig"></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -100,8 +100,10 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     instance.crawlHostGroupConfig = config;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlHostGroupConfig) => this.onSaveMultipleCrawlHostGroupConfigs(crawlHostGroupConfig));
-    instance.delete.subscribe((configs) => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+    instance.update.subscribe(
+      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig));
+    instance.delete.subscribe(
+      () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -118,7 +120,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
 
   onSearch(labelQuery: string[]) {
     console.log('in pagecomp: ', labelQuery);
-    // this.crawlHostGroupConfigService.search(labelQuery)
   }
 
   onCreateCrawlHostGroupConfig(): void {
@@ -130,9 +131,19 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   }
 
 
-  onSelectedChange(configs: CrawlHostGroupConfig[]) {
-    this.loadComponent(this.mergeCrawlHostGroupConfigs(configs));
-    this.selectedConfigs = configs;
+  onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
+    this.selectedConfigs = crawlHostGroupConfigs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs));
+    } else {
+      this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.crawlHostGroupConfig === undefined) {
+        this.crawlHostGroupConfig = null;
+      }
+    }
   }
 
   onSaveCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
@@ -153,47 +164,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       });
   }
 
-  onDeleteCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
-    this.crawlHostGroupConfigService.delete(crawlHostGroupConfig.id)
-      .subscribe((response) => {
-        this.crawlHostGroupConfig = null;
-        this.changes.next();
-        this.snackBarService.openSnackBar('Slettet');
-      });
-  }
-
-  onDeleteMultipleCrawlHostGroupConfigs(configs: CrawlHostGroupConfig[]) {
-    const numOfConfigs = configs.length.toString();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
-      numberOfConfigs: numOfConfigs
-    };
-    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          from(configs).pipe(
-            mergeMap((config) => this.crawlHostGroupConfigService.delete(config.id)),
-            catchError((err) => {
-              console.log(err);
-              return of('true');
-            }),
-          ).subscribe((response) => {
-            this.selectedConfigs = [];
-            this.componentRef.destroy();
-            this.crawlHostGroupConfig = null;
-            this.changes.next();
-            this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner slettet');
-          });
-        } else {
-          this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
-        }
-      });
-  }
-
-  onSaveMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig) {
+  onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlHostGroupConfig) => {
@@ -208,7 +179,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.crawlHostGroupConfig = null;
@@ -217,18 +188,53 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
-  mergeCrawlHostGroupConfigs(configs: CrawlHostGroupConfig[]) {
+  onDeleteCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
+    this.crawlHostGroupConfigService.delete(crawlHostGroupConfig.id)
+      .subscribe(() => {
+        this.crawlHostGroupConfig = null;
+        this.changes.next();
+        this.snackBarService.openSnackBar('Slettet');
+      });
+  }
+
+  onDeleteMultipleCrawlHostGroupConfigs(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
+    const numOfConfigs = crawlHostGroupConfigs.length.toString();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      numberOfConfigs: numOfConfigs
+    };
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          from(crawlHostGroupConfigs).pipe(
+            mergeMap((config) => this.crawlHostGroupConfigService.delete(config.id)),
+            catchError((err) => {
+              console.log(err);
+              return of('true');
+            }),
+          ).subscribe(() => {
+            this.selectedConfigs = [];
+            this.componentRef.destroy();
+            this.crawlHostGroupConfig = null;
+            this.changes.next();
+            this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner slettet');
+          });
+        } else {
+          this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
+        }
+      });
+  }
+
+  mergeCrawlHostGroupConfigs(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     const config = new CrawlHostGroupConfig();
     config.id = '1234567';
     config.meta.name = 'Multi';
 
-    const label = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
+    const label = crawlHostGroupConfigs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-      config.ip_range = intersectIpRange(acc.ip_range, curr.ip_range);
-      return config;
-    });
-
-    const ip_range = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
       config.ip_range = intersectIpRange(acc.ip_range, curr.ip_range);
       return config;
     });

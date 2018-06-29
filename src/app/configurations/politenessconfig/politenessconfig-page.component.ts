@@ -5,7 +5,6 @@ import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
 import {PolitenessConfigService} from './politenessconfig.service';
 import {ActivatedRoute} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
@@ -40,11 +39,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                     (save)="onSavePolitenessConfig($event)"
                                     (delete)="onDeletePolitenessConfig($event)">
       </app-politenessconfig-details>
-      <ng-template detail-host></ng-template>
+      <ng-template detail-host *ngIf="politenessConfig"></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
 })
 export class PolitenessConfigPageComponent implements OnInit {
 
@@ -63,7 +61,6 @@ export class PolitenessConfigPageComponent implements OnInit {
 
   constructor(private politenessConfigService: PolitenessConfigService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase,
               private route: ActivatedRoute,
               private componentFactoryResolver: ComponentFactoryResolver,
               private fb: FormBuilder,
@@ -112,8 +109,10 @@ export class PolitenessConfigPageComponent implements OnInit {
     instance.politenessConfig = politenessConfig;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs));
-    instance.delete.subscribe((politenessConfigs) => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+    instance.update.subscribe(
+      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs));
+    instance.delete.subscribe(
+      () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
   }
 
   onPage(page: PageEvent) {
@@ -132,9 +131,19 @@ export class PolitenessConfigPageComponent implements OnInit {
     console.log('in pagecomp ', labelQuery);
   }
 
-  onSelectedChange(configs: PolitenessConfig[]) {
-    this.loadComponent(this.mergePolitenessConfigs(configs), this.robotsPolicies);
-    this.selectedConfigs = configs;
+  onSelectedChange(politenessConfigs: PolitenessConfig[]) {
+    this.selectedConfigs = politenessConfigs;
+    if (!this.singleMode) {
+      this.loadComponent(this.mergePolitenessConfigs(politenessConfigs), this.robotsPolicies);
+    } else {
+      this.politenessConfig = politenessConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.politenessConfig === undefined) {
+        this.politenessConfig = null;
+      }
+    }
   }
 
   onCreatePolitenessConfig(): void {
@@ -182,7 +191,7 @@ export class PolitenessConfigPageComponent implements OnInit {
         console.log(err);
         return of('true');
       }),
-    ).subscribe((response) => {
+    ).subscribe(() => {
       this.selectedConfigs = [];
       this.componentRef.destroy();
       this.politenessConfig = null;
@@ -193,15 +202,15 @@ export class PolitenessConfigPageComponent implements OnInit {
 
   onDeletePolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfigService.delete(politenessConfig.id)
-      .subscribe((response) => {
+      .subscribe(() => {
         this.politenessConfig = null;
         this.snackBarService.openSnackBar('Slettet');
       });
     this.changes.next();
   }
 
-  onDeleteMultiplePolitenessConfigs(configs: PolitenessConfig[]) {
-    const numOfConfigs = configs.length.toString();
+  onDeleteMultiplePolitenessConfigs(politenessConfigs: PolitenessConfig[]) {
+    const numOfConfigs = politenessConfigs.length.toString();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -212,13 +221,13 @@ export class PolitenessConfigPageComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result) {
-          from(configs).pipe(
+          from(politenessConfigs).pipe(
             mergeMap((config) => this.politenessConfigService.delete(config.id)),
             catchError((err) => {
               console.log(err);
               return of('true');
             }),
-          ).subscribe((response) => {
+          ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
             this.politenessConfig = null;
@@ -231,37 +240,37 @@ export class PolitenessConfigPageComponent implements OnInit {
       });
   }
 
-  mergePolitenessConfigs(configs: PolitenessConfig[]) {
+  mergePolitenessConfigs(politenessConfigs: PolitenessConfig[]) {
     const config = new PolitenessConfig();
-    const compareObj = configs[0];
+    const compareObj = politenessConfigs[0];
     config.id = '1234567';
     config.meta.name = 'Multi';
 
-    const equalRobotPolicy = configs.every(function (cfg: PolitenessConfig) {
+    const equalRobotPolicy = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.robots_policy === compareObj.robots_policy;
     });
 
-    const equalMinRobotsValidity = configs.every(function (cfg: PolitenessConfig) {
+    const equalMinRobotsValidity = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.minimum_robots_validity_duration_s === compareObj.minimum_robots_validity_duration_s;
     });
 
-    const equalMinTimeBetweenPageload = configs.every(function (cfg: PolitenessConfig) {
+    const equalMinTimeBetweenPageload = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.min_time_between_page_load_ms === compareObj.min_time_between_page_load_ms;
     });
 
-    const equalMaxTimeBetweenPageload = configs.every(function (cfg: PolitenessConfig) {
+    const equalMaxTimeBetweenPageload = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.max_time_between_page_load_ms === compareObj.max_time_between_page_load_ms;
     });
 
-    const equalDelayFactor = configs.every(function (cfg: PolitenessConfig) {
+    const equalDelayFactor = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.delay_factor === compareObj.delay_factor;
     });
 
-    const equalMaxRetries = configs.every(function (cfg: PolitenessConfig) {
+    const equalMaxRetries = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.max_retries === compareObj.max_retries;
     });
 
-    const equalRetryDelay = configs.every(function (cfg: PolitenessConfig) {
+    const equalRetryDelay = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.retry_delay_seconds === compareObj.retry_delay_seconds;
     });
 
@@ -290,7 +299,7 @@ export class PolitenessConfigPageComponent implements OnInit {
       config.retry_delay_seconds = compareObj.retry_delay_seconds;
     }
 
-    const label = configs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
+    const label = politenessConfigs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
