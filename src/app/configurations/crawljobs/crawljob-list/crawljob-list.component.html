@@ -2,7 +2,7 @@
   <tr class="mat-row">
     <td class="mat-cell">
       <span>Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert. </span>
-      <a *ngIf="pageLength>selection.selected.length" [routerLink]="" (click)="selectAllConfigs()">
+      <a *ngIf="isAllSelected()" [routerLink]="" (click)="selectAllConfigs()">
         Marker alle {{pageLength}} konfigurasjoner
       </a>
     </td>

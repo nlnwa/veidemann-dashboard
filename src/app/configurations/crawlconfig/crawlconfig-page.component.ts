@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
@@ -47,6 +47,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
     </div>
   `,
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CrawlConfigPageComponent implements OnInit {
 
@@ -82,14 +83,10 @@ export class CrawlConfigPageComponent implements OnInit {
 
   ngOnInit() {
     this.browserConfigService.list().pipe(map(reply => reply.value))
-      .subscribe((browserConfigs) => {
-        this.browserConfigs = browserConfigs;
-      });
+      .subscribe((browserConfigs) => this.browserConfigs = browserConfigs);
 
     this.politenessConfigService.list().pipe(map(reply => reply.value))
-      .subscribe((politenessConfigs) => {
-        this.politenessConfigs = politenessConfigs;
-      });
+      .subscribe((politenessConfigs) => this.politenessConfigs = politenessConfigs);
 
     combineLatest(this.page, this.changes.pipe(startWith(null))).pipe(
       switchMap(([pageEvent]) => {
@@ -101,7 +98,7 @@ export class CrawlConfigPageComponent implements OnInit {
     ).subscribe((reply) => {
       this.data.next({
         value: reply.value,
-        pageLenght: parseInt(reply.count, 10),
+        pageLength: parseInt(reply.count, 10),
         pageSize: reply.page_size || 0,
         pageIndex: reply.page || 0,
       });
@@ -130,6 +127,9 @@ export class CrawlConfigPageComponent implements OnInit {
       id: politenessConfig.id,
       itemName: politenessConfig.meta.name
     }));
+    instance.form.get('minimum_dns_ttl_s').clearValidators();
+    instance.form.get('browser_config_id').clearValidators();
+    instance.form.get('politeness_id').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs));
@@ -198,13 +198,24 @@ export class CrawlConfigPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlConfig) => {
+        if (crawlConfig.meta.label === undefined) {
+          crawlConfig.meta.label = [];
+        }
         crawlConfig.meta.label = updatedLabels(crawlConfigUpdate.meta.label.concat(crawlConfig.meta.label));
         crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
         crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
         crawlConfig.depth_first = crawlConfigUpdate.depth_first;
-        crawlConfig.minimum_dns_ttl_s = crawlConfigUpdate.minimum_dns_ttl_s;
+        if (!isNaN(crawlConfigUpdate.minimum_dns_ttl_s)) {
+          crawlConfig.minimum_dns_ttl_s = crawlConfigUpdate.minimum_dns_ttl_s;
+        }
+        if (crawlConfigUpdate.politeness_id !== '') {
+          crawlConfig.politeness_id = crawlConfigUpdate.politeness_id;
+        }
+        if (crawlConfigUpdate.browser_config_id !== '') {
+          crawlConfig.browser_config_id = crawlConfigUpdate.browser_config_id;
+        }
         crawlConfig.browser_config_id = crawlConfigUpdate.browser_config_id;
-        crawlConfig.politeness_id = crawlConfigUpdate.politeness_id;
+
         return this.crawlConfigService.update(crawlConfig);
       }),
       catchError((err) => {
@@ -280,6 +291,11 @@ export class CrawlConfigPageComponent implements OnInit {
 
     const equalExtractText = configs.every(function (cfg) {
       if ((cfg.extra.extract_text && compareObj.extra.extract_text) !== undefined) {
+        console.log('cfg obj: ', cfg);
+        console.log('compareOBj: ', compareObj);
+        console.log('cfg extract valueOf = ', cfg.extra.extract_text);
+        console.log('compareObj valueOf = ', compareObj.extra.extract_text);
+        console.log('return', cfg.extra.extract_text === compareObj.extra.extract_text);
         return cfg.extra.extract_text === compareObj.extra.extract_text;
       }
       return false;
@@ -309,18 +325,20 @@ export class CrawlConfigPageComponent implements OnInit {
 
     if (equalDnsTtl) {
       config.minimum_dns_ttl_s = compareObj.minimum_dns_ttl_s;
+    } else {
+      config.minimum_dns_ttl_s = null;
     }
 
     if (equalExtractText) {
       config.extra.extract_text = compareObj.extra.extract_text;
-    } else {
-      config.extra.extract_text = false;
+    //} else {
+    //  config.extra.extract_text = false;
     }
 
     if (equalCreateSnapshot) {
       config.extra.create_snapshot = compareObj.extra.create_snapshot;
-    } else {
-      config.extra.create_snapshot = false;
+    //} else {
+    //  config.extra.create_snapshot = false;
     }
 
     if (equalDepthFirst) {

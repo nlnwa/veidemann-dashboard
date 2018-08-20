@@ -8,9 +8,16 @@ import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ScheduleService} from './schedule.service';
 import {ActivatedRoute} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {ScheduleDetailsComponent} from './schedule-details/schedule-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {
+  VALID_CRON_DOM_PATTERN,
+  VALID_CRON_DOW_PATTERN,
+  VALID_CRON_HOUR_PATTERN,
+  VALID_CRON_MINUTE_PATTERN,
+  VALID_CRON_MONTH_PATTERN
+} from '../../commons/validator';
 
 @Component({
   selector: 'app-schedule',
@@ -103,6 +110,11 @@ export class SchedulePageComponent implements OnInit {
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as ScheduleDetailsComponent;
     instance.schedule = schedule;
+    instance.form.get('cron_expression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
+    instance.form.get('cron_expression.hour').setValidators(Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN)));
+    instance.form.get('cron_expression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
+    instance.form.get('cron_expression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
+    instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig));
@@ -168,12 +180,20 @@ export class SchedulePageComponent implements OnInit {
   }
 
   onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig) {
+    console.log('skal oppdatere med scheduleUpdate: ', scheduleUpdate);
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
+        if (schedule.meta.label === undefined) {
+          schedule.meta.label = [];
+        }
         schedule.meta.label = updatedLabels(
           scheduleUpdate.meta.label.concat(schedule.meta.label));
-        schedule.cron_expression = scheduleUpdate.cron_expression;
+        console.log('input: ', schedule.cron_expression);
+        console.log('schedule update: ', scheduleUpdate.cron_expression);
+        if (scheduleUpdate.cron_expression !== '' || undefined) {
+          schedule.cron_expression = scheduleUpdate.cron_expression;
+        }
         schedule.valid_from = scheduleUpdate.valid_from;
         schedule.valid_to = scheduleUpdate.valid_to;
         return this.scheduleService.update(schedule);
@@ -252,6 +272,10 @@ export class SchedulePageComponent implements OnInit {
 
     if (equalCronExpression) {
       config.cron_expression = compareObj.cron_expression;
+      console.log('cron uttrykkene er like, setter det til : ', compareObj.cron_expression);
+    } else {
+      console.log('Cron er ikke like for alle, setter det til tom string from update objekt');
+      config.cron_expression = '';
     }
 
     if (equalValidFrom) {
@@ -266,12 +290,19 @@ export class SchedulePageComponent implements OnInit {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
+    console.log('returnerer config fra merge: ', config);
     return config;
   }
 
 }
 
 function intersectLabel(a, b) {
+  // if (a === undefined) {
+  //   a = [];
+  // }
+  // if (b === undefined) {
+  //   b = [];
+  // }
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>

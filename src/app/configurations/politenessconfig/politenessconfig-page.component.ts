@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
@@ -43,6 +43,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
     </div>
   `,
   styleUrls: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PolitenessConfigPageComponent implements OnInit {
 
@@ -85,7 +86,7 @@ export class PolitenessConfigPageComponent implements OnInit {
     ).subscribe((reply) => {
       this.data.next({
         value: reply.value,
-        pageLenght: parseInt(reply.count, 10),
+        pageLength: parseInt(reply.count, 10),
         pageSize: reply.page_size || 0,
         pageIndex: reply.page || 0,
       });
@@ -105,8 +106,11 @@ export class PolitenessConfigPageComponent implements OnInit {
     viewContainerRef.clear();
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as PolitenessconfigDetailsComponent;
-    instance.robotsPolicyList = robotsPolicies;
     instance.politenessConfig = politenessConfig;
+    instance.robotsPolicyList = robotsPolicies;
+    instance.form.get('minimum_robots_validity_duration_s').clearValidators();
+    instance.form.get('min_time_between_page_load_ms').clearValidators();
+    instance.form.get('max_time_between_page_load_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
@@ -158,9 +162,9 @@ export class PolitenessConfigPageComponent implements OnInit {
     this.politenessConfigService.create(politenessConfig)
       .subscribe(newPolitenessConfig => {
         this.politenessConfig = newPolitenessConfig;
+        this.changes.next();
         this.snackBarService.openSnackBar('Lagret');
       });
-    this.changes.next();
   }
 
   onUpdatePolitenessConfig(politenessConfig: PolitenessConfig) {
@@ -176,15 +180,30 @@ export class PolitenessConfigPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((politenessConfig: PolitenessConfig) => {
+        if (politenessConfig.meta.label === undefined) {
+          politenessConfig.meta.label = [];
+        }
         politenessConfig.meta.label = updatedLabels(politenessConfigUpdate.meta.label
           .concat(politenessConfig.meta.label));
         politenessConfig.robots_policy = politenessConfigUpdate.robots_policy;
-        politenessConfig.minimum_robots_validity_duration_s = politenessConfigUpdate.minimum_robots_validity_duration_s;
-        politenessConfig.min_time_between_page_load_ms = politenessConfigUpdate.min_time_between_page_load_ms;
-        politenessConfig.max_time_between_page_load_ms = politenessConfigUpdate.max_time_between_page_load_ms;
-        politenessConfig.delay_factor = politenessConfigUpdate.delay_factor;
-        politenessConfig.max_retries = politenessConfigUpdate.max_retries;
-        politenessConfig.retry_delay_seconds = politenessConfigUpdate.retry_delay_seconds;
+        if (politenessConfigUpdate.minimum_robots_validity_duration_s !== 0) {
+          politenessConfig.minimum_robots_validity_duration_s = politenessConfigUpdate.minimum_robots_validity_duration_s;
+        }
+        if (politenessConfigUpdate.min_time_between_page_load_ms !== '') {
+          politenessConfig.min_time_between_page_load_ms = politenessConfig.min_time_between_page_load_ms;
+        }
+        if (politenessConfigUpdate.max_time_between_page_load_ms !== null) {
+          politenessConfig.max_time_between_page_load_ms = politenessConfigUpdate.max_time_between_page_load_ms;
+        }
+        if (politenessConfigUpdate.delay_factor !== 0) {
+          politenessConfig.delay_factor = politenessConfigUpdate.delay_factor;
+        }
+        if (politenessConfigUpdate.max_retries !== 0) {
+          politenessConfig.max_retries = politenessConfigUpdate.max_retries;
+        }
+        if (politenessConfigUpdate.retry_delay_seconds !== 0) {
+          politenessConfig.retry_delay_seconds = politenessConfigUpdate.retry_delay_seconds;
+        }
         return this.politenessConfigService.update(politenessConfig);
       }),
       catchError((err) => {
@@ -280,23 +299,35 @@ export class PolitenessConfigPageComponent implements OnInit {
 
     if (equalMinRobotsValidity) {
       config.minimum_robots_validity_duration_s = compareObj.minimum_robots_validity_duration_s;
+    } else {
+      config.minimum_robots_validity_duration_s = null;
     }
 
     if (equalMinTimeBetweenPageload) {
       config.min_time_between_page_load_ms = compareObj.min_time_between_page_load_ms;
+    } else {
+      config.min_time_between_page_load_ms = null;
     }
 
     if (equalMaxTimeBetweenPageload) {
       config.max_time_between_page_load_ms = compareObj.max_time_between_page_load_ms;
+    } else {
+      config.max_time_between_page_load_ms = null;
     }
     if (equalDelayFactor) {
       config.delay_factor = compareObj.delay_factor;
+    } else {
+      config.delay_factor = null;
     }
     if (equalMaxRetries) {
       config.max_retries = compareObj.max_retries;
+    } else {
+      config.max_retries = null;
     }
     if (equalRetryDelay) {
       config.retry_delay_seconds = compareObj.retry_delay_seconds;
+    } else {
+      config.retry_delay_seconds = null
     }
 
     const label = politenessConfigs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
