@@ -1,10 +1,12 @@
 <table class="mat-table" *ngIf="isAllSelected() && dataSource.length > 0">
   <tr class="mat-row">
     <td class="mat-cell">
-      <span>Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert. </span>
-      <a *ngIf="pageLength>selection.selected.length" [routerLink]="" (click)="selectAllConfigs()">
+      <span *ngIf="selection.selected.length < pageLength">Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert.
+      <!-- <a *ngIf="isAllSelected()" [routerLink]="" (click)="selectAllConfigs()"> -->
+        <a *ngIf="isAllSelected()" [routerLink]="" (click)="selectAllConfigs()">
         Marker alle {{pageLength}} konfigurasjoner
-      </a>
+      </a></span>
+      <span *ngIf="selection.selected.length === pageLength"> Alle {{pageLength}} konfigurasjoner er markert</span>
     </td>
   </tr>
 </table>

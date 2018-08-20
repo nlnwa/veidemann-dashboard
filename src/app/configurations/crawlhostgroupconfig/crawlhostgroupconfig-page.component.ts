@@ -11,6 +11,9 @@ import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-detai
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {updateSourceFile} from '@angular/compiler-cli/src/transformers/node_emitter';
+import {CrawlConfigListComponent} from '../crawlconfig';
+import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list/crawlhostgroupconfig-list.component';
 
 @Component({
   selector: 'app-crawlhostgroupconfig',
@@ -32,6 +35,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
           (selectedChange)="onSelectedChange($event)"
           (labelClicked)="onLabelClick($event)"
           (page)="onPage($event)"
+          (getAllConfigs)="getAllConfiguratations()"
         >
         </app-crawlhostgroupconfig-list>
       </div>
@@ -60,6 +64,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   data$ = this.data.asObservable();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
+  @ViewChild(CrawlHostGroupConfigListComponent) listView: CrawlHostGroupConfigListComponent;
 
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
               private snackBarService: SnackBarService,
@@ -74,6 +79,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   }
 
   ngOnInit() {
+
     combineLatest(this.page, this.changes.pipe(startWith(null))).pipe(
       switchMap(([pageEvent]) => {
         return this.crawlHostGroupConfigService.search({
@@ -88,16 +94,18 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
         pageSize: reply.page_size || 0,
         pageIndex: reply.page || 0,
       });
+      console.log(reply);
     });
   }
 
-  loadComponent(config: CrawlHostGroupConfig) {
+  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as CrawlHostGroupConfigDetailsComponent;
     instance.crawlHostGroupConfig = config;
+    console.log('loadComp config: ', config);
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
@@ -134,7 +142,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs));
+      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs), this.selectedConfigs);
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -168,6 +176,9 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlHostGroupConfig) => {
+        if (crawlHostGroupConfig.meta.label === undefined) {
+          crawlHostGroupConfig.meta.label = [];
+        }
         crawlHostGroupConfig.meta.label = updatedLabels(
           crawlHostGroupConfigUpdate.meta.label.concat(crawlHostGroupConfig.meta.label));
         crawlHostGroupConfig.ip_range = updatedRange(
@@ -241,6 +252,25 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
 
     return config;
   }
+
+
+  getAllConfiguratations() {
+    this.selectedConfigs = [];
+    this.crawlHostGroupConfigService.search({})
+      .subscribe((reply) => {
+        this.selectedConfigs = reply.value;
+        console.log(reply);
+        console.log('SelectedConfigs pagecomp', this.selectedConfigs);
+        this.updateSelected();
+      });
+  }
+
+  updateSelected() {
+    console.log('update selected');
+    console.log('har disse configs: ', this.selectedConfigs);
+    // return this.selectedConfigs;
+    this.listView.onUpdateAll(this.selectedConfigs);
+  }
 }
 
 function intersectLabel(a, b) {
@@ -266,6 +296,7 @@ function intersectIpRange(a: IpRange[], b: IpRange[]): IpRange[] {
 }
 
 function updatedLabels(labels) {
+  console.log('update labels: ', labels);
   const result = labels.reduce((unique, o) => {
     if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
       unique.push(o);
