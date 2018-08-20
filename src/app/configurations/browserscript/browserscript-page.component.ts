@@ -12,6 +12,7 @@ import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {BrowserScriptDetailsComponent} from './browserscript-details/browserscript-details.component';
 import {ActivatedRoute} from '@angular/router';
+import {browser} from 'protractor';
 
 
 @Component({
@@ -214,6 +215,9 @@ export class BrowserScriptPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserScript) => {
+        if (browserScript.meta.label === undefined) {
+          browserScript.meta.label = [];
+        }
         browserScript.meta.label = updatedLabels(
           browserScriptUpdate.meta.label.concat(browserScript.meta.label));
         if (browserScriptUpdate.script.length > 0) {
@@ -238,10 +242,20 @@ export class BrowserScriptPageComponent implements OnInit {
     const config = new BrowserScript();
     config.id = '1234567';
     config.meta.name = 'Multi';
+    const compareObj = browserScripts[0];
     const label = browserScripts.reduce((acc: BrowserScript, curr: BrowserScript) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
+    const script = browserScripts.every(function (cfg) {
+      return cfg.script === compareObj.script;
+    });
+
+    if (script) {
+      config.script = compareObj.script;
+    } else {
+      config.script = '';
+    }
     return config;
   }
 }
