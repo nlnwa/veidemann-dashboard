@@ -30,6 +30,9 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   @Output()
   labelClicked = new EventEmitter();
 
+  @Output()
+  getAllConfigs = new EventEmitter();
+
   displayedColumns: string[];
   selection = new SelectionModel<T>(true, []);
   dataSource: T[] = [];
@@ -50,6 +53,13 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   protected constructor() {
+  }
+
+  onUpdateAll(config) {
+    this.selection.clear();
+    this.dataSource = config;
+    this.dataSource.forEach(row => this.selection.select(row));
+    this.selectedChange.emit(this.selection.selected);
   }
 
   onRowClick(item: T) {
@@ -80,6 +90,7 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   selectAllConfigs() {
-    console.log('markerer alle configurasjoner: ', this.pageLength);
+    this.selection.select()
+    this.getAllConfigs.emit();
   }
 }
