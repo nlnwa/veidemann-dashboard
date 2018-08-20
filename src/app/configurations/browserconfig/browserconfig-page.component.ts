@@ -10,7 +10,7 @@ import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
 import {RoleService} from '../../auth';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -95,7 +95,7 @@ export class BrowserConfigPageComponent implements OnInit {
     ).subscribe((reply) => {
       this.data.next({
         value: reply.value,
-        pageLenght: parseInt(reply.count, 10),
+        pageLength: parseInt(reply.count, 10),
         pageSize: reply.page_size || 0,
         pageIndex: reply.page || 0,
       });
@@ -120,6 +120,16 @@ export class BrowserConfigPageComponent implements OnInit {
       id: browserScript.id,
       itemName: browserScript.meta.name,
     }));
+    // instance.form.get('user_agent').setValidators(Validators.minLength(1));
+    // instance.form.get('window_width').setValidators(Validators.min(1));
+    // instance.form.get('window_height').setValidators(Validators.min(1));
+    // instance.form.get('page_load_timeout_ms').setValidators(Validators.min(0));
+    // instance.form.get('sleep_after_pageload_ms').setValidators(Validators.min(0));
+    instance.form.get('user_agent').clearValidators();
+    instance.form.get('window_width').clearValidators();
+    instance.form.get('window_height').clearValidators();
+    instance.form.get('page_load_timeout_ms').clearValidators();
+    instance.form.get('sleep_after_pageload_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
@@ -191,13 +201,30 @@ export class BrowserConfigPageComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserConfig: BrowserConfig) => {
+        if (browserConfig.meta.label === undefined) {
+          browserConfig.meta.label = [];
+        }
         browserConfig.meta.label = updatedLabels(browserConfigUpdate.meta.label.concat(browserConfig.meta.label));
-        browserConfig.user_agent = browserConfigUpdate.user_agent;
-        browserConfig.window_width = browserConfigUpdate.window_width;
-        browserConfig.window_height = browserConfigUpdate.window_height;
-        browserConfig.page_load_timeout_ms = browserConfigUpdate.page_load_timeout_ms;
-        browserConfig.sleep_after_pageload_ms = browserConfigUpdate.sleep_after_pageload_ms;
-        browserConfig.script_id = browserConfigUpdate.script_id;
+        if (browserConfigUpdate.user_agent !== '') {
+          browserConfig.user_agent = browserConfigUpdate.user_agent;
+        }
+        if (browserConfigUpdate.window_width !== 0 ) {
+          browserConfig.window_width = browserConfigUpdate.window_width;
+        }
+        if (browserConfigUpdate.window_height !== 0 ) {
+          browserConfig.window_height = browserConfigUpdate.window_height;
+        }
+        if (browserConfigUpdate.page_load_timeout_ms !== '') {
+          browserConfig.page_load_timeout_ms = browserConfigUpdate.page_load_timeout_ms;
+        }
+        if (browserConfigUpdate.sleep_after_pageload_ms !== '') {
+          browserConfig.sleep_after_pageload_ms = browserConfigUpdate.sleep_after_pageload_ms;
+        }
+
+        //TODO sjekke hele arrayet
+        if (browserConfigUpdate.script_id !== ['']) {
+          browserConfig.script_id = browserConfigUpdate.script_id;
+        }
         return this.browserConfigService.update(browserConfig);
       }),
       catchError((err) => {
@@ -305,13 +332,15 @@ export class BrowserConfigPageComponent implements OnInit {
 
     if (equalBrowserScript) {
       config.script_id = compareObj.script_id;
+    } else {
+      config.script_id = [];
     }
 
     const label = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
-
+    console.log('browserConfigUpdate: ', config);
     return config;
   }
 }
@@ -336,3 +365,6 @@ function updatedLabels(labels) {
   }, []);
   return result;
 }
+
+
+//TODO add intersectBrowserScript concat
