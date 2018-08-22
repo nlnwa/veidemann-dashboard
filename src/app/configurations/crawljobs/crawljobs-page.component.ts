@@ -28,7 +28,7 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
-          <span class="toolbar--title">Høstejobber {{this.selectedConfigs.length}}</span>
+          <span class="toolbar--title">Høstejobber</span>
           <button mat-mini-fab (click)="onCreateCrawlJob()">
             <mat-icon>add</mat-icon>
           </button>
@@ -136,7 +136,6 @@ export class CrawlJobsComponent implements OnInit {
     instance.form.get('crawl_config_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-
     instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig));
     instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
@@ -158,7 +157,6 @@ export class CrawlJobsComponent implements OnInit {
   }
 
   onSelectedChange(crawlJobs: CrawlJob[]) {
-    console.log(crawlJobs);
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
       this.loadComponent(this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs);
@@ -207,7 +205,6 @@ export class CrawlJobsComponent implements OnInit {
 
   onUpdateMultipleCrawlJobs(crawlJobUpdate: CrawlJob) {
     const numOfConfigs = this.selectedConfigs.length.toString();
-    console.log('update: ', crawlJobUpdate);
     from(this.selectedConfigs).pipe(
       mergeMap((crawlJob: CrawlJob) => {
         crawlJob.disabled = crawlJobUpdate.disabled;
@@ -216,22 +213,14 @@ export class CrawlJobsComponent implements OnInit {
         }
         crawlJob.meta.label = updatedLabels(crawlJobUpdate.meta.label.concat(crawlJob.meta.label));
 
-
-        // TODO
-        // Hvordan tolke at crawljobUpdate som ikke skal oppdatere depth/max byte/durations, ikke blir gjort oppdatert.
-        // Siden form er satt opp til å parse tomme felter til 0 eller '0', vil alltid crawlJobUpdate inneholde en verdi,
-        // selv om intensjonen var at den skulle være  tom.
-
-        if (!isNaN(crawlJobUpdate.limits.depth)) {
+        if (crawlJobUpdate.limits.depth !== null) {
           crawlJob.limits.depth = crawlJobUpdate.limits.depth;
         }
         if (crawlJobUpdate.limits.max_bytes !== '') {
-          console.log('ikke en tom string');
           crawlJob.limits.max_bytes = crawlJobUpdate.limits.max_bytes;
         }
 
         if (!(crawlJobUpdate.limits.max_duration_s === '')) {
-          console.log('ikke en tom string');
           crawlJob.limits.max_duration_s = crawlJobUpdate.limits.max_duration_s;
         }
 
@@ -242,7 +231,6 @@ export class CrawlJobsComponent implements OnInit {
         if (crawlJobUpdate.crawl_config_id !== '') {
           crawlJob.crawl_config_id = crawlJobUpdate.crawl_config_id;
         }
-        console.log('skal oppdatere med denne configen: ', crawlJob);
         return this.crawlJobService.update(crawlJob);
       }),
       catchError((err) => {
@@ -335,33 +323,21 @@ export class CrawlJobsComponent implements OnInit {
     }
 
     if (equalDepth) {
-      console.log('lik dybde');
       config.limits.depth = compareObj.limits.depth;
-      console.log('dybden settes til: ', config.limits.depth );
     } else {
-      console.log('dubde ikke lik, sett til null');
       config.limits.depth = null;
-      console.log('dybde er nå. ', config.limits.depth);
     }
 
     if (equalMaxDuration) {
-      console.log('lik max duration');
       config.limits.max_duration_s = compareObj.limits.max_duration_s;
-      console.log('max_duration har da verdi: ', config.limits.max_duration_s);
     } else {
-      console.log('ikke lik max duration, setter til tom string');
       config.limits.max_duration_s = '';
-      console.log('max_duration har nå verdi: ', config.limits.max_duration_s);
     }
 
     if (equalMaxBytes) {
-      console.log('lik max_bytes');
       config.limits.max_bytes = compareObj.limits.max_bytes;
-      console.log('max_bytes har da verdi: ', config.limits.max_bytes);
     } else {
-      console.log('ikke lik max_bytes, setter max bytes til tom string');
       config.limits.max_bytes = '';
-      console.log('da har max_bytes verdi: ', config.limits.max_bytes);
     }
 
     if (equalSchedule) {
@@ -375,18 +351,11 @@ export class CrawlJobsComponent implements OnInit {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
-    console.log('returnerer denne configen til bruk  for oppdatering: ', config);
     return config;
   }
 }
 
 function intersectLabel(a, b) {
-  // if (a === undefined) {
-  //   a = [];
-  // }
-  // if (b === undefined) {
-  //   b = [];
-  // }
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>
