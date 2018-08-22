@@ -10,7 +10,7 @@ import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
 import {RoleService} from '../../auth';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
@@ -208,10 +208,10 @@ export class BrowserConfigPageComponent implements OnInit {
         if (browserConfigUpdate.user_agent !== '') {
           browserConfig.user_agent = browserConfigUpdate.user_agent;
         }
-        if (browserConfigUpdate.window_width !== 0 ) {
+        if (!isNaN(browserConfigUpdate.window_width)) {
           browserConfig.window_width = browserConfigUpdate.window_width;
         }
-        if (browserConfigUpdate.window_height !== 0 ) {
+        if (!isNaN(browserConfigUpdate.window_height)) {
           browserConfig.window_height = browserConfigUpdate.window_height;
         }
         if (browserConfigUpdate.page_load_timeout_ms !== '') {
@@ -221,7 +221,6 @@ export class BrowserConfigPageComponent implements OnInit {
           browserConfig.sleep_after_pageload_ms = browserConfigUpdate.sleep_after_pageload_ms;
         }
 
-        //TODO sjekke hele arrayet
         if (browserConfigUpdate.script_id !== ['']) {
           browserConfig.script_id = browserConfigUpdate.script_id;
         }
@@ -283,6 +282,8 @@ export class BrowserConfigPageComponent implements OnInit {
   mergeBrowserConfigs(browserConfigs: BrowserConfig[]) {
     const config = new BrowserConfig();
     const compareObj = browserConfigs[0];
+    const commonScripts = commonScript(browserConfigs);
+    console.log('commonScript opprettet med data: ', commonScripts);
     config.id = '1234567';
     config.meta.name = 'Multi';
 
@@ -306,10 +307,6 @@ export class BrowserConfigPageComponent implements OnInit {
       return cfg.sleep_after_pageload_ms === compareObj.sleep_after_pageload_ms;
     });
 
-    const equalBrowserScript = browserConfigs.every(function (cfg) {
-      return cfg.script_id === compareObj.script_id;
-    });
-
     if (equalUserAgent) {
       config.user_agent = compareObj.user_agent;
     }
@@ -318,8 +315,15 @@ export class BrowserConfigPageComponent implements OnInit {
       config.window_width = compareObj.window_width;
     }
 
+    else {
+      config
+        .window_width = null;
+    }
+
     if (equalWindowHeight) {
       config.window_height = compareObj.window_height;
+    } else {
+      config.window_height = null;
     }
 
     if (equalPageLoadTimeout) {
@@ -330,17 +334,20 @@ export class BrowserConfigPageComponent implements OnInit {
       config.sleep_after_pageload_ms = compareObj.sleep_after_pageload_ms;
     }
 
-    if (equalBrowserScript) {
-      config.script_id = compareObj.script_id;
-    } else {
-      config.script_id = [];
+    for (const browserConfig of browserConfigs) {
+      for (const script of commonScripts) {
+        if (browserConfig.script_id.includes(script)) {
+        } else {
+          commonScripts.splice(commonScripts.indexOf(script), 1);
+        }
+      }
     }
+    config.script_id = commonScripts;
 
     const label = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
-    console.log('browserConfigUpdate: ', config);
     return config;
   }
 }
@@ -366,5 +373,14 @@ function updatedLabels(labels) {
   return result;
 }
 
-
-//TODO add intersectBrowserScript concat
+function commonScript(browserConfigs: BrowserConfig[]) {
+  const allConfigs = [];
+  for (const configs of browserConfigs) {
+    allConfigs.push(configs.script_id);
+  }
+  const mergedScripts = [].concat.apply([], allConfigs);
+  const uniqueScripts = mergedScripts.filter(function (elem, index, self) {
+    return index === self.indexOf(elem);
+  });
+  return uniqueScripts;
+}
