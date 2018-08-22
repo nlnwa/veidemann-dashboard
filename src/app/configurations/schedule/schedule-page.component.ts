@@ -110,6 +110,7 @@ export class SchedulePageComponent implements OnInit {
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as ScheduleDetailsComponent;
     instance.schedule = schedule;
+    instance.form.get('cron_expression').clearValidators();
     instance.form.get('cron_expression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
     instance.form.get('cron_expression.hour').setValidators(Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN)));
     instance.form.get('cron_expression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
@@ -180,7 +181,6 @@ export class SchedulePageComponent implements OnInit {
   }
 
   onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig) {
-    console.log('skal oppdatere med scheduleUpdate: ', scheduleUpdate);
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
@@ -189,13 +189,25 @@ export class SchedulePageComponent implements OnInit {
         }
         schedule.meta.label = updatedLabels(
           scheduleUpdate.meta.label.concat(schedule.meta.label));
-        console.log('input: ', schedule.cron_expression);
-        console.log('schedule update: ', scheduleUpdate.cron_expression);
-        if (scheduleUpdate.cron_expression !== '' || undefined) {
-          schedule.cron_expression = scheduleUpdate.cron_expression;
+        if (scheduleUpdate.cron_expression !== undefined || null) {
+          const newCron = [];
+          const updatedCron = scheduleUpdate.cron_expression.split(' ');
+          const existingCron = schedule.cron_expression.split(' ');
+          for (let i = 0; i < existingCron.length; i++) {
+            if (updatedCron[i] !== '') {
+              newCron[i] = updatedCron[i];
+            } else {
+              newCron[i] = existingCron[i];
+            }
+          }
+          schedule.cron_expression = newCron.join(' ');
         }
-        schedule.valid_from = scheduleUpdate.valid_from;
-        schedule.valid_to = scheduleUpdate.valid_to;
+        if (scheduleUpdate.valid_from != null) {
+          schedule.valid_from = scheduleUpdate.valid_from;
+        }
+        if (scheduleUpdate.valid_to != null) {
+          schedule.valid_to = scheduleUpdate.valid_to;
+        }
         return this.scheduleService.update(schedule);
       }),
       catchError((err) => {
@@ -258,8 +270,33 @@ export class SchedulePageComponent implements OnInit {
     config.id = '1234567';
     config.meta.name = 'Multi';
 
-    const equalCronExpression = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.cron_expression === compareObj.cron_expression;
+    const equalCronExpressionMinute = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[0] === compareCronSplit[0];
+    });
+
+    const equalCronExpressionHour = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[1] === compareCronSplit[1];
+    });
+
+    const equalCronExpressionDOM = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[2] === compareCronSplit[2];
+    });
+
+    const equalCronExpressionMonth = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[3] === compareCronSplit[3];
+    });
+    const equalCronExpressionDOW = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[4] === compareCronSplit[4];
     });
 
     const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
@@ -270,27 +307,55 @@ export class SchedulePageComponent implements OnInit {
       return cfg.valid_to === compareObj.valid_to;
     });
 
-    if (equalCronExpression) {
-      config.cron_expression = compareObj.cron_expression;
-      console.log('cron uttrykkene er like, setter det til : ', compareObj.cron_expression);
+    const equalCron = [];
+    const splittedCron = configs[0].cron_expression.split(' ');
+    if (equalCronExpressionMinute) {
+      equalCron[0] = splittedCron[0];
     } else {
-      console.log('Cron er ikke like for alle, setter det til tom string from update objekt');
-      config.cron_expression = '';
+      equalCron[0] = '';
     }
+    if (equalCronExpressionHour) {
+      equalCron[1] = splittedCron[1];
+    } else {
+      equalCron[1] = '';
+    }
+
+    if (equalCronExpressionDOM) {
+      equalCron[2] = splittedCron[2];
+    } else {
+      equalCron[2] = '';
+    }
+
+    if (equalCronExpressionMonth) {
+      equalCron[3] = splittedCron[3];
+    } else {
+      equalCron[3] = '';
+    }
+
+    if (equalCronExpressionDOW) {
+      equalCron[4] = splittedCron[4];
+    } else {
+      equalCron[4] = '';
+    }
+
+    config.cron_expression = equalCron.join(' ');
 
     if (equalValidFrom) {
       config.valid_from = compareObj.valid_from;
+    } else {
+      config.valid_from = null;
     }
 
     if (equalValidTo) {
       config.valid_to = compareObj.valid_to;
+    } else {
+      config.valid_to = null;
     }
 
     const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
-    console.log('returnerer config fra merge: ', config);
     return config;
   }
 
