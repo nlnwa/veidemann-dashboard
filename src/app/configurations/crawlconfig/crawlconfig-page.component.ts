@@ -290,29 +290,15 @@ export class CrawlConfigPageComponent implements OnInit {
     });
 
     const equalExtractText = configs.every(function (cfg) {
-      if ((cfg.extra.extract_text && compareObj.extra.extract_text) !== undefined) {
-        console.log('cfg obj: ', cfg);
-        console.log('compareOBj: ', compareObj);
-        console.log('cfg extract valueOf = ', cfg.extra.extract_text);
-        console.log('compareObj valueOf = ', compareObj.extra.extract_text);
-        console.log('return', cfg.extra.extract_text === compareObj.extra.extract_text);
         return cfg.extra.extract_text === compareObj.extra.extract_text;
-      }
-      return false;
     });
 
     const equalCreateSnapshot = configs.every(function (cfg) {
-      if ((cfg.extra.create_snapshot && compareObj.extra.create_snapshot) !== undefined) {
         return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
-      }
-      return false;
     });
 
     const equalDepthFirst = configs.every(function (cfg) {
-      if ((cfg.depth_first && compareObj.depth_first) !== undefined) {
         return cfg.depth_first === compareObj.depth_first;
-      }
-      return false;
     });
 
     if (equalBrowserConfig) {
@@ -331,17 +317,18 @@ export class CrawlConfigPageComponent implements OnInit {
 
     if (equalExtractText) {
       config.extra.extract_text = compareObj.extra.extract_text;
-    //} else {
-    //  config.extra.extract_text = false;
+    } else {
+      config.extra.extract_text = false;
     }
 
     if (equalCreateSnapshot) {
       config.extra.create_snapshot = compareObj.extra.create_snapshot;
-    //} else {
-    //  config.extra.create_snapshot = false;
+    } else {
+      config.extra.create_snapshot = false;
     }
 
     if (equalDepthFirst) {
+
       config.depth_first = compareObj.depth_first;
     } else {
       config.depth_first = false;
