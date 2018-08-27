@@ -10,6 +10,7 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
     if (data === null) {
       return;
     }
+    this.selection.clear();
     this.dataSource = data.value || [];
     this.pageLength = data.pageLength;
     this.pageIndex = data.pageIndex;
@@ -53,13 +54,6 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   protected constructor() {
-  }
-
-  onUpdateAll(config) {
-    this.selection.clear();
-    this.dataSource = config;
-    this.dataSource.forEach(row => this.selection.select(row));
-    this.selectedChange.emit(this.selection.selected);
   }
 
   onRowClick(item: T) {
