@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {BrowserScript, Label} from '../../commons/models/config.model';
+import {BrowserScript, CrawlJob, Label} from '../../commons/models/config.model';
 import {BrowserScriptService} from './browserscript.service';
 import {SnackBarService} from 'app/commons/snack-bar/snack-bar.service';
 import {combineLatest, from, Subject} from 'rxjs';
@@ -41,7 +41,7 @@ import {browser} from 'protractor';
                                  (save)="onSaveBrowserScript($event)"
                                  (delete)="onDeleteBrowserScript($event)">
       </app-browserscript-details>
-      <ng-template detail-host *ngIf="browserScript"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -100,7 +100,7 @@ export class BrowserScriptPageComponent implements OnInit {
     }
   }
 
-  loadComponent(browserScript: BrowserScript) {
+  loadComponent(browserScript: BrowserScript, labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserScriptDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -109,7 +109,7 @@ export class BrowserScriptPageComponent implements OnInit {
     instance.browserScript = browserScript;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts));
+    instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts, labels));
     instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
 
   }
@@ -133,7 +133,7 @@ export class BrowserScriptPageComponent implements OnInit {
   onSelectedChange(browserScripts: BrowserScript[]) {
     this.selectedConfigs = browserScripts;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserScripts(browserScripts));
+      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts));
     } else {
       this.browserScript = browserScripts[0];
       if (this.componentRef !== null) {
@@ -211,15 +211,22 @@ export class BrowserScriptPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleBrowserScripts(browserScriptUpdate: BrowserScript) {
+  onUpdateMultipleBrowserScripts(browserScriptUpdate: BrowserScript, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserScript) => {
         if (browserScript.meta.label === undefined) {
           browserScript.meta.label = [];
         }
-        browserScript.meta.label = updatedLabels(
-          browserScriptUpdate.meta.label.concat(browserScript.meta.label));
+        browserScript.meta.label = updatedLabels(browserScriptUpdate.meta.label.concat(browserScript.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(browserScriptUpdate.meta.label, label.key, label.value)) {
+            browserScript.meta.label.splice(
+              browserScript.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
         if (browserScriptUpdate.script.length > 0) {
           browserScript.script = browserScriptUpdate.script;
         }
@@ -260,6 +267,15 @@ export class BrowserScriptPageComponent implements OnInit {
   }
 }
 
+function getInitialLabels(configs: BrowserScript[]) {
+  const config = new BrowserScript();
+  const label = configs.reduce((acc: BrowserScript, curr: BrowserScript) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
+
 function intersectLabel(a, b) {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
@@ -279,5 +295,17 @@ function updatedLabels(labels) {
     return unique;
   }, []);
   return result;
+}
+
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
+  }
+  if (labelExist) {
+    return true;
+  }
 }
 

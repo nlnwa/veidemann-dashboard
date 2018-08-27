@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {CrawlJob, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -45,7 +45,7 @@ import {
                             (save)="onSaveSchedule($event)"
                             (delete)="onDeleteSchedule($event)">
       </app-schedule-details>
-      <ng-template detail-host *ngIf="schedule"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -103,7 +103,7 @@ export class SchedulePageComponent implements OnInit {
     });
   }
 
-  loadComponent(schedule: CrawlScheduleConfig) {
+  loadComponent(schedule: CrawlScheduleConfig, labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ScheduleDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -118,7 +118,7 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig));
+    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
     instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
   }
 
@@ -141,7 +141,7 @@ export class SchedulePageComponent implements OnInit {
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs));
+      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), getInitialLabels(crawlScheduleConfigs));
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -180,15 +180,22 @@ export class SchedulePageComponent implements OnInit {
     this.changes.next();
   }
 
-  onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig) {
+  onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
         if (schedule.meta.label === undefined) {
           schedule.meta.label = [];
         }
-        schedule.meta.label = updatedLabels(
-          scheduleUpdate.meta.label.concat(schedule.meta.label));
+        schedule.meta.label = updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
+            schedule.meta.label.splice(
+              schedule.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
         if (scheduleUpdate.cron_expression !== undefined || null) {
           const newCron = [];
           const updatedCron = scheduleUpdate.cron_expression.split(' ');
@@ -361,13 +368,17 @@ export class SchedulePageComponent implements OnInit {
 
 }
 
+
+function getInitialLabels(configs: CrawlScheduleConfig[]) {
+  const config = new CrawlScheduleConfig();
+  const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
+
 function intersectLabel(a, b) {
-  // if (a === undefined) {
-  //   a = [];
-  // }
-  // if (b === undefined) {
-  //   b = [];
-  // }
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>
@@ -386,4 +397,16 @@ function updatedLabels(labels) {
     return unique;
   }, []);
   return result;
+}
+
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
+  }
+  if (labelExist) {
+    return true;
+  }
 }
