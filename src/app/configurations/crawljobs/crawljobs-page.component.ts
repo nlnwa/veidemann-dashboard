@@ -33,12 +33,12 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-crawljob-list (rowClick)="onSelectCrawlJob($event)"
+        <app-selection-base-list (rowClick)="onSelectCrawlJob($event)"
                            [data]="data$ | async"
                            (selectedChange)="onSelectedChange($event)"
                            (labelClicked)="onLabelClick($event)"
                            (page)="onPage($event)">
-        </app-crawljob-list>
+        </app-selection-base-list>
       </div>
       <app-crawljob-details [crawlJob]="crawlJob"
                             [crawlConfigs]="crawlConfigs"

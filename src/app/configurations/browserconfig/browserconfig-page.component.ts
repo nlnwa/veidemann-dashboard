@@ -28,12 +28,12 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-browserconfig-list (rowClick)="onSelectBrowserConfig($event)"
+        <app-selection-base-list (rowClick)="onSelectBrowserConfig($event)"
                                 [data]="data$ | async"
                                 (selectedChange)="onSelectedChange($event)"
                                 (labelClicked)="onLabelClick($event)"
                                 (page)="onPage($event)">
-        </app-browserconfig-list>
+        </app-selection-base-list>
       </div>
       <app-browserconfig-details [browserConfig]="browserConfig"
                                  [browserScripts]="browserScripts"

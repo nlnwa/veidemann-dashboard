@@ -29,13 +29,13 @@ import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list/cra
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-crawlhostgroupconfig-list
+        <app-selection-base-list
           (rowClick)="onSelectCrawlHostGroupConfig($event)"
           [data]="data$ | async"
           (selectedChange)="onSelectedChange($event)"
           (labelClicked)="onLabelClick($event)"
           (page)="onPage($event)">
-        </app-crawlhostgroupconfig-list>
+        </app-selection-base-list>
       </div>
       <app-crawlhostgroupconfig-details *ngIf="crawlHostGroupConfig && singleMode"
                                         [crawlHostGroupConfig]="crawlHostGroupConfig"

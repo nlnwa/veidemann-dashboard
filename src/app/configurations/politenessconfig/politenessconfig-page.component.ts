@@ -25,12 +25,12 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-politenessconfig-list (rowClick)="onSelectPolitenessConfig($event)"
+        <app-selection-base-list (rowClick)="onSelectPolitenessConfig($event)"
                                    [data]="data$ | async"
                                    (selectedChange)="onSelectedChange($event)"
                                    (labelClicked)="onLabelClick($event)"
                                    (page)="onPage($event)">
-        </app-politenessconfig-list>
+        </app-selection-base-list>
       </div>
       <app-politenessconfig-details [politenessConfig]="politenessConfig"
                                     [robotsPolicies]="robotsPolicies"
