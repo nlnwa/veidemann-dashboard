@@ -28,12 +28,12 @@ import {browser} from 'protractor';
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-browserscript-list (rowClick)="onSelectBrowserScript($event)"
+        <app-selection-base-list (rowClick)="onSelectBrowserScript($event)"
                                 [data]="data$ | async"
                                 (selectedChange)="onSelectedChange($event)"
                                 (labelClicked)="onLabelClick($event)"
                                 (page)="onPage($event)">
-        </app-browserscript-list>
+        </app-selection-base-list>
       </div>
       <app-browserscript-details [browserScript]="browserScript"
                                  *ngIf="browserScript && singleMode"
