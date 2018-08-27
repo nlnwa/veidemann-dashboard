@@ -48,7 +48,7 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
                             (save)="onSaveCrawlJob($event)"
                             (delete)="onDeleteCrawlJob($event)">
       </app-crawljob-details>
-      <ng-template detail-host *ngIf="crawlJob"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -86,8 +86,6 @@ export class CrawlJobsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Load prerequisites for app-crawljob-detail
-
     this.crawlConfigService.list().pipe(map(reply => reply.value))
       .subscribe(crawlConfigs => this.crawlConfigs = crawlConfigs);
 
@@ -118,7 +116,7 @@ export class CrawlJobsComponent implements OnInit {
     }
   }
 
-  loadComponent(crawlJob: CrawlJob, schedules: CrawlScheduleConfig[], crawlConfigs: CrawlConfig[]) {
+  loadComponent(crawlJob: CrawlJob, schedules: CrawlScheduleConfig[], crawlConfigs: CrawlConfig[], labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawljobDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -136,7 +134,7 @@ export class CrawlJobsComponent implements OnInit {
     instance.form.get('crawl_config_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig));
+    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
     instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
@@ -159,7 +157,8 @@ export class CrawlJobsComponent implements OnInit {
   onSelectedChange(crawlJobs: CrawlJob[]) {
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs);
+      this.loadComponent(
+        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, getInitialLabels(crawlJobs));
     } else {
       this.crawlJob = crawlJobs[0];
       if (this.componentRef !== null) {
@@ -203,7 +202,7 @@ export class CrawlJobsComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlJobs(crawlJobUpdate: CrawlJob) {
+  onUpdateMultipleCrawlJobs(crawlJobUpdate: CrawlJob, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlJob: CrawlJob) => {
@@ -212,22 +211,26 @@ export class CrawlJobsComponent implements OnInit {
           crawlJob.meta.label = [];
         }
         crawlJob.meta.label = updatedLabels(crawlJobUpdate.meta.label.concat(crawlJob.meta.label));
-
+        for (const label of initialLabels) {
+          if (!findLabel(crawlJobUpdate.meta.label, label.key, label.value)) {
+            crawlJob.meta.label.splice(
+              crawlJob.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
         if (crawlJobUpdate.limits.depth !== null) {
           crawlJob.limits.depth = crawlJobUpdate.limits.depth;
         }
         if (crawlJobUpdate.limits.max_bytes !== '') {
           crawlJob.limits.max_bytes = crawlJobUpdate.limits.max_bytes;
         }
-
         if (!(crawlJobUpdate.limits.max_duration_s === '')) {
           crawlJob.limits.max_duration_s = crawlJobUpdate.limits.max_duration_s;
         }
-
         if (!(crawlJobUpdate.schedule_id === '')) {
           crawlJob.schedule_id = crawlJobUpdate.schedule_id;
         }
-
         if (crawlJobUpdate.crawl_config_id !== '') {
           crawlJob.crawl_config_id = crawlJobUpdate.crawl_config_id;
         }
@@ -355,6 +358,16 @@ export class CrawlJobsComponent implements OnInit {
   }
 }
 
+function getInitialLabels(configs: CrawlJob[]) {
+  const config = new CrawlJob();
+  const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
+
+
 function intersectLabel(a, b) {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
@@ -366,7 +379,6 @@ function intersectLabel(a, b) {
   return Array.from(intersection);
 }
 
-
 function updatedLabels(labels) {
   const result = labels.reduce((unique, o) => {
     if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
@@ -375,4 +387,16 @@ function updatedLabels(labels) {
     return unique;
   }, []);
   return result;
+}
+
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
+  }
+  if (labelExist) {
+    return true;
+  }
 }

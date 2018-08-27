@@ -3,7 +3,7 @@ import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {CrawlHostGroupConfig, IpRange, Label} from '../../commons/models/config.model';
+import {CrawlHostGroupConfig, CrawlJob, IpRange, Label} from '../../commons/models/config.model';
 import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 import {of} from 'rxjs/internal/observable/of';
 import {DetailDirective} from '../shared/detail.directive';
@@ -34,9 +34,7 @@ import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list/cra
           [data]="data$ | async"
           (selectedChange)="onSelectedChange($event)"
           (labelClicked)="onLabelClick($event)"
-          (page)="onPage($event)"
-          (getAllConfigs)="getAllConfiguratations()"
-        >
+          (page)="onPage($event)">
         </app-crawlhostgroupconfig-list>
       </div>
       <app-crawlhostgroupconfig-details *ngIf="crawlHostGroupConfig && singleMode"
@@ -45,7 +43,7 @@ import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list/cra
                                         (save)="onSaveCrawlHostGroupConfig($event)"
                                         (delete)="onDeleteCrawlHostGroupConfig($event)">
       </app-crawlhostgroupconfig-details>
-      <ng-template detail-host ngIf="crawlHostGroupConfig"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -64,7 +62,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   data$ = this.data.asObservable();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
-  @ViewChild(CrawlHostGroupConfigListComponent) listView: CrawlHostGroupConfigListComponent;
 
   constructor(private crawlHostGroupConfigService: CrawlHostGroupConfigService,
               private snackBarService: SnackBarService,
@@ -94,22 +91,20 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
         pageSize: reply.page_size || 0,
         pageIndex: reply.page || 0,
       });
-      console.log(reply);
     });
   }
 
-  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[]) {
+  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[], labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as CrawlHostGroupConfigDetailsComponent;
     instance.crawlHostGroupConfig = config;
-    console.log('loadComp config: ', config);
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig));
+      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels));
     instance.delete.subscribe(
       () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
   }
@@ -142,7 +137,8 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs), this.selectedConfigs);
+      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
+        this.selectedConfigs, getInitialLabels(crawlHostGroupConfigs));
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -172,12 +168,22 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig) {
+  onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlHostGroupConfig) => {
-        if (crawlHostGroupConfig.meta.label === undefined) {
+        if (crawlHostGroupConfig.meta.label === undefined || null) {
           crawlHostGroupConfig.meta.label = [];
+        }
+        crawlHostGroupConfig.meta.label = updatedLabels(crawlHostGroupConfigUpdate.meta.label
+          .concat(crawlHostGroupConfig.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(crawlHostGroupConfigUpdate.meta.label, label.key, label.value)) {
+            crawlHostGroupConfig.meta.label.splice(
+              crawlHostGroupConfig.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
         }
         crawlHostGroupConfig.meta.label = updatedLabels(
           crawlHostGroupConfigUpdate.meta.label.concat(crawlHostGroupConfig.meta.label));
@@ -252,24 +258,26 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
 
     return config;
   }
+}
 
+function getInitialLabels(configs: CrawlHostGroupConfig[]) {
+  const config = new CrawlHostGroupConfig();
+  const label = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
 
-  getAllConfiguratations() {
-    this.selectedConfigs = [];
-    this.crawlHostGroupConfigService.search({})
-      .subscribe((reply) => {
-        this.selectedConfigs = reply.value;
-        console.log(reply);
-        console.log('SelectedConfigs pagecomp', this.selectedConfigs);
-        this.updateSelected();
-      });
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
   }
-
-  updateSelected() {
-    console.log('update selected');
-    console.log('har disse configs: ', this.selectedConfigs);
-    // return this.selectedConfigs;
-    this.listView.onUpdateAll(this.selectedConfigs);
+  if (labelExist) {
+    return true;
   }
 }
 
@@ -296,7 +304,6 @@ function intersectIpRange(a: IpRange[], b: IpRange[]): IpRange[] {
 }
 
 function updatedLabels(labels) {
-  console.log('update labels: ', labels);
   const result = labels.reduce((unique, o) => {
     if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
       unique.push(o);

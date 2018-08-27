@@ -102,7 +102,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     }
     if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
       this.robotsPolicyList = changes.robotsPolicies.currentValue;
-      console.log('i pol details, får robotList: ', this.robotsPolicyList);
     }
     if (this.politenessConfig && this.robotsPolicyList) {
       this.updateForm();

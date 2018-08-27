@@ -42,7 +42,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                  (save)="onSaveBrowserConfig($event)"
                                  (delete)="onDeleteBrowserConfig($event)">
       </app-browserconfig-details>
-      <ng-template detail-host *ngIf="browserConfig"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -109,7 +109,7 @@ export class BrowserConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[]) {
+  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[], labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -133,7 +133,7 @@ export class BrowserConfigPageComponent implements OnInit {
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs));
+      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels));
     instance.delete.subscribe(
       () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
   }
@@ -157,7 +157,10 @@ export class BrowserConfigPageComponent implements OnInit {
   onSelectedChange(browserConfigs: BrowserConfig[]) {
     this.selectedConfigs = browserConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserConfigs(browserConfigs), this.browserScripts);
+      this.loadComponent(
+        this.mergeBrowserConfigs(browserConfigs),
+        this.browserScripts,
+        getInitialLabels(browserConfigs));
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -197,7 +200,7 @@ export class BrowserConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleBrowserConfigs(browserConfigUpdate: BrowserConfig) {
+  onUpdateMultipleBrowserConfigs(browserConfigUpdate: BrowserConfig, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserConfig: BrowserConfig) => {
@@ -205,6 +208,15 @@ export class BrowserConfigPageComponent implements OnInit {
           browserConfig.meta.label = [];
         }
         browserConfig.meta.label = updatedLabels(browserConfigUpdate.meta.label.concat(browserConfig.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(browserConfigUpdate.meta.label, label.key, label.value)) {
+            browserConfig.meta.label.splice(
+              browserConfig.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
+
         if (browserConfigUpdate.user_agent !== '') {
           browserConfig.user_agent = browserConfigUpdate.user_agent;
         }
@@ -283,7 +295,6 @@ export class BrowserConfigPageComponent implements OnInit {
     const config = new BrowserConfig();
     const compareObj = browserConfigs[0];
     const commonScripts = commonScript(browserConfigs);
-    console.log('commonScript opprettet med data: ', commonScripts);
     config.id = '1234567';
     config.meta.name = 'Multi';
 
@@ -352,6 +363,15 @@ export class BrowserConfigPageComponent implements OnInit {
   }
 }
 
+function getInitialLabels(configs: BrowserConfig[]) {
+  const config = new BrowserConfig();
+  const label = configs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
+
 function intersectLabel(a, b) {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
@@ -384,3 +404,17 @@ function commonScript(browserConfigs: BrowserConfig[]) {
   });
   return uniqueScripts;
 }
+
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
+  }
+  if (labelExist) {
+    return true;
+  }
+}
+
+

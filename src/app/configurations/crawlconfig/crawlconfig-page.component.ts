@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../commons/models/config.model';
+import {BrowserConfig, CrawlConfig, CrawlJob, Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
@@ -43,7 +43,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
                                (save)="onSaveCrawlConfig($event)"
                                (delete)="onDeleteCrawlConfig($event)">
       </app-crawlconfig-details>
-      <ng-template detail-host *ngIf="crawlConfig"></ng-template>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
@@ -112,7 +112,8 @@ export class CrawlConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(crawlConfig: CrawlConfig, browserConfigs: BrowserConfig[], politenessConfigs: PolitenessConfig[]) {
+  loadComponent(crawlConfig: CrawlConfig, browserConfigs: BrowserConfig[],
+                politenessConfigs: PolitenessConfig[], labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -132,7 +133,7 @@ export class CrawlConfigPageComponent implements OnInit {
     instance.form.get('politeness_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs));
+    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
     instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
@@ -155,7 +156,8 @@ export class CrawlConfigPageComponent implements OnInit {
   onSelectedChange(crawlConfigs: CrawlConfig[]) {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs);
+      this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs,
+        getInitialLabels(crawlConfigs));
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -194,7 +196,7 @@ export class CrawlConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig) {
+  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig, initialLabels: Label[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlConfig) => {
@@ -202,6 +204,14 @@ export class CrawlConfigPageComponent implements OnInit {
           crawlConfig.meta.label = [];
         }
         crawlConfig.meta.label = updatedLabels(crawlConfigUpdate.meta.label.concat(crawlConfig.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(crawlConfigUpdate.meta.label, label.key, label.value)) {
+            crawlConfig.meta.label.splice(
+              crawlConfig.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
         crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
         crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
         crawlConfig.depth_first = crawlConfigUpdate.depth_first;
@@ -290,15 +300,15 @@ export class CrawlConfigPageComponent implements OnInit {
     });
 
     const equalExtractText = configs.every(function (cfg) {
-        return cfg.extra.extract_text === compareObj.extra.extract_text;
+      return cfg.extra.extract_text === compareObj.extra.extract_text;
     });
 
     const equalCreateSnapshot = configs.every(function (cfg) {
-        return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
+      return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
     });
 
     const equalDepthFirst = configs.every(function (cfg) {
-        return cfg.depth_first === compareObj.depth_first;
+      return cfg.depth_first === compareObj.depth_first;
     });
 
     if (equalBrowserConfig) {
@@ -339,6 +349,27 @@ export class CrawlConfigPageComponent implements OnInit {
       return config;
     });
     return config;
+  }
+}
+
+function getInitialLabels(configs: CrawlConfig[]) {
+  const config = new CrawlConfig();
+  const label = configs.reduce((acc: CrawlConfig, curr: CrawlConfig) => {
+    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+    return config;
+  });
+  return config.meta.label;
+}
+
+function findLabel(array: Label[], key, value) {
+  const labelExist = array.find(function (label) {
+    return label.key === key && label.value === value;
+  });
+  if (!labelExist) {
+    return false;
+  }
+  if (labelExist) {
+    return true;
   }
 }
 
