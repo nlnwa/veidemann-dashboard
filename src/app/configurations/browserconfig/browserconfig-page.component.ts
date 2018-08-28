@@ -10,10 +10,11 @@ import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
 import {RoleService} from '../../auth';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-browserconfig',
@@ -120,11 +121,6 @@ export class BrowserConfigPageComponent implements OnInit {
       id: browserScript.id,
       itemName: browserScript.meta.name,
     }));
-    // instance.form.get('user_agent').setValidators(Validators.minLength(1));
-    // instance.form.get('window_width').setValidators(Validators.min(1));
-    // instance.form.get('window_height').setValidators(Validators.min(1));
-    // instance.form.get('page_load_timeout_ms').setValidators(Validators.min(0));
-    // instance.form.get('sleep_after_pageload_ms').setValidators(Validators.min(0));
     instance.form.get('user_agent').clearValidators();
     instance.form.get('window_width').clearValidators();
     instance.form.get('window_height').clearValidators();
@@ -160,7 +156,7 @@ export class BrowserConfigPageComponent implements OnInit {
       this.loadComponent(
         this.mergeBrowserConfigs(browserConfigs),
         this.browserScripts,
-        getInitialLabels(browserConfigs));
+        LabelsComponent.getInitialLabels(browserConfigs, BrowserConfig));
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -207,9 +203,9 @@ export class BrowserConfigPageComponent implements OnInit {
         if (browserConfig.meta.label === undefined) {
           browserConfig.meta.label = [];
         }
-        browserConfig.meta.label = updatedLabels(browserConfigUpdate.meta.label.concat(browserConfig.meta.label));
+        browserConfig.meta.label = LabelsComponent.updatedLabels(browserConfigUpdate.meta.label.concat(browserConfig.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(browserConfigUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(browserConfigUpdate.meta.label, label.key, label.value)) {
             browserConfig.meta.label.splice(
               browserConfig.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -356,41 +352,11 @@ export class BrowserConfigPageComponent implements OnInit {
     config.script_id = commonScripts;
 
     const label = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
-}
-
-function getInitialLabels(configs: BrowserConfig[]) {
-  const config = new BrowserConfig();
-  const label = configs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
 }
 
 function commonScript(browserConfigs: BrowserConfig[]) {
@@ -405,16 +371,5 @@ function commonScript(browserConfigs: BrowserConfig[]) {
   return uniqueScripts;
 }
 
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
 
 

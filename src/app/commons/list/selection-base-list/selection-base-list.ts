@@ -41,17 +41,12 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   page: EventEmitter<PageEvent> = new EventEmitter();
 
   @Output()
-  deleteSelected = new EventEmitter<T[]>();
-
-  @Output()
-  labelClicked = new EventEmitter();
-
-  @Output()
-  getAllConfigs = new EventEmitter();
+  selectAll = new EventEmitter();
 
   displayedColumns: string[] = ['select', 'name', 'description', 'label'];
   selection = new SelectionModel<T>(true, []);
   dataSource: T[] = [];
+  allSelected = false;
 
   // MatPaginator settings
   pageLength = 0;
@@ -94,12 +89,15 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
     this.selectedChange.emit(this.selection.selected);
   }
 
-  onClickLabel(key: string, value: string) {
-    this.labelClicked.emit(key + ':' + value);
+  onSelectAll() {
+    //this.selection.select();
+    this.allSelected = true;
+    this.selectAll.emit(this.allSelected);
   }
 
-  selectAllConfigs() {
-    this.selection.select();
-    this.getAllConfigs.emit();
+  onDeselectAll() {
+    this.selection.clear();
+    this.allSelected = false;
+    this.selectAll.emit(this.allSelected);
   }
 }

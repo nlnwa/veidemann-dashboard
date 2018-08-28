@@ -19,6 +19,7 @@ import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.component';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-crawljobs',
@@ -34,10 +35,10 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectCrawlJob($event)"
-                           [data]="data$ | async"
-                           (selectedChange)="onSelectedChange($event)"
-                           (labelClicked)="onLabelClick($event)"
-                           (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-crawljob-details [crawlJob]="crawlJob"
@@ -67,6 +68,7 @@ export class CrawlJobsComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -84,6 +86,7 @@ export class CrawlJobsComponent implements OnInit {
   get singleMode(): boolean {
     return this.selectedConfigs.length < 2;
   }
+
 
   ngOnInit() {
     this.crawlConfigService.list().pipe(map(reply => reply.value))
@@ -131,23 +134,29 @@ export class CrawlJobsComponent implements OnInit {
       id: crawlConfig.id,
       itemName: crawlConfig.meta.name
     }));
-    instance.form.get('crawl_config_id').clearValidators();
-    instance.data = false;
-    instance.updateForm();
-    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.form.get('crawl_config_id').clearValidators();
+      instance.form.get('limits.depth').clearValidators();
+      instance.form.get('limits.max_duration_s').clearValidators();
+      instance.form.get('limits.max_bytes').clearValidators();
+      instance.data = false;
+      instance.updateForm();
+      instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.data = false;
+      instance.updateForm();
+      instance.update.subscribe((crawlJobConfig) => this.onUpdateAllCrawlJobs(crawlJobConfig));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlJobs());
+
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -157,8 +166,15 @@ export class CrawlJobsComponent implements OnInit {
   onSelectedChange(crawlJobs: CrawlJob[]) {
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
-      this.loadComponent(
-        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, getInitialLabels(crawlJobs));
+      if (!this.allSelected) {
+        this.loadComponent(
+          this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, LabelsComponent.getInitialLabels(crawlJobs, CrawlJob));
+      } else {
+        const crawlJob = new CrawlJob();
+        crawlJob.id = '1234567';
+        crawlJob.meta.name = 'updateAll';
+        this.loadComponent(crawlJob, this.schedules, this.crawlConfigs, []);
+      }
     } else {
       this.crawlJob = crawlJobs[0];
       if (this.componentRef !== null) {
@@ -167,6 +183,16 @@ export class CrawlJobsComponent implements OnInit {
       if (this.crawlJob === undefined) {
         this.crawlJob = null;
       }
+    }
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlJob(), new CrawlJob()]);
+    } else {
+      this.crawlJob = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -210,9 +236,9 @@ export class CrawlJobsComponent implements OnInit {
         if (crawlJob.meta.label === undefined) {
           crawlJob.meta.label = [];
         }
-        crawlJob.meta.label = updatedLabels(crawlJobUpdate.meta.label.concat(crawlJob.meta.label));
+        crawlJob.meta.label = LabelsComponent.updatedLabels(crawlJobUpdate.meta.label.concat(crawlJob.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(crawlJobUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(crawlJobUpdate.meta.label, label.key, label.value)) {
             crawlJob.meta.label.splice(
               crawlJob.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -289,6 +315,16 @@ export class CrawlJobsComponent implements OnInit {
       });
   }
 
+  onDeleteAllCrawlJobs() {
+    console.log('alle er markert og alle skal slettes');
+
+  }
+
+  onUpdateAllCrawlJobs(crawlJob: CrawlJob) {
+    console.log('alle er markert, alle skal oppdateres');
+    console.log('får inn dette pbjektet: ', crawlJob);
+  }
+
   mergeCrawlJobs(configs: CrawlJob[]) {
     const config = new CrawlJob();
     const compareObj = configs[0];
@@ -351,52 +387,9 @@ export class CrawlJobsComponent implements OnInit {
       config.crawl_config_id = compareObj.crawl_config_id;
     }
     const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
-  }
-}
-
-function getInitialLabels(configs: CrawlJob[]) {
-  const config = new CrawlJob();
-  const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
   }
 }

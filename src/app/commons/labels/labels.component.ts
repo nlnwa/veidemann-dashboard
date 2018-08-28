@@ -39,8 +39,8 @@ export class LabelsComponent implements ControlValueAccessor {
   private labels: Label[];
 
   /** Functions used when updating multiple configs*/
-  static getInitialLabels(configs: CrawlJob[]) {
-    const config = new CrawlJob();
+  static getInitialLabels(configs: any[], cfg: any) {
+    const config = new cfg();
     const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
       config.meta.label = this.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
@@ -180,7 +180,6 @@ export class LabelsComponent implements ControlValueAccessor {
   onAbort(): void {
     this.labelForm.disable();
   }
-
 
 
   private reset() {

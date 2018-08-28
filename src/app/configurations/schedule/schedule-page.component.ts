@@ -18,6 +18,7 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../../commons/validator';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-schedule',
@@ -141,7 +142,7 @@ export class SchedulePageComponent implements OnInit {
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), getInitialLabels(crawlScheduleConfigs));
+      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), LabelsComponent.getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig));
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -187,9 +188,9 @@ export class SchedulePageComponent implements OnInit {
         if (schedule.meta.label === undefined) {
           schedule.meta.label = [];
         }
-        schedule.meta.label = updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
+        schedule.meta.label = LabelsComponent.updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
             schedule.meta.label.splice(
               schedule.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -360,53 +361,10 @@ export class SchedulePageComponent implements OnInit {
     }
 
     const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
 
-}
-
-
-function getInitialLabels(configs: CrawlScheduleConfig[]) {
-  const config = new CrawlScheduleConfig();
-  const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
 }

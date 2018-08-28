@@ -11,6 +11,7 @@ import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {PolitenessconfigDetailsComponent} from './politenessconfig-details/politenessconfig-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-politenessconfig',
@@ -140,7 +141,7 @@ export class PolitenessConfigPageComponent implements OnInit {
     this.selectedConfigs = politenessConfigs;
     if (!this.singleMode) {
       this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
-        this.robotsPolicies, getInitialLabels(politenessConfigs));
+        this.robotsPolicies, LabelsComponent.getInitialLabels(politenessConfigs, PolitenessConfig));
     } else {
       this.politenessConfig = politenessConfigs[0];
       if (this.componentRef !== null) {
@@ -185,10 +186,10 @@ export class PolitenessConfigPageComponent implements OnInit {
         if (politenessConfig.meta.label === undefined) {
           politenessConfig.meta.label = [];
         }
-        politenessConfig.meta.label = updatedLabels(politenessConfigUpdate.meta.label
+        politenessConfig.meta.label = LabelsComponent.updatedLabels(politenessConfigUpdate.meta.label
           .concat(politenessConfig.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(politenessConfigUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(politenessConfigUpdate.meta.label, label.key, label.value)) {
             politenessConfig.meta.label.splice(
               politenessConfig.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -342,51 +343,9 @@ export class PolitenessConfigPageComponent implements OnInit {
     }
 
     const label = politenessConfigs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
-}
-
-function getInitialLabels(configs: PolitenessConfig[]) {
-  const config = new PolitenessConfig();
-  const label = configs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
 }

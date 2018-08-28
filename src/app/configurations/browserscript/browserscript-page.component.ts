@@ -13,6 +13,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 import {BrowserScriptDetailsComponent} from './browserscript-details/browserscript-details.component';
 import {ActivatedRoute} from '@angular/router';
 import {browser} from 'protractor';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 
 @Component({
@@ -133,7 +134,7 @@ export class BrowserScriptPageComponent implements OnInit {
   onSelectedChange(browserScripts: BrowserScript[]) {
     this.selectedConfigs = browserScripts;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts));
+      this.loadComponent(this.mergeBrowserScripts(browserScripts), LabelsComponent.getInitialLabels(browserScripts, BrowserScript));
     } else {
       this.browserScript = browserScripts[0];
       if (this.componentRef !== null) {
@@ -218,9 +219,9 @@ export class BrowserScriptPageComponent implements OnInit {
         if (browserScript.meta.label === undefined) {
           browserScript.meta.label = [];
         }
-        browserScript.meta.label = updatedLabels(browserScriptUpdate.meta.label.concat(browserScript.meta.label));
+        browserScript.meta.label = LabelsComponent.updatedLabels(browserScriptUpdate.meta.label.concat(browserScript.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(browserScriptUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(browserScriptUpdate.meta.label, label.key, label.value)) {
             browserScript.meta.label.splice(
               browserScript.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -251,7 +252,7 @@ export class BrowserScriptPageComponent implements OnInit {
     config.meta.name = 'Multi';
     const compareObj = browserScripts[0];
     const label = browserScripts.reduce((acc: BrowserScript, curr: BrowserScript) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     const script = browserScripts.every(function (cfg) {
@@ -267,45 +268,4 @@ export class BrowserScriptPageComponent implements OnInit {
   }
 }
 
-function getInitialLabels(configs: BrowserScript[]) {
-  const config = new BrowserScript();
-  const label = configs.reduce((acc: BrowserScript, curr: BrowserScript) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
 

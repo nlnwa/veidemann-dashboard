@@ -14,6 +14,7 @@ import {DetailDirective} from '../shared/detail.directive';
 import {CrawlConfigDetailsComponent} from './crawlconfig-details/crawlconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-crawlconfig',
@@ -157,7 +158,7 @@ export class CrawlConfigPageComponent implements OnInit {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
       this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs,
-        getInitialLabels(crawlConfigs));
+        LabelsComponent.getInitialLabels(crawlConfigs, CrawlConfig));
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -203,9 +204,9 @@ export class CrawlConfigPageComponent implements OnInit {
         if (crawlConfig.meta.label === undefined) {
           crawlConfig.meta.label = [];
         }
-        crawlConfig.meta.label = updatedLabels(crawlConfigUpdate.meta.label.concat(crawlConfig.meta.label));
+        crawlConfig.meta.label = LabelsComponent.updatedLabels(crawlConfigUpdate.meta.label.concat(crawlConfig.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(crawlConfigUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(crawlConfigUpdate.meta.label, label.key, label.value)) {
             crawlConfig.meta.label.splice(
               crawlConfig.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -345,51 +346,9 @@ export class CrawlConfigPageComponent implements OnInit {
     }
 
     const label = configs.reduce((acc: CrawlConfig, curr: CrawlConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
-}
-
-function getInitialLabels(configs: CrawlConfig[]) {
-  const config = new CrawlConfig();
-  const label = configs.reduce((acc: CrawlConfig, curr: CrawlConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
 }
