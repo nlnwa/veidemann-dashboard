@@ -30,10 +30,10 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectBrowserConfig($event)"
-                                [data]="data$ | async"
-                                (selectedChange)="onSelectedChange($event)"
-                                (labelClicked)="onLabelClick($event)"
-                                (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-browserconfig-details [browserConfig]="browserConfig"
@@ -54,6 +54,7 @@ export class BrowserConfigPageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   browserConfig: BrowserConfig;
   browserScripts: BrowserScript[];
@@ -128,22 +129,22 @@ export class BrowserConfigPageComponent implements OnInit {
     instance.form.get('sleep_after_pageload_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels));
-    instance.delete.subscribe(
-      () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels));
+      instance.delete.subscribe(
+        () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+    }
+    if (this.allSelected) {
+      instance.update.subscribe((browserConfigUpdate) => this.onUpdateAllBrowserConfigs(browserConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllBrowserConfigs());
+    }
   }
+
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -153,10 +154,17 @@ export class BrowserConfigPageComponent implements OnInit {
   onSelectedChange(browserConfigs: BrowserConfig[]) {
     this.selectedConfigs = browserConfigs;
     if (!this.singleMode) {
-      this.loadComponent(
-        this.mergeBrowserConfigs(browserConfigs),
-        this.browserScripts,
-        LabelsComponent.getInitialLabels(browserConfigs, BrowserConfig));
+      if (!this.allSelected) {
+        this.loadComponent(
+          this.mergeBrowserConfigs(browserConfigs),
+          this.browserScripts,
+          LabelsComponent.getInitialLabels(browserConfigs, BrowserConfig));
+      } else {
+        const browserConfig = new BrowserConfig();
+        browserConfig.id = '1234567';
+        browserConfig.meta.name = 'update';
+        this.loadComponent(browserConfig, this.browserScripts, []);
+      }
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -165,6 +173,16 @@ export class BrowserConfigPageComponent implements OnInit {
       if (this.browserConfig === undefined) {
         this.browserConfig = null;
       }
+    }
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new BrowserConfig(), new BrowserConfig()]);
+    } else {
+      this.browserConfig = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -247,6 +265,14 @@ export class BrowserConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllBrowserConfigs(browserConfigUpdate: BrowserConfig) {
+    console.log('Alle browserconfigs markert, opdaterer alle med denne configen: ', browserConfigUpdate);
+  }
+
+  onDeleteAllBrowserConfigs() {
+    console.log('skal slette alle browserconfigs');
+  }
+
   onDeleteBrowserConfig(browserConfig: BrowserConfig) {
     this.browserConfigService.delete(browserConfig.id)
       .subscribe(() => {
@@ -320,11 +346,8 @@ export class BrowserConfigPageComponent implements OnInit {
 
     if (equalWindowWidth) {
       config.window_width = compareObj.window_width;
-    }
-
-    else {
-      config
-        .window_width = null;
+    } else {
+      config.window_width = null;
     }
 
     if (equalWindowHeight) {

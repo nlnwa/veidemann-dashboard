@@ -30,10 +30,10 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectCrawlConfig($event)"
-                              [data]="data$ | async"
-                              (selectedChange)="onSelectedChange($event)"
-                              (labelClicked)="onLabelClick($event)"
-                              (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-crawlconfig-details [crawlConfig]="crawlConfig"
@@ -55,6 +55,7 @@ export class CrawlConfigPageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   crawlConfig: CrawlConfig;
   browserConfigs: BrowserConfig[];
@@ -134,20 +135,20 @@ export class CrawlConfigPageComponent implements OnInit {
     instance.form.get('politeness_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((crawlConfigUpdate) => this.onUpdateAllCrawlConfigs(crawlConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -157,8 +158,15 @@ export class CrawlConfigPageComponent implements OnInit {
   onSelectedChange(crawlConfigs: CrawlConfig[]) {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs,
-        LabelsComponent.getInitialLabels(crawlConfigs, CrawlConfig));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs,
+          LabelsComponent.getInitialLabels(crawlConfigs, CrawlConfig));
+      } else {
+        const crawlConfig = new CrawlConfig();
+        crawlConfig.id = '1234567';
+        crawlConfig.meta.name = 'update';
+        this.loadComponent(crawlConfig, this.browserConfigs, this.politenessConfigs, []);
+      }
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -167,6 +175,16 @@ export class CrawlConfigPageComponent implements OnInit {
       if (this.crawlConfig === undefined) {
         this.crawlConfig = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange(([new CrawlConfig(), new CrawlConfig()]));
+    } else {
+      this.crawlConfig = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -189,6 +207,7 @@ export class CrawlConfigPageComponent implements OnInit {
   }
 
   onUpdateCrawlConfig(crawlConfig: CrawlConfig) {
+    console.log('crawlconfig update: ', crawlConfig);
     this.crawlConfigService.update(crawlConfig)
       .subscribe(updatedCrawlConfig => {
         this.crawlConfig = updatedCrawlConfig;
@@ -242,6 +261,27 @@ export class CrawlConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlConfigs(crawlConfigUpdate: CrawlConfig) {
+    console.log('update: ', crawlConfigUpdate);
+    if (crawlConfigUpdate.browser_config_id === '') {
+      crawlConfigUpdate.browser_config_id = null;
+    }
+    if (crawlConfigUpdate.politeness_id === '') {
+      crawlConfigUpdate.politeness_id = null;
+    }
+    crawlConfigUpdate.meta.name = null;
+    crawlConfigUpdate.meta.description = null;
+
+
+    console.log('update updated: ', crawlConfigUpdate)
+    this.crawlConfigService.updateAll(crawlConfigUpdate)
+      .subscribe(updatedCrawlConfig => {
+        this.snackBarService.openSnackBar('Oppdatert');
+        this.crawlConfig = null;
+      });
+    this.changes.next();
+  }
+
   onDeleteCrawlConfig(crawlConfig: CrawlConfig) {
     this.crawlConfigService.delete(crawlConfig.id)
       .subscribe(() => {
@@ -280,6 +320,10 @@ export class CrawlConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllCrawlConfigs() {
+    this.crawlConfigService.deleteAll('crawlConfig');
   }
 
   mergeCrawlConfigs(configs: CrawlConfig[]) {

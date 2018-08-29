@@ -85,12 +85,21 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   checkboxToggle(item: T) {
-    this.selection.toggle(item);
-    this.selectedChange.emit(this.selection.selected);
+    if (!this.allSelected) {
+      this.selection.toggle(item);
+      if (this.selection.selected.length === this.pageLength) {
+        this.onSelectAll();
+      }
+      this.selectedChange.emit(this.selection.selected);
+    } else {
+      this.selection.toggle(item);
+      if (this.selection.selected.length < this.pageLength) {
+        this.selectedChange.emit(this.selection.selected)
+      }
+    }
   }
 
   onSelectAll() {
-    //this.selection.select();
     this.allSelected = true;
     this.selectAll.emit(this.allSelected);
   }

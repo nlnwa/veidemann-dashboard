@@ -31,7 +31,7 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
           (rowClick)="onSelectCrawlHostGroupConfig($event)"
           [data]="data$ | async"
           (selectedChange)="onSelectedChange($event)"
-          (labelClicked)="onLabelClick($event)"
+          (selectAll)="onSelectAll($event)"
           (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -52,6 +52,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   crawlHostGroupConfig: CrawlHostGroupConfig;
   changes: Subject<void> = new Subject<void>();
@@ -92,7 +93,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
-  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[], labels: Label[]) {
+  loadComponent(config: CrawlHostGroupConfig, labels: Label[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -100,24 +101,25 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     const instance = this.componentRef.instance as CrawlHostGroupConfigDetailsComponent;
     instance.crawlHostGroupConfig = config;
     instance.form.get('ip_range').clearValidators();
+    instance.form.clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels));
-    instance.delete.subscribe(
-      () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels));
+      instance.delete.subscribe(
+        () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((crawlHostGroupConfig) => this.onUpdateAllCrawlHostGroupConfigs(crawlHostGroupConfig));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlHostGroupConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -136,8 +138,15 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
-        this.selectedConfigs, LabelsComponent.getInitialLabels(crawlHostGroupConfigs, CrawlHostGroupConfig));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
+          LabelsComponent.getInitialLabels(crawlHostGroupConfigs, CrawlHostGroupConfig));
+      } else {
+        const crawlHostGroupConfig = new CrawlHostGroupConfig();
+        crawlHostGroupConfig.id = '1234567';
+        crawlHostGroupConfig.meta.name = 'update';
+        this.loadComponent(crawlHostGroupConfig, []);
+      }
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -146,6 +155,16 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       if (this.crawlHostGroupConfig === undefined) {
         this.crawlHostGroupConfig = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange([new CrawlHostGroupConfig(), new CrawlHostGroupConfig()]);
+    } else {
+      this.crawlHostGroupConfig = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -204,6 +223,10 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig) {
+    console.log('skal oppdatere ALLE crawlhostgroupconfigs med configen: ', crawlHostGroupConfigUpdate);
+  }
+
   onDeleteCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigService.delete(crawlHostGroupConfig.id)
       .subscribe(() => {
@@ -242,6 +265,10 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllCrawlHostGroupConfigs() {
+    console.log('Skal slette ALLE crawlhostgroupconfigs');
   }
 
   mergeCrawlHostGroupConfigs(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {

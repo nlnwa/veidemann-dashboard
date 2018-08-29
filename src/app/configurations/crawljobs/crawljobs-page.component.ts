@@ -60,6 +60,7 @@ export class CrawlJobsComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   crawlJob: CrawlJob;
   schedules: CrawlScheduleConfig[];
@@ -68,7 +69,6 @@ export class CrawlJobsComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
-  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -134,21 +134,19 @@ export class CrawlJobsComponent implements OnInit {
       id: crawlConfig.id,
       itemName: crawlConfig.meta.name
     }));
+    instance.form.get('crawl_config_id').clearValidators();
+    instance.form.get('limits.depth').clearValidators();
+    instance.form.get('limits.max_duration_s').clearValidators();
+    instance.form.get('limits.max_bytes').clearValidators();
+    instance.data = false;
+    instance.updateForm();
 
     if (!this.allSelected) {
-      instance.form.get('crawl_config_id').clearValidators();
-      instance.form.get('limits.depth').clearValidators();
-      instance.form.get('limits.max_duration_s').clearValidators();
-      instance.form.get('limits.max_bytes').clearValidators();
-      instance.data = false;
-      instance.updateForm();
       instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
       instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
     }
 
     if (this.allSelected) {
-      instance.data = false;
-      instance.updateForm();
       instance.update.subscribe((crawlJobConfig) => this.onUpdateAllCrawlJobs(crawlJobConfig));
       instance.delete.subscribe(() => this.onDeleteAllCrawlJobs());
 
@@ -172,7 +170,7 @@ export class CrawlJobsComponent implements OnInit {
       } else {
         const crawlJob = new CrawlJob();
         crawlJob.id = '1234567';
-        crawlJob.meta.name = 'updateAll';
+        crawlJob.meta.name = 'update';
         this.loadComponent(crawlJob, this.schedules, this.crawlConfigs, []);
       }
     } else {
@@ -186,9 +184,9 @@ export class CrawlJobsComponent implements OnInit {
     }
   }
 
-  onSelectAll(allSelected: boolean) {
-    this.allSelected = allSelected;
-    if (allSelected) {
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
       this.onSelectedChange([new CrawlJob(), new CrawlJob()]);
     } else {
       this.crawlJob = null;
@@ -275,6 +273,15 @@ export class CrawlJobsComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlJobs(crawlJobUpdate: CrawlJob) {
+    this.crawlJobService.updateAll(crawlJobUpdate)
+      .subscribe(updatedCrawlJob => {
+        this.snackBarService.openSnackBar('Oppdatert');
+        this.crawlJob = null;
+      });
+    this.changes.next();
+  }
+
   onDeleteCrawlJob(crawlJob: CrawlJob) {
     this.crawlJobService.delete(crawlJob.id)
       .subscribe((response) => {
@@ -316,13 +323,7 @@ export class CrawlJobsComponent implements OnInit {
   }
 
   onDeleteAllCrawlJobs() {
-    console.log('alle er markert og alle skal slettes');
-
-  }
-
-  onUpdateAllCrawlJobs(crawlJob: CrawlJob) {
-    console.log('alle er markert, alle skal oppdateres');
-    console.log('får inn dette pbjektet: ', crawlJob);
+    this.crawlJobService.deleteAll('crawlJob');
   }
 
   mergeCrawlJobs(configs: CrawlJob[]) {

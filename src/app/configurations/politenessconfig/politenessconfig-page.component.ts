@@ -27,10 +27,10 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectPolitenessConfig($event)"
-                                   [data]="data$ | async"
-                                   (selectedChange)="onSelectedChange($event)"
-                                   (labelClicked)="onLabelClick($event)"
-                                   (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-politenessconfig-details [politenessConfig]="politenessConfig"
@@ -51,6 +51,7 @@ export class PolitenessConfigPageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   politenessConfig: PolitenessConfig;
   robotsPolicies = [];
@@ -115,22 +116,22 @@ export class PolitenessConfigPageComponent implements OnInit {
     instance.form.get('max_time_between_page_load_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels));
-    instance.delete.subscribe(
-      () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels));
+      instance.delete.subscribe(
+        () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((politenessConfigUpdate) => this.onUpdateAllPolitenessConfigs(politenessConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllPolitenessConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -140,8 +141,15 @@ export class PolitenessConfigPageComponent implements OnInit {
   onSelectedChange(politenessConfigs: PolitenessConfig[]) {
     this.selectedConfigs = politenessConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
-        this.robotsPolicies, LabelsComponent.getInitialLabels(politenessConfigs, PolitenessConfig));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
+          this.robotsPolicies, LabelsComponent.getInitialLabels(politenessConfigs, PolitenessConfig));
+      } else {
+        const politenessConfig = new PolitenessConfig();
+        politenessConfig.id = '1234567';
+        politenessConfig.meta.name = 'update';
+        this.loadComponent(politenessConfig, this.robotsPolicies, []);
+      }
     } else {
       this.politenessConfig = politenessConfigs[0];
       if (this.componentRef !== null) {
@@ -150,6 +158,16 @@ export class PolitenessConfigPageComponent implements OnInit {
       if (this.politenessConfig === undefined) {
         this.politenessConfig = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange([new PolitenessConfig(), new PolitenessConfig()]);
+    } else {
+      this.politenessConfig = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -230,6 +248,10 @@ export class PolitenessConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllPolitenessConfigs(politenessConfigUpdate: PolitenessConfig) {
+    console.log('skal oppdatere ALLE politenessConfigs med config: ', politenessConfigUpdate);
+  }
+
   onDeletePolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfigService.delete(politenessConfig.id)
       .subscribe(() => {
@@ -268,6 +290,10 @@ export class PolitenessConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllPolitenessConfigs(){
+    console.log('Sletter ALLE politenessConfigs');
   }
 
   mergePolitenessConfigs(politenessConfigs: PolitenessConfig[]) {

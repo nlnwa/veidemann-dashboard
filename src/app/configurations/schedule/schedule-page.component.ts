@@ -34,10 +34,10 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectSchedule($event)"
-                           [data]="data$ | async"
-                           (selectedChange)="onSelectedChange($event)"
-                           (labelClicked)="onLabelClick($event)"
-                           (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-schedule-details [schedule]="schedule"
@@ -58,6 +58,7 @@ export class SchedulePageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   schedule: CrawlScheduleConfig;
   changes: Subject<void> = new Subject<void>();
@@ -119,20 +120,20 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((scheduleConfigUpdate) => this.onUpdateAllSchedules(scheduleConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllSchedules());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
   }
 
   onSearch(labelQuery: string[]) {
@@ -142,7 +143,16 @@ export class SchedulePageComponent implements OnInit {
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), LabelsComponent.getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeSchedules(
+          crawlScheduleConfigs),
+          LabelsComponent.getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig));
+      } else {
+        const crawlScheduleConfig = new CrawlScheduleConfig();
+        crawlScheduleConfig.id = '1234567';
+        crawlScheduleConfig.meta.name = 'update';
+        this.loadComponent(crawlScheduleConfig, []);
+      }
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -151,6 +161,16 @@ export class SchedulePageComponent implements OnInit {
       if (this.schedule === undefined) {
         this.schedule = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange([new CrawlScheduleConfig(), new CrawlScheduleConfig()]);
+    } else {
+      this.schedule = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -231,6 +251,15 @@ export class SchedulePageComponent implements OnInit {
     });
   }
 
+  onUpdateAllSchedules(scheduleUpdate: CrawlScheduleConfig) {
+    this.scheduleService.updateAll(scheduleUpdate)
+      .subscribe( updatedSchedule => {
+        this.snackBarService.openSnackBar('Oppdatert');
+        this.schedule = null;
+      });
+    this.changes.next();
+  }
+
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
       .subscribe(() => {
@@ -270,6 +299,10 @@ export class SchedulePageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllSchedules() {
+    this.scheduleService.deleteAll('schedule');
   }
 
   mergeSchedules(configs: CrawlScheduleConfig[]) {
