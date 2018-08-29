@@ -15,9 +15,7 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-politenessconfig',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -132,10 +130,6 @@ export class PolitenessConfigPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pagecomp ', labelQuery);
   }
 
   onSelectedChange(politenessConfigs: PolitenessConfig[]) {

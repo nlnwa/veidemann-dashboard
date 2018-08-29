@@ -4,33 +4,28 @@ import {CommonsModule} from '../commons/commons.module';
 
 import {
   CrawlConfigDetailsComponent,
-  CrawlConfigListComponent,
   CrawlConfigPageComponent,
   CrawlConfigService
 } from './crawlconfig';
 import {
   BrowserScriptDetailsComponent,
-  BrowserScriptListComponent,
   BrowserScriptPageComponent,
   BrowserScriptService
 } from './browserscript';
 import {SearchComponent, SearchListComponent, SearchService} from './search';
-import {CrawljobDetailsComponent, CrawlJobListComponent, CrawlJobsComponent, CrawlJobService} from './crawljobs';
+import {CrawljobDetailsComponent, CrawlJobsComponent, CrawlJobService} from './crawljobs';
 import {
   PolitenessconfigDetailsComponent,
-  PolitenessConfigListComponent,
   PolitenessConfigPageComponent,
   PolitenessConfigService
 } from './politenessconfig';
 import {
   CrawlHostGroupConfigDetailsComponent,
-  CrawlHostGroupConfigListComponent,
   CrawlHostGroupConfigPageComponent,
   CrawlHostGroupConfigService
 } from './crawlhostgroupconfig';
 import {
   ScheduleDetailsComponent,
-  ScheduleListComponent,
   SchedulePageComponent,
   ScheduleService,
   ScheduleSidebarComponent
@@ -39,7 +34,6 @@ import {EntityDetailsComponent, EntityListComponent, EntityService} from './enti
 import {LoglevelComponent, LogService} from './logs';
 import {
   BrowserConfigDetailsComponent,
-  BrowserConfigListComponent,
   BrowserConfigPageComponent,
   BrowserConfigService
 } from './browserconfig';
@@ -55,7 +49,6 @@ import {WarcStatusListComponent} from './warcstatus/warcstatus-list/warcstatus-l
 import {WarcStatusDetailsComponent} from './warcstatus/warcstatus-details/warcstatus-details.component';
 import {WarcStatusPageComponent} from './warcstatus/warcstatus-page.component';
 import {WarcStatusService} from './warcstatus/warcstatus.service';
-import {SearchConfigComponent} from './search/search-config/search-config.component';
 import {DetailDirective} from './shared/detail.directive';
 
 @NgModule({
@@ -89,7 +82,6 @@ import {DetailDirective} from './shared/detail.directive';
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
     WarcStatusPageComponent,
-    SearchConfigComponent,
     DetailDirective,
   ],
   entryComponents: [

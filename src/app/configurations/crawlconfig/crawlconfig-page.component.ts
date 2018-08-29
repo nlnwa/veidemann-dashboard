@@ -18,9 +18,7 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-crawlconfig',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -151,10 +149,6 @@ export class CrawlConfigPageComponent implements OnInit {
     this.page.next(page);
   }
 
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
-  }
-
   onSelectedChange(crawlConfigs: CrawlConfig[]) {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
@@ -207,7 +201,6 @@ export class CrawlConfigPageComponent implements OnInit {
   }
 
   onUpdateCrawlConfig(crawlConfig: CrawlConfig) {
-    console.log('crawlconfig update: ', crawlConfig);
     this.crawlConfigService.update(crawlConfig)
       .subscribe(updatedCrawlConfig => {
         this.crawlConfig = updatedCrawlConfig;
@@ -262,7 +255,6 @@ export class CrawlConfigPageComponent implements OnInit {
   }
 
   onUpdateAllCrawlConfigs(crawlConfigUpdate: CrawlConfig) {
-    console.log('update: ', crawlConfigUpdate);
     if (crawlConfigUpdate.browser_config_id === '') {
       crawlConfigUpdate.browser_config_id = null;
     }
@@ -271,9 +263,6 @@ export class CrawlConfigPageComponent implements OnInit {
     }
     crawlConfigUpdate.meta.name = null;
     crawlConfigUpdate.meta.description = null;
-
-
-    console.log('update updated: ', crawlConfigUpdate)
     this.crawlConfigService.updateAll(crawlConfigUpdate)
       .subscribe(updatedCrawlConfig => {
         this.snackBarService.openSnackBar('Oppdatert');

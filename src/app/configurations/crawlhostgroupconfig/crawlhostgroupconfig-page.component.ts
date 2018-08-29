@@ -15,9 +15,7 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-crawlhostgroupconfig',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
 
@@ -120,10 +118,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pagecomp: ', labelQuery);
   }
 
   onCreateCrawlHostGroupConfig(): void {

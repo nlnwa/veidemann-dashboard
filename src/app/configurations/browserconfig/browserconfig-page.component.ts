@@ -19,8 +19,6 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 @Component({
   selector: 'app-browserconfig',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -52,7 +50,6 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 export class BrowserConfigPageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
   allSelected = false;
 
@@ -145,10 +142,6 @@ export class BrowserConfigPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pagecomp ', labelQuery);
   }
 
   onSelectedChange(browserConfigs: BrowserConfig[]) {

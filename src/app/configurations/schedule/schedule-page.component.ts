@@ -23,8 +23,6 @@ import {LabelsComponent} from '../../commons/labels/labels.component';
 @Component({
   selector: 'app-schedule',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -134,10 +132,6 @@ export class SchedulePageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
   }
 
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
@@ -253,7 +247,7 @@ export class SchedulePageComponent implements OnInit {
 
   onUpdateAllSchedules(scheduleUpdate: CrawlScheduleConfig) {
     this.scheduleService.updateAll(scheduleUpdate)
-      .subscribe( updatedSchedule => {
+      .subscribe(updatedSchedule => {
         this.snackBarService.openSnackBar('Oppdatert');
         this.schedule = null;
       });

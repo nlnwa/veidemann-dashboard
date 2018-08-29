@@ -2,4 +2,4 @@ export {SearchDataSource, SearchListComponent} from './search-entity-list/search
 export {SearchComponent} from './search.component';
 export {SearchService} from './search.service';
 export {SearchDatabase} from './search-database';
-export {SearchConfigComponent} from './search-config/search-config.component';
+
