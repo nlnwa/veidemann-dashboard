@@ -10,6 +10,7 @@ import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
 import {MetaComponent} from './meta/meta.component';
 import {RouterModule} from '@angular/router';
+import {SelectionBaseListComponent} from './list/selection-base-list/selection-base-list';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {RouterModule} from '@angular/router';
     ToolbarComponent,
     LabelsComponent,
     MetaComponent,
+    SelectionBaseListComponent,
   ],
   imports: [
     MaterialModule,
@@ -36,6 +38,7 @@ import {RouterModule} from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    SelectionBaseListComponent,
   ],
   providers: [DatePipe],
 })

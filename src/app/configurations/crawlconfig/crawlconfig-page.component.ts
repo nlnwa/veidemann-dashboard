@@ -28,12 +28,12 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-crawlconfig-list (rowClick)="onSelectCrawlConfig($event)"
+        <app-selection-base-list (rowClick)="onSelectCrawlConfig($event)"
                               [data]="data$ | async"
                               (selectedChange)="onSelectedChange($event)"
                               (labelClicked)="onLabelClick($event)"
                               (page)="onPage($event)">
-        </app-crawlconfig-list>
+        </app-selection-base-list>
       </div>
       <app-crawlconfig-details [crawlConfig]="crawlConfig"
                                [browserConfigs]="browserConfigs"

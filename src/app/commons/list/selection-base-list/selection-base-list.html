@@ -1,17 +1,15 @@
 <table class="mat-table" *ngIf="isAllSelected() && dataSource.length > 0">
   <tr class="mat-row">
     <td class="mat-cell">
-      <span *ngIf="selection.selected.length < pageLength">Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert.
-      <!-- <a *ngIf="isAllSelected()" [routerLink]="" (click)="selectAllConfigs()"> -->
-        <a *ngIf="isAllSelected()" [routerLink]="" (click)="selectAllConfigs()">
+      <span>Alle <b>{{selection.selected.length}}</b> konfigurasjonene på denne siden er markert. </span>
+      <a *ngIf="pageLength>selection.selected.length && isAllSelected()" [routerLink]="" (click)="selectAllConfigs()">
         Marker alle {{pageLength}} konfigurasjoner
-      </a></span>
-      <span *ngIf="selection.selected.length === pageLength"> Alle {{pageLength}} konfigurasjoner er markert</span>
+      </a>
     </td>
   </tr>
 </table>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>

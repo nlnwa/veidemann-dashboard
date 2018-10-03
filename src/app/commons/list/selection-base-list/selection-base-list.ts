@@ -1,9 +1,24 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {AfterViewInit, EventEmitter, Injectable, Input, Output} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 import {PageEvent} from '@angular/material';
 
-@Injectable()
-export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
+@Component({
+  selector: 'app-selection-base-list',
+  templateUrl: './selection-base-list.html',
+  styleUrls: [
+    './selection-base-list.css',
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+
+export class SelectionBaseListComponent<T> implements AfterViewInit {
 
   @Input()
   set data(data: any) {
@@ -34,7 +49,7 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   @Output()
   getAllConfigs = new EventEmitter();
 
-  displayedColumns: string[];
+  displayedColumns: string[] = ['select', 'name', 'description', 'label'];
   selection = new SelectionModel<T>(true, []);
   dataSource: T[] = [];
 
@@ -53,7 +68,7 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
     });
   }
 
-  protected constructor() {
+  constructor() {
   }
 
   onRowClick(item: T) {
@@ -84,7 +99,7 @@ export abstract class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   selectAllConfigs() {
-    this.selection.select()
+    this.selection.select();
     this.getAllConfigs.emit();
   }
 }

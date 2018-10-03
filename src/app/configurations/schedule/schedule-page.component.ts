@@ -32,12 +32,12 @@ import {
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-schedule-list (rowClick)="onSelectSchedule($event)"
+        <app-selection-base-list (rowClick)="onSelectSchedule($event)"
                            [data]="data$ | async"
                            (selectedChange)="onSelectedChange($event)"
                            (labelClicked)="onLabelClick($event)"
                            (page)="onPage($event)">
-        </app-schedule-list>
+        </app-selection-base-list>
       </div>
       <app-schedule-details [schedule]="schedule"
                             *ngIf="schedule && singleMode"
