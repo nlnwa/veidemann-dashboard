@@ -68,7 +68,6 @@ import {
   RoleMappingPageComponent,
   RoleMappingService
 } from './rolemapping';
-
 import {
   WarcStatusListComponent,
   WarcStatusDetailsComponent,

@@ -29,10 +29,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectBrowserConfig($event)"
-                                [data]="data$ | async"
-                                (selectedChange)="onSelectedChange($event)"
-                                (labelClicked)="onLabelClick($event)"
-                                (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (labelClicked)="onLabelClick($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-browserconfig-details [browserConfig]="browserConfig"
@@ -324,11 +324,8 @@ export class BrowserConfigPageComponent implements OnInit {
 
     if (equalWindowWidth) {
       config.window_width = compareObj.window_width;
-    }
-
-    else {
-      config
-        .window_width = null;
+    } else {
+      config.window_width = null;
     }
 
     if (equalWindowHeight) {
@@ -396,7 +393,9 @@ function updatedLabels(labels) {
 function commonScript(browserConfigs: BrowserConfig[]) {
   const allConfigs = [];
   for (const configs of browserConfigs) {
-    allConfigs.push(configs.script_id);
+    if (configs.script_id !== undefined) {
+      allConfigs.push(configs.script_id);
+    }
   }
   const mergedScripts = [].concat.apply([], allConfigs);
   const uniqueScripts = mergedScripts.filter(function (elem, index, self) {
