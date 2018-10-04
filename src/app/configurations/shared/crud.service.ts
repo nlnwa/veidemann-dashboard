@@ -33,9 +33,19 @@ export abstract class CrudService<T extends ListRequest> {
     return item ? this.http.post<T>(`${this.url}/${item.id}`, item) : throwError('parameter item is falsy');
   }
 
+  updateAll(item: T): Observable<T> {
+    console.log('Skal oppdatere alle ', item, 'i databasen ' );
+    return item ? throwError('parameter item is falsy') : throwError('Test');
+  }
+
   // noinspection ReservedWordAsName
   delete(id: string): Observable<any> {
     return id ? this.http.delete<any>(`${this.url}/${id}`) : throwError('parameter id is falsy');
+  }
+
+  deleteAll(table: string) {
+    console.log('should delete all configs from table: ', table );
+    return true;
   }
 
 }

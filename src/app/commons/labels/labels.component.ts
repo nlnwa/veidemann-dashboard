@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Label} from '../models/config.model';
+import {CrawlJob, Label} from '../models/config.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
@@ -37,6 +37,50 @@ export class LabelsComponent implements ControlValueAccessor {
   groups$: Observable<any> = this.groupsSubject.asObservable();
 
   private labels: Label[];
+
+  /** Functions used when updating multiple configs*/
+  static getInitialLabels(configs: any[], cfg: any) {
+    const config = new cfg();
+    const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
+      config.meta.label = this.intersectLabel(acc.meta.label, curr.meta.label);
+      return config;
+    });
+    return config.meta.label;
+  }
+
+
+  static intersectLabel(a, b) {
+    const setA = Array.from(new Set(a));
+    const setB = Array.from(new Set(b));
+    const intersection = new Set(setA.filter((x: Label) =>
+      setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
+        ? false
+        : true
+    ));
+    return Array.from(intersection);
+  }
+
+  static updatedLabels(labels) {
+    const result = labels.reduce((unique, o) => {
+      if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
+        unique.push(o);
+      }
+      return unique;
+    }, []);
+    return result;
+  }
+
+  static findLabel(array: Label[], key, value) {
+    const labelExist = array.find(function (label) {
+      return label.key === key && label.value === value;
+    });
+    if (!labelExist) {
+      return false;
+    }
+    if (labelExist) {
+      return true;
+    }
+  }
 
   constructor(private fb: FormBuilder) {
     this.createForm();
@@ -136,6 +180,7 @@ export class LabelsComponent implements ControlValueAccessor {
   onAbort(): void {
     this.labelForm.disable();
   }
+
 
   private reset() {
     this.regroup();

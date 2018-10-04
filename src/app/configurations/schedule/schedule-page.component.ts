@@ -18,12 +18,11 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../../commons/validator';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-schedule',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -33,10 +32,10 @@ import {
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectSchedule($event)"
-                           [data]="data$ | async"
-                           (selectedChange)="onSelectedChange($event)"
-                           (labelClicked)="onLabelClick($event)"
-                           (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-schedule-details [schedule]="schedule"
@@ -57,6 +56,7 @@ export class SchedulePageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   schedule: CrawlScheduleConfig;
   changes: Subject<void> = new Subject<void>();
@@ -118,30 +118,35 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((scheduleConfigUpdate) => this.onUpdateAllSchedules(scheduleConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllSchedules());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
   }
 
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
-  }
-
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), getInitialLabels(crawlScheduleConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeSchedules(
+          crawlScheduleConfigs),
+          LabelsComponent.getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig));
+      } else {
+        const crawlScheduleConfig = new CrawlScheduleConfig();
+        crawlScheduleConfig.id = '1234567';
+        crawlScheduleConfig.meta.name = 'update';
+        this.loadComponent(crawlScheduleConfig, []);
+      }
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -150,6 +155,16 @@ export class SchedulePageComponent implements OnInit {
       if (this.schedule === undefined) {
         this.schedule = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange([new CrawlScheduleConfig(), new CrawlScheduleConfig()]);
+    } else {
+      this.schedule = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -187,9 +202,9 @@ export class SchedulePageComponent implements OnInit {
         if (schedule.meta.label === undefined) {
           schedule.meta.label = [];
         }
-        schedule.meta.label = updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
+        schedule.meta.label = LabelsComponent.updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
             schedule.meta.label.splice(
               schedule.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -228,6 +243,15 @@ export class SchedulePageComponent implements OnInit {
       this.changes.next();
       this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner er oppdatert');
     });
+  }
+
+  onUpdateAllSchedules(scheduleUpdate: CrawlScheduleConfig) {
+    this.scheduleService.updateAll(scheduleUpdate)
+      .subscribe(updatedSchedule => {
+        this.snackBarService.openSnackBar('Oppdatert');
+        this.schedule = null;
+      });
+    this.changes.next();
   }
 
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
@@ -269,6 +293,10 @@ export class SchedulePageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllSchedules() {
+    this.scheduleService.deleteAll('schedule');
   }
 
   mergeSchedules(configs: CrawlScheduleConfig[]) {
@@ -360,53 +388,10 @@ export class SchedulePageComponent implements OnInit {
     }
 
     const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
 
-}
-
-
-function getInitialLabels(configs: CrawlScheduleConfig[]) {
-  const config = new CrawlScheduleConfig();
-  const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
 }

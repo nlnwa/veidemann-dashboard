@@ -11,12 +11,11 @@ import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {PolitenessconfigDetailsComponent} from './politenessconfig-details/politenessconfig-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 @Component({
   selector: 'app-politenessconfig',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -26,10 +25,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectPolitenessConfig($event)"
-                                   [data]="data$ | async"
-                                   (selectedChange)="onSelectedChange($event)"
-                                   (labelClicked)="onLabelClick($event)"
-                                   (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-politenessconfig-details [politenessConfig]="politenessConfig"
@@ -50,6 +49,7 @@ export class PolitenessConfigPageComponent implements OnInit {
   selectedConfigs = [];
   term = '';
   componentRef = null;
+  allSelected = false;
 
   politenessConfig: PolitenessConfig;
   robotsPolicies = [];
@@ -114,33 +114,36 @@ export class PolitenessConfigPageComponent implements OnInit {
     instance.form.get('max_time_between_page_load_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels));
-    instance.delete.subscribe(
-      () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels));
+      instance.delete.subscribe(
+        () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((politenessConfigUpdate) => this.onUpdateAllPolitenessConfigs(politenessConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllPolitenessConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
   }
 
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pagecomp ', labelQuery);
-  }
-
   onSelectedChange(politenessConfigs: PolitenessConfig[]) {
     this.selectedConfigs = politenessConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
-        this.robotsPolicies, getInitialLabels(politenessConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
+          this.robotsPolicies, LabelsComponent.getInitialLabels(politenessConfigs, PolitenessConfig));
+      } else {
+        const politenessConfig = new PolitenessConfig();
+        politenessConfig.id = '1234567';
+        politenessConfig.meta.name = 'update';
+        this.loadComponent(politenessConfig, this.robotsPolicies, []);
+      }
     } else {
       this.politenessConfig = politenessConfigs[0];
       if (this.componentRef !== null) {
@@ -149,6 +152,16 @@ export class PolitenessConfigPageComponent implements OnInit {
       if (this.politenessConfig === undefined) {
         this.politenessConfig = null;
       }
+    }
+  }
+
+  onSelectAll(isAllSelected: boolean) {
+    this.allSelected = isAllSelected;
+    if (isAllSelected) {
+      this.onSelectedChange([new PolitenessConfig(), new PolitenessConfig()]);
+    } else {
+      this.politenessConfig = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -185,10 +198,10 @@ export class PolitenessConfigPageComponent implements OnInit {
         if (politenessConfig.meta.label === undefined) {
           politenessConfig.meta.label = [];
         }
-        politenessConfig.meta.label = updatedLabels(politenessConfigUpdate.meta.label
+        politenessConfig.meta.label = LabelsComponent.updatedLabels(politenessConfigUpdate.meta.label
           .concat(politenessConfig.meta.label));
         for (const label of initialLabels) {
-          if (!findLabel(politenessConfigUpdate.meta.label, label.key, label.value)) {
+          if (!LabelsComponent.findLabel(politenessConfigUpdate.meta.label, label.key, label.value)) {
             politenessConfig.meta.label.splice(
               politenessConfig.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
@@ -229,6 +242,10 @@ export class PolitenessConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllPolitenessConfigs(politenessConfigUpdate: PolitenessConfig) {
+    console.log('skal oppdatere ALLE politenessConfigs med config: ', politenessConfigUpdate);
+  }
+
   onDeletePolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfigService.delete(politenessConfig.id)
       .subscribe(() => {
@@ -267,6 +284,10 @@ export class PolitenessConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllPolitenessConfigs(){
+    console.log('Sletter ALLE politenessConfigs');
   }
 
   mergePolitenessConfigs(politenessConfigs: PolitenessConfig[]) {
@@ -342,51 +363,9 @@ export class PolitenessConfigPageComponent implements OnInit {
     }
 
     const label = politenessConfigs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     return config;
   }
-}
-
-function getInitialLabels(configs: PolitenessConfig[]) {
-  const config = new PolitenessConfig();
-  const label = configs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
 }

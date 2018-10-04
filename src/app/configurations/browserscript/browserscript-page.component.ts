@@ -13,13 +13,12 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 import {BrowserScriptDetailsComponent} from './browserscript-details/browserscript-details.component';
 import {ActivatedRoute} from '@angular/router';
 import {browser} from 'protractor';
+import {LabelsComponent} from '../../commons/labels/labels.component';
 
 
 @Component({
   selector: 'app-browserscript',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -29,10 +28,10 @@ import {browser} from 'protractor';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectBrowserScript($event)"
-                                [data]="data$ | async"
-                                (selectedChange)="onSelectedChange($event)"
-                                (labelClicked)="onLabelClick($event)"
-                                (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-browserscript-details [browserScript]="browserScript"
@@ -51,8 +50,8 @@ import {browser} from 'protractor';
 export class BrowserScriptPageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
+  allSelected = false;
 
   browserScript: BrowserScript;
   changes: Subject<void> = new Subject<void>();
@@ -109,31 +108,33 @@ export class BrowserScriptPageComponent implements OnInit {
     instance.browserScript = browserScript;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
 
+    if (!this.allSelected) {
+      instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((browserScriptUpdate) => this.onUpdateAllBrowserScripts(browserScriptUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllBrowserScripts());
+    }
   }
 
   onPage(page: PageEvent) {
     this.page.next(page);
   }
 
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp: ', labelQuery);
-  }
-
   onSelectedChange(browserScripts: BrowserScript[]) {
     this.selectedConfigs = browserScripts;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeBrowserScripts(browserScripts), LabelsComponent.getInitialLabels(browserScripts, BrowserScript));
+      } else {
+        const browserScript = new BrowserScript();
+        browserScript.id = '1234567';
+        browserScript.meta.name = 'update';
+        this.loadComponent(browserScript, []);
+      }
     } else {
       this.browserScript = browserScripts[0];
       if (this.componentRef !== null) {
@@ -142,6 +143,16 @@ export class BrowserScriptPageComponent implements OnInit {
       if (this.browserScript === undefined) {
         this.browserScript = null;
       }
+    }
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new BrowserScript(), new BrowserScript()]);
+    } else {
+      this.browserScript = null;
+      this.componentRef.destroy();
     }
   }
 
@@ -169,6 +180,44 @@ export class BrowserScriptPageComponent implements OnInit {
         this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
+  }
+
+  onUpdateMultipleBrowserScripts(browserScriptUpdate: BrowserScript, initialLabels: Label[]) {
+    const numOfConfigs = this.selectedConfigs.length.toString();
+    from(this.selectedConfigs).pipe(
+      mergeMap((browserScript) => {
+        if (browserScript.meta.label === undefined) {
+          browserScript.meta.label = [];
+        }
+        browserScript.meta.label = LabelsComponent.updatedLabels(browserScriptUpdate.meta.label.concat(browserScript.meta.label));
+        for (const label of initialLabels) {
+          if (!LabelsComponent.findLabel(browserScriptUpdate.meta.label, label.key, label.value)) {
+            browserScript.meta.label.splice(
+              browserScript.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
+        if (browserScriptUpdate.script.length > 0) {
+          browserScript.script = browserScriptUpdate.script;
+        }
+        return this.browserScriptService.update(browserScript);
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of('true');
+      }),
+    ).subscribe(() => {
+      this.selectedConfigs = [];
+      this.componentRef.destroy();
+      this.browserScript = null;
+      this.changes.next();
+      this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner er oppdatert');
+    });
+  }
+
+  onUpdateAllBrowserScripts(browserScriptUpdate: BrowserScript){
+    console.log('skal oppdatere ALLE med config: ', browserScriptUpdate);
   }
 
   onDeleteBrowserScript(browserScript: BrowserScript) {
@@ -211,39 +260,11 @@ export class BrowserScriptPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleBrowserScripts(browserScriptUpdate: BrowserScript, initialLabels: Label[]) {
-    const numOfConfigs = this.selectedConfigs.length.toString();
-    from(this.selectedConfigs).pipe(
-      mergeMap((browserScript) => {
-        if (browserScript.meta.label === undefined) {
-          browserScript.meta.label = [];
-        }
-        browserScript.meta.label = updatedLabels(browserScriptUpdate.meta.label.concat(browserScript.meta.label));
-        for (const label of initialLabels) {
-          if (!findLabel(browserScriptUpdate.meta.label, label.key, label.value)) {
-            browserScript.meta.label.splice(
-              browserScript.meta.label.findIndex(
-                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
-              1);
-          }
-        }
-        if (browserScriptUpdate.script.length > 0) {
-          browserScript.script = browserScriptUpdate.script;
-        }
-        return this.browserScriptService.update(browserScript);
-      }),
-      catchError((err) => {
-        console.log(err);
-        return of('true');
-      }),
-    ).subscribe(() => {
-      this.selectedConfigs = [];
-      this.componentRef.destroy();
-      this.browserScript = null;
-      this.changes.next();
-      this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner er oppdatert');
-    });
+  onDeleteAllBrowserScripts() {
+    console.log('skal slette ALLE browserScripts');
   }
+
+
 
   mergeBrowserScripts(browserScripts: BrowserScript[]) {
     const config = new BrowserScript();
@@ -251,7 +272,7 @@ export class BrowserScriptPageComponent implements OnInit {
     config.meta.name = 'Multi';
     const compareObj = browserScripts[0];
     const label = browserScripts.reduce((acc: BrowserScript, curr: BrowserScript) => {
-      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      config.meta.label = LabelsComponent.intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
     const script = browserScripts.every(function (cfg) {
@@ -267,45 +288,4 @@ export class BrowserScriptPageComponent implements OnInit {
   }
 }
 
-function getInitialLabels(configs: BrowserScript[]) {
-  const config = new BrowserScript();
-  const label = configs.reduce((acc: BrowserScript, curr: BrowserScript) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
 
