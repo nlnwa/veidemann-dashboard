@@ -22,7 +22,9 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 
         <app-toolbar>
           <span class="toolbar--title">Crawlhostgroup</span>
-          <button mat-mini-fab (click)="onCreateCrawlHostGroupConfig()">
+          <button mat-mini-fab (click)="onCreateCrawlHostGroupConfig()"
+                  [disabled] = "!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
@@ -312,9 +314,9 @@ function intersectLabel(a, b) {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>
-     setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-       ? false
-       : true
+    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
+      ? false
+      : true
   ));
   return Array.from(intersection);
 }

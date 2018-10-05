@@ -28,7 +28,9 @@ import {
       <div>
         <app-toolbar>
           <span class="toolbar--title">Schedule</span>
-          <button mat-mini-fab (click)="onCreateSchedule()">
+          <button mat-mini-fab (click)="onCreateSchedule()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>

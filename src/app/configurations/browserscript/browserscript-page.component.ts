@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {BrowserScript, CrawlJob, Label} from '../../commons/models/config.model';
+import {BrowserScript, Label} from '../../commons/models/config.model';
 import {BrowserScriptService} from './browserscript.service';
 import {SnackBarService} from 'app/commons/snack-bar/snack-bar.service';
 import {combineLatest, from, Subject} from 'rxjs';
@@ -12,7 +12,6 @@ import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {BrowserScriptDetailsComponent} from './browserscript-details/browserscript-details.component';
 import {ActivatedRoute} from '@angular/router';
-import {browser} from 'protractor';
 
 
 @Component({
@@ -24,7 +23,9 @@ import {browser} from 'protractor';
       <div>
         <app-toolbar>
           <span class="toolbar--title">Browserscript</span>
-          <button mat-mini-fab (click)="onCreateBrowserScript()">
+          <button mat-mini-fab (click)="onCreateBrowserScript()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>

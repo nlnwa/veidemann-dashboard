@@ -21,7 +21,9 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
       <div>
         <app-toolbar>
           <span i18n="@@politenessconfigListHeader" class="toolbar--title">Politeness</span>
-          <button mat-mini-fab (click)="onCreatePolitenessConfig()">
+          <button mat-mini-fab (click)="onCreatePolitenessConfig()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>

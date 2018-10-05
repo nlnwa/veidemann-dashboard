@@ -24,7 +24,9 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
       <div>
         <app-toolbar>
           <span class="toolbar--title">Crawlconfigs</span>
-          <button mat-mini-fab (click)="onCreateCrawlConfig()">
+          <button mat-mini-fab (click)="onCreateCrawlConfig()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>

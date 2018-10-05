@@ -29,15 +29,17 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
       <div>
         <app-toolbar>
           <span class="toolbar--title">Høstejobber</span>
-          <button mat-mini-fab (click)="onCreateCrawlJob()">
+          <button mat-mini-fab (click)="onCreateCrawlJob()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectCrawlJob($event)"
-                           [data]="data$ | async"
-                           (selectedChange)="onSelectedChange($event)"
-                           (labelClicked)="onLabelClick($event)"
-                           (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (labelClicked)="onLabelClick($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-crawljob-details [crawlJob]="crawlJob"
