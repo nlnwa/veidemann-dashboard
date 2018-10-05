@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {CrawlJob, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -33,10 +33,10 @@ import {
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectSchedule($event)"
-                           [data]="data$ | async"
-                           (selectedChange)="onSelectedChange($event)"
-                           (labelClicked)="onLabelClick($event)"
-                           (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (labelClicked)="onLabelClick($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-schedule-details [schedule]="schedule"
@@ -103,7 +103,7 @@ export class SchedulePageComponent implements OnInit {
     });
   }
 
-  loadComponent(schedule: CrawlScheduleConfig, labels: Label[]) {
+  loadComponent(schedule: CrawlScheduleConfig, labels: Label[], initialValidFrom: boolean, initialValidTo: boolean) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ScheduleDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -118,7 +118,8 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(scheduleConfig, labels));
+    instance.update.subscribe((scheduleConfig) =>
+      this.onUpdateMultipleSchedules(scheduleConfig, labels, initialValidFrom, initialValidTo));
     instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
   }
 
@@ -141,7 +142,11 @@ export class SchedulePageComponent implements OnInit {
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(crawlScheduleConfigs), getInitialLabels(crawlScheduleConfigs));
+      this.loadComponent(this.mergeSchedules(
+        crawlScheduleConfigs),
+        getInitialLabels(crawlScheduleConfigs),
+        commonValidFrom(crawlScheduleConfigs),
+        commonValidTo(crawlScheduleConfigs));
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -180,7 +185,10 @@ export class SchedulePageComponent implements OnInit {
     this.changes.next();
   }
 
-  onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig, initialLabels: Label[]) {
+  onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig,
+                            initialLabels: Label[],
+                            initialValidFrom: boolean,
+                            initialValidTo: boolean) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
@@ -211,9 +219,17 @@ export class SchedulePageComponent implements OnInit {
         }
         if (scheduleUpdate.valid_from != null) {
           schedule.valid_from = scheduleUpdate.valid_from;
+        } else {
+          if (initialValidFrom) {
+            schedule.valid_from = null;
+          }
         }
         if (scheduleUpdate.valid_to != null) {
           schedule.valid_to = scheduleUpdate.valid_to;
+        } else {
+          if (initialValidTo) {
+            schedule.valid_to = null;
+          }
         }
         return this.scheduleService.update(schedule);
       }),
@@ -306,13 +322,9 @@ export class SchedulePageComponent implements OnInit {
       return cronSplit[4] === compareCronSplit[4];
     });
 
-    const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.valid_from === compareObj.valid_from;
-    });
+    const equalValidFrom = commonValidFrom(configs);
 
-    const equalValidTo = configs.every(function (cfg: CrawlScheduleConfig) {
-      return cfg.valid_to === compareObj.valid_to;
-    });
+    const equalValidTo = commonValidTo(configs);
 
     const equalCron = [];
     const splittedCron = configs[0].cron_expression.split(' ');
@@ -350,13 +362,13 @@ export class SchedulePageComponent implements OnInit {
     if (equalValidFrom) {
       config.valid_from = compareObj.valid_from;
     } else {
-      config.valid_from = null;
+      config.valid_from = '';
     }
 
     if (equalValidTo) {
       config.valid_to = compareObj.valid_to;
     } else {
-      config.valid_to = null;
+      config.valid_to = '';
     }
 
     const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
@@ -376,6 +388,22 @@ function getInitialLabels(configs: CrawlScheduleConfig[]) {
     return config;
   });
   return config.meta.label;
+}
+
+function commonValidFrom(configs: CrawlScheduleConfig[]): boolean {
+  const compareObj = configs[0];
+  const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
+    return cfg.valid_from === compareObj.valid_from;
+  });
+  return equalValidFrom;
+}
+
+function commonValidTo(configs: CrawlScheduleConfig[]): boolean {
+  const compareObj = configs[0];
+  const equalValidTo = configs.every(function (cfg: CrawlScheduleConfig) {
+    return cfg.valid_to === compareObj.valid_to;
+  });
+  return equalValidTo;
 }
 
 function intersectLabel(a, b) {
