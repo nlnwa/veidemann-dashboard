@@ -62,6 +62,10 @@
             </div>
           </ng-container>
         </div>
+        <mat-error *ngIf="ipRangeControlArray.length === 0"
+                   i18n="@@crawlhostgroupconfigFormMissingIpRangeError">
+          En gyldig IP-range er påkrevd
+        </mat-error>
       </div>
     </mat-card-content>
 

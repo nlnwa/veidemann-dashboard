@@ -49,11 +49,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid();
+    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0;
   }
 
   get canUpdate() {
-    return (this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid());
+    return (this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0);
   }
 
   get canRevert() {

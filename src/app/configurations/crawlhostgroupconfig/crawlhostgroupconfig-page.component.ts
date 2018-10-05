@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {CrawlHostGroupConfig, CrawlJob, IpRange, Label} from '../../commons/models/config.model';
+import {CrawlHostGroupConfig, IpRange, Label} from '../../commons/models/config.model';
 import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 import {of} from 'rxjs/internal/observable/of';
 import {DetailDirective} from '../shared/detail.directive';
@@ -11,9 +11,6 @@ import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-detai
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
-import {updateSourceFile} from '@angular/compiler-cli/src/transformers/node_emitter';
-import {CrawlConfigListComponent} from '../crawlconfig';
-import {CrawlHostGroupConfigListComponent} from './crawlhostgroupconfig-list/crawlhostgroupconfig-list.component';
 
 @Component({
   selector: 'app-crawlhostgroupconfig',
@@ -94,7 +91,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
-  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[], labels: Label[]) {
+  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[], labels: Label[], ipRanges: IpRange[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -104,7 +101,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels));
+      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels, ipRanges));
     instance.delete.subscribe(
       () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
   }
@@ -138,7 +135,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
       this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
-        this.selectedConfigs, getInitialLabels(crawlHostGroupConfigs));
+        this.selectedConfigs, getInitialLabels(crawlHostGroupConfigs), getInitialIpRanges(crawlHostGroupConfigs));
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -168,7 +165,9 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig, initialLabels: Label[]) {
+  onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig,
+                                        initialLabels: Label[],
+                                        initialIpRanges: IpRange[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlHostGroupConfig) => {
@@ -185,10 +184,23 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
               1);
           }
         }
+        if (crawlHostGroupConfig.ip_range === undefined || null) {
+          crawlHostGroupConfig.ip_range = [];
+        }
+        crawlHostGroupConfig.ip_range = updatedRange(
+          crawlHostGroupConfigUpdate.ip_range.concat(crawlHostGroupConfig.ip_range));
+        for (const range of initialIpRanges) {
+          if (!findIpRange(crawlHostGroupConfigUpdate.ip_range, range.ip_from, range.ip_to)) {
+            crawlHostGroupConfig.ip_range.splice(
+              crawlHostGroupConfig.ip_range.findIndex(
+                removedIpRange => removedIpRange.ip_from === range.ip_from && removedIpRange.ip_to === range.ip_to), 1);
+          }
+        }
         crawlHostGroupConfig.meta.label = updatedLabels(
           crawlHostGroupConfigUpdate.meta.label.concat(crawlHostGroupConfig.meta.label));
         crawlHostGroupConfig.ip_range = updatedRange(
           crawlHostGroupConfigUpdate.ip_range.concat(crawlHostGroupConfig.ip_range));
+
 
         return this.crawlHostGroupConfigService.update(crawlHostGroupConfig);
       }),
@@ -255,7 +267,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       config.ip_range = intersectIpRange(acc.ip_range, curr.ip_range);
       return config;
     });
-
     return config;
   }
 }
@@ -267,6 +278,22 @@ function getInitialLabels(configs: CrawlHostGroupConfig[]) {
     return config;
   });
   return config.meta.label;
+}
+
+function getInitialIpRanges(configs: CrawlHostGroupConfig[]) {
+  const config = new CrawlHostGroupConfig();
+  const ipRange = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
+    config.ip_range = intersectIpRange(acc.ip_range, curr.ip_range);
+    return config;
+  });
+  return config.ip_range;
+}
+
+function findIpRange(array: IpRange[], ip_from, ip_to) {
+  const ipRangeExist = array.find((function (iprange) {
+    return iprange.ip_from === ip_from && iprange.ip_to === ip_to;
+  }));
+  return ipRangeExist;
 }
 
 function findLabel(array: Label[], key, value) {
@@ -285,9 +312,9 @@ function intersectLabel(a, b) {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
+     setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
+       ? false
+       : true
   ));
   return Array.from(intersection);
 }
@@ -296,9 +323,7 @@ function intersectIpRange(a: IpRange[], b: IpRange[]): IpRange[] {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: IpRange) =>
-    setB.find((range: IpRange) => x.ip_from === range.ip_from && x.ip_to === range.ip_to) === undefined
-      ? false
-      : true
+    setB.find((range: IpRange) => x.ip_from === range.ip_from && x.ip_to === range.ip_to) !== undefined
   ));
   return Array.from(intersection) as IpRange[];
 }
