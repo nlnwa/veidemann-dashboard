@@ -28,10 +28,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectPolitenessConfig($event)"
-                                   [data]="data$ | async"
-                                   (selectedChange)="onSelectedChange($event)"
-                                   (labelClicked)="onLabelClick($event)"
-                                   (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (labelClicked)="onLabelClick($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-politenessconfig-details [politenessConfig]="politenessConfig"
@@ -45,7 +45,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
     </div>
   `,
   styleUrls: [],
-   changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PolitenessConfigPageComponent implements OnInit {
 
@@ -110,6 +110,8 @@ export class PolitenessConfigPageComponent implements OnInit {
     const instance = this.componentRef.instance as PolitenessconfigDetailsComponent;
     instance.politenessConfig = politenessConfig;
     instance.robotsPolicies = robotsPolicies;
+    instance.robotsPolicyList = robotsPolicies;
+    instance.robotsPolicyList.push(' ');
     instance.form.get('robots_policy').clearValidators();
     instance.form.get('minimum_robots_validity_duration_s').clearValidators();
     instance.form.get('min_time_between_page_load_ms').clearValidators();
@@ -197,7 +199,16 @@ export class PolitenessConfigPageComponent implements OnInit {
               1);
           }
         }
-        politenessConfig.robots_policy = politenessConfigUpdate.robots_policy;
+
+        if (politenessConfigUpdate.robots_policy !== ' ') {
+          politenessConfig.robots_policy = politenessConfigUpdate.robots_policy;
+        }
+        if (politenessConfigUpdate.robots_policy === 'CUSTOM_ROBOTS') {
+          if (politenessConfigUpdate.custom_robots !== null) {
+            politenessConfig.custom_robots = politenessConfigUpdate.custom_robots;
+          }
+        }
+
         if (politenessConfigUpdate.minimum_robots_validity_duration_s !== null) {
           politenessConfig.minimum_robots_validity_duration_s = politenessConfigUpdate.minimum_robots_validity_duration_s;
         }
@@ -280,6 +291,7 @@ export class PolitenessConfigPageComponent implements OnInit {
       return cfg.robots_policy === compareObj.robots_policy;
     });
 
+
     const equalMinRobotsValidity = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.minimum_robots_validity_duration_s === compareObj.minimum_robots_validity_duration_s;
     });
@@ -304,10 +316,20 @@ export class PolitenessConfigPageComponent implements OnInit {
       return cfg.retry_delay_seconds === compareObj.retry_delay_seconds;
     });
 
+    const equalCustomRobot = politenessConfigs.every(function (cfg: PolitenessConfig) {
+      return cfg.custom_robots === compareObj.custom_robots;
+    });
+
     if (equalRobotPolicy) {
       config.robots_policy = compareObj.robots_policy;
     } else {
-      config.robots_policy = 'OBEY_ROBOTS';
+      config.robots_policy = ' ';
+    }
+
+    if (equalCustomRobot) {
+      config.custom_robots = compareObj.custom_robots;
+    } else {
+      config.custom_robots = null;
     }
 
     if (equalMinRobotsValidity) {
