@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {CrawlJob, Label, PolitenessConfig} from '../../commons/models/config.model';
+import {Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -45,7 +45,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
     </div>
   `,
   styleUrls: [],
-  changeDetection: ChangeDetectionStrategy.OnPush
+   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PolitenessConfigPageComponent implements OnInit {
 
@@ -175,9 +175,9 @@ export class PolitenessConfigPageComponent implements OnInit {
     this.politenessConfigService.update(politenessConfig)
       .subscribe(updatedPolitenessConfig => {
         this.politenessConfig = updatedPolitenessConfig;
+        this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
-    this.changes.next();
   }
 
   onUpdateMultiplePolitenessConfigs(politenessConfigUpdate: PolitenessConfig, initialLabels: Label[]) {

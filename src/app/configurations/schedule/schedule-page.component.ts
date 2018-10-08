@@ -182,9 +182,9 @@ export class SchedulePageComponent implements OnInit {
     this.scheduleService.update(schedule)
       .subscribe(updatedSchedule => {
         this.schedule = updatedSchedule;
+        this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
-    this.changes.next();
   }
 
   onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig,
