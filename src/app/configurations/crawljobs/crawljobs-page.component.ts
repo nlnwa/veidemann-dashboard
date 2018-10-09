@@ -10,10 +10,11 @@ import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.component';
 import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
+import {NUMBER_OR_EMPTY_STRING} from '../../commons/validator/patterns';
 
 @Component({
   selector: 'app-crawljobs',
@@ -109,7 +110,11 @@ export class CrawlJobsComponent implements OnInit {
     }
   }
 
-  loadComponent(crawlJob: CrawlJob, schedules: CrawlScheduleConfig[], crawlConfigs: CrawlConfig[], labels: Label[]) {
+  loadComponent(crawlJob: CrawlJob,
+                schedules: CrawlScheduleConfig[],
+                crawlConfigs: CrawlConfig[],
+                labels: Label[]) {
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawljobDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -125,6 +130,9 @@ export class CrawlJobsComponent implements OnInit {
       itemName: crawlConfig.meta.name
     }));
     instance.form.get('crawl_config_id').clearValidators();
+    instance.form.get('limits.depth').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
+    instance.form.get('limits.max_duration_s').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
+    instance.form.get('limits.max_bytes').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
@@ -200,13 +208,13 @@ export class CrawlJobsComponent implements OnInit {
               1);
           }
         }
-        if (crawlJobUpdate.limits.depth !== null) {
+        if (!isNaN(crawlJobUpdate.limits.depth)) {
           crawlJob.limits.depth = crawlJobUpdate.limits.depth;
         }
-        if (crawlJobUpdate.limits.max_bytes !== '') {
+        if (!isNaN(crawlJobUpdate.limits.max_bytes)) {
           crawlJob.limits.max_bytes = crawlJobUpdate.limits.max_bytes;
         }
-        if (!(crawlJobUpdate.limits.max_duration_s === '')) {
+        if (!isNaN(crawlJobUpdate.limits.max_duration_s)) {
           crawlJob.limits.max_duration_s = crawlJobUpdate.limits.max_duration_s;
         }
         if (!(crawlJobUpdate.schedule_id === '')) {
@@ -273,6 +281,8 @@ export class CrawlJobsComponent implements OnInit {
   mergeCrawlJobs(configs: CrawlJob[]) {
     const config = new CrawlJob();
     const compareObj = configs[0];
+
+    // please validators
     config.id = '1234567';
     config.meta.name = 'Multi';
 
@@ -308,20 +318,14 @@ export class CrawlJobsComponent implements OnInit {
 
     if (equalDepth) {
       config.limits.depth = compareObj.limits.depth;
-    } else {
-      config.limits.depth = null;
     }
 
     if (equalMaxDuration) {
       config.limits.max_duration_s = compareObj.limits.max_duration_s;
-    } else {
-      config.limits.max_duration_s = '';
     }
 
     if (equalMaxBytes) {
       config.limits.max_bytes = compareObj.limits.max_bytes;
-    } else {
-      config.limits.max_bytes = '';
     }
 
     if (equalSchedule) {

@@ -96,8 +96,8 @@ export class CrawlScheduleConfig {
 
 export class CrawlLimitsConfig {
   depth: number;
-  max_duration_s: string; // int64
-  max_bytes: string; // int64
+  max_duration_s: number; // int64
+  max_bytes: number; // int64
 }
 
 

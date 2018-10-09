@@ -198,9 +198,9 @@ set data(show) {
       crawl_config_id: formModel.crawl_config_id,
       disabled: !formModel.disabled,
       limits: {
-        depth: parseInt(formModel.limits.depth, 10) || null,
-        max_duration_s: formModel.limits.max_duration_s || '',
-        max_bytes: formModel.limits.max_bytes || '',
+        depth: parseInt(formModel.limits.depth, 10),
+        max_duration_s: parseInt(formModel.limits.max_duration_s, 10),
+        max_bytes: parseInt(formModel.limits.max_bytes, 10),
       },
       meta: formModel.meta,
     };

@@ -72,7 +72,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
+        <mat-error *ngIf="form.dirty && ! crawlConfigId.valid  && ! form.disabled"
                    i18n="@@crawljobFormCrawlconfigRequieredError">
           Crawlconfig er påkrevd.
         </mat-error>
