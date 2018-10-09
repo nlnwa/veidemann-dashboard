@@ -17,8 +17,6 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'app-browserscript',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -30,10 +28,9 @@ import {ActivatedRoute} from '@angular/router';
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectBrowserScript($event)"
-                                [data]="data$ | async"
-                                (selectedChange)="onSelectedChange($event)"
-                                (labelClicked)="onLabelClick($event)"
-                                (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-browserscript-details [browserScript]="browserScript"
@@ -52,7 +49,6 @@ import {ActivatedRoute} from '@angular/router';
 export class BrowserScriptPageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
 
   browserScript: BrowserScript;
@@ -117,18 +113,6 @@ export class BrowserScriptPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp: ', labelQuery);
   }
 
   onSelectedChange(browserScripts: BrowserScript[]) {

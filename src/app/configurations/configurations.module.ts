@@ -2,8 +2,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 
 import {CommonsModule} from '../commons/commons.module';
 
-import {SearchConfigComponent} from './search/search-config/search-config.component';
-
 import {DetailDirective} from './shared/detail.directive';
 
 import {
@@ -107,7 +105,6 @@ import {
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
     WarcStatusPageComponent,
-    SearchConfigComponent,
     DetailDirective,
   ],
   entryComponents: [

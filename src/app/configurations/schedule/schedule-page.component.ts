@@ -21,9 +21,7 @@ import {
 
 @Component({
   selector: 'app-schedule',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -37,7 +35,6 @@ import {
         <app-selection-base-list (rowClick)="onSelectSchedule($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
-                                 (labelClicked)="onLabelClick($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -57,7 +54,6 @@ import {
 export class SchedulePageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
 
   schedule: CrawlScheduleConfig;
@@ -127,18 +123,6 @@ export class SchedulePageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
   }
 
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {

@@ -23,22 +23,19 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
 @Component({
   selector: 'app-crawljobs',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
           <span class="toolbar--title">Høstejobber</span>
           <button mat-mini-fab (click)="onCreateCrawlJob()"
                   [disabled]="!singleMode ? true : false"
-                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.' :'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectCrawlJob($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
-                                 (labelClicked)="onLabelClick($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -59,7 +56,6 @@ import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.comp
 export class CrawlJobsComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
 
   crawlJob: CrawlJob;
@@ -142,18 +138,6 @@ export class CrawlJobsComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
   }
 
   onSelectedChange(crawlJobs: CrawlJob[]) {

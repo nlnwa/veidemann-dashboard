@@ -18,8 +18,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 @Component({
   selector: 'app-browserconfig',
   template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -33,7 +31,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
         <app-selection-base-list (rowClick)="onSelectBrowserConfig($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
-                                 (labelClicked)="onLabelClick($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -53,7 +50,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 export class BrowserConfigPageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
 
   browserConfig: BrowserConfig;
@@ -142,18 +138,6 @@ export class BrowserConfigPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pagecomp ', labelQuery);
   }
 
   onSelectedChange(browserConfigs: BrowserConfig[]) {

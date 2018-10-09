@@ -17,9 +17,7 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 
 @Component({
   selector: 'app-crawlconfig',
-  template: `
-    <app-search-config [term]="term"
-                       (submit)="onSearch($event)"></app-search-config>
+  template: `    
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -33,7 +31,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
         <app-selection-base-list (rowClick)="onSelectCrawlConfig($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
-                                 (labelClicked)="onLabelClick($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -54,7 +51,6 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
 export class CrawlConfigPageComponent implements OnInit {
 
   selectedConfigs = [];
-  term = '';
   componentRef = null;
 
   crawlConfig: CrawlConfig;
@@ -149,18 +145,6 @@ export class CrawlConfigPageComponent implements OnInit {
 
   onPage(page: PageEvent) {
     this.page.next(page);
-  }
-
-  onLabelClick(label) {
-    if (this.term.length > 0) {
-      this.term = ',' + label;
-    } else {
-      this.term = label;
-    }
-  }
-
-  onSearch(labelQuery: string[]) {
-    console.log('in pageComp ', labelQuery);
   }
 
   onSelectedChange(crawlConfigs: CrawlConfig[]) {

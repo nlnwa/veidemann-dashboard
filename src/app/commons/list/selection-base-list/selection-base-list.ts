@@ -44,9 +44,6 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   deleteSelected = new EventEmitter<T[]>();
 
   @Output()
-  labelClicked = new EventEmitter();
-
-  @Output()
   getAllConfigs = new EventEmitter();
 
   displayedColumns: string[] = ['select', 'name', 'description', 'label'];
@@ -92,10 +89,6 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   checkboxToggle(item: T) {
     this.selection.toggle(item);
     this.selectedChange.emit(this.selection.selected);
-  }
-
-  onClickLabel(key: string, value: string) {
-    this.labelClicked.emit(key + ':' + value);
   }
 
   selectAllConfigs() {
