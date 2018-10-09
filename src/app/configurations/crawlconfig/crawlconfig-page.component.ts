@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {BrowserConfig, CrawlConfig, CrawlJob, Label, PolitenessConfig} from '../../commons/models/config.model';
+import {BrowserConfig, CrawlConfig, Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
@@ -31,10 +31,10 @@ import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.co
           </button>
         </app-toolbar>
         <app-selection-base-list (rowClick)="onSelectCrawlConfig($event)"
-                              [data]="data$ | async"
-                              (selectedChange)="onSelectedChange($event)"
-                              (labelClicked)="onLabelClick($event)"
-                              (page)="onPage($event)">
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (labelClicked)="onLabelClick($event)"
+                                 (page)="onPage($event)">
         </app-selection-base-list>
       </div>
       <app-crawlconfig-details [crawlConfig]="crawlConfig"
@@ -114,8 +114,14 @@ export class CrawlConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(crawlConfig: CrawlConfig, browserConfigs: BrowserConfig[],
-                politenessConfigs: PolitenessConfig[], labels: Label[]) {
+  loadComponent(crawlConfig: CrawlConfig,
+                browserConfigs: BrowserConfig[],
+                politenessConfigs: PolitenessConfig[],
+                labels: Label[],
+                intialExtractText: boolean,
+                initialCreateSnapshot: boolean,
+                intitialDepthFirst: boolean) {
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -135,7 +141,9 @@ export class CrawlConfigPageComponent implements OnInit {
     instance.form.get('politeness_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
+    instance.update.subscribe(
+      (crawlConfigs) => this.onUpdateMultipleCrawlConfigs(
+        crawlConfigs, labels, intialExtractText, initialCreateSnapshot, intitialDepthFirst));
     instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
@@ -158,8 +166,9 @@ export class CrawlConfigPageComponent implements OnInit {
   onSelectedChange(crawlConfigs: CrawlConfig[]) {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs,
-        getInitialLabels(crawlConfigs));
+      this.loadComponent(
+        this.mergeCrawlConfigs(crawlConfigs), this.browserConfigs, this.politenessConfigs, getInitialLabels(crawlConfigs),
+        getInitialExtractText(crawlConfigs), getInitialCreateSnapshot(crawlConfigs), getInitialDepthFirst(crawlConfigs));
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -198,7 +207,12 @@ export class CrawlConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig, initialLabels: Label[]) {
+  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig,
+                               initialLabels: Label[],
+                               intialExtractText: boolean,
+                               initialCreateSnapshot: boolean,
+                               initialDepthFirst: boolean) {
+
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlConfig) => {
@@ -214,9 +228,13 @@ export class CrawlConfigPageComponent implements OnInit {
               1);
           }
         }
-        crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
-        crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
-        crawlConfig.depth_first = crawlConfigUpdate.depth_first;
+
+        crawlConfig.extra.extract_text = updateMultiExtractText(crawlConfig, crawlConfigUpdate, intialExtractText);
+
+        crawlConfig.extra.create_snapshot = updateMultiCreateSnapshot(crawlConfig, crawlConfigUpdate, initialCreateSnapshot);
+
+        crawlConfig.depth_first = updateMultiDepthFirst(crawlConfig, crawlConfigUpdate, initialDepthFirst);
+
         if (!isNaN(crawlConfigUpdate.minimum_dns_ttl_s)) {
           crawlConfig.minimum_dns_ttl_s = crawlConfigUpdate.minimum_dns_ttl_s;
         }
@@ -226,8 +244,6 @@ export class CrawlConfigPageComponent implements OnInit {
         if (crawlConfigUpdate.browser_config_id !== '') {
           crawlConfig.browser_config_id = crawlConfigUpdate.browser_config_id;
         }
-        crawlConfig.browser_config_id = crawlConfigUpdate.browser_config_id;
-
         return this.crawlConfigService.update(crawlConfig);
       }),
       catchError((err) => {
@@ -301,24 +317,22 @@ export class CrawlConfigPageComponent implements OnInit {
       return cfg.minimum_dns_ttl_s === compareObj.minimum_dns_ttl_s;
     });
 
-    const equalExtractText = configs.every(function (cfg) {
-      return cfg.extra.extract_text === compareObj.extra.extract_text;
-    });
+    const equalExtractText = getInitialExtractText(configs);
 
-    const equalCreateSnapshot = configs.every(function (cfg) {
-      return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
-    });
+    const equalCreateSnapshot = getInitialCreateSnapshot(configs);
 
-    const equalDepthFirst = configs.every(function (cfg) {
-      return cfg.depth_first === compareObj.depth_first;
-    });
+    const equalDepthFirst = getInitialDepthFirst(configs);
 
     if (equalBrowserConfig) {
       config.browser_config_id = compareObj.browser_config_id;
+    } else {
+      config.browser_config_id = '';
     }
 
     if (equalPolitenessConfig) {
       config.politeness_id = compareObj.politeness_id;
+    } else {
+      config.politeness_id = '';
     }
 
     if (equalDnsTtl) {
@@ -354,6 +368,76 @@ export class CrawlConfigPageComponent implements OnInit {
   }
 }
 
+function getInitialExtractText(configs: CrawlConfig[]) {
+  const compareObj = configs[0];
+  const equalExtractText = configs.every(function (cfg) {
+    return cfg.extra.extract_text === compareObj.extra.extract_text;
+  });
+  return equalExtractText;
+}
+
+function updateMultiExtractText(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialExtractText: boolean) {
+  if (crawlConfig.extra.extract_text && !crawlConfigUpdate.extra.extract_text) {
+    crawlConfig.extra.extract_text = true;
+  }
+
+  if (!crawlConfig.extra.extract_text && crawlConfigUpdate.extra.extract_text) {
+    crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
+  }
+
+  if (crawlConfig.extra.extract_text && initialExtractText && !crawlConfigUpdate.extra.extract_text) {
+    crawlConfig.extra.extract_text = false;
+  }
+  return crawlConfig.extra.extract_text;
+}
+
+function getInitialCreateSnapshot(configs: CrawlConfig[]) {
+  const compareObj = configs[0];
+  const equalCreateSnapshot = configs.every(function (cfg) {
+    return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
+  });
+  return equalCreateSnapshot;
+}
+
+function updateMultiCreateSnapshot(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialCreateSnapshot: boolean) {
+  if (crawlConfig.extra.create_snapshot && !crawlConfigUpdate.extra.create_snapshot) {
+    crawlConfig.extra.create_snapshot = true;
+  }
+
+  if (!crawlConfig.extra.create_snapshot && crawlConfigUpdate.extra.create_snapshot) {
+    crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
+  }
+
+  if (crawlConfig.extra.create_snapshot && initialCreateSnapshot && !crawlConfigUpdate.extra.create_snapshot) {
+    crawlConfig.extra.create_snapshot = false;
+  }
+  return crawlConfig.extra.create_snapshot;
+}
+
+function getInitialDepthFirst(configs: CrawlConfig[]) {
+  const compareObj = configs[0];
+  const equalDepthFirst = configs.every(function (cfg) {
+    return cfg.depth_first === compareObj.depth_first;
+  });
+  return equalDepthFirst;
+}
+
+function updateMultiDepthFirst(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialDepthFirst: boolean) {
+
+  if (crawlConfig.depth_first && !crawlConfigUpdate.depth_first) {
+    crawlConfig.depth_first = true;
+  }
+
+  if (!crawlConfig.depth_first && crawlConfigUpdate.depth_first) {
+    crawlConfig.depth_first = crawlConfigUpdate.depth_first;
+  }
+
+  if (crawlConfig.depth_first && initialDepthFirst && !crawlConfigUpdate.depth_first) {
+    crawlConfig.depth_first = false;
+  }
+  return crawlConfig.depth_first;
+}
+
 function getInitialLabels(configs: CrawlConfig[]) {
   const config = new CrawlConfig();
   const label = configs.reduce((acc: CrawlConfig, curr: CrawlConfig) => {
@@ -362,6 +446,7 @@ function getInitialLabels(configs: CrawlConfig[]) {
   });
   return config.meta.label;
 }
+
 
 function findLabel(array: Label[], key, value) {
   const labelExist = array.find(function (label) {

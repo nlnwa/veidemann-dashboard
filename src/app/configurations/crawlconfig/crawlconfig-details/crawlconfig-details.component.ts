@@ -163,7 +163,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   updateForm() {
     this.form.patchValue({
       id: this.crawlConfig.id,
-      minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s,
+      minimum_dns_ttl_s: (this.crawlConfig.minimum_dns_ttl_s !== undefined) ? this.crawlConfig.minimum_dns_ttl_s : '0',
       depth_first: this.crawlConfig.depth_first,
       politeness_id: this.crawlConfig.politeness_id,
       browser_config_id: this.crawlConfig.browser_config_id,
