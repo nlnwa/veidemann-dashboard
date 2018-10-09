@@ -12,7 +12,7 @@ import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {BrowserScriptDetailsComponent} from './browserscript-details/browserscript-details.component';
 import {ActivatedRoute} from '@angular/router';
-
+import {getInitialLabels, updatedLabels, findLabel, intersectLabel} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-browserscript',
@@ -118,7 +118,7 @@ export class BrowserScriptPageComponent implements OnInit {
   onSelectedChange(browserScripts: BrowserScript[]) {
     this.selectedConfigs = browserScripts;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts));
+      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts, BrowserScript));
     } else {
       this.browserScript = browserScripts[0];
       if (this.componentRef !== null) {
@@ -249,48 +249,6 @@ export class BrowserScriptPageComponent implements OnInit {
       config.script = '';
     }
     return config;
-  }
-}
-
-function getInitialLabels(configs: BrowserScript[]) {
-  const config = new BrowserScript();
-  const label = configs.reduce((acc: BrowserScript, curr: BrowserScript) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
   }
 }
 

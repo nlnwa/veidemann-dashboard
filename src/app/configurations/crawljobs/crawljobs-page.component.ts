@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ComponentFactoryResolver,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {CrawlJobService} from './crawljob.service';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {CrawlConfig, CrawlJob, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
@@ -19,6 +13,7 @@ import {DetailDirective} from '../shared/detail.directive';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.component';
+import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-crawljobs',
@@ -144,7 +139,7 @@ export class CrawlJobsComponent implements OnInit {
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
       this.loadComponent(
-        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, getInitialLabels(crawlJobs));
+        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, getInitialLabels(crawlJobs, CrawlJob));
     } else {
       this.crawlJob = crawlJobs[0];
       if (this.componentRef !== null) {
@@ -341,48 +336,5 @@ export class CrawlJobsComponent implements OnInit {
       return config;
     });
     return config;
-  }
-}
-
-function getInitialLabels(configs: CrawlJob[]) {
-  const config = new CrawlJob();
-  const label = configs.reduce((acc: CrawlJob, curr: CrawlJob) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
   }
 }

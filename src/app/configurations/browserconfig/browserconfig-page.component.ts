@@ -14,6 +14,7 @@ import {FormBuilder} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {findLabel, getInitialLabels, updatedLabels, intersectLabel} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-browserconfig',
@@ -146,7 +147,7 @@ export class BrowserConfigPageComponent implements OnInit {
       this.loadComponent(
         this.mergeBrowserConfigs(browserConfigs),
         this.browserScripts,
-        getInitialLabels(browserConfigs));
+        getInitialLabels(browserConfigs, BrowserConfig));
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -277,7 +278,7 @@ export class BrowserConfigPageComponent implements OnInit {
       });
   }
 
-  mergeBrowserConfigs(browserConfigs: BrowserConfig[]) {
+  mergeBrowserConfigs(browserConfigs: BrowserConfig[]): BrowserConfig {
     const config = new BrowserConfig();
     const compareObj = browserConfigs[0];
     const commonScripts = commonScript(browserConfigs);
@@ -346,36 +347,6 @@ export class BrowserConfigPageComponent implements OnInit {
   }
 }
 
-function getInitialLabels(configs: BrowserConfig[]) {
-  const config = new BrowserConfig();
-  const label = configs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
 function commonScript(browserConfigs: BrowserConfig[]) {
   const allConfigs = [];
   for (const configs of browserConfigs) {
@@ -390,16 +361,5 @@ function commonScript(browserConfigs: BrowserConfig[]) {
   return uniqueScripts;
 }
 
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
 
 

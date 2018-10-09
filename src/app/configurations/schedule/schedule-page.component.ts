@@ -18,10 +18,11 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../../commons/validator';
+import {getInitialLabels, findLabel, updatedLabels, intersectLabel} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-schedule',
-  template: `    
+  template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
         <app-toolbar>
@@ -130,7 +131,7 @@ export class SchedulePageComponent implements OnInit {
     if (!this.singleMode) {
       this.loadComponent(this.mergeSchedules(
         crawlScheduleConfigs),
-        getInitialLabels(crawlScheduleConfigs),
+        getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig),
         commonValidFrom(crawlScheduleConfigs),
         commonValidTo(crawlScheduleConfigs));
     } else {
@@ -366,16 +367,6 @@ export class SchedulePageComponent implements OnInit {
 
 }
 
-
-function getInitialLabels(configs: CrawlScheduleConfig[]) {
-  const config = new CrawlScheduleConfig();
-  const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
 function commonValidFrom(configs: CrawlScheduleConfig[]): boolean {
   const compareObj = configs[0];
   const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
@@ -390,37 +381,4 @@ function commonValidTo(configs: CrawlScheduleConfig[]): boolean {
     return cfg.valid_to === compareObj.valid_to;
   });
   return equalValidTo;
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
-}
-
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
 }

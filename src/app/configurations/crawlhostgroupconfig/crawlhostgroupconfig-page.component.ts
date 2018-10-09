@@ -11,17 +11,18 @@ import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-detai
 import {RoleService} from '../../auth';
 import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {getInitialLabels, updatedLabels, findLabel, intersectLabel} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-crawlhostgroupconfig',
-  template: `    
+  template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
 
         <app-toolbar>
           <span class="toolbar--title">Crawlhostgroup</span>
           <button mat-mini-fab (click)="onCreateCrawlHostGroupConfig()"
-                  [disabled] = "!singleMode ? true : false"
+                  [disabled]="!singleMode ? true : false"
                   [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
@@ -120,8 +121,8 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
-        this.selectedConfigs, getInitialLabels(crawlHostGroupConfigs), getInitialIpRanges(crawlHostGroupConfigs));
+      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs), this.selectedConfigs,
+        getInitialLabels(crawlHostGroupConfigs, CrawlHostGroupConfig), getInitialIpRanges(crawlHostGroupConfigs));
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -257,15 +258,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   }
 }
 
-function getInitialLabels(configs: CrawlHostGroupConfig[]) {
-  const config = new CrawlHostGroupConfig();
-  const label = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
-    config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
-    return config;
-  });
-  return config.meta.label;
-}
-
 function getInitialIpRanges(configs: CrawlHostGroupConfig[]) {
   const config = new CrawlHostGroupConfig();
   const ipRange = configs.reduce((acc: CrawlHostGroupConfig, curr: CrawlHostGroupConfig) => {
@@ -282,29 +274,6 @@ function findIpRange(array: IpRange[], ip_from, ip_to) {
   return ipRangeExist;
 }
 
-function findLabel(array: Label[], key, value) {
-  const labelExist = array.find(function (label) {
-    return label.key === key && label.value === value;
-  });
-  if (!labelExist) {
-    return false;
-  }
-  if (labelExist) {
-    return true;
-  }
-}
-
-function intersectLabel(a, b) {
-  const setA = Array.from(new Set(a));
-  const setB = Array.from(new Set(b));
-  const intersection = new Set(setA.filter((x: Label) =>
-    setB.find((label: Label) => x.key === label.key && x.value === label.value) === undefined
-      ? false
-      : true
-  ));
-  return Array.from(intersection);
-}
-
 function intersectIpRange(a: IpRange[], b: IpRange[]): IpRange[] {
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
@@ -312,16 +281,6 @@ function intersectIpRange(a: IpRange[], b: IpRange[]): IpRange[] {
     setB.find((range: IpRange) => x.ip_from === range.ip_from && x.ip_to === range.ip_to) !== undefined
   ));
   return Array.from(intersection) as IpRange[];
-}
-
-function updatedLabels(labels) {
-  const result = labels.reduce((unique, o) => {
-    if (!unique.find(obj => obj.key === o.key && obj.value === o.value)) {
-      unique.push(o);
-    }
-    return unique;
-  }, []);
-  return result;
 }
 
 function updatedRange(iprange) {
