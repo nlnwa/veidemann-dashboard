@@ -33,6 +33,10 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
   schedule: CrawlScheduleConfig;
+  @Input()
+  equalValidFrom: boolean;
+  @Input()
+  equalValidTo: boolean;
 
   @Output()
   save = new EventEmitter<CrawlScheduleConfig>();
@@ -41,6 +45,10 @@ export class ScheduleDetailsComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<CrawlScheduleConfig>();
+  @Output()
+  deleteValidFrom = new EventEmitter();
+  @Output()
+  deleteValidTo = new EventEmitter();
 
   form: FormGroup;
   shouldShow = true;
@@ -117,6 +125,16 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.delete.emit(this.schedule);
   }
 
+  onDeleteAllValidFrom(): void {
+    this.form.markAsDirty();
+    this.deleteValidFrom.emit(true);
+  }
+
+  onDeleteAllValidTo(): void {
+    this.form.markAsDirty();
+    this.deleteValidTo.emit(true);
+  }
+
   onRevert() {
     this.updateForm();
   }
@@ -165,8 +183,8 @@ export class ScheduleDetailsComponent implements OnChanges {
 
       id: this.schedule.id,
       cron_expression: cronExpression,
-       valid_from: validFromUTC ? validFromUTC : null,
-       valid_to: validToUTC ? validToUTC : null,
+      valid_from: validFromUTC ? validFromUTC : null,
+      valid_to: validToUTC ? validToUTC : null,
       meta: formModel.meta,
     };
   }

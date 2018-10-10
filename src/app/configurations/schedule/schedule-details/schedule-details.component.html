@@ -49,25 +49,47 @@
                      i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
             </mat-form-field>
           </div>
-          <mat-error *ngIf="! cronExpression.valid && !form.disabled"
+          <mat-error *ngIf="form.dirty && !cronExpression.valid && !form.disabled"
                      i18n="@@scheduleFormCronExpressionRequiredError">
             Cron expression er påkrevd.
           </mat-error>
         </fieldset>
         <div fxLayout="row wrap" fxLayoutGap="24px">
+          <div fxLayout="row">
           <mat-form-field>
             <input matInput [matDatepicker]="validFromDatepicker" formControlName="valid_from" placeholder="Gyldig fra">
             <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validFromDatepicker></mat-datepicker>
           </mat-form-field>
-
+            <div *ngIf="!shouldShow && !equalValidFrom">
+              <button  mat-icon-button
+                       (click)="onDeleteAllValidFrom()"
+                       color="warn"
+                       matTooltip="Gyldig fra er ikke lik for alle konfigurasjoner.
+                  Vil du slette Gyldig fra dato for alle konfigurasjonene?">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div fxLayout="row">
           <mat-form-field>
             <input matInput [matDatepicker]="validToDatepicker" formControlName="valid_to" placeholder="Gyldig til">
             <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validToDatepicker></mat-datepicker>
           </mat-form-field>
+            <div *ngIf="!shouldShow && !equalValidTo">
+              <button mat-icon-button
+                      (click)="onDeleteAllValidTo()"
+                      color="warn" matTooltip="Gyldig til er ikke lik for alle konfigurasjoner.
+                  Vil du slette Gyldig til dato for alle konfigurasjonene?">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+
 
       <div fxFlex fxLayout="column">
         <app-schedule-sidebar></app-schedule-sidebar>

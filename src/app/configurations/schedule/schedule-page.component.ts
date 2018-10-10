@@ -108,6 +108,10 @@ export class SchedulePageComponent implements OnInit {
     viewContainerRef.clear();
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as ScheduleDetailsComponent;
+    let shouldDeleteAllValidFrom = false;
+    let shouldDeleteAllValidTo = false;
+    instance.equalValidFrom = initialValidFrom;
+    instance.equalValidTo = initialValidTo;
     instance.schedule = schedule;
     instance.form.get('cron_expression').clearValidators();
     instance.form.get('cron_expression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
@@ -116,9 +120,16 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
+    instance.deleteValidFrom.subscribe(() => {
+      shouldDeleteAllValidFrom = true;
+    });
+    instance.deleteValidTo.subscribe(() => {
+      shouldDeleteAllValidTo = true;
+    });
     instance.updateForm();
     instance.update.subscribe((scheduleConfig) =>
-      this.onUpdateMultipleSchedules(scheduleConfig, labels, initialValidFrom, initialValidTo));
+      this.onUpdateMultipleSchedules(scheduleConfig, labels, initialValidFrom, initialValidTo,
+        shouldDeleteAllValidFrom, shouldDeleteAllValidTo));
     instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
   }
 
@@ -175,7 +186,9 @@ export class SchedulePageComponent implements OnInit {
   onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig,
                             initialLabels: Label[],
                             initialValidFrom: boolean,
-                            initialValidTo: boolean) {
+                            initialValidTo: boolean,
+                            shouldDeleteAllValidFrom: boolean,
+                            shouldDeleteAllValidTo: boolean) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((schedule: CrawlScheduleConfig) => {
@@ -211,12 +224,18 @@ export class SchedulePageComponent implements OnInit {
             schedule.valid_from = null;
           }
         }
+        if (shouldDeleteAllValidFrom) {
+          schedule.valid_from = null;
+        }
         if (scheduleUpdate.valid_to != null) {
           schedule.valid_to = scheduleUpdate.valid_to;
         } else {
           if (initialValidTo) {
             schedule.valid_to = null;
           }
+        }
+        if (shouldDeleteAllValidTo) {
+          schedule.valid_to = null;
         }
         return this.scheduleService.update(schedule);
       }),
