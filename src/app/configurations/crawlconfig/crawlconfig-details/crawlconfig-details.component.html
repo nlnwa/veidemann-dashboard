@@ -24,64 +24,88 @@
         <mat-form-field>
           <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
                       i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+            <mat-option>Ingen</mat-option>
             <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">
               {{browserConfig.itemName}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-error *ngIf="!browserConfigId.valid && browserConfigId.dirty"
-                   i18n="@@crawlconfigFormBrowserconfigRequiredError">
-          Browserconfig er påkrevd.
-        </mat-error>
 
         <mat-form-field>
           <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
                       i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
+            <mat-option> Ingen</mat-option>
             <mat-option *ngFor="let politenessConfig of politenessConfigList"
                         [value]="politenessConfig.id">{{politenessConfig.itemName}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-error *ngIf="!politenessId.valid && politenessId.dirty"
-                   i18n="@@crawlconfigFormPolitenessconfigRequiredError">
-          Politenessconfig er påkrevd.
-        </mat-error>
 
         <mat-form-field>
           <input matInput
                  formControlName="minimum_dns_ttl_s"
-                 placeholder="DNS TTL">
+                 placeholder="DNS TTL"
+          >
           <mat-error *ngIf="!minDnsTtlSeconds.valid"
                      i18n="@@crawlconfigFormMinDNSTTLRequiredError">
-            minimum_dns_ttl_s er påkrevd.
+            Må være et tall eller tom.
           </mat-error>
         </mat-form-field>
-
-        <div formGroupName="extra">
+        <mat-form-field>
+          <input matInput
+                 formControlName="priority_weight"
+                 placeholder="Prioritet vekting">
+          <mat-error *ngIf="!priorityWeight.valid">
+            Må være et tall eller tom
+          </mat-error>
+        </mat-form-field>
+        <div formGroupName="extra" (click)="extractText.disabled ? onEnableExtractText() : null">
           <mat-checkbox formControlName="extract_text"
                         labelPosition="after"
                         i18n="@@crawlconfigFormExtractTextLabel"
-                        color="accent">
+                        i18n-matTooltip = "@@crawlconfigFormDisabledExtractTextExplaination"
+                        color="accent"
+                        [matTooltip]="extractText.disabled ?
+                        'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null"
+          >
             Ekstraher tekst
           </mat-checkbox>
         </div>
 
-        <div formGroupName="extra">
+        <div formGroupName="extra" (click)="createSnapshot.disabled ? onEnableCreateSnapshot() : null">
           <mat-checkbox formControlName="create_snapshot"
                         labelPosition="after"
                         i18n="@@crawlconfigFormCreateSnapshotLabel"
-                        color="accent">
+                        i18n-matTooltip = "@@crawlconfigFormDisabledCreateSnapshotExplaination"
+                        color="accent"
+                        [matTooltip]="createSnapshot.disabled ?
+                        'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null"
+          >
             Lag snapshot
           </mat-checkbox>
         </div>
 
-        <mat-checkbox formControlName="depth_first"
-                      labelPosition="after"
-                      i18n="@@crawlconfigFormDepthFirstLabel"
-                      color="accent">
-          Dybde først
-        </mat-checkbox>
-
+        <div (click)="depthFirst.disabled ? onEnableDepthFirst() : null">
+          <mat-checkbox formControlName="depth_first"
+                        labelPosition="after"
+                        i18n="@@crawlconfigFormDepthFirstLabel"
+                        i18n-matTooltip = "@@crawlconfigFormDisabledDepthFirstExplaination"
+                        color="accent"
+                        [matTooltip]="depthFirst.disabled ?
+                          'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null"
+          >
+            Dybde først
+          </mat-checkbox>
+        </div>
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>

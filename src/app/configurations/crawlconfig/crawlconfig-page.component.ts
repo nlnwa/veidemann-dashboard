@@ -115,9 +115,9 @@ export class CrawlConfigPageComponent implements OnInit {
                 browserConfigs: BrowserConfig[],
                 politenessConfigs: PolitenessConfig[],
                 labels: Label[],
-                intialExtractText: boolean,
-                initialCreateSnapshot: boolean,
-                intitialDepthFirst: boolean) {
+                equalExtractText: boolean,
+                equalCreateSnapshot: boolean,
+                equalDepthFirst: boolean) {
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
@@ -125,6 +125,9 @@ export class CrawlConfigPageComponent implements OnInit {
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as CrawlConfigDetailsComponent;
     instance.crawlConfig = crawlConfig;
+    instance.equalExtractText = equalExtractText;
+    instance.equalCreateSnapshot = equalCreateSnapshot;
+    instance.equalDepthFirst = equalDepthFirst;
     instance.browserConfigList = browserConfigs.map((browserConfig) => ({
       id: browserConfig.id,
       itemName: browserConfig.meta.name,
@@ -133,14 +136,10 @@ export class CrawlConfigPageComponent implements OnInit {
       id: politenessConfig.id,
       itemName: politenessConfig.meta.name
     }));
-    instance.form.get('minimum_dns_ttl_s').clearValidators();
-    instance.form.get('browser_config_id').clearValidators();
-    instance.form.get('politeness_id').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (crawlConfigs) => this.onUpdateMultipleCrawlConfigs(
-        crawlConfigs, labels, intialExtractText, initialCreateSnapshot, intitialDepthFirst));
+      (crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
     instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
   }
 
@@ -154,7 +153,7 @@ export class CrawlConfigPageComponent implements OnInit {
       this.loadComponent(
         this.mergeCrawlConfigs(crawlConfigs),
         this.browserConfigs, this.politenessConfigs, getInitialLabels(crawlConfigs, CrawlConfig),
-        getInitialExtractText(crawlConfigs), getInitialCreateSnapshot(crawlConfigs), getInitialDepthFirst(crawlConfigs));
+        isExtractTextEqual(crawlConfigs), isCreateSnapshotEqual(crawlConfigs), isDepthFirstEqual(crawlConfigs));
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -193,11 +192,7 @@ export class CrawlConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig,
-                               initialLabels: Label[],
-                               intialExtractText: boolean,
-                               initialCreateSnapshot: boolean,
-                               initialDepthFirst: boolean) {
+  onUpdateMultipleCrawlConfigs(crawlConfigUpdate: CrawlConfig, initialLabels: Label[]) {
 
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
@@ -215,14 +210,24 @@ export class CrawlConfigPageComponent implements OnInit {
           }
         }
 
-        crawlConfig.extra.extract_text = updateMultiExtractText(crawlConfig, crawlConfigUpdate, intialExtractText);
+        if (crawlConfigUpdate.extra.extract_text !== undefined) {
+          crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
+        }
 
-        crawlConfig.extra.create_snapshot = updateMultiCreateSnapshot(crawlConfig, crawlConfigUpdate, initialCreateSnapshot);
+        if (crawlConfigUpdate.extra.create_snapshot !== undefined) {
+          crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
+        }
 
-        crawlConfig.depth_first = updateMultiDepthFirst(crawlConfig, crawlConfigUpdate, initialDepthFirst);
+        if (crawlConfigUpdate.depth_first !== undefined) {
+          crawlConfig.depth_first = crawlConfigUpdate.depth_first;
+        }
 
         if (!isNaN(crawlConfigUpdate.minimum_dns_ttl_s)) {
           crawlConfig.minimum_dns_ttl_s = crawlConfigUpdate.minimum_dns_ttl_s;
+        }
+
+        if (!isNaN(crawlConfigUpdate.priority_weight)) {
+          crawlConfig.priority_weight = crawlConfigUpdate.priority_weight;
         }
         if (crawlConfigUpdate.politeness_id !== '') {
           crawlConfig.politeness_id = crawlConfigUpdate.politeness_id;
@@ -303,11 +308,15 @@ export class CrawlConfigPageComponent implements OnInit {
       return cfg.minimum_dns_ttl_s === compareObj.minimum_dns_ttl_s;
     });
 
-    const equalExtractText = getInitialExtractText(configs);
+    const equalPriorityWeight = configs.every(function (cfg) {
+      return cfg.priority_weight === compareObj.priority_weight;
+    });
 
-    const equalCreateSnapshot = getInitialCreateSnapshot(configs);
+    const equalExtractText = isExtractTextEqual(configs);
 
-    const equalDepthFirst = getInitialDepthFirst(configs);
+    const equalCreateSnapshot = isCreateSnapshotEqual(configs);
+
+    const equalDepthFirst = isDepthFirstEqual(configs);
 
     if (equalBrowserConfig) {
       config.browser_config_id = compareObj.browser_config_id;
@@ -327,23 +336,21 @@ export class CrawlConfigPageComponent implements OnInit {
       config.minimum_dns_ttl_s = null;
     }
 
+    if (equalPriorityWeight) {
+      config.priority_weight = compareObj.priority_weight;
+    } else {
+      config.priority_weight = null;
+    }
+
     if (equalExtractText) {
       config.extra.extract_text = compareObj.extra.extract_text;
-    } else {
-      config.extra.extract_text = false;
     }
 
     if (equalCreateSnapshot) {
       config.extra.create_snapshot = compareObj.extra.create_snapshot;
-    } else {
-      config.extra.create_snapshot = false;
     }
-
     if (equalDepthFirst) {
-
       config.depth_first = compareObj.depth_first;
-    } else {
-      config.depth_first = false;
     }
 
     const label = configs.reduce((acc: CrawlConfig, curr: CrawlConfig) => {
@@ -354,7 +361,10 @@ export class CrawlConfigPageComponent implements OnInit {
   }
 }
 
-function getInitialExtractText(configs: CrawlConfig[]) {
+
+// Helper functions to check if a setting is the same for multiple crawlconfigs
+
+function isExtractTextEqual(configs: CrawlConfig[]) {
   const compareObj = configs[0];
   const equalExtractText = configs.every(function (cfg) {
     return cfg.extra.extract_text === compareObj.extra.extract_text;
@@ -362,22 +372,7 @@ function getInitialExtractText(configs: CrawlConfig[]) {
   return equalExtractText;
 }
 
-function updateMultiExtractText(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialExtractText: boolean) {
-  if (crawlConfig.extra.extract_text && !crawlConfigUpdate.extra.extract_text) {
-    crawlConfig.extra.extract_text = true;
-  }
-
-  if (!crawlConfig.extra.extract_text && crawlConfigUpdate.extra.extract_text) {
-    crawlConfig.extra.extract_text = crawlConfigUpdate.extra.extract_text;
-  }
-
-  if (crawlConfig.extra.extract_text && initialExtractText && !crawlConfigUpdate.extra.extract_text) {
-    crawlConfig.extra.extract_text = false;
-  }
-  return crawlConfig.extra.extract_text;
-}
-
-function getInitialCreateSnapshot(configs: CrawlConfig[]) {
+function isCreateSnapshotEqual(configs: CrawlConfig[]) {
   const compareObj = configs[0];
   const equalCreateSnapshot = configs.every(function (cfg) {
     return cfg.extra.create_snapshot === compareObj.extra.create_snapshot;
@@ -385,22 +380,7 @@ function getInitialCreateSnapshot(configs: CrawlConfig[]) {
   return equalCreateSnapshot;
 }
 
-function updateMultiCreateSnapshot(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialCreateSnapshot: boolean) {
-  if (crawlConfig.extra.create_snapshot && !crawlConfigUpdate.extra.create_snapshot) {
-    crawlConfig.extra.create_snapshot = true;
-  }
-
-  if (!crawlConfig.extra.create_snapshot && crawlConfigUpdate.extra.create_snapshot) {
-    crawlConfig.extra.create_snapshot = crawlConfigUpdate.extra.create_snapshot;
-  }
-
-  if (crawlConfig.extra.create_snapshot && initialCreateSnapshot && !crawlConfigUpdate.extra.create_snapshot) {
-    crawlConfig.extra.create_snapshot = false;
-  }
-  return crawlConfig.extra.create_snapshot;
-}
-
-function getInitialDepthFirst(configs: CrawlConfig[]) {
+function isDepthFirstEqual(configs: CrawlConfig[]) {
   const compareObj = configs[0];
   const equalDepthFirst = configs.every(function (cfg) {
     return cfg.depth_first === compareObj.depth_first;
@@ -408,18 +388,3 @@ function getInitialDepthFirst(configs: CrawlConfig[]) {
   return equalDepthFirst;
 }
 
-function updateMultiDepthFirst(crawlConfig: CrawlConfig, crawlConfigUpdate: CrawlConfig, initialDepthFirst: boolean) {
-
-  if (crawlConfig.depth_first && !crawlConfigUpdate.depth_first) {
-    crawlConfig.depth_first = true;
-  }
-
-  if (!crawlConfig.depth_first && crawlConfigUpdate.depth_first) {
-    crawlConfig.depth_first = crawlConfigUpdate.depth_first;
-  }
-
-  if (crawlConfig.depth_first && initialDepthFirst && !crawlConfigUpdate.depth_first) {
-    crawlConfig.depth_first = false;
-  }
-  return crawlConfig.depth_first;
-}

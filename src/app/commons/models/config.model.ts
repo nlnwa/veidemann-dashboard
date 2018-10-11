@@ -135,6 +135,7 @@ export class CrawlConfig {
   politeness_id: string;
   extra: Extra;
   minimum_dns_ttl_s: number;
+  priority_weight: number;
   depth_first: boolean;
 
   constructor() {
@@ -144,6 +145,7 @@ export class CrawlConfig {
     this.politeness_id = '';
     this.extra = new Extra();
     this.minimum_dns_ttl_s = 0;
+    this.priority_weight = 0;
     this.depth_first = true;
   }
 }
