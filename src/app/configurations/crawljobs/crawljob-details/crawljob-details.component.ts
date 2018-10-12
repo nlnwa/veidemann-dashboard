@@ -13,16 +13,19 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawljobDetailsComponent implements OnChanges {
-@Input()
-set data(show) {
-  this.shouldShow = show;
-}
+  @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
   @Input()
   crawlJob: CrawlJob;
   @Input()
   crawlConfigs: any[];
   @Input()
   schedules: any[];
+  @Input()
+  equalDisabled: boolean;
 
   @Output()
   save = new EventEmitter<CrawlJob>();
@@ -42,7 +45,7 @@ set data(show) {
       id: {value: '', disabled: true},
       schedule_id: [],
       crawl_config_id: ['', CustomValidators.nonEmpty],
-      disabled: false,
+      disabled: '',
       limits: this.fb.group({
         depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         max_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
@@ -96,6 +99,24 @@ set data(show) {
     return this.form.get('crawl_config_id');
   }
 
+  get disabled() {
+    return this.form.get('disabled');
+  }
+
+  get showSchedule(): boolean {
+    const schedule = this.scheduleId.value;
+    return schedule != null && schedule !== '';
+  }
+
+  get showCrawlConfig(): boolean {
+    const crawlconfig = this.crawlConfigId.value;
+    return crawlconfig != null && crawlconfig !== '';
+  }
+
+  get showShortcuts(): boolean {
+    return this.showSchedule || this.showCrawlConfig;
+  }
+
   getScheduleName(id): string {
     for (let i = 0; i < this.schedules.length; i++) {
       if (id === this.schedules[i].id) {
@@ -112,18 +133,12 @@ set data(show) {
     }
   }
 
-  get showSchedule(): boolean {
-    const schedule = this.scheduleId.value;
-    return schedule != null && schedule !== '';
-  }
-
-  get showCrawlConfig(): boolean {
-    const crawlconfig = this.crawlConfigId.value;
-    return crawlconfig != null && crawlconfig !== '';
-  }
-
-  get showShortcuts(): boolean {
-    return this.showSchedule || this.showCrawlConfig;
+  shouldDisableDisabled(): void {
+    if (this.equalDisabled !== undefined || !this.shouldShow) {
+      if (!this.equalDisabled) {
+        this.disabled.disable();
+      }
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -166,6 +181,12 @@ set data(show) {
     this.updateForm();
   }
 
+  onEnableDisabled() {
+    if (this.disabled.disabled) {
+      this.disabled.enable();
+    }
+  }
+
   private createForm(controlsConfig: object) {
     this.form = this.fb.group(controlsConfig);
   }
@@ -173,7 +194,7 @@ set data(show) {
   updateForm() {
     this.form.patchValue({
       id: this.crawlJob.id,
-      disabled: !this.crawlJob.disabled,
+      disabled: this.crawlJob.disabled,
       schedule_id: this.crawlJob.schedule_id,
       crawl_config_id: this.crawlJob.crawl_config_id,
       limits: {
@@ -188,6 +209,7 @@ set data(show) {
     if (!this.canEdit) {
       this.form.disable();
     }
+    this.shouldDisableDisabled();
   }
 
   private prepareSave(): CrawlJob {
@@ -196,7 +218,7 @@ set data(show) {
       id: this.crawlJob.id,
       schedule_id: formModel.schedule_id,
       crawl_config_id: formModel.crawl_config_id,
-      disabled: !formModel.disabled,
+      disabled: formModel.disabled,
       limits: {
         depth: parseInt(formModel.limits.depth, 10),
         max_duration_s: parseInt(formModel.limits.max_duration_s, 10),

@@ -113,7 +113,8 @@ export class CrawlJobsComponent implements OnInit {
   loadComponent(crawlJob: CrawlJob,
                 schedules: CrawlScheduleConfig[],
                 crawlConfigs: CrawlConfig[],
-                labels: Label[]) {
+                labels: Label[],
+                equalDisabled: boolean) {
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawljobDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
@@ -121,6 +122,7 @@ export class CrawlJobsComponent implements OnInit {
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as CrawljobDetailsComponent;
     instance.crawlJob = crawlJob;
+    instance.equalDisabled = equalDisabled;
     instance.schedules = schedules.map((schedule) => ({
       id: schedule.id,
       itemName: schedule.meta.name
@@ -130,9 +132,6 @@ export class CrawlJobsComponent implements OnInit {
       itemName: crawlConfig.meta.name
     }));
     instance.form.get('crawl_config_id').clearValidators();
-    instance.form.get('limits.depth').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
-    instance.form.get('limits.max_duration_s').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
-    instance.form.get('limits.max_bytes').setValidators(Validators.pattern(NUMBER_OR_EMPTY_STRING));
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
@@ -147,7 +146,8 @@ export class CrawlJobsComponent implements OnInit {
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
       this.loadComponent(
-        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs, getInitialLabels(crawlJobs, CrawlJob));
+        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs,
+        getInitialLabels(crawlJobs, CrawlJob), isDisabledEqual(crawlJobs));
     } else {
       this.crawlJob = crawlJobs[0];
       if (this.componentRef !== null) {
@@ -195,7 +195,7 @@ export class CrawlJobsComponent implements OnInit {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((crawlJob: CrawlJob) => {
-        crawlJob.disabled = crawlJobUpdate.disabled;
+
         if (crawlJob.meta.label === undefined) {
           crawlJob.meta.label = [];
         }
@@ -207,6 +207,10 @@ export class CrawlJobsComponent implements OnInit {
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
               1);
           }
+        }
+
+        if (crawlJobUpdate.disabled !== undefined) {
+          crawlJob.disabled = crawlJobUpdate.disabled;
         }
         if (!isNaN(crawlJobUpdate.limits.depth)) {
           crawlJob.limits.depth = crawlJobUpdate.limits.depth;
@@ -286,9 +290,7 @@ export class CrawlJobsComponent implements OnInit {
     config.id = '1234567';
     config.meta.name = 'Multi';
 
-    const equalDisabledStatus = configs.every(function (cfg: CrawlJob) {
-      return cfg.disabled === compareObj.disabled;
-    });
+    const equalDisabledStatus = isDisabledEqual(configs);
 
     const equalDepth = configs.every(function (cfg: CrawlJob) {
       return cfg.limits.depth === compareObj.limits.depth;
@@ -312,8 +314,6 @@ export class CrawlJobsComponent implements OnInit {
 
     if (equalDisabledStatus) {
       config.disabled = compareObj.disabled;
-    } else {
-      config.disabled = true;
     }
 
     if (equalDepth) {
@@ -341,4 +341,13 @@ export class CrawlJobsComponent implements OnInit {
     });
     return config;
   }
+}
+
+// Helper function to see if multiple configs has the same value for disabled field
+function isDisabledEqual(configs: CrawlJob[]) {
+  const compareObj = configs[0];
+  const equalDisabledStatus = configs.every(function (cfg: CrawlJob) {
+    return cfg.disabled === compareObj.disabled;
+  });
+  return equalDisabledStatus;
 }

@@ -107,7 +107,7 @@ export class CrawlJob {
   schedule_id?: string;
   limits: CrawlLimitsConfig;
   crawl_config_id?: string;
-  disabled?: boolean;
+  disabled: boolean;
 
   constructor() {
     this.id = '';
@@ -115,6 +115,7 @@ export class CrawlJob {
     this.limits = new CrawlLimitsConfig();
     this.schedule_id = '';
     this.crawl_config_id = '';
+    this.disabled = false;
   }
 }
 
