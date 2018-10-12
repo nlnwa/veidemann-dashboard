@@ -27,7 +27,7 @@
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
           <mat-error *ngIf="!user_agent.valid"
                      i18n="@@browserconfigFormUserAgentRequiredError">
-            Brukeragent er påkrevd.
+            Må ha en lengde på minst ett tegn.
           </mat-error>
         </mat-form-field>
 
@@ -36,7 +36,7 @@
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
           <mat-error *ngIf="!window_width.valid"
                      i18n="@@browserconfigFormWindowWidthRequiredError">
-            Vindusbredde er påkrevd.
+             Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -45,7 +45,7 @@
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
           <mat-error *ngIf="!window_height.valid"
                      i18n="@@browserconfigFormWindowHeightRequiredError">
-            Vindushøyde er påkrevd.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -54,7 +54,7 @@
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
           <mat-error *ngIf="!page_load_timeout_ms.valid"
                      i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
-            Page load timeout er påkrevd.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -63,7 +63,7 @@
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
           <mat-error *ngIf="!sleep_after_pageload_ms.valid"
                      i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
-            Sleep after pageload er påkrevd.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -74,10 +74,6 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-error *ngIf="!script_id.valid  && !form.disabled"
-                   i18n="@@browserconfigFormScriptsRequiredError">
-          Scripts påkrevd.
-        </mat-error>
 
         <app-labels kind="Script Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
 

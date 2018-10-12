@@ -124,11 +124,11 @@ export class BrowserConfigPageComponent implements OnInit {
     // instance.form.get('window_height').setValidators(Validators.min(1));
     // instance.form.get('page_load_timeout_ms').setValidators(Validators.min(0));
     // instance.form.get('sleep_after_pageload_ms').setValidators(Validators.min(0));
-    instance.form.get('user_agent').clearValidators();
-    instance.form.get('window_width').clearValidators();
-    instance.form.get('window_height').clearValidators();
-    instance.form.get('page_load_timeout_ms').clearValidators();
-    instance.form.get('sleep_after_pageload_ms').clearValidators();
+    // instance.form.get('user_agent').clearValidators();
+    // instance.form.get('window_width').clearValidators();
+    // instance.form.get('window_height').clearValidators();
+    // instance.form.get('page_load_timeout_ms').clearValidators();
+    // instance.form.get('sleep_after_pageload_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
@@ -213,10 +213,10 @@ export class BrowserConfigPageComponent implements OnInit {
         if (!isNaN(browserConfigUpdate.window_height)) {
           browserConfig.window_height = browserConfigUpdate.window_height;
         }
-        if (browserConfigUpdate.page_load_timeout_ms !== '') {
+        if (!isNaN(browserConfigUpdate.page_load_timeout_ms)) {
           browserConfig.page_load_timeout_ms = browserConfigUpdate.page_load_timeout_ms;
         }
-        if (browserConfigUpdate.sleep_after_pageload_ms !== '') {
+        if (!isNaN(browserConfigUpdate.sleep_after_pageload_ms)) {
           browserConfig.sleep_after_pageload_ms = browserConfigUpdate.sleep_after_pageload_ms;
         }
 
@@ -323,10 +323,14 @@ export class BrowserConfigPageComponent implements OnInit {
 
     if (equalPageLoadTimeout) {
       config.page_load_timeout_ms = compareObj.page_load_timeout_ms;
+    } else {
+      config.page_load_timeout_ms = null;
     }
 
     if (equalSleepAfterPageload) {
       config.sleep_after_pageload_ms = compareObj.sleep_after_pageload_ms;
+    } else {
+      config.sleep_after_pageload_ms = null;
     }
 
     for (const browserConfig of browserConfigs) {

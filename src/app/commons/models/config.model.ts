@@ -157,12 +157,12 @@ export class BrowserConfig {
   user_agent: string;
   window_width: number;
   window_height: number;
-  page_load_timeout_ms: string; // int64
+  page_load_timeout_ms: number; // int64
   script_selector: string [];
   script_id: string[];
   headers?: Map<string, string>;
   // script_parameters?: Map<string, string>; not implemented
-  sleep_after_pageload_ms: string; // int64
+  sleep_after_pageload_ms: number; // int64
 
   constructor() {
     this.id = '';
@@ -170,10 +170,10 @@ export class BrowserConfig {
     this.user_agent = '';
     this.window_width = 0;
     this.window_height = 0;
-    this.page_load_timeout_ms = '';
+    this.page_load_timeout_ms = 0;
     this.script_selector = [];
     this.script_id = [];
-    this.sleep_after_pageload_ms = '';
+    this.sleep_after_pageload_ms = 0;
 
   }
 }
