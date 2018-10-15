@@ -14,7 +14,8 @@ import {FormBuilder} from '@angular/forms';
 import {BrowserConfigDetailsComponent} from './browserconfig-details/browserconfig-details.component';
 import {of} from 'rxjs/internal/observable/of';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
-import {findLabel, getInitialLabels, updatedLabels, intersectLabel} from '../../commons/group-update/labels/common-labels';
+import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
+import {findSelector, getInitialSelectors, intersectSelector, updatedSelectors} from '../../commons/group-update/labels/common-selector';
 
 @Component({
   selector: 'app-browserconfig',
@@ -108,7 +109,7 @@ export class BrowserConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[], labels: Label[]) {
+  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[], labels: Label[], selectors: string[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -119,20 +120,10 @@ export class BrowserConfigPageComponent implements OnInit {
       id: browserScript.id,
       itemName: browserScript.meta.name,
     }));
-    // instance.form.get('user_agent').setValidators(Validators.minLength(1));
-    // instance.form.get('window_width').setValidators(Validators.min(1));
-    // instance.form.get('window_height').setValidators(Validators.min(1));
-    // instance.form.get('page_load_timeout_ms').setValidators(Validators.min(0));
-    // instance.form.get('sleep_after_pageload_ms').setValidators(Validators.min(0));
-    // instance.form.get('user_agent').clearValidators();
-    // instance.form.get('window_width').clearValidators();
-    // instance.form.get('window_height').clearValidators();
-    // instance.form.get('page_load_timeout_ms').clearValidators();
-    // instance.form.get('sleep_after_pageload_ms').clearValidators();
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels));
+      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels, selectors));
     instance.delete.subscribe(
       () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
   }
@@ -147,7 +138,8 @@ export class BrowserConfigPageComponent implements OnInit {
       this.loadComponent(
         this.mergeBrowserConfigs(browserConfigs),
         this.browserScripts,
-        getInitialLabels(browserConfigs, BrowserConfig));
+        getInitialLabels(browserConfigs, BrowserConfig),
+        getInitialSelectors(browserConfigs, BrowserConfig));
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -187,7 +179,8 @@ export class BrowserConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultipleBrowserConfigs(browserConfigUpdate: BrowserConfig, initialLabels: Label[]) {
+  onUpdateMultipleBrowserConfigs(browserConfigUpdate: BrowserConfig, initialLabels: Label[], initialSelectors: string[]) {
+    console.log('har initial selectors: ', initialSelectors);
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserConfig: BrowserConfig) => {
@@ -201,6 +194,19 @@ export class BrowserConfigPageComponent implements OnInit {
               browserConfig.meta.label.findIndex(
                 removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
               1);
+          }
+        }
+        if (browserConfig.script_selector === undefined) {
+          browserConfig.script_selector = [];
+        }
+        browserConfig.script_selector = updatedSelectors(browserConfigUpdate.script_selector
+          .concat(browserConfig.script_selector));
+
+        for (const selector of initialSelectors) {
+          if (!findSelector(browserConfigUpdate.script_selector, selector)) {
+            browserConfig.script_selector.splice(
+              browserConfig.script_selector.findIndex(
+                removedSelector => removedSelector === selector), 1);
           }
         }
 
@@ -345,6 +351,15 @@ export class BrowserConfigPageComponent implements OnInit {
 
     const label = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      return config;
+    });
+
+    const selector = browserConfigs.reduce((acc: BrowserConfig, curr: BrowserConfig) => {
+      if (acc.script_selector === undefined || curr.script_selector === undefined) {
+        acc.script_selector = [];
+        curr.script_selector = [];
+      }
+      config.script_selector = intersectSelector(acc.script_selector, curr.script_selector);
       return config;
     });
     return config;
