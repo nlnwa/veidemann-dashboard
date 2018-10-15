@@ -12,6 +12,7 @@ import {FormBuilder} from '@angular/forms';
 import {PolitenessconfigDetailsComponent} from './politenessconfig-details/politenessconfig-details.component';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {getInitialLabels, updatedLabels, findLabel, intersectLabel} from '../../commons/group-update/labels/common-labels';
+import {findSelector, getInitialSelectors, intersectSelector, updatedSelectors} from '../../commons/group-update/labels/common-selector';
 
 @Component({
   selector: 'app-politenessconfig',
@@ -99,7 +100,12 @@ export class PolitenessConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(politenessConfig: PolitenessConfig, robotsPolicies: any[], labels: Label[]) {
+  loadComponent(politenessConfig: PolitenessConfig,
+                robotsPolicies: any[],
+                labels: Label[],
+                selectors: string[],
+                equalRobotsPolicies: boolean) {
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PolitenessconfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -108,15 +114,12 @@ export class PolitenessConfigPageComponent implements OnInit {
     instance.politenessConfig = politenessConfig;
     instance.robotsPolicies = robotsPolicies;
     instance.robotsPolicyList = robotsPolicies;
-    instance.robotsPolicyList.push(' ');
-    instance.form.get('robots_policy').clearValidators();
-    instance.form.get('minimum_robots_validity_duration_s').clearValidators();
-    instance.form.get('min_time_between_page_load_ms').clearValidators();
-    instance.form.get('max_time_between_page_load_ms').clearValidators();
+    instance.equalRobotPolicy = equalRobotsPolicies;
+    // instance.robotsPolicyList.push(' ');
     instance.data = false;
     instance.updateForm();
     instance.update.subscribe(
-      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels));
+      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels, selectors));
     instance.delete.subscribe(
       () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
   }
@@ -129,7 +132,8 @@ export class PolitenessConfigPageComponent implements OnInit {
     this.selectedConfigs = politenessConfigs;
     if (!this.singleMode) {
       this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
-        this.robotsPolicies, getInitialLabels(politenessConfigs, PolitenessConfig));
+        this.robotsPolicies, getInitialLabels(politenessConfigs, PolitenessConfig),
+        getInitialSelectors(politenessConfigs, PolitenessConfig), isRobotPoliciesEqual(politenessConfigs));
     } else {
       this.politenessConfig = politenessConfigs[0];
       if (this.componentRef !== null) {
@@ -167,7 +171,7 @@ export class PolitenessConfigPageComponent implements OnInit {
       });
   }
 
-  onUpdateMultiplePolitenessConfigs(politenessConfigUpdate: PolitenessConfig, initialLabels: Label[]) {
+  onUpdateMultiplePolitenessConfigs(politenessConfigUpdate: PolitenessConfig, initialLabels: Label[], initialSelectors: any[]) {
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((politenessConfig: PolitenessConfig) => {
@@ -185,7 +189,21 @@ export class PolitenessConfigPageComponent implements OnInit {
           }
         }
 
-        if (politenessConfigUpdate.robots_policy !== ' ') {
+        if (politenessConfig.crawl_host_group_selector === undefined) {
+          politenessConfig.crawl_host_group_selector = [];
+        }
+        politenessConfig.crawl_host_group_selector = updatedSelectors(politenessConfigUpdate.crawl_host_group_selector
+          .concat(politenessConfig.crawl_host_group_selector));
+
+        for (const selector of initialSelectors) {
+          if (!findSelector(politenessConfigUpdate.crawl_host_group_selector, selector)) {
+            politenessConfig.crawl_host_group_selector.splice(
+              politenessConfig.crawl_host_group_selector.findIndex(
+                removedSelector => removedSelector === selector), 1);
+          }
+        }
+
+        if (politenessConfigUpdate.robots_policy !== undefined) {
           politenessConfig.robots_policy = politenessConfigUpdate.robots_policy;
         }
         if (politenessConfigUpdate.robots_policy === 'CUSTOM_ROBOTS') {
@@ -194,22 +212,22 @@ export class PolitenessConfigPageComponent implements OnInit {
           }
         }
 
-        if (politenessConfigUpdate.minimum_robots_validity_duration_s !== null) {
+        if (!isNaN(politenessConfigUpdate.minimum_robots_validity_duration_s)) {
           politenessConfig.minimum_robots_validity_duration_s = politenessConfigUpdate.minimum_robots_validity_duration_s;
         }
-        if (politenessConfigUpdate.min_time_between_page_load_ms !== null) {
-          politenessConfig.min_time_between_page_load_ms = politenessConfig.min_time_between_page_load_ms;
+        if (!isNaN(politenessConfigUpdate.min_time_between_page_load_ms)) {
+          politenessConfig.min_time_between_page_load_ms = politenessConfigUpdate.min_time_between_page_load_ms;
         }
-        if (politenessConfigUpdate.max_time_between_page_load_ms !== null) {
+        if (!isNaN(politenessConfigUpdate.max_time_between_page_load_ms)) {
           politenessConfig.max_time_between_page_load_ms = politenessConfigUpdate.max_time_between_page_load_ms;
         }
-        if (politenessConfigUpdate.delay_factor !== 0) {
+        if (!isNaN(politenessConfigUpdate.delay_factor)) {
           politenessConfig.delay_factor = politenessConfigUpdate.delay_factor;
         }
-        if (politenessConfigUpdate.max_retries !== 0) {
+        if (!isNaN(politenessConfigUpdate.max_retries)) {
           politenessConfig.max_retries = politenessConfigUpdate.max_retries;
         }
-        if (politenessConfigUpdate.retry_delay_seconds !== 0) {
+        if (!isNaN(politenessConfigUpdate.retry_delay_seconds)) {
           politenessConfig.retry_delay_seconds = politenessConfigUpdate.retry_delay_seconds;
         }
         return this.politenessConfigService.update(politenessConfig);
@@ -272,10 +290,8 @@ export class PolitenessConfigPageComponent implements OnInit {
     const compareObj = politenessConfigs[0];
     config.id = '1234567';
     config.meta.name = 'Multi';
-    const equalRobotPolicy = politenessConfigs.every(function (cfg: PolitenessConfig) {
-      return cfg.robots_policy === compareObj.robots_policy;
-    });
 
+    const equalRobotPolicy = isRobotPoliciesEqual(politenessConfigs);
 
     const equalMinRobotsValidity = politenessConfigs.every(function (cfg: PolitenessConfig) {
       return cfg.minimum_robots_validity_duration_s === compareObj.minimum_robots_validity_duration_s;
@@ -307,8 +323,6 @@ export class PolitenessConfigPageComponent implements OnInit {
 
     if (equalRobotPolicy) {
       config.robots_policy = compareObj.robots_policy;
-    } else {
-      config.robots_policy = ' ';
     }
 
     if (equalCustomRobot) {
@@ -354,6 +368,23 @@ export class PolitenessConfigPageComponent implements OnInit {
       config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
       return config;
     });
+
+    const selector = politenessConfigs.reduce((acc: PolitenessConfig, curr: PolitenessConfig) => {
+      if (acc.crawl_host_group_selector === undefined || curr.crawl_host_group_selector === undefined) {
+        acc.crawl_host_group_selector = [];
+        curr.crawl_host_group_selector = [];
+      }
+      config.crawl_host_group_selector = intersectSelector(acc.crawl_host_group_selector, curr.crawl_host_group_selector);
+      return config;
+    });
     return config;
   }
+}
+
+function isRobotPoliciesEqual(configs: PolitenessConfig[]): boolean {
+  const compareObj = configs[0];
+  const equalRobotsPolicies = configs.every(function (cfg) {
+    return cfg.robots_policy === compareObj.robots_policy;
+  });
+  return equalRobotsPolicies;
 }

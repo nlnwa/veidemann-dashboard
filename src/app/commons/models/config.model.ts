@@ -188,10 +188,10 @@ export class PolitenessConfig {
   id: string;
   meta: Meta;
   robots_policy: string;
-  minimum_robots_validity_duration_s?: number;
   custom_robots: string;
-  min_time_between_page_load_ms?: string; // int64
-  max_time_between_page_load_ms?: string; // int64
+  minimum_robots_validity_duration_s: number;
+  min_time_between_page_load_ms: number; // int64
+  max_time_between_page_load_ms: number; // int64
   delay_factor: number;
   max_retries: number;
   retry_delay_seconds: number;
@@ -202,6 +202,9 @@ export class PolitenessConfig {
     this.meta = new Meta();
     this.robots_policy = RobotPolicy.OBEY_ROBOTS;
     this.custom_robots = '';
+    this.minimum_robots_validity_duration_s = 0;
+    this.min_time_between_page_load_ms = 0;
+    this.max_time_between_page_load_ms = 0;
     this.delay_factor = 0;
     this.max_retries = 0;
     this.retry_delay_seconds = 0;
