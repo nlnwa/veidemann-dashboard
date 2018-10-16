@@ -33,6 +33,7 @@ import {findSelector, getInitialSelectors, intersectSelector, updatedSelectors} 
         <app-selection-base-list (rowClick)="onSelectBrowserConfig($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -53,6 +54,7 @@ export class BrowserConfigPageComponent implements OnInit {
 
   selectedConfigs = [];
   componentRef = null;
+  allSelected = false;
 
   browserConfig: BrowserConfig;
   browserScripts: BrowserScript[];
@@ -122,10 +124,18 @@ export class BrowserConfigPageComponent implements OnInit {
     }));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels, selectors));
-    instance.delete.subscribe(
-      () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (browserConfigs) => this.onUpdateMultipleBrowserConfigs(browserConfigs, labels, selectors));
+      instance.delete.subscribe(
+        () => this.onDeleteMultipleBrowserConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((browserConfigUpdate) => this.onUpdateAllBrowserConfigs(browserConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllBrowserConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -135,11 +145,18 @@ export class BrowserConfigPageComponent implements OnInit {
   onSelectedChange(browserConfigs: BrowserConfig[]) {
     this.selectedConfigs = browserConfigs;
     if (!this.singleMode) {
-      this.loadComponent(
-        this.mergeBrowserConfigs(browserConfigs),
-        this.browserScripts,
-        getInitialLabels(browserConfigs, BrowserConfig),
-        getInitialSelectors(browserConfigs, BrowserConfig));
+      if(!this.allSelected) {
+        this.loadComponent(
+          this.mergeBrowserConfigs(browserConfigs),
+          this.browserScripts,
+          getInitialLabels(browserConfigs, BrowserConfig),
+          getInitialSelectors(browserConfigs, BrowserConfig));
+      } else {
+        const browserConfig = new BrowserConfig();
+        browserConfig.id = '1234567';
+        browserConfig.meta.name = 'update';
+        this.loadComponent(browserConfig, this.browserScripts, [], []);
+      }
     } else {
       this.browserConfig = browserConfigs[0];
       if (this.componentRef !== null) {
@@ -158,6 +175,16 @@ export class BrowserConfigPageComponent implements OnInit {
   onSelectBrowserConfig(browserConfig: BrowserConfig) {
     this.router.navigate(['browserconfig', browserConfig.id]);
     this.browserConfig = browserConfig;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new BrowserConfig(), new BrowserConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveBrowserConfig(browserConfig: BrowserConfig) {
@@ -180,7 +207,6 @@ export class BrowserConfigPageComponent implements OnInit {
   }
 
   onUpdateMultipleBrowserConfigs(browserConfigUpdate: BrowserConfig, initialLabels: Label[], initialSelectors: string[]) {
-    console.log('har initial selectors: ', initialSelectors);
     const numOfConfigs = this.selectedConfigs.length.toString();
     from(this.selectedConfigs).pipe(
       mergeMap((browserConfig: BrowserConfig) => {
@@ -364,6 +390,15 @@ export class BrowserConfigPageComponent implements OnInit {
     });
     return config;
   }
+
+  // WIP
+  onUpdateAllBrowserConfigs(browserConfigUpdate: BrowserConfig) {
+    console.log('Alle browserconfigs markert, opdaterer alle med denne configen: ', browserConfigUpdate);
+  }
+  onDeleteAllBrowserConfigs() {
+    console.log('skal slette alle browserconfigs');
+  }
+
 }
 
 function commonScript(browserConfigs: BrowserConfig[]) {

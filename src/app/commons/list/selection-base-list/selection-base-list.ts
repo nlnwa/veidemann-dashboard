@@ -41,14 +41,12 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   page: EventEmitter<PageEvent> = new EventEmitter();
 
   @Output()
-  deleteSelected = new EventEmitter<T[]>();
-
-  @Output()
-  getAllConfigs = new EventEmitter();
+  selectAll = new EventEmitter();
 
   displayedColumns: string[] = ['select', 'name', 'description', 'label'];
   selection = new SelectionModel<T>(true, []);
   dataSource: T[] = [];
+  allSelected = false;
 
   // MatPaginator settings
   pageLength = 0;
@@ -58,11 +56,11 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-    this.page.emit({
-      length: this.pageLength,
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-    });
+      this.page.emit({
+        length: this.pageLength,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+      });
   }
 
   constructor() {
@@ -87,12 +85,28 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   checkboxToggle(item: T) {
-    this.selection.toggle(item);
-    this.selectedChange.emit(this.selection.selected);
+    if (!this.allSelected) {
+      this.selection.toggle(item);
+      if (this.selection.selected.length === this.pageLength) {
+        this.onSelectAll();
+      }
+      this.selectedChange.emit(this.selection.selected);
+    } else {
+      this.selection.toggle(item);
+      if (this.selection.selected.length < this.pageLength) {
+        this.selectedChange.emit(this.selection.selected);
+      }
+    }
   }
 
-  selectAllConfigs() {
-    this.selection.select();
-    this.getAllConfigs.emit();
+  onSelectAll() {
+   this.allSelected = true;
+   this.selectAll.emit(this.allSelected);
+  }
+
+  onDeselectAll() {
+    this.selection.clear();
+    this.allSelected = false;
+    this.selectAll.emit(this.allSelected);
   }
 }
