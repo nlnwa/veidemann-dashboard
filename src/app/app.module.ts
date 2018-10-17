@@ -20,6 +20,7 @@ import {registerLocaleData} from '@angular/common';
 
 import localeNb from '@angular/common/locales/nb';
 import localeNbExtra from '@angular/common/locales/extra/nb';
+import {DeleteDialogComponent} from './dialog/delete-dialog/delete-dialog.component';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
@@ -27,10 +28,11 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
   declarations: [
     AppComponent,
     ErrorDialogComponent,
+    DeleteDialogComponent,
     DialogComponent,
     TimeComponent,
   ],
-  entryComponents: [ErrorDialogComponent],
+  entryComponents: [ErrorDialogComponent, DeleteDialogComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

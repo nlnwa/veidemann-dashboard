@@ -13,6 +13,11 @@ import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidat
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   crawlHostGroupConfig: CrawlHostGroupConfig;
 
   @Output()
@@ -23,10 +28,16 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   delete = new EventEmitter<CrawlHostGroupConfig>();
 
   form: FormGroup;
+  shouldShow = true;
+
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      ip_range: this.fb.array([]),
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -38,11 +49,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid();
+    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0;
   }
 
   get canUpdate() {
-    return (this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid());
+    return (this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0);
   }
 
   get canRevert() {
@@ -105,15 +116,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     this.form.markAsDirty();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      ip_range: this.fb.array([]),
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     const ipRangeFG: FormGroup[] = this.crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
     if (this.form.disabled) {

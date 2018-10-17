@@ -1,6 +1,6 @@
 <div [formGroup]="form" fxLayout="column">
 
-  <mat-form-field *ngIf="!nameIsUrl">
+  <mat-form-field *ngIf="!nameIsUrl && shouldShow">
     <input matInput formControlName="name" placeholder="Navn"
            i18n-placeholder="@@metaNameInputPlaceholder">
     <mat-error
@@ -9,7 +9,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field *ngIf="nameIsUrl">
+  <mat-form-field *ngIf="nameIsUrl && shouldShow">
     <input matInput formControlName="name" placeholder="URL"
            i18n="@@metaUrlInputPlaceholder">
     <mat-error
@@ -18,14 +18,14 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="shouldShow">
     <textarea matInput formControlName="description" placeholder="Beskrivelse"
               i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
     </textarea>
   </mat-form-field>
 
   <app-labels [removable]="editable" formControlName="label"></app-labels>
-
+<div *ngIf="shouldShow">
   <mat-form-field>
     <input matInput
            formControlName="created"
@@ -53,5 +53,5 @@
            placeholder="Sist endret av"
            i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
   </mat-form-field>
-
+</div>
 </div>

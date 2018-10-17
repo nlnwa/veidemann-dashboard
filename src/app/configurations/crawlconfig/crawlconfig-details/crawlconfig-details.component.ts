@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, CrawlConfig, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
 
 @Component({
   selector: 'app-crawlconfig-details',
@@ -13,11 +13,22 @@ import {RoleService} from '../../../auth/role.service';
 export class CrawlConfigDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   crawlConfig: CrawlConfig;
   @Input()
   browserConfigs: BrowserConfig[];
   @Input()
   politenessConfigs: PolitenessConfig[];
+  @Input()
+  equalExtractText: boolean;
+  @Input()
+  equalCreateSnapshot: boolean;
+  @Input()
+  equalDepthFirst: boolean;
 
   @Output()
   save = new EventEmitter<CrawlConfig>();
@@ -28,14 +39,26 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   delete = new EventEmitter<CrawlConfig>();
 
   form: FormGroup;
+  shouldShow = true;
 
   browserConfigList: any[];
   politenessConfigList: any = [];
 
-
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      browser_config_id: [''],
+      politeness_id: [''],
+      extra: this.fb.group({
+        extract_text: '',
+        create_snapshot: '',
+      }),
+      minimum_dns_ttl_s: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      depth_first: '',
+      priority_weight: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -62,6 +85,22 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return this.form.get('minimum_dns_ttl_s');
   }
 
+  get priorityWeight() {
+    return this.form.get('priority_weight');
+  }
+
+  get extractText() {
+    return this.form.get('extra.extract_text');
+  }
+
+  get createSnapshot() {
+    return this.form.get('extra.create_snapshot');
+  }
+
+  get depthFirst() {
+    return this.form.get('depth_first');
+  }
+
   get showPolitenessConfig(): boolean {
     const politenessConfig = this.politenessId.value;
     if (politenessConfig != null && politenessConfig !== '') {
@@ -85,6 +124,30 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return false;
   }
 
+  shouldDisableExtractText(): void {
+    if (this.equalExtractText !== undefined || !this.shouldShow) {
+      if (!this.equalExtractText) {
+        this.extractText.disable();
+      }
+    }
+  }
+
+  shouldDisableCreateSnapshot(): void {
+    if (this.equalCreateSnapshot !== undefined || !this.shouldShow) {
+      if (!this.equalCreateSnapshot) {
+        this.createSnapshot.disable();
+      }
+    }
+  }
+
+  shouldDisableDepthFirst(): void {
+    if (this.equalDepthFirst !== undefined || !this.shouldShow) {
+      if (!this.equalDepthFirst) {
+        this.depthFirst.disable();
+      }
+    }
+  }
+
   getPolitenessConfigName(id): string {
     for (let i = 0; i < this.politenessConfigList.length; i++) {
       if (id === this.politenessConfigList[i].id) {
@@ -98,6 +161,24 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       if (id === this.browserConfigList[i].id) {
         return this.browserConfigList[i].itemName;
       }
+    }
+  }
+
+  onEnableExtractText() {
+    if (this.extractText.disabled) {
+      this.extractText.enable();
+    }
+  }
+
+  onEnableCreateSnapshot() {
+    if(this.createSnapshot.disabled) {
+      this.createSnapshot.enable();
+    }
+  }
+
+  onEnableDepthFirst() {
+    if (this.depthFirst.disabled) {
+      this.depthFirst.enable();
     }
   }
 
@@ -140,28 +221,18 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      browser_config_id: ['', CustomValidators.nonEmpty],
-      politeness_id: ['', CustomValidators.nonEmpty],
-      extra: this.fb.group({
-        extract_text: '',
-        create_snapshot: '',
-      }),
-      minimum_dns_ttl_s: ['', [Validators.required, Validators.min(0)]],
-      depth_first: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.crawlConfig.id,
-      minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s,
+      minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s || '',
+      priority_weight: this.crawlConfig.priority_weight || '',
       depth_first: this.crawlConfig.depth_first,
-      politeness_id: this.crawlConfig.politeness_id,
-      browser_config_id: this.crawlConfig.browser_config_id,
+      politeness_id: this.crawlConfig.politeness_id || '',
+      browser_config_id: this.crawlConfig.browser_config_id || '',
       extra: {
         extract_text: this.crawlConfig.extra.extract_text,
         create_snapshot: this.crawlConfig.extra.create_snapshot,
@@ -173,6 +244,9 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     if (!(this.canEdit)) {
       this.form.disable();
     }
+    this.shouldDisableExtractText();
+    this.shouldDisableCreateSnapshot();
+    this.shouldDisableDepthFirst();
   }
 
   private prepareSave(): CrawlConfig {
@@ -186,6 +260,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
         create_snapshot: formModel.extra.create_snapshot,
       },
       minimum_dns_ttl_s: parseInt(formModel.minimum_dns_ttl_s, 10),
+      priority_weight: parseInt(formModel.priority_weight, 10),
       depth_first: formModel.depth_first,
       meta: formModel.meta,
     };

@@ -31,3 +31,4 @@ export const VALID_MONTH_PATTERN = /^0?[1-9]$|^1[0-2]$/;
 export const VALID_DAY_PATTERN = /^0?[1-9]$|^1[0-9]$|^2[0-9]$|^3[0-1]$/;
 
 export const NUMBER_OR_EMPTY_STRING = /^\s*\d*\s*$/;
+

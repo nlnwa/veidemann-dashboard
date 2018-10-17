@@ -1,15 +1,24 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {ListDatabase, ListDataSource} from '../../commons/list/';
-import {MatPaginator} from '@angular/material';
-import {ScheduleListComponent} from './schedule-list/schedule-list.component';
-import {CrawlScheduleConfig} from '../../commons/models/config.model';
-import {merge, Subject} from 'rxjs';
-import {map, startWith, switchMap} from 'rxjs/operators';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
+import {BrowserConfig, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {combineLatest, from, Subject} from 'rxjs';
+import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
+import {of} from 'rxjs/internal/observable/of';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {ScheduleService} from './schedule.service';
-
-
 import {ActivatedRoute} from '@angular/router';
+import {DetailDirective} from '../shared/detail.directive';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ScheduleDetailsComponent} from './schedule-details/schedule-details.component';
+import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {
+  VALID_CRON_DOM_PATTERN,
+  VALID_CRON_DOW_PATTERN,
+  VALID_CRON_HOUR_PATTERN,
+  VALID_CRON_MINUTE_PATTERN,
+  VALID_CRON_MONTH_PATTERN
+} from '../../commons/validator';
+import {getInitialLabels, findLabel, updatedLabels, intersectLabel} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-schedule',
@@ -18,73 +27,148 @@ import {ActivatedRoute} from '@angular/router';
       <div>
         <app-toolbar>
           <span class="toolbar--title">Schedule</span>
-          <button mat-mini-fab (click)="onCreateSchedule()">
+          <button mat-mini-fab (click)="onCreateSchedule()"
+                  [disabled]="!singleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
             <mat-icon>add</mat-icon>
           </button>
         </app-toolbar>
-        <app-schedule-list (rowClick)="onSelectSchedule($event)"></app-schedule-list>
-        <mat-paginator [length]="pageLength"
-                       [pageIndex]="pageIndex"
-                       [pageSize]="pageSize"
-                       [pageSizeOptions]="pageOptions">
-        </mat-paginator>
+        <app-selection-base-list (rowClick)="onSelectSchedule($event)"
+                                 [data]="data$ | async"
+                                 (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
+                                 (page)="onPage($event)">
+        </app-selection-base-list>
       </div>
       <app-schedule-details [schedule]="schedule"
-                            *ngIf="schedule"
+                            *ngIf="schedule && singleMode"
                             (update)="onUpdateSchedule($event)"
                             (save)="onSaveSchedule($event)"
                             (delete)="onDeleteSchedule($event)">
       </app-schedule-details>
+      <ng-template detail-host></ng-template>
     </div>
   `,
   styleUrls: [],
-  providers: [ListDataSource, ListDatabase],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class SchedulePageComponent implements AfterViewInit {
-  pageLength = 0;
-  pageSize = 5;
-  pageIndex = 0;
-  pageOptions = [5, 10];
+export class SchedulePageComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(ScheduleListComponent) list: ScheduleListComponent;
+  selectedConfigs = [];
+  componentRef = null;
 
   schedule: CrawlScheduleConfig;
   changes: Subject<void> = new Subject<void>();
+  page: Subject<PageEvent> = new Subject<PageEvent>();
+  data = new Subject<any>();
+  data$ = this.data.asObservable();
+  allSelected = false;
+
+  @ViewChild(DetailDirective) detailHost: DetailDirective;
 
   constructor(private scheduleService: ScheduleService,
               private snackBarService: SnackBarService,
-              private database: ListDatabase,
-              private route: ActivatedRoute) {
-
+              private route: ActivatedRoute,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private fb: FormBuilder,
+              private dialog: MatDialog) {
   }
 
-  ngAfterViewInit() {
-    merge(this.paginator.page, this.changes).pipe(
-      startWith(null),
-      switchMap(() => {
-        return this.scheduleService.search({
-          page_size: this.paginator.pageSize,
-          page: this.paginator.pageIndex
-        });
-      }),
-      map((reply) => {
-        this.pageLength = parseInt(reply.count, 10);
-        this.pageSize = reply.page_size;
-        this.pageIndex = reply.page;
-        return reply.value;
-      })
-    )
-      .subscribe((items) => {
-        this.database.items = items;
-      });
+  get singleMode(): boolean {
+    return this.selectedConfigs.length < 2;
+  }
+
+  ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != null) {
       this.scheduleService.get(id)
         .subscribe(schedule => {
           this.schedule = schedule;
         });
+    }
+    combineLatest(this.page, this.changes.pipe(startWith(null))).pipe(
+      switchMap(([pageEvent]) => {
+        return this.scheduleService.search({
+          page_size: pageEvent.pageSize,
+          page: pageEvent.pageIndex
+        });
+      }),
+    ).subscribe((reply) => {
+      this.data.next({
+        value: reply.value,
+        pageLength: parseInt(reply.count, 10),
+        pageSize: reply.page_size || 0,
+        pageIndex: reply.page || 0,
+      });
+    });
+  }
+
+  loadComponent(schedule: CrawlScheduleConfig, labels: Label[], initialValidFrom: boolean, initialValidTo: boolean) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ScheduleDetailsComponent);
+    const viewContainerRef = this.detailHost.viewContainerRef;
+    viewContainerRef.clear();
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    const instance = this.componentRef.instance as ScheduleDetailsComponent;
+    let shouldDeleteAllValidFrom = false;
+    let shouldDeleteAllValidTo = false;
+    instance.equalValidFrom = initialValidFrom;
+    instance.equalValidTo = initialValidTo;
+    instance.schedule = schedule;
+    instance.form.get('cron_expression').clearValidators();
+    instance.form.get('cron_expression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
+    instance.form.get('cron_expression.hour').setValidators(Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN)));
+    instance.form.get('cron_expression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
+    instance.form.get('cron_expression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
+    instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
+    instance.data = false;
+    instance.updateForm();
+
+    if (!this.allSelected) {
+      instance.deleteValidFrom.subscribe(() => {
+        shouldDeleteAllValidFrom = true;
+      });
+      instance.deleteValidTo.subscribe(() => {
+        shouldDeleteAllValidTo = true;
+      });
+      instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(
+        scheduleConfig, labels, initialValidFrom, initialValidTo, shouldDeleteAllValidFrom, shouldDeleteAllValidTo));
+      instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((scheduleConfigUpdate) => this.onUpdateAllSchedules(scheduleConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllSchedules());
+    }
+  }
+
+  onPage(page: PageEvent) {
+    this.page.next(page);
+  }
+
+  onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
+    this.selectedConfigs = crawlScheduleConfigs;
+    if (!this.singleMode) {
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeSchedules(
+          crawlScheduleConfigs),
+          getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig),
+          commonValidFrom(crawlScheduleConfigs),
+          commonValidTo(crawlScheduleConfigs));
+      } else {
+        const scheduleConfig = new CrawlScheduleConfig();
+        scheduleConfig.id = '1234567';
+        scheduleConfig.meta.name = 'update';
+        this.loadComponent(scheduleConfig, [], true, true);
+      }
+    } else {
+      this.schedule = crawlScheduleConfigs[0];
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
+      if (this.schedule === undefined) {
+        this.schedule = null;
+      }
     }
   }
 
@@ -94,6 +178,16 @@ export class SchedulePageComponent implements AfterViewInit {
 
   onSelectSchedule(schedule: CrawlScheduleConfig) {
     this.schedule = schedule;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlScheduleConfig(), new CrawlScheduleConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveSchedule(schedule: CrawlScheduleConfig) {
@@ -110,14 +204,87 @@ export class SchedulePageComponent implements AfterViewInit {
     this.scheduleService.update(schedule)
       .subscribe(updatedSchedule => {
         this.schedule = updatedSchedule;
+        this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
-    this.changes.next();
+  }
+
+  onUpdateMultipleSchedules(scheduleUpdate: CrawlScheduleConfig,
+                            initialLabels: Label[],
+                            initialValidFrom: boolean,
+                            initialValidTo: boolean,
+                            shouldDeleteAllValidFrom: boolean,
+                            shouldDeleteAllValidTo: boolean) {
+    const numOfConfigs = this.selectedConfigs.length.toString();
+    from(this.selectedConfigs).pipe(
+      mergeMap((schedule: CrawlScheduleConfig) => {
+        if (schedule.meta.label === undefined) {
+          schedule.meta.label = [];
+        }
+        schedule.meta.label = updatedLabels(scheduleUpdate.meta.label.concat(schedule.meta.label));
+        for (const label of initialLabels) {
+          if (!findLabel(scheduleUpdate.meta.label, label.key, label.value)) {
+            schedule.meta.label.splice(
+              schedule.meta.label.findIndex(
+                removedLabel => removedLabel.key === label.key && removedLabel.value === label.value),
+              1);
+          }
+        }
+        if (scheduleUpdate.cron_expression !== undefined || null) {
+          const newCron = [];
+          const updatedCron = scheduleUpdate.cron_expression.split(' ');
+          const existingCron = schedule.cron_expression.split(' ');
+          for (let i = 0; i < existingCron.length; i++) {
+            if (updatedCron[i] !== '') {
+              newCron[i] = updatedCron[i];
+            } else {
+              newCron[i] = existingCron[i];
+            }
+          }
+          schedule.cron_expression = newCron.join(' ');
+        }
+        if (scheduleUpdate.valid_from != null) {
+          schedule.valid_from = scheduleUpdate.valid_from;
+        } else {
+          if (initialValidFrom) {
+            schedule.valid_from = null;
+          }
+        }
+        if (shouldDeleteAllValidFrom) {
+          schedule.valid_from = null;
+        }
+        if (scheduleUpdate.valid_to != null) {
+          schedule.valid_to = scheduleUpdate.valid_to;
+        } else {
+          if (initialValidTo) {
+            schedule.valid_to = null;
+          }
+        }
+        if (shouldDeleteAllValidTo) {
+          schedule.valid_to = null;
+        }
+        return this.scheduleService.update(schedule);
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of('true');
+      }),
+    ).subscribe(() => {
+      this.selectedConfigs = [];
+      this.componentRef.destroy();
+      this.schedule = null;
+      this.changes.next();
+      this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner er oppdatert');
+    });
+  }
+
+  onUpdateAllSchedules(scheduleConfigUpdate: CrawlScheduleConfig) {
+    console.log('skal oppdatere alle schedules med configen: ', scheduleConfigUpdate);
   }
 
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
-      .subscribe((response) => {
+      .subscribe(() => {
         this.schedule = null;
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
@@ -125,4 +292,146 @@ export class SchedulePageComponent implements AfterViewInit {
     this.changes.next();
   }
 
+  onDeleteMultipleSchedules(configs: CrawlScheduleConfig[]) {
+    const numOfConfigs = configs.length.toString();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      numberOfConfigs: numOfConfigs
+    };
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          from(configs).pipe(
+            mergeMap((config) => this.scheduleService.delete(config.id)),
+            catchError((err) => {
+              console.log(err);
+              return of('true');
+            }),
+          ).subscribe(() => {
+            this.selectedConfigs = [];
+            this.componentRef.destroy();
+            this.schedule = null;
+            this.changes.next();
+            this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner slettet');
+          });
+        } else {
+          this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
+        }
+      });
+  }
+
+  onDeleteAllSchedules() {
+    console.log('skal slette alle schedules i databasen');
+  }
+
+  mergeSchedules(configs: CrawlScheduleConfig[]) {
+    const config = new CrawlScheduleConfig();
+    const compareObj = configs[0];
+    config.id = '1234567';
+    config.meta.name = 'Multi';
+
+    const equalCronExpressionMinute = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[0] === compareCronSplit[0];
+    });
+
+    const equalCronExpressionHour = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[1] === compareCronSplit[1];
+    });
+
+    const equalCronExpressionDOM = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[2] === compareCronSplit[2];
+    });
+
+    const equalCronExpressionMonth = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[3] === compareCronSplit[3];
+    });
+    const equalCronExpressionDOW = configs.every(function (cfg: CrawlScheduleConfig) {
+      const cronSplit = cfg.cron_expression.split(' ');
+      const compareCronSplit = compareObj.cron_expression.split(' ');
+      return cronSplit[4] === compareCronSplit[4];
+    });
+
+    const equalValidFrom = commonValidFrom(configs);
+
+    const equalValidTo = commonValidTo(configs);
+
+    const equalCron = [];
+    const splittedCron = configs[0].cron_expression.split(' ');
+    if (equalCronExpressionMinute) {
+      equalCron[0] = splittedCron[0];
+    } else {
+      equalCron[0] = '';
+    }
+    if (equalCronExpressionHour) {
+      equalCron[1] = splittedCron[1];
+    } else {
+      equalCron[1] = '';
+    }
+
+    if (equalCronExpressionDOM) {
+      equalCron[2] = splittedCron[2];
+    } else {
+      equalCron[2] = '';
+    }
+
+    if (equalCronExpressionMonth) {
+      equalCron[3] = splittedCron[3];
+    } else {
+      equalCron[3] = '';
+    }
+
+    if (equalCronExpressionDOW) {
+      equalCron[4] = splittedCron[4];
+    } else {
+      equalCron[4] = '';
+    }
+
+    config.cron_expression = equalCron.join(' ');
+
+    if (equalValidFrom) {
+      config.valid_from = compareObj.valid_from;
+    } else {
+      config.valid_from = '';
+    }
+
+    if (equalValidTo) {
+      config.valid_to = compareObj.valid_to;
+    } else {
+      config.valid_to = '';
+    }
+
+    const label = configs.reduce((acc: CrawlScheduleConfig, curr: CrawlScheduleConfig) => {
+      config.meta.label = intersectLabel(acc.meta.label, curr.meta.label);
+      return config;
+    });
+    return config;
+  }
+
+}
+
+function commonValidFrom(configs: CrawlScheduleConfig[]): boolean {
+  const compareObj = configs[0];
+  const equalValidFrom = configs.every(function (cfg: CrawlScheduleConfig) {
+    return cfg.valid_from === compareObj.valid_from;
+  });
+  return equalValidFrom;
+}
+
+function commonValidTo(configs: CrawlScheduleConfig[]): boolean {
+  const compareObj = configs[0];
+  const equalValidTo = configs.every(function (cfg: CrawlScheduleConfig) {
+    return cfg.valid_to === compareObj.valid_to;
+  });
+  return equalValidTo;
 }
