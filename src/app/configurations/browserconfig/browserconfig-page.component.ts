@@ -111,7 +111,11 @@ export class BrowserConfigPageComponent implements OnInit {
     }
   }
 
-  loadComponent(browserConfig: BrowserConfig, browserScripts: BrowserScript[], labels: Label[], selectors: string[]) {
+  loadComponent(browserConfig: BrowserConfig,
+                browserScripts: BrowserScript[],
+                labels: Label[],
+                selectors: string[]) {
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(BrowserConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -145,7 +149,7 @@ export class BrowserConfigPageComponent implements OnInit {
   onSelectedChange(browserConfigs: BrowserConfig[]) {
     this.selectedConfigs = browserConfigs;
     if (!this.singleMode) {
-      if(!this.allSelected) {
+      if (!this.allSelected) {
         this.loadComponent(
           this.mergeBrowserConfigs(browserConfigs),
           this.browserScripts,
@@ -395,6 +399,7 @@ export class BrowserConfigPageComponent implements OnInit {
   onUpdateAllBrowserConfigs(browserConfigUpdate: BrowserConfig) {
     console.log('Alle browserconfigs markert, opdaterer alle med denne configen: ', browserConfigUpdate);
   }
+
   onDeleteAllBrowserConfigs() {
     console.log('skal slette alle browserconfigs');
   }

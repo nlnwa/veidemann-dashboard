@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {CrawlJobService} from './crawljob.service';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {CrawlConfig, CrawlJob, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {BrowserConfig, CrawlConfig, CrawlJob, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -10,11 +10,10 @@ import {CrawlConfigService} from '../crawlconfig/crawlconfig.service';
 import {ScheduleService} from '../schedule/schedule.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from '../shared/detail.directive';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 import {CrawljobDetailsComponent} from './crawljob-details/crawljob-details.component';
 import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
-import {NUMBER_OR_EMPTY_STRING} from '../../commons/validator/patterns';
 
 @Component({
   selector: 'app-crawljobs',
@@ -32,6 +31,7 @@ import {NUMBER_OR_EMPTY_STRING} from '../../commons/validator/patterns';
         <app-selection-base-list (rowClick)="onSelectCrawlJob($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -61,6 +61,7 @@ export class CrawlJobsComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -134,8 +135,16 @@ export class CrawlJobsComponent implements OnInit {
     instance.form.get('crawl_config_id').clearValidators();
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe((crawlJobConfig) => this.onUpdateMultipleCrawlJobs(crawlJobConfig, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleCrawlJobs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((crawlJobConfigUpdate) => this.onUpdateAllCrawlJobs(crawlJobConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlJobs());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -145,9 +154,16 @@ export class CrawlJobsComponent implements OnInit {
   onSelectedChange(crawlJobs: CrawlJob[]) {
     this.selectedConfigs = crawlJobs;
     if (!this.singleMode) {
-      this.loadComponent(
-        this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs,
-        getInitialLabels(crawlJobs, CrawlJob), isDisabledEqual(crawlJobs));
+      if (!this.allSelected) {
+        this.loadComponent(
+          this.mergeCrawlJobs(crawlJobs), this.schedules, this.crawlConfigs,
+          getInitialLabels(crawlJobs, CrawlJob), isDisabledEqual(crawlJobs));
+      } else {
+        const crawlJob = new CrawlJob();
+        crawlJob.id = '1234567';
+        crawlJob.meta.name = 'update';
+        this.loadComponent(crawlJob, this.schedules, this.crawlConfigs, [], true);
+      }
     } else {
       this.crawlJob = crawlJobs[0];
       if (this.componentRef !== null) {
@@ -170,6 +186,16 @@ export class CrawlJobsComponent implements OnInit {
   onSelectCrawlJob(crawlJob: CrawlJob) {
     this.router.navigate(['crawljobs', crawlJob.id]);
     this.crawlJob = crawlJob;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlJob(), new CrawlJob()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveCrawlJob(crawlJob: CrawlJob) {
@@ -242,6 +268,10 @@ export class CrawlJobsComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlJobs(crawlJobsUpdate: CrawlJob) {
+    console.log('Skal oppdatere alle crawljobs i databasen med: ', crawlJobsUpdate);
+  }
+
   onDeleteCrawlJob(crawlJob: CrawlJob) {
     this.crawlJobService.delete(crawlJob.id)
       .subscribe((response) => {
@@ -251,7 +281,7 @@ export class CrawlJobsComponent implements OnInit {
       });
   }
 
-  onDeleteMultipleCrawlConfigs(configs: CrawlJob[]) {
+  onDeleteMultipleCrawlJobs(configs: CrawlJob[]) {
     const numOfConfigs = configs.length.toString();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -280,6 +310,10 @@ export class CrawlJobsComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllCrawlJobs() {
+    console.log('Skal slette alle crawljobs i databasen ');
   }
 
   mergeCrawlJobs(configs: CrawlJob[]) {

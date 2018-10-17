@@ -3,7 +3,7 @@ import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-import {CrawlHostGroupConfig, IpRange, Label} from '../../commons/models/config.model';
+import {BrowserConfig, CrawlHostGroupConfig, IpRange, Label} from '../../commons/models/config.model';
 import {CrawlHostGroupConfigService} from './crawlhostgroupconfig.service';
 import {of} from 'rxjs/internal/observable/of';
 import {DetailDirective} from '../shared/detail.directive';
@@ -31,6 +31,7 @@ import {getInitialLabels, updatedLabels, findLabel, intersectLabel} from '../../
           (rowClick)="onSelectCrawlHostGroupConfig($event)"
           [data]="data$ | async"
           (selectedChange)="onSelectedChange($event)"
+          (selectAll)="onSelectAll($event)"
           (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -56,6 +57,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -90,7 +92,7 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
-  loadComponent(config: CrawlHostGroupConfig, selectedConfigs: CrawlHostGroupConfig[], labels: Label[], ipRanges: IpRange[]) {
+  loadComponent(config: CrawlHostGroupConfig, labels: Label[], ipRanges: IpRange[]) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CrawlHostGroupConfigDetailsComponent);
     const viewContainerRef = this.detailHost.viewContainerRef;
     viewContainerRef.clear();
@@ -99,10 +101,19 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     instance.crawlHostGroupConfig = config;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels, ipRanges));
-    instance.delete.subscribe(
-      () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (crawlHostGroupConfig) => this.onUpdateMultipleCrawlHostGroupConfigs(crawlHostGroupConfig, labels, ipRanges));
+      instance.delete.subscribe(
+        () => this.onDeleteMultipleCrawlHostGroupConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe(
+        (crawlHostGroupConfigUpdate) => this.onUpdateAllCrawlHostGroupConfigs(crawlHostGroupConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlHostGroupConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -117,12 +128,29 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     this.crawlHostGroupConfig = crawlHostGroupConfig;
   }
 
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlHostGroupConfig(), new CrawlHostGroupConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
+  }
 
   onSelectedChange(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {
     this.selectedConfigs = crawlHostGroupConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs), this.selectedConfigs,
-        getInitialLabels(crawlHostGroupConfigs, CrawlHostGroupConfig), getInitialIpRanges(crawlHostGroupConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeCrawlHostGroupConfigs(crawlHostGroupConfigs),
+          getInitialLabels(crawlHostGroupConfigs, CrawlHostGroupConfig), getInitialIpRanges(crawlHostGroupConfigs));
+      } else {
+        const crawlHostGroupConfig = new CrawlHostGroupConfig();
+        crawlHostGroupConfig.id = '1234567';
+        crawlHostGroupConfig.meta.name = 'update';
+        this.loadComponent(crawlHostGroupConfig, [], []);
+      }
+
     } else {
       this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
       if (this.componentRef !== null) {
@@ -204,6 +232,10 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlHostGroupConfigs(crawlHostGroupConfigUpdate: CrawlHostGroupConfig) {
+    console.log('skal oppdatere alle crawlhostgroupconfigs i databasen med: ', crawlHostGroupConfigUpdate);
+  }
+
   onDeleteCrawlHostGroupConfig(crawlHostGroupConfig: CrawlHostGroupConfig) {
     this.crawlHostGroupConfigService.delete(crawlHostGroupConfig.id)
       .subscribe(() => {
@@ -242,6 +274,10 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllCrawlHostGroupConfigs() {
+    console.log('skal slette alle crawlhostgroupconfigs fra databasen ');
   }
 
   mergeCrawlHostGroupConfigs(crawlHostGroupConfigs: CrawlHostGroupConfig[]) {

@@ -30,6 +30,7 @@ import {getInitialLabels, updatedLabels, findLabel, intersectLabel} from '../../
         <app-selection-base-list (rowClick)="onSelectBrowserScript($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -50,6 +51,7 @@ export class BrowserScriptPageComponent implements OnInit {
 
   selectedConfigs = [];
   componentRef = null;
+  allSelected = false;
 
   browserScript: BrowserScript;
   changes: Subject<void> = new Subject<void>();
@@ -106,8 +108,16 @@ export class BrowserScriptPageComponent implements OnInit {
     instance.browserScript = browserScript;
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe((browserScripts) => this.onUpdateMultipleBrowserScripts(browserScripts, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleBrowserScripts(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((browserScriptUpdate) => this.onUpdateAllBrowserScripts(browserScriptUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllBrowserScripts());
+    }
 
   }
 
@@ -118,7 +128,14 @@ export class BrowserScriptPageComponent implements OnInit {
   onSelectedChange(browserScripts: BrowserScript[]) {
     this.selectedConfigs = browserScripts;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts, BrowserScript));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeBrowserScripts(browserScripts), getInitialLabels(browserScripts, BrowserScript));
+      } else {
+        const browserScript = new BrowserScript();
+        browserScript.id = '1234567';
+        browserScript.meta.name = 'update';
+        this.loadComponent(browserScript, []);
+      }
     } else {
       this.browserScript = browserScripts[0];
       if (this.componentRef !== null) {
@@ -136,6 +153,16 @@ export class BrowserScriptPageComponent implements OnInit {
 
   onSelectBrowserScript(browserScript: BrowserScript) {
     this.browserScript = browserScript;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new BrowserScript(), new BrowserScript()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveBrowserScript(browserScript: BrowserScript) {
@@ -228,6 +255,14 @@ export class BrowserScriptPageComponent implements OnInit {
       this.changes.next();
       this.snackBarService.openSnackBar(numOfConfigs, ' konfigurasjoner er oppdatert');
     });
+  }
+
+  onUpdateAllBrowserScripts(browserScriptUpdate: BrowserScript) {
+    console.log('Alle browserscripts i database skal oppdateres med denne configen', browserScriptUpdate);
+  }
+
+  onDeleteAllBrowserScripts() {
+    console.log('Skal slette alle browserscripts i database');
   }
 
   mergeBrowserScripts(browserScripts: BrowserScript[]) {

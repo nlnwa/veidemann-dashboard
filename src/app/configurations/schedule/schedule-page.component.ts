@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {BrowserConfig, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -36,6 +36,7 @@ import {getInitialLabels, findLabel, updatedLabels, intersectLabel} from '../../
         <app-selection-base-list (rowClick)="onSelectSchedule($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -62,6 +63,7 @@ export class SchedulePageComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -120,17 +122,24 @@ export class SchedulePageComponent implements OnInit {
     instance.form.get('cron_expression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
     instance.form.get('cron_expression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
     instance.data = false;
-    instance.deleteValidFrom.subscribe(() => {
-      shouldDeleteAllValidFrom = true;
-    });
-    instance.deleteValidTo.subscribe(() => {
-      shouldDeleteAllValidTo = true;
-    });
     instance.updateForm();
-    instance.update.subscribe((scheduleConfig) =>
-      this.onUpdateMultipleSchedules(scheduleConfig, labels, initialValidFrom, initialValidTo,
-        shouldDeleteAllValidFrom, shouldDeleteAllValidTo));
-    instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.deleteValidFrom.subscribe(() => {
+        shouldDeleteAllValidFrom = true;
+      });
+      instance.deleteValidTo.subscribe(() => {
+        shouldDeleteAllValidTo = true;
+      });
+      instance.update.subscribe((scheduleConfig) => this.onUpdateMultipleSchedules(
+        scheduleConfig, labels, initialValidFrom, initialValidTo, shouldDeleteAllValidFrom, shouldDeleteAllValidTo));
+      instance.delete.subscribe(() => this.onDeleteMultipleSchedules(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((scheduleConfigUpdate) => this.onUpdateAllSchedules(scheduleConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllSchedules());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -140,11 +149,18 @@ export class SchedulePageComponent implements OnInit {
   onSelectedChange(crawlScheduleConfigs: CrawlScheduleConfig[]) {
     this.selectedConfigs = crawlScheduleConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergeSchedules(
-        crawlScheduleConfigs),
-        getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig),
-        commonValidFrom(crawlScheduleConfigs),
-        commonValidTo(crawlScheduleConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergeSchedules(
+          crawlScheduleConfigs),
+          getInitialLabels(crawlScheduleConfigs, CrawlScheduleConfig),
+          commonValidFrom(crawlScheduleConfigs),
+          commonValidTo(crawlScheduleConfigs));
+      } else {
+        const scheduleConfig = new CrawlScheduleConfig();
+        scheduleConfig.id = '1234567';
+        scheduleConfig.meta.name = 'update';
+        this.loadComponent(scheduleConfig, [], true, true);
+      }
     } else {
       this.schedule = crawlScheduleConfigs[0];
       if (this.componentRef !== null) {
@@ -162,6 +178,16 @@ export class SchedulePageComponent implements OnInit {
 
   onSelectSchedule(schedule: CrawlScheduleConfig) {
     this.schedule = schedule;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlScheduleConfig(), new CrawlScheduleConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveSchedule(schedule: CrawlScheduleConfig) {
@@ -252,6 +278,10 @@ export class SchedulePageComponent implements OnInit {
     });
   }
 
+  onUpdateAllSchedules(scheduleConfigUpdate: CrawlScheduleConfig) {
+    console.log('skal oppdatere alle schedules med configen: ', scheduleConfigUpdate);
+  }
+
   onDeleteSchedule(schedule: CrawlScheduleConfig) {
     this.scheduleService.delete(schedule.id)
       .subscribe(() => {
@@ -291,6 +321,10 @@ export class SchedulePageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllSchedules() {
+    console.log('skal slette alle schedules i databasen');
   }
 
   mergeSchedules(configs: CrawlScheduleConfig[]) {

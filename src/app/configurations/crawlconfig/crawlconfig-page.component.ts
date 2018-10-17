@@ -32,6 +32,7 @@ import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../
         <app-selection-base-list (rowClick)="onSelectCrawlConfig($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -61,6 +62,7 @@ export class CrawlConfigPageComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -138,9 +140,17 @@ export class CrawlConfigPageComponent implements OnInit {
     }));
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
-    instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (crawlConfigs) => this.onUpdateMultipleCrawlConfigs(crawlConfigs, labels));
+      instance.delete.subscribe(() => this.onDeleteMultipleCrawlConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((crawlConfigUpdate) => this.onUpdateAllCrawlConfigs(crawlConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllCrawlConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -150,10 +160,18 @@ export class CrawlConfigPageComponent implements OnInit {
   onSelectedChange(crawlConfigs: CrawlConfig[]) {
     this.selectedConfigs = crawlConfigs;
     if (!this.singleMode) {
-      this.loadComponent(
-        this.mergeCrawlConfigs(crawlConfigs),
-        this.browserConfigs, this.politenessConfigs, getInitialLabels(crawlConfigs, CrawlConfig),
-        isExtractTextEqual(crawlConfigs), isCreateSnapshotEqual(crawlConfigs), isDepthFirstEqual(crawlConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(
+          this.mergeCrawlConfigs(crawlConfigs),
+          this.browserConfigs, this.politenessConfigs, getInitialLabels(crawlConfigs, CrawlConfig),
+          isExtractTextEqual(crawlConfigs), isCreateSnapshotEqual(crawlConfigs), isDepthFirstEqual(crawlConfigs));
+      } else {
+        const crawlConfig = new CrawlConfig();
+        crawlConfig.id = '1234567';
+        crawlConfig.meta.name = 'update';
+        this.loadComponent(crawlConfig, this.browserConfigs, this.politenessConfigs,
+          [], true, true, true);
+      }
     } else {
       this.crawlConfig = crawlConfigs[0];
       if (this.componentRef !== null) {
@@ -172,6 +190,16 @@ export class CrawlConfigPageComponent implements OnInit {
   onSelectCrawlConfig(crawlConfig: CrawlConfig) {
     this.router.navigate(['crawlconfig', crawlConfig.id]);
     this.crawlConfig = crawlConfig;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new CrawlConfig(), new CrawlConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSaveCrawlConfig(crawlConfig: CrawlConfig) {
@@ -250,6 +278,10 @@ export class CrawlConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllCrawlConfigs(crawlConfigUpdate: CrawlConfig) {
+    console.log('skall oppdatere alle crawlconfigs i databasen med config: ', crawlConfigUpdate);
+  }
+
   onDeleteCrawlConfig(crawlConfig: CrawlConfig) {
     this.crawlConfigService.delete(crawlConfig.id)
       .subscribe(() => {
@@ -288,6 +320,10 @@ export class CrawlConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllCrawlConfigs() {
+    console.log('Skal slette alle crawlconfigs i databasen');
   }
 
   mergeCrawlConfigs(configs: CrawlConfig[]) {

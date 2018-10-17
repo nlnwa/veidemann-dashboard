@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {Label, PolitenessConfig} from '../../commons/models/config.model';
+import {BrowserConfig, Label, PolitenessConfig} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -30,6 +30,7 @@ import {findSelector, getInitialSelectors, intersectSelector, updatedSelectors} 
         <app-selection-base-list (rowClick)="onSelectPolitenessConfig($event)"
                                  [data]="data$ | async"
                                  (selectedChange)="onSelectedChange($event)"
+                                 (selectAll)="onSelectAll($event)"
                                  (page)="onPage($event)">
         </app-selection-base-list>
       </div>
@@ -57,6 +58,7 @@ export class PolitenessConfigPageComponent implements OnInit {
   page: Subject<PageEvent> = new Subject<PageEvent>();
   data = new Subject<any>();
   data$ = this.data.asObservable();
+  allSelected = false;
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
@@ -118,10 +120,18 @@ export class PolitenessConfigPageComponent implements OnInit {
     // instance.robotsPolicyList.push(' ');
     instance.data = false;
     instance.updateForm();
-    instance.update.subscribe(
-      (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels, selectors));
-    instance.delete.subscribe(
-      () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (politenessConfigs) => this.onUpdateMultiplePolitenessConfigs(politenessConfigs, labels, selectors));
+      instance.delete.subscribe(
+        () => this.onDeleteMultiplePolitenessConfigs(this.selectedConfigs));
+    }
+
+    if (this.allSelected) {
+      instance.update.subscribe((politenessConfigUpdate) => this.onUpdateAllPolitenessConfigs(politenessConfigUpdate));
+      instance.delete.subscribe(() => this.onDeleteAllPolitenessConfigs());
+    }
   }
 
   onPage(page: PageEvent) {
@@ -131,9 +141,16 @@ export class PolitenessConfigPageComponent implements OnInit {
   onSelectedChange(politenessConfigs: PolitenessConfig[]) {
     this.selectedConfigs = politenessConfigs;
     if (!this.singleMode) {
-      this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
-        this.robotsPolicies, getInitialLabels(politenessConfigs, PolitenessConfig),
-        getInitialSelectors(politenessConfigs, PolitenessConfig), isRobotPoliciesEqual(politenessConfigs));
+      if (!this.allSelected) {
+        this.loadComponent(this.mergePolitenessConfigs(politenessConfigs),
+          this.robotsPolicies, getInitialLabels(politenessConfigs, PolitenessConfig),
+          getInitialSelectors(politenessConfigs, PolitenessConfig), isRobotPoliciesEqual(politenessConfigs));
+      } else {
+        const politenessConfig = new PolitenessConfig();
+        politenessConfig.id = '1234567';
+        politenessConfig.meta.name = 'update';
+        this.loadComponent(politenessConfig, this.robotsPolicies, [], [], true);
+      }
     } else {
       this.politenessConfig = politenessConfigs[0];
       if (this.componentRef !== null) {
@@ -151,6 +168,16 @@ export class PolitenessConfigPageComponent implements OnInit {
 
   onSelectPolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfig = politenessConfig;
+  }
+
+  onSelectAll(allSelected: boolean) {
+    this.allSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedChange([new PolitenessConfig(), new PolitenessConfig()]);
+    } else {
+      this.onSelectedChange([]);
+      this.componentRef.destroy();
+    }
   }
 
   onSavePolitenessConfig(politenessConfig: PolitenessConfig) {
@@ -245,6 +272,10 @@ export class PolitenessConfigPageComponent implements OnInit {
     });
   }
 
+  onUpdateAllPolitenessConfigs(politenessConfigUpdate: PolitenessConfig) {
+    console.log('Skal oppdatere alle politenessConfig i databasen med configen: ', politenessConfigUpdate);
+  }
+
   onDeletePolitenessConfig(politenessConfig: PolitenessConfig) {
     this.politenessConfigService.delete(politenessConfig.id)
       .subscribe(() => {
@@ -283,6 +314,10 @@ export class PolitenessConfigPageComponent implements OnInit {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
       });
+  }
+
+  onDeleteAllPolitenessConfigs() {
+    console.log('skal slette alle politenessconfigs i databasen');
   }
 
   mergePolitenessConfigs(politenessConfigs: PolitenessConfig[]) {
