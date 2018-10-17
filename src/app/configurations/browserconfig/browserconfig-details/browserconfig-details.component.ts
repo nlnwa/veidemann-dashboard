@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BrowserConfig, BrowserScript, Label, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
 
 @Component({
   selector: 'app-browserconfig-details',
@@ -9,6 +10,12 @@ import {RoleService} from '../../../auth/role.service';
   styleUrls: ['./browserconfig-details.component.css'],
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
+
+  @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
   @Input()
   browserConfig: BrowserConfig;
   @Input()
@@ -24,9 +31,21 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
   browserScriptList: any[];
+  shouldShow = true;
 
   constructor(private fb: FormBuilder, private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      user_agent: ['', [Validators.minLength(1)]],
+      window_width: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      window_height: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      page_load_timeout_ms: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      sleep_after_pageload_ms: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      // headers: this.fb.group({''}),
+      script_id: '',
+      script_selector: '',
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -77,6 +96,18 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     return this.form.get('script_id');
   }
 
+  get showShortcuts(): boolean {
+    const script = this.script_id.value;
+    if (script != null && script !== '') {
+      if (script.length != null) {
+        if (script.length > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.browserConfig && !changes.browserConfig.currentValue) {
       this.form.reset();
@@ -92,18 +123,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     if (this.browserConfig && this.browserScriptList) {
       this.updateForm();
     }
-  }
-
-  get showShortcuts(): boolean {
-    const script = this.script_id.value;
-    if (script != null && script !== '') {
-      if (script.length != null) {
-        if (script.length > 0) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   onSave() {
@@ -130,29 +149,18 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     }
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      user_agent: ['', [Validators.required, Validators.minLength(1)]],
-      window_width: ['', [Validators.required, Validators.min(1)]],
-      window_height: ['', [Validators.required, Validators.min(1)]],
-      page_load_timeout_ms: ['', [Validators.required, Validators.min(0)]],
-      sleep_after_pageload_ms: ['', [Validators.required, Validators.min(0)]],
-      // headers: this.fb.group({''}),
-      script_id: '',
-      script_selector: '',
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.browserConfig.id,
-      user_agent: this.browserConfig.user_agent,
-      window_width: this.browserConfig.window_width,
-      window_height: this.browserConfig.window_height,
-      page_load_timeout_ms: this.browserConfig.page_load_timeout_ms,
-      sleep_after_pageload_ms: this.browserConfig.sleep_after_pageload_ms,
+      user_agent: this.browserConfig.user_agent || '',
+      window_width: this.browserConfig.window_width || '',
+      window_height: this.browserConfig.window_height || '',
+      page_load_timeout_ms: this.browserConfig.page_load_timeout_ms || '',
+      sleep_after_pageload_ms: this.browserConfig.sleep_after_pageload_ms || '',
       // headers: this.browserConfig.headers;
       script_id: this.browserConfig.script_id,
       script_selector: this.browserConfig.script_selector ? this.browserConfig.script_selector.map(selector => {
@@ -179,8 +187,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       user_agent: formModel.user_agent,
       window_width: parseInt(formModel.window_width, 10),
       window_height: parseInt(formModel.window_height, 10),
-      page_load_timeout_ms: formModel.page_load_timeout_ms,
-      sleep_after_pageload_ms: formModel.sleep_after_pageload_ms,
+      page_load_timeout_ms: parseInt(formModel.page_load_timeout_ms, 10),
+      sleep_after_pageload_ms: parseInt(formModel.sleep_after_pageload_ms, 10),
       script_id: formModel.script_id,
       script_selector: formModel.script_selector.map(label => label.key + ':' + label.value),
       headers: formModel.headers,

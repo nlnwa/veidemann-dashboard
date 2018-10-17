@@ -30,6 +30,9 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   @Input()
   nameIsUrl: boolean;
 
+  @Input()
+  shouldShow: boolean;
+
   form: FormGroup;
 
   // ControlValueAccessor callbacks

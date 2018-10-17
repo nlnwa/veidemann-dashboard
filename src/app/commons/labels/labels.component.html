@@ -16,7 +16,7 @@
                [placeholder]="kind"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
-               (matChipInputTokenEnd)="onSaveLabel($event.value); chipInput.value = ''"
+               (matChipInputTokenEnd)="onSave($event.value); chipInput.value = ''"
                [attr.disabled]="canUpdate ? null : ''"/>
       </mat-chip-list>
 
@@ -49,13 +49,12 @@
         <button i18n="@@commonButtonAdd" mat-button color="primary"
                 *ngIf="!showUpdate"
                 [disabled]="!labelForm.valid"
-                (click)="onSaveLabel(newKey.value, newValue.value)">Legg til
+                (click)="onSave(newKey.value, newValue.value)">Legg til
         </button>
         <button mat-button color="accent"
                 *ngIf="showUpdate"
                 [disabled]="!(labelForm.valid && labelForm.dirty)"
                 (click)="onUpdateLabel(newKey.value, newValue.value)">Oppdater
-
         </button>
         <button i18n="@@commonButtonCancel" mat-button color="warn"
                 (click)="onAbort()">Avbryt

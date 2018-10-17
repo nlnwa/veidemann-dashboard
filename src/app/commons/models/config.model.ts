@@ -96,8 +96,8 @@ export class CrawlScheduleConfig {
 
 export class CrawlLimitsConfig {
   depth: number;
-  max_duration_s: string; // int64
-  max_bytes: string; // int64
+  max_duration_s: number; // int64
+  max_bytes: number; // int64
 }
 
 
@@ -107,7 +107,7 @@ export class CrawlJob {
   schedule_id?: string;
   limits: CrawlLimitsConfig;
   crawl_config_id?: string;
-  disabled?: boolean;
+  disabled: boolean;
 
   constructor() {
     this.id = '';
@@ -115,6 +115,7 @@ export class CrawlJob {
     this.limits = new CrawlLimitsConfig();
     this.schedule_id = '';
     this.crawl_config_id = '';
+    this.disabled = false;
   }
 }
 
@@ -135,6 +136,7 @@ export class CrawlConfig {
   politeness_id: string;
   extra: Extra;
   minimum_dns_ttl_s: number;
+  priority_weight: number;
   depth_first: boolean;
 
   constructor() {
@@ -144,6 +146,7 @@ export class CrawlConfig {
     this.politeness_id = '';
     this.extra = new Extra();
     this.minimum_dns_ttl_s = 0;
+    this.priority_weight = 0;
     this.depth_first = true;
   }
 }
@@ -154,12 +157,12 @@ export class BrowserConfig {
   user_agent: string;
   window_width: number;
   window_height: number;
-  page_load_timeout_ms: string; // int64
+  page_load_timeout_ms: number; // int64
   script_selector: string [];
   script_id: string[];
   headers?: Map<string, string>;
   // script_parameters?: Map<string, string>; not implemented
-  sleep_after_pageload_ms: string; // int64
+  sleep_after_pageload_ms: number; // int64
 
   constructor() {
     this.id = '';
@@ -167,10 +170,10 @@ export class BrowserConfig {
     this.user_agent = '';
     this.window_width = 0;
     this.window_height = 0;
-    this.page_load_timeout_ms = '';
+    this.page_load_timeout_ms = 0;
     this.script_selector = [];
     this.script_id = [];
-    this.sleep_after_pageload_ms = '';
+    this.sleep_after_pageload_ms = 0;
 
   }
 }
@@ -185,10 +188,10 @@ export class PolitenessConfig {
   id: string;
   meta: Meta;
   robots_policy: string;
-  minimum_robots_validity_duration_s?: number;
   custom_robots: string;
-  min_time_between_page_load_ms?: string; // int64
-  max_time_between_page_load_ms?: string; // int64
+  minimum_robots_validity_duration_s: number;
+  min_time_between_page_load_ms: number; // int64
+  max_time_between_page_load_ms: number; // int64
   delay_factor: number;
   max_retries: number;
   retry_delay_seconds: number;
@@ -199,6 +202,9 @@ export class PolitenessConfig {
     this.meta = new Meta();
     this.robots_policy = RobotPolicy.OBEY_ROBOTS;
     this.custom_robots = '';
+    this.minimum_robots_validity_duration_s = 0;
+    this.min_time_between_page_load_ms = 0;
+    this.max_time_between_page_load_ms = 0;
     this.delay_factor = 0;
     this.max_retries = 0;
     this.retry_delay_seconds = 0;
