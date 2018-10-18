@@ -165,9 +165,11 @@ export class BrowserConfigDetailsComponent implements OnChanges {
       script_id: this.browserConfig.script_id,
       script_selector: this.browserConfig.script_selector ? this.browserConfig.script_selector.map(selector => {
           const parts = selector.split(':');
+          const key = parts.shift();
+          const value = parts.join(':');
           const label = new Label();
-          label.key = parts[0];
-          label.value = parts[1];
+          label.key = key;
+          label.value = value;
           return label;
         })
         : [],

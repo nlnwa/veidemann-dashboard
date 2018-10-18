@@ -3,6 +3,7 @@ import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validat
 import {Label} from '../models/config.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {NO_COLON} from '../validator/patterns';
 
 export enum Kind {
   LABEL = 'Label',
@@ -38,7 +39,8 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   private labels: Label[];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   get showUpdate(): boolean {
     return this.showUpdateLabel;
@@ -46,6 +48,14 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   get canUpdate(): boolean {
     return !this.isDisabled;
+  }
+
+  get key() {
+    return this.labelForm.get('key');
+  }
+
+  get value() {
+   return this.labelForm.get('value');
   }
 
   ngOnInit(): void {
@@ -102,8 +112,8 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
     const parts = value.split(':');
     if (parts.length > 1) {
-      key = parts[0].trim();
-      value = parts[1].trim();
+      key = parts.shift();
+      value = parts.join(':');
       if (key.length < 1 || value.length < 1) {
         return;
       }
@@ -131,8 +141,8 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
     const parts = value.split(':');
     if (parts.length > 1) {
-      key = parts[0].trim();
-      value = parts[1].trim();
+      key = parts.shift();
+      value = parts.join(':');
     } else {
       key = parts[0].trim();
       value = '';
@@ -189,10 +199,10 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   private createForm(): void {
     this.labelForm = this.fb.group({
       key: this.kind === Kind.LABEL
-        ? ['', [Validators.required, Validators.minLength(1)]]
+        ? ['', [Validators.required, Validators.pattern(NO_COLON)]]
         : '',
       value: this.kind === Kind.LABEL
-        ? ['', Validators.required, Validators.minLength(1)]
+        ? ['', Validators.required]
         : ''
     });
     this.labelForm.disable();

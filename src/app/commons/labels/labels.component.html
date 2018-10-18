@@ -34,6 +34,10 @@
              Eks. Org.nummer, kategorisering, begivenhet'>
           info
         </mat-icon>
+        <mat-error *ngIf="!key.valid"
+                   i18n="@@labelKeyError">
+          Kan ikke være tom eller inneholde kolon.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input #newValue matInput placeholder="Verdi" formControlName="value"
@@ -44,6 +48,10 @@
              Eks. offentlig nettsted, nettavis, Valg 2017'>
           info
         </mat-icon>
+        <mat-error *ngIf="!value.valid"
+                   i18n="@@labelValueError">
+          Kan ikke være tom.
+        </mat-error>
       </mat-form-field>
       <mat-card-actions>
         <button i18n="@@commonButtonAdd" mat-button color="primary"

@@ -170,9 +170,11 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
       crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector
         ? this.politenessConfig.crawl_host_group_selector.map(selector => {
           const parts = selector.split(':');
+          const key = parts.shift();
+          const value = parts.join(':');
           const label = new Label();
-          label.key = parts[0];
-          label.value = parts[1];
+          label.key = key;
+          label.value = value;
           return label;
         })
         : [],
