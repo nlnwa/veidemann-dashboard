@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Label} from '../models/config.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {NO_COLON} from '../validator/patterns';
 
 export enum Kind {
   LABEL = 'Label',
@@ -16,7 +17,7 @@ export enum Kind {
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: LabelsComponent, multi: true}],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LabelsComponent implements ControlValueAccessor {
+export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   @Input() removable = true;
   @Input() kind: string = Kind.LABEL;
@@ -39,7 +40,6 @@ export class LabelsComponent implements ControlValueAccessor {
   private labels: Label[];
 
   constructor(private fb: FormBuilder) {
-    this.createForm();
   }
 
   get showUpdate(): boolean {
@@ -48,6 +48,18 @@ export class LabelsComponent implements ControlValueAccessor {
 
   get canUpdate(): boolean {
     return !this.isDisabled;
+  }
+
+  get key() {
+    return this.labelForm.get('key');
+  }
+
+  get value() {
+   return this.labelForm.get('value');
+  }
+
+  ngOnInit(): void {
+    this.createForm();
   }
 
   // implement ControlValueAccessor
@@ -82,6 +94,14 @@ export class LabelsComponent implements ControlValueAccessor {
     this.labelForm.reset({key, value});
   }
 
+  onSave(value: string): void {
+    if (Kind.LABEL === this.kind) {
+      this.onSaveLabel(value);
+    } else {
+      this.onSaveSelector(value);
+    }
+  }
+
   onSaveLabel(value: string): void {
     let key = '';
     value = value.trim();
@@ -92,13 +112,40 @@ export class LabelsComponent implements ControlValueAccessor {
 
     const parts = value.split(':');
     if (parts.length > 1) {
-      key = parts[0].trim();
-      value = parts[1].trim();
+      key = parts.shift();
+      value = parts.join(':');
       if (key.length < 1 || value.length < 1) {
         return;
       }
     } else {
       return;
+    }
+
+    if (this.findLabelIndex(key, value) > -1) {
+      return;
+    }
+
+    this.labels.push({key, value});
+
+    this.onChange(this.labels);
+    this.reset();
+  }
+
+  onSaveSelector(value: string): void {
+    let key = '';
+    value = value.trim();
+
+    if (value === '') {
+      return;
+    }
+
+    const parts = value.split(':');
+    if (parts.length > 1) {
+      key = parts.shift();
+      value = parts.join(':');
+    } else {
+      key = parts[0].trim();
+      value = '';
     }
 
     if (this.findLabelIndex(key, value) > -1) {
@@ -151,8 +198,12 @@ export class LabelsComponent implements ControlValueAccessor {
 
   private createForm(): void {
     this.labelForm = this.fb.group({
-      key: ['', [Validators.required, Validators.minLength(1)]],
-      value: ['', [Validators.required, Validators.minLength(1)]],
+      key: this.kind === Kind.LABEL
+        ? ['', [Validators.required, Validators.pattern(NO_COLON)]]
+        : '',
+      value: this.kind === Kind.LABEL
+        ? ['', Validators.required]
+        : ''
     });
     this.labelForm.disable();
   }
@@ -169,5 +220,4 @@ export class LabelsComponent implements ControlValueAccessor {
     });
     this.groupsSubject.next(Object.keys(grouping).map(key => ({key, values: grouping[key]})));
   }
-
 }

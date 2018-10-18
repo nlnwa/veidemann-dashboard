@@ -16,7 +16,7 @@
                [placeholder]="kind"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
-               (matChipInputTokenEnd)="onSaveLabel($event.value); chipInput.value = ''"
+               (matChipInputTokenEnd)="onSave($event.value); chipInput.value = ''"
                [attr.disabled]="canUpdate ? null : ''"/>
       </mat-chip-list>
 
@@ -34,6 +34,10 @@
              Eks. Org.nummer, kategorisering, begivenhet'>
           info
         </mat-icon>
+        <mat-error *ngIf="!key.valid"
+                   i18n="@@labelKeyError">
+          Kan ikke være tom eller inneholde kolon.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input #newValue matInput placeholder="Verdi" formControlName="value"
@@ -44,18 +48,21 @@
              Eks. offentlig nettsted, nettavis, Valg 2017'>
           info
         </mat-icon>
+        <mat-error *ngIf="!value.valid"
+                   i18n="@@labelValueError">
+          Kan ikke være tom.
+        </mat-error>
       </mat-form-field>
       <mat-card-actions>
         <button i18n="@@commonButtonAdd" mat-button color="primary"
                 *ngIf="!showUpdate"
                 [disabled]="!labelForm.valid"
-                (click)="onSaveLabel(newKey.value, newValue.value)">Legg til
+                (click)="onSave(newKey.value, newValue.value)">Legg til
         </button>
         <button mat-button color="accent"
                 *ngIf="showUpdate"
                 [disabled]="!(labelForm.valid && labelForm.dirty)"
                 (click)="onUpdateLabel(newKey.value, newValue.value)">Oppdater
-
         </button>
         <button i18n="@@commonButtonCancel" mat-button color="warn"
                 (click)="onAbort()">Avbryt

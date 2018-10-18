@@ -11,8 +11,8 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta"></app-meta>
-        <mat-form-field *ngIf="!showSave">
+        <app-meta formControlName="meta" [shouldShow]="shouldShow"></app-meta>
+        <mat-form-field *ngIf="!showSave && shouldShow">
           <input matInput
                  formControlName="id"
                  placeholder="Id"
@@ -21,17 +21,21 @@
       </div>
 
       <div fxFlex fxLayout="column">
+        <div (click)="robotsPolicy.disabled ? onEnableRobotsPolicy() : null">
         <mat-form-field>
-          <mat-select placeholder="Velg policy" formControlName="robots_policy"
-                      i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+          <mat-select placeholder="Velg policy"
+                      formControlName="robots_policy"
+                      i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder"
+                      [matTooltip]="robotsPolicy.disabled ?
+                        'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null"
+          >
             <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-error *ngIf="! robotsPolicy.valid && !form.disabled"
-                   i18n="@@politenessconfigFormRobotPolicyErrorRequired">
-          Robots policy er påkrevd.
-        </mat-error>
-
+      </div>
         <!--CrawlHostGroup Selector -->
         <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector"
                     [removable]="canEdit"></app-labels>
@@ -46,7 +50,7 @@
             </textarea>
               <mat-error *ngIf="!customRobots.valid"
                          i18n="@@politenessconfigFormValidityDurationRequiredError">
-                Validity duration er påkrevd.
+                Må være et tall.
               </mat-error>
             </mat-form-field>
           </div>
@@ -57,9 +61,9 @@
                  formControlName="minimum_robots_validity_duration_s"
                  placeholder="Minimum robots validity (seconds)"
                  i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-          <mat-error *ngIf="! minRobotsValidDurationSec.valid"
+          <mat-error *ngIf="!minRobotsValidDurationSec.valid"
                      i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
-            Validity duration required.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -68,9 +72,9 @@
                  formControlName="min_time_between_page_load_ms"
                  placeholder="Minimum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! minTimeBetweenPageloadMs.valid"
+          <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
                      i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
-            En minimum tid mellom sideinnlastning er påkrevd.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
@@ -79,9 +83,9 @@
                  formControlName="max_time_between_page_load_ms"
                  placeholder="Maximum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="! maxTimeBetweenPageloadMs.valid"
+          <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
                      i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
-            En maksimum tid mellom sideinnlastning er påkrevd.
+            Må være et tall
           </mat-error>
         </mat-form-field>
 
@@ -91,20 +95,31 @@
                  placeholder="Delay factor"
                  i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
         </mat-form-field>
+        <mat-error *ngIf="!delayFactor.valid"
+                   i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+          Må være et tall
+        </mat-error>
 
         <mat-form-field>
           <input matInput
                  formControlName="max_retries"
                  placeholder="Maximum retries"
-                 i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
+                 i18n-placeholder="@@mustBeNumberError">
         </mat-form-field>
-
+        <mat-error *ngIf="!maxRetries.valid"
+                   i18n="@@mustBeNumberError">
+          Må være et tall
+        </mat-error>
         <mat-form-field>
           <input matInput
                  formControlName="retry_delay_seconds"
                  placeholder="Retry delay (s)"
                  i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
         </mat-form-field>
+        <mat-error *ngIf="!retryDelaySeconds.valid"
+                   i18n="@@mustBeNumberError">
+          Må være et tall
+        </mat-error>
       </div>
     </mat-card-content>
 

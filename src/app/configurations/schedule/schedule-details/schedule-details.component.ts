@@ -7,10 +7,7 @@ import {
   VALID_CRON_DOW_PATTERN,
   VALID_CRON_HOUR_PATTERN,
   VALID_CRON_MINUTE_PATTERN,
-  VALID_CRON_MONTH_PATTERN,
-  VALID_DAY_PATTERN,
-  VALID_MONTH_PATTERN,
-  VALID_YEAR_PATTERN
+  VALID_CRON_MONTH_PATTERN
 } from '../../../commons/validator';
 import {RoleService} from '../../../auth/role.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
@@ -30,7 +27,16 @@ import * as moment from 'moment';
 export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   schedule: CrawlScheduleConfig;
+  @Input()
+  equalValidFrom: boolean;
+  @Input()
+  equalValidTo: boolean;
 
   @Output()
   save = new EventEmitter<CrawlScheduleConfig>();
@@ -39,12 +45,29 @@ export class ScheduleDetailsComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<CrawlScheduleConfig>();
+  @Output()
+  deleteValidFrom = new EventEmitter();
+  @Output()
+  deleteValidTo = new EventEmitter();
 
   form: FormGroup;
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm();
+    this.createForm({
+      id: {value: '', disabled: true},
+      valid_from: '',
+      valid_to: '',
+      cron_expression: this.fb.group({
+        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+      }),
+      meta: new Meta(),
+    });
   }
 
   get canDelete(): boolean {
@@ -102,27 +125,25 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.delete.emit(this.schedule);
   }
 
+  onDeleteAllValidFrom(): void {
+    this.form.markAsDirty();
+    this.deleteValidFrom.emit(true);
+  }
+
+  onDeleteAllValidTo(): void {
+    this.form.markAsDirty();
+    this.deleteValidTo.emit(true);
+  }
+
   onRevert() {
     this.updateForm();
   }
 
-  private createForm() {
-    this.form = this.fb.group({
-      id: {value: '', disabled: true},
-      valid_from: '',
-      valid_to: '',
-      cron_expression: this.fb.group({
-        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-      }),
-      meta: new Meta(),
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm() {
+  updateForm() {
     const cronSplit = this.schedule.cron_expression.split(' ');
     this.form.patchValue({
       id: this.schedule.id,
@@ -162,8 +183,8 @@ export class ScheduleDetailsComponent implements OnChanges {
 
       id: this.schedule.id,
       cron_expression: cronExpression,
-       valid_from: validFromUTC ? validFromUTC : null,
-       valid_to: validToUTC ? validToUTC : null,
+      valid_from: validFromUTC ? validFromUTC : null,
+      valid_to: validToUTC ? validToUTC : null,
       meta: formModel.meta,
     };
   }

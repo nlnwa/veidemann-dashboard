@@ -96,8 +96,8 @@ export class RoleMappingPageComponent implements OnInit, AfterViewInit {
       .subscribe(newRoleMapping => {
         this.roleMapping = newRoleMapping;
         this.snackBarService.openSnackBar('Lagret');
+        this.changes.next();
       });
-    this.changes.next();
   }
 
   onUpdateRoleMapping(roleMapping: RoleMapping) {

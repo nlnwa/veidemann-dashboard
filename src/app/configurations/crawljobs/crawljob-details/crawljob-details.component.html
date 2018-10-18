@@ -8,14 +8,24 @@
         <span *ngIf="showSave" i18n="@@newCrawljobHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
       <span fxFlex></span>
-      <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch" formControlName="disabled">
-        Aktiv
+      <div (click)="disabled.disabled ? onEnableDisabled() : null">
+      <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
+                        formControlName="disabled"
+                        i18n-matTooltip = "@@crawlconfigFormDisabledDisabledExplaination"
+                        color="accent"
+                        [matTooltip]="disabled.disabled ?
+                        'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null">
+        Deaktivert
       </mat-slide-toggle>
+      </div>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta"></app-meta>
-        <mat-form-field *ngIf="!showSave">
+        <app-meta formControlName="meta" [shouldShow]="shouldShow"></app-meta>
+        <mat-form-field *ngIf="!showSave && shouldShow">
           <input matInput
                  formControlName="id"
                  placeholder="Id"
@@ -72,7 +82,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-error *ngIf="! crawlConfigId.valid  && ! form.disabled"
+        <mat-error *ngIf="form.dirty && ! crawlConfigId.valid  && ! form.disabled"
                    i18n="@@crawljobFormCrawlconfigRequieredError">
           Crawlconfig er påkrevd.
         </mat-error>
