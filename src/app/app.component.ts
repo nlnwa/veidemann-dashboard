@@ -44,4 +44,8 @@ export class AppComponent {
     this.showSidenav = !this.showSidenav;
   }
 
+  onOpenDocs() {
+    window.open('/veidemann/docs/', '_blank');
+  }
+
 }

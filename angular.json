@@ -30,7 +30,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/veidemannn/",
+              "baseHref": "/veidemann/",
               "deployUrl": "/veidemann/",
               "optimization": true,
               "outputHashing": "all",
