@@ -18,9 +18,9 @@
       <mat-icon>person</mat-icon>
       <ng-container i18n="@@toolbarLogon">Logg ut {{name}}</ng-container>
     </a>
-    <a color="primary"
+    <a color="primary" target="_blank"
        [routerLink]="['/docs']" [routerLinkActiveOptions]="{exact: true}" [routerLinkActive]="['is-active']">
-      <button mat-icon-button (click)="onOpenDocs()" matTooltip =" Veidemann dashboard dokumentasjon">
+      <button mat-icon-button matTooltip =" Veidemann dashboard dokumentasjon">
       <mat-icon style="color: black">help</mat-icon>
       </button>
     </a>
