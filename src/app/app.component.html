@@ -18,6 +18,12 @@
       <mat-icon>person</mat-icon>
       <ng-container i18n="@@toolbarLogon">Logg ut {{name}}</ng-container>
     </a>
+    <a color="primary" target="_blank"
+       [routerLink]="['/docs']" [routerLinkActiveOptions]="{exact: true}" [routerLinkActive]="['is-active']">
+      <button mat-icon-button matTooltip =" Veidemann dashboard dokumentasjon">
+      <mat-icon style="color: black">help</mat-icon>
+      </button>
+    </a>
   </mat-toolbar>
 
   <!-- Sidenav -->
@@ -35,11 +41,6 @@
         <a mat-list-item [routerLink]="['/statistics']" [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">assessment</mat-icon>
           <ng-container i18n="@@navigationSidebarStatistics">Statistikk</ng-container>
-        </a>
-        <a mat-list-item [routerLink]="['/documentation']" [routerLinkActiveOptions]="{ exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">help</mat-icon>
-          <ng-container i18n="@@navigationSidebarDocumentation">Dokumentasjon</ng-container>
         </a>
 
         <ng-container *ngIf="canConfigure">
