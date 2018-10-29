@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
-import {BrowserConfig, CrawlScheduleConfig, Label} from '../../commons/models/config.model';
+import {CrawlScheduleConfig, Label} from '../../commons/models/config.model';
 import {combineLatest, from, Subject} from 'rxjs';
 import {catchError, mergeMap, startWith, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
@@ -18,7 +18,7 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../../commons/validator';
-import {getInitialLabels, findLabel, updatedLabels, intersectLabel} from '../../commons/group-update/labels/common-labels';
+import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
 
 @Component({
   selector: 'app-schedule',
