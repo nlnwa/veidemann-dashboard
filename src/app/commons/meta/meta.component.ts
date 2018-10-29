@@ -31,7 +31,7 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   nameIsUrl: boolean;
 
   @Input()
-  shouldShow: boolean;
+  shouldShow = true;
 
   form: FormGroup;
 
