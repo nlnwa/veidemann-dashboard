@@ -1,4 +1,5 @@
 **
+!.git/
 !*.json
 !yarn.lock
 !src/

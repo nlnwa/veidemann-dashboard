@@ -3,12 +3,15 @@ FROM node:8-alpine
 ARG BASE_HREF=/veidemann
 ARG DEPLOY_URL=/veidemann
 
+RUN apk add --update --no-cache git
+
 COPY package.json yarn.lock /usr/src/app/
 WORKDIR /usr/src/app
 RUN yarn install && yarn cache clean
 
 COPY . .
-RUN node_modules/@angular/cli/bin/ng build --configuration=production
+RUN sed -i "s/version: ''/version: '$(git describe --tags)'/" src/environments/*.ts \
+&& node_modules/@angular/cli/bin/ng build --configuration=production
 
 
 FROM nginx:stable-alpine

@@ -3,6 +3,7 @@ const basePath = '/veidemann';
 
 export const environment = {
   production: true,
+  version: '',
   config: basePath + '/assets/config/environment.json',
   apiGateway: '/api',
   authConfig: {

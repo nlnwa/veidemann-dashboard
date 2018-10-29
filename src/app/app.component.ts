@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 
-import {AuthService} from './auth';
-import {RoleService} from './auth/role.service';
+import {AuthService, RoleService} from './auth';
+import {environment} from '../environments/environment';
 
 
 @Component({
@@ -14,6 +14,10 @@ export class AppComponent {
   showSidenav = true;
 
   constructor(private authService: AuthService, private roleService: RoleService) {
+  }
+
+  get version(): string {
+    return environment.version;
   }
 
   get canConfigure(): boolean {
