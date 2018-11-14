@@ -59,20 +59,13 @@ export class Seed {
   job_id: string[];
   disabled: boolean;
 
-  constructor({
-                id = '',
-                entityId = '',
-                scope = new Scope(),
-                meta = new Meta(),
-                job_id = [],
-                disabled = false
-              } = {}) {
-    this.id = id;
+  constructor(entityId: string) {
+    this.id = '';
     this.entity_id = entityId;
-    this.scope = scope;
-    this.meta = meta;
-    this.job_id = job_id;
-    this.disabled = disabled;
+    this.scope = new Scope();
+    this.meta = new Meta();
+    this.job_id = [];
+    this.disabled = false;
   }
 }
 

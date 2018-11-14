@@ -13,21 +13,33 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta" [nameIsUrl]="true"></app-meta>
-        <mat-form-field *ngIf="seed.id">
+        <app-meta formControlName="meta" [nameIsUrl]="true" [shouldShow]="shouldShow"></app-meta>
+        <mat-form-field *ngIf="!showSave && shouldShow">
           <input matInput formControlName="id" placeholder="Id"
                  i18n-placeholder="@@seedFormIdPlaceholder">
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field *ngIf="shouldShow">
           <input matInput formControlName="entity_id"
                  placeholder="Entitetens Id"
-                 i18n-placeholder="@@metaEntityIdInputPlaceholder">
+                 i18n-placeholder="@@metaEntityIdInputPlaceholder"
+          >
         </mat-form-field>
       </div>
 
       <div fxFlex fxLayout="column">
-          <mat-slide-toggle class="disabled-toggle" [checked]="!form.disabled" formControlName="disabled" i18n="@@seedDisabledToggleSwitch">Av/På</mat-slide-toggle>
-          <mat-form-field formGroupName="scope" *ngIf="seed?.id">
+          <div (click)="disabled.disabled ? onEnableDisabled(): null">
+          <mat-slide-toggle class="disabled-toggle"
+                            formControlName="disabled"
+                            i18n="@@seedDisabledToggleSwitch"
+                            [matTooltip]="disabled.disabled ?
+                            'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                            + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                            + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                            : null">
+            Deaktivert
+          </mat-slide-toggle>
+          </div>
+            <mat-form-field formGroupName="scope" *ngIf="seed?.id && shouldShow">
           <input matInput
                  formControlName="surt_prefix"
                  placeholder="Surt prefiks"

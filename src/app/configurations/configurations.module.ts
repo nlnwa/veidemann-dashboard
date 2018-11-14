@@ -115,6 +115,7 @@ import {
     CrawljobDetailsComponent,
     ScheduleDetailsComponent,
     PolitenessconfigDetailsComponent,
+    SeedDetailComponent
   ],
   imports: [
     CommonsModule,

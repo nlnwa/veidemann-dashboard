@@ -20,6 +20,18 @@ import {PageEvent} from '@angular/material';
 
 export class SelectionBaseListComponent<T> implements AfterViewInit {
 
+  displayedColumns: string[] = ['select', 'name', 'description', 'label'];
+  selection = new SelectionModel<T>(true, []);
+  dataSource: T[] = [];
+  allSelected = false;
+
+  // MatPaginator settings
+  pageLength = 0;
+  pageSize = 5;
+  pageIndex = 0;
+  pageOptions = [5, 10];
+
+
   @Input()
   set data(data: any) {
     if (data === null) {
@@ -43,24 +55,13 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   @Output()
   selectAll = new EventEmitter();
 
-  displayedColumns: string[] = ['select', 'name', 'description', 'label'];
-  selection = new SelectionModel<T>(true, []);
-  dataSource: T[] = [];
-  allSelected = false;
-
-  // MatPaginator settings
-  pageLength = 0;
-  pageSize = 5;
-  pageIndex = 0;
-  pageOptions = [5, 10];
-
 
   ngAfterViewInit(): void {
-      this.page.emit({
-        length: this.pageLength,
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize,
-      });
+    this.page.emit({
+      length: this.pageLength,
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+    });
   }
 
   constructor() {
@@ -100,8 +101,8 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   onSelectAll() {
-   this.allSelected = true;
-   this.selectAll.emit(this.allSelected);
+    this.allSelected = true;
+    this.selectAll.emit(this.allSelected);
   }
 
   onDeselectAll() {
@@ -110,3 +111,5 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
     this.selectAll.emit(this.allSelected);
   }
 }
+
+
