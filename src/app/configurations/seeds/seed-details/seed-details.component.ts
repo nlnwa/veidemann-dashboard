@@ -14,10 +14,18 @@ import {RoleService} from '../../../auth/role.service';
 export class SeedDetailComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   seed: Seed;
 
   @Input()
   crawlJobs: CrawlJob[];
+
+  @Input()
+  equalDisabled: boolean;
 
   @Output()
   save = new EventEmitter<Seed>();
@@ -33,10 +41,18 @@ export class SeedDetailComponent implements OnChanges {
   clear = new EventEmitter<void>();
 
   form: FormGroup;
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm(new Seed());
+    this.createForm({
+      id: {value: '', disabled: true},
+      disabled: '',
+      entity_id: {value: '', disabled: true},
+      job_id: [''],
+      scope: this.fb.group({surt_prefix: ''}),
+      meta: new Meta(),
+    });
   }
 
   get canEdit(): boolean {
@@ -45,6 +61,10 @@ export class SeedDetailComponent implements OnChanges {
 
   get crawlJobId() {
     return this.form.get('job_id');
+  }
+
+  get disabled() {
+    return this.form.get('disabled');
   }
 
   get showShortcuts(): boolean {
@@ -58,16 +78,31 @@ export class SeedDetailComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.seed && !this.seed) {
-        this.form.reset();
+      this.form.reset();
     }
     if (this.seed && this.crawlJobs) {
-      this.updateForm(this.seed);
+      this.updateForm();
     }
   }
 
   getCrawlJobName(id): string {
     const found = this.crawlJobs.find((job) => job.id === id);
     return found ? found.meta.name : '';
+  }
+
+  // Disables disable toggle switch if every selected seed doesn't have the same disabled value
+  shouldDisableDisabled(): void {
+    if (this.equalDisabled !== undefined || !this.shouldShow) {
+      if (!this.equalDisabled) {
+        this.disabled.disable();
+      }
+    }
+  }
+
+  onEnableDisabled() {
+    if (this.disabled.disabled) {
+      this.disabled.enable();
+    }
   }
 
   onSave(): void {
@@ -83,36 +118,30 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   onRevert() {
-    this.updateForm(this.seed);
+    this.updateForm();
   }
 
-  private createForm(seed: Seed) {
-    this.form = this.fb.group({
-      id: {value: seed.id, disabled: true},
-      disabled: seed.disabled,
-      entity_id: {value: seed.entity_id, disabled: true},
-      job_id: seed.job_id,
-      scope: this.fb.group({surt_prefix: seed.scope.surt_prefix}),
-      meta: seed.meta,
-    });
+  private createForm(controlsConfig: object) {
+    this.form = this.fb.group(controlsConfig);
   }
 
-  private updateForm(seed: Seed) {
-    if (!this.canEdit) {
-      this.form.disable();
-    }
-    this.form.setValue({
-      id: seed.id,
-      disabled: !!seed.disabled,
-      entity_id: seed.entity_id,
-      job_id: seed.job_id || [],
+  updateForm() {
+    this.form.patchValue({
+      id: this.seed.id,
+      disabled: this.seed.disabled,
+      entity_id: this.seed.entity_id,
+      job_id: this.seed.job_id || [],
       scope: {
-        surt_prefix: seed.scope.surt_prefix,
+        surt_prefix: this.seed.scope.surt_prefix,
       },
-      meta: seed.meta,
+      meta: this.seed.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
+    this.shouldDisableDisabled();
   }
 
   /**

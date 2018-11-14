@@ -13,7 +13,8 @@
       <mat-toolbar>
         <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
         <span class="fill-space"></span>
-        <button mat-mini-fab (click)="onCreateEntity()" *ngIf="canEdit">
+        <button mat-mini-fab (click)="onCreateEntity()"
+                *ngIf="canEdit">
           <mat-icon matTooltipShowDelay="500"
                     matTooltip='En entitet besitter et eller flere nettsted.
                    Eks. VG (vg.no) eller Nasjonalbiblioteket (nb.no, ibsen.no, pliktavlevering.no)'
@@ -40,14 +41,24 @@
         <mat-toolbar>
           <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)" *ngIf="canEdit">
+          <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)"
+                  *ngIf="canEdit"
+                  [disabled]="!seedSingleMode ? true : false"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny seed når flere er valgt.' :'Legg til en ny seed.'">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
-        <app-seed-list (rowClick)="onSelectSeed($event)"></app-seed-list>
+        <app-selection-base-list (rowClick)="onSelectSeed($event)"
+                                 [data]="seeds$ | async"
+                                 (selectedChange)="onSelectedSeedChange($event)"
+                                 (selectAll)="onSelectAllSeeds($event)"
+                                 (page)="onPageSeed($event)"
+                                 >
+
+        </app-selection-base-list>
       </app-entity-details>
     </div>
-    <div fxFlex *ngIf="selectedSeed">
+    <div fxFlex *ngIf="selectedSeed && seedSingleMode">
       <app-seed-details
         [seed]="selectedSeed"
         [crawlJobs]="crawlJobs"
@@ -57,5 +68,6 @@
         (clear)="onClearSeed()">
       </app-seed-details>
     </div>
+    <ng-template detail-host></ng-template>
   </div>
 </div>
