@@ -14,20 +14,29 @@ import {CustomValidators} from '../../../commons/validator';
 export class RoleMappingDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   roleMapping: RoleMapping;
+
   @Input()
   roles: string[];
 
   @Output()
   save = new EventEmitter<RoleMapping>();
+
   @Output()
   update = new EventEmitter<RoleMapping>();
+
   @Output()
   delete = new EventEmitter<RoleMapping>();
 
   form: FormGroup;
   rolesList: any[];
   selectedType = '';
+  shouldShow = true;
 
   constructor(private fb: FormBuilder) {
     this.createForm();
@@ -69,6 +78,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
     }
     if (changes.roles && changes.roles.currentValue) {
       this.rolesList = changes.roles.currentValue;
+      console.log(this.rolesList);
     }
     if (this.roleMapping && this.rolesList) {
       this.updateForm();
@@ -100,7 +110,7 @@ export class RoleMappingDetailsComponent implements OnChanges {
     });
   }
 
-  private updateForm() {
+  updateForm() {
     this.form.patchValue({
       id: this.roleMapping.id,
       email: this.roleMapping.email,
@@ -128,22 +138,44 @@ export class RoleMappingDetailsComponent implements OnChanges {
         role: formModel.role,
       };
     }
+    if (!this.shouldShow && this.selectedType === '') {
+      return {
+        id: this.roleMapping.id,
+        email: '',
+        group: '',
+        role: formModel.role,
+      };
+    }
   }
 
   private setUserType() {
-    const group = this.roleMapping.hasOwnProperty('group');
-    const email = this.roleMapping.hasOwnProperty('email');
+    if (this.shouldShow) {
+        const group = this.roleMapping.hasOwnProperty('group');
+        const email = this.roleMapping.hasOwnProperty('email');
 
-    if (email) {
-      this.selectedType = 'email';
+        if (email) {
+          this.selectedType = 'email';
+        }
+
+        if (group) {
+          this.selectedType = 'group';
+        }
+
+        if (!(group || email)) {
+          this.selectedType = '';
+        }
+    } else {
+      if (this.roleMapping.group !== undefined || this.roleMapping.email !== undefined) {
+        if (this.roleMapping.group !== undefined) {
+          this.selectedType = 'group';
+        }
+        if (this.roleMapping.email !== undefined) {
+          this.selectedType = 'email';
+        }
+      } else {
+        this.selectedType = '';
+      }
     }
 
-    if (group) {
-      this.selectedType = 'group';
-    }
-
-    if (!(group || email)) {
-      this.selectedType = '';
-    }
   }
 }
