@@ -51,8 +51,9 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></tr>
-
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': null|| selectedRow == row.id ? 'highlight' : null"
+      (click)="onRowClick(row)"></tr>
 </table>
 
 <mat-paginator (page)="page.emit($event)"

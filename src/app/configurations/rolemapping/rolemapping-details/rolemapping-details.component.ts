@@ -78,7 +78,6 @@ export class RoleMappingDetailsComponent implements OnChanges {
     }
     if (changes.roles && changes.roles.currentValue) {
       this.rolesList = changes.roles.currentValue;
-      console.log(this.rolesList);
     }
     if (this.roleMapping && this.rolesList) {
       this.updateForm();
