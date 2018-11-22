@@ -31,6 +31,10 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   pageIndex = 0;
   pageOptions = [5, 10];
 
+  // highlight
+  selectedRow = -1;
+  selectedRows = [];
+
 
   @Input()
   set data(data: any) {
@@ -38,6 +42,8 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
       return;
     }
     this.selection.clear();
+    this.selectedRows = [];
+    this.selectedRow = -1;
     this.dataSource = data.value || [];
     this.pageLength = data.pageLength;
     this.pageIndex = data.pageIndex;
@@ -69,6 +75,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
 
   onRowClick(item: T) {
     this.rowClick.emit(item);
+    this.selectedRow = item.id;
   }
 
   isAllSelected() {
@@ -83,6 +90,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
       this.selection.clear() :
       this.dataSource.forEach(row => this.selection.select(row));
     this.selectedChange.emit(this.selection.selected);
+    this.highlightSelected(this.selection.selected);
   }
 
   checkboxToggle(item: T) {
@@ -98,6 +106,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
         this.selectedChange.emit(this.selection.selected);
       }
     }
+    this.highlightSelected(this.selection.selected);
   }
 
   onSelectAll() {
@@ -110,6 +119,15 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
     this.allSelected = false;
     this.selectAll.emit(this.allSelected);
   }
+
+  highlightSelected(rows) {
+    this.selectedRows = [];
+    for (const row of rows) {
+      this.selectedRows.push(row.id);
+    }
+  }
 }
+
+
 
 
