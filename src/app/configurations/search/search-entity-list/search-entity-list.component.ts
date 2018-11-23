@@ -1,47 +1,42 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable} from '@angular/core';
-import {BaseListComponent, Item, ListDataSource} from '../../../commons/list';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ResultType} from '../search.service';
-import {SearchDatabase} from '../search-database';
-
-@Injectable()
-export class SearchDataSource extends ListDataSource {
-  constructor(protected database: SearchDatabase) {
-    super(database);
-  }
-}
+import {SelectionBaseListComponent} from '../../../commons/list/selection-base-list/selection-base-list';
+import {Entity} from '../../../commons/models/config.model';
 
 @Component({
   selector: 'app-search-list',
   templateUrl: './search-entity-list.component.html',
   styleUrls: [
-    '../../../commons/list/base-list/base-list.component.css',
+    '../../../commons/list/selection-base-list/selection-base-list.css',
     './search-entity-list.component.css',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchListComponent extends BaseListComponent {
-  constructor(public dataSource: SearchDataSource,
-              protected changeDetectorRef: ChangeDetectorRef) {
-    super(dataSource, changeDetectorRef);
-    this.displayedColumns = ['name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
+export class SearchListComponent extends SelectionBaseListComponent<Entity> {
+  displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
+
+
+  onRowClick(item: Entity) {
+    this.rowClick.emit(item);
+    this.selectedRow = item.id;
   }
 
-  isEntityName(item: Item): boolean {
+  isEntityName(item: Entity): boolean {
     /* tslint:disable:no-bitwise */
     return ((<any>item).type & ResultType.EntityName) > 0;
   }
 
-  isEntityLabel(item: Item): boolean {
+  isEntityLabel(item: Entity): boolean {
     /* tslint:disable:no-bitwise */
     return ((<any>item).type & ResultType.EntityLabel) > 0;
   }
 
-  isSeedName(item: Item): boolean {
+  isSeedName(item: Entity): boolean {
     /* tslint:disable:no-bitwise */
     return ((<any>item).type & ResultType.SeedName) > 0;
   }
 
-  isSeedLabel(item: Item): boolean {
+  isSeedLabel(item: Entity): boolean {
     /* tslint:disable:no-bitwise */
     return ((<any>item).type & ResultType.SeedLabel) > 0;
   }

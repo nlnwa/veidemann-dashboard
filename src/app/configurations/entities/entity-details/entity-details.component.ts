@@ -13,6 +13,11 @@ import {RoleService} from '../../../auth/role.service';
 export class EntityDetailsComponent implements OnChanges {
 
   @Input()
+  set data(show) {
+    this.shouldShow = show;
+  }
+
+  @Input()
   entity: Entity;
 
   @Output()
@@ -29,6 +34,7 @@ export class EntityDetailsComponent implements OnChanges {
   clear = new EventEmitter<void>();
 
   form: FormGroup;
+  shouldShow = true;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
@@ -80,11 +86,11 @@ export class EntityDetailsComponent implements OnChanges {
     });
   }
 
-  private updateForm(entity: Entity) {
+  updateForm(entity: Entity) {
     if (!this.canEdit) {
       this.form.disable();
     }
-    this.form.setValue(entity);
+    this.form.patchValue(entity);
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }

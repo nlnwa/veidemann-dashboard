@@ -32,7 +32,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   pageOptions = [5, 10];
 
   // highlight
-  selectedRow = -1;
+  selectedRow ;
   selectedRows = [];
 
 
@@ -75,7 +75,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
 
   onRowClick(item: T) {
     this.rowClick.emit(item);
-    this.selectedRow = item.id;
+    this.selectedRow = (item as any).id;
   }
 
   isAllSelected() {
