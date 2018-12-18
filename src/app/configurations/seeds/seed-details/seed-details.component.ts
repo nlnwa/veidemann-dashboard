@@ -72,6 +72,10 @@ export class SeedDetailComponent implements OnChanges {
     return crawlJob && crawlJob.length > 0;
   }
 
+  get showSave() {
+    return this.seed ? !this.seed.id : false;
+  }
+
   onClearClicked() {
     this.clear.emit();
   }

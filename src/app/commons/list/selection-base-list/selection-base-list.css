@@ -13,3 +13,12 @@ table {
 .mat-table {
   overflow-y: auto;
 }
+
+
+.highlight {
+  background-color: #eee;
+}
+
+.highlightSelected {
+  background-color: #ddd;
+}

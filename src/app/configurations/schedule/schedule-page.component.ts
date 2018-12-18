@@ -162,12 +162,9 @@ export class SchedulePageComponent implements OnInit {
         this.loadComponent(scheduleConfig, [], true, true);
       }
     } else {
-      this.schedule = crawlScheduleConfigs[0];
+      this.schedule = crawlScheduleConfigs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.schedule === undefined) {
-        this.schedule = null;
       }
     }
   }
@@ -186,7 +183,6 @@ export class SchedulePageComponent implements OnInit {
       this.onSelectedChange([new CrawlScheduleConfig(), new CrawlScheduleConfig()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

@@ -162,12 +162,9 @@ export class BrowserConfigPageComponent implements OnInit {
         this.loadComponent(browserConfig, this.browserScripts, [], []);
       }
     } else {
-      this.browserConfig = browserConfigs[0];
+      this.browserConfig = browserConfigs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.browserConfig === undefined) {
-        this.browserConfig = null;
       }
     }
   }
@@ -187,7 +184,6 @@ export class BrowserConfigPageComponent implements OnInit {
       this.onSelectedChange([new BrowserConfig(), new BrowserConfig()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

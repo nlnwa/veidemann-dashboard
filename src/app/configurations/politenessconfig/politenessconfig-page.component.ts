@@ -152,12 +152,9 @@ export class PolitenessConfigPageComponent implements OnInit {
         this.loadComponent(politenessConfig, this.robotsPolicies, [], [], true);
       }
     } else {
-      this.politenessConfig = politenessConfigs[0];
+      this.politenessConfig = politenessConfigs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.politenessConfig === undefined) {
-        this.politenessConfig = null;
       }
     }
   }
@@ -176,7 +173,6 @@ export class PolitenessConfigPageComponent implements OnInit {
       this.onSelectedChange([new PolitenessConfig(), new PolitenessConfig()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

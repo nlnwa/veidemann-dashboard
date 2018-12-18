@@ -14,23 +14,25 @@
         <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
         <span class="fill-space"></span>
         <button mat-mini-fab (click)="onCreateEntity()"
-                *ngIf="canEdit">
+                *ngIf="canEdit" [disabled]="!entitySingleMode ? true : false">
           <mat-icon matTooltipShowDelay="500"
-                    matTooltip='En entitet besitter et eller flere nettsted.
-                   Eks. VG (vg.no) eller Nasjonalbiblioteket (nb.no, ibsen.no, pliktavlevering.no)'
-                    i18n-matTooltip="@@searchAddNewEntityTooltip">add
+                    [matTooltip]="!entitySingleMode ? 'Kan ikke opprette en ny entitet når flere er valgt.' : 'Legg til en ny entitet.'">
+            add
           </mat-icon>
         </button>
       </mat-toolbar>
-      <app-search-list (rowClick)="onSelectEntity($event)"></app-search-list>
-      <mat-paginator [length]="pageLength"
-                     [pageIndex]="pageIndex"
-                     [pageSize]="pageSize"
-                     [pageSizeOptions]="pageOptions"></mat-paginator>
+
+      <app-search-list (rowClick)="onSelectEntity($event)"
+                       [data]="entities$ | async"
+                       (selectedChange)="onSelectedEntityChange($event)"
+                       (selectAll)="onSelectAllEntities($event)"
+                       (page)="onPageEntity($event)">
+      </app-search-list>
+
     </div>
   </div>
   <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-    <div fxFlex *ngIf="selectedEntity">
+    <div fxFlex [fxHide]="(!entitySingleMode || (entitySingleMode && !selectedEntity))" [fxShow]="selectedEntity && entitySingleMode">
       <app-entity-details
         [entity]="selectedEntity"
         (save)="onSaveEntity($event)"
@@ -44,7 +46,7 @@
           <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)"
                   *ngIf="canEdit"
                   [disabled]="!seedSingleMode ? true : false"
-                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny seed når flere er valgt.' :'Legg til en ny seed.'">
+                  [matTooltip]="!seedSingleMode ? 'Kan ikke opprette en ny seed når flere er valgt.' :'Legg til en ny seed.'">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
@@ -52,9 +54,7 @@
                                  [data]="seeds$ | async"
                                  (selectedChange)="onSelectedSeedChange($event)"
                                  (selectAll)="onSelectAllSeeds($event)"
-                                 (page)="onPageSeed($event)"
-                                 >
-
+                                 (page)="onPageSeed($event)">
         </app-selection-base-list>
       </app-entity-details>
     </div>

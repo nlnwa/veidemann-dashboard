@@ -31,6 +31,10 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   pageIndex = 0;
   pageOptions = [5, 10];
 
+  // highlight
+  selectedRow ;
+  selectedRows = [];
+
 
   @Input()
   set data(data: any) {
@@ -38,6 +42,8 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
       return;
     }
     this.selection.clear();
+    this.selectedRows = [];
+    this.selectedRow = -1;
     this.dataSource = data.value || [];
     this.pageLength = data.pageLength;
     this.pageIndex = data.pageIndex;
@@ -69,35 +75,44 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
 
   onRowClick(item: T) {
     this.rowClick.emit(item);
+    this.selectedRow = (item as any).id;
   }
 
-  isAllSelected() {
+  private isAllInPageSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.length;
     return numSelected === numRows;
   }
 
+  isEverythingSelected(): boolean {
+    return this.selection.selected.length === this.pageLength;
+  }
+
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
+  masterToggle(checked: boolean) {
+    this.selectedRow = -1;
+    this.allSelected = false;
+    if (checked) {
       this.dataSource.forEach(row => this.selection.select(row));
+    } else {
+      this.selection.clear();
+    }
+    this.selectAll.emit(this.allSelected);
     this.selectedChange.emit(this.selection.selected);
+    this.highlightSelected(this.selection.selected);
   }
 
   checkboxToggle(item: T) {
-    if (!this.allSelected) {
-      this.selection.toggle(item);
-      if (this.selection.selected.length === this.pageLength) {
-        this.onSelectAll();
-      }
-      this.selectedChange.emit(this.selection.selected);
+    this.allSelected = false;
+    this.selection.toggle(item);
+    if (this.selection.isSelected(item)) {
+      this.selectedRow = (item as any).id;
     } else {
-      this.selection.toggle(item);
-      if (this.selection.selected.length < this.pageLength) {
-        this.selectedChange.emit(this.selection.selected);
-      }
+      this.selectedRow = -1;
     }
+    this.selectAll.emit(this.allSelected);
+    this.selectedChange.emit(this.selection.selected);
+    this.highlightSelected(this.selection.selected);
   }
 
   onSelectAll() {
@@ -106,10 +121,14 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
   }
 
   onDeselectAll() {
-    this.selection.clear();
-    this.allSelected = false;
-    this.selectAll.emit(this.allSelected);
+    this.masterToggle(false);
+  }
+
+  highlightSelected(rows) {
+    this.selectedRows = rows.map(row => row.id);
   }
 }
+
+
 
 

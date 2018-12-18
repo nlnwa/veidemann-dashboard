@@ -134,7 +134,6 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       this.onSelectedChange([new CrawlHostGroupConfig(), new CrawlHostGroupConfig()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 
@@ -152,12 +151,9 @@ export class CrawlHostGroupConfigPageComponent implements OnInit {
       }
 
     } else {
-      this.crawlHostGroupConfig = crawlHostGroupConfigs[0];
+      this.crawlHostGroupConfig = crawlHostGroupConfigs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.crawlHostGroupConfig === undefined) {
-        this.crawlHostGroupConfig = null;
       }
     }
   }

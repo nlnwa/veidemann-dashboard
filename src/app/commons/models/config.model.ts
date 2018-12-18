@@ -36,7 +36,6 @@ export class Meta {
 export class Entity {
   id: string;
   meta: Meta;
-
   constructor({id = '', name = '', meta = new Meta({name})} = {}) {
     this.id = id;
     this.meta = meta;

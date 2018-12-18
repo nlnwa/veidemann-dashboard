@@ -43,7 +43,6 @@ import {
 } from './schedule';
 import {
   EntityDetailsComponent,
-  EntityListComponent,
   EntityService
 } from './entities';
 import {
@@ -57,7 +56,6 @@ import {
 } from './browserconfig';
 import {
   SeedDetailComponent,
-  SeedListComponent,
   SeedService
 } from './seeds';
 import {
@@ -100,8 +98,6 @@ import {
     RoleMappingListComponent,
     RoleMappingDetailsComponent,
     RoleMappingPageComponent,
-    SeedListComponent,
-    EntityListComponent,
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
     WarcStatusPageComponent,
@@ -115,7 +111,9 @@ import {
     CrawljobDetailsComponent,
     ScheduleDetailsComponent,
     PolitenessconfigDetailsComponent,
-    SeedDetailComponent
+    SeedDetailComponent,
+    EntityDetailsComponent,
+    RoleMappingDetailsComponent,
   ],
   imports: [
     CommonsModule,

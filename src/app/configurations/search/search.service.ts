@@ -4,9 +4,8 @@ import {bufferWhen, finalize, map, mergeMap, tap, first} from 'rxjs/operators';
 
 import {EntityService} from '../entities';
 import {SeedService} from '../seeds';
-import {Item} from '../../commons/list';
 import {ListReply} from '../../commons/models/controller.model';
-import {Seed} from '../../commons/models/config.model';
+import {Entity, Seed} from '../../commons/models/config.model';
 
 
 /* tslint:disable:no-bitwise */
@@ -17,7 +16,7 @@ export enum ResultType {
   SeedLabel = 1 << 3,
 }
 
-const applyType = (item: any, type) => {
+const applyType = (item: any, type: ResultType) => {
   item.type = type;
   return item;
 };
@@ -34,11 +33,12 @@ interface PageQuery {
 }
 
 interface Pager extends PageQuery {
-  length: number;
+  length?: number;
+  value?: any;
 }
 
 export interface SearchReply extends Pager {
-  value: Item[];
+  value: Entity[];
 }
 
 export interface SearchQuery extends Pager {
@@ -79,7 +79,7 @@ export class SearchService {
     this.slPager = {...emptyPage};
   }
 
-  search({term = '', length = 0, pageIndex = 0, pageSize = 0}: SearchQuery): Observable<SearchReply> {
+  search({term = '', pageIndex = 0, pageSize = 0}: SearchQuery): Observable<SearchReply> {
     const completeCount = term ? 4 : 1;
     const complete = new Subject<void>();
     const searchCompleted$ = complete.asObservable();
@@ -94,7 +94,7 @@ export class SearchService {
 
     this.updatePagers(term, pageIndex, pageSize);
 
-    const entityName$: Observable<Item> = this.entityService.search(nameQuery(term, this.enPager))
+    const entityName$: Observable<Entity> = this.entityService.search(nameQuery(term, this.enPager))
       .pipe(
         tap((reply) => flipPager(this.enPager, reply)),
         map((reply) => reply.value || []),
@@ -102,7 +102,7 @@ export class SearchService {
         finalize(completed)
       );
 
-    const entityLabel$: Observable<Item> = this.entityService.search(labelQuery(term, this.elPager))
+    const entityLabel$: Observable<Entity> = this.entityService.search(labelQuery(term, this.elPager))
       .pipe(
         tap((reply) => flipPager(this.elPager, reply)),
         map((reply) => reply.value || []),
@@ -110,7 +110,7 @@ export class SearchService {
         finalize(completed)
       );
 
-    const seedLabel$: Observable<Item> = this.seedService.search(labelQuery(term, this.slPager))
+    const seedLabel$: Observable<Entity> = this.seedService.search(labelQuery(term, this.slPager))
       .pipe(
         tap((reply) => flipPager(this.slPager, reply)),
         map((reply) => reply.value || []),
@@ -120,7 +120,7 @@ export class SearchService {
         finalize(completed)
       );
 
-    const seedName$: Observable<Item> = this.seedService.search(nameQuery(term, this.snPager))
+    const seedName$: Observable<Entity> = this.seedService.search(nameQuery(term, this.snPager))
       .pipe(
         tap((reply) => flipPager(this.snPager, reply)),
         map((reply) => reply.value || []),
@@ -131,28 +131,45 @@ export class SearchService {
       );
 
     return (completeCount > 1
-            ? merge(entityName$, entityLabel$, seedLabel$, seedName$)
-            : entityName$)
+      ? merge(entityName$, entityLabel$, seedLabel$, seedName$)
+      : entityName$)
       .pipe(
         bufferWhen(() => searchCompleted$),
         first(),
-        map((entities) => ({value: entities, ...this.combinePagers()})),
+        map(entities => this.mergeSearchResult(entities)),
+        map((entities) => this.combinePagers(entities)),
       );
+  }
+
+  private mergeSearchResult(items: any[]): any[] {
+    const dataSet = new Set();
+    return items.reduce((acc, curr) => {
+      if (dataSet.has(curr.id)) {
+        const index = acc.findIndex((item) => item.id === curr.id);
+        // tslint:disable:no-bitwise
+        acc[index].type |= (<any>curr).type;
+      } else {
+        dataSet.add(curr.id);
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
   }
 
   private updatePagers(term, pageIndex: number, pageSize: number): void {
     this.enPager.pageSize =
       this.elPager.pageSize =
-      this.slPager.pageSize =
-      this.snPager.pageSize = pageSize;
+        this.slPager.pageSize =
+          this.snPager.pageSize = pageSize;
     this.enPager.pageIndex = pageIndex;
   }
 
-  private combinePagers(): Pager {
-    return [this.enPager, this.elPager, this.snPager, this.slPager].reduce((acc, curr) => {
+  private combinePagers(entities: Entity[]): any {
+    const result: any = [this.enPager, this.elPager, this.snPager, this.slPager].reduce((acc, curr) => {
       acc.length += curr.length;
       // TODO
       return acc;
-    }, {length: 0, pageIndex: 0, pageSize: 0});
+    }, {value: entities, length: 0, pageIndex: 0, pageSize: 0});
+    return result;
   }
 }

@@ -1,75 +1,106 @@
-<div>
-  <mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef
-                       i18n="@@baselistNameHeaderCell">Navn
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.meta.name}}</mat-cell>
-    </ng-container>
+<table class="mat-table" *ngIf="isAllInPageSelected() && dataSource.length > 0">
+  <tr class="mat-row">
+    <td class="mat-cell" *ngIf="!allEntitiesSelected">
+      <span>Alle <b>{{selection.selected.length}}</b> entiteter på siden er markert</span>
+      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">
+        Marker alle {{pageLength}} entiteter.
+      </a>
+    </td>
+    <td class="mat-cell" *ngIf="allSelected">
+      <span>Alle <b>{{pageLength}}</b> entiteter i databasen er markert.</span>
+      <a [routerLink]="" (click)="onDeselectAll()"> Fjern markeringen</a>
+    </td>
+  </tr>
+</table>
 
-    <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef
-                       i18n="@@baselistDescriptionHeaderCell">Beskrivelse
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.meta.description}}</mat-cell>
-    </ng-container>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- checkbox column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="masterToggle($event.checked)"
+                    [checked]="selection.hasValue() && isAllInPageSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllInPageSelected()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)=checkboxToggle(row)
+                    [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="entityName">
-      <mat-header-cell *matHeaderCellDef
-                       class="list__column--narrow"
-                       i18n="@@baselistIdHeaderCell">
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"
-                class="list__column--narrow">
-        <mat-icon *ngIf="isEntityName(row)">business</mat-icon>
-      </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef i18n="@@baselistNameHeaderCell">Navn</th>
+    <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
+  </ng-container>
 
-    <ng-container matColumnDef="entityLabel">
-      <mat-header-cell *matHeaderCellDef
-                       class="list__column--narrow"
-                       i18n="@@baselistIdHeaderCell">
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"
-                class="list__column--narrow">
-        <mat-icon *ngIf="isEntityLabel(row)">label</mat-icon>
-      </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef i18n="@@baselistDescriptionHeaderCell">Beskrivelse</th>
+    <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
+  </ng-container>
 
-    <ng-container matColumnDef="seedName">
-      <mat-header-cell *matHeaderCellDef
-                       class="list__column--narrow"
-                       i18n="@@baselistIdHeaderCell">
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"
-                class="list__column--narrow">
-        <mat-icon *ngIf="isSeedName(row)">link</mat-icon>
-      </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="entityName">
+    <th mat-header-cell *matHeaderCellDef
+                     class="list__column--narrow"
+                     i18n="@@baselistIdHeaderCell">
+    </th>
+    <td mat-cell *matCellDef="let row"
+              class="list__column--narrow">
+      <mat-icon *ngIf="isEntityName(row)">business</mat-icon>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="seedLabel">
-      <mat-header-cell *matHeaderCellDef
-                       class="list__column--narrow"
-                       i18n="@@baselistIdHeaderCell">
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"
-                class="list__column--narrow">
-        <mat-icon *ngIf="isSeedLabel(row)">label_outline</mat-icon>
-      </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="entityLabel">
+    <th mat-header-cell *matHeaderCellDef
+                     class="list__column--narrow"
+                     i18n="@@baselistIdHeaderCell">
+    </th>
+    <td mat-cell *matCellDef="let row"
+              class="list__column--narrow">
+      <mat-icon *ngIf="isEntityLabel(row)">label</mat-icon>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef
-                       i18n="@@baselistIdHeaderCell">ID
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="seedName">
+    <th mat-header-cell *matHeaderCellDef
+                     class="list__column--narrow"
+                     i18n="@@baselistIdHeaderCell">
+    </th>
+    <td mat-cell *matCellDef="let row"
+              class="list__column--narrow">
+      <mat-icon *ngIf="isSeedName(row)">link</mat-icon>
+    </td>
+  </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <ng-container matColumnDef="seedLabel">
+    <th mat-header-cell *matHeaderCellDef
+                     class="list__column--narrow"
+                     i18n="@@baselistIdHeaderCell">
+    </th>
+    <td mat-cell *matCellDef="let row"
+              class="list__column--narrow">
+      <mat-icon *ngIf="isSeedLabel(row)">label_outline</mat-icon>
+    </td>
+  </ng-container>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns"
-             [ngClass]="{highlight: isSelected(row)}"
-             (click)="onRowClick(row)">
-    </mat-row>
-  </mat-table>
-</div>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef
+                     i18n="@@baselistIdHeaderCell">ID
+    </th>
+    <td mat-cell *matCellDef="let row">{{row.id}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': null|| selectedRow == row.id ? 'highlight' : null"
+      (click)="onRowClick(row)"></tr>
+</table>
+
+<mat-paginator (page)="page.emit($event)"
+               [length]="pageLength"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageOptions">
+</mat-paginator>
+
