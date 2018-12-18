@@ -173,12 +173,9 @@ export class CrawlConfigPageComponent implements OnInit {
           [], true, true, true);
       }
     } else {
-      this.crawlConfig = crawlConfigs[0];
+      this.crawlConfig = crawlConfigs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.crawlConfig === undefined) {
-        this.crawlConfig = null;
       }
     }
   }
@@ -198,7 +195,6 @@ export class CrawlConfigPageComponent implements OnInit {
       this.onSelectedChange([new CrawlConfig(), new CrawlConfig()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

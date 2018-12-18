@@ -141,12 +141,9 @@ export class RoleMappingPageComponent implements OnInit {
         this.loadComponent(roleMapping, this.roles);
       }
     } else {
-      this.roleMapping = roleMappings[0];
+      this.roleMapping = roleMappings[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.roleMapping === undefined) {
-        this.roleMapping = null;
       }
     }
   }
@@ -157,7 +154,6 @@ export class RoleMappingPageComponent implements OnInit {
       this.onSelectedChange([new RoleMapping(), new RoleMapping()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

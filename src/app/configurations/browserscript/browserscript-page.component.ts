@@ -137,12 +137,9 @@ export class BrowserScriptPageComponent implements OnInit {
         this.loadComponent(browserScript, []);
       }
     } else {
-      this.browserScript = browserScripts[0];
+      this.browserScript = browserScripts[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.browserScript === undefined) {
-        this.browserScript = null;
       }
     }
   }
@@ -161,7 +158,6 @@ export class BrowserScriptPageComponent implements OnInit {
       this.onSelectedChange([new BrowserScript(), new BrowserScript()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 

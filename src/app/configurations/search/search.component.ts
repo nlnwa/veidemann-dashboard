@@ -124,6 +124,7 @@ export class SearchComponent implements OnInit {
     });
 
     this.seedPage$.subscribe((page: PageEvent) => {
+      console.log('seed page subscription', page);
       if (this.selectedEntity) {
         this.loadSeedList(this.selectedEntity.id, page);
       } else {
@@ -225,12 +226,9 @@ export class SearchComponent implements OnInit {
         this.loadEntityComponent(entity, []);
       }
     } else {
-      this.selectedEntity = entities[0];
+      this.selectedEntity = entities[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.selectedEntity === undefined) {
-        this.selectedEntity = null;
       }
     }
   }
@@ -346,7 +344,6 @@ export class SearchComponent implements OnInit {
       this.onSelectedEntityChange([new Entity(), new Entity()]);
     } else {
       this.onSelectedEntityChange([]);
-      this.componentRef.destroy();
     }
   }
 
@@ -397,7 +394,6 @@ export class SearchComponent implements OnInit {
       this.onSelectedSeedChange([new Seed('1234'), new Seed('5678')]);
     } else {
       this.onSelectedSeedChange([]);
-      this.componentRef.destroy();
     }
   }
 
@@ -415,12 +411,9 @@ export class SearchComponent implements OnInit {
       }
 
     } else {
-      this.selectedSeed = seeds[0];
+      this.selectedSeed = seeds[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.selectedSeed === undefined) {
-        this.selectedSeed = null;
       }
     }
   }

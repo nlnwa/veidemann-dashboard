@@ -1,9 +1,9 @@
-<table class="mat-table" *ngIf="isAllSelected() && dataSource.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected() && dataSource.length > 0">
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
       <span>Alle <b>{{selection.selected.length}}</b> brukere på denne siden er markert. </span>
-      <a *ngIf="pageLength>selection.selected.length && isAllSelected()" [routerLink]="" (click)="onSelectAll()">
-        Marker alle {{pageLength}} brukere
+      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">
+        Marker alle {{pageLength}} brukere i databasen
       </a>
     </td>
     <td  class="mat-cell" *ngIf="allSelected">
@@ -17,9 +17,9 @@
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+      <mat-checkbox #masterCheckbox (change)="masterToggle(masterCheckbox.checked)"
+                    [checked]="selection.hasValue() && isAllInPageSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllInPageSelected()">
       </mat-checkbox>
     </th>
     <td mat-cell *matCellDef="let row">

@@ -165,12 +165,9 @@ export class CrawlJobsComponent implements OnInit {
         this.loadComponent(crawlJob, this.schedules, this.crawlConfigs, [], true);
       }
     } else {
-      this.crawlJob = crawlJobs[0];
+      this.crawlJob = crawlJobs[0] || null;
       if (this.componentRef !== null) {
         this.componentRef.destroy();
-      }
-      if (this.crawlJob === undefined) {
-        this.crawlJob = null;
       }
     }
   }
@@ -194,7 +191,6 @@ export class CrawlJobsComponent implements OnInit {
       this.onSelectedChange([new CrawlJob(), new CrawlJob()]);
     } else {
       this.onSelectedChange([]);
-      this.componentRef.destroy();
     }
   }
 
