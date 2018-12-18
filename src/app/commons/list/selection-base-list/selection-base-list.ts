@@ -78,7 +78,7 @@ export class SelectionBaseListComponent<T> implements AfterViewInit {
     this.selectedRow = (item as any).id;
   }
 
-  private isAllInPageSelected() {
+  isAllInPageSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.length;
     return numSelected === numRows;
