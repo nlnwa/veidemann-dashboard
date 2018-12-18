@@ -2,7 +2,7 @@ import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/c
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
 import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
-import {catchError, map, mergeMap, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 
 import {CrawlJob, Entity, Label, Seed} from '../../commons/models/config.model';
 import {SearchReply, SearchService} from './search.service';
@@ -14,6 +14,7 @@ import {RoleService} from '../../auth';
 import {findLabel, getInitialLabels, intersectLabel, updatedLabels} from '../../commons/group-update/labels/common-labels';
 import {DetailDirective} from '../shared/detail.directive';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
+import {ListRequest} from '../../commons/models/controller.model';
 
 
 @Component({
@@ -38,8 +39,9 @@ export class SearchComponent implements OnInit {
   componentRef = null;
 
   changes: Subject<void> = new Subject<void>();
-  seedPage: Subject<PageEvent> = new Subject<PageEvent>();
 
+  seedPage: BehaviorSubject<PageEvent> = new BehaviorSubject<PageEvent>(null);
+  seedPage$ = this.seedPage.asObservable();
 
   entityPage = new Subject<PageEvent>();
   entityPage$ = this.entityPage.asObservable();
@@ -120,6 +122,14 @@ export class SearchComponent implements OnInit {
         this.selectedEntity = new Entity({name: this.searchTerm.value});
       }
     });
+
+    this.seedPage$.subscribe((page: PageEvent) => {
+      if (this.selectedEntity) {
+        this.loadSeedList(this.selectedEntity.id, page);
+      } else {
+
+      }
+    });
   }
 
 
@@ -172,7 +182,9 @@ export class SearchComponent implements OnInit {
     this.selectedEntities = [];
     this.selectedSeed = null;
     this.selectedSeeds = [];
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
     this.searchTerm.next(event.target.value);
   }
 
@@ -356,8 +368,15 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  loadSeedList(entity_id: string) {
-    this.seedService.search({entity_id: entity_id})
+  loadSeedList(entity_id: string, page?: PageEvent) {
+    const listRequest: ListRequest = {entity_id: entity_id};
+    if (page) {
+      listRequest.page = page.pageIndex;
+      listRequest.page_size = page.pageSize;
+    } else {
+      listRequest.page_size = this.seedPage.value.pageSize;
+    }
+    this.seedService.search(listRequest)
       .subscribe((reply) => {
         this.seeds.next({
           value: reply.value,

@@ -23,11 +23,10 @@
       </mat-toolbar>
 
       <app-search-list (rowClick)="onSelectEntity($event)"
-      [data]="entities$ | async"
-      (selectedChange)="onSelectedEntityChange($event)"
-      (selectAll)="onSelectAllEntities($event)"
-      (page)="onPageEntity($event)">
-
+                       [data]="entities$ | async"
+                       (selectedChange)="onSelectedEntityChange($event)"
+                       (selectAll)="onSelectAllEntities($event)"
+                       (page)="onPageEntity($event)">
       </app-search-list>
 
     </div>
@@ -55,9 +54,7 @@
                                  [data]="seeds$ | async"
                                  (selectedChange)="onSelectedSeedChange($event)"
                                  (selectAll)="onSelectAllSeeds($event)"
-                                 (page)="onPageSeed($event)"
-                                 >
-
+                                 (page)="onPageSeed($event)">
         </app-selection-base-list>
       </app-entity-details>
     </div>
