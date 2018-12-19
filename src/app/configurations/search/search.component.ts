@@ -120,6 +120,7 @@ export class SearchComponent implements OnInit {
         }
       } else if (this.searchTerm.value) {
         this.selectedEntity = new Entity({name: this.searchTerm.value});
+        this.clearSeedList();
       }
     });
 
