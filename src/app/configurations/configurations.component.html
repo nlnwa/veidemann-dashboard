@@ -1,0 +1,108 @@
+<div fxLayout="column" fxLayoutGap="8px">
+  <div>
+    <app-toolbar>
+      <span class="toolbar--title">{{ title }}</span>
+      <button mat-mini-fab (click)="onCreateConfig()"
+              [disabled]="!singleMode"
+              [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
+        <mat-icon>add</mat-icon>
+      </button>
+    </app-toolbar>
+    <div [ngSwitch]="kind">
+      <ng-container *ngSwitchCase="Kind.ROLEMAPPING">
+        <app-rolemapping-list (rowClick)="onSelectConfig($event)"
+                              [data]="data$ | async"
+                              (selectedChange)="onSelectedChange($event)"
+                              (selectAll)="onSelectAll($event)"
+                              (page)="onPage($event)"
+                              [count]="count$|async">
+        </app-rolemapping-list>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <app-base-list (rowClick)="onSelectConfig($event)"
+                       [data]="data$ | async"
+                       (selectedChange)="onSelectedChange($event)"
+                       (selectAll)="onSelectAll($event)"
+                       (page)="onPage($event)"
+                       [count]="count$|async">
+        </app-base-list>
+      </ng-container>
+    </div>
+    <div [ngSwitch]="kind">
+      <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+        <app-crawljob-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-crawljob-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
+        <app-crawlconfig-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-crawlconfig-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG">
+        <app-schedule-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-schedule-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
+        <app-browserconfig-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-browserconfig-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG">
+        <app-politenessconfig-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-politenessconfig-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT">
+        <app-browserscript-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-browserscript-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLHOSTGROUPCONFIG">
+        <app-crawlhostgroupconfig-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-crawlhostgroupconfig-details>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.ROLEMAPPING">
+        <app-rolemapping-details
+          [configObject]="configObject"
+          *ngIf="configObject && singleMode"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-rolemapping-details>
+      </ng-container>
+    </div>
+    <ng-template detail-host></ng-template>
+  </div>
+</div>
