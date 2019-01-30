@@ -5,14 +5,13 @@ import {CommonsModule} from '../commons/commons.module';
 import {DetailDirective} from './shared/detail.directive';
 
 import {
+  ConfigurationsComponent
+} from './configurations.component';
+import {
   CrawlConfigDetailsComponent,
-  CrawlConfigPageComponent,
-  CrawlConfigService
 } from './crawlconfig';
 import {
   BrowserScriptDetailsComponent,
-  BrowserScriptPageComponent,
-  BrowserScriptService,
   BrowserScriptDirective
 } from './browserscript';
 import {
@@ -22,23 +21,15 @@ import {
 } from './search';
 import {
   CrawljobDetailsComponent,
-  CrawlJobsComponent,
-  CrawlJobService
 } from './crawljobs';
 import {
   PolitenessconfigDetailsComponent,
-  PolitenessConfigPageComponent,
-  PolitenessConfigService
 } from './politenessconfig';
 import {
   CrawlHostGroupConfigDetailsComponent,
-  CrawlHostGroupConfigPageComponent,
-  CrawlHostGroupConfigService
 } from './crawlhostgroupconfig';
 import {
   ScheduleDetailsComponent,
-  SchedulePageComponent,
-  ScheduleService,
   ScheduleSidebarComponent
 } from './schedule';
 import {
@@ -51,8 +42,6 @@ import {
 } from './logs';
 import {
   BrowserConfigDetailsComponent,
-  BrowserConfigPageComponent,
-  BrowserConfigService
 } from './browserconfig';
 import {
   SeedDetailComponent,
@@ -61,8 +50,6 @@ import {
 import {
   RoleMappingDetailsComponent,
   RoleMappingListComponent,
-  RoleMappingPageComponent,
-  RoleMappingService
 } from './rolemapping';
 import {
   WarcStatusListComponent,
@@ -70,13 +57,16 @@ import {
   WarcStatusPageComponent,
   WarcStatusService
 } from './warcstatus';
+import {
+  BackendService
+} from './shared/backend.service';
 
 
 @NgModule({
   declarations: [
     SearchComponent,
     SeedDetailComponent,
-    CrawlJobsComponent,
+    ConfigurationsComponent,
     CrawljobDetailsComponent,
     ScheduleDetailsComponent,
     CrawlConfigDetailsComponent,
@@ -87,17 +77,10 @@ import {
     EntityDetailsComponent,
     LoglevelComponent,
     CrawlHostGroupConfigDetailsComponent,
-    CrawlHostGroupConfigPageComponent,
-    PolitenessConfigPageComponent,
-    SchedulePageComponent,
     SearchListComponent,
-    BrowserConfigPageComponent,
-    BrowserScriptPageComponent,
     BrowserScriptDirective,
-    CrawlConfigPageComponent,
     RoleMappingListComponent,
     RoleMappingDetailsComponent,
-    RoleMappingPageComponent,
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
     WarcStatusPageComponent,
@@ -119,17 +102,10 @@ import {
     CommonsModule,
   ],
   exports: [
-    CrawlJobsComponent,
     SearchComponent,
-    SchedulePageComponent,
-    CrawlConfigPageComponent,
-    CrawlHostGroupConfigPageComponent,
-    BrowserConfigPageComponent,
-    BrowserScriptPageComponent,
-    PolitenessConfigPageComponent,
     LoglevelComponent,
-    RoleMappingPageComponent,
     WarcStatusPageComponent,
+    ConfigurationsComponent,
   ],
 })
 export class ConfigurationsModule {
@@ -137,18 +113,11 @@ export class ConfigurationsModule {
     return {
       ngModule: ConfigurationsModule,
       providers: [
+        BackendService,
         SearchService,
         SeedService,
-        CrawlJobService,
-        CrawlConfigService,
-        CrawlHostGroupConfigService,
-        PolitenessConfigService,
-        BrowserConfigService,
-        ScheduleService,
         EntityService,
-        BrowserScriptService,
         LogService,
-        RoleMappingService,
         WarcStatusService,
       ],
     };
