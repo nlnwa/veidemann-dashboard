@@ -21,29 +21,13 @@
       </div>
 
       <div fxFlex fxLayout="column">
-        <mat-form-field>
-          <mat-select placeholder="Velg browser config" formControlName="browser_config_id"
-                      i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
-            <mat-option>Ingen</mat-option>
-            <mat-option *ngFor="let browserConfig of browserConfigList" [value]="browserConfig.id">
-              {{browserConfig.itemName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-select placeholder="Velg politeness config" formControlName="politeness_id"
-                      i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
-            <mat-option> Ingen</mat-option>
-            <mat-option *ngFor="let politenessConfig of politenessConfigList"
-                        [value]="politenessConfig.id">{{politenessConfig.itemName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <app-configref formControlName="collectionRef" [multiple]="false" [kind]="Kind.COLLECTION"></app-configref>
+        <app-configref formControlName="browserConfigRef" [multiple]="false" [kind]="Kind.BROWSERCONFIG"></app-configref>
+        <app-configref formControlName="politenessRef" [multiple]="false" [kind]="Kind.POLITENESSCONFIG"></app-configref>
 
         <mat-form-field>
           <input matInput
-                 formControlName="minimum_dns_ttl_s"
+                 formControlName="minimumDnsTtlS"
                  placeholder="DNS TTL"
           >
           <mat-error *ngIf="!minDnsTtlSeconds.valid"
@@ -53,14 +37,14 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput
-                 formControlName="priority_weight"
+                 formControlName="priorityWeight"
                  placeholder="Prioritet vekting">
           <mat-error *ngIf="!priorityWeight.valid">
             Må være et tall eller tom
           </mat-error>
         </mat-form-field>
         <div formGroupName="extra" (click)="extractText.disabled ? onEnableExtractText() : null">
-          <mat-checkbox formControlName="extract_text"
+          <mat-checkbox formControlName="extractText"
                         labelPosition="after"
                         i18n="@@crawlconfigFormExtractTextLabel"
                         i18n-matTooltip = "@@crawlconfigFormDisabledExtractTextExplaination"
@@ -75,13 +59,13 @@
           </mat-checkbox>
         </div>
 
-        <div formGroupName="extra" (click)="createSnapshot.disabled ? onEnableCreateSnapshot() : null">
-          <mat-checkbox formControlName="create_snapshot"
+        <div formGroupName="extra" (click)="createScreenshot.disabled ? onEnableCreateScreenshot() : null">
+          <mat-checkbox formControlName="createScreenshot"
                         labelPosition="after"
                         i18n="@@crawlconfigFormCreateSnapshotLabel"
                         i18n-matTooltip = "@@crawlconfigFormDisabledCreateSnapshotExplaination"
                         color="accent"
-                        [matTooltip]="createSnapshot.disabled ?
+                        [matTooltip]="createScreenshot.disabled ?
                         'Instilling er ikke lik for alle markerte konfigurasjoner.'
                         + 'Klikk her og sett ønsket verdi for å overstyre alle,'
                         + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
@@ -90,47 +74,31 @@
             Lag snapshot
           </mat-checkbox>
         </div>
-
-        <div (click)="depthFirst.disabled ? onEnableDepthFirst() : null">
-          <mat-checkbox formControlName="depth_first"
-                        labelPosition="after"
-                        i18n="@@crawlconfigFormDepthFirstLabel"
-                        i18n-matTooltip = "@@crawlconfigFormDisabledDepthFirstExplaination"
-                        color="accent"
-                        [matTooltip]="depthFirst.disabled ?
-                          'Instilling er ikke lik for alle markerte konfigurasjoner.'
-                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
-                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
-                        : null"
-          >
-            Dybde først
-          </mat-checkbox>
-        </div>
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-          <ng-container *ngIf="showPolitenessConfig">
-            <mat-form-field>
-              <mat-chip-list placeholder="Politeness">
-                <mat-chip>
-                  <a [routerLink]="['/politenessconfig', politenessId.value]">
-                    {{getPolitenessConfigName(politenessId.value)}}</a>
-                </mat-chip>
-              </mat-chip-list>
-            </mat-form-field>
-          </ng-container>
-          <ng-container *ngIf="showBrowserConfig">
-            <mat-form-field>
-              <mat-chip-list placeholder="Browser">
-                <mat-chip>
-                  <a [routerLink]="['/browserconfig', browserConfigId.value]">
-                    {{getBrowserConfigName(browserConfigId.value)}}</a>
-                </mat-chip>
-              </mat-chip-list>
-            </mat-form-field>
-          </ng-container>
+          <!--<ng-container *ngIf="showPolitenessConfig">-->
+            <!--<mat-form-field>-->
+              <!--<mat-chip-list placeholder="Politeness">-->
+                <!--<mat-chip>-->
+                  <!--<a [routerLink]="['/politenessconfig', politenessId.value]">-->
+                    <!--{{getPolitenessConfigName(politenessId.value)}}</a>-->
+                <!--</mat-chip>-->
+              <!--</mat-chip-list>-->
+            <!--</mat-form-field>-->
+          <!--</ng-container>-->
+          <!--<ng-container *ngIf="showBrowserConfig">-->
+            <!--<mat-form-field>-->
+              <!--<mat-chip-list placeholder="Browser">-->
+                <!--<mat-chip>-->
+                  <!--<a [routerLink]="['/browserconfig', browserConfigId.value]">-->
+                    <!--{{getBrowserConfigName(browserConfigId.value)}}</a>-->
+                <!--</mat-chip>-->
+              <!--</mat-chip-list>-->
+            <!--</mat-form-field>-->
+          <!--</ng-container>-->
         </ng-container>
       </div>
     </mat-card-content>

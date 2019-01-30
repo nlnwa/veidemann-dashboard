@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {CrawlScheduleConfig, Label} from '../../../commons/models/config.model';
+import {CrawlScheduleConfig, Label} from '../../../commons/models/configobject.model';
 
 describe('ScheduleDetailsComponent', () => {
   let component: ScheduleDetailsComponent;

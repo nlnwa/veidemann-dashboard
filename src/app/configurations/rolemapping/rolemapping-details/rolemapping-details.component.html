@@ -2,10 +2,10 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <span *ngIf="roleMapping" i18n="@@roleMappingHeader">Rolemapping</span>
+        <span *ngIf="configObject" i18n="@@roleMappingHeader">Rolemapping</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!roleMapping.id"
+        <span *ngIf="!configObject.id"
               i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -26,14 +26,29 @@
                  i18n-placeholder="@@groupInputPlaceholder">
         </mat-form-field>
         <mat-form-field>
-          <mat-select placeholder="Velg rolle" formControlName="role" multiple
+          <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
                       i18n-placeholder="@@rolemappingRoleMultiselectHeader">
-            <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
+            <mat-option *ngFor="let role of roles" [value]="role">{{role}}</mat-option>
           </mat-select>
           <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
           <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
         </mat-form-field>
       </div>
+      <div *ngIf="!shouldShow">
+        <div>
+          <span>Roller:</span>
+          <button mat-icon-button (click)="onToggleShouldAddRole(true)">
+            <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onToggleShouldAddRole(false)">
+            <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+          </button>
+          <span *ngIf="shouldAddRoles">Skal legge til roler for de valgte brukerene</span>
+          <span *ngIf="!shouldAddRoles && shouldAddRoles !== undefined">
+            Skal fjerne rollene for de valgte brukerene </span>
+        </div>
+      </div>
+
     </mat-card-content>
 
     <mat-card-actions>

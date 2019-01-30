@@ -1,8 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Label, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {Meta} from '../../../commons/models/meta/meta.model';
+import {Label} from '../../../commons/models/meta/label.model';
+import {PolitenessConfig} from '../../../commons/models';
+import {Kind} from '../../../commons/models/kind.model';
+import {RobotsPolicy} from '../../../commons/models/configs/politenessconfig.model';
 
 @Component({
   selector: 'app-politenessconfig-details',
@@ -11,7 +16,8 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class PolitenessconfigDetailsComponent implements OnChanges {
+export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
+  readonly RobotsPolicy = RobotsPolicy;
 
   @Input()
   set data(show) {
@@ -19,38 +25,24 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   @Input()
-  politenessConfig: PolitenessConfig;
-  @Input()
-  robotsPolicies: string[];
+  configObject: ConfigObject;
   @Input()
   equalRobotPolicy: boolean;
 
   @Output()
-  save = new EventEmitter<PolitenessConfig>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<PolitenessConfig>();
+  update = new EventEmitter<ConfigObject>();
   @Output()
-  delete = new EventEmitter<PolitenessConfig>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
-  robotsPolicyList: any[];
   shouldShow = true;
+  robotsPolicies: RobotsPolicy[] = [];
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      robots_policy: [''],
-      minimum_robots_validity_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      custom_robots: null,
-      min_time_between_page_load_ms: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      max_time_between_page_load_ms: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delay_factor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      max_retries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      retry_delay_seconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      crawl_host_group_selector: '',
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canEdit(): boolean {
@@ -58,7 +50,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return (this.politenessConfig && !this.politenessConfig.id);
+    return (this.configObject && !this.configObject.id);
   }
 
   get canSave() {
@@ -78,47 +70,56 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   get robotsPolicy() {
-    return this.form.get('robots_policy');
+    return this.form.get('robotsPolicy');
   }
 
   get customRobots() {
-    return this.form.get('custom_robots');
+    return this.form.get('customRobots');
   }
 
   get minRobotsValidDurationSec() {
-    return this.form.get('minimum_robots_validity_duration_s');
+    return this.form.get('minimumRobotsValidityDurationS');
   }
 
   get minTimeBetweenPageloadMs() {
-    return this.form.get('min_time_between_page_load_ms');
+    return this.form.get('minTimeBetweenPageLoadMs');
   }
 
   get maxTimeBetweenPageloadMs() {
-    return this.form.get('max_time_between_page_load_ms');
+    return this.form.get('maxTimeBetweenPageLoadMs');
   }
 
   get delayFactor() {
-    return this.form.get('delay_factor');
+    return this.form.get('delayFactor');
   }
 
   get maxRetries() {
-    return this.form.get('max_retries');
+    return this.form.get('maxRetries');
   }
 
   get retryDelaySeconds() {
-    return this.form.get('retry_delay_seconds');
+    return this.form.get('retryDelaySeconds');
+  }
+
+  get crawlHostGroupSelectorList() {
+    return this.form.get('crawlHostGroupSelectorList');
+  }
+
+  ngOnInit() {
+    for (const policy in RobotsPolicy) {
+      if (isNaN(Number(policy))) {
+        this.robotsPolicies.push(policy as any as RobotsPolicy);
+      }
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.politenessConfig && !changes.politenessConfig.currentValue) {
-      this.form.reset();
-      return;
-    }
-    if (changes.robotsPolicies && changes.robotsPolicies.currentValue) {
-      this.robotsPolicyList = changes.robotsPolicies.currentValue;
-    }
-    if (this.politenessConfig && this.robotsPolicyList) {
-      this.updateForm();
+    if (changes.configObject) {
+      if (this.configObject) {
+        this.updateForm();
+      } else {
+        this.form.reset();
+      }
     }
   }
 
@@ -145,30 +146,44 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
   }
 
   onDelete() {
-    this.delete.emit(this.politenessConfig);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
     this.updateForm();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      robotsPolicy: [''],
+      minimumRobotsValidityDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      customRobots: null,
+      minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      crawlHostGroupSelectorList: '',
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
+    console.log('updateForm', this.configObject.politenessConfig.robotsPolicy);
     this.form.patchValue({
-      id: this.politenessConfig.id,
-      robots_policy: this.politenessConfig.robots_policy || this.robotsPolicies[0],
-      minimum_robots_validity_duration_s: this.politenessConfig.minimum_robots_validity_duration_s || '',
-      custom_robots: this.politenessConfig.custom_robots,
-      min_time_between_page_load_ms: this.politenessConfig.min_time_between_page_load_ms || '',
-      max_time_between_page_load_ms: this.politenessConfig.max_time_between_page_load_ms || '',
-      delay_factor: this.politenessConfig.delay_factor || '',
-      max_retries: this.politenessConfig.max_retries || '',
-      retry_delay_seconds: this.politenessConfig.retry_delay_seconds || '',
-      crawl_host_group_selector: this.politenessConfig.crawl_host_group_selector
-        ? this.politenessConfig.crawl_host_group_selector.map(selector => {
+      id: this.configObject.id,
+      meta: this.configObject.meta,
+      robotsPolicy: this.configObject.politenessConfig.robotsPolicy || RobotsPolicy[RobotsPolicy.OBEY_ROBOTS],
+      minimumRobotsValidityDurationS: this.configObject.politenessConfig.minimumRobotsValidityDurationS || '',
+      customRobots: this.configObject.politenessConfig.customRobots,
+      minTimeBetweenPageLoadMs: this.configObject.politenessConfig.minTimeBetweenPageLoadMs || '',
+      maxTimeBetweenPageLoadMs: this.configObject.politenessConfig.maxTimeBetweenPageLoadMs || '',
+      delayFactor: this.configObject.politenessConfig.delayFactor || '',
+      maxRetries: this.configObject.politenessConfig.maxRetries || '',
+      retryDelaySeconds: this.configObject.politenessConfig.retryDelaySeconds || '',
+      crawlHostGroupSelectorList: this.configObject.politenessConfig.crawlHostGroupSelectorList
+        ? this.configObject.politenessConfig.crawlHostGroupSelectorList.map(selector => {
           const parts = selector.split(':');
           const key = parts.shift();
           const value = parts.join(':');
@@ -178,7 +193,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
           return label;
         })
         : [],
-      meta: this.politenessConfig.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -188,20 +202,28 @@ export class PolitenessconfigDetailsComponent implements OnChanges {
     }
   }
 
-  private prepareSave(): PolitenessConfig {
+  private prepareSave(): ConfigObject {
+
     const formModel = this.form.value;
-    return {
-      id: this.politenessConfig.id,
-      robots_policy: formModel.robots_policy,
-      minimum_robots_validity_duration_s: parseInt(formModel.minimum_robots_validity_duration_s, 10),
-      custom_robots: formModel.custom_robots,
-      min_time_between_page_load_ms: parseInt(formModel.min_time_between_page_load_ms, 10),
-      max_time_between_page_load_ms: parseInt(formModel.max_time_between_page_load_ms, 10),
-      delay_factor: parseFloat(formModel.delay_factor),
-      max_retries: parseInt(formModel.max_retries, 10),
-      retry_delay_seconds: parseInt(formModel.retry_delay_seconds, 10),
-      crawl_host_group_selector: formModel.crawl_host_group_selector.map(label => label.key + ':' + label.value),
-      meta: formModel.meta,
-    };
+
+    const configObject = new ConfigObject({kind: Kind.POLITENESSCONFIG});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const politenessConfig = new PolitenessConfig();
+    politenessConfig.robotsPolicy = formModel.robotsPolicy;
+    politenessConfig.minimumRobotsValidityDurationS = parseInt(formModel.minimumRobotsValidityDurationS, 10) || 0;
+    politenessConfig.customRobots = formModel.customRobots;
+    politenessConfig.minTimeBetweenPageLoadMs = parseInt(formModel.minTimeBetweenPageLoadMs, 10) || 0;
+    politenessConfig.maxTimeBetweenPageLoadMs = parseInt(formModel.maxTimeBetweenPageLoadMs, 10) || 0;
+    politenessConfig.delayFactor = parseFloat(formModel.delayFactor) || 0.0;
+    politenessConfig.maxRetries = parseInt(formModel.maxRetries, 10) || 0;
+    politenessConfig.retryDelaySeconds = parseInt(formModel.retryDelaySeconds, 10) || 0;
+    politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);
+
+    configObject.meta = formModel.meta;
+    configObject.politenessConfig = politenessConfig;
+    return configObject;
   }
 }

@@ -31,6 +31,19 @@
                  placeholder="Id"
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
+      <div *ngIf="!shouldShow">
+        <div>
+          <span>Labels:</span>
+          <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+            <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+            <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+          </button>
+          <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+          <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+        </div>
+      </div>
       </div>
 
       <div fxFlex fxLayout="column">
@@ -46,7 +59,7 @@
 
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                   matInput formControlName="max_duration_s" type="text" placeholder="Maks tid">
+                   matInput formControlName="maxDurationS" type="text" placeholder="Maks tid">
             <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
                        *ngIf="!maxDurationSeconds.valid">
               Ikke en gyldig maks tid.
@@ -54,64 +67,23 @@
           </mat-form-field>
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                   matInput formControlName="max_bytes" type="text" placeholder="Maks bytes">
+                   matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
             <mat-error i18n="@@crawljobFormMaxByteRequiredError"
                        *ngIf="!maxBytes.valid">
               ikke en gyldig maks byte.
             </mat-error>
           </mat-form-field>
         </ng-container>
+        <app-configref formControlName="scheduleRef" [multiple]="false" [kind]="Kind.CRAWLSCHEDULECONFIG"></app-configref>
+        <app-configref formControlName="crawlConfigRef" [multiple]="false" [kind]="Kind.CRAWLCONFIG"></app-configref>
 
-        <mat-form-field>
-          <mat-select placeholder="Velg schedule" formControlName="schedule_id"
-                      i18n-placeholder="@@crawljobScheduleDropdownPlaceholder">
-            <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">{{schedule.itemName}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-error *ngIf="! scheduleId.valid  && ! form.disabled"
-                   i18n="@@crawljobFormScheduleRequiredError">
-          Schedule er påkrevd.
-        </mat-error>
-
-        <mat-form-field>
-          <mat-select placeholder="Velg crawl config" formControlName="crawl_config_id"
-                      i18n-placeholder="@@crawljobCrawlconfigDropdownPlaceholder">
-            <mat-option *ngFor="let crawlConfig of crawlConfigs" [value]="crawlConfig.id">{{crawlConfig.itemName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-error *ngIf="form.dirty && ! crawlConfigId.valid  && ! form.disabled"
-                   i18n="@@crawljobFormCrawlconfigRequieredError">
-          Crawlconfig er påkrevd.
-        </mat-error>
 
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-          <ng-container *ngIf="showSchedule">
-            <mat-form-field>
-              <mat-chip-list placeholder="Schedules">
-                <mat-chip>
-                  <a [routerLink]="['/schedule', scheduleId.value]">
-                    {{getScheduleName(scheduleId.value)}}</a>
-                </mat-chip>
-              </mat-chip-list>
-            </mat-form-field>
-          </ng-container>
-          <ng-container *ngIf="showCrawlConfig">
-            <mat-form-field>
-              <mat-chip-list placeholder="Crawlconfigs">
-                <mat-chip>
-                  <a [routerLink]="['/crawlconfig', crawlConfigId.value]">
-                    {{getCrawlConfigName(crawlConfigId.value)}}</a>
-                </mat-chip>
-              </mat-chip-list>
-            </mat-form-field>
-          </ng-container>
+
         </ng-container>
       </div>
     </mat-card-content>

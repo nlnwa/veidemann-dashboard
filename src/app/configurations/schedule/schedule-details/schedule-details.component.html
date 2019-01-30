@@ -2,10 +2,10 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <span *ngIf="schedule" i18n="@@scheduleDetailsHeader">Schedule</span>
+        <span *ngIf="configObject" i18n="@@scheduleDetailsHeader">Schedule</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!schedule.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
+        <span *ngIf="!configObject.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
@@ -17,10 +17,22 @@
                  placeholder="Id"
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
+        <div *ngIf="!shouldShow">
+          <div>
+            <span>Labels:</span>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+          </div>
       </div>
-
+      </div>
       <div fxFlex fxLayout="column">
-        <fieldset formGroupName="cron_expression">
+        <fieldset formGroupName="cronExpression">
           <legend i18n="@@scheduleFormCronExpressionHeader">Cron expression</legend>
           <div fxLayout="row wrap" fxLayoutGap="24px">
             <mat-form-field>
@@ -57,7 +69,7 @@
         <div fxLayout="row wrap" fxLayoutGap="24px">
           <div fxLayout="row">
           <mat-form-field>
-            <input matInput [matDatepicker]="validFromDatepicker" formControlName="valid_from" placeholder="Gyldig fra">
+            <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom" placeholder="Gyldig fra">
             <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validFromDatepicker></mat-datepicker>
           </mat-form-field>
@@ -73,7 +85,7 @@
           </div>
           <div fxLayout="row">
           <mat-form-field>
-            <input matInput [matDatepicker]="validToDatepicker" formControlName="valid_to" placeholder="Gyldig til">
+            <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo" placeholder="Gyldig til">
             <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validToDatepicker></mat-datepicker>
           </mat-form-field>

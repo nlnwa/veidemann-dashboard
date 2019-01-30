@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
-import {BrowserScript, Label} from '../../../commons/models/config.model';
+import {BrowserScript, Label} from '../../../commons/models/configobject.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
 

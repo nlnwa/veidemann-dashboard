@@ -1,9 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {CustomValidators} from '../../../commons/validator';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlJob, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {Meta} from '../../../commons/models/meta/meta.model';
+import {CrawlJob} from '../../../commons/models';
+import {Kind} from '../../../commons/models/kind.model';
 
 
 @Component({
@@ -13,46 +16,38 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawljobDetailsComponent implements OnChanges {
+  readonly Kind = Kind;
+
   @Input()
   set data(show) {
     this.shouldShow = show;
   }
 
   @Input()
-  crawlJob: CrawlJob;
+  configObject: ConfigObject;
   @Input()
-  crawlConfigs: any[];
+  crawlConfigs: ConfigObject[];
   @Input()
-  schedules: any[];
+  schedules: ConfigObject[];
   @Input()
   equalDisabled: boolean;
 
   @Output()
-  save = new EventEmitter<CrawlJob>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<CrawlJob>();
+  update = new EventEmitter<ConfigObject>();
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<CrawlJob>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
 
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      schedule_id: [],
-      crawl_config_id: ['', CustomValidators.nonEmpty],
-      disabled: '',
-      limits: this.fb.group({
-        depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-        max_duration_s: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-        max_bytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      }),
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canEdit(): boolean {
@@ -60,7 +55,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return (this.crawlJob && !this.crawlJob.id);
+    return (this.configObject && !this.configObject.id);
   }
 
   get canSave() {
@@ -84,54 +79,54 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   get maxDurationSeconds() {
-    return this.form.get('limits.max_duration_s');
+    return this.form.get('limits.maxDurationS');
   }
 
   get maxBytes() {
-    return this.form.get('limits.max_bytes');
+    return this.form.get('limits.maxBytes');
   }
 
-  get scheduleId() {
-    return this.form.get('schedule_id');
-  }
-
-  get crawlConfigId() {
-    return this.form.get('crawl_config_id');
-  }
+  // get scheduleId() {
+  //   return this.form.get('scheduleId');
+  // }
+  //
+  // get crawlConfigId() {
+  //   return this.form.get('crawlConfigId');
+  // }
 
   get disabled() {
     return this.form.get('disabled');
   }
 
-  get showSchedule(): boolean {
-    const schedule = this.scheduleId.value;
-    return schedule != null && schedule !== '';
-  }
+  // get showSchedule(): boolean {
+  //   const schedule = this.scheduleId.value;
+  //   return schedule != null && schedule !== '';
+  // }
+  //
+  // get showCrawlConfig(): boolean {
+  //   const crawlconfig = this.crawlConfigId.value;
+  //   return crawlconfig != null && crawlconfig !== '';
+  // }
 
-  get showCrawlConfig(): boolean {
-    const crawlconfig = this.crawlConfigId.value;
-    return crawlconfig != null && crawlconfig !== '';
-  }
+  // get showShortcuts(): boolean {
+  //   return this.showSchedule || this.showCrawlConfig;
+  // }
 
-  get showShortcuts(): boolean {
-    return this.showSchedule || this.showCrawlConfig;
-  }
-
-  getScheduleName(id): string {
-    for (let i = 0; i < this.schedules.length; i++) {
-      if (id === this.schedules[i].id) {
-        return this.schedules[i].itemName;
-      }
-    }
-  }
-
-  getCrawlConfigName(id): string {
-    for (let i = 0; i < this.crawlConfigs.length; i++) {
-      if (id === this.crawlConfigs[i].id) {
-        return this.crawlConfigs[i].itemName;
-      }
-    }
-  }
+  // getScheduleName(id): string {
+  //   for (let i = 0; i < this.schedules.length; i++) {
+  //     if (id === this.schedules[i].id) {
+  //       return this.schedules[i].itemName;
+  //     }
+  //   }
+  // }
+  //
+  // getCrawlConfigName(id): string {
+  //   for (let i = 0; i < this.crawlConfigs.length; i++) {
+  //     if (id === this.crawlConfigs[i].id) {
+  //       return this.crawlConfigs[i].itemName;
+  //     }
+  //   }
+  // }
 
   shouldDisableDisabled(): void {
     if (this.equalDisabled !== undefined || !this.shouldShow) {
@@ -142,26 +137,33 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlJob && !changes.crawlJob.currentValue) {
-      this.form.reset();
-      return;
-    }
-    if (changes.crawlConfigs && changes.crawlJob.currentValue) {
-      this.crawlConfigs = changes.crawlConfigs.currentValue.map((crawlConfig) =>
-        ({
-          id: crawlConfig.id,
-          itemName: crawlConfig.meta.name,
-        }));
-    }
-    if (changes.schedules && changes.schedules.currentValue) {
-      this.schedules = changes.schedules.currentValue.map((schedule) =>
-        ({
-          id: schedule.id,
-          itemName: schedule.meta.name,
-        }));
-    }
-    if (this.crawlJob && this.crawlConfigs && this.schedules) {
-      this.updateForm();
+    // if (changes.configObject && !changes.configObject.currentValue) {
+    //   this.form.reset();
+    //   return;
+    // }
+    // if (changes.crawlConfigs && changes.configObject.currentValue) {
+    //   this.crawlConfigs = changes.crawlConfigs.currentValue.map((crawlConfig) =>
+    //     ({
+    //       id: crawlConfig.id,
+    //       itemName: crawlConfig.meta.name,
+    //     }));
+    // }
+    // if (changes.schedules && changes.schedules.currentValue) {
+    //   this.schedules = changes.schedules.currentValue.map((schedule) =>
+    //     ({
+    //       id: schedule.id,
+    //       itemName: schedule.meta.name,
+    //     }));
+    // }
+    // if (this.configObject && this.crawlConfigs && this.schedules) {
+    //   this.updateForm();
+    // }
+    if (changes.configObject) {
+      if (!this.configObject) {
+        this.form.reset();
+      } else {
+        this.updateForm();
+      }
     }
   }
 
@@ -174,7 +176,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.crawlJob);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
@@ -187,22 +189,39 @@ export class CrawljobDetailsComponent implements OnChanges {
     }
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      scheduleRef: '',
+      crawlConfigRef: ['', CustomValidators.nonEmpty],
+      disabled: '',
+      limits: this.fb.group({
+        depth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        maxDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        maxBytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      }),
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
+    console.log('updateForm: ', this.configObject);
     this.form.patchValue({
-      id: this.crawlJob.id,
-      disabled: this.crawlJob.disabled,
-      schedule_id: this.crawlJob.schedule_id,
-      crawl_config_id: this.crawlJob.crawl_config_id,
+      id: this.configObject.id,
+      disabled: this.configObject.crawlJob.disabled,
+      scheduleRef: this.configObject.crawlJob.scheduleRef,
+      crawlConfigRef: this.configObject.crawlJob.crawlConfigRef,
       limits: {
-        depth: this.crawlJob.limits.depth || '',
-        max_duration_s: this.crawlJob.limits.max_duration_s || '',
-        max_bytes: this.crawlJob.limits.max_bytes || '',
+        depth: this.configObject.crawlJob.limits.depth || '',
+        maxDurationS: this.configObject.crawlJob.limits.maxDurationS || '',
+        maxBytes: this.configObject.crawlJob.limits.maxBytes || '',
       },
-      meta: this.crawlJob.meta,
+      meta: this.configObject.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -212,20 +231,24 @@ export class CrawljobDetailsComponent implements OnChanges {
     this.shouldDisableDisabled();
   }
 
-  private prepareSave(): CrawlJob {
+  private prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    return {
-      id: this.crawlJob.id,
-      schedule_id: formModel.schedule_id,
-      crawl_config_id: formModel.crawl_config_id,
-      disabled: formModel.disabled,
-      limits: {
-        depth: parseInt(formModel.limits.depth, 10),
-        max_duration_s: parseInt(formModel.limits.max_duration_s, 10),
-        max_bytes: parseInt(formModel.limits.max_bytes, 10),
-      },
-      meta: formModel.meta,
-    };
-  }
 
+    const configObject = new ConfigObject({kind: Kind.CRAWLJOB});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+    const crawlJob = new CrawlJob();
+    crawlJob.disabled = formModel.disabled;
+    crawlJob.crawlConfigRef = formModel.crawlConfigRef;
+    crawlJob.scheduleRef = formModel.scheduleRef;
+    crawlJob.limits.depth = parseInt(formModel.limits.depth, 10);
+    crawlJob.limits.maxDurationS = parseInt(formModel.limits.maxDurationS, 10);
+    crawlJob.limits.maxBytes = parseInt(formModel.limits.maxBytes, 10);
+
+    configObject.meta = formModel.meta;
+    configObject.crawlJob = crawlJob;
+    console.log(configObject);
+    return configObject;
+  }
 }

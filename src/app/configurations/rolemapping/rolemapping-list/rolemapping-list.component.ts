@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {SelectionBaseListComponent} from '../../../commons/list';
-import {RoleMapping} from '../../../commons/models/config.model';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {RoleMapping} from '../../../commons/models/configs/rolemapping.model';
+import {BaseListComponent} from '../../../commons/list';
 
 
 @Component({
@@ -12,7 +12,19 @@ import {RoleMapping} from '../../../commons/models/config.model';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RoleMappingListComponent extends SelectionBaseListComponent<RoleMapping> {
+
+
+
+export class RoleMappingListComponent extends BaseListComponent <RoleMapping> {
+
+  @Input()
+    set count (count: number) {
+    this.pageLength = count;
+  }
+
   displayedColumns = ['select', 'email', 'group', 'role'];
+
+
+
 }
 

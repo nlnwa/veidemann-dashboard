@@ -5,7 +5,7 @@
         <span i18n="@@browserconfigDetailsHeader">Browserconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!browserConfig.id"
+        <span *ngIf="!configObject.id"
               i18n="@@browserconfigNewConfigHeader">
         Ny (ikke lagret)</span>
       </mat-card-subtitle>
@@ -19,78 +19,93 @@
                  placeholder="Id"
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
+        <div *ngIf="!shouldShow">
+          <div>
+            <span>Labels:</span>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+          </div>
+          <div>
+            <span>Browserscript:</span>
+            <button mat-icon-button (click)="onToggleShouldAddBrowserscript(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddBrowserscript(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddBrowserscript">Skal legge til valgte browserscript til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddBrowserscript && shouldAddBrowserscript !== undefined">
+            Skal fjerne valgte browserscript fra alle konfigurasjoner </span>
+          </div>
+          <div>
+            <span>Script selector:</span>
+            <button mat-icon-button (click)="onToggleShouldAddScriptSelector(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddScriptSelector(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddScriptSelector">Skal legge til script selector til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddScriptSelector && shouldAddScriptSelector !== undefined">
+            Skal fjerne script selector for alle konfigurasjoner</span>
+          </div>
+        </div>
       </div>
-
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <input matInput formControlName="user_agent" placeholder="Brukeragent"
+          <input matInput formControlName="userAgent" placeholder="Brukeragent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
-          <mat-error *ngIf="!user_agent.valid"
+          <mat-error *ngIf="!userAgent.valid"
                      i18n="@@browserconfigFormUserAgentRequiredError">
             Må ha en lengde på minst ett tegn.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="window_width" placeholder="Vindusbredde"
+          <input matInput formControlName="windowWidth" placeholder="Vindusbredde"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
-          <mat-error *ngIf="!window_width.valid"
+          <mat-error *ngIf="!windowWidth.valid"
                      i18n="@@browserconfigFormWindowWidthRequiredError">
-             Må være et tall.
+            Må være et tall.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="window_height" placeholder="Vindushøyde"
+          <input matInput formControlName="windowHeight" placeholder="Vindushøyde"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
-          <mat-error *ngIf="!window_height.valid"
+          <mat-error *ngIf="!windowHeight.valid"
                      i18n="@@browserconfigFormWindowHeightRequiredError">
             Må være et tall.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="page_load_timeout_ms" placeholder="Page load timeout in ms"
+          <input matInput formControlName="pageLoadTimeoutMs" placeholder="Page load timeout in ms"
                  i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-          <mat-error *ngIf="!page_load_timeout_ms.valid"
+          <mat-error *ngIf="!pageLoadTimeoutMs.valid"
                      i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
             Må være et tall.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="sleep_after_pageload_ms" placeholder="Sleep after pageload ms"
+          <input matInput formControlName="maxInactivityTimeMs" placeholder="Max inactivity time ms"
                  i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-          <mat-error *ngIf="!sleep_after_pageload_ms.valid"
+          <mat-error *ngIf="!maxInactivityTimeMs.valid"
                      i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
             Må være et tall.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-select placeholder="Velg browser script" formControlName="script_id" multiple
-                      i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
-            <mat-option *ngFor="let script of browserScriptList" [value]="script.id">{{script.itemName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <app-configref formControlName="scriptRefList" [multiple]="true" [kind]="Kind.BROWSERSCRIPT"></app-configref>
 
-        <app-labels kind="Script Selector" formControlName="script_selector" [removable]="canEdit"></app-labels>
-
-        <ng-container *ngIf="showShortcuts">
-          <mat-toolbar>
-            <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
-            <span class="fill-space"></span>
-          </mat-toolbar>
-          <mat-form-field>
-            <mat-chip-list placeholder="Valgte script">
-              <mat-chip *ngFor="let script of script_id.value">
-                <a [routerLink]="['/browserscript', script]">
-                  {{getScriptName(script)}}</a>
-              </mat-chip>
-            </mat-chip-list>
-          </mat-form-field>
-        </ng-container>
+        <app-labels kind="Script Selector" formControlName="scriptSelectorList" [removable]="canEdit"></app-labels>
       </div>
     </mat-card-content>
 

@@ -1,7 +1,13 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {BrowserScript, Meta} from '../../../commons/models/config.model';
-import {RoleService} from '../../../auth/role.service';
+import {RoleService} from '../../../auth/';
+import {
+  ConfigObject,
+  Meta,
+  BrowserScript,
+  Label,
+  Kind
+} from '../../../commons/models/';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,22 +21,24 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   set data(show) {
     this.shouldShow = show;
   }
+
   @Input()
-  browserScript: BrowserScript;
+  configObject: ConfigObject;
 
   @Output()
-  save = new EventEmitter<BrowserScript>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<BrowserScript>();
+  update = new EventEmitter<ConfigObject>();
   @Output()
-  delete = new EventEmitter<BrowserScript>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm( {
+    this.createForm({
       id: {value: '', disabled: true},
       script: '',
       meta: new Meta(),
@@ -42,7 +50,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return (this.browserScript && !this.browserScript.id);
+    return (this.configObject && !this.configObject.id);
   }
 
   get name() {
@@ -54,7 +62,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       this.form.reset();
       return;
     }
-    if (this.browserScript) {
+    if (this.configObject) {
       this.updateForm();
     }
   }
@@ -68,7 +76,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.browserScript);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
@@ -79,11 +87,16 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.form = this.fb.group(controlsConfig);
   }
 
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
   updateForm(): void {
     this.form.patchValue({
-      id: this.browserScript.id,
-      script: this.browserScript.script,
-      meta: this.browserScript.meta,
+      id: this.configObject.id,
+      script: this.configObject.browserScript.script,
+      meta: this.configObject.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -92,12 +105,36 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     }
   }
 
-  private prepareSave(): BrowserScript {
+  private prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    return {
-      id: this.browserScript.id,
-      script: formModel.script,
-      meta: formModel.meta,
-    };
+
+    const configObject = new ConfigObject({kind: Kind.BROWSERSCRIPT});
+    configObject.id = this.configObject.id;
+
+    const browserScript = new BrowserScript();
+    browserScript.script = formModel.script;
+
+    configObject.meta = toMeta(formModel.meta);
+    configObject.browserScript = browserScript;
+
+    return configObject;
+    // return {
+    //   id: this.browserScript.id,
+    //   script: formModel.script,
+    //   meta: formModel.meta,
+    // };
   }
+}
+
+function toMeta(m: Meta): Meta {
+  const meta = new Meta();
+  meta.name = m.name;
+  meta.description = m.description;
+  meta.labelList = m.labelList ? m.labelList.map(label => {
+    const l = new Label();
+    l.key = label.key;
+    l.value = label.value;
+    return label;
+  }) : [];
+  return meta;
 }
