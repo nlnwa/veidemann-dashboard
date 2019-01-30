@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import {Moment} from 'moment';
+import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
 export class DateTime {
 
@@ -37,3 +38,27 @@ export class DateTime {
     return m;
   }
 }
+
+export function fromTimestampProto(proto: any): string {
+  if (proto) {
+    const ms = new Date(proto.getSeconds() * 1e3 + proto.getNanos() / 1e6);
+    return ms.toISOString();
+  } else {
+    return '';
+  }
+}
+
+/* tslint:disable:no-bitwise */
+export function toTimestampProto(timestamp: string): any {
+  if (timestamp) {
+    const date = new Date(timestamp);
+    const timestampProto = new timestamp_pb.Timestamp();
+    const seconds  = date.getTime() / 1000;
+    timestampProto.setSeconds(~(~seconds));
+
+    return timestampProto;
+  } else {
+    return undefined;
+  }
+}
+
