@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Label} from '../models/config.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../validator/patterns';
+import {Label} from '../../../api/config/v1/config_pb';
 
 export enum Kind {
   LABEL = 'Label',
@@ -22,9 +22,10 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   @Input() removable = true;
   @Input() kind: string = Kind.LABEL;
 
+
   // ControlValueAccessor callback functions
-  onChange: (labels: Label[]) => void;
-  onTouched: (labels: Label[]) => void;
+  onChange: (labels: Label.AsObject[]) => void;
+  onTouched: (labels: Label.AsObject[]) => void;
 
   labelForm: FormGroup;
   labelInputSeparators = [ENTER, COMMA];
@@ -37,7 +38,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   private groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$: Observable<any> = this.groupsSubject.asObservable();
 
-  private labels: Label[];
+  private labels: Label.AsObject[];
 
   constructor(private fb: FormBuilder) {
   }
@@ -63,17 +64,17 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   }
 
   // implement ControlValueAccessor
-  writeValue(labels: Label[]): void {
+  writeValue(labels: Label.AsObject[]): void {
     if (labels === null) {
       this.labels = [];
     } else {
-      this.labels = labels.map((l) => new Label(l));
+      this.labels = labels.map(label => ({key: label.key, value: label.value}));
     }
     this.reset();
   }
 
   // implement ControlValueAccessor
-  registerOnChange(fn: (labels: Label[]) => void): void {
+  registerOnChange(fn: (labels: Label.AsObject[]) => void): void {
     this.onChange = fn;
   }
 

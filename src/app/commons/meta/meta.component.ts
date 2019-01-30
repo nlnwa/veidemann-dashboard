@@ -12,7 +12,7 @@ import {
   Validators
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {Meta} from '../models/config.model';
+import {Meta} from '../models';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   private valueSubscription: Subscription;
 
   constructor(private fb: FormBuilder, private datePipe: DatePipe) {
-    this.createForm(new Meta());
+    this.createForm();
   }
 
   get editable(): boolean {
@@ -60,7 +60,10 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   }
 
   ngAfterViewInit() {
-    this.valueSubscription = this.form.valueChanges.subscribe(this.onChange);
+    this.valueSubscription = this.form.valueChanges.subscribe(
+      ({name, description, created, createdBy, lastModified, lastModifiedBy, labelList}) => this.onChange(new Meta({
+        name, description, created, createdBy, lastModified, lastModifiedBy, labelList
+      })));
   }
 
   ngOnDestroy() {
@@ -98,32 +101,37 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
     return this.form.valid ? null : {'invalidMeta': true};
   }
 
-  private dateFormat(date: string): string {
-    return this.datePipe.transform(date, 'medium', 'UTC');
+  private dateFormat(timestamp: string): string {
+    if (timestamp) {
+      return this.datePipe.transform(timestamp, 'medium', 'UTC');
+    } else {
+      return '';
+    }
   }
 
-  private createForm(meta: Meta): void {
+  private createForm(): void {
+    const meta = new Meta();
     this.form = this.fb.group({
       name: [meta.name, [Validators.required, Validators.minLength(2)]],
       description: meta.description,
       created: {value: meta.created, disabled: true},
-      created_by: {value: meta.created_by, disabled: true},
-      last_modified: {value: meta.last_modified, disabled: true},
-      last_modified_by: {value: meta.last_modified_by, disabled: true},
-      label: meta.label,
+      createdBy: {value: meta.createdBy, disabled: true},
+      lastModified: {value: meta.lastModified, disabled: true},
+      lastModifiedBy: {value: meta.lastModifiedBy, disabled: true},
+      labelList: meta.labelList,
     });
   }
 
   private updateForm(meta: Meta): void {
     // setting the emitEvent option to false  prevents the valueChange subscription above to fire
-    this.form.setValue({
+    this.form.patchValue({
       name: meta.name,
       description: meta.description || '',
       created: this.dateFormat(meta.created),
-      created_by: meta.created_by || '',
-      last_modified: this.dateFormat(meta.last_modified),
-      last_modified_by: meta.last_modified_by || '',
-      label: meta.label || [],
+      createdBy: meta.createdBy || '',
+      lastModified: this.dateFormat(meta.lastModified),
+      lastModifiedBy: meta.lastModifiedBy || '',
+      labelList: meta.labelList || [],
     }, {emitEvent: false});
     this.form.markAsPristine();
     this.form.markAsUntouched();

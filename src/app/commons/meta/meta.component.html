@@ -24,7 +24,7 @@
     </textarea>
   </mat-form-field>
 
-  <app-labels [removable]="editable" formControlName="label"></app-labels>
+  <app-labels [removable]="editable" formControlName="labelList"></app-labels>
 <div *ngIf="shouldShow">
   <mat-form-field>
     <input matInput
@@ -35,21 +35,21 @@
 
   <mat-form-field>
     <input matInput
-           formControlName="created_by"
+           formControlName="createdBy"
            placeholder="Opprettet av"
            i18n-placeholder="@@metaCreatedByInputPlaceholder">
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-           formControlName=last_modified
+           formControlName=lastModified
            placeholder="Sist endret"
            i18n-placeholder="@@metaLastModifiedInputPlaceholder">
   </mat-form-field>
 
   <mat-form-field>
     <input matInput
-           formControlName="last_modified_by"
+           formControlName="lastModifiedBy"
            placeholder="Sist endret av"
            i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
   </mat-form-field>
