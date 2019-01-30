@@ -6,18 +6,12 @@ import {DocumentationComponent} from './core/documentation/documentation.compone
 import {StatisticsComponent} from './core/statistics/statistics.component';
 import {LoglevelComponent} from './configurations/logs/';
 import {SearchComponent} from './configurations/search';
-import {CrawlJobsComponent} from './configurations/crawljobs';
-import {SchedulePageComponent} from './configurations/schedule';
-import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig';
-import {PolitenessConfigPageComponent} from './configurations/politenessconfig';
-import {BrowserConfigPageComponent} from './configurations/browserconfig';
-import {BrowserScriptPageComponent} from './configurations/browserscript';
-import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
-import {RoleMappingPageComponent} from './configurations/rolemapping';
-import {GuardService} from './auth/guard.service';
-import {Role} from './commons/models/config.model';
-import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
 
+import {GuardService} from './auth/guard.service';
+import {Kind} from './commons/models/kind.model';
+import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
+import {Role} from './commons/models/configs/rolemapping.model';
+import {ConfigurationsComponent} from './configurations/configurations.component';
 
 const routes: Routes = [
   {
@@ -47,105 +41,118 @@ const routes: Routes = [
   },
   {
     path: 'crawljobs',
-    component: CrawlJobsComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLJOB,
       roles: [Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'crawljobs/:id',
-    component: CrawlJobsComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLJOB,
       roles: [Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'schedule',
-    component: SchedulePageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLSCHEDULECONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'schedule/:id',
-    component: SchedulePageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLSCHEDULECONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'crawlconfig',
-    component: CrawlConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'crawlconfig/:id',
-    component: CrawlConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'crawlhostgroupconfig',
-    component: CrawlHostGroupConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLHOSTGROUPCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'browserconfig',
-    component: BrowserConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.BROWSERCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'browserconfig/:id',
-    component: BrowserConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.BROWSERCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'browserscript',
-    component: BrowserScriptPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.BROWSERSCRIPT,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'browserscript/:id',
-    component: BrowserScriptPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.BROWSERSCRIPT,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN]
     },
   },
   {
     path: 'politenessconfig',
-    component: PolitenessConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.POLITENESSCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
   {
     path: 'politenessconfig/:id',
-    component: PolitenessConfigPageComponent,
+    component: ConfigurationsComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.POLITENESSCONFIG,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },
@@ -159,9 +166,11 @@ const routes: Routes = [
   },
   {
     path: 'rolemapping',
-    component: RoleMappingPageComponent,
+    component: ConfigurationsComponent,
+    // component: BrowserConfigPageComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.ROLEMAPPING,
       roles: [Role.ADMIN],
     },
   },
