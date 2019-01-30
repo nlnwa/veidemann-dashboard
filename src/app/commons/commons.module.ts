@@ -2,16 +2,15 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
 import {MaterialModule} from '../material.module';
-
 import {SnackBarService} from './snack-bar/snack-bar.service';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
 import {MetaComponent} from './meta/meta.component';
 import {RouterModule} from '@angular/router';
 import {SelectionBaseListComponent} from './list/selection-base-list/selection-base-list';
-
+import {BaseListComponent} from './list';
+import {ConfigRefComponent} from './configref/configref.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +18,8 @@ import {SelectionBaseListComponent} from './list/selection-base-list/selection-b
     LabelsComponent,
     MetaComponent,
     SelectionBaseListComponent,
+    BaseListComponent,
+    ConfigRefComponent
   ],
   imports: [
     MaterialModule,
@@ -39,6 +40,8 @@ import {SelectionBaseListComponent} from './list/selection-base-list/selection-b
     ReactiveFormsModule,
     RouterModule,
     SelectionBaseListComponent,
+    BaseListComponent,
+    ConfigRefComponent
   ],
   providers: [DatePipe],
 })
