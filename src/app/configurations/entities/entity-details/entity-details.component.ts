@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Entity, Meta} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
+import {ConfigObject, Kind, Meta} from '../../../commons/models';
 
 @Component({
   selector: 'app-entity-details',
@@ -18,17 +18,17 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   @Input()
-  entity: Entity;
+  configObject: ConfigObject;
 
   @Output()
-  save = new EventEmitter<Entity>();
+  save = new EventEmitter<ConfigObject>();
 
   @Output()
-  update = new EventEmitter<Entity>();
+  update = new EventEmitter<ConfigObject>();
 
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<Entity>();
+  delete = new EventEmitter<ConfigObject>();
 
   @Output()
   clear = new EventEmitter<void>();
@@ -38,11 +38,11 @@ export class EntityDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm(new Entity());
+    this.createForm();
   }
 
   get showSave() {
-    return this.entity ? !this.entity.id : false;
+    return this.configObject ? !this.configObject.id : false;
   }
 
   get canEdit(): boolean {
@@ -50,9 +50,9 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.entity) {
-      if (this.entity) {
-        this.updateForm(this.entity);
+    if (changes.configObject) {
+      if (this.configObject) {
+        this.updateForm();
       } else {
         this.form.reset();
       }
@@ -60,42 +60,55 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   onSave() {
-    this.save.emit(this.prepareSaveEntity());
+    this.save.emit(this.prepareSave());
   }
 
   onUpdate() {
-    this.update.emit(this.prepareSaveEntity());
+    this.update.emit(this.prepareSave());
   }
 
   onDelete(): void {
-    this.delete.emit(this.entity);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
-    this.updateForm(this.entity);
+    this.updateForm();
   }
 
   onClearClicked() {
     this.clear.emit();
   }
 
-  private createForm(entity: Entity) {
+  private createForm() {
     this.form = this.fb.group({
-      id: {value: entity.id, disabled: true},
-      meta: entity.meta,
+      id: {value: '', disabled: true},
+      meta: new Meta(),
     });
   }
 
-  updateForm(entity: Entity) {
+  updateForm() {
+    this.form.patchValue({
+      id: this.configObject.id,
+      meta: this.configObject.meta
+    });
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
     if (!this.canEdit) {
       this.form.disable();
     }
-    this.form.patchValue(entity);
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
   }
 
-  private prepareSaveEntity(): Entity {
-    return this.form.getRawValue();
+  private prepareSave(): ConfigObject {
+    console.log('onPrepareSaveEntity');
+    const formModel = this.form.value;
+
+    const configObject = new ConfigObject({kind: Kind.CRAWLENTITY});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    configObject.meta = formModel.meta;
+    console.log('should save: ', configObject);
+    return configObject;
   }
 }

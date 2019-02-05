@@ -34,7 +34,7 @@ import {
 } from './schedule';
 import {
   EntityDetailsComponent,
-  EntityService
+ // EntityService
 } from './entities';
 import {
   LoglevelComponent,
@@ -116,7 +116,7 @@ export class ConfigurationsModule {
         BackendService,
         SearchService,
         SeedService,
-        EntityService,
+       // EntityService,
         LogService,
         WarcStatusService,
       ],

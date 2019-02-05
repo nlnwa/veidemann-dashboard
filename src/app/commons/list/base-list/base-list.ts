@@ -51,6 +51,7 @@ export class BaseListComponent<T> implements AfterViewInit {
   set count(count: number) {
     this.pageLength = count;
   }
+
   @Output()
   protected rowClick = new EventEmitter<T | T[]>();
 

@@ -24,6 +24,7 @@ export class BackendService {
   }
 
   list(listRequest: ListRequest): Observable<ConfigObject[]> {
+    console.log('doing listRequest backend ', listRequest.toObject());
     const metadata = this.getAuth();
 
     const observable: Observable<ConfigObject> = Observable.create((observer: Observer<ConfigObject>) => {

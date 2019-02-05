@@ -1,15 +1,16 @@
 import {CrawlScope as CrawlScopeProto, Seed as SeedProto} from '../../../../api/config/v1/config_pb';
 import {ConfigRef} from '../configref.model';
+import {Kind} from '../kind.model';
 
 
 export class Seed {
-  entityRef: ConfigRef;
+  entityRef?: ConfigRef;
   scope: Scope;
-  jobRefList: ConfigRef[];
+  jobRefList?: ConfigRef[];
   disabled: boolean;
 
   constructor({
-                entityRef = new ConfigRef(),
+                entityRef = new ConfigRef({kind: Kind.CRAWLENTITY}),
                 scope = new Scope(),
                 jobRefList = [],
                 disabled = false
@@ -21,8 +22,9 @@ export class Seed {
   }
 
   static fromProto(proto: SeedProto): Seed {
+    const  entityRef = proto.getEntityRef() ? ConfigRef.fromProto(proto.getEntityRef()) : new ConfigRef({kind: Kind.CRAWLENTITY});
     return new Seed({
-      entityRef: ConfigRef.fromProto(proto.getEntityRef()),
+      entityRef,
       scope: Scope.fromProto(proto.getScope()),
       jobRefList: proto.getJobRefList().map(ref => ConfigRef.fromProto(ref)),
       disabled: proto.getDisabled()
@@ -30,8 +32,9 @@ export class Seed {
   }
 
   toProto(): SeedProto {
+    const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: this.entityRef.id});
     const proto = new SeedProto() as any as SeedProto.AsObject;
-    proto.entityRef = this.entityRef.toProto();
+    proto.entityRef = entityRef.toProto();
     proto.scope = this.scope.toProto();
     proto.jobRefList = this.jobRefList.map(ref => ref.toProto());
     proto.disabled = this.disabled;

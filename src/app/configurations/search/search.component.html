@@ -23,18 +23,21 @@
       </mat-toolbar>
 
       <app-search-list (rowClick)="onSelectEntity($event)"
-                       [data]="entities$ | async"
+                       [data]="data$ | async"
                        (selectedChange)="onSelectedEntityChange($event)"
                        (selectAll)="onSelectAllEntities($event)"
-                       (page)="onPageEntity($event)">
+                       (page)="onPageEntity($event)"
+                       [count]="entityCount$ | async">
       </app-search-list>
 
     </div>
   </div>
   <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-    <div fxFlex [fxHide]="(!entitySingleMode || (entitySingleMode && !selectedEntity))" [fxShow]="selectedEntity && entitySingleMode">
+    <!--<div fxFlex [fxHide]="(!entitySingleMode || (entitySingleMode && !selectedEntity))"-->
+    <!--[fxShow]="selectedEntity && entitySingleMode">-->
+    <div *ngIf="selectedEntity$ | async as selectedEntity">
       <app-entity-details
-        [entity]="selectedEntity"
+        [configObject]="selectedEntity"
         (save)="onSaveEntity($event)"
         (update)="onUpdateEntity($event)"
         (delete)="onDeleteEntity($event)"
@@ -43,25 +46,26 @@
         <mat-toolbar>
           <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
           <span class="fill-space"></span>
-          <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)"
+          <button mat-mini-fab (click)="onCreateSeed()"
                   *ngIf="canEdit"
                   [disabled]="!seedSingleMode ? true : false"
                   [matTooltip]="!seedSingleMode ? 'Kan ikke opprette en ny seed når flere er valgt.' :'Legg til en ny seed.'">
             <mat-icon>add</mat-icon>
           </button>
         </mat-toolbar>
-        <app-selection-base-list (rowClick)="onSelectSeed($event)"
-                                 [data]="seeds$ | async"
-                                 (selectedChange)="onSelectedSeedChange($event)"
-                                 (selectAll)="onSelectAllSeeds($event)"
-                                 (page)="onPageSeed($event)">
-        </app-selection-base-list>
+        <app-base-list
+          (rowClick)="onSelectSeed($event)"
+          [data]="seedData$ | async"
+          (selectedChange)="onSelectedSeedChange($event)"
+          (selectAll)="onSelectAllSeeds($event)"
+          (page)="onPageSeed($event)"
+          [count]="seedCount$ | async">
+        </app-base-list>
       </app-entity-details>
     </div>
     <div fxFlex *ngIf="selectedSeed && seedSingleMode">
       <app-seed-details
-        [seed]="selectedSeed"
-        [crawlJobs]="crawlJobs"
+        [configObject]="selectedSeed"
         (save)="onSaveSeed($event)"
         (update)="onUpdateSeed($event)"
         (delete)="onDeleteSeed($event)"

@@ -36,6 +36,7 @@ const routes: Routes = [
     component: SearchComponent,
     canActivate: [GuardService],
     data: {
+      kind: Kind.CRAWLENTITY,
       roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
     },
   },

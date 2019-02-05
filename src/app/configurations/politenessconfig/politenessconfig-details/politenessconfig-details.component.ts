@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RoleService} from '../../../auth/role.service';
+import {RoleService} from '../../../auth/';
 import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
-import {ConfigObject} from '../../../commons/models/configobject.model';
-import {Meta} from '../../../commons/models/meta/meta.model';
-import {Label} from '../../../commons/models/meta/label.model';
+import {ConfigObject} from '../../../commons/models/';
+import {Meta} from '../../../commons/models/';
+import {Label} from '../../../commons/models/';
 import {PolitenessConfig} from '../../../commons/models';
-import {Kind} from '../../../commons/models/kind.model';
+import {Kind} from '../../../commons/models/';
 import {RobotsPolicy} from '../../../commons/models/configs/politenessconfig.model';
 
 @Component({
@@ -170,7 +170,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
   }
 
   updateForm() {
-    console.log('updateForm', this.configObject.politenessConfig.robotsPolicy);
     this.form.patchValue({
       id: this.configObject.id,
       meta: this.configObject.meta,
