@@ -1,6 +1,7 @@
 import {CrawlScope as CrawlScopeProto, Seed as SeedProto} from '../../../../api/config/v1/config_pb';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
+import {ConfigObject} from '../configobject.model';
 
 
 export class Seed {
@@ -29,6 +30,46 @@ export class Seed {
       jobRefList: proto.getJobRefList().map(ref => ConfigRef.fromProto(ref)),
       disabled: proto.getDisabled()
     });
+  }
+
+  static mergeConfigs(configObjects: ConfigObject[]): Seed {
+    const seed = new Seed();
+    const compareObj: Seed = configObjects[0].seed;
+
+    const equalDisabledStatus = this.isDisabledEqual(configObjects);
+    const commonCrawlJobs = this.commonCrawlJobs(configObjects);
+
+       if (equalDisabledStatus) {
+         seed.disabled = compareObj.disabled;
+       } else {
+         seed.disabled = undefined;
+       }
+    //
+    //   for (const seedObj of seeds) {
+    //     for (const job of commonJobs) {
+    //       if (seedObj.job_id.includes(job)) {
+    //       } else {
+    //         commonJobs.splice(commonJobs.indexOf(job), 1);
+    //       }
+    //     }
+    //   }
+    //
+    //   seed.job_id = commonJobs;
+    //
+    //   return seed;
+    return seed;
+  }
+
+  static commonCrawlJobs(configObjects: ConfigObject[]) {
+
+  }
+
+  static isDisabledEqual(configObjects: ConfigObject[]) {
+    const compareSeed = configObjects[0].seed;
+    const equalDisabledStatus = configObjects.every(function (cfg: ConfigObject) {
+      return cfg.seed.disabled === compareSeed.disabled;
+    });
+    return equalDisabledStatus;
   }
 
   toProto(): SeedProto {

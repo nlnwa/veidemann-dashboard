@@ -35,7 +35,10 @@
   <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
     <!--<div fxFlex [fxHide]="(!entitySingleMode || (entitySingleMode && !selectedEntity))"-->
     <!--[fxShow]="selectedEntity && entitySingleMode">-->
-    <div *ngIf="selectedEntity$ | async as selectedEntity">
+    <div fxFlex *ngIf="selectedEntity$ | async as selectedEntity"
+         [fxHide]="!entitySingleMode"
+         [fxShow]="selectedEntity$ | async "
+    >
       <app-entity-details
         [configObject]="selectedEntity"
         (save)="onSaveEntity($event)"

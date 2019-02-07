@@ -36,6 +36,8 @@ export class EntityDetailsComponent implements OnChanges {
   form: FormGroup;
   shouldShow = true;
 
+  shouldAddLabel = undefined;
+
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
     this.createForm();
@@ -79,6 +81,11 @@ export class EntityDetailsComponent implements OnChanges {
     this.clear.emit();
   }
 
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
@@ -87,6 +94,7 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   updateForm() {
+    console.log(('updateForm entityDetails'));
     this.form.patchValue({
       id: this.configObject.id,
       meta: this.configObject.meta

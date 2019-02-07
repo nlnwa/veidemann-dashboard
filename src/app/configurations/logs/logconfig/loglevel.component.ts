@@ -2,9 +2,9 @@ import {Component, OnChanges, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {map} from 'rxjs/operators';
 import {LogService} from '../log.service';
-import {LogLevel} from '../../../commons/models/config.model';
 import {SnackBarService} from '../../../commons/snack-bar/snack-bar.service';
-import {RoleService} from '../../../auth/role.service';
+import {RoleService} from '../../../auth/';
+import {LogLevel} from '../../../commons/models';
 
 
 @Component({
@@ -88,7 +88,7 @@ export class LoglevelComponent implements OnChanges {
   }
 
   private getLogLevels() {
-    this.logService.getLogConfig().pipe(map(response => response.log_level))
+    this.logService.getLogConfig().pipe(map(response => response.logLevel))
       .subscribe(logLevels => {
         logLevels.forEach((logLevel) => {
           this.logLevels.push(logLevel);

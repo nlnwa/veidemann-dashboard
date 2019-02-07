@@ -21,6 +21,19 @@
                  placeholder="Id"
                  i18n-placeholder="@@metaIdInputPlaceholder">
         </mat-form-field>
+        <div *ngIf="!shouldShow">
+          <div>
+            <span>Labels:</span>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+          </div>
+        </div>
       </div>
 
       <div fxFlex fxLayout="column">

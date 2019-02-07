@@ -4,7 +4,7 @@ import {Observable, Observer} from 'rxjs';
 import {ConfigObject, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from '../../../api/config/v1/config_pb';
 import {ConfigPromiseClient} from '../../../api/config/v1/config_grpc_web_pb';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {map, toArray} from 'rxjs/operators';
+import {map, timeout, timeoutWith, toArray} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {environment} from '../../../environments/environment';
@@ -23,22 +23,26 @@ export class BackendService {
   constructor(protected oauthService: OAuthService) {
   }
 
-  list(listRequest: ListRequest): Observable<ConfigObject[]> {
-    console.log('doing listRequest backend ', listRequest.toObject());
+  list(listRequest: ListRequest, due = 1000): Observable<ConfigObject[]> {
     const metadata = this.getAuth();
 
     const observable: Observable<ConfigObject> = Observable.create((observer: Observer<ConfigObject>) => {
       const stream = this.configClient.listConfigObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
-        .on('status', () => {
+        .on('status', (s) => {
+          console.log('status', s);
           observer.complete();
-        });
+        })
+        .on('end', () => console.log('end'));
 
       return () => stream.cancel();
     });
 
-    return observable.pipe(toArray());
+    return observable.pipe(
+      timeoutWith(due, []),
+      toArray()
+    );
   }
 
   count(request: ListRequest): Observable<number> {

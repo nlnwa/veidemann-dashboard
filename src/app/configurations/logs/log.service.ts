@@ -3,7 +3,7 @@ import {environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
 
 import {HttpClient} from '@angular/common/http';
-import {LogLevels} from '../../commons/models/config.model';
+import {LogLevels} from '../../commons/models/configs/loglevel.model';
 
 @Injectable()
 export class LogService {

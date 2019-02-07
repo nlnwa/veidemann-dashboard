@@ -141,8 +141,12 @@ export class ConfigObject {
       case Kind.UNDEFINED:
         break;
       case Kind.CRAWLENTITY:
+        configObject.crawlEntity = CrawlEntity.mergeConfigs(configs);
+        return configObject;
         break;
       case Kind.SEED:
+        configObject.seed = Seed.mergeConfigs(configs);
+        return configObject;
         break;
       case Kind.CRAWLJOB:
         configObject.crawlJob = CrawlJob.mergeConfigs(configs);

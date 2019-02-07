@@ -439,6 +439,8 @@ export class ConfigurationsComponent implements OnInit {
     updateRequest.setUpdateTemplate(updateTemplate.toProto());
     updateRequest.setUpdateMask(updateMask);
 
+    console.log('configUpdateRequest multiple: ', updateRequest.toObject());
+
     this.configService.update(updateRequest)
       .subscribe(updatedConfigs => {
         this.selectedConfigs = [];
