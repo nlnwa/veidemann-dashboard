@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 
 import {RoleService} from '../../../auth/role.service';
 import {ConfigObject, Kind, Meta, Seed} from '../../../commons/models';
-import {ConfigRef} from '../../../commons/models/configref.model';
 
 
 @Component({
@@ -42,6 +41,8 @@ export class SeedDetailComponent implements OnChanges {
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
+  shouldAddCrawlJob = undefined;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
@@ -103,6 +104,15 @@ export class SeedDetailComponent implements OnChanges {
     }
   }
 
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  onToggleShouldAddCrawlJob(shouldAdd: boolean): void {
+    this.shouldAddCrawlJob = shouldAdd;
+  }
+
   onSave(): void {
     this.save.emit(this.prepareSaveSeed());
   }
@@ -137,8 +147,6 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   updateForm() {
-    console.log('in updateForm med data: ', this.configObject)
-    ;
     this.form.patchValue({
       id: this.configObject.id,
       disabled: this.configObject.seed.disabled || false,
@@ -183,7 +191,6 @@ export class SeedDetailComponent implements OnChanges {
 
     configObject.seed = seed;
     configObject.meta = formModel.meta;
-    console.log('skal lagre seed fra form: ', configObject);
     return configObject;
   }
 }

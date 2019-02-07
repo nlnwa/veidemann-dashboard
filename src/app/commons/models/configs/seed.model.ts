@@ -23,7 +23,7 @@ export class Seed {
   }
 
   static fromProto(proto: SeedProto): Seed {
-    const  entityRef = proto.getEntityRef() ? ConfigRef.fromProto(proto.getEntityRef()) : new ConfigRef({kind: Kind.CRAWLENTITY});
+    const entityRef = proto.getEntityRef() ? ConfigRef.fromProto(proto.getEntityRef()) : new ConfigRef({kind: Kind.CRAWLENTITY});
     return new Seed({
       entityRef,
       scope: Scope.fromProto(proto.getScope()),
@@ -39,24 +39,11 @@ export class Seed {
     const equalDisabledStatus = this.isDisabledEqual(configObjects);
     const commonCrawlJobs = this.commonCrawlJobs(configObjects);
 
-       if (equalDisabledStatus) {
-         seed.disabled = compareObj.disabled;
-       } else {
-         seed.disabled = undefined;
-       }
-    //
-    //   for (const seedObj of seeds) {
-    //     for (const job of commonJobs) {
-    //       if (seedObj.job_id.includes(job)) {
-    //       } else {
-    //         commonJobs.splice(commonJobs.indexOf(job), 1);
-    //       }
-    //     }
-    //   }
-    //
-    //   seed.job_id = commonJobs;
-    //
-    //   return seed;
+    if (equalDisabledStatus) {
+      seed.disabled = compareObj.disabled;
+    } else {
+      seed.disabled = undefined;
+    }
     return seed;
   }
 
@@ -81,6 +68,58 @@ export class Seed {
     proto.disabled = this.disabled;
 
     return proto as any as SeedProto;
+  }
+
+  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addJobRef?: boolean) {
+    const seed = new Seed();
+    const pathList = [];
+
+    if (mergedConfig) {
+      if (formControl.entityRef.dirty) {
+        if (configUpdate.seed.entityRef !== mergedConfig.seed.entityRef) {
+          seed.entityRef = configUpdate.seed.entityRef;
+          pathList.push('seed.entityRef');
+        }
+      }
+      if (addJobRef !== undefined) {
+        if (addJobRef) {
+          if (configUpdate.seed.jobRefList !== mergedConfig.seed.jobRefList) {
+            seed.jobRefList = configUpdate.seed.jobRefList;
+            pathList.push('seed.jobRef+');
+          }
+        } else {
+          seed.jobRefList = configUpdate.seed.jobRefList;
+          pathList.push('seed.jobRef-');
+        }
+      }
+
+      if (configUpdate.seed.disabled !== undefined) {
+        seed.disabled = configUpdate.seed.disabled;
+      }
+    } else {
+
+      if (formControl.entityRef.dirty) {
+        seed.entityRef = configUpdate.seed.entityRef;
+        pathList.push('seed.entityRef');
+      }
+
+      if (formControl.jobRefList.dirty) {
+        if (addJobRef !== undefined) {
+          seed.jobRefList = configUpdate.seed.jobRefList;
+          if (addJobRef) {
+            pathList.push('seed.jobRef+');
+          } else {
+            pathList.push('seed.jobRef-');
+          }
+        }
+      }
+
+      if (configUpdate.seed.disabled !== undefined) {
+        seed.disabled = configUpdate.seed.disabled;
+      }
+    }
+
+    return {updateTemplate: seed, pathList: pathList};
   }
 }
 

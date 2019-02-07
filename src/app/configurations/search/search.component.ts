@@ -1,14 +1,12 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, PageEvent} from '@angular/material';
+import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
-import {BehaviorSubject, combineLatest, EMPTY as empty, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
 import {catchError, filter, map, mergeMap, share, startWith, switchMap, tap} from 'rxjs/operators';
 
-import {ConfigObject, CrawlEntity, CrawlEntity as Entity, Kind, Label, Meta, Seed} from '../../commons/models/';
+import {ConfigObject, Kind, Meta, Seed} from '../../commons/models/';
 import {SearchService} from './search.service';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
-// import {CrawlJobService} from '../crawljobs';
-// import {EntityDetailsComponent, EntityService} from '../entities/';
 import {RoleService} from '../../auth';
 import {DetailDirective} from '../shared/detail.directive';
 
@@ -18,6 +16,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ConfigRef} from '../../commons/models/configref.model';
 import {EntityDetailsComponent} from '../entities';
 import {SeedDetailComponent} from '../seeds';
+import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -68,7 +67,7 @@ export class SearchComponent implements OnInit {
   data$ = this.data.asObservable();
 
   seedData = new Subject<ConfigObject[]>();
-  seedData$ = this.seedData.asObservable().pipe(tap(console.log));
+  seedData$ = this.seedData.asObservable();
 
   entityCount = new BehaviorSubject<number>(0);
   entityCount$ = this.entityCount.asObservable();
@@ -84,6 +83,7 @@ export class SearchComponent implements OnInit {
   // dynamic views
   @ViewChild(DetailDirective) entityDetailHost: DetailDirective;
   @ViewChild(DetailDirective) seedDetailHost: DetailDirective;
+  @ViewChild(DetailDirective) detailHost: DetailDirective;
 
   private searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
   searchTerm$ = this.searchTerm.asObservable();
@@ -110,7 +110,6 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('onInit search comp');
     this.kind = this.activatedRoute.snapshot.data.kind;
 
     combineLatest(
@@ -125,29 +124,18 @@ export class SearchComponent implements OnInit {
         })
       )
     ).subscribe((reply: any) => {
-      console.log('onInit reply: ', reply);
       this.data.next(reply.value);
       this.entityCount.next(reply.length);
 
-      //     if (reply.length > 0 && this.searchTerm.value.length > 0) {
-      //
-      //       if (reply.length === 1) {
-      //         this.selectedEntity = reply.value[0];
-      //       }
-      //     } else if (this.searchTerm.value) {
-      //     //  this.selectedEntity = new Entity({name: this.searchTerm.value});
-      //       this.clearSeedList();
-      //     }
-      //   });
-      //
-      //   this.seedPage$.subscribe((page: PageEvent) => {
-      //     console.log('seed page subscription', page);
-      //     if (this.selectedEntity) {
-      //       this.loadSeedList(this.selectedEntity.id, page);
-      //     } else {
-      //
-      //     }
-      //   });
+      if (reply.value.length > 0 && this.searchTerm.value.length > 0) {
+        if (reply.value.length === 1) {
+          this.onSelectEntity(reply.value[0]);
+        }
+      } else if (this.searchTerm.value) {
+        const newEntity = new ConfigObject({kind: Kind.CRAWLENTITY});
+        newEntity.meta = new Meta({name: this.searchTerm.value});
+        this.selectedEntity.next(newEntity);
+      }
     });
 
     this.selectedEntity$.pipe(
@@ -197,6 +185,71 @@ export class SearchComponent implements OnInit {
     this.seedData.next([]);
   }
 
+  // loadComponent(mergedConfigObject: ConfigObject) {
+  //   const kind = mergedConfigObject.kind;
+  //   let component;
+  //   switch (kind) {
+  //     case Kind.CRAWLENTITY:
+  //       component = EntityDetailsComponent;
+  //       break;
+  //     case Kind.SEED:
+  //       component = SeedDetailComponent;
+  //       break;
+  //   }
+  //
+  //   const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+  //   const viewContainerRef = this.detailHost.viewContainerRef;
+  //   viewContainerRef.clear();
+  //   this.componentRef = viewContainerRef.createComponent(componentFactory);
+  //   const instance = Object.assign(this.componentRef.instance);
+  //   const formControl = instance.form.controls;
+  //   instance.configObject = mergedConfigObject;
+  //   instance.data = false;
+  //   switch (kind) {
+  //     case Kind.CRAWLENTITY:
+  //       instance.updateAll = this.allEntitiesSelected;
+  //       instance.clear.subscribe(() => this.onClearEntity());
+  //       break;
+  //     case Kind.SEED:
+  //       instance.updateAll = this.allSeedsSelected;
+  //       instance.clear.subscribe(() => this.onClearSeed());
+  //   }
+  //   instance.updateForm();
+  //
+  //   if (kind === Kind.CRAWLENTITY) {
+  //     if (!this.allEntitiesSelected) {
+  //       instance.update.subscribe(
+  //         (entityUpdate) => {
+  //           const addLabel = instance.shouldAddLabel;
+  //           this.onUpdateMultipleEntities(mergedConfigObject, entityUpdate, formControl, addLabel);
+  //         });
+  //       instance.delete.subscribe(() => this.onDeleteMultipleEntities(this.selectedEntities));
+  //     }
+  //
+  //     if (this.allEntitiesSelected) {
+  //       // instance.update.subscribe((entityUpdate) => this.onUpdateAllEntities(entityUpdate));
+  //       // instance.delete.subscribe(() => this.onDeleteAllEntities());
+  //     }
+  //   }
+  //   if (kind === Kind.SEED) {
+  //     if (!this.allSeedsSelected) {
+  //
+  //       instance.update.subscribe((seedUpdate) => {
+  //         const addLabel = instance.shouldAddLabel;
+  //         const addCrawlJob = instance.shouldAddCrawlJob;
+  //         this.onUpdateMultipleSeeds(mergedConfigObject, seedUpdate, formControl, addLabel, addCrawlJob);
+  //       });
+  //
+  //       instance.delete.subscribe(() => this.onDeleteMultipleSeeds(this.selectedSeeds));
+  //     }
+  //
+  //     if (this.allSeedsSelected) {
+  //       instance.update.subscribe((seedUpdate) => this.onUpdateAllSeeds(seedUpdate));
+  //       instance.delete.subscribe(() => this.onDeleteAllSeeds());
+  //     }
+  //   }
+  // }
+
   loadEntityComponent(mergedEntities: ConfigObject) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(EntityDetailsComponent);
     const viewContainerRef = this.entityDetailHost.viewContainerRef;
@@ -221,33 +274,46 @@ export class SearchComponent implements OnInit {
     }
 
     if (this.allEntitiesSelected) {
-      instance.update.subscribe((entityUpdate) => this.onUpdateAllEntities(entityUpdate));
-      instance.delete.subscribe(() => this.onDeleteAllEntities());
+      instance.update.subscribe((entityUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        this.onUpdateAllEntities(entityUpdate, formControl, addLabel);
+      });
+      // instance.delete.subscribe(() => this.onDeleteAllEntities());
     }
   }
 
   loadSeedComponent(mergedSeeds: ConfigObject) {
-    console.log('loadSeedComp med configobj: ', mergedSeeds);
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(SeedDetailComponent);
     const viewContainerRef = this.seedDetailHost.viewContainerRef;
     viewContainerRef.clear();
     this.componentRef = viewContainerRef.createComponent(componentFactory);
     const instance = this.componentRef.instance as SeedDetailComponent;
+    const formControl = instance.form.controls;
     instance.configObject = mergedSeeds;
-    //  instance.equalDisabled = equalDisabled;
-    //   instance.crawlJobs = crawlJobs;
+    // instance.equalDisabled = equalDisabled;
+
     instance.data = false;
     instance.updateForm();
     instance.clear.subscribe(() => this.onClearSeed());
-    //   if (!this.allSeedsSelected) {
-    //     instance.update.subscribe((seedUpdate) => this.onUpdateMultipleSeeds(seedUpdate, initialLabels));
-    //     instance.delete.subscribe(() => this.onDeleteMultipleSeeds(this.selectedSeeds));
-    //   }
-    //
-    //   if (this.allSeedsSelected) {
-    //     instance.update.subscribe((seedUpdate) => this.onUpdateAllSeeds(seedUpdate));
-    //     instance.delete.subscribe(() => this.onDeleteAllSeeds());
-    //   }
+
+    if (!this.allSeedsSelected) {
+
+      instance.update.subscribe((seedUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        const addCrawlJob = instance.shouldAddCrawlJob;
+        this.onUpdateMultipleSeeds(mergedSeeds, seedUpdate, formControl, addLabel, addCrawlJob);
+      });
+
+      instance.delete.subscribe(() => this.onDeleteMultipleSeeds(this.selectedSeeds));
+    }
+
+    if (this.allSeedsSelected) {
+      instance.update.subscribe((seedUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        const addCrawlJob = instance.shouldAddCrawlJob;
+        this.onUpdateAllSeeds(seedUpdate, formControl, addLabel, addCrawlJob);
+      });
+    }
   }
 
   onEnterKey(event) {
@@ -284,66 +350,49 @@ export class SearchComponent implements OnInit {
   }
 
   onSelectedEntityChange(entities: ConfigObject[]) {
-    console.log('selectedEntitiesChanged: ', entities);
     this.selectedEntities = entities;
     if (!this.entitySingleMode) {
       if (!this.allEntitiesSelected) {
-        console.log('vis merged seeds');
         this.loadEntityComponent(ConfigObject.mergeConfigs(entities));
-        //     this.loadEntityComponent(this.mergeEntities(entities), getInitialLabels(entities, Entity));
       } else {
-        //     const entity = new Entity();
-        //     // Please validators
-        //     entity.id = '1234567';
-        //     entity.meta.name = 'update';
-        //     this.loadEntityComponent(entity, []);
-        console.log('skal oppdatere alle alle');
+        const entity = entities[0];
+        entity.meta.name = 'update';
+        entity.id = '1234567';
+        this.loadEntityComponent(entity);
       }
     } else {
-
       this.selectedEntity.next(entities[0] || null);
       if (this.componentRef !== null) {
         this.componentRef.destroy();
       }
     }
-    //   this.selectedEntity = entities[0] || null;
-    //   if (this.componentRef !== null) {
-    //     this.componentRef.destroy();
-    //   }
-    // }
   }
 
   onSelectedSeedChange(seeds: ConfigObject[]) {
-    console.log('selectedSeedsChanges: ', seeds);
     this.selectedSeeds = seeds;
     if (!this.seedSingleMode) {
       if (!this.allSeedsSelected) {
-        console.log('vis merged seeds');
         this.loadSeedComponent(ConfigObject.mergeConfigs(seeds));
       } else {
-        //     const seed = new Seed('123456');
-        //     seed.id = '1234567';
-        //     seed.meta.name = 'update';
-        //     this.loadSeedComponent(seed, this.crawlJobs, [], true);
-        console.log('skal oppdatere alle');
+        const seed = seeds[0];
+        seed.meta.name = 'update';
+        seed.id = '1234567';
+        this.loadSeedComponent(seed);
       }
-      //
     } else {
-
-      console.log('skal bare vise en ');
-      // //   this.selectedSeed = seeds[0] || null;
-      // if (this.componentRef !== null) {
-      //   this.componentRef.destroy();
-      // }
+      this.selectedSeed = seeds[0] || null;
+      if (this.componentRef !== null) {
+        this.componentRef.destroy();
+      }
     }
   }
-
 
   onSaveEntity(configObject: ConfigObject) {
     this.backendService.save(configObject.toProto())
       .subscribe(newConfig => {
         this.entityCount.next(this.entityCount.value + 1);
         this.selectedEntity.next(ConfigObject.fromProto(newConfig));
+        this.searchTerm.next(this.searchTerm.value);
         this.snackBarService.openSnackBar('Lagret');
       });
   }
@@ -370,145 +419,35 @@ export class SearchComponent implements OnInit {
       })
     )
       .subscribe((deletedEntity) => {
+        this.entityCount.next(this.entityCount.value - 1);
         this.onClearEntity();
         this.snackBarService.openSnackBar('Entitet slettet');
         this.searchTerm.next(this.searchTerm.value);
       });
   }
 
-  onUpdateMultipleEntities(mergedEntity: ConfigObject, entityUpdate: ConfigObject, formControl: any, addLabel: boolean) {
-    const numOfEntities = this.selectedEntities.length.toString();
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
-    const pathList = [];
-
-    const ids = [];
-    for (const entity of this.selectedEntities) {
-      ids.push(entity.id);
-    }
-    listRequest.setIdList(ids);
-    // updateTemplate.crawlEntity = new CrawlEntity();
-    listRequest.setKind(Kind.CRAWLENTITY.valueOf());
-
-    const meta = new Meta().createUpdateRequest(entityUpdate, formControl, mergedEntity, addLabel);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(meta.pathList);
-    }
-
-    updateMask.setPathsList(pathList);
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    console.log('multipleEntityUpdate: ', updateRequest.toObject());
-
-    this.backendService.update(updateRequest)
-      .subscribe(updatedEntities => {
-        this.selectedEntities = [];
-        this.onClearEntity();
-        this.componentRef.destroy();
-        this.searchTerm.next(this.searchTerm.value);
-        this.snackBarService.openSnackBar(numOfEntities + ' entiteter er oppdatert');
-      });
-
-    // from(this.selectedEntities).pipe(
-    //   mergeMap((entity: Entity) => {
-    //
-    //     if (entity.meta.label === undefined) {
-    //       entity.meta.label = [];
-    //     }
-    //     entity.meta.label = updatedLabels(entityUpdate.meta.label.concat(entity.meta.label));
-    //     for (const label of initialLabels) {
-    //       if (!findLabel(entityUpdate.meta.label, label.key, label.value)) {
-    //         entity.meta.label.splice(
-    //           entity.meta.label.findIndex(
-    //             removedLabel => removedLabel.key === label.key && removedLabel.value === label.value), 1);
-    //       }
-    //     }
-    //     return this.entityService.update(entity);
-    //   }),
-    //   catchError((err) => {
-    //     console.log(err);
-    //     return of('true');
-    //   }),
-    // ).subscribe(() => {
-    //   this.selectedEntities = [];
-    //   this.selectedEntity = null;
-    //   this.componentRef.destroy();
-    //   this.changes.next();
-    //   this.snackBarService.openSnackBar(numOfEntities + ' entiteter er oppdatert');
-    // });
-  }
-
-  // onDeleteMultipleEntities(entities: Entity[]) {
-  // const numOfEntities = entities.length.toString();
-  // const dialogConfig = new MatDialogConfig();
-  // dialogConfig.disableClose = true;
-  // dialogConfig.autoFocus = true;
-  // dialogConfig.data = {
-  //   numberOfConfigs: numOfEntities
-  // };
-  // const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
-  // dialogRef.afterClosed()
-  //   .subscribe(result => {
-  //     if (result) {
-  //       from(entities).pipe(
-  //         mergeMap((entity) => this.entityService.delete(entity.id)),
-  //         catchError((err) => {
-  //           console.log(err);
-  //           const errorString = err.error.error.split(':')[1];
-  //           const deleteError = /delete CrawlEntity, there are/g;
-  //           if (errorString.match(deleteError)) {
-  //             this.snackBarService.openSnackBar(errorString);
-  //             return empty;
-  //           }
-  //           return empty;
-  //         }),
-  //       ).subscribe(() => {
-  //         this.selectedEntities = [];
-  //         this.componentRef.destroy();
-  //         this.selectedEntity = null;
-  //         this.changes.next();
-  //         this.snackBarService.openSnackBar(numOfEntities + ' entiteter er slettet');
-  //       });
-  //     } else {
-  //       this.snackBarService.openSnackBar('Entitetene vil ikke bli slettet');
-  //     }
-  //   });
-  // }
 
   onSelectAllEntities(allSelected: boolean) {
-    // this.allEntitiesSelected = allSelected;
-    // if (allSelected) {
-    //   this.onSelectedEntityChange([new Entity(), new Entity()]);
-    // } else {
-    //   this.onSelectedEntityChange([]);
-    // }
+    this.allEntitiesSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedEntityChange([new ConfigObject({kind: Kind.CRAWLENTITY}), new ConfigObject({kind: Kind.CRAWLENTITY})]);
+    } else {
+      this.onSelectedEntityChange([]);
+    }
   }
 
-  onUpdateAllEntities(entityUpdate: Entity) {
-    console.log('Skal oppdatere alle tilgjengelige entiteter');
-  }
-
-  onDeleteAllEntities() {
-    console.log('Skal slette alle tilgjengelige entiteter');
-  }
 
   onSelectSeed(seed: ConfigObject) {
     this.selectedSeed = seed;
   }
 
   onSelectAllSeeds(allSelected: boolean) {
-    // this.allSeedsSelected = allSelected;
-    // if (allSelected) {
-    //   this.onSelectedSeedChange([new Seed('1234'), new Seed('5678')]);
-    // } else {
-    //   this.onSelectedSeedChange([]);
-    // }
+    this.allSeedsSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedSeedChange([new ConfigObject({kind: Kind.SEED}), new ConfigObject({kind: Kind.SEED})]);
+    } else {
+      this.onSelectedSeedChange([]);
+    }
   }
 
 
@@ -517,7 +456,6 @@ export class SearchComponent implements OnInit {
   }
 
   onPageSeed(page: PageEvent) {
-    console.log(page);
     this.seedPage.next(page);
   }
 
@@ -525,7 +463,6 @@ export class SearchComponent implements OnInit {
     this.selectedSeed = null;
     if (!this.seedSingleMode) {
       this.selectedSeeds = [];
-      //  this.loadSeedList(this.selectedEntity.id);
       this.componentRef.destroy();
       if (this.allSeedsSelected) {
         this.allSeedsSelected = false;
@@ -583,105 +520,229 @@ export class SearchComponent implements OnInit {
       });
   }
 
+  onUpdateMultipleEntities(mergedEntity: ConfigObject, entityUpdate: ConfigObject, formControl: any, addLabel: boolean) {
+    const numOfEntities = this.selectedEntities.length.toString();
+    const updateRequest = new UpdateRequest();
+    const updateMask = new FieldMask();
+    const listRequest = new ListRequest();
+    const updateTemplate = new ConfigObject();
+    updateTemplate.meta = new Meta();
+    const pathList = [];
 
-  onUpdateMultipleSeeds(seedUpdate: Seed, initialLabels: Label[]) {
-    // const numOfConfigs = this.selectedSeeds.length.toString();
-    // from(this.selectedSeeds).pipe(
-    //   mergeMap((seed: Seed) => {
-    //
-    //     if (seed.meta.label === undefined) {
-    //       seed.meta.label = [];
-    //     }
-    //     seed.meta.label = updatedLabels(seedUpdate.meta.label.concat(seed.meta.label));
-    //     for (const label of initialLabels) {
-    //       if (!findLabel(seedUpdate.meta.label, label.key, label.value)) {
-    //         seed.meta.label.splice(
-    //           seed.meta.label.findIndex(
-    //             removedLabel => removedLabel.key === label.key && removedLabel.value === label.value), 1);
-    //       }
-    //     }
-    //
-    //     if (seedUpdate.disabled !== undefined) {
-    //       seed.disabled = seedUpdate.disabled;
-    //     }
-    //
-    //     if (seedUpdate.job_id !== ['']) {
-    //       seed.job_id = seedUpdate.job_id;
-    //     }
-    //     return this.seedService.update(seed);
-    //   }),
-    //   catchError((err) => {
-    //     console.log(err);
-    //     return of('true');
-    //   }),
-    // ).subscribe(() => {
-    //   this.selectedSeeds = [];
-    //   this.componentRef.destroy();
-    //   this.selectedSeed = null;
-    //   this.changes.next();
-    //   this.snackBarService.openSnackBar(numOfConfigs + ' seeds er oppdatert');
-    // });
+    const ids = [];
+    for (const entity of this.selectedEntities) {
+      ids.push(entity.id);
+    }
+    listRequest.setIdList(ids);
+    listRequest.setKind(Kind.CRAWLENTITY.valueOf());
+
+    const meta = new Meta().createUpdateRequest(entityUpdate, formControl, mergedEntity, addLabel);
+    updateTemplate.meta = meta.updateTemplate;
+    if (meta.pathList.length !== 0) {
+      pathList.push(meta.pathList);
+    }
+
+    updateMask.setPathsList(pathList);
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(updateTemplate.toProto());
+    updateRequest.setUpdateMask(updateMask);
+
+    this.backendService.update(updateRequest)
+      .subscribe(updatedEntities => {
+        this.selectedEntities = [];
+        this.onClearEntity();
+        this.componentRef.destroy();
+        this.searchTerm.next(this.searchTerm.value);
+        this.snackBarService.openSnackBar(numOfEntities + ' entiteter er oppdatert');
+      });
   }
 
 
-  onDeleteMultipleSeeds(seeds: Seed[]) {
-    // const numOfSeeds = seeds.length.toString();
-    // const entityId = seeds[0].entity_id;
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.autoFocus = true;
-    // dialogConfig.data = {
-    //   numberOfConfigs: numOfSeeds
-    // };
-    // const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
-    // dialogRef.afterClosed()
-    //   .subscribe(result => {
-    //     if (result) {
-    //       from(seeds).pipe(
-    //         mergeMap((seed) => this.seedService.delete(seed.id)),
-    //         catchError((err) => {
-    //           console.log(err);
-    //           return of('true');
-    //         }),
-    //       ).subscribe(() => {
-    //         this.selectedSeeds = [];
-    //         this.componentRef.destroy();
-    //         this.loadSeedList(entityId);
-    //         this.selectedSeed = null;
-    //         this.changes.next();
-    //         this.snackBarService.openSnackBar(numOfSeeds + ' seeds er slettet');
-    //       });
-    //     } else {
-    //       this.snackBarService.openSnackBar('Seeds vil ikke bli slettet');
-    //     }
-    //   });
+  onUpdateMultipleSeeds(mergedSeeds: ConfigObject, seedUpdate: ConfigObject, formControl: any, addLabel: boolean, addCrawlJob: boolean) {
+    const numOfSeeds = this.selectedSeeds.length.toString();
+    const updateRequest = new UpdateRequest();
+    const updateMask = new FieldMask();
+    const listRequest = new ListRequest();
+    const updateTemplate = new ConfigObject();
+    updateTemplate.meta = new Meta();
+
+    const pathList = [];
+
+    const ids = [];
+    for (const config of this.selectedSeeds) {
+      ids.push(config.id);
+    }
+
+    listRequest.setIdList(ids);
+    const seed = new Seed().createUpdateRequest(seedUpdate, formControl, mergedSeeds);
+    updateTemplate.seed = seed.updateTemplate;
+    listRequest.setKind(Kind.SEED.valueOf());
+    if (seed.pathList.length !== 0) {
+      pathList.push(...seed.pathList);
+    }
+
+    const meta = new Meta().createUpdateRequest(seedUpdate, formControl, mergedSeeds, addLabel);
+    updateTemplate.meta = meta.updateTemplate;
+    if (meta.pathList.length !== 0) {
+      pathList.push(...meta.pathList);
+    }
+
+    updateMask.setPathsList(pathList);
+
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(updateTemplate.toProto());
+    updateRequest.setUpdateMask(updateMask);
+
+    this.backendService.update(updateRequest)
+      .subscribe(updatedSeeds => {
+        this.selectedSeeds = [];
+        this.onClearSeed();
+        this.componentRef.destroy();
+        this.seedChanges.next();
+        this.snackBarService.openSnackBar(numOfSeeds + ' seeds er oppdatert');
+      });
   }
 
-  onUpdateAllSeeds(seedUpdate: Seed) {
-    console.log('Skal oppdatere alle tilgjengelige seeds');
+  onDeleteMultipleEntities(entities: ConfigObject[]) {
+    const numOfEntities = entities.length.toString();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      numberOfConfigs: numOfEntities
+    };
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          from(entities).pipe(
+            mergeMap((entity) => this.backendService.delete(entity.toProto())),
+            catchError((err) => {
+              console.log(err);
+              const errorString = err.message.split(':')[1];
+              const deleteError = /delete crawlEntity, there are/gm;
+              if (deleteError.test(errorString)) {
+                this.snackBarService.openSnackBar(errorString);
+                return empty;
+              }
+              return empty;
+            }),
+          ).subscribe(() => {
+            this.entityCount.next(this.entityCount.value - entities.length);
+            this.selectedEntities = [];
+            this.componentRef.destroy();
+            this.onClearEntity();
+            this.searchTerm.next(this.searchTerm.value);
+            this.snackBarService.openSnackBar(numOfEntities + ' entiteter er slettet');
+          });
+        } else {
+          this.snackBarService.openSnackBar('Entitetene vil ikke bli slettet');
+        }
+      });
   }
 
-  onDeleteAllSeeds() {
-    console.log('skal slette alle tilgjengelige seeds');
+  onDeleteMultipleSeeds(seeds: ConfigObject[]) {
+    const numOfSeeds = seeds.length.toString();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      numberOfConfigs: numOfSeeds
+    };
+
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          from(seeds).pipe(
+            mergeMap((seed) => this.backendService.delete(seed.toProto())),
+            catchError((err) => {
+              console.log(err);
+              return of('true');
+            }),
+          ).subscribe(() => {
+            this.selectedSeeds = [];
+            this.componentRef.destroy();
+            this.onClearSeed();
+            this.seedChanges.next();
+            this.selectedSeed = null;
+            this.snackBarService.openSnackBar(numOfSeeds + ' seeds er slettet');
+          });
+        } else {
+          this.snackBarService.openSnackBar('Seeds vil ikke bli slettet');
+        }
+      });
+    this.seedCount.next(this.seedCount.value - seeds.length);
+  }
+
+  onUpdateAllEntities(configUpdate: ConfigObject, formControl: any, addLabels: boolean) {
+    const updateRequest = new UpdateRequest();
+    const updateMask = new FieldMask();
+    const listRequest = new ListRequest();
+    listRequest.setKind(Kind.CRAWLENTITY.valueOf());
+    const updateTemplate = new ConfigObject();
+    updateTemplate.meta = new Meta();
+
+    const pathList = [];
+    const meta = new Meta().createUpdateRequest(configUpdate, formControl, null, addLabels);
+    updateTemplate.meta = meta.updateTemplate;
+    if (meta.pathList.length !== 0) {
+      pathList.push(...meta.pathList);
+    }
+
+    listRequest.setIdList([]);
+    updateMask.setPathsList(pathList);
+
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(updateTemplate.toProto());
+    updateRequest.setUpdateMask(updateMask);
+
+    this.backendService.update(updateRequest)
+      .subscribe(updatedEntities => {
+        this.selectedEntities = [];
+        this.componentRef.destroy();
+        this.searchTerm.next(this.searchTerm.value);
+        this.snackBarService.openSnackBar('Alle entiteter er oppdatert');
+      });
+  }
+
+
+  onUpdateAllSeeds(configUpdate: ConfigObject, formControl: any, addLabels: boolean, addCrawlJob: boolean) {
+    const updateRequest = new UpdateRequest();
+    const updateMask = new FieldMask();
+    const listRequest = new ListRequest();
+    listRequest.setKind(Kind.SEED.valueOf());
+    const updateTemplate = new ConfigObject();
+    updateTemplate.meta = new Meta();
+    const pathList = [];
+
+    const seed = new Seed().createUpdateRequest(configUpdate, formControl, null, addCrawlJob);
+    updateTemplate.seed = seed.updateTemplate;
+    if (seed.pathList.length !== 0) {
+      pathList.push(...seed.pathList);
+    }
+
+    const meta = new Meta().createUpdateRequest(configUpdate, formControl, null, addLabels);
+    updateTemplate.meta = meta.updateTemplate;
+    if (meta.pathList.length !== 0) {
+      pathList.push(...meta.pathList);
+    }
+
+    listRequest.setIdList([]);
+    updateMask.setPathsList(pathList);
+
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(updateTemplate.toProto());
+    updateRequest.setUpdateMask(updateMask);
+
+    this.backendService.update(updateRequest)
+      .subscribe(() => {
+        this.selectedSeeds = [];
+        this.onClearSeed();
+        this.componentRef.destroy();
+        this.seedChanges.next();
+        this.snackBarService.openSnackBar('Alle seeds er oppdatert');
+      });
   }
 }
 
-// Helper function to determine if all selected seeds has the same value for disabled
-
-
-// Helper function for finding common crawljob for selected seeds
-function commonCrawljobs(seeds: Seed[]) {
-  // const allJobs = [];
-  // for (const seed of seeds) {
-  //   if (seed.job_id !== undefined) {
-  //     allJobs.push(seed.job_id);
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  // const mergedJobs = [].concat.apply([], allJobs);
-  // const uniqueJobs = mergedJobs.filter(function (elem, index, self) {
-  //   return index === self.indexOf(elem);
-  // });
-  // return uniqueJobs;
-}
