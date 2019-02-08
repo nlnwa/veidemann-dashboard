@@ -1,4 +1,4 @@
-import {CrawlEntity as CrawlEntityProto} from '../../../../api/config/v1/config_pb';
+import {CrawlEntity as CrawlEntityProto} from 'veidemann-api-grpc-web';
 import {ConfigObject} from '../configobject.model';
 
 export class CrawlEntity {

@@ -1,4 +1,4 @@
-import {CrawlScope as CrawlScopeProto, Seed as SeedProto} from '../../../../api/config/v1/config_pb';
+import {CrawlScope as CrawlScopeProto, Seed as SeedProto} from 'veidemann-api-grpc-web';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
 import {ConfigObject} from '../configobject.model';
@@ -60,14 +60,13 @@ export class Seed {
   }
 
   toProto(): SeedProto {
+    const proto = new SeedProto();
     const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: this.entityRef.id});
-    const proto = new SeedProto() as any as SeedProto.AsObject;
-    proto.entityRef = entityRef.toProto();
-    proto.scope = this.scope.toProto();
-    proto.jobRefList = this.jobRefList.map(ref => ref.toProto());
-    proto.disabled = this.disabled;
-
-    return proto as any as SeedProto;
+    proto.setEntityRef(entityRef.toProto());
+    proto.setScope(this.scope.toProto());
+    proto.setJobRefList(this.jobRefList.map(ref => ref.toProto()));
+    proto.setDisabled(this.disabled);
+    return proto;
   }
 
   createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addJobRef?: boolean) {

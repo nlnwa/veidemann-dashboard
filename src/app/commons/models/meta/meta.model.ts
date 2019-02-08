@@ -1,4 +1,4 @@
-import {Label as LabelProto, Meta as MetaProto} from '../../../../api/config/v1/config_pb';
+import {Label as LabelProto, Meta as MetaProto} from 'veidemann-api-grpc-web';
 import {fromTimestampProto} from '../../datetime/datetime';
 import {ConfigObject} from '../configobject.model';
 import {Label} from './label.model';
@@ -43,17 +43,17 @@ export class Meta {
   }
 
   toProto(): MetaProto {
-    const proto = new MetaProto() as any as MetaProto.AsObject;
-    proto.name = this.name;
-    proto.description = this.description;
-    proto.labelList = this.labelList.map(label => {
+    const proto = new MetaProto();
+    proto.setName(this.name);
+    proto.setDescription(this.description);
+    proto.setLabelList(this.labelList.map(label => {
       const l = new LabelProto();
       l.setKey(label.key);
       l.setValue(label.value);
       return l;
-    });
+    }));
 
-    return proto as any as MetaProto;
+    return proto;
   }
 
   createUpdateRequest(updateConfig: ConfigObject, control: any, mergedConfig?: ConfigObject, addLabel?: boolean) {

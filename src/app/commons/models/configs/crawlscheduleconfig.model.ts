@@ -1,4 +1,4 @@
-import {CrawlScheduleConfig as CrawlScheduleConfigProto} from '../../../../api/config/v1/config_pb';
+import {CrawlScheduleConfig as CrawlScheduleConfigProto} from 'veidemann-api-grpc-web';
 import {fromTimestampProto, toTimestampProto} from '../../datetime/datetime';
 import {ConfigObject} from '../configobject.model';
 
@@ -128,13 +128,11 @@ export class CrawlScheduleConfig {
   }
 
   toProto(): CrawlScheduleConfigProto {
-    const proto = new CrawlScheduleConfigProto() as any as CrawlScheduleConfigProto.AsObject;
-    proto.cronExpression = this.cronExpression;
-    proto.validFrom = toTimestampProto(this.validFrom);
-    proto.validTo = toTimestampProto(this.validTo);
-
-
-    return proto as any as CrawlScheduleConfigProto;
+    const proto = new CrawlScheduleConfigProto();
+    proto.setCronExpression(this.cronExpression);
+    proto.setValidFrom(toTimestampProto(this.validFrom));
+    proto.setValidTo(toTimestampProto(this.validTo));
+    return proto;
   }
 
 

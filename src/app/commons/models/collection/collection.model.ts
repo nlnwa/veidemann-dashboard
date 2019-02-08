@@ -1,7 +1,5 @@
-import {
-  Collection as CollectionProto,
-  SubCollection as SubCollectionProto
-} from '../../../../api/config/v1/config_pb';
+import {Collection as CollectionProto} from 'veidemann-api-grpc-web';
+
 
 export enum RotationPolicy {
   NONE = 0,
@@ -50,13 +48,13 @@ export class Collection {
   }
 
   toProto(): CollectionProto {
-    const proto = new CollectionProto() as any as CollectionProto.AsObject;
-    proto.collectionDedupPolicy = this.collectionDedupPolicy;
-    proto.fileRotationPolicy = this.fileRotationPolicy;
-    proto.compress = this.compress;
-    proto.fileSize = this.fileSize;
-    proto.subCollectionsList = this.subCollectionsList.map(ref => ref.toProto());
-    return proto as any as CollectionProto;
+    const proto = new CollectionProto();
+    proto.setCollectionDedupPolicy(this.collectionDedupPolicy);
+    proto.setFileRotationPolicy(this.fileRotationPolicy);
+    proto.setCompress(this.compress);
+    proto.setFileSize(this.fileSize);
+    proto.setSubCollectionsList(this.subCollectionsList.map(ref => ref.toProto()));
+    return proto;
   }
 }
 
@@ -73,17 +71,17 @@ export class SubCollection {
     this.name = name;
   }
 
-  static fromProto(proto: SubCollectionProto): SubCollection {
+  static fromProto(proto: CollectionProto.SubCollection): SubCollection {
     return new SubCollection({
       type: proto.getType(),
       name: proto.getName()
     });
   }
 
-  toProto(): SubCollectionProto {
-    const proto = new SubCollectionProto() as any as SubCollectionProto.AsObject;
-    proto.type = this.type;
-    proto.name = this.name;
-    return proto as any as SubCollectionProto;
+  toProto(): CollectionProto.SubCollection {
+    const proto = new CollectionProto.SubCollection();
+    proto.setType(this.type);
+    proto.setName(this.name);
+    return proto;
   }
 }

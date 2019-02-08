@@ -3,7 +3,8 @@ import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validat
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../validator/patterns';
-import {Label} from '../../../api/config/v1/config_pb';
+import {Label} from '../models';
+
 
 export enum Kind {
   LABEL = 'Label',
@@ -24,8 +25,8 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
 
   // ControlValueAccessor callback functions
-  onChange: (labels: Label.AsObject[]) => void;
-  onTouched: (labels: Label.AsObject[]) => void;
+  onChange: (labels: Label[]) => void;
+  onTouched: (labels: Label[]) => void;
 
   labelForm: FormGroup;
   labelInputSeparators = [ENTER, COMMA];
@@ -38,7 +39,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   private groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$: Observable<any> = this.groupsSubject.asObservable();
 
-  private labels: Label.AsObject[];
+  private labels: Label[];
 
   constructor(private fb: FormBuilder) {
   }
@@ -56,7 +57,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   }
 
   get value() {
-   return this.labelForm.get('value');
+    return this.labelForm.get('value');
   }
 
   ngOnInit(): void {
@@ -64,17 +65,17 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   }
 
   // implement ControlValueAccessor
-  writeValue(labels: Label.AsObject[]): void {
+  writeValue(labels: Label[]): void {
     if (labels === null) {
       this.labels = [];
     } else {
-      this.labels = labels.map(label => ({key: label.key, value: label.value}));
+      this.labels = labels.map(label => new Label({key: label.key, value: label.value}));
     }
     this.reset();
   }
 
   // implement ControlValueAccessor
-  registerOnChange(fn: (labels: Label.AsObject[]) => void): void {
+  registerOnChange(fn: (labels: Label[]) => void): void {
     this.onChange = fn;
   }
 
@@ -126,7 +127,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();
@@ -153,7 +154,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();
@@ -166,7 +167,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     // remove old
     this.labels.splice(this.clickedIndex, 1);
     // add updated
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();

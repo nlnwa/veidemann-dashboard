@@ -12,7 +12,7 @@ import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@
 import {Kind} from '../models/kind.model';
 import {ConfigRef} from '../models/configref.model';
 import {Subscription} from 'rxjs';
-import {ListRequest} from '../../../api/config/v1/config_pb';
+import {ListRequest} from 'veidemann-api-grpc-web';
 import {map} from 'rxjs/operators';
 import {ConfigObject} from '../models/configobject.model';
 import {RobotsPolicy} from '../models/configs/politenessconfig.model';

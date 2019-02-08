@@ -1,4 +1,4 @@
-import {CrawlConfig as CrawlConfigProto, ExtraConfig as ExtraConfigProto} from '../../../../api/config/v1/config_pb';
+import {CrawlConfig as CrawlConfigProto, ExtraConfig as ExtraConfigProto} from 'veidemann-api-grpc-web';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
 import {ConfigObject} from '../configobject.model';
@@ -114,15 +114,14 @@ export class CrawlConfig {
   }
 
   toProto(): CrawlConfigProto {
-    const proto = new CrawlConfigProto() as any as CrawlConfigProto.AsObject;
-    proto.collectionRef = this.collectionRef.toProto();
-    proto.browserConfigRef = this.browserConfigRef.toProto();
-    proto.politenessRef = this.politenessRef.toProto();
-    proto.extra = this.extra.toProto();
-    proto.minimumDnsTtlS = this.minimumDnsTtlS;
-    proto.priorityWeight = this.priorityWeight;
-
-    return proto as any as CrawlConfigProto;
+    const proto = new CrawlConfigProto();
+    proto.setCollectionRef(this.collectionRef.toProto());
+    proto.setBrowserConfigRef(this.browserConfigRef.toProto());
+    proto.setPolitenessRef(this.politenessRef.toProto());
+    proto.setExtra(this.extra.toProto());
+    proto.setMinimumDnsTtlS(this.minimumDnsTtlS);
+    proto.setPriorityWeight(this.priorityWeight);
+    return proto;
   }
 
 
@@ -243,11 +242,10 @@ export class ExtraConfig {
   }
 
   toProto(): ExtraConfigProto {
-    const proto = new ExtraConfigProto() as any as ExtraConfigProto.AsObject;
-    proto.extractText = this.extractText;
-    proto.createScreenshot = this.createScreenshot;
-
-    return proto as any as ExtraConfigProto;
+    const proto = new ExtraConfigProto();
+    proto.setExtractText(this.extractText);
+    proto.setCreateScreenshot(this.createScreenshot);
+    return proto;
   }
 }
 

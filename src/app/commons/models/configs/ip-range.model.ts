@@ -1,5 +1,7 @@
-import * as config_pb from '../../../../api/config/v1/config_pb';
-const IpRangeProto = config_pb.CrawlHostGroupConfig['IpRange'];
+// import * as config_pb from '../../../../api/config/v1/config_pb';
+// const IpRangeProto = config_pb.CrawlHostGroupConfig['IpRange'];
+
+import {CrawlHostGroupConfig as CrawlHostGroupConfigProto} from 'veidemann-api-grpc-web';
 
 export class IpRange {
   ipFrom: string;
@@ -13,7 +15,7 @@ export class IpRange {
     this.ipTo = ipTo;
   }
 
-  static fromProto(proto): IpRange {
+  static fromProto(proto: CrawlHostGroupConfigProto.IpRange): IpRange {
     return new IpRange({
       ipFrom: proto.getIpFrom(),
       ipTo: proto.getIpTo()
@@ -29,8 +31,8 @@ export class IpRange {
     return Array.from(intersection) as IpRange[];
   }
 
-  toProto() {
-    const proto = new IpRangeProto();
+  toProto(): CrawlHostGroupConfigProto.IpRange {
+    const proto = new CrawlHostGroupConfigProto.IpRange();
     proto.setIpFrom(this.ipFrom);
     proto.setIpTo(this.ipTo);
     return proto;

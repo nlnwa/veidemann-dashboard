@@ -1,4 +1,4 @@
-import {CrawlJob as CrawlJobProto, CrawlLimitsConfig as CrawlLimitsConfigProto} from '../../../../api/config/v1/config_pb';
+import {CrawlJob as CrawlJobProto, CrawlLimitsConfig as CrawlLimitsConfigProto} from 'veidemann-api-grpc-web';
 import {ConfigRef} from '../configref.model';
 import {ConfigObject} from '../configobject.model';
 import {Kind} from '../kind.model';
@@ -22,8 +22,12 @@ export class CrawlJob {
   }
 
   static fromProto(proto: CrawlJobProto): CrawlJob {
-    const scheduleRef = proto.getScheduleRef() ? ConfigRef.fromProto(proto.getScheduleRef()) : new ConfigRef({kind: Kind.CRAWLSCHEDULECONFIG});
-    const crawlConfigRef = proto.getCrawlConfigRef() ? ConfigRef.fromProto(proto.getCrawlConfigRef()) : new ConfigRef({kind: Kind.CRAWLCONFIG});
+    const scheduleRef = proto.getScheduleRef()
+      ? ConfigRef.fromProto(proto.getScheduleRef())
+      : new ConfigRef({kind: Kind.CRAWLSCHEDULECONFIG});
+    const crawlConfigRef = proto.getCrawlConfigRef()
+      ? ConfigRef.fromProto(proto.getCrawlConfigRef())
+      : new ConfigRef({kind: Kind.CRAWLCONFIG});
     return new CrawlJob({
       scheduleRef,
       limits: CrawlLimitsConfig.fromProto(proto.getLimits()),
@@ -87,13 +91,12 @@ export class CrawlJob {
   }
 
   toProto(): CrawlJobProto {
-    const proto = new CrawlJobProto() as any as CrawlJobProto.AsObject;
-    proto.scheduleRef = this.scheduleRef.toProto();
-    proto.limits = this.limits.toProto();
-    proto.crawlConfigRef = this.crawlConfigRef.toProto();
-    proto.disabled = this.disabled;
-
-    return proto as any as CrawlJobProto;
+    const proto = new CrawlJobProto();
+    proto.setScheduleRef(this.scheduleRef.toProto());
+    proto.setLimits(this.limits.toProto());
+    proto.setCrawlConfigRef(this.crawlConfigRef.toProto());
+    proto.setDisabled(this.disabled);
+    return proto;
   }
 
   createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
@@ -196,12 +199,11 @@ export class CrawlLimitsConfig {
   }
 
   toProto(): CrawlLimitsConfigProto {
-    const proto = new CrawlLimitsConfigProto() as any as CrawlLimitsConfigProto.AsObject;
-    proto.depth = this.depth || 0;
-    proto.maxDurationS = this.maxDurationS || 0;
-    proto.maxBytes = this.maxBytes || 0;
-
-    return proto as any as CrawlLimitsConfigProto;
+    const proto = new CrawlLimitsConfigProto();
+    proto.setDepth(this.depth || 0);
+    proto.setMaxDurationS(this.maxDurationS || 0);
+    proto.setMaxBytes(this.maxBytes || 0);
+    return proto;
   }
 }
 

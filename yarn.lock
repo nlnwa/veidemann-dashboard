@@ -8060,6 +8060,13 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+"veidemann-api-grpc-web@github:nlnwa/veidemann-api-grpc-web#v1.0.0-beta2":
+  version "1.0.0-beta2"
+  resolved "https://codeload.github.com/nlnwa/veidemann-api-grpc-web/tar.gz/d32c2e7ba29310d9ab0da1c8cd06ad868ca844a1"
+  dependencies:
+    google-protobuf "^3.7.0-rc.2"
+    grpc-web "^1.0.3"
+
 verror@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"

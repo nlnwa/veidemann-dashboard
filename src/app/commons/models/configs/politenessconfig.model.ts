@@ -1,4 +1,4 @@
-import {PolitenessConfig as PolitenessConfigProto} from '../../../../api/config/v1/config_pb';
+import {PolitenessConfig as PolitenessConfigProto} from 'veidemann-api-grpc-web';
 import {ConfigObject} from '../configobject.model';
 import {intersectSelector} from '../../group-update/labels/common-selector';
 
@@ -153,18 +153,18 @@ export class PolitenessConfig {
   }
 
   toProto(): PolitenessConfigProto {
-    const proto = new PolitenessConfigProto() as any as PolitenessConfigProto.AsObject;
-    proto.robotsPolicy = PolitenessConfigProto.RobotsPolicy[this.robotsPolicy] as any as PolitenessConfigProto.RobotsPolicy;
-    proto.customRobots = this.customRobots;
-    proto.minimumRobotsValidityDurationS = this.minimumRobotsValidityDurationS;
-    proto.minTimeBetweenPageLoadMs = this.minTimeBetweenPageLoadMs;
-    proto.maxTimeBetweenPageLoadMs = this.maxTimeBetweenPageLoadMs;
-    proto.delayFactor = this.delayFactor;
-    proto.maxRetries = this.maxRetries;
-    proto.delayFactor = this.delayFactor;
-    proto.crawlHostGroupSelectorList = this.crawlHostGroupSelectorList;
+    const proto = new PolitenessConfigProto();
+    proto.setRobotsPolicy(PolitenessConfigProto.RobotsPolicy[this.robotsPolicy] as any as PolitenessConfigProto.RobotsPolicy);
+    proto.setCustomRobots(this.customRobots);
+    proto.setMinimumRobotsValidityDurationS(this.minimumRobotsValidityDurationS);
+    proto.setMinTimeBetweenPageLoadMs(this.minTimeBetweenPageLoadMs);
+    proto.setMaxTimeBetweenPageLoadMs(this.maxTimeBetweenPageLoadMs);
+    proto.setDelayFactor(this.delayFactor);
+    proto.setMaxRetries(this.maxRetries);
+    proto.setDelayFactor(this.delayFactor);
+    proto.setCrawlHostGroupSelectorList(this.crawlHostGroupSelectorList);
 
-    return proto as any as PolitenessConfigProto;
+    return proto;
   }
 
   createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addCrawlHostGroupSelector?: boolean) {

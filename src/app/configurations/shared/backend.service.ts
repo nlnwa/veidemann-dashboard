@@ -1,10 +1,9 @@
 import {HttpParams} from '@angular/common/http';
 import {Observable, Observer} from 'rxjs';
 
-import {ConfigObject, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from '../../../api/config/v1/config_pb';
-import {ConfigPromiseClient} from '../../../api/config/v1/config_grpc_web_pb';
+import {ConfigObject, ConfigPromiseClient, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from 'veidemann-api-grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {map, timeout, timeoutWith, toArray} from 'rxjs/operators';
+import {map, timeoutWith, toArray} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {environment} from '../../../environments/environment';

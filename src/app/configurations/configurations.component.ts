@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
 import {FormBuilder, Validators} from '@angular/forms';
-import {FieldMask, ListRequest, UpdateRequest} from '../../api/config/v1/config_pb';
+import {FieldMask, ListRequest, UpdateRequest} from 'veidemann-api-grpc-web';
 import {BackendService} from './shared/backend.service';
 import {
   BrowserConfig,

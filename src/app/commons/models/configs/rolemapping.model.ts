@@ -1,4 +1,4 @@
-import {Role as RoleProto, RoleMapping as RoleMappingProto} from '../../../../api/config/v1/config_pb';
+import {Role as RoleProto, RoleMapping as RoleMappingProto} from 'veidemann-api-grpc-web';
 import {ConfigObject} from '../configobject.model';
 
 export enum Role {
@@ -87,18 +87,18 @@ export class RoleMapping {
   }
 
   toProto(): RoleMappingProto {
-    const proto = new RoleMappingProto() as any as RoleMappingProto.AsObject;
+    const proto = new RoleMappingProto();
     if (this.email !== null) {
-      proto.email = this.email;
+      proto.setEmail(this.email);
     }
     if (this.group !== null) {
-      proto.group = this.group;
+      proto.setGroup(this.group);
     }
 
-    proto.roleList = this.roleList.map(role => RoleProto[role.toString()]);
+    proto.setRoleList(this.roleList.map(role => RoleProto[role.toString()]));
 
 
-    return proto as any as RoleMappingProto;
+    return proto;
   }
 
   createUpdateRequest(configUpdate: ConfigObject, formControl: any, addRoles: boolean, mergedConfig?: ConfigObject) {
@@ -120,7 +120,7 @@ export class RoleMapping {
         }
       }
       if (addRoles !== undefined) {
-      if (formControl.roleList.dirty) {
+        if (formControl.roleList.dirty) {
           if (addRoles) {
             roleMapping.roleList = configUpdate.roleMapping.roleList;
             pathList.push('roleMapping.role+');

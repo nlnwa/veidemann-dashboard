@@ -1,8 +1,9 @@
-import * as config_pb from '../../../../api/config/v1/config_pb';
+// import * as config_pb from '../../../../api/config/v1/config_pb';
 import {ConfigObject} from '../configobject.model';
 import {IpRange} from './ip-range.model';
 
-const CrawlHostGroupConfigProto = config_pb.CrawlHostGroupConfig;
+// const CrawlHostGroupConfigProto = config_pb.CrawlHostGroupConfig;
+import {CrawlHostGroupConfig as CrawlHostGroupConfigProto} from 'veidemann-api-grpc-web';
 
 export class CrawlHostGroupConfig {
   ipRangeList: IpRange[];

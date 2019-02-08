@@ -11,7 +11,7 @@ import {RoleService} from '../../auth';
 import {DetailDirective} from '../shared/detail.directive';
 
 import {BackendService} from '../shared/backend.service';
-import {FieldMask, ListRequest, UpdateRequest} from '../../../api/config/v1/config_pb';
+import {FieldMask, ListRequest, UpdateRequest} from 'veidemann-api-grpc-web';
 import {ActivatedRoute} from '@angular/router';
 import {ConfigRef} from '../../commons/models/configref.model';
 import {EntityDetailsComponent} from '../entities';
@@ -270,7 +270,7 @@ export class SearchComponent implements OnInit {
           const addLabel = instance.shouldAddLabel;
           this.onUpdateMultipleEntities(mergedEntities, entityUpdate, formControl, addLabel);
         });
-      instance.delete.subscribe(() => this.onDeleteMultipleEntities(this.selectedEntities));
+      instance.delete.subscribe(() => console.log('IMPLEMENT ME')) // TODO this.onDeleteMultipleEntities(this.selectedEntities));
     }
 
     if (this.allEntitiesSelected) {

@@ -1,4 +1,4 @@
-import {Label as LabelProto} from '../../../../api/config/v1/config_pb';
+import {Label as LabelProto} from 'veidemann-api-grpc-web';
 
 export class Label {
   key?: string;
@@ -20,10 +20,9 @@ export class Label {
   }
 
   toProto(): LabelProto {
-    const proto = new LabelProto() as any as LabelProto.AsObject;
-    proto.key = this.key;
-    proto.value = this.value;
-
-    return proto as any as LabelProto;
+    const proto = new LabelProto();
+    proto.setKey(this.key);
+    proto.setValue(this.value);
+    return proto;
   }
 }

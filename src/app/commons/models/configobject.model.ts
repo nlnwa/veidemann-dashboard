@@ -1,4 +1,4 @@
-import {ConfigObject as ConfigObjectProto} from '../../../api/config/v1/config_pb';
+import {ConfigObject as ConfigObjectProto} from 'veidemann-api-grpc-web';
 import {intersectLabel} from '../group-update/labels/common-labels';
 
 import {Collection} from './collection/collection.model';
@@ -143,47 +143,37 @@ export class ConfigObject {
       case Kind.CRAWLENTITY:
         configObject.crawlEntity = CrawlEntity.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.SEED:
         configObject.seed = Seed.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.CRAWLJOB:
         configObject.crawlJob = CrawlJob.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.CRAWLCONFIG:
         configObject.crawlConfig = CrawlConfig.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.CRAWLSCHEDULECONFIG:
         configObject.crawlScheduleConfig = CrawlScheduleConfig.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.BROWSERCONFIG:
         configObject.browserConfig = BrowserConfig.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.POLITENESSCONFIG:
         configObject.politenessConfig = PolitenessConfig.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.BROWSERSCRIPT:
-        configObject.browserScript =  BrowserScript.mergeConfigs(configs);
+        configObject.browserScript = BrowserScript.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.CRAWLHOSTGROUPCONFIG:
         configObject.crawlHostGroupConfig = CrawlHostGroupConfig.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.ROLEMAPPING:
         configObject.roleMapping = RoleMapping.mergeConfigs(configs);
         return configObject;
-        break;
       case Kind.COLLECTION:
-        break;
+      default:
+        return null;
     }
-    return null;
   }
 
   static mergeLabels(configs: ConfigObject[]): any {

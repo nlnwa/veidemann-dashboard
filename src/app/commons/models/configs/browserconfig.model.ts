@@ -1,4 +1,4 @@
-import {BrowserConfig as BrowserConfigProto} from '../../../../api/config/v1/config_pb';
+import {BrowserConfig as BrowserConfigProto} from 'veidemann-api-grpc-web';
 import {intersectSelector} from '../../group-update/labels/common-selector';
 import {ConfigRef} from '../configref.model';
 import {ConfigObject} from '../configobject.model';
@@ -141,16 +141,16 @@ export class BrowserConfig {
   }
 
   toProto(): BrowserConfigProto {
-    const proto = new BrowserConfigProto() as any as BrowserConfigProto.AsObject;
-    proto.userAgent = this.userAgent;
-    proto.windowWidth = this.windowWidth || 0;
-    proto.windowHeight = this.windowHeight || 0;
-    proto.pageLoadTimeoutMs = this.pageLoadTimeoutMs || 0;
-    proto.maxInactivityTimeMs = this.maxInactivityTimeMs || 0;
-    proto.scriptRefList = this.scriptRefList.map(ref => ref.toProto());
-    proto.scriptSelectorList = this.scriptSelectorList;
+    const proto = new BrowserConfigProto();
+    proto.setUserAgent(this.userAgent);
+    proto.setWindowWidth(this.windowWidth || 0);
+    proto.setWindowHeight(this.windowHeight || 0);
+    proto.setPageLoadTimeoutMs(this.pageLoadTimeoutMs || 0);
+    proto.setMaxInactivityTimeMs(this.maxInactivityTimeMs || 0);
+    proto.setScriptRefList(this.scriptRefList.map(ref => ref.toProto()));
+    proto.setScriptSelectorList(this.scriptSelectorList);
 
-    return proto as any as BrowserConfigProto;
+    return proto;
   }
 
   createUpdateRequest(updateConfig: ConfigObject, formControl: any, mergedConfig?: ConfigObject,

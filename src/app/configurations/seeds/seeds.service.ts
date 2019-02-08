@@ -2,10 +2,11 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {CrudService} from '../shared/crud.service';
-import {Seed} from '../../commons/models/config.model';
+import {Seed} from '../../commons/models';
+
 
 @Injectable()
-export class SeedService extends CrudService<Seed> {
+export class SeedService extends CrudService<any> {
 
   protected readonly url: string = `${environment.apiGateway}/control/seeds`;
 
