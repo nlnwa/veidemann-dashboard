@@ -18,8 +18,9 @@ export {
   PolitenessConfig as PolitenessConfigProto,
   Role as RoleProto,
   RoleMapping as RoleMappingProto,
-  Seed as SeedProto
+  Seed as SeedProto,
 } from './gen/config/v1/resources_pb';
+
 export {
   DeleteResponse,
   FieldMask,
@@ -30,6 +31,7 @@ export {
   UpdateRequest,
   UpdateResponse,
 } from './gen/config/v1/config_pb';
+
 export {
   ConfigClient,
   ConfigPromiseClient
