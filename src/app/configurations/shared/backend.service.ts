@@ -1,7 +1,7 @@
 import {HttpParams} from '@angular/common/http';
 import {Observable, Observer} from 'rxjs';
 
-import {ConfigObject, ConfigPromiseClient, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from 'veidemann-api-grpc-web';
+import {ConfigObjectProto, ConfigPromiseClient, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from '../../../api';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {map, timeoutWith, toArray} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -22,10 +22,10 @@ export class BackendService {
   constructor(protected oauthService: OAuthService) {
   }
 
-  list(listRequest: ListRequest, due = 1000): Observable<ConfigObject[]> {
+  list(listRequest: ListRequest, due = 1000): Observable<ConfigObjectProto[]> {
     const metadata = this.getAuth();
 
-    const observable: Observable<ConfigObject> = Observable.create((observer: Observer<ConfigObject>) => {
+    const observable: Observable<ConfigObjectProto> = Observable.create((observer: Observer<ConfigObjectProto>) => {
       const stream = this.configClient.listConfigObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
@@ -49,7 +49,7 @@ export class BackendService {
     return fromPromise(this.configClient.countConfigObjects(request, metadata)).pipe(map(listCountResponse => listCountResponse.getCount()));
   }
 
-  save(config: ConfigObject): Observable<ConfigObject> {
+  save(config: ConfigObjectProto): Observable<ConfigObjectProto> {
     const metadata = this.getAuth();
     config.setApiversion('v1');
     return fromPromise(this.configClient.saveConfigObject(config, metadata));
@@ -60,7 +60,7 @@ export class BackendService {
     return fromPromise(this.configClient.updateConfigObjects(request, metadata));
   }
 
-  delete(request: ConfigObject): Observable<DeleteResponse> {
+  delete(request: ConfigObjectProto): Observable<DeleteResponse> {
     const metadata = this.getAuth();
     return fromPromise(this.configClient.deleteConfigObject(request, metadata));
   }

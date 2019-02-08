@@ -1,4 +1,4 @@
-import {CrawlScope as CrawlScopeProto, Seed as SeedProto} from 'veidemann-api-grpc-web';
+import {CrawlScopeProto, SeedProto} from '../../../../api';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
 import {ConfigObject} from '../configobject.model';

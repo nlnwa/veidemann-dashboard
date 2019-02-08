@@ -1,4 +1,4 @@
-import {BrowserScript as BrowserScriptProto} from 'veidemann-api-grpc-web';
+import {BrowserScriptProto} from '../../../../api';
 import {ConfigObject} from '../configobject.model';
 
 

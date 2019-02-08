@@ -1,4 +1,4 @@
-import {CrawlScheduleConfig as CrawlScheduleConfigProto} from 'veidemann-api-grpc-web';
+import {CrawlScheduleConfigProto} from '../../../../api';
 import {fromTimestampProto, toTimestampProto} from '../../datetime/datetime';
 import {ConfigObject} from '../configobject.model';
 
@@ -134,7 +134,6 @@ export class CrawlScheduleConfig {
     proto.setValidTo(toTimestampProto(this.validTo));
     return proto;
   }
-
 
 
   createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {

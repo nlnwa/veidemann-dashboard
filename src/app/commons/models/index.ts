@@ -13,4 +13,5 @@ export {Meta} from './meta/meta.model';
 export {Label} from './meta/label.model';
 export {Collection} from './collection/collection.model';
 export {ConfigObject} from './configobject.model';
+export {ConfigRef} from './configref.model';
 export {Kind} from './kind.model';

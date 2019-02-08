@@ -1,4 +1,4 @@
-import {CrawlJob as CrawlJobProto, CrawlLimitsConfig as CrawlLimitsConfigProto} from 'veidemann-api-grpc-web';
+import {CrawlJobProto, CrawlLimitsConfigProto} from '../../../../api';
 import {ConfigRef} from '../configref.model';
 import {ConfigObject} from '../configobject.model';
 import {Kind} from '../kind.model';

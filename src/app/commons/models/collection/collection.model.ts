@@ -1,5 +1,4 @@
-import {Collection as CollectionProto} from 'veidemann-api-grpc-web';
-
+import {CollectionProto} from '../../../../api';
 
 export enum RotationPolicy {
   NONE = 0,

@@ -8,7 +8,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
 import {FormBuilder, Validators} from '@angular/forms';
-import {FieldMask, ListRequest, UpdateRequest} from 'veidemann-api-grpc-web';
 import {BackendService} from './shared/backend.service';
 import {
   BrowserConfig,
@@ -37,8 +36,9 @@ import {CrawljobDetailsComponent} from './crawljobs';
 import {CrawlConfigDetailsComponent} from './crawlconfig';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig';
 import {RoleMappingDetailsComponent} from './rolemapping';
-import {DeleteDialogComponent} from './../dialog/delete-dialog/delete-dialog.component';
+import {DeleteDialogComponent} from '../dialog/delete-dialog/delete-dialog.component';
 import {BrowserConfigDetailsComponent} from './browserconfig';
+import {FieldMask, ListRequest, UpdateRequest} from '../../api/';
 
 
 @Component({

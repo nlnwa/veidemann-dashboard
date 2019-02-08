@@ -9,14 +9,11 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Kind} from '../models/kind.model';
-import {ConfigRef} from '../models/configref.model';
+import {ConfigObject, ConfigRef, Kind} from '../models/';
+import {ListRequest} from '../../../api/';
 import {Subscription} from 'rxjs';
-import {ListRequest} from 'veidemann-api-grpc-web';
 import {map} from 'rxjs/operators';
-import {ConfigObject} from '../models/configobject.model';
-import {RobotsPolicy} from '../models/configs/politenessconfig.model';
-import {Role} from '../models/configs/rolemapping.model';
+
 import {BackendService} from '../../configurations/shared/backend.service';
 
 @Component({

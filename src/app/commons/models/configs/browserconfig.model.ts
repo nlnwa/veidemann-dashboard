@@ -1,4 +1,4 @@
-import {BrowserConfig as BrowserConfigProto} from 'veidemann-api-grpc-web';
+import {BrowserConfigProto} from '../../../../api';
 import {intersectSelector} from '../../group-update/labels/common-selector';
 import {ConfigRef} from '../configref.model';
 import {ConfigObject} from '../configobject.model';

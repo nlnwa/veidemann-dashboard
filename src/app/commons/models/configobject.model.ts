@@ -1,6 +1,5 @@
-import {ConfigObject as ConfigObjectProto} from 'veidemann-api-grpc-web';
+import {ConfigObjectProto} from '../../../api';
 import {intersectLabel} from '../group-update/labels/common-labels';
-
 import {Collection} from './collection/collection.model';
 import {CrawlEntity} from './configs/crawlentity.model';
 import {Seed} from './configs/seed.model';

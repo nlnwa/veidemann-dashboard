@@ -1,4 +1,4 @@
-import {ConfigRef as ConfigRefProto} from 'veidemann-api-grpc-web';
+import {ConfigRefProto} from '../../../api';
 import {Kind} from './kind.model';
 
 export class ConfigRef {

@@ -1,4 +1,4 @@
-import {CrawlConfig as CrawlConfigProto, ExtraConfig as ExtraConfigProto} from 'veidemann-api-grpc-web';
+import {CrawlConfigProto, ExtraConfigProto} from '../../../../api';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
 import {ConfigObject} from '../configobject.model';

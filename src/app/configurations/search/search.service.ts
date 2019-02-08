@@ -10,10 +10,10 @@
 //
 
 import {merge, Observable, Subject} from 'rxjs';
-import {ConfigObject, CrawlEntity, Kind, Label, Meta, Seed} from '../../commons/models';
-import {FieldMask, ListRequest} from 'veidemann-api-grpc-web';
+import {ConfigObject, Kind} from '../../commons/models';
+import {ListRequest} from '../../../api';
 import {BackendService} from '../shared/backend.service';
-import {bufferWhen, finalize, first, map, mergeMap, tap} from 'rxjs/operators';
+import {bufferWhen, finalize, first, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 
 

@@ -1,4 +1,5 @@
-import {Label as LabelProto} from 'veidemann-api-grpc-web';
+import {LabelProto} from '../../../../api';
+
 
 export class Label {
   key?: string;

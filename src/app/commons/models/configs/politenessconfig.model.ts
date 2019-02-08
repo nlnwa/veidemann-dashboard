@@ -1,4 +1,4 @@
-import {PolitenessConfig as PolitenessConfigProto} from 'veidemann-api-grpc-web';
+import {PolitenessConfigProto} from '../../../../api';
 import {ConfigObject} from '../configobject.model';
 import {intersectSelector} from '../../group-update/labels/common-selector';
 

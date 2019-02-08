@@ -1,4 +1,4 @@
-import {Label as LabelProto, Meta as MetaProto} from 'veidemann-api-grpc-web';
+import {LabelProto, MetaProto} from '../../../../api';
 import {fromTimestampProto} from '../../datetime/datetime';
 import {ConfigObject} from '../configobject.model';
 import {Label} from './label.model';

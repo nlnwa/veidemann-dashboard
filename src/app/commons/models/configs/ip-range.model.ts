@@ -1,7 +1,4 @@
-// import * as config_pb from '../../../../api/config/v1/config_pb';
-// const IpRangeProto = config_pb.CrawlHostGroupConfig['IpRange'];
-
-import {CrawlHostGroupConfig as CrawlHostGroupConfigProto} from 'veidemann-api-grpc-web';
+import {CrawlHostGroupConfigProto} from '../../../../api';
 
 export class IpRange {
   ipFrom: string;

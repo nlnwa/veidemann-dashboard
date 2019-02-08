@@ -1,6 +1,13 @@
-VEIDEMANN_API_VERSION=v1.0.0-beta1
-PROTOC_VERSION=3.6.1
+VEIDEMANN_API_VERSION?=v1.0.0-beta2
+PROTOC_VERSION=3.7.0rc2
+PROTOC_FILE_VERSION=$$(echo ${PROTOC_VERSION} | sed -r 's|(.*)(rc)(.*)|\1-\2-\3|')
 GRPC_WEB_VERSION=1.0.3
+
+PROTOC=tools/bin/protoc
+PROTOC_GEN_GRPC_WEB=tools/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
+
+GRPC_WEB_IMPORT_STYLE=commonjs
+OUT=../src/api/gen
 
 .PHONY: all
 .PHONY: clean
@@ -15,21 +22,25 @@ distclean: clean
 	rm -rf tools
 
 tools:
-	mkdir tools
-	cd tools \
-	&& wget -q https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip \
-	&& unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip \
-	&& rm protoc-${PROTOC_VERSION}-linux-x86_64.zip \
+	@mkdir -p tools \
+	&& cd tools \
+	&& wget -q https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_FILE_VERSION}-linux-x86_64.zip \
+	&& unzip -qq protoc-${PROTOC_FILE_VERSION}-linux-x86_64.zip \
+	&& rm protoc-${PROTOC_FILE_VERSION}-linux-x86_64.zip \
 	&& wget -q https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64 \
 	&& chmod +x protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
 
 build: veidemann-api
-	rm -rf ../src/api
-	mkdir -p ../src/api
-	find veidemann-api -name *.proto -exec 'tools/bin/protoc' '-Iveidemann-api/protobuf' '-Iveidemann-api/include' '-Itools/include' \
-	  '--plugin=protoc-gen-grpc-web=tools/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64' \
-	  '--js_out=import_style=commonjs:../src/api' \
-	  '--grpc-web_out=import_style=commonjs,mode=grpcwebtext:../src/api' '{}' ';'
+	@rm -rf ${OUT}; mkdir -p ${OUT}
+	@find veidemann-api/protobuf/config veidemann-api/include/ -name *.proto -exec ${PROTOC} \
+	  -Iveidemann-api/protobuf \
+	  -Iveidemann-api/include \
+	  -Itools/include \
+	  --plugin=${PROTOC_GEN_GRPC_WEB} \
+	  --js_out=import_style=commonjs:${OUT} \
+	  --grpc-web_out=import_style=${GRPC_WEB_IMPORT_STYLE},mode=grpcwebtext:${OUT} \
+	  {} ';'
+	@tree ${OUT}
 
 veidemann-api: tools
-	git clone --depth=1 --branch ${VEIDEMANN_API_VERSION} git@github.com:nlnwa/veidemann-api.git
+	@git clone --depth=1 --quiet --branch ${VEIDEMANN_API_VERSION} git@github.com:nlnwa/veidemann-api.git

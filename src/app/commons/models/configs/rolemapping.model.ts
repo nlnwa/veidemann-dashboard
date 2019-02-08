@@ -1,5 +1,5 @@
-import {Role as RoleProto, RoleMapping as RoleMappingProto} from 'veidemann-api-grpc-web';
 import {ConfigObject} from '../configobject.model';
+import {RoleMappingProto, RoleProto} from '../../../../api';
 
 export enum Role {
   ANY_USER,
