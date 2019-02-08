@@ -38,7 +38,7 @@ export class Meta {
       createdBy: proto.getCreatedBy(),
       lastModified: fromTimestampProto(proto.getLastModified()),
       lastModifiedBy: proto.getLastModifiedBy(),
-      labelList: proto.getLabelList()
+      labelList: proto.getLabelList().map(label => new Label({key: label.getKey(), value: label.getValue()}))
     });
   }
 
