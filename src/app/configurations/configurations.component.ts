@@ -3,8 +3,6 @@ import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
 import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith} from 'rxjs/operators';
-
-import {ActivatedRoute, Router} from '@angular/router';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
 import {FormBuilder, Validators} from '@angular/forms';
@@ -39,6 +37,8 @@ import {RoleMappingDetailsComponent} from './rolemapping';
 import {DeleteDialogComponent} from '../dialog/delete-dialog/delete-dialog.component';
 import {BrowserConfigDetailsComponent} from './browserconfig';
 import {FieldMask, ListRequest, UpdateRequest} from '../../api/';
+import {ErrorService} from '../error';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -54,7 +54,9 @@ export class ConfigurationsComponent implements OnInit {
   allSelected = false;
 
   kind: Kind;
-  configObject: ConfigObject;
+
+  configObject: Subject<ConfigObject> = new Subject<ConfigObject>();
+  configObject$ = this.configObject.asObservable();
 
   changes: Subject<void> = new Subject<void>();
   page: Subject<PageEvent> = new Subject<PageEvent>();
@@ -67,18 +69,16 @@ export class ConfigurationsComponent implements OnInit {
 
   constructor(private configService: BackendService,
               private snackBarService: SnackBarService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
+              private errorService: ErrorService,
               private componentFactoryResolver: ComponentFactoryResolver,
               private fb: FormBuilder,
+              private route: ActivatedRoute,
               private roleService: RoleService,
               private dialog: MatDialog) {
   }
 
   get title(): string {
     switch (this.kind) {
-      case Kind.UNDEFINED:
-        break;
       case Kind.CRAWLENTITY:
         return 'Entity';
       case Kind.SEED:
@@ -99,9 +99,10 @@ export class ConfigurationsComponent implements OnInit {
         return 'CrawlHostGroupConfig';
       case Kind.ROLEMAPPING:
         return 'RoleMapping';
+      case Kind.UNDEFINED:
+      default:
+        return 'not implemented';
     }
-    // TODO
-    return 'not implemented';
   }
 
   get singleMode(): boolean {
@@ -109,7 +110,7 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.kind = this.activatedRoute.snapshot.data.kind;
+    this.kind = this.route.snapshot.data.kind;
 
     const listRequest = new ListRequest();
     listRequest.setKind(this.kind.valueOf());
@@ -125,15 +126,7 @@ export class ConfigurationsComponent implements OnInit {
       map(configObjects => configObjects.map(ConfigObject.fromProto))
     ).subscribe(
       (configObjects: ConfigObject[]) => this.data.next(configObjects),
-      err => console.error(err),
-      () => console.log('sub'));
-    // const id = this.routeSnapshot.paramMap.get('id');
-    // if (id != null) {
-    //   this.browserConfigService.get(id)
-    //     .subscribe(configObject => {
-    //       this.configObject = configObject;
-    //     });
-    // }
+      error => console.error(error));
   }
 
   loadComponent(mergedConfig: ConfigObject) {
@@ -244,7 +237,7 @@ export class ConfigurationsComponent implements OnInit {
         this.loadComponent(config);
       }
     } else {
-      this.configObject = configs[0] || null;
+      this.configObject.next(configs[0] || null);
       if (this.componentRef !== null) {
         this.componentRef.destroy();
       }
@@ -252,45 +245,11 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onCreateConfig(): void {
-    this.configObject = new ConfigObject({kind: this.kind});
+    this.configObject.next(new ConfigObject({kind: this.kind}));
   }
 
-  onSelectConfig(config: ConfigObject) {
-    switch (this.kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        this.router.navigate(['entity', config.id]);
-        break;
-      case Kind.SEED:
-        this.router.navigate(['seed', config.id]);
-        break;
-      case Kind.CRAWLJOB:
-        this.router.navigate(['crawljobs', config.id]);
-        break;
-      case Kind.CRAWLCONFIG:
-        this.router.navigate(['crawlconfig', config.id]);
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        this.router.navigate(['schedule', config.id]);
-        break;
-      case Kind.BROWSERCONFIG:
-        this.router.navigate(['browserconfig', config.id]);
-        break;
-      case Kind.POLITENESSCONFIG:
-        this.router.navigate(['politenessconfig', config.id]);
-        break;
-      case Kind.BROWSERSCRIPT:
-        this.router.navigate(['browserscript', config.id]);
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        this.router.navigate(['crawlhostgroupconfig', config.id]);
-        break;
-      case Kind.ROLEMAPPING:
-        this.router.navigate(['rolemapping', config.id]);
-        break;
-    }
-    this.configObject = config;
+  onSelectConfig(configObject: ConfigObject) {
+    this.configObject.next(configObject);
   }
 
   onSelectAll(allSelected: boolean) {
@@ -306,7 +265,7 @@ export class ConfigurationsComponent implements OnInit {
     this.configService.save(configObject.toProto())
       .subscribe(newConfig => {
         this.count.next(this.count.value + 1);
-        this.configObject = ConfigObject.fromProto(newConfig);
+        this.configObject.next(ConfigObject.fromProto(newConfig));
         this.changes.next();
         this.snackBarService.openSnackBar('Lagret');
       });
@@ -315,7 +274,7 @@ export class ConfigurationsComponent implements OnInit {
   onUpdateConfig(configObject: ConfigObject) {
     this.configService.save(configObject.toProto())
       .subscribe(newConfig => {
-        this.configObject = ConfigObject.fromProto(newConfig);
+        this.configObject.next(ConfigObject.fromProto(newConfig));
         this.changes.next();
         this.snackBarService.openSnackBar('Oppdatert');
       });
@@ -335,7 +294,7 @@ export class ConfigurationsComponent implements OnInit {
     )
       .subscribe(() => {
         this.count.next(this.count.value - 1);
-        this.configObject = null;
+        this.configObject.next(null);
         this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
       });

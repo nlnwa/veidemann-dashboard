@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {RoleMapping} from '../../../commons/models/configs/rolemapping.model';
 import {BaseListComponent} from '../../../commons/list';
 
 
@@ -15,7 +14,7 @@ import {BaseListComponent} from '../../../commons/list';
 
 
 
-export class RoleMappingListComponent extends BaseListComponent <RoleMapping> {
+export class RoleMappingListComponent extends BaseListComponent {
 
   @Input()
     set count (count: number) {
@@ -23,8 +22,5 @@ export class RoleMappingListComponent extends BaseListComponent <RoleMapping> {
   }
 
   displayedColumns = ['select', 'email', 'group', 'role'];
-
-
-
 }
 

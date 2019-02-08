@@ -1,13 +1,7 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {PageEvent} from '@angular/material';
+import {ConfigObject} from '../../models';
 
 @Component({
   selector: 'app-base-list',
@@ -18,11 +12,11 @@ import {PageEvent} from '@angular/material';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class BaseListComponent<T> implements AfterViewInit {
+export class BaseListComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['select', 'name', 'description', 'label'];
-  selection = new SelectionModel<T>(true, []);
-  dataSource: T[] = [];
+  selection = new SelectionModel<ConfigObject>(true, []);
+  dataSource: ConfigObject[] = [];
   allSelected = false;
 
   // MatPaginator settings
@@ -37,7 +31,7 @@ export class BaseListComponent<T> implements AfterViewInit {
 
 
   @Input()
-  set data(data: T[]) {
+  set data(data: ConfigObject[]) {
     if (data === null) {
       return;
     }
@@ -53,7 +47,7 @@ export class BaseListComponent<T> implements AfterViewInit {
   }
 
   @Output()
-  protected rowClick = new EventEmitter<T | T[]>();
+  protected rowClick = new EventEmitter<ConfigObject | ConfigObject[]>();
 
   @Output()
   selectedChange = new EventEmitter();
@@ -82,9 +76,9 @@ export class BaseListComponent<T> implements AfterViewInit {
     this.page.emit(pageEvent);
   }
 
-  onRowClick(item: T) {
+  onRowClick(item: ConfigObject) {
     this.rowClick.emit(item);
-    this.selectedRow = (item as any).id;
+    this.selectedRow = item.id;
   }
 
   isAllInPageSelected() {
@@ -111,11 +105,11 @@ export class BaseListComponent<T> implements AfterViewInit {
     this.highlightSelected(this.selection.selected);
   }
 
-  checkboxToggle(item: T) {
+  checkboxToggle(item: ConfigObject) {
     this.allSelected = false;
     this.selection.toggle(item);
     if (this.selection.isSelected(item)) {
-      this.selectedRow = (item as any).id;
+      this.selectedRow = item.id;
     } else {
       this.selectedRow = -1;
     }

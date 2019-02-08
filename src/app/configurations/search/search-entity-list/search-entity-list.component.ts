@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ResultType} from '../search.service';
-import {ConfigObject, CrawlEntity} from '../../../commons/models';
+import {ConfigObject} from '../../../commons/models';
 import {BaseListComponent} from '../../../commons/list';
 
 
@@ -13,7 +13,7 @@ import {BaseListComponent} from '../../../commons/list';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchListComponent extends BaseListComponent<CrawlEntity> {
+export class SearchListComponent extends BaseListComponent {
 
   displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
 
