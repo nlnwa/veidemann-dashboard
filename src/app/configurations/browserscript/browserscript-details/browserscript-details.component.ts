@@ -118,11 +118,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     configObject.browserScript = browserScript;
 
     return configObject;
-    // return {
-    //   id: this.browserScript.id,
-    //   script: formModel.script,
-    //   meta: formModel.meta,
-    // };
   }
 }
 

@@ -4,7 +4,7 @@ import {ConfigObject} from '../configobject.model';
 
 export class BrowserScript {
   script?: string;
-  urlRegexp?: string;
+  urlRegexp?: string; // Not implemented
 
   constructor({
                 script = '',
@@ -38,9 +38,9 @@ export class BrowserScript {
   }
 
   toProto(): BrowserScriptProto {
-    const proto = new BrowserScriptProto() as any as BrowserScriptProto.AsObject;
-    proto.script = this.script;
-    proto.urlRegexp = this.urlRegexp;
+    const proto = new BrowserScriptProto();
+    proto.setScript(this.script);
+    proto.setUrlRegexp(this.urlRegexp);
 
     return proto as any as BrowserScriptProto;
   }

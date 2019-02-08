@@ -94,7 +94,6 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   updateForm() {
-    console.log(('updateForm entityDetails'));
     this.form.patchValue({
       id: this.configObject.id,
       meta: this.configObject.meta
@@ -107,7 +106,6 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   private prepareSave(): ConfigObject {
-    console.log('onPrepareSaveEntity');
     const formModel = this.form.value;
 
     const configObject = new ConfigObject({kind: Kind.CRAWLENTITY});
@@ -116,7 +114,6 @@ export class EntityDetailsComponent implements OnChanges {
     }
 
     configObject.meta = formModel.meta;
-    console.log('should save: ', configObject);
     return configObject;
   }
 }

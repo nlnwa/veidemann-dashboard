@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, combineLatest, from, of, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith} from 'rxjs/operators';
 
 import {ActivatedRoute, Router} from '@angular/router';
@@ -322,7 +322,17 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onDeleteConfig(configObject: ConfigObject) {
-    this.configService.delete(configObject.toProto())
+    this.configService.delete(configObject.toProto()).pipe(
+      catchError((err) => {
+        const errorString = err.message.split(':')[1];
+        const deleteError = /(?=.*delete)(?=.*there are)/gm;
+        if (deleteError.test(errorString)) {
+          this.snackBarService.openSnackBar(errorString);
+          return empty;
+        }
+        return empty;
+      })
+    )
       .subscribe(() => {
         this.count.next(this.count.value - 1);
         this.configObject = null;
@@ -438,8 +448,6 @@ export class ConfigurationsComponent implements OnInit {
     updateRequest.setListRequest(listRequest);
     updateRequest.setUpdateTemplate(updateTemplate.toProto());
     updateRequest.setUpdateMask(updateMask);
-
-    console.log('configUpdateRequest multiple: ', updateRequest.toObject());
 
     this.configService.update(updateRequest)
       .subscribe(updatedConfigs => {
