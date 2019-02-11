@@ -105,8 +105,8 @@ export class BrowserConfig {
 
     for (const config of configObjects) {
       for (const script of commonScripts) {
-        if (browserConfig.scriptRefList.includes(script)) {
-        } else {
+        const hasScript = this.containsScript(script, config.browserConfig.scriptRefList);
+        if (!hasScript) {
           commonScripts.splice(commonScripts.indexOf(script), 1);
         }
       }
@@ -126,18 +126,29 @@ export class BrowserConfig {
     return browserConfig;
   }
 
-  static commonScript(browserConfigs: ConfigObject[]) {
-    const allConfigs = [];
-    for (const configs of browserConfigs) {
-      if (configs.browserConfig.scriptRefList !== undefined) {
-        allConfigs.push(configs.browserConfig.scriptRefList);
+  static containsScript(scriptRef, configScripts) {
+    for (const script of configScripts) {
+      if (script.id === scriptRef.id) {
+        return true;
       }
     }
-    const mergedScripts = [].concat.apply([], allConfigs);
-    const uniqueScripts = mergedScripts.filter(function (elem, index, self) {
-      return index === self.indexOf(elem);
-    });
-    return uniqueScripts;
+    return false;
+  }
+
+  static commonScript(browserConfigs: ConfigObject[]) {
+    const scripts = [];
+    for (const config of browserConfigs) {
+      for (const script of config.browserConfig.scriptRefList) {
+        if (script !== undefined) {
+            scripts.push(script);
+        }
+      }
+    }
+     const unique = scripts.filter(function({id}) {
+       return !this.has(id) && this.add(id);
+     }, new Set);
+
+    return unique;
   }
 
   toProto(): BrowserConfigProto {
@@ -155,6 +166,7 @@ export class BrowserConfig {
 
   createUpdateRequest(updateConfig: ConfigObject, formControl: any, mergedConfig?: ConfigObject,
                       addBrowserscript?: boolean, addScriptSelector?: boolean) {
+
 
     const browserConfig = new BrowserConfig();
     const pathList = [];
