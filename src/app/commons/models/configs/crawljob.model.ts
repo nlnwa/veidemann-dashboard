@@ -55,12 +55,13 @@ export class CrawlJob {
       return cfg.crawlJob.limits.maxBytes === compareObj.limits.maxBytes;
     });
 
-    const equalSchedule = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.scheduleRef === compareObj.scheduleRef;
-    });
+     const equalSchedule = configObjects.every(function (cfg: ConfigObject) {
+       return objectEqual(cfg.crawlJob.scheduleRef, compareObj.scheduleRef);
+     });
+
 
     const equalCrawlConfig = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.crawlConfigRef === compareObj.crawlConfigRef;
+      return objectEqual(cfg.crawlJob.crawlConfigRef, compareObj.crawlConfigRef);
     });
 
     if (equalDisabledStatus) {
@@ -81,14 +82,20 @@ export class CrawlJob {
 
     if (equalSchedule) {
       crawlJob.scheduleRef = compareObj.scheduleRef;
+    } else {
+      crawlJob.scheduleRef = null;
     }
 
     if (equalCrawlConfig) {
       crawlJob.crawlConfigRef = compareObj.crawlConfigRef;
+    } else {
+      crawlJob.crawlConfigRef = null;
     }
 
     return crawlJob;
   }
+
+
 
   toProto(): CrawlJobProto {
     const proto = new CrawlJobProto();
@@ -214,5 +221,22 @@ function isDisabledEqual(configs: ConfigObject[]) {
     return cfg.crawlJob.disabled === compareObj.disabled;
   });
   return equalDisabledStatus;
+}
+
+function objectEqual(config, compareConfig): boolean {
+  const cfgProps = Object.getOwnPropertyNames(config);
+  const compareObjProps = Object.getOwnPropertyNames(compareConfig);
+
+  if (cfgProps.length !== compareObjProps.length) {
+    return false;
+  }
+
+  for (const prop  of cfgProps) {
+    const propName = prop;
+    if (cfgProps[propName] !== compareObjProps[propName]) {
+      return false;
+    }
+  }
+  return true;
 }
 
