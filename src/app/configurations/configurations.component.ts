@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, EMPTY as empty, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
@@ -198,7 +198,6 @@ export class ConfigurationsComponent implements OnInit {
       instance.form.get('crawlConfigRef').clearValidators();
     }
 
-
     instance.data = false;
     instance.updateAll = this.allSelected;
     instance.updateForm();
@@ -226,7 +225,6 @@ export class ConfigurationsComponent implements OnInit {
           const addIpRange = instance.shouldAddIpRange; // Crawlhostgroupconfig
           this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addScriptSelector, addIpRange);
         });
-      //  instance.delete.subscribe(() => this.onDeleteAllBrowserConfigs());
     }
   }
 

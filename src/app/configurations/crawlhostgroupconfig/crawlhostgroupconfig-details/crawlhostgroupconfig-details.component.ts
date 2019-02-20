@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {RoleService} from '../../../auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
 import {ConfigObject} from '../../../commons/models/configobject.model';
-import {Meta} from '../../../commons/models';
-import {CrawlHostGroupConfig} from '../../../commons/models';
+import {CrawlHostGroupConfig, Meta} from '../../../commons/models';
 import {Kind} from '../../../commons/models/kind.model';
 import {IpRange} from '../../../commons/models/configs/ip-range.model';
 
@@ -51,12 +50,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get canSave(): boolean {
-    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0;
+    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid();
   }
 
   get canUpdate() {
-    return (
-      this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0);
+    return this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid();
   }
 
   get canRevert() {
@@ -138,7 +136,6 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   updateForm() {
-    console.log('updateForm: ', this.configObject);
     const ipRangeFG: FormGroup[] = this.configObject.crawlHostGroupConfig.ipRangeList
       .map(ipRangeList => this.fb.group(ipRangeList));
 
@@ -179,8 +176,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   private initIpRange() {
     return this.fb.group({
-      ipFrom: ['', [Validators.required, CrawlHostGroupConfigIpValidation.ipAddressValidator]],
-      ipTo: ['', [Validators.required, CrawlHostGroupConfigIpValidation.ipAddressValidator]],
+      ipFrom: ['', [CrawlHostGroupConfigIpValidation.ipAddressValidator]],
+      ipTo: ['', [CrawlHostGroupConfigIpValidation.ipAddressValidator]],
     });
   }
 }
