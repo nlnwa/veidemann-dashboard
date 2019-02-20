@@ -73,7 +73,7 @@
             <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validFromDatepicker></mat-datepicker>
           </mat-form-field>
-            <div *ngIf="!shouldShow && !equalValidFrom">
+            <div *ngIf="shouldDisableValidFrom">
               <button  mat-icon-button
                        (click)="onDeleteAllValidFrom()"
                        color="warn"
@@ -89,7 +89,7 @@
             <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validToDatepicker></mat-datepicker>
           </mat-form-field>
-            <div *ngIf="!shouldShow && !equalValidTo">
+            <div *ngIf="shouldDisableValidTo">
               <button mat-icon-button
                       (click)="onDeleteAllValidTo()"
                       color="warn" matTooltip="Gyldig til er ikke lik for alle konfigurasjoner.

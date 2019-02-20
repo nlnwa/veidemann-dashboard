@@ -175,6 +175,8 @@ export class ConfigurationsComponent implements OnInit {
 
     instance.configObject = mergedConfig;
 
+    console.log('loadCompon configObject is: ', instance.configObject);
+
     // adding validator for forms
     if (this.kind === Kind.CRAWLSCHEDULECONFIG) {
       instance.form.get('cronExpression').clearValidators();
@@ -183,10 +185,19 @@ export class ConfigurationsComponent implements OnInit {
       instance.form.get('cronExpression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
       instance.form.get('cronExpression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
       instance.form.get('cronExpression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
+
+      if (mergedConfig.crawlScheduleConfig.validFrom === undefined) {
+        instance.shouldDisableValidFrom = true;
+      }
+
+      if (mergedConfig.crawlScheduleConfig.validTo === undefined) {
+        instance.shouldDisableValidTo = true;
+      }
     }
     if (this.kind === Kind.CRAWLJOB) {
       instance.form.get('crawlConfigRef').clearValidators();
     }
+
 
     instance.data = false;
     instance.updateAll = this.allSelected;
@@ -197,11 +208,10 @@ export class ConfigurationsComponent implements OnInit {
         (configUpdate) => {
           const addLabel = instance.shouldAddLabel;
           const addBrowserscript = instance.shouldAddBrowserscript;
-          const addRoles = instance.shouldAddRoles;
           const addSelector = instance.shouldAddScriptSelector;
           const addIpRange = instance.shouldAddIpRange;
           this.onUpdateSelectedConfigs(mergedConfig, configUpdate, formControl,
-            addLabel, addBrowserscript, addRoles, addSelector, addIpRange);
+            addLabel, addBrowserscript, addSelector, addIpRange);
         });
       instance.delete.subscribe(
         () => this.onDeleteSelectedConfigs(this.selectedConfigs));
@@ -211,11 +221,10 @@ export class ConfigurationsComponent implements OnInit {
       instance.update.subscribe(
         (configUpdate) => {
           const addLabel = instance.shouldAddLabel;
-          const addBrowserscript = instance.shouldAddBrowserscript;
-          const addScriptSelector = instance.shouldAddScriptSelector;
-          const addRoles = instance.shouldAddRoles;
-          const addIpRange = instance.shouldAddIpRange;
-          this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addRoles, addScriptSelector, addIpRange);
+          const addBrowserscript = instance.shouldAddBrowserscript; // Browserconfig
+          const addScriptSelector = instance.shouldAddScriptSelector; // Browserconfig
+          const addIpRange = instance.shouldAddIpRange; // Crawlhostgroupconfig
+          this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addScriptSelector, addIpRange);
         });
       //  instance.delete.subscribe(() => this.onDeleteAllBrowserConfigs());
     }
@@ -286,7 +295,7 @@ export class ConfigurationsComponent implements OnInit {
         const errorString = err.message.split(':')[1];
         const deleteError = /(?=.*delete)(?=.*there are)/gm;
         if (deleteError.test(errorString)) {
-          this.snackBarService.openSnackBar(errorString);
+          this.snackBarService.openSnackBar('Error deleting config ' +  configObject.meta.name + ': ' +  errorString);
           return empty;
         }
         return empty;
@@ -301,7 +310,9 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onUpdateSelectedConfigs(mergedConfig: ConfigObject, configUpdate: ConfigObject, formControl: any,
-                          addLabel: boolean, addBrowserscript: boolean, addRoles: boolean, addSelector: boolean, addIpRange: boolean) {
+                          addLabel: boolean, addBrowserscript: boolean, addSelector: boolean, addIpRange: boolean) {
+
+    console.log('onUpdateMultiple with merged: ', mergedConfig);
 
     const kind = configUpdate.kind;
     const numOfConfigs = this.selectedConfigs.length.toString(10);
@@ -386,7 +397,7 @@ export class ConfigurationsComponent implements OnInit {
         }
         break;
       case Kind.ROLEMAPPING:
-        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl, addRoles, mergedConfig);
+        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl, mergedConfig);
         updateTemplate.roleMapping = roleMapping.updateTemplate;
         listRequest.setKind(Kind.ROLEMAPPING.valueOf());
         if (roleMapping.pathList.length !== 0) {
@@ -431,11 +442,19 @@ export class ConfigurationsComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           from(configObjects).pipe(
-            mergeMap((configObject) => this.configService.delete(configObject.toProto())),
-            catchError((err) => {
-              console.log(err);
-              return of('true');
-            }),
+            mergeMap((configObject) => this.configService.delete(configObject.toProto()).pipe(
+              catchError((err) => {
+                console.log(err);
+                console.log('kan ikke slette config: ', configObject.meta.name);
+                const errorString = err.message.split(':')[1];
+                const deleteError = /(?=.*delete)(?=.*there are)/gm;
+                if (deleteError.test(errorString)) {
+                  this.snackBarService.openSnackBar('Error deleting config ' +  configObject.meta.name.bold() + ':  \n' + errorString);
+                  return empty;
+                }
+                return empty;
+              })
+            )),
           ).subscribe(() => {
             this.selectedConfigs = [];
             this.componentRef.destroy();
@@ -450,7 +469,7 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onUpdateAllConfigsOfKind(configUpdate: ConfigObject, formControl: any, addLabels: boolean,
-                           addBrowserscript: boolean, addRoles: boolean, addSelector: boolean, addIpRange: boolean) {
+                           addBrowserscript: boolean, addSelector: boolean, addIpRange: boolean) {
     const kind = configUpdate.kind;
     const updateRequest = new UpdateRequest();
     const updateMask = new FieldMask();
@@ -525,7 +544,7 @@ export class ConfigurationsComponent implements OnInit {
         }
         break;
       case Kind.ROLEMAPPING:
-        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl, addRoles);
+        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl);
         updateTemplate.roleMapping = roleMapping.updateTemplate;
         listRequest.setKind(Kind.ROLEMAPPING.valueOf());
         if (roleMapping.pathList.length !== 0) {

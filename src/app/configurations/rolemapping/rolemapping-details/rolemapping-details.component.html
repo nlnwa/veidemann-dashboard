@@ -10,45 +10,32 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
-        <mat-form-field>
-          <mat-select placeholder="Velg en type" [(value)]="selectedType">
-            <mat-option value="email">E-post</mat-option>
-            <mat-option value="group">Gruppe</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedType === 'email'">
-          <input matInput formControlName="email" placeholder="Epost"
-                 i18n-placeholder="@@emailInputPlaceholder">
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedType === 'group'">
-          <input matInput formControlName="group" placeholder="Gruppe"
-                 i18n-placeholder="@@groupInputPlaceholder">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
-                      i18n-placeholder="@@rolemappingRoleMultiselectHeader">
-            <mat-option *ngFor="let role of roles" [value]="role">{{role}}</mat-option>
-          </mat-select>
-          <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
-          <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
-        </mat-form-field>
-      </div>
-      <div *ngIf="!shouldShow">
-        <div>
-          <span>Roller:</span>
-          <button mat-icon-button (click)="onToggleShouldAddRole(true)">
-            <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
-          </button>
-          <button mat-icon-button (click)="onToggleShouldAddRole(false)">
-            <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
-          </button>
-          <span *ngIf="shouldAddRoles">Skal legge til roler for de valgte brukerene</span>
-          <span *ngIf="!shouldAddRoles && shouldAddRoles !== undefined">
-            Skal fjerne rollene for de valgte brukerene </span>
+      <div fxLayout="column">
+        <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
+          <mat-form-field *ngIf ="shouldShow">
+            <mat-select placeholder="Velg en type" [(value)]="selectedType">
+              <mat-option value="email">E-post</mat-option>
+              <mat-option value="group">Gruppe</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'email' && shouldShow" >
+            <input matInput formControlName="email" placeholder="Epost"
+                   i18n-placeholder="@@emailInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'group' && shouldShow">
+            <input matInput formControlName="group" placeholder="Gruppe"
+                   i18n-placeholder="@@groupInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
+                        i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+              <mat-option *ngFor="let role of roles" [value]="role">{{role}}</mat-option>
+            </mat-select>
+            <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
+            <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
+          </mat-form-field>
         </div>
       </div>
-
     </mat-card-content>
 
     <mat-card-actions>

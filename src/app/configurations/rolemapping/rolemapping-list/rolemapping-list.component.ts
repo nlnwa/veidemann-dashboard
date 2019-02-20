@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/list';
 
-
 @Component({
   selector: 'app-rolemapping-list',
   templateUrl: './rolemapping-list.component.html',
@@ -12,9 +11,8 @@ import {BaseListComponent} from '../../../commons/list';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-
-
 export class RoleMappingListComponent extends BaseListComponent {
+
 
   @Input()
     set count (count: number) {

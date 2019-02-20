@@ -25,9 +25,6 @@ export class RoleMappingDetailsComponent implements OnChanges, OnInit {
   @Input()
   configObject: ConfigObject;
 
-  // @Input()
-  // roles: string[];
-
   @Output()
   save = new EventEmitter<ConfigObject>();
 
@@ -84,17 +81,6 @@ export class RoleMappingDetailsComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    // if (changes.configObject && !changes.configObject.currentValue) {
-    //   this.form.reset();
-    //   return;
-    // }
-    // if (changes.roles && changes.roles.currentValue) {
-    //   this.rolesList = changes.roles.currentValue;
-    // }
-    // if (this.configObject && this.rolesList) {
-    //   this.updateForm();
-    // }
     if (changes.configObject) {
       if (!this.configObject) {
         this.form.reset();
@@ -174,10 +160,8 @@ export class RoleMappingDetailsComponent implements OnChanges, OnInit {
   }
 
   private setUserType() {
-    if (this.shouldShow) {
       const group = this.configObject.roleMapping.hasOwnProperty('group') && this.configObject.roleMapping.group !== '';
       const email = this.configObject.roleMapping.hasOwnProperty('email') && this.configObject.roleMapping.email !== '';
-
 
       if (email) {
         this.selectedType = 'email';
@@ -187,21 +171,8 @@ export class RoleMappingDetailsComponent implements OnChanges, OnInit {
         this.selectedType = 'group';
       }
 
-      if (!(group || email)) {
+      if (!group && !email) {
         this.selectedType = '';
       }
-    } else {
-      if (this.configObject.roleMapping.group !== undefined || this.configObject.roleMapping.email !== undefined) {
-        if (this.configObject.roleMapping.group !== undefined) {
-          this.selectedType = 'group';
-        }
-        if (this.configObject.roleMapping.email !== undefined) {
-          this.selectedType = 'email';
-        }
-      } else {
-        this.selectedType = '';
-      }
-    }
-
   }
 }

@@ -30,7 +30,6 @@ export class BackendService {
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('status', (s) => {
-          console.log('status', s);
           observer.complete();
         })
         .on('end', () => console.log('end'));
@@ -50,12 +49,14 @@ export class BackendService {
   }
 
   save(config: ConfigObjectProto): Observable<ConfigObjectProto> {
+    console.log('backend save: ', config.toObject());
     const metadata = this.getAuth();
     config.setApiversion('v1');
     return fromPromise(this.configClient.saveConfigObject(config, metadata));
   }
 
   update(request: UpdateRequest): Observable<UpdateResponse> {
+    console.log('backend update: ', request.toObject());
     const metadata = this.getAuth();
     return fromPromise(this.configClient.updateConfigObjects(request, metadata));
   }

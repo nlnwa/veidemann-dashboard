@@ -98,13 +98,13 @@ export class CrawlScheduleConfig {
     if (equalValidFrom) {
       crawlScheduleConfig.validFrom = compareObj.validFrom;
     } else {
-      crawlScheduleConfig.validFrom = '';
+      crawlScheduleConfig.validFrom = undefined;
     }
 
     if (equalValidTo) {
       crawlScheduleConfig.validTo = compareObj.validTo;
     } else {
-      crawlScheduleConfig.validTo = '';
+      crawlScheduleConfig.validTo = undefined;
     }
 
 
@@ -116,6 +116,7 @@ export class CrawlScheduleConfig {
     const equalValidFrom = configObjects.every(function (cfg: ConfigObject) {
       return cfg.crawlScheduleConfig.validFrom === compareObj.crawlScheduleConfig.validFrom;
     });
+    console.log('commonValidFrom: ', equalValidFrom);
     return equalValidFrom;
   }
 
@@ -124,6 +125,7 @@ export class CrawlScheduleConfig {
     const equalValidTo = configObjects.every(function (cfg: ConfigObject) {
       return cfg.crawlScheduleConfig.validTo === compareObj.crawlScheduleConfig.validTo;
     });
+    console.log('commonValidTo: ', equalValidTo);
     return equalValidTo;
   }
 
@@ -132,6 +134,7 @@ export class CrawlScheduleConfig {
     proto.setCronExpression(this.cronExpression);
     proto.setValidFrom(toTimestampProto(this.validFrom));
     proto.setValidTo(toTimestampProto(this.validTo));
+    console.log('toProto validTo: ', proto.getValidTo());
     return proto;
   }
 
@@ -158,7 +161,9 @@ export class CrawlScheduleConfig {
       }
 
       if (formControl.validTo.dirty) {
+        console.log('createUpdateReq ValidTo: ', 'merged: ', mergedConfig.crawlScheduleConfig.validTo, 'update: ', configUpdate.crawlScheduleConfig.validTo);
         if (configUpdate.crawlScheduleConfig.validTo !== mergedConfig.crawlScheduleConfig.validTo) {
+          console.log('ikke lik skal sette update til: ', configUpdate.crawlScheduleConfig.validTo);
           crawlScheduleConfig.validTo = configUpdate.crawlScheduleConfig.validTo;
           pathList.push('crawlScheduleConfig.validTo');
         }

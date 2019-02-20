@@ -36,10 +36,10 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
   configObject: ConfigObject;
-  @Input()
-  equalValidFrom: boolean;
-  @Input()
-  equalValidTo: boolean;
+  // @Input()
+  // equalValidFrom: boolean;
+  // @Input()
+  // equalValidTo: boolean;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -48,14 +48,17 @@ export class ScheduleDetailsComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
-  @Output()
-  deleteValidFrom = new EventEmitter();
-  @Output()
-  deleteValidTo = new EventEmitter();
+  // @Output()
+  // deleteValidFrom = new EventEmitter();
+  // @Output()
+  // deleteValidTo = new EventEmitter();
 
   form: FormGroup;
   shouldShow = true;
   shouldAddLabel = undefined;
+
+  shouldDisableValidFrom = false;
+  shouldDisableValidTo = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
@@ -130,14 +133,16 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   onDeleteAllValidFrom(): void {
-    this.form.markAsDirty();
-    this.deleteValidFrom.emit(true);
+    this.form.controls.validFrom.markAsDirty();
+    this.form.patchValue({validFrom: null});
+    // this.deleteValidFrom.emit(true);
   }
 
   onDeleteAllValidTo(): void {
-    this.form.markAsDirty();
-    this.deleteValidTo.emit(true);
-  }
+    this.form.controls.validTo.markAsDirty();
+    this.form.patchValue({validTo: null});
+    // this.deleteValidTo.emit(true);
+   }
 
   onRevert() {
     this.updateForm();
@@ -152,12 +157,14 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.form = this.fb.group(controlsConfig);
   }
 
+  // TODO validfrom/to ved singleupdate blir en tomstreng = undefined og listes ikke i db, mens ved å sette null/undefined i multiupdate blir det parset som 1.1.1970
+
   updateForm() {
     const cronSplit = this.configObject.crawlScheduleConfig.cronExpression.split(' ');
     this.form.patchValue({
       id: this.configObject.id,
-      validFrom: this.configObject.crawlScheduleConfig.validFrom ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validFrom) : '',
-      validTo: this.configObject.crawlScheduleConfig.validTo ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validTo) : '',
+      validFrom: this.configObject.crawlScheduleConfig.validFrom ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validFrom) : null,
+      validTo: this.configObject.crawlScheduleConfig.validTo ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validTo) : null,
       cronExpression: {
         minute: cronSplit[0],
         hour: cronSplit[1],
@@ -200,6 +207,8 @@ export class ScheduleDetailsComponent implements OnChanges {
 
     configObject.meta = formModel.meta;
     configObject.crawlScheduleConfig = crawlScheduleConfig;
+
+    console.log('prepareSave returning: ', configObject);
     return configObject;
   }
 }
