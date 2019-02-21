@@ -103,16 +103,14 @@ export class BrowserConfig {
       browserConfig.maxInactivityTimeMs = NaN;
     }
 
-    for (const config of configObjects) {
-      for (const script of commonScripts) {
-        const hasScript = this.containsScript(script, config.browserConfig.scriptRefList);
-        if (!hasScript) {
-          commonScripts.splice(commonScripts.indexOf(script), 1);
-        }
+    for (const script of commonScripts) {
+      const gotScript = configObjects.every(function (cfg) {
+        return cfg.browserConfig.scriptRefList.indexOf(script) !== -1;
+      });
+      if (gotScript) {
+        browserConfig.scriptRefList.push(script);
       }
     }
-    browserConfig.scriptRefList = commonScripts;
-
 
     browserConfig.scriptSelectorList = configObjects.reduce((acc: any[], curr: ConfigObject) => {
       if (acc.length < 1) {
@@ -126,18 +124,9 @@ export class BrowserConfig {
     return browserConfig;
   }
 
-  static containsScript(scriptRef, configScripts) {
-    for (const script of configScripts) {
-      if (script.id === scriptRef.id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  static commonScript(browserConfigs: ConfigObject[]) {
+  static commonScript(configObjects: ConfigObject[]) {
     const scripts = [];
-    for (const config of browserConfigs) {
+    for (const config of configObjects) {
       for (const script of config.browserConfig.scriptRefList) {
         if (script !== undefined) {
             scripts.push(script);
@@ -171,7 +160,7 @@ export class BrowserConfig {
     const browserConfig = new BrowserConfig();
     const pathList = [];
 
-    if (mergedConfig) { // Updating selected configs
+    if (mergedConfig) {
       if (formControl.userAgent.dirty) {
         if (updateConfig.browserConfig.userAgent !== mergedConfig.browserConfig.userAgent) {
           browserConfig.userAgent = updateConfig.browserConfig.userAgent;
@@ -226,7 +215,7 @@ export class BrowserConfig {
           pathList.push('browserConfig.scriptSelector-');
         }
       }
-    } else { // Updating all configs
+    } else {
 
       if (formControl.userAgent.dirty) {
         pathList.push('browserConfig.userAgent');

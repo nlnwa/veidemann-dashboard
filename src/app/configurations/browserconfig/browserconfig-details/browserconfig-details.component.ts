@@ -45,7 +45,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   // adding or subtracting labels ect when updating all configs.
   shouldAddLabel = undefined;
   shouldAddBrowserscript = undefined;
-  shouldAddScriptSelector = undefined;
+  shouldAddSelector = undefined;
 
   constructor(private fb: FormBuilder, private roleService: RoleService) {
     this.createForm();
@@ -155,7 +155,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   onToggleShouldAddScriptSelector(shouldAdd: boolean): void {
-    this.shouldAddScriptSelector = shouldAdd;
+    this.shouldAddSelector = shouldAdd;
   }
 
   private createForm() {

@@ -51,8 +51,8 @@
             <button mat-icon-button (click)="onToggleShouldAddScriptSelector(false)">
               <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
             </button>
-            <span *ngIf="shouldAddScriptSelector">Skal legge til script selector til alle konfigurasjoner</span>
-            <span *ngIf="!shouldAddScriptSelector && shouldAddScriptSelector !== undefined">
+            <span *ngIf="shouldAddSelector">Skal legge til script selector til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddSelector && shouldAddSelector !== undefined">
             Skal fjerne script selector for alle konfigurasjoner</span>
           </div>
         </div>
