@@ -56,12 +56,12 @@ export class CrawlJob {
     });
 
      const equalSchedule = configObjects.every(function (cfg: ConfigObject) {
-       return objectEqual(cfg.crawlJob.scheduleRef, compareObj.scheduleRef);
+       return cfg.crawlJob.scheduleRef.id === compareObj.scheduleRef.id;
      });
 
 
     const equalCrawlConfig = configObjects.every(function (cfg: ConfigObject) {
-      return objectEqual(cfg.crawlJob.crawlConfigRef, compareObj.crawlConfigRef);
+      return cfg.crawlJob.crawlConfigRef.id === compareObj.crawlConfigRef.id;
     });
 
     if (equalDisabledStatus) {
@@ -221,22 +221,5 @@ function isDisabledEqual(configs: ConfigObject[]) {
     return cfg.crawlJob.disabled === compareObj.disabled;
   });
   return equalDisabledStatus;
-}
-
-function objectEqual(config, compareConfig): boolean {
-  const cfgProps = Object.getOwnPropertyNames(config);
-  const compareObjProps = Object.getOwnPropertyNames(compareConfig);
-
-  if (cfgProps.length !== compareObjProps.length) {
-    return false;
-  }
-
-  for (const prop  of cfgProps) {
-    const propName = prop;
-    if (cfgProps[propName] !== compareObjProps[propName]) {
-      return false;
-    }
-  }
-  return true;
 }
 
