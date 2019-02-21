@@ -83,15 +83,21 @@ export class CrawlConfig {
     });
 
     if (equalCollectionRef) {
-      crawlConfig.collectionRef.id = compareObj.browserConfigRef.id;
+      crawlConfig.collectionRef = compareObj.collectionRef;
+    } else {
+      crawlConfig.collectionRef = null;
     }
 
     if (equalBrowserConfigRef) {
-      crawlConfig.browserConfigRef.id = compareObj.browserConfigRef.id;
+      crawlConfig.browserConfigRef = compareObj.browserConfigRef;
+    } else {
+      crawlConfig.browserConfigRef = null;
     }
 
     if (equalPolitenessRef) {
-      crawlConfig.politenessRef.id = compareObj.politenessRef.id;
+      crawlConfig.politenessRef = compareObj.politenessRef;
+    } else {
+      crawlConfig.politenessRef = null;
     }
 
     if (equalDnsTtlS) {
@@ -104,10 +110,14 @@ export class CrawlConfig {
 
     if (equalExtractText) {
       crawlConfig.extra.extractText = compareObj.extra.extractText;
+    } else {
+      crawlConfig.extra.extractText = null;
     }
 
     if (equalCreateScreenshot) {
       crawlConfig.extra.createScreenshot = compareObj.extra.createScreenshot;
+    } else {
+      crawlConfig.extra.createScreenshot = null;
     }
 
     return crawlConfig;
@@ -216,7 +226,6 @@ export class CrawlConfig {
         pathList.push('crawlConfig.extra.createScreenshot');
       }
     }
-
     return {updateTemplate: crawlConfig, pathList: pathList};
   }
 }
@@ -248,6 +257,7 @@ export class ExtraConfig {
     return proto;
   }
 }
+
 
 
 

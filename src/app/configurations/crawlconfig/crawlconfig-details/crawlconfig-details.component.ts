@@ -24,16 +24,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   @Input()
   configObject: ConfigObject;
-  @Input()
-  browserConfigs: ConfigObject[];
-  @Input()
-  politenessConfigs: ConfigObject[];
-  @Input()
-  equalExtractText: boolean;
-  @Input()
-  equalCreateScreenshot: boolean;
-  @Input()
-  equalDepthFirst: boolean;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -45,6 +35,11 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
   shouldShow = true;
+
+  disableExtractText = false;
+  disableCreateScreenshot = false;
+
+  shouldAddLabel = undefined;
 
   browserConfigList: any[];
   politenessConfigList: any = [];
@@ -93,10 +88,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return this.form.get('extra.createScreenshot');
   }
 
-  get depthFirst() {
-    return this.form.get('depthFirst');
-  }
-
   get showPolitenessConfig(): boolean {
     const politenessConfig = this.politenessId.value;
     if (politenessConfig != null && politenessConfig !== '') {
@@ -121,27 +112,15 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   shouldDisableExtractText(): void {
-    if (this.equalExtractText !== undefined || !this.shouldShow) {
-      if (!this.equalExtractText) {
+      if (this.disableExtractText) {
         this.extractText.disable();
       }
-    }
   }
 
   shouldDisableCreateSnapshot(): void {
-    if (this.equalCreateScreenshot !== undefined || !this.shouldShow) {
-      if (!this.equalCreateScreenshot) {
+      if (this.disableCreateScreenshot) {
         this.createScreenshot.disable();
       }
-    }
-  }
-
-  shouldDisableDepthFirst(): void {
-    if (this.equalDepthFirst !== undefined || !this.shouldShow) {
-      if (!this.equalDepthFirst) {
-        this.depthFirst.disable();
-      }
-    }
   }
 
   getPolitenessConfigName(id): string {
@@ -172,11 +151,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     }
   }
 
-  onEnableDepthFirst() {
-    if (this.depthFirst.disabled) {
-      this.depthFirst.enable();
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -205,6 +179,11 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
@@ -230,8 +209,8 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       minimumDnsTtlS: this.configObject.crawlConfig.minimumDnsTtlS || '',
       priorityWeight: this.configObject.crawlConfig.priorityWeight || '',
       extra: {
-        extractText: this.configObject.crawlConfig.extra.extractText,
-        createScreenshot: this.configObject.crawlConfig.extra.createScreenshot,
+        extractText: this.configObject.crawlConfig.extra.extractText || null,
+        createScreenshot: this.configObject.crawlConfig.extra.createScreenshot || null,
       },
       meta: this.configObject.meta,
     });
@@ -240,11 +219,12 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     if (!(this.canEdit)) {
       this.form.disable();
     }
-   // this.shouldDisableExtractText();
-   // this.shouldDisableCreateSnapshot();
+    this.shouldDisableExtractText();
+    this.shouldDisableCreateSnapshot();
   }
 
   private prepareSave(): ConfigObject {
+
     const formModel = this.form.value;
 
     const configObject = new ConfigObject({kind: Kind.CRAWLCONFIG});
@@ -256,10 +236,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     crawlConfig.collectionRef = formModel.collectionRef;
     crawlConfig.browserConfigRef = formModel.browserConfigRef;
     crawlConfig.politenessRef = formModel.politenessRef;
-    crawlConfig.minimumDnsTtlS = parseInt(formModel.minimumDnsTtlS, 10);
-    crawlConfig.priorityWeight = parseInt(formModel.priorityWeight, 10);
-    crawlConfig.extra.extractText = formModel.extra.extractText;
-    crawlConfig.extra.createScreenshot = formModel.extra.createScreenshot;
+    crawlConfig.minimumDnsTtlS = parseInt(formModel.minimumDnsTtlS, 10) || 0;
+    crawlConfig.priorityWeight = parseInt(formModel.priorityWeight, 10) || 0;
+    crawlConfig.extra.extractText = formModel.extra ? formModel.extra.extractText : null;
+    crawlConfig.extra.createScreenshot = formModel.extra ? formModel.extra.createScreenshot : null;
 
     configObject.meta = formModel.meta;
     configObject.crawlConfig = crawlConfig;
