@@ -26,8 +26,6 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
 
   @Input()
   configObject: ConfigObject;
-  @Input()
-  equalRobotPolicy: boolean;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -39,6 +37,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
   form: FormGroup;
   shouldShow = true;
   robotsPolicies: RobotsPolicy[] = [];
+
+  // adding or subtracting labels ect when updating multiple configs.
+  shouldAddLabel = undefined;
+  shouldAddSelector = undefined;
+
+  // disable fields on multi update if not equal
+  shouldDisablePolicy = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
@@ -123,15 +128,13 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
     }
   }
 
-  shouldDisableRobotPolicy() {
-    if (this.equalRobotPolicy !== undefined && !this.shouldShow) {
-      if (!this.equalRobotPolicy) {
-        this.robotsPolicy.disable();
-      }
+  shouldDisableRobotPolicy(): void {
+    if (this.shouldDisablePolicy) {
+      this.robotsPolicy.disable();
     }
   }
 
-  onEnableRobotsPolicy() {
+  onEnableRobotsPolicy(): void {
     if (this.robotsPolicy.disabled) {
       this.robotsPolicy.enable();
     }
@@ -151,6 +154,16 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
 
   onRevert() {
     this.updateForm();
+  }
+
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  onToggleShouldAddSelector(shouldAdd: boolean): void {
+    this.shouldAddSelector = shouldAdd;
+    this.form.controls.crawlHostGroupSelectorList.markAsDirty();
   }
 
   private createForm() {

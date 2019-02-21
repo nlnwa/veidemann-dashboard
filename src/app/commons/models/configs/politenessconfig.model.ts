@@ -91,6 +91,8 @@ export class PolitenessConfig {
 
     if (equalRobotPolicy) {
       politenessConfig.robotsPolicy = compareObj.robotsPolicy;
+    } else {
+      politenessConfig.robotsPolicy = undefined;
     }
 
     if (equalCustomRobot) {
@@ -162,6 +164,7 @@ export class PolitenessConfig {
     proto.setDelayFactor(this.delayFactor);
     proto.setMaxRetries(this.maxRetries);
     proto.setDelayFactor(this.delayFactor);
+    proto.setRetryDelaySeconds(this.retryDelaySeconds);
     proto.setCrawlHostGroupSelectorList(this.crawlHostGroupSelectorList);
 
     return proto;
@@ -231,13 +234,11 @@ export class PolitenessConfig {
       if (formControl.crawlHostGroupSelectorList.dirty) {
         if (addCrawlHostGroupSelector !== undefined) {
           if (addCrawlHostGroupSelector) {
-            if (configUpdate.politenessConfig.crawlHostGroupSelectorList !== mergedConfig.politenessConfig.crawlHostGroupSelectorList) {
-              pathList.push('politenessConfig.crawlHostGroupSelector+');
-              politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
-            } else {
-              pathList.push('politenessConfig.crawlHostGroupSelector-');
-              politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
-            }
+            pathList.push('politenessConfig.crawlHostGroupSelector+');
+            politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
+          } else {
+            pathList.push('politenessConfig.crawlHostGroupSelector-');
+            politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
           }
         }
       }
