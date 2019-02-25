@@ -36,10 +36,6 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   @Input()
   configObject: ConfigObject;
-  // @Input()
-  // equalValidFrom: boolean;
-  // @Input()
-  // equalValidTo: boolean;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -48,33 +44,14 @@ export class ScheduleDetailsComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
-  // @Output()
-  // deleteValidFrom = new EventEmitter();
-  // @Output()
-  // deleteValidTo = new EventEmitter();
 
   form: FormGroup;
   shouldShow = true;
   shouldAddLabel = undefined;
 
-  shouldDisableValidFrom = false;
-  shouldDisableValidTo = false;
-
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      validFrom: '',
-      validTo: '',
-      cronExpression: this.fb.group({
-        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-      }),
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canDelete(): boolean {
@@ -132,18 +109,6 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.delete.emit(this.configObject);
   }
 
-  onDeleteAllValidFrom(): void {
-    this.form.controls.validFrom.markAsDirty();
-    this.form.patchValue({validFrom: null});
-    // this.deleteValidFrom.emit(true);
-  }
-
-  onDeleteAllValidTo(): void {
-    this.form.controls.validTo.markAsDirty();
-    this.form.patchValue({validTo: null});
-    // this.deleteValidTo.emit(true);
-   }
-
   onRevert() {
     this.updateForm();
   }
@@ -153,11 +118,21 @@ export class ScheduleDetailsComponent implements OnChanges {
     this.form.controls.meta.markAsDirty();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      validFrom: '',
+      validTo: '',
+      cronExpression: this.fb.group({
+        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+      }),
+      meta: new Meta(),
+    });
   }
-
-  // TODO validfrom/to ved singleupdate blir en tomstreng = undefined og listes ikke i db, mens ved å sette null/undefined i multiupdate blir det parset som 1.1.1970
 
   updateForm() {
     const cronSplit = this.configObject.crawlScheduleConfig.cronExpression.split(' ');
@@ -207,8 +182,6 @@ export class ScheduleDetailsComponent implements OnChanges {
 
     configObject.meta = formModel.meta;
     configObject.crawlScheduleConfig = crawlScheduleConfig;
-
-    console.log('prepareSave returning: ', configObject);
     return configObject;
   }
 }

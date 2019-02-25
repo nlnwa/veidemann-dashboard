@@ -32,7 +32,7 @@
       </div>
       </div>
       <div fxFlex fxLayout="column">
-        <fieldset formGroupName="cronExpression">
+        <fieldset formGroupName="cronExpression" *ngIf="shouldShow">
           <legend i18n="@@scheduleFormCronExpressionHeader">Cron expression</legend>
           <div fxLayout="row wrap" fxLayoutGap="24px">
             <mat-form-field>
@@ -73,15 +73,6 @@
             <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validFromDatepicker></mat-datepicker>
           </mat-form-field>
-            <div *ngIf="shouldDisableValidFrom">
-              <button  mat-icon-button
-                       (click)="onDeleteAllValidFrom()"
-                       color="warn"
-                       matTooltip="Gyldig fra er ikke lik for alle konfigurasjoner.
-                  Vil du slette Gyldig fra dato for alle konfigurasjonene?">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
           </div>
           <div fxLayout="row">
           <mat-form-field>
@@ -89,14 +80,6 @@
             <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #validToDatepicker></mat-datepicker>
           </mat-form-field>
-            <div *ngIf="shouldDisableValidTo">
-              <button mat-icon-button
-                      (click)="onDeleteAllValidTo()"
-                      color="warn" matTooltip="Gyldig til er ikke lik for alle konfigurasjoner.
-                  Vil du slette Gyldig til dato for alle konfigurasjonene?">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
           </div>
         </div>
       </div>

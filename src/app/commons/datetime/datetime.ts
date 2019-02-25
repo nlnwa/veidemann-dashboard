@@ -13,21 +13,17 @@ export class DateTime {
   }
 
   static dateToUtc(momentObj: Moment, startOfDay: boolean): string {
-    console.log('dateToUtc with momenObj: ', momentObj);
     if (momentObj.isValid()) {
       const utc = moment.utc()
         .year(momentObj.get('year'))
         .month(momentObj.get('month'))
         .date(momentObj.get('date'));
-
-      console.log('startOfDay: ', startOfDay, 'utc: ', utc.toISOString());
       if (startOfDay) {
         return utc.startOf('day').toISOString();
       } else {
         return utc.endOf('day').toISOString();
       }
     } else {
-      console.log('dateToUtc return null');
       return null;
     }
   }
@@ -53,7 +49,6 @@ export function fromTimestampProto(proto: any): string {
 
 /* tslint:disable:no-bitwise */
 export function toTimestampProto(timestamp: string): any {
-  console.log('toTimestampProto: ', timestamp);
   if (timestamp) {
     const date = new Date(timestamp);
     const timestampProto = new timestamp_pb.Timestamp();
