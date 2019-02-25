@@ -1,4 +1,5 @@
 import {CollectionProto} from '../../../../api';
+import {SubCollection, SubCollectionType} from './subcollection.model';
 
 export enum RotationPolicy {
   NONE = 0,
@@ -8,13 +9,6 @@ export enum RotationPolicy {
   YEARLY = 4,
 }
 
-export enum SubCollectionType {
-  UNDEFINED = 0,
-  SCREENSHOT = 1,
-  DNS = 2,
-}
-
-
 export class Collection {
   collectionDedupPolicy: RotationPolicy;
   fileRotationPolicy: RotationPolicy;
@@ -23,8 +17,8 @@ export class Collection {
   subCollectionsList: SubCollection[];
 
   constructor({
-                collectionDedupPolicy = RotationPolicy.NONE,
-                fileRotationPolicy = RotationPolicy.NONE,
+                collectionDedupPolicy = RotationPolicy[RotationPolicy.NONE] as any as RotationPolicy,
+                fileRotationPolicy = RotationPolicy[RotationPolicy.NONE] as any as RotationPolicy,
                 compress = false,
                 fileSize = 0,
                 subCollectionsList = []
@@ -38,49 +32,27 @@ export class Collection {
 
   static fromProto(proto: CollectionProto): Collection {
     return new Collection({
-      collectionDedupPolicy: proto.getCollectionDedupPolicy(),
-      fileRotationPolicy: proto.getFileRotationPolicy(),
+      collectionDedupPolicy: RotationPolicy[proto.getCollectionDedupPolicy()] as any as RotationPolicy,
+      fileRotationPolicy: RotationPolicy[proto.getFileRotationPolicy()] as any as RotationPolicy,
       compress: proto.getCompress(),
       fileSize: proto.getFileSize(),
       subCollectionsList: proto.getSubCollectionsList()
+        .map(subCollectionProto => new SubCollection(
+          {
+            name: subCollectionProto.getName(),
+            type: SubCollectionType[subCollectionProto.getType()] as any as SubCollectionType
+          }))
     });
   }
 
   toProto(): CollectionProto {
     const proto = new CollectionProto();
-    proto.setCollectionDedupPolicy(this.collectionDedupPolicy);
-    proto.setFileRotationPolicy(this.fileRotationPolicy);
+    proto.setCollectionDedupPolicy(CollectionProto.RotationPolicy[this.collectionDedupPolicy] as any as CollectionProto.RotationPolicy);
+    proto.setFileRotationPolicy(CollectionProto.RotationPolicy[this.fileRotationPolicy] as any as CollectionProto.RotationPolicy);
     proto.setCompress(this.compress);
     proto.setFileSize(this.fileSize);
-    proto.setSubCollectionsList(this.subCollectionsList.map(ref => ref.toProto()));
+    proto.setSubCollectionsList(this.subCollectionsList.map(subCollection => subCollection.toProto()));
     return proto;
   }
 }
 
-
-export class SubCollection {
-  type: SubCollectionType;
-  name: string;
-
-  constructor({
-                type = SubCollectionType.UNDEFINED,
-                name = ''
-              } = {}) {
-    this.type = type;
-    this.name = name;
-  }
-
-  static fromProto(proto: CollectionProto.SubCollection): SubCollection {
-    return new SubCollection({
-      type: proto.getType(),
-      name: proto.getName()
-    });
-  }
-
-  toProto(): CollectionProto.SubCollection {
-    const proto = new CollectionProto.SubCollection();
-    proto.setType(this.type);
-    proto.setName(this.name);
-    return proto;
-  }
-}

@@ -18,6 +18,13 @@
                               [count]="count$|async">
         </app-rolemapping-list>
       </ng-container>
+      <ng-container *ngSwitchCase="Kind.COLLECTION">
+        <app-collection-list (rowClick)="onSelectConfig($event)"
+                             [data]="data$ | async"
+                             (page)="onPage($event)"
+                             [count]="count$|async">
+        </app-collection-list>
+      </ng-container>
 
       <ng-container *ngSwitchDefault>
         <app-base-list (rowClick)="onSelectConfig($event)"
@@ -30,6 +37,14 @@
       </ng-container>
     </div>
     <div [ngSwitch]="kind" *ngIf="singleMode && configObject$ | async as configObject">
+      <ng-container *ngSwitchCase="Kind.COLLECTION">
+        <app-collection-details
+          [configObject]="configObject"
+          (update)="onUpdateConfig($event)"
+          (save)="onSaveConfig($event)"
+          (delete)="onDeleteConfig($event)">
+        </app-collection-details>
+      </ng-container>
       <ng-container *ngSwitchCase="Kind.CRAWLJOB">
         <app-crawljob-details
           [configObject]="configObject"

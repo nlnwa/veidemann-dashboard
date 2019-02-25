@@ -99,6 +99,8 @@ export class ConfigurationsComponent implements OnInit {
         return 'CrawlHostGroupConfig';
       case Kind.ROLEMAPPING:
         return 'RoleMapping';
+      case Kind.COLLECTION:
+        return 'Collection';
       case Kind.UNDEFINED:
       default:
         return 'not implemented';
@@ -175,8 +177,6 @@ export class ConfigurationsComponent implements OnInit {
 
     instance.configObject = mergedConfig;
 
-    console.log('loadCompon configObject is: ', instance.configObject);
-
     // adding validator for forms
     if (this.kind === Kind.CRAWLSCHEDULECONFIG) {
       instance.form.get('cronExpression').clearValidators();
@@ -185,17 +185,25 @@ export class ConfigurationsComponent implements OnInit {
       instance.form.get('cronExpression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
       instance.form.get('cronExpression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
       instance.form.get('cronExpression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
-
-      if (mergedConfig.crawlScheduleConfig.validFrom === undefined) {
-        instance.shouldDisableValidFrom = true;
-      }
-
-      if (mergedConfig.crawlScheduleConfig.validTo === undefined) {
-        instance.shouldDisableValidTo = true;
-      }
     }
     if (this.kind === Kind.CRAWLJOB) {
       instance.form.get('crawlConfigRef').clearValidators();
+    }
+
+    if (this.kind === Kind.POLITENESSCONFIG) {
+      if (mergedConfig.politenessConfig.robotsPolicy === undefined) {
+        instance.shouldDisablePolicy = true;
+      }
+    }
+
+    if (this.kind === Kind.CRAWLCONFIG) {
+      if (mergedConfig.crawlConfig.extra.extractText === null) {
+        instance.disableExtractText = true;
+      }
+
+      if (mergedConfig.crawlConfig.extra.createScreenshot === null) {
+        instance.disableCreateScreenshot = true;
+      }
     }
 
     instance.data = false;
@@ -207,7 +215,7 @@ export class ConfigurationsComponent implements OnInit {
         (configUpdate) => {
           const addLabel = instance.shouldAddLabel;
           const addBrowserscript = instance.shouldAddBrowserscript;
-          const addSelector = instance.shouldAddScriptSelector;
+          const addSelector = instance.shouldAddSelector;
           const addIpRange = instance.shouldAddIpRange;
           this.onUpdateSelectedConfigs(mergedConfig, configUpdate, formControl,
             addLabel, addBrowserscript, addSelector, addIpRange);
@@ -221,9 +229,9 @@ export class ConfigurationsComponent implements OnInit {
         (configUpdate) => {
           const addLabel = instance.shouldAddLabel;
           const addBrowserscript = instance.shouldAddBrowserscript; // Browserconfig
-          const addScriptSelector = instance.shouldAddScriptSelector; // Browserconfig
+          const addSelector = instance.shouldAddSelector; // Browserconfig
           const addIpRange = instance.shouldAddIpRange; // Crawlhostgroupconfig
-          this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addScriptSelector, addIpRange);
+          this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addSelector, addIpRange);
         });
     }
   }
@@ -293,7 +301,7 @@ export class ConfigurationsComponent implements OnInit {
         const errorString = err.message.split(':')[1];
         const deleteError = /(?=.*delete)(?=.*there are)/gm;
         if (deleteError.test(errorString)) {
-          this.snackBarService.openSnackBar('Error deleting config ' +  configObject.meta.name + ': ' +  errorString);
+          this.snackBarService.openSnackBar('Error deleting config ' + configObject.meta.name + ': ' + errorString);
           return empty;
         }
         return empty;
@@ -309,8 +317,6 @@ export class ConfigurationsComponent implements OnInit {
 
   onUpdateSelectedConfigs(mergedConfig: ConfigObject, configUpdate: ConfigObject, formControl: any,
                           addLabel: boolean, addBrowserscript: boolean, addSelector: boolean, addIpRange: boolean) {
-
-    console.log('onUpdateMultiple with merged: ', mergedConfig);
 
     const kind = configUpdate.kind;
     const numOfConfigs = this.selectedConfigs.length.toString(10);
@@ -443,11 +449,10 @@ export class ConfigurationsComponent implements OnInit {
             mergeMap((configObject) => this.configService.delete(configObject.toProto()).pipe(
               catchError((err) => {
                 console.log(err);
-                console.log('kan ikke slette config: ', configObject.meta.name);
                 const errorString = err.message.split(':')[1];
                 const deleteError = /(?=.*delete)(?=.*there are)/gm;
                 if (deleteError.test(errorString)) {
-                  this.snackBarService.openSnackBar('Error deleting config ' +  configObject.meta.name.bold() + ':  \n' + errorString);
+                  this.snackBarService.openSnackBar('Error deleting config ' + configObject.meta.name.bold() + ':  \n' + errorString);
                   return empty;
                 }
                 return empty;

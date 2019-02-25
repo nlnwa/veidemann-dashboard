@@ -55,6 +55,12 @@
             <ng-container i18n="@@navigationSidebarSearch">Entiteter/Seeds</ng-container>
           </a>
 
+          <a mat-list-item [routerLink]="['/collection']" [routerLinkActiveOptions]="{ exact: true }"
+             [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav--icon__margin">collections_bookmark</mat-icon>
+            <ng-container i18n="@@navigationSidebarCollection">Collection</ng-container>
+          </a>
+
           <ng-container *ngIf="canViewCrawljobs">
             <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
                [routerLinkActive]="['is-active']">

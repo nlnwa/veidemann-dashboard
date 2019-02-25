@@ -1,0 +1,29 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Navn</th>
+    <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Beskrivelse</th>
+    <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let row">{{row.id}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': null|| selectedRow == row.id ? 'highlight' : null"
+      (click)="onRowClick(row)"></tr>
+</table>
+
+<mat-paginator (page)="page.emit($event)"
+               [length]="pageLength"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageOptions">
+</mat-paginator>

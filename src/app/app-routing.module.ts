@@ -12,6 +12,7 @@ import {Kind} from './commons/models/kind.model';
 import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
 import {Role} from './commons/models/configs/rolemapping.model';
 import {ConfigurationsComponent} from './configurations/configurations.component';
+import {CollectionDetailsComponent} from './configurations/collection';
 
 const routes: Routes = [
   {
@@ -183,6 +184,22 @@ const routes: Routes = [
       roles: [Role.CURATOR, Role.ADMIN],
     },
   },
+  {
+    path: 'collection',
+    component: ConfigurationsComponent,
+    canActivate: [GuardService],
+    data: {
+      kind: Kind.COLLECTION
+    }
+  },
+  {
+    path: 'collection/:id',
+    component: ConfigurationsComponent,
+    canActivate: [GuardService],
+    data: {
+      roles: [Role.CURATOR, Role.ADMIN],
+    },
+  }
 ];
 
 @NgModule({

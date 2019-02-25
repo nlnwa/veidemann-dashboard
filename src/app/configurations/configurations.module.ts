@@ -34,7 +34,7 @@ import {
 } from './schedule';
 import {
   EntityDetailsComponent,
- // EntityService
+  // EntityService
 } from './entities';
 import {
   LoglevelComponent,
@@ -60,6 +60,10 @@ import {
 import {
   BackendService
 } from './shared/backend.service';
+import {
+  CollectionDetailsComponent
+} from './collection/collection-details/collection-details.component';
+import { CollectionListComponent } from './collection/collection-list/collection-list.component';
 
 
 @NgModule({
@@ -85,6 +89,8 @@ import {
     WarcStatusDetailsComponent,
     WarcStatusPageComponent,
     DetailDirective,
+    CollectionDetailsComponent,
+    CollectionListComponent,
   ],
   entryComponents: [
     CrawlHostGroupConfigDetailsComponent,
@@ -97,6 +103,7 @@ import {
     SeedDetailComponent,
     EntityDetailsComponent,
     RoleMappingDetailsComponent,
+    CollectionDetailsComponent,
   ],
   imports: [
     CommonsModule,
@@ -116,7 +123,7 @@ export class ConfigurationsModule {
         BackendService,
         SearchService,
         SeedService,
-       // EntityService,
+        // EntityService,
         LogService,
         WarcStatusService,
       ],
