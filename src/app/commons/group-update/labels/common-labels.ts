@@ -13,7 +13,6 @@ export function getInitialLabels(configs: any[], cfg: any): Label[] {
 
 
 export function intersectLabel(a: Label[], b: Label[]): Label[] {
-  console.log('in intersect label with: ', a , b);
   const setA = Array.from(new Set(a));
   const setB = Array.from(new Set(b));
   const intersection = new Set(setA.filter((x: Label) =>
