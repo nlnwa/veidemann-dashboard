@@ -30,7 +30,7 @@ export class DeleteDialogComponent implements OnInit {
 
   onDelete(): void {
     const confirmationInput =  this.form.get('delete_confirmation').value;
-    if (confirmationInput == this.numberOfConfigs) {
+    if (confirmationInput === this.numberOfConfigs) {
       this.dialogRef.close(true);
     } else {
       this.dialogRef.close(false);
