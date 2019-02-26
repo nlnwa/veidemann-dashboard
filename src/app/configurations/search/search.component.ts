@@ -574,7 +574,7 @@ export class SearchComponent implements OnInit {
     }
 
     listRequest.setIdList(ids);
-    const seed = new Seed().createUpdateRequest(seedUpdate, formControl, mergedSeeds);
+    const seed = new Seed().createUpdateRequest(seedUpdate, formControl, mergedSeeds, addCrawlJob);
     updateTemplate.seed = seed.updateTemplate;
     listRequest.setKind(Kind.SEED.valueOf());
     if (seed.pathList.length !== 0) {

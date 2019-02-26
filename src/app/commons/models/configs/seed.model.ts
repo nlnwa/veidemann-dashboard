@@ -39,6 +39,20 @@ export class Seed {
     const equalDisabledStatus = this.isDisabledEqual(configObjects);
     const commonCrawlJobs = this.commonCrawlJobs(configObjects);
 
+    for (const crawlJob of commonCrawlJobs) {
+      const gotCrawlJob = configObjects.every(function (cfg) {
+        for (const job of cfg.seed.jobRefList) {
+          if (job.id === crawlJob.id) {
+            return true;
+          }
+        }
+        return false;
+      });
+      if (gotCrawlJob) {
+        seed.jobRefList.push(crawlJob);
+      }
+    }
+
     if (equalDisabledStatus) {
       seed.disabled = compareObj.disabled;
     } else {
@@ -48,7 +62,18 @@ export class Seed {
   }
 
   static commonCrawlJobs(configObjects: ConfigObject[]) {
-
+    const crawlJobs = [];
+    for (const config of configObjects) {
+      for (const job of config.seed.jobRefList) {
+        if (job) {
+          crawlJobs.push(job);
+        }
+      }
+    }
+    const unique = crawlJobs.filter(function ({id}) {
+      return !this.has(id) && this.add(id);
+    }, new Set);
+    return unique;
   }
 
   static isDisabledEqual(configObjects: ConfigObject[]) {
@@ -74,12 +99,6 @@ export class Seed {
     const pathList = [];
 
     if (mergedConfig) {
-      if (formControl.entityRef.dirty) {
-        if (configUpdate.seed.entityRef !== mergedConfig.seed.entityRef) {
-          seed.entityRef = configUpdate.seed.entityRef;
-          pathList.push('seed.entityRef');
-        }
-      }
       if (addJobRef !== undefined) {
         if (addJobRef) {
           if (configUpdate.seed.jobRefList !== mergedConfig.seed.jobRefList) {
@@ -94,6 +113,7 @@ export class Seed {
 
       if (configUpdate.seed.disabled !== undefined) {
         seed.disabled = configUpdate.seed.disabled;
+        pathList.push('seed.disabled');
       }
     } else {
 

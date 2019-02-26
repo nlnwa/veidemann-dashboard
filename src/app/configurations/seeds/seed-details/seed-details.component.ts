@@ -111,6 +111,7 @@ export class SeedDetailComponent implements OnChanges {
 
   onToggleShouldAddCrawlJob(shouldAdd: boolean): void {
     this.shouldAddCrawlJob = shouldAdd;
+    this.form.controls.jobRefList.markAsDirty();
   }
 
   onSave(): void {
