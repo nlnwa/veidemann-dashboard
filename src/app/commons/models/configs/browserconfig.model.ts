@@ -103,12 +103,17 @@ export class BrowserConfig {
       browserConfig.maxInactivityTimeMs = NaN;
     }
 
-    for (const script of commonScripts) {
+    for (const browserScript of commonScripts) {
       const gotScript = configObjects.every(function (cfg) {
-        return cfg.browserConfig.scriptRefList.indexOf(script) !== -1;
+        for (const script of cfg.browserConfig.scriptRefList) {
+          if (script.id === browserScript.id) {
+            return true;
+          }
+        }
+        return false;
       });
       if (gotScript) {
-        browserConfig.scriptRefList.push(script);
+        browserConfig.scriptRefList.push(browserScript);
       }
     }
 
