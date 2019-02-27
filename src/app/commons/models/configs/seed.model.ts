@@ -98,6 +98,11 @@ export class Seed {
     const seed = new Seed();
     const pathList = [];
 
+    if (configUpdate.seed.disabled !== undefined) {
+      seed.disabled = configUpdate.seed.disabled;
+      pathList.push('seed.disabled');
+    }
+
     if (mergedConfig) {
       if (addJobRef !== undefined) {
         if (addJobRef) {
@@ -110,18 +115,7 @@ export class Seed {
           pathList.push('seed.jobRef-');
         }
       }
-
-      if (configUpdate.seed.disabled !== undefined) {
-        seed.disabled = configUpdate.seed.disabled;
-        pathList.push('seed.disabled');
-      }
     } else {
-
-      if (formControl.entityRef.dirty) {
-        seed.entityRef = configUpdate.seed.entityRef;
-        pathList.push('seed.entityRef');
-      }
-
       if (formControl.jobRefList.dirty) {
         if (addJobRef !== undefined) {
           seed.jobRefList = configUpdate.seed.jobRefList;
@@ -132,12 +126,7 @@ export class Seed {
           }
         }
       }
-
-      if (configUpdate.seed.disabled !== undefined) {
-        seed.disabled = configUpdate.seed.disabled;
-      }
     }
-
     return {updateTemplate: seed, pathList: pathList};
   }
 }

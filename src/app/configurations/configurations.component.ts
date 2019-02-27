@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, combineLatest, EMPTY as empty, from, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
 import {catchError, map, mergeMap, startWith} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
@@ -427,19 +427,20 @@ export class ConfigurationsComponent implements OnInit {
       .subscribe(updatedConfigs => {
         this.selectedConfigs = [];
         this.componentRef.destroy();
-        this.configObject = null;
+        this.configObject.next(null);
         this.changes.next();
         this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner oppdatert');
       });
   }
 
   onDeleteSelectedConfigs(configObjects: ConfigObject[]) {
-    const numOfConfigs = this.selectedConfigs.length.toString();
+    const numOfConfigs = this.selectedConfigs.length;
+    let numOfDeleted = this.selectedConfigs.length;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
-      numberOfConfigs: numOfConfigs
+      numberOfConfigs: numOfConfigs.toString()
     };
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
     dialogRef.afterClosed()
@@ -448,23 +449,31 @@ export class ConfigurationsComponent implements OnInit {
           from(configObjects).pipe(
             mergeMap((configObject) => this.configService.delete(configObject.toProto()).pipe(
               catchError((err) => {
-                console.log(err);
                 const errorString = err.message.split(':')[1];
                 const deleteError = /(?=.*delete)(?=.*there are)/gm;
                 if (deleteError.test(errorString)) {
-                  this.snackBarService.openSnackBar('Error deleting config ' + configObject.meta.name.bold() + ':  \n' + errorString);
-                  return empty;
+                  numOfDeleted--;
+                  return of([]);
                 }
                 return empty;
               })
             )),
           ).subscribe(() => {
-            this.selectedConfigs = [];
-            this.componentRef.destroy();
-            this.configObject = null;
-            this.changes.next();
-            this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
-          });
+              this.selectedConfigs = [];
+              this.componentRef.destroy();
+              this.configObject.next(null);
+              this.changes.next();
+            },
+            (err => console.log(err)),
+            () => {
+              const cantDelete = (numOfConfigs - numOfDeleted > 0) ? numOfConfigs - numOfDeleted
+                + ' ble ikke slettet siden de brukes i andre konfigurasjoner ' : null;
+              let deleteConfirmation = numOfDeleted + ' / ' + numOfConfigs + ' konfigurasjoner  ble  slettet. ';
+              if (cantDelete) {
+                deleteConfirmation += cantDelete;
+              }
+              this.snackBarService.openSnackBar(deleteConfirmation);
+            });
         } else {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
@@ -575,7 +584,7 @@ export class ConfigurationsComponent implements OnInit {
       .subscribe(updatedConfigs => {
         this.selectedConfigs = [];
         this.componentRef.destroy();
-        this.configObject = null;
+        this.configObject.next(null);
         this.changes.next();
         this.snackBarService.openSnackBar('Alle konfigurasjoner av typen ' + this.kind + ' er oppdatert');
       });
