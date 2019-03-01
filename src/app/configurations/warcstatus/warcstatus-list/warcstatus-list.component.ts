@@ -14,6 +14,9 @@ export class WarcStatusListComponent implements OnInit, AfterViewInit {
   @Output()
   protected rowClick = new EventEmitter<any[]>();
 
+  @Output()
+  allErrors = new EventEmitter<any[]>();
+
   dataSource = new MatTableDataSource();
   displayedColumns = ['filename', 'status'];
 
@@ -26,6 +29,7 @@ export class WarcStatusListComponent implements OnInit, AfterViewInit {
     this.warcStatusService.getValidationErrors()
       .subscribe(warcErrors => {
         this.dataSource.data = warcErrors;
+        this.allErrors.emit(warcErrors);
       });
   }
 
@@ -34,7 +38,14 @@ export class WarcStatusListComponent implements OnInit, AfterViewInit {
   }
 
   onRowClick(row) {
-    this.rowClick.emit(row);
-    this.selectedRowIndex = row.filename;
+    if (this.selectedRowIndex !== row.filename) {
+      this.rowClick.emit(row);
+      this.selectedRowIndex = row.filename;
+    } else {
+      if (this.selectedRowIndex === row.filename) {
+        this.rowClick.emit(null);
+        this.selectedRowIndex = -1;
+      }
+    }
   }
 }

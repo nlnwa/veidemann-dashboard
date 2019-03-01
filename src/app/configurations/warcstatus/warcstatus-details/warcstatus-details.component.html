@@ -36,38 +36,70 @@
         <span i18n="@@warcErrorMessagesToolbarText">Beskjeder</span>
         <span class="fill-space"></span>
       </mat-toolbar>
-      <mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="text">
-          <mat-header-cell *matHeaderCellDef
-                           class="validator-message-table__text-column"
-                           i18n="@@warcErrorTextHeaderCell">Tekst
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"
-                    class="validator-message-table__text-column">{{row.text}}
-          </mat-cell>
-        </ng-container>
 
-        <ng-container matColumnDef="severity">
-          <mat-header-cell *matHeaderCellDef
-                           class="validator-message-table__severity-column"
-                           i18n="@@warcErrorSeverityHeaderCell">Alvorlighetsgrad
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"
-                    class="validator-message-table__severity-column">{{row.severity}}
-          </mat-cell>
-        </ng-container>
+      <ng-container *ngFor="let error of this.errors">
+        <mat-accordion>
+          <mat-expansion-panel fxFlex>
 
-        <ng-container matColumnDef="subMessage">
-          <mat-header-cell *matHeaderCellDef
-                           i18n="@@warcErrorSubMessageHeaderCell">Info
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.subMessage}}</mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns">
-        </mat-row>
-      </mat-table>
+            <mat-expansion-panel-header>
+              <mat-panel-title> {{error.type}} ({{error.total}})</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-table [dataSource]="error.subMessages">
+              <ng-container matColumnDef="subMessage">
+                <mat-header-cell *matHeaderCellDef> Feilmelding</mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.message}}</mat-cell>
+              </ng-container>
 
+              <ng-container matColumnDef="subMessageCount">
+                <mat-header-cell *matHeaderCellDef> Antall</mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.count}}</mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="errorSummaryColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: errorSummaryColumns;"></mat-row>
+            </mat-table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
+      <mat-accordion>
+        <mat-expansion-panel fxFlex>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Alle feil ({{totalErrors(this.errors)}})</mat-panel-title>
+            <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="text">
+              <mat-header-cell *matHeaderCellDef
+                               class="validator-message-table__text-column"
+                               i18n="@@warcErrorTextHeaderCell">Tekst
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"
+                        class="validator-message-table__text-column">{{row.text}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="severity">
+              <mat-header-cell *matHeaderCellDef
+                               class="validator-message-table__severity-column"
+                               i18n="@@warcErrorSeverityHeaderCell">Alvorlighetsgrad
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"
+                        class="validator-message-table__severity-column">{{row.severity}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="subMessage">
+              <mat-header-cell *matHeaderCellDef
+                               i18n="@@warcErrorSubMessageHeaderCell">Info
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.subMessage}}</mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns">
+            </mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+      </mat-accordion>
       <mat-toolbar>
         <span i18n="@@@@warcErrorNonCompliantWarcIdToolbarText">Ikke-kompatibel WARC ID</span>
         <span class="fill-space"></span>

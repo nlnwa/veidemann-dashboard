@@ -55,6 +55,7 @@ import {
   WarcStatusListComponent,
   WarcStatusDetailsComponent,
   WarcStatusPageComponent,
+  WarcStatusSummaryComponent,
   WarcStatusService
 } from './warcstatus';
 import {
@@ -87,6 +88,7 @@ import { CollectionListComponent } from './collection/collection-list/collection
     RoleMappingDetailsComponent,
     WarcStatusListComponent,
     WarcStatusDetailsComponent,
+    WarcStatusSummaryComponent,
     WarcStatusPageComponent,
     DetailDirective,
     CollectionDetailsComponent,
