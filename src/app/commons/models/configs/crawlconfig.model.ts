@@ -123,21 +123,25 @@ export class CrawlConfig {
     return crawlConfig;
   }
 
-  toProto(): CrawlConfigProto {
+  static toProto(crawlConfig: CrawlConfig): CrawlConfigProto {
     const proto = new CrawlConfigProto();
-    proto.setCollectionRef(this.collectionRef.toProto());
-    proto.setBrowserConfigRef(this.browserConfigRef.toProto());
-    proto.setPolitenessRef(this.politenessRef.toProto());
-    proto.setExtra(this.extra.toProto());
-    proto.setMinimumDnsTtlS(this.minimumDnsTtlS);
-    proto.setPriorityWeight(this.priorityWeight);
+    proto.setCollectionRef(crawlConfig.collectionRef.toProto());
+    proto.setBrowserConfigRef(crawlConfig.browserConfigRef.toProto());
+    proto.setPolitenessRef(crawlConfig.politenessRef.toProto());
+    proto.setExtra(ExtraConfig.toProto(crawlConfig.extra));
+    proto.setMinimumDnsTtlS(crawlConfig.minimumDnsTtlS);
+    proto.setPriorityWeight(crawlConfig.priorityWeight);
     return proto;
   }
 
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             configUpdate: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any): void {
     const crawlConfig = new CrawlConfig();
-    const pathList = [];
+    updateTemplate.crawlConfig = crawlConfig;
 
     if (mergedConfig) {
 
@@ -226,7 +230,6 @@ export class CrawlConfig {
         pathList.push('crawlConfig.extra.createScreenshot');
       }
     }
-    return {updateTemplate: crawlConfig, pathList: pathList};
   }
 }
 
@@ -250,10 +253,10 @@ export class ExtraConfig {
     });
   }
 
-  toProto(): ExtraConfigProto {
+  static toProto(extraConfig: ExtraConfig): ExtraConfigProto {
     const proto = new ExtraConfigProto();
-    proto.setExtractText(this.extractText);
-    proto.setCreateScreenshot(this.createScreenshot);
+    proto.setExtractText(extraConfig.extractText);
+    proto.setCreateScreenshot(extraConfig.createScreenshot);
     return proto;
   }
 }

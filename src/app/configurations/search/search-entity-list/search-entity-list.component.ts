@@ -1,14 +1,14 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
 import {ResultType} from '../search.service';
 import {ConfigObject} from '../../../commons/models';
 import {BaseListComponent} from '../../../commons/list';
-
+import {SearchDataService} from '../../shared/search-data.service';
 
 @Component({
   selector: 'app-search-list',
   templateUrl: './search-entity-list.component.html',
   styleUrls: [
-    '../../../commons/list/selection-base-list/selection-base-list.css',
+    '../../../commons/list/base-list/base-list.css',
     './search-entity-list.component.css',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,10 +17,8 @@ export class SearchListComponent extends BaseListComponent {
 
   displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
 
-
-  onRowClick(item: ConfigObject) {
-    this.rowClick.emit(item);
-    this.selectedRow = item.id;
+  constructor(@Optional() protected dataService: SearchDataService) {
+    super(dataService);
   }
 
   isEntityName(item: ConfigObject): boolean {

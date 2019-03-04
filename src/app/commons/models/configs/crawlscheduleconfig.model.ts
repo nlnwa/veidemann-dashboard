@@ -65,16 +65,16 @@ export class CrawlScheduleConfig {
     return equalValidTo;
   }
 
-  toProto(): CrawlScheduleConfigProto {
+  static toProto(crawlScheduleConfig: CrawlScheduleConfig): CrawlScheduleConfigProto {
     const proto = new CrawlScheduleConfigProto();
-    proto.setCronExpression(this.cronExpression);
-    proto.setValidFrom(toTimestampProto(this.validFrom));
-    proto.setValidTo(toTimestampProto(this.validTo));
+    proto.setCronExpression(crawlScheduleConfig.cronExpression);
+    proto.setValidFrom(toTimestampProto(crawlScheduleConfig.validFrom));
+    proto.setValidTo(toTimestampProto(crawlScheduleConfig.validTo));
     return proto;
   }
 
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject, paths: string[], configUpdate: ConfigObject, mergedConfig: ConfigObject, formControl: any) {
     const crawlScheduleConfig = new CrawlScheduleConfig();
     const pathList = [];
 

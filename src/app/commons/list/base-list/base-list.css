@@ -2,6 +2,7 @@ table {
   width: 100%;
 }
 
+
 .list-row:hover {
   background: rgba(0, 1, 0, 0.5);
 }
@@ -10,15 +11,11 @@ table {
   margin-bottom: 1em;
 }
 
-.mat-table {
-  overflow-y: auto;
-}
-
 
 .highlight {
-  background-color: #eee;
+  background-color: #ddd;
 }
 
 .highlightSelected {
-  background-color: #ddd;
+  background-color: #eee;
 }

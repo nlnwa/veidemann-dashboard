@@ -1,4 +1,4 @@
-<table class="mat-table" *ngIf="isAllInPageSelected() && dataSource.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected() && dataService.length > 0">
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allEntitiesSelected">
       <span>Alle <b>{{selection.selected.length}}</b> entiteter på siden er markert</span>
@@ -42,51 +42,51 @@
 
   <ng-container matColumnDef="entityName">
     <th mat-header-cell *matHeaderCellDef
-                     class="list__column--narrow"
-                     i18n="@@baselistIdHeaderCell">
+        class="list__column--narrow"
+        i18n="@@baselistIdHeaderCell">
     </th>
     <td mat-cell *matCellDef="let row"
-              class="list__column--narrow">
+        class="list__column--narrow">
       <mat-icon *ngIf="isEntityName(row)">business</mat-icon>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="entityLabel">
     <th mat-header-cell *matHeaderCellDef
-                     class="list__column--narrow"
-                     i18n="@@baselistIdHeaderCell">
+        class="list__column--narrow"
+        i18n="@@baselistIdHeaderCell">
     </th>
     <td mat-cell *matCellDef="let row"
-              class="list__column--narrow">
+        class="list__column--narrow">
       <mat-icon *ngIf="isEntityLabel(row)">label</mat-icon>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="seedName">
     <th mat-header-cell *matHeaderCellDef
-                     class="list__column--narrow"
-                     i18n="@@baselistIdHeaderCell">
+        class="list__column--narrow"
+        i18n="@@baselistIdHeaderCell">
     </th>
     <td mat-cell *matCellDef="let row"
-              class="list__column--narrow">
+        class="list__column--narrow">
       <mat-icon *ngIf="isSeedName(row)">link</mat-icon>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="seedLabel">
     <th mat-header-cell *matHeaderCellDef
-                     class="list__column--narrow"
-                     i18n="@@baselistIdHeaderCell">
+        class="list__column--narrow"
+        i18n="@@baselistIdHeaderCell">
     </th>
     <td mat-cell *matCellDef="let row"
-              class="list__column--narrow">
+        class="list__column--narrow">
       <mat-icon *ngIf="isSeedLabel(row)">label_outline</mat-icon>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef
-                     i18n="@@baselistIdHeaderCell">ID
+        i18n="@@baselistIdHeaderCell">ID
     </th>
     <td mat-cell *matCellDef="let row">{{row.id}}</td>
   </ng-container>
@@ -97,10 +97,12 @@
       (click)="onRowClick(row)"></tr>
 </table>
 
-<mat-paginator (page)="page.emit($event)"
-               [length]="pageLength"
-               [pageIndex]="pageIndex"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="pageOptions">
+<mat-paginator
+  (page)="onPage($event)"
+  [ngClass]="pageLength === 0 ? 'hide-mat-paginator-range-label' : ''"
+  [length]="pageLength"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageOptions">
 </mat-paginator>
 

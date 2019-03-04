@@ -37,19 +37,22 @@ export class BrowserScript {
     return browserScript;
   }
 
-  toProto(): BrowserScriptProto {
+  static toProto(browserScript: BrowserScript): BrowserScriptProto {
     const proto = new BrowserScriptProto();
-    proto.setScript(this.script);
-    proto.setUrlRegexp(this.urlRegexp);
+    proto.setScript(browserScript.script);
+    proto.setUrlRegexp(browserScript.urlRegexp);
 
     return proto as any as BrowserScriptProto;
   }
 
 
-
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             configUpdate: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any): void {
     const browserScript = new BrowserScript();
-    const pathList = [];
+    updateTemplate.browserScript = browserScript;
 
     if (mergedConfig) {
       if (formControl.script.dirty) {
@@ -65,7 +68,6 @@ export class BrowserScript {
       }
 
     }
-    return {updateTemplate: browserScript, pathList: pathList};
   }
 }
 

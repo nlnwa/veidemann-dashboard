@@ -1,10 +1,9 @@
-main {
+.content-padding {
   padding: 1em 1.5em 2em 1.3em;
-  overflow-y: auto;
 }
 
-.app-toolbar {
-  min-height: 64px;
+.container {
+  height: 100%;
 }
 
 .sidenav--icon__margin {

@@ -23,11 +23,9 @@
       </mat-toolbar>
 
       <app-search-list (rowClick)="onSelectEntity($event)"
-                       [data]="data$ | async"
                        (selectedChange)="onSelectedEntityChange($event)"
                        (selectAll)="onSelectAllEntities($event)"
-                       (page)="onPageEntity($event)"
-                       [count]="entityCount$ | async">
+                       (page)="onPageEntity($event)">
       </app-search-list>
 
     </div>
@@ -37,8 +35,7 @@
     <!--[fxShow]="selectedEntity && entitySingleMode">-->
     <div fxFlex *ngIf="selectedEntity$ | async as selectedEntity"
          [fxHide]="!entitySingleMode"
-         [fxShow]="selectedEntity$ | async "
-    >
+         [fxShow]="selectedEntity$ | async">
       <app-entity-details
         [configObject]="selectedEntity"
         (save)="onSaveEntity($event)"
@@ -58,11 +55,9 @@
         </mat-toolbar>
         <app-base-list
           (rowClick)="onSelectSeed($event)"
-          [data]="seedData$ | async"
           (selectedChange)="onSelectedSeedChange($event)"
           (selectAll)="onSelectAllSeeds($event)"
-          (page)="onPageSeed($event)"
-          [count]="seedCount$ | async">
+          (page)="onPageSeed($event)">
         </app-base-list>
       </app-entity-details>
     </div>

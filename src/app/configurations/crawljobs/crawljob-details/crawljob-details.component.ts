@@ -210,7 +210,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   updateForm() {
-    console.log('updateForm: ', this.configObject);
     this.form.patchValue({
       id: this.configObject.id,
       disabled: this.configObject.crawlJob.disabled,
@@ -248,7 +247,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
     configObject.meta = formModel.meta;
     configObject.crawlJob = crawlJob;
-    console.log(configObject);
     return configObject;
   }
 }

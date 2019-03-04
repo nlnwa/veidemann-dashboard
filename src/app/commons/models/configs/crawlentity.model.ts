@@ -12,7 +12,7 @@ export class CrawlEntity {
     return crawlEntity;
   }
 
-  toProto(): CrawlEntityProto {
+  static toProto(crawlEntity: CrawlEntity): CrawlEntityProto {
     return new CrawlEntityProto();
   }
 }

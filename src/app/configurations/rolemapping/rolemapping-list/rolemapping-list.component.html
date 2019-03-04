@@ -1,4 +1,4 @@
-<table class="mat-table" *ngIf="isAllInPageSelected() && dataSource.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected() && dataService.length > 0">
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
       <span>Alle <b>{{selection.selected.length}}</b> brukere på denne siden er markert. </span>
@@ -13,7 +13,7 @@
   </tr>
 </table>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataService" class="mat-elevation-z8">
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>

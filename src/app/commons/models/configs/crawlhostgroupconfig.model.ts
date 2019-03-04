@@ -31,15 +31,22 @@ export class CrawlHostGroupConfig {
     return crawlHostGroupConfig;
   }
 
-  toProto() {
+  static toProto(crawlHostGroupConfig: CrawlHostGroupConfig) {
     const proto = new CrawlHostGroupConfigProto();
-    proto.setIpRangeList(this.ipRangeList.map(ipRange => ipRange.toProto()));
+    proto.setIpRangeList(crawlHostGroupConfig.ipRangeList.map(ipRange => IpRange.toProto(ipRange)));
     return proto;
   }
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, addRange: boolean, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             configUpdate: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any,
+                             options): void {
     const crawlHostGroupConfig = new CrawlHostGroupConfig();
-    const pathList = [];
+    updateTemplate.crawlHostGroupConfig = crawlHostGroupConfig;
+
+    const {addRange} = options;
 
     if (mergedConfig) {
       if (configUpdate.crawlHostGroupConfig.ipRangeList !== mergedConfig.crawlHostGroupConfig.ipRangeList) {
@@ -62,7 +69,6 @@ export class CrawlHostGroupConfig {
         }
       }
     }
-    return {updateTemplate: crawlHostGroupConfig, pathList: pathList};
   }
 }
 

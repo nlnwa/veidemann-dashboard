@@ -1,28 +1,30 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
 import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
 import {catchError, filter, map, mergeMap, share, startWith, switchMap, tap} from 'rxjs/operators';
 
-import {ConfigObject, Kind, Meta, Seed} from '../../commons/models/';
+import {ConfigObject, ConfigRef, Kind, Seed} from '../../commons/models/';
 import {SearchService} from './search.service';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {RoleService} from '../../auth';
-import {DetailDirective} from '../shared/detail.directive';
 
 import {BackendService} from '../shared/backend.service';
 import {ActivatedRoute} from '@angular/router';
-import {ConfigRef} from '../../commons/models';
-import {EntityDetailsComponent} from '../entities';
+import {SearchDataService} from '../shared/search-data.service';
 import {SeedDetailComponent} from '../seeds';
+import {EntityDetailsComponent} from '../entities';
+import {FieldMask, ListRequest} from '../../../api';
 import {DeleteDialogComponent} from '../../dialog/delete-dialog/delete-dialog.component';
-import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
+import {DataService} from '../shared/data.service';
+import {DetailDirective} from '../shared/detail.directive';
 
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
+  providers: [SearchDataService, DataService]
 })
 
 export class SearchComponent implements OnInit {
@@ -34,14 +36,15 @@ export class SearchComponent implements OnInit {
   selectedEntity: BehaviorSubject<ConfigObject> = new BehaviorSubject<ConfigObject>(null);
   selectedEntity$ = this.selectedEntity.asObservable().pipe(
     share(),
-    tap(() => this.selectedSeed = null)
+    tap(() => {
+      this.selectedSeed = null;
+      this.seedDataService.clear();
+    })
   );
   selectedEntities: ConfigObject[] = [];
 
   selectedSeed: ConfigObject = null;
   selectedSeeds: ConfigObject[] = [];
-
-  componentRef = null;
 
   changes: Subject<void> = new Subject<void>();
 
@@ -66,7 +69,7 @@ export class SearchComponent implements OnInit {
   data = new Subject<ConfigObject[]>();
   data$ = this.data.asObservable();
 
-  seedData = new Subject<ConfigObject[]>();
+  seedData = new Subject<ConfigObject>();
   seedData$ = this.seedData.asObservable();
 
   entityCount = new BehaviorSubject<number>(0);
@@ -79,22 +82,26 @@ export class SearchComponent implements OnInit {
 
   kind: Kind;
 
-
-  // dynamic views
-  @ViewChild(DetailDirective) entityDetailHost: DetailDirective;
-  @ViewChild(DetailDirective) seedDetailHost: DetailDirective;
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
   private searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  searchTerm$ = this.searchTerm.asObservable();
+  searchTerm$ = this.searchTerm.asObservable().pipe(
+    tap(() => this.searchDataService.clear()),
+  );
 
   constructor(private searchService: SearchService,
+              private searchDataService: SearchDataService,
+              private seedDataService: DataService,
               private backendService: BackendService,
               private snackBarService: SnackBarService,
               private roleService: RoleService,
               private activatedRoute: ActivatedRoute,
               private componentFactoryResolver: ComponentFactoryResolver,
               private dialog: MatDialog) {
+  }
+
+  get componentRef() {
+    return this.detailHost.viewContainerRef.get(0);
   }
 
   get canEdit(): boolean {
@@ -110,33 +117,14 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.kind = this.activatedRoute.snapshot.data.kind;
-
-    combineLatest(
-      this.searchTerm$,
-      this.entityPage$
-    ).pipe(
-      switchMap(([term, pager]) =>
-        this.searchService.search({
-          term,
-          pageIndex: pager.pageIndex,
-          pageSize: pager.pageSize,
-        })
+    combineLatest(this.searchTerm$, this.entityPage$).pipe(
+      switchMap(([term, {pageIndex, pageSize}]) =>
+        this.searchService.search(term, {pageIndex, pageSize})
       )
-    ).subscribe((reply: any) => {
-      this.data.next(reply.value);
-      this.entityCount.next(reply.length);
-
-      if (reply.value.length > 0 && this.searchTerm.value.length > 0) {
-        if (reply.value.length === 1) {
-          this.onSelectEntity(reply.value[0]);
-        }
-      } else if (this.searchTerm.value) {
-        const newEntity = new ConfigObject({kind: Kind.CRAWLENTITY});
-        newEntity.meta = new Meta({name: this.searchTerm.value});
-        this.selectedEntity.next(newEntity);
-      }
+    ).subscribe((configObject: ConfigObject) => {
+      this.searchDataService.add(configObject);
     });
+
 
     this.selectedEntity$.pipe(
       filter(entity => !!entity),
@@ -150,7 +138,7 @@ export class SearchComponent implements OnInit {
         const seed = new Seed();
         seed.entityRef.id = entity.id;
         configObject.seed = seed;
-        listRequest.setQueryTemplate(configObject.toProto());
+        listRequest.setQueryTemplate(ConfigObject.toProto(configObject));
         return listRequest;
       }),
       switchMap(listRequest => this.backendService.count(listRequest)),
@@ -170,19 +158,19 @@ export class SearchComponent implements OnInit {
         const seed = new Seed();
         seed.entityRef.id = entity.id;
         configObject.seed = seed;
-        listRequest.setQueryTemplate(configObject.toProto());
+        listRequest.setQueryTemplate(ConfigObject.toProto(configObject));
         return listRequest;
 
       }),
       mergeMap((request) => this.backendService.list(request)),
-      map(configObjects => configObjects.map(ConfigObject.fromProto)),
+      map(configObject => ConfigObject.fromProto(configObject)),
     ).subscribe(
-      (configObjects: ConfigObject[]) => this.seedData.next(configObjects),
+      (configObject: ConfigObject) => console.log(configObject), // pass)this.seedDataService.add(configObject),
       err => console.log(err));
   }
 
   loadSeedList() {
-    this.seedData.next([]);
+    this.seedData.next(null);
   }
 
   // loadComponent(mergedConfigObject: ConfigObject) {
@@ -250,73 +238,8 @@ export class SearchComponent implements OnInit {
   //   }
   // }
 
-  loadEntityComponent(mergedEntities: ConfigObject) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(EntityDetailsComponent);
-    const viewContainerRef = this.entityDetailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as EntityDetailsComponent;
-    const formControl = instance.form.controls;
-
-    instance.configObject = mergedEntities;
-    instance.data = false;
-    instance.updateForm();
-
-
-    instance.clear.subscribe(() => this.onClearEntity());
-    if (!this.allEntitiesSelected) {
-      instance.update.subscribe(
-        (entityUpdate) => {
-          const addLabel = instance.shouldAddLabel;
-          this.onUpdateMultipleEntities(mergedEntities, entityUpdate, formControl, addLabel);
-        });
-      instance.delete.subscribe(() => console.log('IMPLEMENT ME')); // TODO this.onDeleteMultipleEntities(this.selectedEntities));
-    }
-
-    if (this.allEntitiesSelected) {
-      instance.update.subscribe((entityUpdate) => {
-        const addLabel = instance.shouldAddLabel;
-        this.onUpdateAllEntities(entityUpdate, formControl, addLabel);
-      });
-      // instance.delete.subscribe(() => this.onDeleteAllEntities());
-    }
-  }
-
-  loadSeedComponent(mergedSeeds: ConfigObject) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(SeedDetailComponent);
-    const viewContainerRef = this.seedDetailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = this.componentRef.instance as SeedDetailComponent;
-    const formControl = instance.form.controls;
-    instance.configObject = mergedSeeds;
-    // instance.equalDisabled = equalDisabled;
-
-    instance.data = false;
-    instance.updateForm();
-    instance.clear.subscribe(() => this.onClearSeed());
-
-    if (!this.allSeedsSelected) {
-
-      instance.update.subscribe((seedUpdate) => {
-        const addLabel = instance.shouldAddLabel;
-        const addCrawlJob = instance.shouldAddCrawlJob;
-        this.onUpdateMultipleSeeds(mergedSeeds, seedUpdate, formControl, addLabel, addCrawlJob);
-      });
-
-      instance.delete.subscribe(() => this.onDeleteMultipleSeeds(this.selectedSeeds));
-    }
-
-    if (this.allSeedsSelected) {
-      instance.update.subscribe((seedUpdate) => {
-        const addLabel = instance.shouldAddLabel;
-        const addCrawlJob = instance.shouldAddCrawlJob;
-        this.onUpdateAllSeeds(seedUpdate, formControl, addLabel, addCrawlJob);
-      });
-    }
-  }
-
   onEnterKey(event) {
+    console.log('enterkey');
     this.selectedEntity = null;
     this.selectedEntities = [];
     this.selectedSeed = null;
@@ -324,10 +247,54 @@ export class SearchComponent implements OnInit {
     if (this.componentRef) {
       this.componentRef.destroy();
     }
-    console.log('onEnter: ', event.target.value);
-    console.log('this searchTerm: ', this.searchTerm);
     this.searchTerm.next(event.target.value);
   }
+
+
+  onPageEntity(page: PageEvent) {
+    console.log('page entity');
+    this.entityPage.next(page);
+  }
+
+
+  onSelectEntity(entity: ConfigObject) {
+    console.log('onSelectEntity');
+    this.selectedEntity.next(entity);
+  }
+
+
+  onSelectAllEntities(allSelected: boolean) {
+    /*
+    this.allEntitiesSelected = allSelected;
+    if (allSelected) {
+      this.onSelectedEntityChange([new ConfigObject({kind: Kind.CRAWLENTITY}), new ConfigObject({kind: Kind.CRAWLENTITY})]);
+    } else {
+      this.onSelectedEntityChange([]);
+    }
+    */
+  }
+
+
+  onSelectedEntityChange(entities: ConfigObject[]) {
+    /*
+    this.selectedEntities = entities;
+    if (!this.entitySingleMode) {
+      if (!this.allEntitiesSelected) {
+        const configObject = ConfigObject.mergeConfigs(entities);
+        this.loadEntityComponent({configObject});
+      } else {
+        const configObject = entities[0];
+        configObject.meta.name = 'update';
+        configObject.id = '1234567';
+        this.loadEntityComponent({configObject});
+      }
+    } else {
+      this.selectedEntity.next(entities[0] || null);
+      this.destroyComponent();
+    }
+    */
+  }
+
 
   onClearEntity(): void {
     this.onClearSeed();
@@ -345,69 +312,29 @@ export class SearchComponent implements OnInit {
     this.selectedEntity.next(new ConfigObject({kind: Kind.CRAWLENTITY}));
   }
 
-  onSelectEntity(entity: ConfigObject) {
-    this.selectedEntity.next(entity);
-  }
-
-  onSelectedEntityChange(entities: ConfigObject[]) {
-    this.selectedEntities = entities;
-    if (!this.entitySingleMode) {
-      if (!this.allEntitiesSelected) {
-        this.loadEntityComponent(ConfigObject.mergeConfigs(entities));
-      } else {
-        const entity = entities[0];
-        entity.meta.name = 'update';
-        entity.id = '1234567';
-        this.loadEntityComponent(entity);
-      }
-    } else {
-      this.selectedEntity.next(entities[0] || null);
-      if (this.componentRef !== null) {
-        this.componentRef.destroy();
-      }
-    }
-  }
-
-  onSelectedSeedChange(seeds: ConfigObject[]) {
-    this.selectedSeeds = seeds;
-    if (!this.seedSingleMode) {
-      if (!this.allSeedsSelected) {
-        this.loadSeedComponent(ConfigObject.mergeConfigs(seeds));
-      } else {
-        const seed = seeds[0];
-        seed.meta.name = 'update';
-        seed.id = '1234567';
-        this.loadSeedComponent(seed);
-      }
-    } else {
-      this.selectedSeed = seeds[0] || null;
-      if (this.componentRef !== null) {
-        this.componentRef.destroy();
-      }
-    }
-  }
-
   onSaveEntity(configObject: ConfigObject) {
-    this.backendService.save(configObject.toProto())
+    this.backendService.save(ConfigObject.toProto(configObject))
+      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)))
       .subscribe(newConfig => {
         this.entityCount.next(this.entityCount.value + 1);
-        this.selectedEntity.next(ConfigObject.fromProto(newConfig));
-        this.searchTerm.next(this.searchTerm.value);
+        this.selectedEntity.next(newConfig);
+        this.searchDataService.add(newConfig);
         this.snackBarService.openSnackBar('Lagret');
       });
   }
 
   onUpdateEntity(configObject: ConfigObject) {
-    this.backendService.save(configObject.toProto())
+    this.backendService.save(ConfigObject.toProto(configObject))
+      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)))
       .subscribe(newConfig => {
-        this.selectedEntity.next(ConfigObject.fromProto(newConfig));
-        this.changes.next();
+        this.selectedEntity.next(newConfig);
+        this.searchDataService.update(newConfig);
         this.snackBarService.openSnackBar('Oppdatert');
       });
   }
 
-  onDeleteEntity(entity: ConfigObject): void {
-    this.backendService.delete(entity.toProto()).pipe(
+  onDeleteEntity(configObject: ConfigObject): void {
+    this.backendService.delete(ConfigObject.toProto(configObject)).pipe(
       catchError((err) => {
         const errorString = err.message.split(':')[1];
         const deleteError = /delete crawlEntity, there are/gm;
@@ -418,21 +345,29 @@ export class SearchComponent implements OnInit {
         return empty;
       })
     )
-      .subscribe((deletedEntity) => {
-        this.entityCount.next(this.entityCount.value - 1);
-        this.onClearEntity();
+      .subscribe(() => {
+        this.searchDataService.delete(configObject);
+        this.selectedEntity.next(null);
         this.snackBarService.openSnackBar('Entitet slettet');
         this.searchTerm.next(this.searchTerm.value);
       });
   }
 
-
-  onSelectAllEntities(allSelected: boolean) {
-    this.allEntitiesSelected = allSelected;
-    if (allSelected) {
-      this.onSelectedEntityChange([new ConfigObject({kind: Kind.CRAWLENTITY}), new ConfigObject({kind: Kind.CRAWLENTITY})]);
+  onSelectedSeedChange(seeds: ConfigObject[]) {
+    this.selectedSeeds = seeds;
+    if (!this.seedSingleMode) {
+      if (!this.allSeedsSelected) {
+        const configObject = ConfigObject.mergeConfigs(seeds);
+        this.loadSeedComponent({configObject});
+      } else {
+        const configObject = seeds[0];
+        configObject.meta.name = 'update';
+        configObject.id = '1234567';
+        this.loadSeedComponent({configObject});
+      }
     } else {
-      this.onSelectedEntityChange([]);
+      this.selectedSeed = seeds[0] || null;
+      this.destroyComponent();
     }
   }
 
@@ -448,11 +383,6 @@ export class SearchComponent implements OnInit {
     } else {
       this.onSelectedSeedChange([]);
     }
-  }
-
-
-  onPageEntity(page: PageEvent) {
-    this.entityPage.next(page);
   }
 
   onPageSeed(page: PageEvent) {
@@ -474,13 +404,12 @@ export class SearchComponent implements OnInit {
     const entityId = this.selectedEntity.value.id;
     this.onClearSeed();
     if (entityId) {
-      const configRef = new ConfigRef();
-      configRef.kind = Kind.CRAWLENTITY;
-      configRef.id = entityId;
-      const configObject = new ConfigObject();
-      const seed = new Seed();
-      seed.entityRef = configRef;
-      configObject.seed = seed;
+      const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: entityId});
+      console.log(entityRef);
+      const seed = new Seed({entityRef});
+      console.log(seed);
+      const configObject = new ConfigObject({seed});
+      console.log(configObject);
       this.selectedSeed = configObject;
     } else {
       this.snackBarService.openSnackBar('Kan ikke lage ny seed før gjeldende entitet er lagret');
@@ -488,11 +417,12 @@ export class SearchComponent implements OnInit {
   }
 
   onSaveSeed(configObject: ConfigObject): void {
-    this.backendService.save(configObject.toProto())
+    this.backendService.save(ConfigObject.toProto(configObject))
+      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)))
       .subscribe(newConfig => {
         this.seedCount.next(this.seedCount.value + 1);
         this.loadSeedList();
-        this.selectedSeed = ConfigObject.fromProto(newConfig);
+        this.selectedSeed = newConfig;
         this.seedChanges.next();
         this.snackBarService.openSnackBar('Seed lagret');
       });
@@ -500,110 +430,56 @@ export class SearchComponent implements OnInit {
   }
 
   onUpdateSeed(configObject: ConfigObject): void {
-    this.backendService.save(configObject.toProto())
+    this.backendService.save(ConfigObject.toProto(configObject))
+      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)))
       .subscribe(newConfig => {
         this.loadSeedList();
-        this.selectedSeed = ConfigObject.fromProto(newConfig);
-        this.seedChanges.next();
+        this.selectedSeed = newConfig;
+        this.seedDataService.update(newConfig);
         this.snackBarService.openSnackBar('Seed oppdatert');
       });
   }
 
   onDeleteSeed(configObject: ConfigObject): void {
-    this.backendService.delete(configObject.toProto())
+    this.backendService.delete(ConfigObject.toProto(configObject))
       .subscribe(() => {
         this.seedCount.next(this.seedCount.value - 1);
         this.selectedSeed = null;
-        this.loadSeedList();
-        this.seedChanges.next();
+        this.seedDataService.delete(configObject);
         this.snackBarService.openSnackBar('Seed slettet');
       });
   }
 
-  onUpdateMultipleEntities(mergedEntity: ConfigObject, entityUpdate: ConfigObject, formControl: any, addLabel: boolean) {
-    const numOfEntities = this.selectedEntities.length.toString();
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
-    const pathList = [];
+  onUpdateSelectedEntities(mergedEntity: ConfigObject, entityUpdate: ConfigObject, formControl: any, options) {
 
-    const ids = [];
-    for (const entity of this.selectedEntities) {
-      ids.push(entity.id);
-    }
-    listRequest.setIdList(ids);
-    listRequest.setKind(Kind.CRAWLENTITY.valueOf());
+    const {updateTemplate, pathList} = ConfigObject.createUpdateRequest(entityUpdate, formControl, mergedEntity, options);
 
-    const meta = new Meta().createUpdateRequest(entityUpdate, formControl, mergedEntity, addLabel);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(meta.pathList);
-    }
-
-    updateMask.setPathsList(pathList);
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.backendService.update(updateRequest)
+    this.searchDataService.updateWithTemplate(updateTemplate, pathList)
       .subscribe(updatedEntities => {
         this.selectedEntities = [];
         this.onClearEntity();
         this.componentRef.destroy();
         this.searchTerm.next(this.searchTerm.value);
-        this.snackBarService.openSnackBar(numOfEntities + ' entiteter er oppdatert');
+        // TODO
+        this.snackBarService.openSnackBar('TODO' + ' entiteter er oppdatert');
       });
   }
 
 
-  onUpdateMultipleSeeds(mergedSeeds: ConfigObject, seedUpdate: ConfigObject, formControl: any, addLabel: boolean, addCrawlJob: boolean) {
-    const numOfSeeds = this.selectedSeeds.length.toString();
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
+  onUpdateSelectedSeeds(mergedSeeds: ConfigObject, seedUpdate: ConfigObject, formControl: any, options: any) {
+    const {updateTemplate, pathList} = ConfigObject.createUpdateRequest(seedUpdate, formControl, mergedSeeds, options);
 
-    const pathList = [];
-
-    const ids = [];
-    for (const config of this.selectedSeeds) {
-      ids.push(config.id);
-    }
-
-    listRequest.setIdList(ids);
-    const seed = new Seed().createUpdateRequest(seedUpdate, formControl, mergedSeeds, addCrawlJob);
-    updateTemplate.seed = seed.updateTemplate;
-    listRequest.setKind(Kind.SEED.valueOf());
-    if (seed.pathList.length !== 0) {
-      pathList.push(...seed.pathList);
-    }
-
-    const meta = new Meta().createUpdateRequest(seedUpdate, formControl, mergedSeeds, addLabel);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(...meta.pathList);
-    }
-
-    updateMask.setPathsList(pathList);
-
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.backendService.update(updateRequest)
+    this.seedDataService.updateWithTemplate(updateTemplate, pathList, this.selectedSeeds.map(config => config.id))
       .subscribe(updatedSeeds => {
         this.selectedSeeds = [];
         this.onClearSeed();
         this.componentRef.destroy();
         this.seedChanges.next();
-        this.snackBarService.openSnackBar(numOfSeeds + ' seeds er oppdatert');
+        this.snackBarService.openSnackBar('TODO' + ' seeds er oppdatert');
       });
   }
 
-  onDeleteMultipleEntities(entities: ConfigObject[]) {
+  onDeleteSelectedEntities(entities: ConfigObject[]) {
     const numOfEntities = entities.length.toString();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -616,7 +492,7 @@ export class SearchComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           from(entities).pipe(
-            mergeMap((entity) => this.backendService.delete(entity.toProto())),
+            mergeMap((entity) => this.backendService.delete(ConfigObject.toProto(entity))),
             catchError((err) => {
               console.log(err);
               const errorString = err.message.split(':')[1];
@@ -641,7 +517,7 @@ export class SearchComponent implements OnInit {
       });
   }
 
-  onDeleteMultipleSeeds(seeds: ConfigObject[]) {
+  onDeleteSelectedSeeds(seeds: ConfigObject[]) {
     const numOfSeeds = seeds.length.toString();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -655,7 +531,7 @@ export class SearchComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           from(seeds).pipe(
-            mergeMap((seed) => this.backendService.delete(seed.toProto())),
+            mergeMap((seed) => this.backendService.delete(ConfigObject.toProto(seed))),
             catchError((err) => {
               console.log(err);
               return of('true');
@@ -675,29 +551,10 @@ export class SearchComponent implements OnInit {
     this.seedCount.next(this.seedCount.value - seeds.length);
   }
 
-  onUpdateAllEntities(configUpdate: ConfigObject, formControl: any, addLabels: boolean) {
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    listRequest.setKind(Kind.CRAWLENTITY.valueOf());
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
+  onUpdateAllEntities(configUpdate: ConfigObject, formControl: any, options) {
+    const {pathList, updateTemplate} = ConfigObject.createUpdateRequest(configUpdate, null, formControl, options);
 
-    const pathList = [];
-    const meta = new Meta().createUpdateRequest(configUpdate, formControl, null, addLabels);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(...meta.pathList);
-    }
-
-    listRequest.setIdList([]);
-    updateMask.setPathsList(pathList);
-
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.backendService.update(updateRequest)
+    this.searchDataService.updateWithTemplate(updateTemplate, pathList)
       .subscribe(updatedEntities => {
         this.selectedEntities = [];
         this.componentRef.destroy();
@@ -707,35 +564,10 @@ export class SearchComponent implements OnInit {
   }
 
 
-  onUpdateAllSeeds(configUpdate: ConfigObject, formControl: any, addLabels: boolean, addCrawlJob: boolean) {
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    listRequest.setKind(Kind.SEED.valueOf());
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
-    const pathList = [];
+  onUpdateAllSeeds(configUpdate: ConfigObject, formControl: any, options) {
+    const {pathList, updateTemplate} = ConfigObject.createUpdateRequest(configUpdate, null, formControl, options);
 
-    const seed = new Seed().createUpdateRequest(configUpdate, formControl, null, addCrawlJob);
-    updateTemplate.seed = seed.updateTemplate;
-    if (seed.pathList.length !== 0) {
-      pathList.push(...seed.pathList);
-    }
-
-    const meta = new Meta().createUpdateRequest(configUpdate, formControl, null, addLabels);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(...meta.pathList);
-    }
-
-    listRequest.setIdList([]);
-    updateMask.setPathsList(pathList);
-
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.backendService.update(updateRequest)
+    this.seedDataService.updateWithTemplate(updateTemplate, pathList)
       .subscribe(() => {
         this.selectedSeeds = [];
         this.onClearSeed();
@@ -743,6 +575,91 @@ export class SearchComponent implements OnInit {
         this.seedChanges.next();
         this.snackBarService.openSnackBar('Alle seeds er oppdatert');
       });
+  }
+
+  private loadEntityComponent(instanceData = {}) {
+    const componentRef = this.createComponent(EntityDetailsComponent);
+    this.initEntityComponent(componentRef.instance, instanceData);
+
+  }
+
+  private loadSeedComponent(instanceData = {}) {
+    const componentRef = this.createComponent(SeedDetailComponent);
+    this.initSeedComponent(componentRef.instance, instanceData);
+  }
+
+  private initEntityComponent(instance, instanceData) {
+    Object.keys(instanceData).forEach(key => {
+      instance[key] = instanceData[key];
+    });
+
+    const formControl = instance.form.controls;
+
+    instance.data = false;
+    instance.updateForm();
+
+    instance.clear.subscribe(() => this.onClearEntity());
+    if (!this.allEntitiesSelected) {
+      instance.update.subscribe(
+        (entityUpdate) => {
+          const addLabel = instance.shouldAddLabel;
+          this.onUpdateSelectedEntities(instance.configObject, entityUpdate, formControl, addLabel);
+        });
+      instance.delete.subscribe(() => console.log('IMPLEMENT ME')); // TODO this.onDeleteMultipleEntities(this.selectedEntities));
+    }
+
+    if (this.allEntitiesSelected) {
+      instance.update.subscribe((entityUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        this.onUpdateAllEntities(entityUpdate, formControl, addLabel);
+      });
+      // instance.delete.subscribe(() => this.onDeleteAllEntities());
+    }
+  }
+
+  private initSeedComponent(instance: SeedDetailComponent, instanceData) {
+    Object.keys(instanceData).forEach(key => {
+      instance[key] = instanceData[key];
+    });
+
+    const formControl = instance.form.controls;
+
+    // instance.equalDisabled = equalDisabled;
+
+    instance.data = false;
+    instance.updateForm();
+    instance.clear.subscribe(() => this.onClearSeed());
+
+    if (!this.allSeedsSelected) {
+
+      instance.update.subscribe((seedUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        const addCrawlJob = instance.shouldAddCrawlJob;
+        this.onUpdateSelectedSeeds(instance.configObject, seedUpdate, formControl, {addLabel, addCrawlJob});
+      });
+
+      instance.delete.subscribe(() => this.onDeleteSelectedSeeds(this.selectedSeeds));
+    }
+
+    if (this.allSeedsSelected) {
+      instance.update.subscribe((seedUpdate) => {
+        const addLabel = instance.shouldAddLabel;
+        const addCrawlJob = instance.shouldAddCrawlJob;
+        this.onUpdateAllSeeds(seedUpdate, formControl, {addLabel, addCrawlJob});
+      });
+    }
+  }
+
+  private createComponent(component: any, viewContainerRef: ViewContainerRef = this.detailHost.viewContainerRef): any {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+    viewContainerRef.clear();
+    return viewContainerRef.createComponent(componentFactory);
+  }
+
+  private destroyComponent() {
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
   }
 }
 

@@ -1,14 +1,14 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
-import {BrowserScript, Label} from '../../../commons/models/configobject.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
+import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../commons/models';
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
   let fixture: ComponentFixture<BrowserScriptDetailsComponent>;
-  let expectedBrowserScript: BrowserScript;
   let expectedLabel: Label;
+  let expectedConfigObject: ConfigObject;
 
   // Async beforeEach needed when using external template
   beforeEach(async(() => {
@@ -24,29 +24,32 @@ describe('BrowserScriptDetailsComponent', () => {
     fixture = TestBed.createComponent(BrowserScriptDetailsComponent);
     component = fixture.componentInstance;
 
-    expectedLabel = {
+    expectedLabel = new Label({
       key: 'Test',
       value: 'test',
-    };
+    });
 
-    expectedBrowserScript = {
+    console.log(new ConfigObject);
+    expectedConfigObject = new ConfigObject({
       id: '1000',
-      script: 'var test=5; console.log(test)',
-      meta: {
+      apiVersion: 'v1',
+      kind: Kind.BROWSERSCRIPT,
+      browserScript: new BrowserScript({script: 'var test=5; console.log(test)'}),
+      meta: new Meta({
         name: 'Test',
         description: 'Dette er en test',
         created: '1511964561',
-        created_by: 'admin',
-        last_modified: '1511964561',
-        last_modified_by: 'admin',
-        label: [expectedLabel]
-      }
-    };
+        createdBy: 'admin',
+        lastModified: '1511964561',
+        lastModifiedBy: 'admin',
+        labelList: [expectedLabel]
+      })
+    });
 
-    component.browserScript = expectedBrowserScript;
+    component.configObject = expectedConfigObject;
 
     component.ngOnChanges({
-      browserScript: new SimpleChange(null, component.browserScript, null)
+      browserScript: new SimpleChange(null, component.configObject, null)
     });
 
     fixture.detectChanges();
@@ -61,11 +64,11 @@ describe('BrowserScriptDetailsComponent', () => {
   });
 
   it('should have the correct data from @Input ', () => {
-    expect(component.browserScript.id).toEqual('1000');
-    expect(component.browserScript.script).toEqual('var test=5; console.log(test)');
-    expect(component.browserScript.meta.name).toEqual('Test');
-    expect(component.browserScript.meta.description).toEqual('Dette er en test');
-    expect(component.browserScript.meta.label).toEqual([expectedLabel]);
+    expect(component.configObject.id).toEqual('1000');
+    expect(component.configObject.browserScript.script).toEqual('var test=5; console.log(test)');
+    expect(component.configObject.meta.name).toEqual('Test');
+    expect(component.configObject.meta.description).toEqual('Dette er en test');
+    expect(component.configObject.meta.labelList).toEqual([expectedLabel]);
   });
 
   it('should create a "FormGroup"', () => {
@@ -104,12 +107,12 @@ describe('BrowserScriptDetailsComponent', () => {
     });
     expect(component.form.valid).toBe(true);
 
-    component.update.subscribe((browserScriptValue: BrowserScript) => {
-      expect(browserScriptValue.id).toBe(expectedBrowserScript.id);
-      expect(browserScriptValue.script).toBe(expectedBrowserScript.script);
-      expect(browserScriptValue.meta.name).toBe('Endret navn');
-      expect(browserScriptValue.meta.description).toBe(expectedBrowserScript.meta.description);
-      expect(browserScriptValue.meta.label).toEqual(expectedBrowserScript.meta.label);
+    component.update.subscribe((value: ConfigObject) => {
+      expect(value.id).toBe(expectedConfigObject.id);
+      expect(value.browserScript).toBe(expectedConfigObject.browserScript);
+      expect(value.meta.name).toBe('Endret navn');
+      expect(value.meta.description).toBe(expectedConfigObject.meta.description);
+      expect(value.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
       done();
     });
 
@@ -119,12 +122,12 @@ describe('BrowserScriptDetailsComponent', () => {
   it('Should save correct data', (done) => {
     expect(component.form.valid).toBe(true);
 
-    component.save.subscribe((browserScriptValue: BrowserScript) => {
-      expect(browserScriptValue.id).toBe(expectedBrowserScript.id);
-      expect(browserScriptValue.script).toBe(expectedBrowserScript.script);
-      expect(browserScriptValue.meta.name).toBe(expectedBrowserScript.meta.name);
-      expect(browserScriptValue.meta.description).toBe(expectedBrowserScript.meta.description);
-      expect(browserScriptValue.meta.label).toEqual(expectedBrowserScript.meta.label);
+    component.save.subscribe((value: ConfigObject) => {
+      expect(value.id).toBe(expectedConfigObject.id);
+      expect(value.browserScript).toBe(expectedConfigObject.browserScript);
+      expect(value.meta.name).toBe(expectedConfigObject.meta.name);
+      expect(value.meta.description).toBe(expectedConfigObject.meta.description);
+      expect(value.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
       done();
     });
 

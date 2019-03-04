@@ -1,12 +1,11 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, ViewRef} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, combineLatest, EMPTY as empty, from, of, Subject} from 'rxjs';
-import {catchError, map, mergeMap, startWith} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY, from, Subject} from 'rxjs';
+import {catchError, map, mergeMap} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
 import {RoleService} from '../auth';
-import {FormBuilder, Validators} from '@angular/forms';
-import {BackendService} from './shared/backend.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   BrowserConfig,
   BrowserScript,
@@ -27,58 +26,61 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../commons/validator';
-import {ScheduleDetailsComponent} from './schedule';
-import {BrowserScriptDetailsComponent} from './browserscript';
-import {PolitenessconfigDetailsComponent} from './politenessconfig';
-import {CrawljobDetailsComponent} from './crawljobs';
-import {CrawlConfigDetailsComponent} from './crawlconfig';
-import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig';
-import {RoleMappingDetailsComponent} from './rolemapping';
 import {DeleteDialogComponent} from '../dialog/delete-dialog/delete-dialog.component';
-import {BrowserConfigDetailsComponent} from './browserconfig';
-import {FieldMask, ListRequest, UpdateRequest} from '../../api/';
 import {ErrorService} from '../error';
 import {ActivatedRoute} from '@angular/router';
+import {componentOfKind} from '../commons/func/kind';
+import {DataService} from './shared/data.service';
+import {Title} from '@angular/platform-browser';
+import {ReferrerError} from '../error/referrer-error';
 
 
 @Component({
   templateUrl: './configurations.component.html',
-  styleUrls: [],
+  styleUrls: ['./configurations.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DataService]
 })
 
 export class ConfigurationsComponent implements OnInit {
   readonly Kind = Kind;
-  selectedConfigs = [];
+  selectedConfigs: ConfigObject[] = [];
 
-  componentRef = null;
   allSelected = false;
 
-  kind: Kind;
+  kind: BehaviorSubject<Kind> = new BehaviorSubject(null);
+  kind$ = this.kind.asObservable();
 
   configObject: Subject<ConfigObject> = new Subject<ConfigObject>();
   configObject$ = this.configObject.asObservable();
 
-  changes: Subject<void> = new Subject<void>();
-  page: Subject<PageEvent> = new Subject<PageEvent>();
-  count = new BehaviorSubject<number>(0);
-  count$ = this.count.asObservable();
-  data = new Subject<ConfigObject[]>();
-  data$ = this.data.asObservable();
+  title: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  title$ = this.title.asObservable();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
-  constructor(private configService: BackendService,
+  constructor(private dataService: DataService,
               private snackBarService: SnackBarService,
               private errorService: ErrorService,
               private componentFactoryResolver: ComponentFactoryResolver,
               private fb: FormBuilder,
               private route: ActivatedRoute,
               private roleService: RoleService,
+              public titleService: Title,
               private dialog: MatDialog) {
+
   }
 
-  get title(): string {
-    switch (this.kind) {
+  get viewContainerRef(): ViewContainerRef {
+    return this.detailHost.viewContainerRef;
+  }
+
+  get componentRef(): ViewRef {
+    return this.detailHost.viewContainerRef.get(0);
+  }
+
+  static getTitle(kind: Kind): string {
+    switch (kind) {
       case Kind.CRAWLENTITY:
         return 'Entity';
       case Kind.SEED:
@@ -108,334 +110,88 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   get singleMode(): boolean {
-    return this.selectedConfigs.length < 2;
+    return !this.allSelected && this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
-    this.kind = this.route.snapshot.data.kind;
-
-    const listRequest = new ListRequest();
-    listRequest.setKind(this.kind.valueOf());
-
-    this.configService.count(listRequest).subscribe(count => this.count.next(count));
-    combineLatest(this.page, this.changes.pipe(startWith(null))).pipe(
-      map(([pageEvent]) => {
-        listRequest.setOffset(pageEvent.pageIndex * pageEvent.pageSize);
-        listRequest.setPageSize(pageEvent.pageSize);
-        return listRequest;
-      }),
-      mergeMap((request) => this.configService.list(request)),
-      map(configObjects => configObjects.map(ConfigObject.fromProto))
-    ).subscribe(
-      (configObjects: ConfigObject[]) => this.data.next(configObjects),
-      error => console.error(error));
+    this.route.data.pipe(map(data => data.kind))
+      .subscribe(kind => {
+        this.destroyComponent();
+        this.kind.next(kind);
+        this.configObject.next(null);
+        this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
+        this.title.next(ConfigurationsComponent.getTitle(kind));
+        this.dataService.kind = kind;
+      });
   }
 
-  loadComponent(mergedConfig: ConfigObject) {
-    let component;
-    const instanceData: any = {};
-    switch (this.kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        break;
-      case Kind.SEED:
-        break;
-      case Kind.CRAWLJOB:
-        component = CrawljobDetailsComponent;
-        break;
-      case Kind.CRAWLCONFIG:
-        component = CrawlConfigDetailsComponent;
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        component = ScheduleDetailsComponent;
-        break;
-      case Kind.BROWSERCONFIG:
-        component = BrowserConfigDetailsComponent;
-        break;
-      case Kind.POLITENESSCONFIG:
-        component = PolitenessconfigDetailsComponent;
-        break;
-      case Kind.BROWSERSCRIPT:
-        component = BrowserScriptDetailsComponent;
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        component = CrawlHostGroupConfigDetailsComponent;
-        break;
-      case Kind.ROLEMAPPING:
-        component = RoleMappingDetailsComponent;
-        break;
-
-    }
-
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
-    const viewContainerRef = this.detailHost.viewContainerRef;
-    viewContainerRef.clear();
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
-    const instance = Object.assign(this.componentRef.instance, instanceData);
-    const formControl = instance.form.controls;
-
-    instance.configObject = mergedConfig;
-
-    // adding validator for forms
-    if (this.kind === Kind.CRAWLSCHEDULECONFIG) {
-      instance.form.get('cronExpression').clearValidators();
-      instance.form.get('cronExpression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
-      instance.form.get('cronExpression.hour').setValidators(Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN)));
-      instance.form.get('cronExpression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
-      instance.form.get('cronExpression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
-      instance.form.get('cronExpression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
-    }
-    if (this.kind === Kind.CRAWLJOB) {
-      instance.form.get('crawlConfigRef').clearValidators();
-    }
-
-    if (this.kind === Kind.POLITENESSCONFIG) {
-      if (mergedConfig.politenessConfig.robotsPolicy === undefined) {
-        instance.shouldDisablePolicy = true;
-      }
-    }
-
-    if (this.kind === Kind.CRAWLCONFIG) {
-      if (mergedConfig.crawlConfig.extra.extractText === null) {
-        instance.disableExtractText = true;
-      }
-
-      if (mergedConfig.crawlConfig.extra.createScreenshot === null) {
-        instance.disableCreateScreenshot = true;
-      }
-    }
-
-    instance.data = false;
-    instance.updateAll = this.allSelected;
-    instance.updateForm();
-
-    if (!this.allSelected) {
-      instance.update.subscribe(
-        (configUpdate) => {
-          const addLabel = instance.shouldAddLabel;
-          const addBrowserscript = instance.shouldAddBrowserscript;
-          const addSelector = instance.shouldAddSelector;
-          const addIpRange = instance.shouldAddIpRange;
-          this.onUpdateSelectedConfigs(mergedConfig, configUpdate, formControl,
-            addLabel, addBrowserscript, addSelector, addIpRange);
-        });
-      instance.delete.subscribe(
-        () => this.onDeleteSelectedConfigs(this.selectedConfigs));
-    }
-
-    if (this.allSelected) {
-      instance.update.subscribe(
-        (configUpdate) => {
-          const addLabel = instance.shouldAddLabel;
-          const addBrowserscript = instance.shouldAddBrowserscript; // Browserconfig
-          const addSelector = instance.shouldAddSelector; // Browserconfig
-          const addIpRange = instance.shouldAddIpRange; // Crawlhostgroupconfig
-          this.onUpdateAllConfigsOfKind(configUpdate, formControl, addLabel, addBrowserscript, addSelector, addIpRange);
-        });
-    }
-  }
-
-  onPage(page: PageEvent) {
-    this.page.next(page);
+  onSelectAll() {
+    this.allSelected = true;
+    const configObject: ConfigObject = new ConfigObject({id: '1234567', kind: this.kind.value});
+    configObject.meta = new Meta({name: 'update'});
+    this.loadComponent({configObject});
   }
 
   onSelectedChange(configs: ConfigObject[]) {
     this.selectedConfigs = configs;
+    this.allSelected = false;
+
     if (!this.singleMode) {
-      if (!this.allSelected) {
-        this.loadComponent(ConfigObject.mergeConfigs(configs));
-      } else {
-        const config = configs[0];
-        config.meta.name = 'update';
-        config.id = '1234567';
-        this.loadComponent(config);
-      }
+      const configObject = ConfigObject.mergeConfigs(configs);
+      this.loadComponent({configObject});
     } else {
-      this.configObject.next(configs[0] || null);
-      if (this.componentRef !== null) {
-        this.componentRef.destroy();
-      }
+      this.destroyComponent();
     }
   }
 
   onCreateConfig(): void {
-    this.configObject.next(new ConfigObject({kind: this.kind}));
+    this.configObject.next(new ConfigObject({kind: this.kind.value}));
   }
 
   onSelectConfig(configObject: ConfigObject) {
     this.configObject.next(configObject);
   }
 
-  onSelectAll(allSelected: boolean) {
-    this.allSelected = allSelected;
-    if (allSelected) {
-      this.onSelectedChange([new ConfigObject({kind: this.kind}), new ConfigObject({kind: this.kind})]);
-    } else {
-      this.onSelectedChange([]);
-    }
-  }
 
   onSaveConfig(configObject: ConfigObject) {
-    this.configService.save(configObject.toProto())
+    this.dataService.save(configObject)
       .subscribe(newConfig => {
-        this.count.next(this.count.value + 1);
-        this.configObject.next(ConfigObject.fromProto(newConfig));
-        this.changes.next();
+        this.configObject.next(newConfig);
         this.snackBarService.openSnackBar('Lagret');
       });
   }
 
   onUpdateConfig(configObject: ConfigObject) {
-    this.configService.save(configObject.toProto())
-      .subscribe(newConfig => {
-        this.configObject.next(ConfigObject.fromProto(newConfig));
-        this.changes.next();
-        this.snackBarService.openSnackBar('Oppdatert');
-      });
+    this.dataService.update(configObject).subscribe(newConfig => {
+      this.configObject.next(newConfig);
+      this.snackBarService.openSnackBar('Oppdatert');
+    });
   }
 
   onDeleteConfig(configObject: ConfigObject) {
-    this.configService.delete(configObject.toProto()).pipe(
-      catchError((err) => {
-        const errorString = err.message.split(':')[1];
-        const deleteError = /(?=.*delete)(?=.*there are)/gm;
-        if (deleteError.test(errorString)) {
-          this.snackBarService.openSnackBar('Error deleting config ' + configObject.meta.name + ': ' + errorString);
-          return empty;
-        }
-        return empty;
-      })
-    )
+    this.dataService.delete(configObject)
+      .pipe(
+        catchError((err) => {
+          const errorString = err.message.split(':')[1];
+          const deleteError = /(?=.*delete)(?=.*there are)/gm;
+          if (deleteError.test(errorString)) {
+            this.errorService.dispatch(new ReferrerError('Error deleting config ' + configObject.meta.name + ': ' + errorString));
+          } else {
+            this.errorService.dispatch(err);
+          }
+          return EMPTY;
+        })
+      )
       .subscribe(() => {
-        this.count.next(this.count.value - 1);
         this.configObject.next(null);
-        this.changes.next();
         this.snackBarService.openSnackBar('Slettet');
-      });
-  }
-
-  onUpdateSelectedConfigs(mergedConfig: ConfigObject, configUpdate: ConfigObject, formControl: any,
-                          addLabel: boolean, addBrowserscript: boolean, addSelector: boolean, addIpRange: boolean) {
-
-    const kind = configUpdate.kind;
-    const numOfConfigs = this.selectedConfigs.length.toString(10);
-
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
-
-    const ids = [];
-    for (const config of this.selectedConfigs) {
-      ids.push(config.id);
-    }
-    listRequest.setIdList(ids);
-
-    const pathList = [];
-
-
-    switch (kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        break;
-      case Kind.SEED:
-        break;
-      case Kind.CRAWLJOB:
-        const crawlJob = new CrawlJob().createUpdateRequest(configUpdate, formControl, mergedConfig);
-        updateTemplate.crawlJob = crawlJob.updateTemplate;
-        listRequest.setKind(Kind.CRAWLJOB.valueOf());
-        if (crawlJob.pathList.length !== 0) {
-          pathList.push(...crawlJob.pathList);
-        }
-        break;
-      case Kind.CRAWLCONFIG:
-        const crawlConfig = new CrawlConfig().createUpdateRequest(configUpdate, formControl, mergedConfig);
-        updateTemplate.crawlConfig = crawlConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLCONFIG.valueOf());
-        if (crawlConfig.pathList.length !== 0) {
-          pathList.push(...crawlConfig.pathList);
-        }
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        const crawlScheduleConfig = new CrawlScheduleConfig().createUpdateRequest(configUpdate, formControl, mergedConfig);
-        updateTemplate.crawlScheduleConfig = crawlScheduleConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLSCHEDULECONFIG.valueOf());
-        if (crawlScheduleConfig.pathList.length !== 0) {
-          pathList.push(...crawlScheduleConfig.pathList);
-        }
-        break;
-      case Kind.BROWSERCONFIG:
-        const browserConfig = new BrowserConfig()
-          .createUpdateRequest(configUpdate, formControl, mergedConfig, addBrowserscript, addSelector);
-        updateTemplate.browserConfig = browserConfig.updateTemplate;
-        listRequest.setKind(Kind.BROWSERCONFIG.valueOf());
-        if (browserConfig.pathList.length !== 0) {
-          pathList.push(...browserConfig.pathList);
-        }
-        break;
-      case Kind.POLITENESSCONFIG:
-        const politenessConfig = new PolitenessConfig().createUpdateRequest(configUpdate, formControl, mergedConfig, addSelector);
-        updateTemplate.politenessConfig = politenessConfig.updateTemplate;
-        listRequest.setKind(Kind.POLITENESSCONFIG.valueOf());
-        if (politenessConfig.pathList.length !== 0) {
-          pathList.push(...politenessConfig.pathList);
-        }
-        break;
-      case Kind.BROWSERSCRIPT:
-        const browserScript = new BrowserScript().createUpdateRequest(configUpdate, formControl, mergedConfig);
-        updateTemplate.browserScript = browserScript.updateTemplate;
-        listRequest.setKind(Kind.BROWSERSCRIPT.valueOf());
-        if (browserScript.pathList.length !== 0) {
-          pathList.push(...browserScript.pathList);
-        }
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        const crawlHostGroupConfig = new CrawlHostGroupConfig().createUpdateRequest(configUpdate, formControl, addIpRange, mergedConfig);
-        updateTemplate.crawlHostGroupConfig = crawlHostGroupConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLHOSTGROUPCONFIG.valueOf());
-        if (crawlHostGroupConfig.pathList.length !== 0) {
-          pathList.push(...crawlHostGroupConfig.pathList);
-        }
-        break;
-      case Kind.ROLEMAPPING:
-        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl, mergedConfig);
-        updateTemplate.roleMapping = roleMapping.updateTemplate;
-        listRequest.setKind(Kind.ROLEMAPPING.valueOf());
-        if (roleMapping.pathList.length !== 0) {
-          pathList.push(...roleMapping.pathList);
-        }
-        break;
-
-    }
-
-    const meta = new Meta().createUpdateRequest(configUpdate, formControl, mergedConfig, addLabel);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(...meta.pathList);
-    }
-
-    updateMask.setPathsList(pathList);
-
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.configService.update(updateRequest)
-      .subscribe(updatedConfigs => {
-        this.selectedConfigs = [];
-        this.componentRef.destroy();
-        this.configObject.next(null);
-        this.changes.next();
-        this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner oppdatert');
       });
   }
 
   onDeleteSelectedConfigs(configObjects: ConfigObject[]) {
     const numOfConfigs = this.selectedConfigs.length;
     let numOfDeleted = this.selectedConfigs.length;
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -447,32 +203,30 @@ export class ConfigurationsComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           from(configObjects).pipe(
-            mergeMap((configObject) => this.configService.delete(configObject.toProto()).pipe(
-              catchError((err) => {
-                const errorString = err.message.split(':')[1];
-                const deleteError = /(?=.*delete)(?=.*there are)/gm;
-                if (deleteError.test(errorString)) {
-                  numOfDeleted--;
-                  return of([]);
-                }
-                return empty;
-              })
-            )),
+            mergeMap((configObject) => this.dataService.delete(configObject)),
+            catchError((err) => {
+              const errorString = err.message.split(':')[1];
+              const deleteError = /(?=.*delete)(?=.*there are)/gm;
+              if (deleteError.test(errorString)) {
+                numOfDeleted--;
+              } else {
+                this.errorService.dispatch(err);
+              }
+              return EMPTY;
+            })
           ).subscribe(() => {
               this.selectedConfigs = [];
-              this.componentRef.destroy();
+              this.destroyComponent();
               this.configObject.next(null);
-              this.changes.next();
+              this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
             },
-            (err => console.log(err)),
+            (error) => console.error(error),
             () => {
-              const cantDelete = (numOfConfigs - numOfDeleted > 0) ? numOfConfigs - numOfDeleted
-                + ' ble ikke slettet siden de brukes i andre konfigurasjoner ' : null;
-              let deleteConfirmation = numOfDeleted + ' / ' + numOfConfigs + ' konfigurasjoner  ble  slettet. ';
-              if (cantDelete) {
-                deleteConfirmation += cantDelete;
+              if (numOfConfigs !== numOfDeleted) {
+                const notDeletedMsg = numOfConfigs - numOfDeleted + ' ble ikke slettet siden de brukes i andre konfigurasjoner ';
+                const deletedMsg = numOfDeleted + '/' + numOfConfigs + ' konfigurasjoner  ble  slettet. ';
+                this.errorService.dispatch(new ReferrerError(deletedMsg + notDeletedMsg));
               }
-              this.snackBarService.openSnackBar(deleteConfirmation);
             });
         } else {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
@@ -480,115 +234,136 @@ export class ConfigurationsComponent implements OnInit {
       });
   }
 
-  onUpdateAllConfigsOfKind(configUpdate: ConfigObject, formControl: any, addLabels: boolean,
-                           addBrowserscript: boolean, addSelector: boolean, addIpRange: boolean) {
-    const kind = configUpdate.kind;
-    const updateRequest = new UpdateRequest();
-    const updateMask = new FieldMask();
-    const listRequest = new ListRequest();
-    const updateTemplate = new ConfigObject();
-    updateTemplate.meta = new Meta();
+  onUpdateSelectedConfigs(mergedConfig: ConfigObject, configUpdate: ConfigObject, formControl: any, options: any) {
+    const {updateTemplate, pathList} = ConfigObject.createUpdateRequest(configUpdate, mergedConfig, formControl, options);
 
-    const pathList = [];
+    this.dataService.updateWithTemplate(updateTemplate, pathList, this.selectedConfigs.map(config => config.id))
+      .subscribe(updatedConfigs => {
+        this.selectedConfigs = [];
+        this.destroyComponent();
+        this.configObject.next(null);
+        this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
+      });
+  }
 
-    switch (kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        break;
-      case Kind.SEED:
+  onUpdateAllConfigsOfKind(configUpdate: ConfigObject, formControl: any, options) {
+    const {pathList, updateTemplate} = ConfigObject.createUpdateRequest(configUpdate, null, formControl, options);
+
+    this.dataService.updateWithTemplate(updateTemplate, pathList)
+      .subscribe(updatedConfigs => {
+        this.selectedConfigs = [];
+        this.allSelected = false;
+        this.destroyComponent();
+        this.configObject.next(null);
+        this.snackBarService.openSnackBar('Alle ' + updatedConfigs + ' konfigurasjoner av typen ' +
+          Kind[this.kind.value.valueOf()] + ' er oppdatert');
+      });
+  }
+
+  /**
+   * Load component creates a dynamic component and initializes
+   *
+   * @param instanceData
+   */
+  private loadComponent(instanceData = {}) {
+    this.destroyComponent();
+    const componentRef = this.createComponent(componentOfKind(this.kind.value));
+    this.initComponent(componentRef.instance, instanceData);
+  }
+
+  /**
+   * Create dynamic component
+   *
+   * @param component
+   * @param viewContainerRef
+   */
+  private createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): any {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+    viewContainerRef.clear();
+    return viewContainerRef.createComponent(componentFactory);
+  }
+
+  /**
+   * Initialize dynamic component
+   *
+   * @param instance
+   * @param instanceData
+   */
+  private initComponent(instance, instanceData) {
+    Object.keys(instanceData).forEach(key => {
+      instance[key] = instanceData[key];
+    });
+
+    const form: FormGroup = instance.form;
+
+    switch (this.kind.value) {
+      case Kind.CRAWLSCHEDULECONFIG:
+        form.get('cronExpression').clearValidators();
+        form.get('cronExpression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
+        form.get('cronExpression.hour').setValidators(Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN)));
+        form.get('cronExpression.dom').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN)));
+        form.get('cronExpression.month').setValidators(Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN)));
+        form.get('cronExpression.dow').setValidators(Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN)));
         break;
       case Kind.CRAWLJOB:
-        const crawlJob = new CrawlJob().createUpdateRequest(configUpdate, formControl);
-        updateTemplate.crawlJob = crawlJob.updateTemplate;
-        listRequest.setKind(Kind.CRAWLJOB.valueOf());
-        if (crawlJob.pathList.length !== 0) {
-          pathList.push(...crawlJob.pathList);
+        form.get('crawlConfigRef').clearValidators();
+        break;
+      case Kind.POLITENESSCONFIG:
+        if (instanceData.politenessConfig.robotsPolicy === undefined) {
+          instance.shouldDisablePolicy = true;
         }
         break;
       case Kind.CRAWLCONFIG:
-        const crawlConfig = new CrawlConfig().createUpdateRequest(configUpdate, formControl);
-        updateTemplate.crawlConfig = crawlConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLCONFIG.valueOf());
-        if (crawlConfig.pathList.length !== 0) {
-          pathList.push(...crawlConfig.pathList);
+        if (instanceData.crawlConfig.extra.extractText === null) {
+          instance.disableExtractText = true;
         }
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        const crawlScheduleConfig = new CrawlScheduleConfig().createUpdateRequest(configUpdate, formControl);
-        updateTemplate.crawlScheduleConfig = crawlScheduleConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLSCHEDULECONFIG.valueOf());
-        if (crawlScheduleConfig.pathList.length !== 0) {
-          pathList.push(...crawlScheduleConfig.pathList);
+        if (instanceData.crawlConfig.extra.createScreenshot === null) {
+          instance.disableCreateScreenshot = true;
         }
-        break;
-      case Kind.BROWSERCONFIG:
-        const browserConfig = new BrowserConfig().createUpdateRequest(configUpdate, formControl, null,
-          addBrowserscript, addSelector);
-        updateTemplate.browserConfig = browserConfig.updateTemplate;
-        listRequest.setKind(Kind.BROWSERCONFIG.valueOf());
-        if (browserConfig.pathList.length !== 0) {
-          pathList.push(...browserConfig.pathList);
-        }
-        break;
-      case Kind.POLITENESSCONFIG:
-        const politenessConfig = new PolitenessConfig().createUpdateRequest(configUpdate, formControl, null, addSelector);
-        updateTemplate.politenessConfig = politenessConfig.updateTemplate;
-        listRequest.setKind(Kind.POLITENESSCONFIG.valueOf());
-        if (politenessConfig.pathList.length !== 0) {
-          pathList.push(...politenessConfig.pathList);
-        }
-        break;
-      case Kind.BROWSERSCRIPT:
-        const browserScript = new BrowserScript().createUpdateRequest(configUpdate, formControl);
-        updateTemplate.browserScript = browserScript.updateTemplate;
-        listRequest.setKind(Kind.BROWSERSCRIPT.valueOf());
-        if (browserScript.pathList.length !== 0) {
-          pathList.push(...browserScript.pathList);
-        }
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        const crawlHostGroupConfig = new CrawlHostGroupConfig().createUpdateRequest(configUpdate, formControl, addIpRange);
-        updateTemplate.crawlHostGroupConfig = crawlHostGroupConfig.updateTemplate;
-        listRequest.setKind(Kind.CRAWLHOSTGROUPCONFIG.valueOf());
-        if (crawlHostGroupConfig.pathList.length !== 0) {
-          pathList.push(...crawlHostGroupConfig.pathList);
-        }
-        break;
-      case Kind.ROLEMAPPING:
-        const roleMapping = new RoleMapping().createUpdateRequest(configUpdate, formControl);
-        updateTemplate.roleMapping = roleMapping.updateTemplate;
-        listRequest.setKind(Kind.ROLEMAPPING.valueOf());
-        if (roleMapping.pathList.length !== 0) {
-          pathList.push(...roleMapping.pathList);
-        }
-        break;
-
     }
 
-    const meta = new Meta().createUpdateRequest(configUpdate, formControl, null, addLabels);
-    updateTemplate.meta = meta.updateTemplate;
-    if (meta.pathList.length !== 0) {
-      pathList.push(...meta.pathList);
+    instance.data = false;
+    instance.updateAll = this.allSelected;
+    instance.updateForm();
+
+
+    if (!this.allSelected) {
+      instance.update.subscribe(
+        (configUpdate) => {
+          const addLabel = instance.shouldAddLabel;
+          const addBrowserScript = instance.shouldAddBrowserscript;
+          const addSelector = instance.shouldAddSelector;
+          const addIpRange = instance.shouldAddIpRange;
+
+          this.onUpdateSelectedConfigs(
+            instance.configObject, configUpdate, form.controls,
+            {addLabel, addBrowserScript, addSelector, addIpRange});
+        });
+      instance.delete.subscribe(
+        () => this.onDeleteSelectedConfigs(this.selectedConfigs));
+    } else {
+      instance.update.subscribe(
+        (configUpdate) => {
+          const addLabel = instance.shouldAddLabel;
+          const addBrowserScript = instance.shouldAddBrowserscript;
+          const addSelector = instance.shouldAddSelector;
+          const addIpRange = instance.shouldAddIpRange;
+
+          this.onUpdateAllConfigsOfKind(configUpdate, form.controls,
+            {addLabel, addBrowserScript, addSelector, addIpRange});
+        });
     }
-
-    listRequest.setIdList([]);
-    updateMask.setPathsList(pathList);
-
-
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(updateTemplate.toProto());
-    updateRequest.setUpdateMask(updateMask);
-
-    this.configService.update(updateRequest)
-      .subscribe(updatedConfigs => {
-        this.selectedConfigs = [];
-        this.componentRef.destroy();
-        this.configObject.next(null);
-        this.changes.next();
-        this.snackBarService.openSnackBar('Alle konfigurasjoner av typen ' + this.kind + ' er oppdatert');
-      });
   }
+
+  /**
+   * Destroy dynamic component
+   */
+  private destroyComponent() {
+    if (this.detailHost && this.componentRef) {
+      this.componentRef.destroy();
+    }
+  }
+
 }
 
 

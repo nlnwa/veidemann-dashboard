@@ -154,25 +154,33 @@ export class PolitenessConfig {
     return equalRobotsPolicies;
   }
 
-  toProto(): PolitenessConfigProto {
+  static toProto(politenessConfig: PolitenessConfig): PolitenessConfigProto {
     const proto = new PolitenessConfigProto();
-    proto.setRobotsPolicy(PolitenessConfigProto.RobotsPolicy[this.robotsPolicy] as any as PolitenessConfigProto.RobotsPolicy);
-    proto.setCustomRobots(this.customRobots);
-    proto.setMinimumRobotsValidityDurationS(this.minimumRobotsValidityDurationS);
-    proto.setMinTimeBetweenPageLoadMs(this.minTimeBetweenPageLoadMs);
-    proto.setMaxTimeBetweenPageLoadMs(this.maxTimeBetweenPageLoadMs);
-    proto.setDelayFactor(this.delayFactor);
-    proto.setMaxRetries(this.maxRetries);
-    proto.setDelayFactor(this.delayFactor);
-    proto.setRetryDelaySeconds(this.retryDelaySeconds);
-    proto.setCrawlHostGroupSelectorList(this.crawlHostGroupSelectorList);
+
+    proto.setRobotsPolicy(PolitenessConfigProto.RobotsPolicy[politenessConfig.robotsPolicy] as any as PolitenessConfigProto.RobotsPolicy);
+    proto.setCustomRobots(politenessConfig.customRobots);
+    proto.setMinimumRobotsValidityDurationS(politenessConfig.minimumRobotsValidityDurationS);
+    proto.setMinTimeBetweenPageLoadMs(politenessConfig.minTimeBetweenPageLoadMs);
+    proto.setMaxTimeBetweenPageLoadMs(politenessConfig.maxTimeBetweenPageLoadMs);
+    proto.setDelayFactor(politenessConfig.delayFactor);
+    proto.setMaxRetries(politenessConfig.maxRetries);
+    proto.setDelayFactor(politenessConfig.delayFactor);
+    proto.setRetryDelaySeconds(politenessConfig.retryDelaySeconds);
+    proto.setCrawlHostGroupSelectorList(politenessConfig.crawlHostGroupSelectorList);
 
     return proto;
   }
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addCrawlHostGroupSelector?: boolean) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             configUpdate: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any,
+                             options: any): void {
     const politenessConfig = new PolitenessConfig();
-    const pathList = [];
+    updateTemplate.politenessConfig = politenessConfig;
+
+    const {addCrawlHostGroupSelector} = options;
 
     if (mergedConfig) {
       if (formControl.robotsPolicy.dirty) {
@@ -295,6 +303,5 @@ export class PolitenessConfig {
         }
       }
     }
-    return {updateTemplate: politenessConfig, pathList: pathList};
   }
 }

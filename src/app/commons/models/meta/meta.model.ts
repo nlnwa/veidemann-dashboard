@@ -30,6 +30,37 @@ export class Meta {
     this.labelList = labelList;
   }
 
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             updateConfig: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             options: any): void {
+    const meta = new Meta();
+    updateTemplate.meta = meta;
+
+    const {addLabel} = options;
+
+    if (mergedConfig) {
+      if (addLabel) {
+        if (mergedConfig.meta.labelList !== updateConfig.meta.labelList) {
+          meta.labelList = updateConfig.meta.labelList;
+          pathList.push('meta.label+');
+        }
+      } else {
+        meta.labelList = updateConfig.meta.labelList;
+        pathList.push('meta.label-');
+      }
+    } else {
+      if (addLabel) {
+        meta.labelList = updateConfig.meta.labelList;
+        pathList.push('meta.label+');
+      } else {
+        meta.labelList = updateConfig.meta.labelList;
+        pathList.push('meta.label-');
+      }
+    }
+  }
+
   static fromProto(proto: MetaProto): Meta {
     return new Meta({
       name: proto.getName(),
@@ -42,11 +73,11 @@ export class Meta {
     });
   }
 
-  toProto(): MetaProto {
+  static toProto(meta: Meta): MetaProto {
     const proto = new MetaProto();
-    proto.setName(this.name);
-    proto.setDescription(this.description);
-    proto.setLabelList(this.labelList.map(label => {
+    proto.setName(meta.name);
+    proto.setDescription(meta.description);
+    proto.setLabelList(meta.labelList.map(label => {
       const l = new LabelProto();
       l.setKey(label.key);
       l.setValue(label.value);
@@ -54,34 +85,5 @@ export class Meta {
     }));
 
     return proto;
-  }
-
-  createUpdateRequest(updateConfig: ConfigObject, control: any, mergedConfig?: ConfigObject, addLabel?: boolean) {
-    const meta = new Meta();
-    const pathList = [];
-    if (mergedConfig) {
-      if (addLabel !== undefined) {
-        if (addLabel) {
-          if (mergedConfig.meta.labelList !== updateConfig.meta.labelList) {
-            meta.labelList = updateConfig.meta.labelList;
-            pathList.push('meta.label+');
-          }
-        } else {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label-');
-        }
-      }
-    } else {
-      if (addLabel !== undefined) {
-        if (addLabel) {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label+');
-        } else {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label-');
-        }
-      }
-    }
-    return {updateTemplate: meta, pathList: pathList};
   }
 }

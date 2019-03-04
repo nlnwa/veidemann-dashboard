@@ -38,3 +38,7 @@ html, body {
  .mat-column-label {
    padding-left: 10px !important;
  }
+
+.hide-mat-paginator-range-label .mat-paginator-range-label {
+  display: none;
+}

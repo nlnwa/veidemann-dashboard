@@ -95,20 +95,22 @@ export class CrawlJob {
     return crawlJob;
   }
 
-
-
-  toProto(): CrawlJobProto {
+  static toProto(crawlJob: CrawlJob): CrawlJobProto {
     const proto = new CrawlJobProto();
-    proto.setScheduleRef(this.scheduleRef.toProto());
-    proto.setLimits(this.limits.toProto());
-    proto.setCrawlConfigRef(this.crawlConfigRef.toProto());
-    proto.setDisabled(this.disabled);
+    proto.setScheduleRef(crawlJob.scheduleRef.toProto());
+    proto.setLimits(crawlJob.limits.toProto());
+    proto.setCrawlConfigRef(crawlJob.crawlConfigRef.toProto());
+    proto.setDisabled(crawlJob.disabled);
     return proto;
   }
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject, pathList: string[], configUpdate: ConfigObject, mergedConfig: ConfigObject, formControl: any) {
     const crawlJob = new CrawlJob();
-    const pathList = [];
+    updateTemplate.crawlJob = crawlJob;
+
+    if (!mergedConfig) {
+      mergedConfig = configUpdate;
+    }
 
     if (mergedConfig) {
 
@@ -156,7 +158,7 @@ export class CrawlJob {
           pathList.push('crawlJob.disabled');
         }
       }
-      if (formControl.limits.controls.depth.dirty) {
+      if (formControl.limits.controls.depth.dirty && configUpdate.crawlJob.limits.depth !== mergedConfig.crawlJob.limits.depth) {
         crawlJob.limits.depth = configUpdate.crawlJob.limits.depth;
         pathList.push('crawlJob.limits.depth');
       }
@@ -178,7 +180,6 @@ export class CrawlJob {
         pathList.push('crawlJob.crawlConfigRef');
       }
     }
-    return {updateTemplate: crawlJob, pathList: pathList};
   }
 }
 
@@ -222,4 +223,3 @@ function isDisabledEqual(configs: ConfigObject[]) {
   });
   return equalDisabledStatus;
 }
-

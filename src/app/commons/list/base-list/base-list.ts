@@ -1,7 +1,9 @@
-import {SelectionModel} from '@angular/cdk/collections';
-import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {PageEvent} from '@angular/material';
+import {DataSource, SelectionModel} from '@angular/cdk/collections';
+import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatPaginator, MatTableDataSource, PageEvent} from '@angular/material';
 import {ConfigObject} from '../../models';
+import {DataService} from '../../../configurations/shared/data.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-base-list',
@@ -12,95 +14,109 @@ import {ConfigObject} from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class BaseListComponent implements AfterViewInit {
+export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['select', 'name', 'description', 'label'];
-  selection = new SelectionModel<ConfigObject>(true, []);
-  dataSource: ConfigObject[] = [];
-  allSelected = false;
 
-  // MatPaginator settings
+  dataSource: DataSource<ConfigObject>;
+
+  // selection
+  selection = new SelectionModel<ConfigObject>(true, []);
+  allSelected = false;
+  selectedRow: ConfigObject;
+  selectedRows: string[] = [];
+
+  // paging
+  @Input()
   pageLength = 0;
   pageSize = 5;
   pageIndex = 0;
-  pageOptions = [5, 10];
-
-  // highlight
-  selectedRow;
-  selectedRows = [];
-
-
-  @Input()
-  set data(data: ConfigObject[]) {
-    if (data === null) {
-      return;
-    }
-    this.selection.clear();
-    this.selectedRows = [];
-    this.selectedRow = -1;
-    this.dataSource = data;
-  }
-
-  @Input()
-  set count(count: number) {
-    this.pageLength = count;
-  }
-
-  @Output()
-  protected rowClick = new EventEmitter<ConfigObject | ConfigObject[]>();
-
-  @Output()
-  selectedChange = new EventEmitter();
+  pageOptions = [5, 10, 25, 50, 100];
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter();
 
   @Output()
-  selectAll = new EventEmitter();
+  rowClick = new EventEmitter<ConfigObject | ConfigObject[]>();
 
+  @Output()
+  selectedChange: EventEmitter<ConfigObject[]> = new EventEmitter();
 
-  ngAfterViewInit(): void {
-    this.onPage({
-      length: this.pageLength,
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-    });
+  @Output()
+  selectAll: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
+  private resetSubscription: Subscription = Subscription.EMPTY;
+
+  constructor(protected dataService: DataService) {
   }
 
-  constructor() {
+  private get data(): ConfigObject[] {
+    if (this.dataService) {
+      return this.dataService.data;
+    } else {
+      return (<MatTableDataSource<ConfigObject>>this.dataSource).data;
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.dataService) {
+      this.dataSource = this.dataService;
+      this.resetSubscription = this.dataService.reset.subscribe(() => this.reset());
+    } else {
+      this.dataSource = new MatTableDataSource<ConfigObject>();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.dataService) {
+      this.dataService.paginator = this.paginator;
+    } else {
+      (<MatTableDataSource<ConfigObject>>this.dataSource).paginator = this.paginator;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.resetSubscription.unsubscribe();
+  }
+
+  reset() {
+    this.selection.clear();
+    this.selectedRows = [];
+    this.selectedRow = null;
+    this.pageLength = 0;
+    this.pageIndex = 0;
   }
 
   onPage(pageEvent: PageEvent) {
-    this.selection.clear();
-    this.dataSource = [];
     this.page.emit(pageEvent);
   }
 
   onRowClick(item: ConfigObject) {
+    if (this.selectedRows.length > 1) {
+      return;
+    }
+    this.selectedRow = item;
     this.rowClick.emit(item);
-    this.selectedRow = item.id;
   }
 
   isAllInPageSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
+    const numRows = this.data.length;
     return numSelected === numRows;
-  }
-
-  isEverythingSelected(): boolean {
-    return this.selection.selected.length === this.pageSize;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle(checked: boolean) {
-    this.selectedRow = -1;
     this.allSelected = false;
+    this.selectedRow = null;
     if (checked) {
-      this.dataSource.forEach(row => this.selection.select(row));
+      this.data.forEach(row => this.selection.select(row));
     } else {
       this.selection.clear();
     }
-    this.selectAll.emit(this.allSelected);
     this.selectedChange.emit(this.selection.selected);
     this.highlightSelected(this.selection.selected);
   }
@@ -108,12 +124,7 @@ export class BaseListComponent implements AfterViewInit {
   checkboxToggle(item: ConfigObject) {
     this.allSelected = false;
     this.selection.toggle(item);
-    if (this.selection.isSelected(item)) {
-      this.selectedRow = item.id;
-    } else {
-      this.selectedRow = -1;
-    }
-    this.selectAll.emit(this.allSelected);
+    this.selectedRow = this.selection.isSelected(item) ? item : null;
     this.selectedChange.emit(this.selection.selected);
     this.highlightSelected(this.selection.selected);
   }
@@ -124,6 +135,7 @@ export class BaseListComponent implements AfterViewInit {
   }
 
   onDeselectAll() {
+    this.allSelected = false;
     this.masterToggle(false);
   }
 
@@ -131,7 +143,3 @@ export class BaseListComponent implements AfterViewInit {
     this.selectedRows = rows.map(row => row.id);
   }
 }
-
-
-
-

@@ -28,10 +28,10 @@ export class IpRange {
     return Array.from(intersection) as IpRange[];
   }
 
-  toProto(): CrawlHostGroupConfigProto.IpRange {
+  static toProto(ipRange: IpRange): CrawlHostGroupConfigProto.IpRange {
     const proto = new CrawlHostGroupConfigProto.IpRange();
-    proto.setIpFrom(this.ipFrom);
-    proto.setIpTo(this.ipTo);
+    proto.setIpFrom(ipRange.ipFrom);
+    proto.setIpTo(ipRange.ipTo);
     return proto;
   }
 }

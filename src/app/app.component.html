@@ -1,7 +1,6 @@
-<div fxFlexFill fxLayout="column">
-
+<div class="container" fxLayout="column">
   <!-- Toolbar -->
-  <mat-toolbar fxLayout="row" color="primary" class="app-toolbar">
+  <mat-toolbar color="primary">
     <button mat-icon-button (click)="onToggleSidenav()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -20,17 +19,15 @@
     </a>
     <a color="primary" target="_blank"
        [routerLink]="['/docs']" [routerLinkActiveOptions]="{exact: true}" [routerLinkActive]="['is-active']">
-      <button mat-icon-button matTooltip =" Veidemann dashboard dokumentasjon">
-      <mat-icon style="color: black">help</mat-icon>
+      <button mat-icon-button matTooltip=" Veidemann dashboard dokumentasjon">
+        <mat-icon style="color: black">help</mat-icon>
       </button>
     </a>
   </mat-toolbar>
 
-  <!-- Sidenav -->
-  <mat-drawer-container fxFlex="100%">
-
+  <mat-drawer-container fxFlex="grow">
+    <!-- Sidenav -->
     <mat-drawer mode="side" [(opened)]="showSidenav">
-
       <!-- Navigation -->
       <mat-nav-list>
         <a mat-list-item [routerLink]="['/']" [routerLinkActiveOptions]="{ exact: true }"
@@ -55,49 +52,49 @@
             <ng-container i18n="@@navigationSidebarSearch">Entiteter/Seeds</ng-container>
           </a>
 
-          <a mat-list-item [routerLink]="['/collection']" [routerLinkActiveOptions]="{ exact: true }"
+          <a mat-list-item [routerLink]="['/config/collection']" [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">collections_bookmark</mat-icon>
             <ng-container i18n="@@navigationSidebarCollection">Collection</ng-container>
           </a>
 
           <ng-container *ngIf="canViewCrawljobs">
-            <a mat-list-item [routerLink]="['/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
+            <a mat-list-item [routerLink]="['/config/crawljobs']" [routerLinkActiveOptions]="{ exact: true }"
                [routerLinkActive]="['is-active']">
               <mat-icon class="sidenav--icon__margin">work</mat-icon>
               <ng-container i18n="@@navigationSidebarCrawljobs">Crawljobs</ng-container>
             </a>
           </ng-container>
-          <a mat-list-item [routerLink]="['/schedule']" [routerLinkActiveOptions]="{ exact: true }"
+          <a mat-list-item [routerLink]="['/config/schedule']" [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">schedule</mat-icon>
             <ng-container i18n="@@navigationSidebarSchedule">Schedule</ng-container>
           </a>
-          <a mat-list-item [routerLink]="['/crawlconfig']"
+          <a mat-list-item [routerLink]="['/config/crawlconfig']"
              [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">settings</mat-icon>
             <ng-container i18n="@@navigationSidebarCrawlconfig">CrawlConfig</ng-container>
           </a>
-          <a mat-list-item [routerLink]="['/crawlhostgroupconfig']"
+          <a mat-list-item [routerLink]="['/config/crawlhostgroupconfig']"
              [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">group_work</mat-icon>
             <ng-container i18n="@@navigationSidebarCrawlhostgroupconfig">CrawlHostGroup</ng-container>
           </a>
-          <a mat-list-item [routerLink]="['/browserconfig']"
+          <a mat-list-item [routerLink]="['/config/browserconfig']"
              [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">web</mat-icon>
             <ng-container i18n="@@navigationSidebarBrowserconfig">BrowserConfig</ng-container>
           </a>
-          <a mat-list-item [routerLink]="['/browserscript']"
+          <a mat-list-item [routerLink]="['/config/browserscript']"
              [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">web_asset</mat-icon>
             <ng-container i18n="@@navigationSidebarBrowserscript">BrowserScript</ng-container>
           </a>
-          <a mat-list-item [routerLink]="['/politenessconfig']"
+          <a mat-list-item [routerLink]="['/config/politenessconfig']"
              [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">sentiment_neutral</mat-icon>
@@ -109,7 +106,7 @@
             <mat-icon class="sidenav--icon__margin">receipt</mat-icon>
             <ng-container i18n="@@navigationSidebarLogconfig">Logging</ng-container>
           </a>
-          <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/rolemapping']"
+          <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/config/rolemapping']"
              [routerLinkActiveOptions]="{ exact: true}"
              [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">person</mat-icon>
@@ -124,10 +121,10 @@
         </ng-container>
       </mat-nav-list>
     </mat-drawer>
-
+    <!-- Content -->
     <mat-drawer-content>
       <app-dialog></app-dialog>
-      <main class="mat-typography">
+      <main class="content-padding">
         <router-outlet></router-outlet>
       </main>
     </mat-drawer-content>

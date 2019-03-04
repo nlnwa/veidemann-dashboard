@@ -11,19 +11,19 @@ import {
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ConfigObject, ConfigRef, Kind} from '../models/';
 import {ListRequest} from '../../../api/';
-import {Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Subject, Subscription} from 'rxjs';
+import {map, toArray} from 'rxjs/operators';
 
 import {BackendService} from '../../configurations/shared/backend.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-configref',
   templateUrl: './configref.component.html',
   styleUrls: ['./configref.component.css'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: ConfigRefComponent, multi: true},
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
 
@@ -40,7 +40,8 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
 
   form: FormGroup;
 
-  options: any[];
+  options: Subject<ConfigObject[]> = new Subject();
+  options$ = this.options.asObservable();
 
   private valueSubscription: Subscription;
 
@@ -52,38 +53,26 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
   get placeholder(): string {
     switch (this.kind) {
       case Kind.UNDEFINED:
-        break;
       case Kind.CRAWLENTITY:
-        break;
       case Kind.SEED:
-        break;
+      case Kind.CRAWLHOSTGROUPCONFIG:
+      case Kind.ROLEMAPPING:
+        return this.kind.toString();
       case Kind.CRAWLJOB:
         return 'Velg crawljob';
-        break;
       case Kind.CRAWLCONFIG:
         return 'Velg crawlconfig';
-        break;
       case Kind.CRAWLSCHEDULECONFIG:
         return 'Velg schedule';
-        break;
       case Kind.BROWSERCONFIG:
         return 'Velg browserconfig';
-        break;
       case Kind.POLITENESSCONFIG:
         return 'Velg politenessconfig';
-        break;
       case Kind.BROWSERSCRIPT:
         return 'Velg browserscript';
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        break;
-      case Kind.ROLEMAPPING:
-        break;
       case Kind.COLLECTION:
         return 'Velg collection';
-        break;
     }
-    return this.kind.toString();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -151,67 +140,11 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
   }
 
   private loadOptions(kind: Kind) {
-    switch (kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        break;
-      case Kind.SEED:
-        break;
-      case Kind.CRAWLJOB:
-        const crawlJobRequest = new ListRequest();
-        crawlJobRequest.setKind(Kind.CRAWLJOB.valueOf());
-        this.configService.list(crawlJobRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.CRAWLCONFIG:
-        const crawlConfigRequest = new ListRequest();
-        crawlConfigRequest.setKind(Kind.CRAWLCONFIG.valueOf());
-        this.configService.list(crawlConfigRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        const scheduleConfigRequest = new ListRequest();
-        scheduleConfigRequest.setKind(Kind.CRAWLSCHEDULECONFIG.valueOf());
-        this.configService.list(scheduleConfigRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.POLITENESSCONFIG:
-        const politenessRequest = new ListRequest();
-        politenessRequest.setKind(Kind.POLITENESSCONFIG.valueOf());
-        this.configService.list(politenessRequest).pipe(
-          map(configObjects => configObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.BROWSERSCRIPT:
-        const browserScriptRequest = new ListRequest();
-        browserScriptRequest.setKind(Kind.BROWSERSCRIPT.valueOf());
-        this.configService.list(browserScriptRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        break;
-      case Kind.ROLEMAPPING:
-        break;
-      case Kind.BROWSERCONFIG:
-        const browserConfigRequest = new ListRequest();
-        browserConfigRequest.setKind(Kind.BROWSERCONFIG.valueOf());
-        this.configService.list(browserConfigRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-      case Kind.COLLECTION:
-        const collectionRequest = new ListRequest();
-        collectionRequest.setKind(Kind.COLLECTION.valueOf());
-        this.configService.list(collectionRequest).pipe(
-          map(ConfigObjects => ConfigObjects.map(ConfigObject.fromProto))
-        ).subscribe(options => this.options = options);
-        break;
-    }
+    const listRequest = new ListRequest();
+    listRequest.setKind(kind.valueOf());
+    this.configService.list(listRequest).pipe(
+      map(configObject => ConfigObject.fromProto(configObject)),
+      toArray(),
+    ).subscribe(configObjects => this.options.next(configObjects));
   }
-
 }

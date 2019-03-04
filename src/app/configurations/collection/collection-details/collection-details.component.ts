@@ -3,8 +3,8 @@ import {Collection, ConfigObject, Kind, Meta} from '../../../commons/models';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RoleService} from '../../../auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
-import {RotationPolicy} from '../../../commons/models/collection/collection.model';
-import {SubCollection, SubCollectionType} from '../../../commons/models/collection/subcollection.model';
+import {RotationPolicy} from '../../../commons/models/configs/collection.model';
+import {SubCollection, SubCollectionType} from '../../../commons/models/configs/subcollection.model';
 
 @Component({
   selector: 'app-collection-details',
@@ -130,7 +130,6 @@ export class CollectionDetailsComponent implements OnChanges, OnInit {
   }
 
   updateForm(): void {
-
     const subCollectionsFG: FormGroup[] = this.configObject.collection.subCollectionsList
       .map(subCollectionsList => this.fb.group(subCollectionsList));
 
@@ -178,8 +177,8 @@ export class CollectionDetailsComponent implements OnChanges, OnInit {
 
 private initSubCollection() {
     return this.fb.group({
-      name: [''],
-      type: ['']
+      name: '',
+      type: '',
     });
 }
 

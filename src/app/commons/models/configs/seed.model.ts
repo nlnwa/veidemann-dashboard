@@ -6,13 +6,13 @@ import {ConfigObject} from '../configobject.model';
 
 export class Seed {
   entityRef?: ConfigRef;
-  scope: Scope;
+  scope: CrawlScope;
   jobRefList?: ConfigRef[];
   disabled: boolean;
 
   constructor({
                 entityRef = new ConfigRef({kind: Kind.CRAWLENTITY}),
-                scope = new Scope(),
+                scope = new CrawlScope(),
                 jobRefList = [],
                 disabled = false
               } = {}) {
@@ -26,7 +26,7 @@ export class Seed {
     const entityRef = proto.getEntityRef() ? ConfigRef.fromProto(proto.getEntityRef()) : new ConfigRef({kind: Kind.CRAWLENTITY});
     return new Seed({
       entityRef,
-      scope: Scope.fromProto(proto.getScope()),
+      scope: CrawlScope.fromProto(proto.getScope()),
       jobRefList: proto.getJobRefList().map(ref => ConfigRef.fromProto(ref)),
       disabled: proto.getDisabled()
     });
@@ -84,17 +84,17 @@ export class Seed {
     return equalDisabledStatus;
   }
 
-  toProto(): SeedProto {
+  static toProto(seed: Seed): SeedProto {
     const proto = new SeedProto();
-    const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: this.entityRef.id});
+    const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: seed.entityRef.id});
     proto.setEntityRef(entityRef.toProto());
-    proto.setScope(this.scope.toProto());
-    proto.setJobRefList(this.jobRefList.map(ref => ref.toProto()));
-    proto.setDisabled(this.disabled);
+    proto.setScope(CrawlScope.toProto(seed.scope));
+    proto.setJobRefList(seed.jobRefList.map(ref => ref.toProto()));
+    proto.setDisabled(seed.disabled);
     return proto;
   }
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addJobRef?: boolean) {
+  static createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject, addJobRef?: boolean) {
     const seed = new Seed();
     const pathList = [];
 
@@ -131,7 +131,7 @@ export class Seed {
   }
 }
 
-export class Scope {
+export class CrawlScope {
   surtPrefix?: string;
 
   constructor({
@@ -140,15 +140,15 @@ export class Scope {
     this.surtPrefix = surtPrefix;
   }
 
-  static fromProto(proto: CrawlScopeProto): Scope {
-    return new Scope({
+  static fromProto(proto: CrawlScopeProto): CrawlScope {
+    return new CrawlScope({
       surtPrefix: proto.getSurtPrefix()
     });
   }
 
-  toProto(): CrawlScopeProto {
+  static toProto(crawlScope: CrawlScope): CrawlScopeProto {
     const proto = new CrawlScopeProto() as any as CrawlScopeProto.AsObject;
-    proto.surtPrefix = this.surtPrefix;
+    proto.surtPrefix = crawlScope.surtPrefix;
 
     return proto as any as CrawlScopeProto;
   }

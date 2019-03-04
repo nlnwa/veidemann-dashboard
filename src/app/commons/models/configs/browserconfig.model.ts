@@ -145,25 +145,31 @@ export class BrowserConfig {
     return unique;
   }
 
-  toProto(): BrowserConfigProto {
+  static toProto(browserConfig: BrowserConfig): BrowserConfigProto {
     const proto = new BrowserConfigProto();
-    proto.setUserAgent(this.userAgent);
-    proto.setWindowWidth(this.windowWidth || 0);
-    proto.setWindowHeight(this.windowHeight || 0);
-    proto.setPageLoadTimeoutMs(this.pageLoadTimeoutMs || 0);
-    proto.setMaxInactivityTimeMs(this.maxInactivityTimeMs || 0);
-    proto.setScriptRefList(this.scriptRefList.map(ref => ref.toProto()));
-    proto.setScriptSelectorList(this.scriptSelectorList);
+    proto.setUserAgent(browserConfig.userAgent);
+    proto.setWindowWidth(browserConfig.windowWidth || 0);
+    proto.setWindowHeight(browserConfig.windowHeight || 0);
+    proto.setPageLoadTimeoutMs(browserConfig.pageLoadTimeoutMs || 0);
+    proto.setMaxInactivityTimeMs(browserConfig.maxInactivityTimeMs || 0);
+    proto.setScriptRefList(browserConfig.scriptRefList.map(ref => ref.toProto()));
+    proto.setScriptSelectorList(browserConfig.scriptSelectorList);
 
     return proto;
   }
 
-  createUpdateRequest(updateConfig: ConfigObject, formControl: any, mergedConfig?: ConfigObject,
-                      addBrowserscript?: boolean, addScriptSelector?: boolean) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             updateConfig: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any,
+                             options: any): void {
 
 
     const browserConfig = new BrowserConfig();
-    const pathList = [];
+    updateTemplate.browserConfig = browserConfig;
+
+    const {addBrowserscript, addScriptSelector} = options;
 
     if (mergedConfig) {
       if (formControl.userAgent.dirty) {
@@ -267,6 +273,5 @@ export class BrowserConfig {
         }
       }
     }
-    return {updateTemplate: browserConfig, pathList: pathList};
   }
 }

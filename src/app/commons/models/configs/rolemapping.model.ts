@@ -50,25 +50,30 @@ export class RoleMapping {
     return roleMapping;
   }
 
-
-  toProto(): RoleMappingProto {
+  static toProto(roleMapping: RoleMapping): RoleMappingProto {
     const proto = new RoleMappingProto();
-
-    if (this.email !== null) {
-      proto.setEmail(this.email);
+    if (roleMapping.email !== null) {
+      proto.setEmail(roleMapping.email);
     }
-    if (this.group !== null) {
-      proto.setGroup(this.group);
+    if (roleMapping.group !== null) {
+      proto.setGroup(roleMapping.group);
     }
 
-    proto.setRoleList(this.roleList.map(role => RoleProto[role.toString()]));
+    proto.setRoleList(roleMapping.roleList.map(role => RoleProto[role.toString()]));
 
     return proto;
   }
 
-  createUpdateRequest(configUpdate: ConfigObject, formControl: any, mergedConfig?: ConfigObject) {
+  static createUpdateRequest(updateTemplate: ConfigObject,
+                             pathList: string[],
+                             configUpdate: ConfigObject,
+                             mergedConfig: ConfigObject,
+                             formControl: any,
+  ): void {
+
     const roleMapping = new RoleMapping();
-    const pathList = [];
+    updateTemplate.roleMapping = roleMapping;
+
     if (formControl.roleList.dirty) {
       if (mergedConfig) {
         if (mergedConfig.roleMapping.roleList !== configUpdate.roleMapping.roleList) {
@@ -80,9 +85,7 @@ export class RoleMapping {
         pathList.push('roleMapping.role');
       }
     }
-    return {updateTemplate: roleMapping, pathList: pathList};
   }
-
 }
 
 function getCommonRoles(configObjects: ConfigObject[]): any {

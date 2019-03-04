@@ -1,70 +1,60 @@
-import {Component, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {map} from 'rxjs/operators';
 import {LogService} from '../log.service';
 import {SnackBarService} from '../../../commons/snack-bar/snack-bar.service';
 import {RoleService} from '../../../auth/';
-import {LogLevel} from '../../../commons/models';
+import {LogLevel, LogLevels} from '../../../commons/models';
 
 
 @Component({
   selector: 'app-loglevel',
   templateUrl: './loglevel.component.html',
-  styleUrls: ['./loglevel.component.css']
+  styleUrls: ['./loglevel.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoglevelComponent implements OnChanges {
+export class LoglevelComponent implements OnInit {
 
   form: FormGroup;
-  logLevels: LogLevel[] = [];
+  logLevels: LogLevels = new LogLevels();
+  levelOptions: string[];
 
   constructor(private logService: LogService,
               private fb: FormBuilder,
               private snackBarService: SnackBarService,
-              private roleService: RoleService) {
-
-    this.form = this.fb.group({
-      log_level: this.fb.array([]),
-
-    });
-    this.getLogLevels();
+              private roleService: RoleService,
+              private cdr: ChangeDetectorRef) {
+    this.logService.getLevels().subscribe(levels => this.levelOptions = levels);
+    this.createForm();
   }
 
   get canEdit(): boolean {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
-  get levels() {
-    return this.logService.getLevels();
-  }
-
-  get log_level(): FormArray {
+  get logLevelsFormArray(): FormArray {
     return this.form.get('log_level') as FormArray;
   }
 
-  get log_levelArray() {
-    return <FormArray>this.form.get('log_level');
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.logLevels.currentValue) {
-      this.updateForm();
-    }
-  }
-
-  onSave(logconfig) {
-    this.logService.saveLogConfig(logconfig).subscribe();
-    this.form.markAsPristine();
-    this.logLevels = [];
+  ngOnInit() {
     this.getLogLevels();
-    this.snackBarService.openSnackBar('Lagret');
+  }
+
+  onSave() {
+    this.logService.saveLogConfig(this.prepareSave())
+      .subscribe(logLevels => {
+        this.logLevels = logLevels;
+        this.updateForm();
+        this.snackBarService.openSnackBar('Lagret');
+      });
   }
 
   onAdd() {
-    this.log_levelArray.push(this.initLogconfig());
+    this.logLevelsFormArray.push(this.createLogLevel());
+    this.form.markAsDirty();
   }
 
   onDelete(i: number) {
-    this.log_levelArray.removeAt(i);
+    this.logLevelsFormArray.removeAt(i);
     this.form.markAsDirty();
   }
 
@@ -73,35 +63,40 @@ export class LoglevelComponent implements OnChanges {
     this.snackBarService.openSnackBar('Tilbakestilt');
   }
 
+  private createForm() {
+    this.form = this.fb.group({
+      log_level: this.fb.array([])
+    });
+  }
+
   private updateForm() {
-    const logconfigFG: FormGroup[] = this.logLevels.map(config => this.fb.group(config));
-    const logconfigFormArray = this.fb.array(logconfigFG);
+    this.form.setControl('log_level', this.fb.array(this.logLevels.log_level.map(this.createLogLevel.bind(this))));
     if (this.form.disabled) {
-      logconfigFormArray.disable();
+      this.logLevelsFormArray.disable();
     }
-    this.form.setControl('log_level', logconfigFormArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
       this.form.disable();
     }
+    this.cdr.markForCheck();
   }
 
-  private getLogLevels() {
-    this.logService.getLogConfig().pipe(map(response => response.logLevel))
-      .subscribe(logLevels => {
-        logLevels.forEach((logLevel) => {
-          this.logLevels.push(logLevel);
-        });
-        this.updateForm();
-      });
+  private prepareSave(): LogLevels {
+    return new LogLevels(this.form.value);
   }
 
-  private initLogconfig() {
+  private createLogLevel(logLevel: LogLevel = new LogLevel()): FormGroup {
     return this.fb.group({
-      logger: ['', [Validators.required, Validators.minLength(1)]],
-      level: ['', [Validators.required, Validators.minLength(1)]],
+      logger: [logLevel.logger, [Validators.required, Validators.minLength(1)]],
+      level: [logLevel.level, [Validators.required, Validators.minLength(1)]]
     });
   }
 
+  private getLogLevels() {
+    this.logService.getLogConfig().subscribe(logLevels => {
+      this.logLevels = logLevels;
+      this.updateForm();
+    });
+  }
 }

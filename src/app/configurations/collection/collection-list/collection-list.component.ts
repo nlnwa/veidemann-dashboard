@@ -12,13 +12,6 @@ import {BaseListComponent} from '../../../commons/list';
 })
 
 export class CollectionListComponent extends BaseListComponent {
-
-
-  @Input()
-  set count (count: number) {
-    this.pageLength = count;
-  }
-
   displayedColumns = ['name', 'description'];
 }
 

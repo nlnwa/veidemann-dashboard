@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseListComponent} from '../../../commons/list';
 
 @Component({
@@ -12,13 +12,5 @@ import {BaseListComponent} from '../../../commons/list';
 })
 
 export class RoleMappingListComponent extends BaseListComponent {
-
-
-  @Input()
-    set count (count: number) {
-    this.pageLength = count;
-  }
-
   displayedColumns = ['select', 'email', 'group', 'role'];
 }
-

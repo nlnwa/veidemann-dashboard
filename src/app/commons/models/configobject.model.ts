@@ -1,6 +1,6 @@
 import {ConfigObjectProto} from '../../../api';
 import {intersectLabel} from '../group-update/labels/common-labels';
-import {Collection} from './collection/collection.model';
+import {Collection} from './configs/collection.model';
 import {CrawlEntity} from './configs/crawlentity.model';
 import {Seed} from './configs/seed.model';
 import {CrawlJob} from './configs/crawljob.model';
@@ -17,9 +17,9 @@ import {Meta} from './meta/meta.model';
 
 export class ConfigObject {
   id?: string;
-  apiversion: string;
-  kind: Kind;
-  meta: Meta;
+  apiVersion?: string;
+  kind?: Kind;
+  meta?: Meta;
   crawlEntity?: CrawlEntity;
   seed?: Seed;
   crawlJob?: CrawlJob;
@@ -30,62 +30,56 @@ export class ConfigObject {
   browserScript?: BrowserScript;
   crawlHostGroupConfig?: CrawlHostGroupConfig;
   roleMapping?: RoleMapping;
-  collection: Collection;
+  collection?: Collection;
 
-  constructor({
-                id = '',
-                apiversion = 'v1',
-                kind = Kind.UNDEFINED,
-                meta = new Meta(),
-              } = {}) {
-    this.id = id;
-    this.apiversion = apiversion;
-    this.kind = kind;
-    this.meta = meta;
-    switch (kind) {
+  constructor(configObject: ConfigObject | any = {}) {
+    this.id = configObject.id || '';
+    this.apiVersion = configObject.apiVersion || 'v1';
+    this.kind = configObject.kind || Kind.UNDEFINED;
+    this.meta = configObject.meta || new Meta();
+    switch (configObject.kind) {
       case Kind.UNDEFINED:
         break;
       case Kind.CRAWLENTITY:
-        this.crawlEntity = new CrawlEntity();
+        this.crawlEntity = configObject.crawlEntity || new CrawlEntity();
         break;
       case Kind.SEED:
-        this.seed = new Seed();
+        this.seed = configObject.seed || new Seed();
         break;
       case Kind.CRAWLJOB:
-        this.crawlJob = new CrawlJob();
+        this.crawlJob = configObject.crawlJob || new CrawlJob();
         break;
       case Kind.CRAWLCONFIG:
-        this.crawlConfig = new CrawlConfig();
+        this.crawlConfig = configObject.crawlConfig || new CrawlConfig();
         break;
       case Kind.CRAWLSCHEDULECONFIG:
-        this.crawlScheduleConfig = new CrawlScheduleConfig();
+        this.crawlScheduleConfig = configObject.crawlScheduleConfig || new CrawlScheduleConfig();
         break;
       case Kind.BROWSERCONFIG:
-        this.browserConfig = new BrowserConfig();
+        this.browserConfig = configObject.browserConfig || new BrowserConfig();
         break;
       case Kind.POLITENESSCONFIG:
-        this.politenessConfig = new PolitenessConfig();
+        this.politenessConfig = configObject.politenessConfig || new PolitenessConfig();
         break;
       case Kind.BROWSERSCRIPT:
-        this.browserScript = new BrowserScript();
+        this.browserScript = configObject.browserScript || new BrowserScript();
         break;
       case Kind.CRAWLHOSTGROUPCONFIG:
-        this.crawlHostGroupConfig = new CrawlHostGroupConfig();
+        this.crawlHostGroupConfig = configObject.crawlHostGroupConfig || new CrawlHostGroupConfig();
         break;
       case Kind.ROLEMAPPING:
-        this.roleMapping = new RoleMapping();
+        this.roleMapping = configObject.roleMapping || new RoleMapping();
         break;
       case Kind.COLLECTION:
-        this.collection = new Collection();
+        this.collection = configObject.collection || new Collection();
         break;
     }
   }
 
   static fromProto(proto: ConfigObjectProto): ConfigObject {
-
     const config = new ConfigObject();
     config.id = proto.getId();
-    config.apiversion = proto.getApiversion();
+    config.apiVersion = proto.getApiversion();
     config.kind = proto.getKind().valueOf();
     config.meta = Meta.fromProto(proto.getMeta());
 
@@ -135,6 +129,7 @@ export class ConfigObject {
     configObject.meta.labelList = ConfigObject.mergeLabels(configs);
 
     const kind: Kind = configs[0].kind;
+    configObject.kind = kind;
 
     switch (kind) {
       case Kind.UNDEFINED:
@@ -184,51 +179,95 @@ export class ConfigObject {
     return configObject.meta.labelList;
   }
 
-  toProto(): ConfigObjectProto {
+  static toProto(configObject: ConfigObject): ConfigObjectProto {
+
     const proto = new ConfigObjectProto();
     proto.setApiversion('v1');
-    proto.setId(this.id);
-    proto.setMeta(this.meta.toProto());
-    proto.setKind(this.kind.valueOf());
+    proto.setId(configObject.id);
+    proto.setMeta(Meta.toProto(configObject.meta));
+    proto.setKind(configObject.kind.valueOf());
 
-    if (this.crawlEntity) {
-      proto.setCrawlEntity(this.crawlEntity.toProto());
+    if (configObject.crawlEntity) {
+      proto.setCrawlEntity(CrawlEntity.toProto(configObject.crawlEntity));
 
-    } else if (this.seed) {
-      proto.setSeed(this.seed.toProto());
+    } else if (configObject.seed) {
+      proto.setSeed(Seed.toProto(configObject.seed));
 
-    } else if (this.crawlJob) {
-      proto.setCrawlJob(this.crawlJob.toProto());
+    } else if (configObject.crawlJob) {
+      proto.setCrawlJob(CrawlJob.toProto(configObject.crawlJob));
 
-    } else if (this.crawlConfig) {
-      proto.setCrawlConfig(this.crawlConfig.toProto());
+    } else if (configObject.crawlConfig) {
+      proto.setCrawlConfig(CrawlConfig.toProto(configObject.crawlConfig));
 
-    } else if (this.crawlScheduleConfig) {
-      proto.setCrawlScheduleConfig(this.crawlScheduleConfig.toProto());
+    } else if (configObject.crawlScheduleConfig) {
+      proto.setCrawlScheduleConfig(CrawlScheduleConfig.toProto(configObject.crawlScheduleConfig));
 
-    } else if (this.browserConfig) {
-      proto.setBrowserConfig(this.browserConfig.toProto());
+    } else if (configObject.browserConfig) {
+      proto.setBrowserConfig(BrowserConfig.toProto(configObject.browserConfig));
 
-    } else if (this.politenessConfig) {
-      proto.setPolitenessConfig(this.politenessConfig.toProto());
+    } else if (configObject.politenessConfig) {
+      proto.setPolitenessConfig(PolitenessConfig.toProto(configObject.politenessConfig));
 
-    } else if (this.browserScript) {
-      proto.setBrowserScript(this.browserScript.toProto());
+    } else if (configObject.browserScript) {
+      proto.setBrowserScript(BrowserScript.toProto(configObject.browserScript));
 
-    } else if (this.crawlHostGroupConfig) {
-      proto.setCrawlHostGroupConfig(this.crawlHostGroupConfig.toProto());
+    } else if (configObject.crawlHostGroupConfig) {
+      proto.setCrawlHostGroupConfig(CrawlHostGroupConfig.toProto(configObject.crawlHostGroupConfig));
 
-    } else if (this.roleMapping) {
-      proto.setRoleMapping(this.roleMapping.toProto());
+    } else if (configObject.roleMapping) {
+      proto.setRoleMapping(RoleMapping.toProto(configObject.roleMapping));
 
-    } else if (this.collection) {
-      proto.setCollection(this.collection.toProto());
+    } else if (configObject.collection) {
+      proto.setCollection(Collection.toProto(configObject.collection));
     }
 
     return proto;
   }
 
+  static createUpdateRequest(configUpdate: ConfigObject, mergedConfigs: ConfigObject, formControl: any, options: any):
+    { updateTemplate: ConfigObject, pathList: string[] } {
+    const updateTemplate = new ConfigObject();
+    updateTemplate.kind = configUpdate.kind;
+    const pathList = [];
+
+    console.log(options);
+
+    Meta.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, options);
+
+    switch (configUpdate.kind) {
+      case Kind.UNDEFINED:
+        break;
+      case Kind.CRAWLENTITY:
+        break;
+      case Kind.SEED:
+        break;
+      case Kind.CRAWLJOB:
+        CrawlJob.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
+        console.log(updateTemplate);
+        break;
+      case Kind.CRAWLCONFIG:
+        CrawlConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
+        break;
+      case Kind.CRAWLSCHEDULECONFIG:
+        CrawlScheduleConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
+        break;
+      case Kind.BROWSERCONFIG:
+        BrowserConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl, options);
+        break;
+      case Kind.POLITENESSCONFIG:
+        PolitenessConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl, options);
+        break;
+      case Kind.BROWSERSCRIPT:
+        BrowserScript.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
+        break;
+      case Kind.CRAWLHOSTGROUPCONFIG:
+        CrawlHostGroupConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl, options);
+        break;
+      case Kind.ROLEMAPPING:
+        RoleMapping.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
+        break;
+    }
+
+    return {updateTemplate, pathList};
+  }
 }
-
-
-

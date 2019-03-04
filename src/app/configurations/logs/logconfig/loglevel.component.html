@@ -1,11 +1,13 @@
+<app-toolbar>
+  <span class="toolbar--title">LogLevels</span>
+  <button mat-mini-fab (click)="onAdd()">
+    <mat-icon>add</mat-icon>
+  </button>
+</app-toolbar>
 <form [formGroup]="form">
   <mat-card>
-    <mat-card-title-group>
-      <mat-card-title><span i18n="@@logconfigHeader">Logconfig</span></mat-card-title>
-    </mat-card-title-group>
-
     <mat-card-content>
-      <ng-container formArrayName="log_level" *ngFor="let log_level of log_levelArray.controls;let i=index">
+      <ng-container formArrayName="log_level" *ngFor="let _ of logLevelsFormArray.controls; let i=index">
         <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
           <mat-form-field fxFlex="2 1 100%">
             <input matInput formControlName="logger" placeholder="Logger"
@@ -14,7 +16,7 @@
           <mat-form-field fxFlex>
             <mat-select formControlName="level" placeholder="Level"
                         i18n-placeholder="@@logconfigFormLevelPlaceholder">
-              <mat-option *ngFor="let level of levels | async" [value]="level">{{level}}</mat-option>
+              <mat-option *ngFor="let level of levelOptions" [value]="level">{{level}}</mat-option>
             </mat-select>
           </mat-form-field>
           <button mat-icon-button color="warn" (click)="onDelete(i)" *ngIf="canEdit">
@@ -26,7 +28,7 @@
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
               [disabled]="!form.valid ||!form.dirty"
-              (click)="onSave(form.value)" novalidate
+              (click)="onSave()"
               i18n="@@commonButtonSave">Lagre
       </button>
       <button mat-raised-button color="accent"
@@ -34,9 +36,6 @@
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
         Tilbakestill
-      </button>
-      <button mat-raised-button color="warn" *ngIf="canEdit" (click)="onAdd()">
-        Legg til
       </button>
     </mat-card-actions>
   </mat-card>

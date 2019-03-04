@@ -45,13 +45,13 @@ export class Collection {
     });
   }
 
-  toProto(): CollectionProto {
+  static toProto(collection: Collection): CollectionProto {
     const proto = new CollectionProto();
-    proto.setCollectionDedupPolicy(CollectionProto.RotationPolicy[this.collectionDedupPolicy] as any as CollectionProto.RotationPolicy);
-    proto.setFileRotationPolicy(CollectionProto.RotationPolicy[this.fileRotationPolicy] as any as CollectionProto.RotationPolicy);
-    proto.setCompress(this.compress);
-    proto.setFileSize(this.fileSize);
-    proto.setSubCollectionsList(this.subCollectionsList.map(subCollection => subCollection.toProto()));
+    proto.setCollectionDedupPolicy(CollectionProto.RotationPolicy[collection.collectionDedupPolicy] as any as CollectionProto.RotationPolicy);
+    proto.setFileRotationPolicy(CollectionProto.RotationPolicy[collection.fileRotationPolicy] as any as CollectionProto.RotationPolicy);
+    proto.setCompress(collection.compress);
+    proto.setFileSize(collection.fileSize);
+    proto.setSubCollectionsList(collection.subCollectionsList.map(subCollection => SubCollection.toProto(subCollection)));
     return proto;
   }
 }

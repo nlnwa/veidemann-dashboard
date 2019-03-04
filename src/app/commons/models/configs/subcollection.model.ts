@@ -27,10 +27,10 @@ export class SubCollection {
     });
   }
 
-  toProto(): CollectionProto.SubCollection {
+  static toProto(subCollection: SubCollection): CollectionProto.SubCollection {
     const proto = new CollectionProto.SubCollection();
-    proto.setType(CollectionProto.SubCollectionType[this.type] as any as SubCollectionType);
-    proto.setName(this.name);
+    proto.setType(CollectionProto.SubCollectionType[subCollection.type] as any as SubCollectionType);
+    proto.setName(subCollection.name);
     return proto;
   }
 }
