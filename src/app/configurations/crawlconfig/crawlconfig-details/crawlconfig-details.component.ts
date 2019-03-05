@@ -40,6 +40,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   disableCreateScreenshot = false;
 
   shouldAddLabel = undefined;
+  allSelected = false;
 
   browserConfigList: any[];
   politenessConfigList: any = [];

@@ -122,6 +122,8 @@ export class ConfigurationsComponent implements OnInit {
         this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
         this.title.next(ConfigurationsComponent.getTitle(kind));
         this.dataService.kind = kind;
+        this.allSelected = false;
+        this.selectedConfigs = [];
       });
   }
 
@@ -309,21 +311,21 @@ export class ConfigurationsComponent implements OnInit {
         form.get('crawlConfigRef').clearValidators();
         break;
       case Kind.POLITENESSCONFIG:
-        if (instanceData.politenessConfig.robotsPolicy === undefined) {
+        if (instanceData.configObject.politenessConfig.robotsPolicy === undefined) {
           instance.shouldDisablePolicy = true;
         }
         break;
       case Kind.CRAWLCONFIG:
-        if (instanceData.crawlConfig.extra.extractText === null) {
+        if (instanceData.configObject.crawlConfig.extra.extractText === null) {
           instance.disableExtractText = true;
         }
-        if (instanceData.crawlConfig.extra.createScreenshot === null) {
+        if (instanceData.configObject.crawlConfig.extra.createScreenshot === null) {
           instance.disableCreateScreenshot = true;
         }
     }
 
     instance.data = false;
-    instance.updateAll = this.allSelected;
+    instance.allSelected = this.allSelected;
     instance.updateForm();
 
 

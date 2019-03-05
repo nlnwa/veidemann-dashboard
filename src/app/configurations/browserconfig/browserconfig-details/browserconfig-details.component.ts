@@ -20,11 +20,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   @Input()
-  set updateAll(allSelected) {
-    this.allSelected = allSelected;
-  }
-
-  @Input()
   configObject: ConfigObject;
   @Input()
   browserScripts: ConfigObject[];

@@ -114,7 +114,7 @@
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="!showSave && canDelete"
+              *ngIf="!showSave && canDelete && !allSelected"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

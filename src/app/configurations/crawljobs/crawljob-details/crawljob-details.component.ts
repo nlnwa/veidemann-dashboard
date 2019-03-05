@@ -43,6 +43,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   form: FormGroup;
   shouldShow = true;
   shouldAddLabel = undefined;
+  allSelected = false;
 
 
   constructor(private fb: FormBuilder,
@@ -86,47 +87,10 @@ export class CrawljobDetailsComponent implements OnChanges {
     return this.form.get('limits.maxBytes');
   }
 
-  // get scheduleId() {
-  //   return this.form.get('scheduleId');
-  // }
-  //
-  // get crawlConfigId() {
-  //   return this.form.get('crawlConfigId');
-  // }
 
   get disabled() {
     return this.form.get('disabled');
   }
-
-  // get showSchedule(): boolean {
-  //   const schedule = this.scheduleId.value;
-  //   return schedule != null && schedule !== '';
-  // }
-  //
-  // get showCrawlConfig(): boolean {
-  //   const crawlconfig = this.crawlConfigId.value;
-  //   return crawlconfig != null && crawlconfig !== '';
-  // }
-
-  // get showShortcuts(): boolean {
-  //   return this.showSchedule || this.showCrawlConfig;
-  // }
-
-  // getScheduleName(id): string {
-  //   for (let i = 0; i < this.schedules.length; i++) {
-  //     if (id === this.schedules[i].id) {
-  //       return this.schedules[i].itemName;
-  //     }
-  //   }
-  // }
-  //
-  // getCrawlConfigName(id): string {
-  //   for (let i = 0; i < this.crawlConfigs.length; i++) {
-  //     if (id === this.crawlConfigs[i].id) {
-  //       return this.crawlConfigs[i].itemName;
-  //     }
-  //   }
-  // }
 
   shouldDisableDisabled(): void {
     if (this.equalDisabled !== undefined || !this.shouldShow) {
@@ -137,27 +101,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // if (changes.configObject && !changes.configObject.currentValue) {
-    //   this.form.reset();
-    //   return;
-    // }
-    // if (changes.crawlConfigs && changes.configObject.currentValue) {
-    //   this.crawlConfigs = changes.crawlConfigs.currentValue.map((crawlConfig) =>
-    //     ({
-    //       id: crawlConfig.id,
-    //       itemName: crawlConfig.meta.name,
-    //     }));
-    // }
-    // if (changes.schedules && changes.schedules.currentValue) {
-    //   this.schedules = changes.schedules.currentValue.map((schedule) =>
-    //     ({
-    //       id: schedule.id,
-    //       itemName: schedule.meta.name,
-    //     }));
-    // }
-    // if (this.configObject && this.crawlConfigs && this.schedules) {
-    //   this.updateForm();
-    // }
     if (changes.configObject) {
       if (!this.configObject) {
         this.form.reset();

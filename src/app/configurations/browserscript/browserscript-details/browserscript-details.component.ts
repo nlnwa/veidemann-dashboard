@@ -35,6 +35,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   form: FormGroup;
   shouldShow = true;
   shouldAddLabel = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {

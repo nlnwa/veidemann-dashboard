@@ -39,6 +39,7 @@ export class RoleMappingDetailsComponent implements OnChanges, OnInit {
   selectedType = '';
   shouldShow = true;
   shouldAddRoles = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder) {
     this.createForm();

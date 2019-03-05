@@ -1,13 +1,13 @@
-<table class="mat-table" *ngIf="isAllInPageSelected() && dataService.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected()">
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
-      <span>Alle <b>{{selection.selected.length}}</b> brukere på denne siden er markert. </span>
-      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">
-        Marker alle {{pageLength}} brukere i databasen
+      <span>Alle <b>{{selection.selected.length}}</b> brukere lokalt er markert. </span>
+      <a [routerLink]="" (click)="onSelectAll()">
+        Marker alle brukere i databasen
       </a>
     </td>
     <td  class="mat-cell" *ngIf="allSelected">
-      <span>Alle <b>{{pageLength}}</b> brukere i databasen er markert. </span>
+      <span>Alle <b>{{pageLength || ''}}</b> brukere i databasen er markert. </span>
       <a [routerLink]="" (click)="onDeselectAll()"> Fjern markeringen</a>
     </td>
   </tr>

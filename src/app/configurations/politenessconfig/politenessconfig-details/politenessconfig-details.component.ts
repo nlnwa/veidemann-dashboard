@@ -44,6 +44,7 @@ export class PolitenessconfigDetailsComponent implements OnChanges, OnInit {
 
   // disable fields on multi update if not equal
   shouldDisablePolicy = false;
+  allSelected = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {

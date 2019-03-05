@@ -34,6 +34,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   shouldShow = true;
   shouldAddLabel = undefined;
   shouldAddIpRange = undefined;
+  allSelected = false;
 
 
   constructor(private fb: FormBuilder,

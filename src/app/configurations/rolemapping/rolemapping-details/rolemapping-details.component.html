@@ -60,7 +60,7 @@
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="!showSave"
+              *ngIf="!showSave && !allSelected"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett
