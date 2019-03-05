@@ -5,7 +5,7 @@ import {BaseListComponent} from '../../../commons/list';
   selector: 'app-collection-list',
   templateUrl: './collection-list.component.html',
   styleUrls: [
-    '../../../commons/list/selection-base-list/selection-base-list.css',
+    '../../../commons/list/base-list/base-list.css',
     './collection-list.component.css',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,7 +8,7 @@ import {ToolbarComponent} from './toolbar/toolbar.component';
 import {LabelsComponent} from './labels/labels.component';
 import {MetaComponent} from './meta/meta.component';
 import {RouterModule} from '@angular/router';
-import {BaseListComponent, SelectionBaseListComponent} from './list/';
+import {BaseListComponent} from './list/';
 import {ConfigRefComponent} from './configref/configref.component';
 
 @NgModule({
@@ -16,7 +16,6 @@ import {ConfigRefComponent} from './configref/configref.component';
     ToolbarComponent,
     LabelsComponent,
     MetaComponent,
-    SelectionBaseListComponent,
     BaseListComponent,
     ConfigRefComponent
   ],
@@ -38,7 +37,6 @@ import {ConfigRefComponent} from './configref/configref.component';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    SelectionBaseListComponent,
     BaseListComponent,
     ConfigRefComponent
   ],
