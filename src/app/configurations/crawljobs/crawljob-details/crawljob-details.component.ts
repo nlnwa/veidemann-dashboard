@@ -29,8 +29,6 @@ export class CrawljobDetailsComponent implements OnChanges {
   crawlConfigs: ConfigObject[];
   @Input()
   schedules: ConfigObject[];
-  @Input()
-  equalDisabled: boolean;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -90,14 +88,6 @@ export class CrawljobDetailsComponent implements OnChanges {
 
   get disabled() {
     return this.form.get('disabled');
-  }
-
-  shouldDisableDisabled(): void {
-    if (this.equalDisabled !== undefined || !this.shouldShow) {
-      if (!this.equalDisabled) {
-        this.disabled.disable();
-      }
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -170,7 +160,9 @@ export class CrawljobDetailsComponent implements OnChanges {
     if (!this.canEdit) {
       this.form.disable();
     }
-    this.shouldDisableDisabled();
+    if (this.disabled.value === undefined) {
+      this.disabled.disable();
+    }
   }
 
   private prepareSave(): ConfigObject {

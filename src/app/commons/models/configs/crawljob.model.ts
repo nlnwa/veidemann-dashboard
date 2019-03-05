@@ -66,6 +66,8 @@ export class CrawlJob {
 
     if (equalDisabledStatus) {
       crawlJob.disabled = compareObj.disabled;
+    } else {
+      crawlJob.disabled = undefined;
     }
 
     if (equalDepth) {
