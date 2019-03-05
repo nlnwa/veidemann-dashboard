@@ -46,13 +46,14 @@ export class CrawlHostGroupConfig {
     const crawlHostGroupConfig = new CrawlHostGroupConfig();
     updateTemplate.crawlHostGroupConfig = crawlHostGroupConfig;
 
-    const {addRange} = options;
+    const {addIpRange} = options;
+
 
     if (mergedConfig) {
       if (configUpdate.crawlHostGroupConfig.ipRangeList !== mergedConfig.crawlHostGroupConfig.ipRangeList) {
         crawlHostGroupConfig.ipRangeList = configUpdate.crawlHostGroupConfig.ipRangeList;
-        if (addRange !== undefined) {
-          if (addRange) {
+        if (addIpRange !== undefined) {
+          if (addIpRange) {
             pathList.push('crawlHostGroupConfig.ipRange+');
           } else {
             pathList.push('crawlHostGroupConfig.ipRange-');
@@ -61,8 +62,8 @@ export class CrawlHostGroupConfig {
       }
     } else {
       crawlHostGroupConfig.ipRangeList = configUpdate.crawlHostGroupConfig.ipRangeList;
-      if (addRange !== undefined) {
-        if (addRange) {
+      if (addIpRange !== undefined) {
+        if (addIpRange) {
           pathList.push('crawlHostGroupConfig.ipRange+');
         } else {
           pathList.push('crawlHostGroupConfig.ipRange-');

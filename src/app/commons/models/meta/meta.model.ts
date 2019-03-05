@@ -41,22 +41,26 @@ export class Meta {
     const {addLabel} = options;
 
     if (mergedConfig) {
-      if (addLabel) {
-        if (mergedConfig.meta.labelList !== updateConfig.meta.labelList) {
+      if (addLabel !== undefined) {
+        if (addLabel) {
+          if (mergedConfig.meta.labelList !== updateConfig.meta.labelList) {
+            meta.labelList = updateConfig.meta.labelList;
+            pathList.push('meta.label+');
+          }
+        } else {
           meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label+');
+          pathList.push('meta.label-');
         }
-      } else {
-        meta.labelList = updateConfig.meta.labelList;
-        pathList.push('meta.label-');
       }
     } else {
-      if (addLabel) {
-        meta.labelList = updateConfig.meta.labelList;
-        pathList.push('meta.label+');
-      } else {
-        meta.labelList = updateConfig.meta.labelList;
-        pathList.push('meta.label-');
+      if (addLabel !== undefined) {
+        if (addLabel) {
+          meta.labelList = updateConfig.meta.labelList;
+          pathList.push('meta.label+');
+        } else {
+          meta.labelList = updateConfig.meta.labelList;
+          pathList.push('meta.label-');
+        }
       }
     }
   }

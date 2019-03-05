@@ -169,7 +169,7 @@ export class BrowserConfig {
     const browserConfig = new BrowserConfig();
     updateTemplate.browserConfig = browserConfig;
 
-    const {addBrowserscript, addScriptSelector} = options;
+    const {addBrowserScript, addSelector} = options;
 
     if (mergedConfig) {
       if (formControl.userAgent.dirty) {
@@ -203,8 +203,8 @@ export class BrowserConfig {
         }
       }
 
-      if (addBrowserscript !== undefined) {
-        if (addBrowserscript) {
+      if (addBrowserScript !== undefined) {
+        if (addBrowserScript) {
           if (mergedConfig.browserConfig.scriptRefList !== updateConfig.browserConfig.scriptRefList) {
             browserConfig.scriptRefList = updateConfig.browserConfig.scriptRefList;
             pathList.push('browserConfig.scriptRef+');
@@ -215,8 +215,8 @@ export class BrowserConfig {
         }
       }
 
-      if (addScriptSelector !== undefined) {
-        if (addScriptSelector) {
+      if (addSelector !== undefined) {
+        if (addSelector) {
           if (mergedConfig.browserConfig.scriptSelectorList !== updateConfig.browserConfig.scriptSelectorList) {
             browserConfig.scriptSelectorList = updateConfig.browserConfig.scriptSelectorList;
             pathList.push('browserConfig.scriptSelector+');
@@ -250,8 +250,8 @@ export class BrowserConfig {
       }
 
       if (formControl.scriptRefList.dirty) {
-        if (addBrowserscript !== undefined) {
-          if (addBrowserscript) {
+        if (addBrowserScript !== undefined) {
+          if (addBrowserScript) {
             pathList.push('browserConfig.scriptRef+');
             browserConfig.scriptRefList = updateConfig.browserConfig.scriptRefList;
           } else {
@@ -262,8 +262,8 @@ export class BrowserConfig {
       }
 
       if (formControl.scriptSelectorList.dirty) {
-        if (addScriptSelector !== undefined) {
-          if (addScriptSelector) {
+        if (addSelector !== undefined) {
+          if (addSelector) {
             pathList.push('browserConfig.scriptSelector+');
             browserConfig.scriptSelectorList = updateConfig.browserConfig.scriptSelectorList;
           } else {

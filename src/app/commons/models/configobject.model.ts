@@ -230,8 +230,6 @@ export class ConfigObject {
     updateTemplate.kind = configUpdate.kind;
     const pathList = [];
 
-    console.log(options);
-
     Meta.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, options);
 
     switch (configUpdate.kind) {
