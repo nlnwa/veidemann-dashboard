@@ -44,8 +44,6 @@ export class CrawlScheduleConfig {
     } else {
       crawlScheduleConfig.validTo = undefined;
     }
-
-
     return crawlScheduleConfig;
   }
 
@@ -74,11 +72,12 @@ export class CrawlScheduleConfig {
   }
 
 
-  static createUpdateRequest(updateTemplate: ConfigObject, paths: string[], configUpdate: ConfigObject, mergedConfig: ConfigObject, formControl: any) {
+  static createUpdateRequest(updateTemplate: ConfigObject, pathList: string[], configUpdate: ConfigObject, mergedConfig: ConfigObject, formControl: any) {
     const crawlScheduleConfig = new CrawlScheduleConfig();
-    const pathList = [];
+    updateTemplate.crawlScheduleConfig = crawlScheduleConfig;
 
     if (mergedConfig) {
+
       if (formControl.validFrom.dirty) {
         if (configUpdate.crawlScheduleConfig.validFrom !== mergedConfig.crawlScheduleConfig.validFrom) {
           crawlScheduleConfig.validFrom = configUpdate.crawlScheduleConfig.validFrom;
@@ -103,6 +102,5 @@ export class CrawlScheduleConfig {
         pathList.push('crawlScheduleConfig.validTo');
       }
     }
-    return {updateTemplate: crawlScheduleConfig, pathList: pathList};
   }
 }

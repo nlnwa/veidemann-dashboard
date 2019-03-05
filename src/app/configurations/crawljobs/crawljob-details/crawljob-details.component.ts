@@ -160,7 +160,7 @@ export class CrawljobDetailsComponent implements OnChanges {
     if (!this.canEdit) {
       this.form.disable();
     }
-    if (this.disabled.value === undefined) {
+    if (this.disabled.value === undefined || this.allSelected) {
       this.disabled.disable();
     }
   }
