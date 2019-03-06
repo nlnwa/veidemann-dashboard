@@ -180,7 +180,7 @@ export class PolitenessConfig {
     const politenessConfig = new PolitenessConfig();
     updateTemplate.politenessConfig = politenessConfig;
 
-    const {addCrawlHostGroupSelector} = options;
+    const {addSelector} = options;
 
     if (mergedConfig) {
       if (formControl.robotsPolicy.dirty) {
@@ -193,7 +193,7 @@ export class PolitenessConfig {
       if (formControl.customRobots.dirty) {
         if (configUpdate.politenessConfig.customRobots !== mergedConfig.politenessConfig.customRobots) {
           politenessConfig.customRobots = configUpdate.politenessConfig.customRobots;
-          pathList.push('politenessConfig,customRobots');
+          pathList.push('politenessConfig.customRobots');
         }
       }
 
@@ -240,8 +240,8 @@ export class PolitenessConfig {
       }
 
       if (formControl.crawlHostGroupSelectorList.dirty) {
-        if (addCrawlHostGroupSelector !== undefined) {
-          if (addCrawlHostGroupSelector) {
+        if (addSelector !== undefined) {
+          if (addSelector) {
             pathList.push('politenessConfig.crawlHostGroupSelector+');
             politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
           } else {
@@ -258,7 +258,7 @@ export class PolitenessConfig {
 
       if (formControl.customRobots.dirty) {
         politenessConfig.customRobots = configUpdate.politenessConfig.customRobots;
-        pathList.push('politenessConfig,customRobots');
+        pathList.push('politenessConfig.customRobots');
       }
 
       if (formControl.minimumRobotsValidityDurationS.dirty) {
@@ -292,8 +292,8 @@ export class PolitenessConfig {
       }
 
       if (formControl.crawlHostGroupSelectorList.dirty) {
-        if (addCrawlHostGroupSelector !== undefined) {
-          if (addCrawlHostGroupSelector) {
+        if (addSelector !== undefined) {
+          if (addSelector) {
             pathList.push('politenessConfig.crawlHostGroupSelector+');
             politenessConfig.crawlHostGroupSelectorList = configUpdate.politenessConfig.crawlHostGroupSelectorList;
           } else {
