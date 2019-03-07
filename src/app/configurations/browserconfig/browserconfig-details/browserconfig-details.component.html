@@ -29,7 +29,8 @@
               <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
             </button>
             <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
-            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+            <span
+              *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
           </div>
           <div>
             <span>Browserscript:</span>
@@ -103,9 +104,29 @@
           </mat-error>
         </mat-form-field>
 
-        <app-configref formControlName="scriptRefList" [multiple]="true" [kind]="Kind.BROWSERSCRIPT"></app-configref>
+        <app-configref formControlName="scriptRefList"
+                       [multiple]="true"
+                       [kind]="Kind.BROWSERSCRIPT"
+                       [options]="options?.browserScripts">
+        </app-configref>
 
         <app-labels kind="Script Selector" formControlName="scriptSelectorList" [removable]="canEdit"></app-labels>
+
+        <ng-container *ngIf="showShortcuts">
+          <mat-toolbar>
+            <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
+            <span class="fill-space"></span>
+          </mat-toolbar>
+          <ng-container>
+            <mat-form-field>
+              <mat-chip-list placeholder="Script">
+                <mat-chip *ngFor="let script of scriptRefList">
+                  <a [routerLink]="['/config/browserscript', script.id ]">{{ getScriptName(script.id) }}</a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
       </div>
     </mat-card-content>
 

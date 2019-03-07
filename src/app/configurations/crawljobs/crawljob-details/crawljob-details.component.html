@@ -74,16 +74,44 @@
             </mat-error>
           </mat-form-field>
         </ng-container>
-        <app-configref formControlName="scheduleRef" [multiple]="false" [kind]="Kind.CRAWLSCHEDULECONFIG"></app-configref>
-        <app-configref formControlName="crawlConfigRef" [multiple]="false" [kind]="Kind.CRAWLCONFIG"></app-configref>
-
+        <app-configref formControlName="scheduleRef"
+                       [multiple]="false"
+                       [kind]="Kind.CRAWLSCHEDULECONFIG"
+                       [options]="options?.crawlScheduleConfigs">
+        </app-configref>
+        <app-configref formControlName="crawlConfigRef"
+                       [multiple]="false"
+                       [kind]="Kind.CRAWLCONFIG"
+                       [options]="options?.crawlConfigs">
+        </app-configref>
 
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-
+          <ng-container *ngIf="scheduleRef.id !== ''">
+            <mat-form-field>
+              <mat-chip-list placeholder="Schedule">
+                <mat-chip>
+                  <a [routerLink]="['/config/schedule', scheduleRef.id]">
+                    {{ getCrawlScheduleName(scheduleRef.id)}}
+                  </a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="crawlConfigRef.id !== ''">
+            <mat-form-field>
+              <mat-chip-list placeholder="Crawlconfig">
+                <mat-chip>
+                  <a [routerLink]="['/config/crawlconfig', crawlConfigRef.id]">
+                    {{ getCrawlConfigName(crawlConfigRef.id)}}
+                  </a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
         </ng-container>
       </div>
     </mat-card-content>

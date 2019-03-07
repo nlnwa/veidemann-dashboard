@@ -9,9 +9,9 @@ import {LoglevelComponent} from './configurations/logs/';
 import {GuardService} from './auth/';
 import {WarcStatusPageComponent} from './configurations/warcstatus/';
 import {ConfigurationsComponent} from './configurations/configurations.component';
-import {KindResolver} from './configurations/kind.resolver.service';
 import {SearchComponent} from './configurations/search';
 import {Kind} from './commons/models';
+import {OptionsResolver} from './configurations/options.resolver.service';
 
 const routes: Routes = [
   {
@@ -34,9 +34,17 @@ const routes: Routes = [
   {
     path: 'config/:kind',
     component: ConfigurationsComponent,
-    resolve: {
-      kind: KindResolver,
-    },
+     resolve: {
+       options: OptionsResolver
+     },
+    canActivate: [GuardService],
+  },
+  {
+    path: 'config/:kind/:id',
+    component: ConfigurationsComponent,
+     resolve: {
+       options: OptionsResolver
+     },
     canActivate: [GuardService],
   },
   {

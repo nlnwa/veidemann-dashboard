@@ -7,7 +7,7 @@ import {catchError, mergeMap, switchMap} from 'rxjs/operators';
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../commons/models/';
 import {SnackBarService} from '../../commons/snack-bar/snack-bar.service';
 import {RoleService} from '../../auth';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SearchDataService} from '../shared/search-data.service';
 import {SeedDetailComponent} from '../seeds';
 import {EntityDetailsComponent} from '../entities';
@@ -57,11 +57,12 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit {
     protected errorService: ErrorService,
     protected activatedRoute: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
+    protected router: Router,
     protected dialog: MatDialog,
     private searchDataService: SearchDataService,
     public titleService: Title,
     private roleService: RoleService) {
-    super(seedDataService, snackBarService, errorService, componentFactoryResolver, titleService, dialog, activatedRoute);
+    super(seedDataService, snackBarService, errorService, componentFactoryResolver, router, titleService, dialog, activatedRoute);
     this.seedDataService.kind = Kind.SEED;
   }
 

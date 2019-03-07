@@ -13,7 +13,7 @@ import {PolitenessconfigDetailsComponent} from './politenessconfig';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig';
 import {ScheduleDetailsComponent, ScheduleSidebarComponent} from './schedule';
 import {EntityDetailsComponent} from './entities';
-import {LoglevelComponent} from './logs';
+import {LoglevelComponent, LogService} from './logs';
 import {BrowserConfigDetailsComponent} from './browserconfig';
 import {SeedDetailComponent} from './seeds';
 import {RoleMappingDetailsComponent, RoleMappingListComponent} from './rolemapping';
@@ -25,8 +25,8 @@ import {
   WarcStatusSummaryComponent
 } from './warcstatus';
 import {BackendService} from './shared/backend.service';
-import {KindResolver} from './kind.resolver.service';
 import {CollectionDetailsComponent, CollectionListComponent} from './collection';
+import {OptionsResolver} from './options.resolver.service';
 
 
 @NgModule({
@@ -85,8 +85,9 @@ export class ConfigurationsModule {
       ngModule: ConfigurationsModule,
       providers: [
         BackendService,
-        KindResolver,
+        LogService,
         WarcStatusService,
+        OptionsResolver
       ],
     };
   }

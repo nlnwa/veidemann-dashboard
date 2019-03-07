@@ -28,15 +28,28 @@
               <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
             </button>
             <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
-            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+            <span
+              *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
           </div>
         </div>
       </div>
 
       <div fxFlex fxLayout="column">
-        <app-configref formControlName="collectionRef" [multiple]="false" [kind]="Kind.COLLECTION"></app-configref>
-        <app-configref formControlName="browserConfigRef" [multiple]="false" [kind]="Kind.BROWSERCONFIG"></app-configref>
-        <app-configref formControlName="politenessRef" [multiple]="false" [kind]="Kind.POLITENESSCONFIG"></app-configref>
+        <app-configref formControlName="collectionRef"
+                       [multiple]="false"
+                       [kind]="Kind.COLLECTION"
+                       [options]="options?.collections">
+        </app-configref>
+        <app-configref formControlName="browserConfigRef"
+                       [multiple]="false"
+                       [kind]="Kind.BROWSERCONFIG"
+                       [options]="options?.browserConfigs">
+        </app-configref>
+        <app-configref formControlName="politenessRef"
+                       [multiple]="false"
+                       [kind]="Kind.POLITENESSCONFIG"
+                       [options]="options?.politenessConfigs">
+        </app-configref>
 
         <mat-form-field>
           <input matInput
@@ -60,7 +73,7 @@
           <mat-checkbox formControlName="extractText"
                         labelPosition="after"
                         i18n="@@crawlconfigFormExtractTextLabel"
-                        i18n-matTooltip = "@@crawlconfigFormDisabledExtractTextExplaination"
+                        i18n-matTooltip="@@crawlconfigFormDisabledExtractTextExplaination"
                         color="accent"
                         [matTooltip]="extractText.disabled ?
                         'Instilling er ikke lik for alle markerte konfigurasjoner.'
@@ -76,7 +89,7 @@
           <mat-checkbox formControlName="createScreenshot"
                         labelPosition="after"
                         i18n="@@crawlconfigFormCreateSnapshotLabel"
-                        i18n-matTooltip = "@@crawlconfigFormDisabledCreateSnapshotExplaination"
+                        i18n-matTooltip="@@crawlconfigFormDisabledCreateSnapshotExplaination"
                         color="accent"
                         [matTooltip]="createScreenshot.disabled ?
                         'Instilling er ikke lik for alle markerte konfigurasjoner.'
@@ -92,26 +105,39 @@
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-          <!--<ng-container *ngIf="showPolitenessConfig">-->
-            <!--<mat-form-field>-->
-              <!--<mat-chip-list placeholder="Politeness">-->
-                <!--<mat-chip>-->
-                  <!--<a [routerLink]="['/politenessconfig', politenessId.value]">-->
-                    <!--{{getPolitenessConfigName(politenessId.value)}}</a>-->
-                <!--</mat-chip>-->
-              <!--</mat-chip-list>-->
-            <!--</mat-form-field>-->
-          <!--</ng-container>-->
-          <!--<ng-container *ngIf="showBrowserConfig">-->
-            <!--<mat-form-field>-->
-              <!--<mat-chip-list placeholder="Browser">-->
-                <!--<mat-chip>-->
-                  <!--<a [routerLink]="['/browserconfig', browserConfigId.value]">-->
-                    <!--{{getBrowserConfigName(browserConfigId.value)}}</a>-->
-                <!--</mat-chip>-->
-              <!--</mat-chip-list>-->
-            <!--</mat-form-field>-->
-          <!--</ng-container>-->
+          <ng-container *ngIf="collectionRef.id !== ''">
+            <mat-form-field>
+              <mat-chip-list placeholder="Collection">
+                <mat-chip>
+                  <a [routerLink]="['/config/collection', collectionRef.id]">
+                    {{ getCollectionName(collectionRef.id) }}
+                  </a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="browserConfigRef.id !== ''">
+            <mat-form-field>
+              <mat-chip-list placeholder="Browser">
+                <mat-chip>
+                  <a [routerLink]="['/config/browserconfig', browserConfigRef.id]">
+                    {{ getBrowserConfigName(browserConfigRef.id) }}
+                    </a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="politenessRef.id !== ''">
+            <mat-form-field>
+              <mat-chip-list placeholder="Politeness">
+                <mat-chip>
+                  <a [routerLink]="['/config/politenessconfig', politenessRef.id]">
+                    {{ getPolitenessConfigName(politenessRef.id) }}
+                  </a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
         </ng-container>
       </div>
     </mat-card-content>

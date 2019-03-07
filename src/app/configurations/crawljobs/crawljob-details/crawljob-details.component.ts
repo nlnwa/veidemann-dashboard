@@ -22,13 +22,10 @@ export class CrawljobDetailsComponent implements OnChanges {
   set data(show) {
     this.shouldShow = show;
   }
-
   @Input()
   configObject: ConfigObject;
   @Input()
-  crawlConfigs: ConfigObject[];
-  @Input()
-  schedules: ConfigObject[];
+  options: any;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -85,9 +82,23 @@ export class CrawljobDetailsComponent implements OnChanges {
     return this.form.get('limits.maxBytes');
   }
 
-
   get disabled() {
     return this.form.get('disabled');
+  }
+
+  get scheduleRef() {
+    return this.form.get('scheduleRef').value;
+  }
+
+  get crawlConfigRef() {
+    return this.form.get('crawlConfigRef').value;
+  }
+
+  get showShortcuts(): boolean {
+    if (this.scheduleRef.id !== '' || this.crawlConfigRef.id !== '') {
+      return true;
+    }
+    return false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,6 +109,16 @@ export class CrawljobDetailsComponent implements OnChanges {
         this.updateForm();
       }
     }
+  }
+
+  getCrawlScheduleName(id): string {
+    const found = this.options.crawlScheduleConfigs.find(crawlSchedule => crawlSchedule.id === id);
+    return found ? found.meta.name : 'crawlSchedule';
+  }
+
+  getCrawlConfigName(id): string {
+    const found = this.options.crawlConfigs.find( crawlConfig => crawlConfig.id === id);
+    return found ? found.meta.name : 'crawlConfig';
   }
 
   onSave() {

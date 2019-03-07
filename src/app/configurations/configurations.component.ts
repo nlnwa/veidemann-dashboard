@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, ViewRef} from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, EMPTY, from, Subject} from 'rxjs';
-import {catchError, map, mergeMap} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY, from, ReplaySubject, Subject} from 'rxjs';
+import {catchError, mergeMap} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
 import {FormGroup, Validators} from '@angular/forms';
 import {
@@ -27,8 +27,8 @@ import {
 } from '../commons/validator';
 import {DeleteDialogComponent} from '../dialog/delete-dialog/delete-dialog.component';
 import {ErrorService} from '../error';
-import {ActivatedRoute} from '@angular/router';
-import {componentOfKind} from '../commons/func/kind';
+import {ActivatedRoute, Router} from '@angular/router';
+import {componentOfKind, pathToKind} from '../commons/func/kind';
 import {DataService} from './shared/data.service';
 import {Title} from '@angular/platform-browser';
 import {ReferrerError} from '../error/referrer-error';
@@ -57,12 +57,16 @@ export class ConfigurationsComponent implements OnInit {
   title: BehaviorSubject<string> = new BehaviorSubject<string>('');
   title$ = this.title.asObservable();
 
+  options = new ReplaySubject<any>(1);
+  options$ = this.options.asObservable();
+
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
   constructor(protected dataService: DataService,
               protected snackBarService: SnackBarService,
               protected errorService: ErrorService,
               protected componentFactoryResolver: ComponentFactoryResolver,
+              protected router: Router,
               public titleService: Title,
               protected dialog: MatDialog,
               protected route: ActivatedRoute) {
@@ -111,18 +115,31 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data.pipe(map(data => data.kind))
-      .subscribe(kind => {
-        this.selectedConfigs = [];
-        this.allSelected = false;
-        this.destroyComponent();
-        this.kind.next(kind);
-        this.configObject.next(null);
-        this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
-        this.title.next(ConfigurationsComponent.getTitle(kind));
-        this.dataService.kind = kind;
-        this.allSelected = false;
-        this.selectedConfigs = [];
+    this.route.data
+      .subscribe(data => {
+        this.options.next(data.options);
+      });
+    this.route.paramMap
+      .subscribe(data => {
+        const kind = pathToKind(data.get('kind'));
+        const id = data.get('id');
+
+        if (this.kind.value !== kind) {
+          this.destroyComponent();
+          this.kind.next(kind);
+          this.configObject.next(null);
+          this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
+          this.title.next(ConfigurationsComponent.getTitle(kind));
+          this.dataService.kind = kind;
+          this.allSelected = false;
+          this.selectedConfigs = [];
+        }
+        if (id) {
+          this.dataService.get(id, kind).subscribe(configObject => {
+              this.configObject.next(configObject);
+            }
+          );
+        }
       });
   }
 
@@ -154,7 +171,11 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onSelectConfig(configObject: ConfigObject) {
-    this.configObject.next(configObject);
+    if (this.route.snapshot.paramMap.has('id')) {
+      this.router.navigate(['..', configObject.id], {relativeTo: this.route});
+    } else {
+      this.router.navigate([configObject.id], {relativeTo: this.route});
+    }
   }
 
 

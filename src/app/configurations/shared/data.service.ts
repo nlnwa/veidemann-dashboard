@@ -8,7 +8,7 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subject, Subscription} from 'rxjs';
-import {ConfigObject, Kind} from '../../commons/models';
+import {ConfigObject, ConfigRef, Kind} from '../../commons/models';
 import {DataSource} from '@angular/cdk/table';
 import {MatPaginator, PageEvent} from '@angular/material';
 import {filter, map, tap} from 'rxjs/operators';
@@ -93,6 +93,16 @@ export class DataService extends DataSource<ConfigObject> {
     this._paginator = paginator;
     this.updateChangeSubscription();
     this._paginator._changePageSize(this._paginator.pageSize);
+  }
+
+  get (id: string, kind: Kind): Observable<ConfigObject> {
+    const config = new ConfigRef();
+    config.kind = kind;
+    config.id = id;
+    return this.backendService.get(config.toProto())
+      .pipe(
+        map( configObject => ConfigObject.fromProto(configObject))
+      );
   }
 
   list(): Observable<ConfigObject> {

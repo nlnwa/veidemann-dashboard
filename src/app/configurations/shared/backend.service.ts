@@ -1,12 +1,21 @@
 import {Observable, Observer} from 'rxjs';
 
-import {ConfigObjectProto, ConfigPromiseClient, DeleteResponse, ListRequest, UpdateRequest, UpdateResponse} from '../../../api';
+import {
+  ConfigObjectProto,
+  ConfigPromiseClient,
+  ConfigRefProto,
+  DeleteResponse,
+  ListRequest,
+  UpdateRequest,
+  UpdateResponse
+} from '../../../api';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {map, timeoutWith} from 'rxjs/operators';
+import {map, tap, timeoutWith} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {environment} from '../../../environments/environment';
 import {Kind} from '../../commons/models';
+
 
 
 @Injectable()
@@ -42,6 +51,11 @@ export class BackendService {
     const metadata = this.getAuth();
     return fromPromise(this.configClient.countConfigObjects(request, metadata))
       .pipe(map(listCountResponse => listCountResponse.getCount()));
+  }
+
+  get(config: ConfigRefProto): Observable<ConfigObjectProto> {
+    const metadata = this.getAuth();
+    return fromPromise(this.configClient.getConfigObject(config, metadata));
   }
 
   save(config: ConfigObjectProto): Observable<ConfigObjectProto> {

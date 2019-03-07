@@ -22,8 +22,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   @Input()
   configObject: ConfigObject;
   @Input()
-  browserScripts: ConfigObject[];
-
+  options: any;
   @Output()
   save = new EventEmitter<ConfigObject>();
   @Output()
@@ -37,7 +36,6 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   shouldShow = true;
   allSelected = false;
 
-  // adding or subtracting labels ect when updating all configs.
   shouldAddLabel = undefined;
   shouldAddBrowserscript = undefined;
   shouldAddSelector = undefined;
@@ -94,8 +92,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     return this.form.get('headers');
   }
 
-  get scriptIdList() {
-    return this.form.get('scriptRefList');
+  get scriptRefList() {
+    return this.form.get('scriptRefList').value;
   }
 
   get scriptSelectorList() {
@@ -103,13 +101,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    const script = this.scriptIdList.value;
-    if (script != null && script !== '') {
-      if (script.length != null) {
-        if (script.length > 0) {
-          return true;
-        }
-      }
+    if (this.scriptRefList.length > 0) {
+      return true;
     }
     return false;
   }
@@ -122,6 +115,11 @@ export class BrowserConfigDetailsComponent implements OnChanges {
         this.updateForm();
       }
     }
+  }
+
+  getScriptName(id) {
+    const found = this.options.browserScripts.find(script => script.id === id);
+    return found ? found.meta.name : 'script';
   }
 
   onSave() {

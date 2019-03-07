@@ -1,18 +1,7 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ConfigObject, ConfigRef, Kind} from '../models/';
-import {ListRequest} from '../../../api/';
-import {Subject, Subscription} from 'rxjs';
-import {map, toArray} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 
 import {BackendService} from '../../configurations/shared/backend.service';
 
@@ -25,12 +14,13 @@ import {BackendService} from '../../configurations/shared/backend.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class ConfigRefComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
 
 
   @Input()
   kind: Kind = Kind.UNDEFINED;
-
+  @Input()
+  options: ConfigObject[];
   @Input()
   multiple = true;
 
@@ -39,9 +29,6 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
   onTouched: (configRef: ConfigRef | ConfigRef[]) => void;
 
   form: FormGroup;
-
-  options: Subject<ConfigObject[]> = new Subject();
-  options$ = this.options.asObservable();
 
   private valueSubscription: Subscription;
 
@@ -72,14 +59,8 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
         return 'Velg browserscript';
       case Kind.COLLECTION:
         return 'Velg collection';
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.kind) {
-      if (this.kind) {
-        this.loadOptions(this.kind);
-      }
+      default:
+        return 'undefined';
     }
   }
 
@@ -137,14 +118,5 @@ export class ConfigRefComponent implements AfterViewInit, OnChanges, OnDestroy, 
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.cdr.detectChanges();
-  }
-
-  private loadOptions(kind: Kind) {
-    const listRequest = new ListRequest();
-    listRequest.setKind(kind.valueOf());
-    this.configService.list(listRequest).pipe(
-      map(configObject => ConfigObject.fromProto(configObject)),
-      toArray(),
-    ).subscribe(configObjects => this.options.next(configObjects));
   }
 }

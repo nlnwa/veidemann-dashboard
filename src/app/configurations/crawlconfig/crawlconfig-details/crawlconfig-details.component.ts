@@ -21,9 +21,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   set data(show) {
     this.shouldShow = show;
   }
-
   @Input()
   configObject: ConfigObject;
+  @Input()
+  options: any;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -42,9 +43,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   shouldAddLabel = undefined;
   allSelected = false;
 
-  browserConfigList: any[];
-  politenessConfigList: any = [];
-
   constructor(private fb: FormBuilder, private roleService: RoleService) {
     this.createForm();
   }
@@ -61,16 +59,16 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return this.form.get('meta').value.name;
   }
 
-  get collectionId() {
-    return this.form.get('collectionRef');
+  get collectionRef() {
+    return this.form.get('collectionRef').value;
   }
 
-  get browserConfigId() {
-    return this.form.get('browserConfigRef');
+  get browserConfigRef() {
+    return this.form.get('browserConfigRef').value;
   }
 
-  get politenessId() {
-    return this.form.get('politenessRef');
+  get politenessRef() {
+    return this.form.get('politenessRef').value;
   }
 
   get minDnsTtlSeconds() {
@@ -89,28 +87,28 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return this.form.get('extra.createScreenshot');
   }
 
-  get showPolitenessConfig(): boolean {
-    const politenessConfig = this.politenessId.value;
-    if (politenessConfig != null && politenessConfig !== '') {
-      return true;
-    }
-    return false;
-  }
-
-  get showBrowserConfig(): boolean {
-    const browserConfig = this.browserConfigId.value;
-    if (browserConfig != null && browserConfig !== '') {
-      return true;
-    }
-    return false;
-  }
 
   get showShortcuts(): boolean {
-    if (this.showPolitenessConfig || this.showBrowserConfig) {
-      return true;
-    }
-    return false;
-  }
+     if (this.politenessRef.id !== '' || this.browserConfigRef.id !== '' || this.collectionRef.id !== '') {
+       return true;
+     }
+     return false;
+   }
+
+   getPolitenessConfigName(id) {
+    const found = this.options.politenessConfigs.find( politenessConfig => politenessConfig.id === id);
+    return found ? found.meta.name : 'politenessConfig';
+   }
+
+   getCollectionName(id) {
+    const found = this.options.collections.find( collection => collection.id === id);
+    return found ? found.meta.name : 'collection';
+   }
+
+   getBrowserConfigName(id) {
+    const found = this.options.browserConfigs.find( browserConfig => browserConfig.id === id);
+    return found ? found.meta.name : 'browserConfig';
+   }
 
   shouldDisableExtractText(): void {
       if (this.disableExtractText) {
@@ -122,22 +120,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       if (this.disableCreateScreenshot) {
         this.createScreenshot.disable();
       }
-  }
-
-  getPolitenessConfigName(id): string {
-    for (let i = 0; i < this.politenessConfigList.length; i++) {
-      if (id === this.politenessConfigList[i].id) {
-        return this.politenessConfigList[i].itemName;
-      }
-    }
-  }
-
-  getBrowserConfigName(id): string {
-    for (let i = 0; i < this.browserConfigList.length; i++) {
-      if (id === this.browserConfigList[i].id) {
-        return this.browserConfigList[i].itemName;
-      }
-    }
   }
 
   onEnableExtractText() {
@@ -154,7 +136,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-
     if (changes.configObject) {
       if (!this.configObject) {
         this.form.reset();

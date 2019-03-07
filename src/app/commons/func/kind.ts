@@ -11,6 +11,18 @@ import {CrawlHostGroupConfigDetailsComponent} from '../../configurations/crawlho
 import {RoleMappingDetailsComponent} from '../../configurations/rolemapping';
 import {CollectionDetailsComponent} from '../../configurations/collection';
 
+const pathToKindMap = {
+  crawljobs: Kind.CRAWLJOB,
+  schedule: Kind.CRAWLSCHEDULECONFIG,
+  crawlconfig: Kind.CRAWLCONFIG,
+  crawlhostgroupconfig: Kind.CRAWLHOSTGROUPCONFIG,
+  browserconfig: Kind.BROWSERCONFIG,
+  browserscript: Kind.BROWSERSCRIPT,
+  politenessconfig: Kind.POLITENESSCONFIG,
+  rolemapping: Kind.ROLEMAPPING,
+  collection: Kind.COLLECTION
+};
+
 export function componentOfKind(kind: Kind) {
   switch (kind) {
     case Kind.UNDEFINED:
@@ -37,4 +49,8 @@ export function componentOfKind(kind: Kind) {
     case Kind.COLLECTION:
       return CollectionDetailsComponent;
   }
+}
+
+export function pathToKind(kind: string) {
+  return pathToKindMap[kind];
 }
