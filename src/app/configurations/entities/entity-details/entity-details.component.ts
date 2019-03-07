@@ -30,9 +30,6 @@ export class EntityDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  @Output()
-  clear = new EventEmitter<void>();
-
   form: FormGroup;
   shouldShow = true;
 
@@ -40,7 +37,6 @@ export class EntityDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    console.log('entity details');
     this.createForm();
   }
 
@@ -76,10 +72,6 @@ export class EntityDetailsComponent implements OnChanges {
 
   onRevert() {
     this.updateForm();
-  }
-
-  onClearClicked() {
-    this.clear.emit();
   }
 
   onToggleShouldAddLabels(shouldAdd: boolean): void {

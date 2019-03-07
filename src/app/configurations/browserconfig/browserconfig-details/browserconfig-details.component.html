@@ -120,8 +120,8 @@
           <ng-container>
             <mat-form-field>
               <mat-chip-list placeholder="Script">
-                <mat-chip *ngFor="let script of scriptRefList">
-                  <a [routerLink]="['/config/browserscript', script.id ]">{{ getScriptName(script.id) }}</a>
+                <mat-chip *ngFor="let configRef of scriptRefList">
+                  <a [routerLink]="['/config/browserscript']" [queryParams]="{id: configRef.id}">{{ getScriptName(configRef.id) }}</a>
                 </mat-chip>
               </mat-chip-list>
             </mat-form-field>

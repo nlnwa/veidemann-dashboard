@@ -65,6 +65,7 @@ export class DataService extends DataSource<ConfigObject> {
   private _pageChangeSubscription: Subscription = Subscription.EMPTY;
   private _renderData: Subject<ConfigObject[]> = new Subject();
   protected _paginator: MatPaginator | null;
+  private pageLength: number;
 
   reset = new EventEmitter<void>();
 
@@ -83,7 +84,6 @@ export class DataService extends DataSource<ConfigObject> {
     this.clear();
 
     if (this._paginator) {
-      this.reset.emit();
       this._paginator.pageIndex = 0;
       this._paginator._changePageSize(this._paginator.pageSize);
     }
@@ -95,18 +95,23 @@ export class DataService extends DataSource<ConfigObject> {
     this._paginator._changePageSize(this._paginator.pageSize);
   }
 
-  get (id: string, kind: Kind): Observable<ConfigObject> {
-    const config = new ConfigRef();
-    config.kind = kind;
-    config.id = id;
-    return this.backendService.get(config.toProto())
+  get(configRef: ConfigRef): Observable<ConfigObject> {
+    return this.backendService.get(ConfigRef.toProto(configRef))
       .pipe(
-        map( configObject => ConfigObject.fromProto(configObject))
+        map(configObject => ConfigObject.fromProto(configObject))
       );
   }
 
+  count(): Observable<number> {
+    return this.backendService.count(ofKind(this._kind.valueOf())).pipe(
+      tap(count => {
+        this.pageLength = count;
+        this._paginator.length = count;
+      })
+    );
+  }
+
   list(): Observable<ConfigObject> {
-    console.debug('dataService.list', Kind[this._kind]);
     return this.backendService.list(paged(ofKind(this._kind), {
       pageIndex: this._paginator.pageIndex,
       pageSize: this._paginator.pageSize
@@ -186,14 +191,15 @@ export class DataService extends DataSource<ConfigObject> {
     if (!this._paginator) {
       return data;
     }
-    this._paginator.length = data.length > 0 ? data.length + 1 : 0;
+    if (!this.pageLength) {
+      this._paginator.length = data.length > 0 ? data.length + 1 : 0;
+    }
 
     const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
     return data.slice().splice(startIndex, this._paginator.pageSize);
   }
 
   protected onPage(pageEvent: PageEvent) {
-    console.debug(Kind[this._kind], ':', pageEvent);
     this.list().subscribe();
   }
 
@@ -218,6 +224,7 @@ export class DataService extends DataSource<ConfigObject> {
   }
 
   clear() {
+    this.reset.emit();
     this._data.next([]);
   }
 

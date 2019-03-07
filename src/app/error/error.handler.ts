@@ -1,8 +1,7 @@
 import {ErrorHandler, Injectable} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorService} from './error.service';
-import {CustomError} from './custom-error';
-
+import {ReferrerError} from './referrer-error';
 
 @Injectable()
 export class ApplicationErrorHandler extends ErrorHandler {
@@ -14,7 +13,9 @@ export class ApplicationErrorHandler extends ErrorHandler {
   handleError(error: any): void {
     switch (error.constructor) {
       case HttpErrorResponse:
-      case CustomError:
+        this.errorService.dispatch(error);
+        break;
+      case ReferrerError:
         this.errorService.dispatch(error);
         break;
       default:

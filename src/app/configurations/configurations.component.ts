@@ -1,5 +1,14 @@
-import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, ViewRef} from '@angular/core';
-import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  ViewRef
+} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
 import {BehaviorSubject, EMPTY, from, ReplaySubject, Subject} from 'rxjs';
 import {catchError, mergeMap} from 'rxjs/operators';
@@ -39,25 +48,31 @@ import {ReferrerError} from '../error/referrer-error';
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DataService]
 })
 
 export class ConfigurationsComponent implements OnInit {
   readonly Kind = Kind;
-  selectedConfigs: ConfigObject[] = [];
 
-  allSelected = false;
+  private embedded = false;
 
-  kind: BehaviorSubject<Kind> = new BehaviorSubject(null);
-  kind$ = this.kind.asObservable();
+  @Input()
+  set kind(kind: Kind) {
+    this.embedded = true;
+    this._kind.next(kind);
+  }
+
+  _kind: BehaviorSubject<Kind> = new BehaviorSubject(null);
+  kind$ = this._kind.asObservable();
 
   configObject: Subject<ConfigObject> = new Subject<ConfigObject>();
   configObject$ = this.configObject.asObservable();
+  selectedConfigs: ConfigObject[] = [];
+  allSelected = false;
 
   title: BehaviorSubject<string> = new BehaviorSubject<string>('');
   title$ = this.title.asObservable();
 
-  options = new ReplaySubject<any>(1);
+  options = new BehaviorSubject<any>({});
   options$ = this.options.asObservable();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
@@ -70,6 +85,10 @@ export class ConfigurationsComponent implements OnInit {
               public titleService: Title,
               protected dialog: MatDialog,
               protected route: ActivatedRoute) {
+  }
+
+  get kind(): Kind {
+    return this._kind.value;
   }
 
   get viewContainerRef(): ViewContainerRef {
@@ -115,41 +134,40 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data
-      .subscribe(data => {
-        this.options.next(data.options);
-      });
-    this.route.paramMap
-      .subscribe(data => {
-        const kind = pathToKind(data.get('kind'));
-        const id = data.get('id');
+    this.route.data.subscribe(data => {
+      this.options.next(data.options);
+    });
 
-        if (this.kind.value !== kind) {
-          this.destroyComponent();
-          this.kind.next(kind);
-          this.configObject.next(null);
-          this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
-          this.title.next(ConfigurationsComponent.getTitle(kind));
-          this.dataService.kind = kind;
-          this.allSelected = false;
-          this.selectedConfigs = [];
-        }
-        if (id) {
-          this.dataService.get(id, kind).subscribe(configObject => {
-              this.configObject.next(configObject);
-            }
-          );
-        }
-      });
-  }
+    this.route.paramMap.subscribe(params => {
+      if (this.embedded) {
+        this.dataService.kind = this.kind;
+        this.title.next(ConfigurationsComponent.getTitle(this.kind));
+      } else if (params.has('kind')) {
+        const kind = pathToKind(params.get('kind'));
+        this.destroyComponent();
+        this._kind.next(kind);
+        this.configObject.next(null);
+        this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
+        this.title.next(ConfigurationsComponent.getTitle(kind));
+        this.dataService.kind = kind;
+        this.allSelected = false;
+        this.selectedConfigs = [];
+      }
+    });
 
-  onPage(pageEvent: PageEvent) {
-    this.dataService.list();
+    this.route.queryParamMap.subscribe(queryParamMap => {
+      if (this.embedded || !queryParamMap.has('id')) {
+        return;
+      }
+      const id = queryParamMap.get('id');
+      const kind = this.kind;
+      this.dataService.get({id, kind}).subscribe(configObject => this.configObject.next(configObject));
+    });
   }
 
   onSelectAll() {
     this.allSelected = true;
-    const configObject: ConfigObject = new ConfigObject({id: '1234567', kind: this.kind.value});
+    const configObject: ConfigObject = new ConfigObject({id: '1234567', kind: this.kind});
     configObject.meta = new Meta({name: 'update'});
     this.loadComponent({configObject});
   }
@@ -167,14 +185,16 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   onCreateConfig(): void {
-    this.configObject.next(new ConfigObject({kind: this.kind.value}));
+    this.configObject.next(new ConfigObject({kind: this.kind}));
   }
 
   onSelectConfig(configObject: ConfigObject) {
-    if (this.route.snapshot.paramMap.has('id')) {
-      this.router.navigate(['..', configObject.id], {relativeTo: this.route});
+    if (!configObject) {
+      this.configObject.next(null);
+    } else if (this.embedded) {
+      this.configObject.next(configObject);
     } else {
-      this.router.navigate([configObject.id], {relativeTo: this.route});
+      this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route});
     }
   }
 
@@ -282,7 +302,7 @@ export class ConfigurationsComponent implements OnInit {
         this.destroyComponent();
         this.configObject.next(null);
         this.snackBarService.openSnackBar('Alle ' + updatedConfigs + ' konfigurasjoner av typen ' +
-          Kind[this.kind.value.valueOf()] + ' er oppdatert');
+          Kind[this.kind.valueOf()] + ' er oppdatert');
       });
   }
 
@@ -291,9 +311,9 @@ export class ConfigurationsComponent implements OnInit {
    *
    * @param instanceData
    */
-  private loadComponent(instanceData = {}) {
+  protected loadComponent(instanceData = {}) {
     this.destroyComponent();
-    const componentRef = this.createComponent(componentOfKind(this.kind.value));
+    const componentRef = this.createComponent(componentOfKind(this.kind));
     this.initComponent(componentRef.instance, instanceData);
   }
 
@@ -322,7 +342,7 @@ export class ConfigurationsComponent implements OnInit {
 
     const form: FormGroup = instance.form;
 
-    switch (this.kind.value) {
+    switch (this.kind) {
       case Kind.CRAWLSCHEDULECONFIG:
         form.get('cronExpression').clearValidators();
         form.get('cronExpression.minute').setValidators(Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN)));
@@ -348,6 +368,7 @@ export class ConfigurationsComponent implements OnInit {
         }
     }
 
+    instance.options = this.options.value;
     instance.data = false;
     instance.allSelected = this.allSelected;
     instance.updateForm();

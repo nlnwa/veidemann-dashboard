@@ -95,10 +95,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    if (this.scheduleRef.id !== '' || this.crawlConfigRef.id !== '') {
-      return true;
-    }
-    return false;
+    return ((this.scheduleRef && this.scheduleRef.id !== '') || (this.crawlConfigRef && this.crawlConfigRef.id !== ''));
   }
 
   ngOnChanges(changes: SimpleChanges) {

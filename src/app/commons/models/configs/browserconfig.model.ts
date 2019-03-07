@@ -152,7 +152,7 @@ export class BrowserConfig {
     proto.setWindowHeight(browserConfig.windowHeight || 0);
     proto.setPageLoadTimeoutMs(browserConfig.pageLoadTimeoutMs || 0);
     proto.setMaxInactivityTimeMs(browserConfig.maxInactivityTimeMs || 0);
-    proto.setScriptRefList(browserConfig.scriptRefList.map(ref => ref.toProto()));
+    proto.setScriptRefList(browserConfig.scriptRefList.map(ConfigRef.toProto));
     proto.setScriptSelectorList(browserConfig.scriptSelectorList);
 
     return proto;

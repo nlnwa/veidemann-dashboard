@@ -16,7 +16,7 @@ import {Subscription} from 'rxjs';
 
 export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  displayedColumns: string[] = ['select', 'name', 'description', 'label'];
+  displayedColumns: string[] = ['select', 'name', 'description'];
 
   dataSource: DataSource<ConfigObject>;
 
@@ -83,6 +83,7 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   reset() {
+    this.rowClick.emit(null);
     this.selection.clear();
     this.selectedRows = [];
     this.selectedRow = null;

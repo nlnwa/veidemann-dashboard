@@ -27,6 +27,7 @@ import {
 import {BackendService} from './shared/backend.service';
 import {CollectionDetailsComponent, CollectionListComponent} from './collection';
 import {OptionsResolver} from './options.resolver.service';
+import {DataService} from './shared/data.service';
 
 
 @NgModule({
@@ -77,6 +78,9 @@ import {OptionsResolver} from './options.resolver.service';
     LoglevelComponent,
     WarcStatusPageComponent,
     ConfigurationsComponent,
+  ],
+  providers: [
+    DataService
   ]
 })
 export class ConfigurationsModule {

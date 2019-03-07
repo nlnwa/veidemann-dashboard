@@ -101,10 +101,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    if (this.scriptRefList.length > 0) {
-      return true;
-    }
-    return false;
+    return this.scriptRefList.length > 0;
   }
 
   ngOnChanges(changes: SimpleChanges) {

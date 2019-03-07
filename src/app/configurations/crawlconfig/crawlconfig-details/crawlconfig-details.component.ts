@@ -89,10 +89,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
 
   get showShortcuts(): boolean {
-     if (this.politenessRef.id !== '' || this.browserConfigRef.id !== '' || this.collectionRef.id !== '') {
-       return true;
-     }
-     return false;
+     return (this.politenessRef && this.politenessRef.id) || (this.browserConfigRef && this.browserConfigRef.id) || (this.collectionRef && this.collectionRef.id)
    }
 
    getPolitenessConfigName(id) {

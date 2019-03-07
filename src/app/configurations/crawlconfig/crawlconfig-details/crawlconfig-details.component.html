@@ -105,33 +105,33 @@
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-          <ng-container *ngIf="collectionRef.id !== ''">
+          <ng-container *ngIf="collectionRef?.id">
             <mat-form-field>
               <mat-chip-list placeholder="Collection">
                 <mat-chip>
-                  <a [routerLink]="['/config/collection', collectionRef.id]">
+                  <a [routerLink]="['/config/collection']" [queryParams]="{id: collectionRef.id}">
                     {{ getCollectionName(collectionRef.id) }}
                   </a>
                 </mat-chip>
               </mat-chip-list>
             </mat-form-field>
           </ng-container>
-          <ng-container *ngIf="browserConfigRef.id !== ''">
+          <ng-container *ngIf="browserConfigRef?.id">
             <mat-form-field>
               <mat-chip-list placeholder="Browser">
                 <mat-chip>
-                  <a [routerLink]="['/config/browserconfig', browserConfigRef.id]">
+                  <a [routerLink]="['/config/browserconfig']" [queryParams]="{id: browserConfigRef.id}">
                     {{ getBrowserConfigName(browserConfigRef.id) }}
-                    </a>
+                  </a>
                 </mat-chip>
               </mat-chip-list>
             </mat-form-field>
           </ng-container>
-          <ng-container *ngIf="politenessRef.id !== ''">
+          <ng-container *ngIf="politenessRef?.id">
             <mat-form-field>
               <mat-chip-list placeholder="Politeness">
                 <mat-chip>
-                  <a [routerLink]="['/config/politenessconfig', politenessRef.id]">
+                  <a [routerLink]="['/config/politenessconfig']" [queryParams]="{id: politenessRef.id}">
                     {{ getPolitenessConfigName(politenessRef.id) }}
                   </a>
                 </mat-chip>

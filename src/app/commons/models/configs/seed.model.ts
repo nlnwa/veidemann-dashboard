@@ -87,9 +87,9 @@ export class Seed {
   static toProto(seed: Seed): SeedProto {
     const proto = new SeedProto();
     const entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: seed.entityRef.id});
-    proto.setEntityRef(entityRef.toProto());
+    proto.setEntityRef(ConfigRef.toProto(entityRef));
     proto.setScope(CrawlScope.toProto(seed.scope));
-    proto.setJobRefList(seed.jobRefList.map(ref => ref.toProto()));
+    proto.setJobRefList(seed.jobRefList.map(ConfigRef.toProto));
     proto.setDisabled(seed.disabled);
     return proto;
   }

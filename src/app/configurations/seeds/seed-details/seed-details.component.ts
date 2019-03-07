@@ -21,6 +21,9 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   @Input()
+  options: any;
+
+  @Input()
   configObject: ConfigObject;
 
   @Input()
@@ -35,9 +38,6 @@ export class SeedDetailComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
-
-  @Output()
-  clear = new EventEmitter<void>();
 
   form: FormGroup;
   shouldShow = true;
@@ -70,10 +70,6 @@ export class SeedDetailComponent implements OnChanges {
     return this.configObject ? !this.configObject.id : false;
   }
 
-  onClearClicked() {
-    this.clear.emit();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.configObject) {
       if (this.configObject) {
@@ -83,6 +79,7 @@ export class SeedDetailComponent implements OnChanges {
       }
     }
   }
+
   //
   // getCrawlJobName(id): string {
   //   const found = this.crawlJobs.find((job) => job.id === id);
@@ -135,10 +132,10 @@ export class SeedDetailComponent implements OnChanges {
       id: {value: '', disabled: true},
       disabled: '',
       // entityRef: {value: '', disabled: true},
-        entityRef: this.fb.group({
-          kind: '',
-          id: {value: '', disabled: true}
-        }),
+      entityRef: this.fb.group({
+        kind: '',
+        id: {value: '', disabled: true}
+      }),
       jobRefList: '',
       scope: this.fb.group({
         surtPrefix: ''

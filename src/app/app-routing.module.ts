@@ -40,20 +40,15 @@ const routes: Routes = [
     canActivate: [GuardService],
   },
   {
-    path: 'config/:kind/:id',
-    component: ConfigurationsComponent,
-     resolve: {
-       options: OptionsResolver
-     },
-    canActivate: [GuardService],
-  },
-  {
     path: 'search',
     component: SearchComponent,
     pathMatch: 'full',
     data: {
       kind: Kind.CRAWLENTITY
-    }
+    },
+    resolve: {
+      options: OptionsResolver
+    },
   },
   {
     path: 'logconfig',

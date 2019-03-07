@@ -99,9 +99,9 @@ export class CrawlJob {
 
   static toProto(crawlJob: CrawlJob): CrawlJobProto {
     const proto = new CrawlJobProto();
-    proto.setScheduleRef(crawlJob.scheduleRef.toProto());
+    proto.setScheduleRef(ConfigRef.toProto(crawlJob.scheduleRef));
     proto.setLimits(crawlJob.limits.toProto());
-    proto.setCrawlConfigRef(crawlJob.crawlConfigRef.toProto());
+    proto.setCrawlConfigRef(ConfigRef.toProto(crawlJob.crawlConfigRef));
     proto.setDisabled(crawlJob.disabled);
     return proto;
   }

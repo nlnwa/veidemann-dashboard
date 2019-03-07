@@ -15,17 +15,18 @@ export class OptionsResolver implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
-    const kind: Kind = pathToKind(route.paramMap.get('kind'));
+    const kind: Kind = pathToKind(route.paramMap.get('kind')) || route.data.kind;
 
     switch (kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        break;
       case Kind.SEED:
-        break;
-      case Kind.CRAWLJOB:
+      case Kind.CRAWLENTITY:
+        return this.backendService.list(ofKind(Kind.CRAWLJOB.valueOf())).pipe(
+          map(configObject => ConfigObject.fromProto(configObject)),
+          toArray(),
+          map(crawlJobs => ({crawlJobs}))
+        );
 
+      case Kind.CRAWLJOB:
         const crawlScheduleConfig$ = this.backendService.list(ofKind(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
@@ -35,10 +36,10 @@ export class OptionsResolver implements Resolve<any> {
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
+
         return combineLatest(crawlScheduleConfig$, crawlConfig$).pipe(
-          map(([crawlScheduleConfigs, crawlConfigs]) => ({
-        crawlScheduleConfigs, crawlConfigs
-          })));
+          map(([crawlScheduleConfigs, crawlConfigs]) => ({crawlScheduleConfigs, crawlConfigs})));
+
       case Kind.CRAWLCONFIG:
         const collection$ = this.backendService.list(ofKind(Kind.COLLECTION.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
@@ -53,29 +54,15 @@ export class OptionsResolver implements Resolve<any> {
           toArray(),
         );
         return combineLatest(collection$, browserConfig$, politenessConfig$).pipe(
-          map(([collections, browserConfigs, politenessConfigs]) => ({
-            collections,
-            browserConfigs,
-            politenessConfigs
-          })));
-      case Kind.CRAWLSCHEDULECONFIG:
-        break;
+          map(([collections, browserConfigs, politenessConfigs]) => ({collections, browserConfigs, politenessConfigs})));
+
       case Kind.BROWSERCONFIG:
         return this.backendService.list(ofKind(Kind.BROWSERSCRIPT.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
           map(browserScripts => ({browserScripts}))
         );
-      case Kind.POLITENESSCONFIG:
-        break;
-      case Kind.BROWSERSCRIPT:
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        break;
-      case Kind.ROLEMAPPING:
-        break;
-      case Kind.COLLECTION:
-        break;
+
       default:
         return {};
     }

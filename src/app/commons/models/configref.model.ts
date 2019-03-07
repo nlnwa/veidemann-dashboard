@@ -17,10 +17,10 @@ export class ConfigRef {
     });
   }
 
-  toProto(): ConfigRefProto {
+  static toProto(configRef: ConfigRef): ConfigRefProto {
     const proto = new ConfigRefProto();
-    proto.setId(this.id);
-    proto.setKind(this.kind.valueOf());
+    proto.setId(configRef.id);
+    proto.setKind(configRef.kind.valueOf());
     return proto;
   }
 }

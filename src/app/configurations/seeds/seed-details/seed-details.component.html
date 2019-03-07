@@ -8,8 +8,6 @@
       <mat-card-subtitle *ngIf="!configObject.id">
         <span i18n="@@seedDetailsCardSubtitle">Ny (ikke lagret)</span>
       </mat-card-subtitle>
-      <span class="fill-space"></span>
-      <button mat-icon-button (click)="onClearClicked()"><mat-icon>clear</mat-icon></button>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
@@ -67,7 +65,7 @@
           </mat-slide-toggle>
           </div>
 
-        <app-configref formControlName="jobRefList" [multiple]="true" [kind]="Kind.CRAWLJOB"></app-configref>
+        <app-configref formControlName="jobRefList" [multiple]="true" [options]="options.crawlJobs" [kind]="Kind.CRAWLJOB"></app-configref>
 
             <mat-form-field formGroupName="scope" *ngIf="configObject?.id && shouldShow">
           <input matInput

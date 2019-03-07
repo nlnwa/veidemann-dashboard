@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {ConfigObject, Kind} from '../../commons/models';
 import {DataService, labelQuery, nameQuery, ofKind, paged, Pager, withIds} from './data.service';
 import {BackendService} from './backend.service';
-import {EMPTY, merge, Observable} from 'rxjs';
-import {map, mergeMap, tap} from 'rxjs/operators';
+import {EMPTY, merge, Observable, race, Subject, timer} from 'rxjs';
+import {map, mergeMap, takeUntil, tap} from 'rxjs/operators';
 import {ConfigObjectProto} from '../../../api';
 import {PageEvent} from '@angular/material';
 
@@ -87,6 +87,8 @@ export class SearchDataService extends DataService {
   private snPager: Pager = {pageSize: 5, pageIndex: 0};
   private slPager: Pager = {pageSize: 5, pageIndex: 0};
 
+  private cancel$ = new Subject<void>();
+
   constructor(protected backendService: BackendService) {
     super(backendService);
     this._kind = Kind.CRAWLENTITY;
@@ -106,7 +108,7 @@ export class SearchDataService extends DataService {
   protected onPage(pageEvent: PageEvent) {
     if (this.term === undefined) {
       this.search('').subscribe();
-    } else if (this.data.length > pageEvent.pageIndex * pageEvent.pageSize) {
+    } else if (this.data.length > ((pageEvent.pageIndex + 1) * pageEvent.pageSize)) {
       this._data.next(this.data);
     } else {
       this.search(this.term, pageEvent).subscribe();
@@ -141,6 +143,10 @@ export class SearchDataService extends DataService {
       this.snPager = this.getPagerPage();
       this.slPager = this.getPagerPage();
     }
+  }
+
+  destroy() {
+    this.cancel$.next();
   }
 
   search(term: string, pageEvent?: PageEvent): Observable<ConfigObject> {
@@ -194,6 +200,8 @@ export class SearchDataService extends DataService {
         ))
       );
 
+    this.cancel$.next();
+
     return (term.length > 0
       ? merge(
         maxIndex > this.enPager.pageIndex || (!isNewTerm && this.enCount === 0) ? EMPTY : entityName$,
@@ -202,8 +210,9 @@ export class SearchDataService extends DataService {
         maxIndex > this.snPager.pageIndex || (!isNewTerm && this.snCount === 0) ? EMPTY : seedName$
       )
       : entityName$)
-      .pipe(tap(configObject => this.add(configObject)));
+      .pipe(
+        tap(configObject => this.add(configObject)),
+        takeUntil(race(this.cancel$, timer(10000)))
+      );
   }
-
-
 }

@@ -125,9 +125,9 @@ export class CrawlConfig {
 
   static toProto(crawlConfig: CrawlConfig): CrawlConfigProto {
     const proto = new CrawlConfigProto();
-    proto.setCollectionRef(crawlConfig.collectionRef.toProto());
-    proto.setBrowserConfigRef(crawlConfig.browserConfigRef.toProto());
-    proto.setPolitenessRef(crawlConfig.politenessRef.toProto());
+    proto.setCollectionRef(ConfigRef.toProto(crawlConfig.collectionRef));
+    proto.setBrowserConfigRef(ConfigRef.toProto(crawlConfig.browserConfigRef));
+    proto.setPolitenessRef(ConfigRef.toProto(crawlConfig.politenessRef));
     proto.setExtra(ExtraConfig.toProto(crawlConfig.extra));
     proto.setMinimumDnsTtlS(crawlConfig.minimumDnsTtlS);
     proto.setPriorityWeight(crawlConfig.priorityWeight);

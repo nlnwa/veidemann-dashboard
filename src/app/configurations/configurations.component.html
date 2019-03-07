@@ -25,12 +25,11 @@
       <app-base-list
         (rowClick)="onSelectConfig($event)"
         (selectedChange)="onSelectedChange($event)"
-        (selectAll)="onSelectAll()"
-        (page)="onPage($event)">
+        (selectAll)="onSelectAll()">
       </app-base-list>
     </ng-container>
   </ng-container>
-  <ng-container [ngSwitch]="kind" *ngIf="singleMode && configObject$ | async as configObject">
+  <ng-container [ngSwitch]="kind" *ngIf="singleMode && (configObject$ | async) as configObject">
     <ng-container *ngSwitchCase="Kind.COLLECTION">
       <app-collection-details
         [configObject]="configObject"
@@ -100,6 +99,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="Kind.SEED">
       <app-seed-details
+        [options]="options$ | async"
         [configObject]="configObject"
         (update)="onUpdateConfig($event)"
         (save)="onSaveConfig($event)"

@@ -10,12 +10,10 @@ import {
   UpdateResponse
 } from '../../../api';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {map, tap, timeoutWith} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {environment} from '../../../environments/environment';
-import {Kind} from '../../commons/models';
-
 
 
 @Injectable()
@@ -28,11 +26,9 @@ export class BackendService {
   constructor(protected oauthService: OAuthService) {
   }
 
-  list(listRequest: ListRequest, due = 1000): Observable<ConfigObjectProto> {
-
+  list(listRequest: ListRequest): Observable<ConfigObjectProto> {
     const metadata = this.getAuth();
-
-    const observable: Observable<ConfigObjectProto> = new Observable((observer: Observer<ConfigObjectProto>) => {
+    return new Observable((observer: Observer<ConfigObjectProto>) => {
       const stream = this.configClient.listConfigObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
@@ -41,10 +37,6 @@ export class BackendService {
 
       return () => stream.cancel();
     });
-
-    return observable.pipe(
-      timeoutWith(due, []),
-    );
   }
 
   count(request: ListRequest): Observable<number> {
