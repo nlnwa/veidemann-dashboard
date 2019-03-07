@@ -105,7 +105,7 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   isAllInPageSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.data.length;
-    return numSelected === numRows;
+    return numSelected === numRows && numSelected > 0;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */

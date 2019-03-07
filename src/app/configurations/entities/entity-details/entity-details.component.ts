@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {RoleService} from '../../../auth/role.service';
+import {RoleService} from '../../../auth/';
 import {ConfigObject, Kind, Meta} from '../../../commons/models';
 
 @Component({
@@ -40,6 +40,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
+    console.log('entity details');
     this.createForm();
   }
 

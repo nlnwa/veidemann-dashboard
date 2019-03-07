@@ -11,6 +11,7 @@ import {WarcStatusPageComponent} from './configurations/warcstatus/';
 import {ConfigurationsComponent} from './configurations/configurations.component';
 import {KindResolver} from './configurations/kind.resolver.service';
 import {SearchComponent} from './configurations/search';
+import {Kind} from './commons/models';
 
 const routes: Routes = [
   {
@@ -41,7 +42,10 @@ const routes: Routes = [
   {
     path: 'search',
     component: SearchComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      kind: Kind.CRAWLENTITY
+    }
   },
   {
     path: 'logconfig',

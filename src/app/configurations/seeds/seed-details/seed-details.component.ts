@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 
-import {RoleService} from '../../../auth/role.service';
+import {RoleService} from '../../../auth/';
 import {ConfigObject, Kind, Meta, Seed} from '../../../commons/models';
 
 

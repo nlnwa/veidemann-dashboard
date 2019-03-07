@@ -14,7 +14,9 @@ export class KindResolver implements Resolve<Kind> {
     browserscript: Kind.BROWSERSCRIPT,
     politenessconfig: Kind.POLITENESSCONFIG,
     rolemapping: Kind.ROLEMAPPING,
-    collection: Kind.COLLECTION
+    collection: Kind.COLLECTION,
+    entity: Kind.CRAWLENTITY,
+    seed: Kind.SEED,
   };
 
   constructor() {

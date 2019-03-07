@@ -11,6 +11,7 @@ import {LogLevel, LogLevels} from '../../../commons/models';
   templateUrl: './loglevel.component.html',
   styleUrls: ['./loglevel.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [LogService]
 })
 export class LoglevelComponent implements OnInit {
 

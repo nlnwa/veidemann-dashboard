@@ -1,11 +1,10 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef, ViewRef} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
 import {BehaviorSubject, EMPTY, from, Subject} from 'rxjs';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
-import {RoleService} from '../auth';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormGroup, Validators} from '@angular/forms';
 import {
   BrowserConfig,
   BrowserScript,
@@ -36,6 +35,7 @@ import {ReferrerError} from '../error/referrer-error';
 
 
 @Component({
+  selector: 'app-configurations',
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,16 +59,13 @@ export class ConfigurationsComponent implements OnInit {
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
 
-  constructor(private dataService: DataService,
-              private snackBarService: SnackBarService,
-              private errorService: ErrorService,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private fb: FormBuilder,
-              private route: ActivatedRoute,
-              private roleService: RoleService,
+  constructor(protected dataService: DataService,
+              protected snackBarService: SnackBarService,
+              protected errorService: ErrorService,
+              protected componentFactoryResolver: ComponentFactoryResolver,
               public titleService: Title,
-              private dialog: MatDialog) {
-
+              protected dialog: MatDialog,
+              protected route: ActivatedRoute) {
   }
 
   get viewContainerRef(): ViewContainerRef {
@@ -116,6 +113,8 @@ export class ConfigurationsComponent implements OnInit {
   ngOnInit() {
     this.route.data.pipe(map(data => data.kind))
       .subscribe(kind => {
+        this.selectedConfigs = [];
+        this.allSelected = false;
         this.destroyComponent();
         this.kind.next(kind);
         this.configObject.next(null);
@@ -125,6 +124,10 @@ export class ConfigurationsComponent implements OnInit {
         this.allSelected = false;
         this.selectedConfigs = [];
       });
+  }
+
+  onPage(pageEvent: PageEvent) {
+    this.dataService.list();
   }
 
   onSelectAll() {
@@ -279,7 +282,7 @@ export class ConfigurationsComponent implements OnInit {
    * @param component
    * @param viewContainerRef
    */
-  private createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): any {
+  protected createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): any {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     viewContainerRef.clear();
     return viewContainerRef.createComponent(componentFactory);
@@ -360,7 +363,7 @@ export class ConfigurationsComponent implements OnInit {
   /**
    * Destroy dynamic component
    */
-  private destroyComponent() {
+  protected destroyComponent() {
     if (this.detailHost && this.componentRef) {
       this.componentRef.destroy();
     }

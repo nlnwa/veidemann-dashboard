@@ -1,14 +1,13 @@
-<table class="mat-table" *ngIf="isAllInPageSelected() && dataService.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected()">
   <tr class="mat-row">
-    <td class="mat-cell" *ngIf="!allEntitiesSelected">
-      <span>Alle <b>{{selection.selected.length}}</b> entiteter på siden er markert</span>
-      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">
-        Marker alle {{pageLength}} entiteter.
-      </a>
+    <td class="mat-cell" *ngIf="!allSelected">
+      <span>Alle <b>{{selection.selected.length}}</b> entiteter lokalt er markert. </span>
+      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">Marker alle {{pageLength || ''}}
+        entiteter i databasen</a>
     </td>
     <td class="mat-cell" *ngIf="allSelected">
-      <span>Alle <b>{{pageLength}}</b> entiteter i databasen er markert.</span>
-      <a [routerLink]="" (click)="onDeselectAll()"> Fjern markeringen</a>
+      <span>Alle <b>{{pageLength || ''}}</b> entiteter i databasen er markert. </span>
+      <a [routerLink]="" (click)="onDeselectAll()">Fjern markeringen</a>
     </td>
   </tr>
 </table>

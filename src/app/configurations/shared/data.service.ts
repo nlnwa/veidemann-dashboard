@@ -21,10 +21,6 @@ export interface Pager {
   pageIndex: number;
 }
 
-function startPage(): Pager {
-  return {pageSize: 5, pageIndex: 0};
-}
-
 export function ofKind(kind: Kind): ListRequest {
   const listRequest = new ListRequest();
   listRequest.setKind(kind.valueOf());
@@ -34,6 +30,11 @@ export function ofKind(kind: Kind): ListRequest {
 export function paged(listRequest, pager: Pager): ListRequest {
   listRequest.setOffset(pager.pageIndex * pager.pageSize);
   listRequest.setPageSize(pager.pageSize);
+  return listRequest;
+}
+
+export function withIds(listRequest, ids: string[]) {
+  listRequest.setIdList(ids);
   return listRequest;
 }
 
@@ -57,13 +58,13 @@ export function labelQuery(listRequest, term: string) {
 @Injectable()
 export class DataService extends DataSource<ConfigObject> {
 
-  protected _data = new BehaviorSubject<ConfigObject[]>([]);
+  protected _kind: Kind;
 
-  private _kind: BehaviorSubject<Kind> = new BehaviorSubject(Kind.UNDEFINED);
+  protected _data = new BehaviorSubject<ConfigObject[]>([]);
   private _renderChangesSubscription: Subscription = Subscription.EMPTY;
   private _pageChangeSubscription: Subscription = Subscription.EMPTY;
   private _renderData: Subject<ConfigObject[]> = new Subject();
-  private _paginator: MatPaginator | null;
+  protected _paginator: MatPaginator | null;
 
   reset = new EventEmitter<void>();
 
@@ -78,7 +79,7 @@ export class DataService extends DataSource<ConfigObject> {
   }
 
   set kind(kind: Kind) {
-    this._kind.next(kind);
+    this._kind = kind;
     this.clear();
 
     if (this._paginator) {
@@ -91,17 +92,17 @@ export class DataService extends DataSource<ConfigObject> {
   set paginator(paginator: MatPaginator) {
     this._paginator = paginator;
     this.updateChangeSubscription();
-
     this._paginator._changePageSize(this._paginator.pageSize);
   }
 
   list(): Observable<ConfigObject> {
-    return this.backendService.list(paged(ofKind(this._kind.value), {
+    console.debug('dataService.list', Kind[this._kind]);
+    return this.backendService.list(paged(ofKind(this._kind), {
       pageIndex: this._paginator.pageIndex,
       pageSize: this._paginator.pageSize
     })).pipe(
       map(configObject => ConfigObject.fromProto(configObject)),
-      tap(configObject => this._add(configObject))
+      tap(configObject => this.add(configObject))
     );
   }
 
@@ -109,7 +110,7 @@ export class DataService extends DataSource<ConfigObject> {
     return this.backendService.save(ConfigObject.toProto(configObject))
       .pipe(
         map(newConfig => ConfigObject.fromProto(newConfig)),
-        tap(newConfig => this._add(newConfig))
+        tap(newConfig => this.add(newConfig))
       );
   }
 
@@ -117,7 +118,7 @@ export class DataService extends DataSource<ConfigObject> {
     return this.backendService.save(ConfigObject.toProto(configObject))
       .pipe(
         map(newConfig => ConfigObject.fromProto(newConfig)),
-        tap(newConfig => this._update(newConfig))
+        tap(newConfig => this.replace(newConfig))
       );
   }
 
@@ -139,13 +140,14 @@ export class DataService extends DataSource<ConfigObject> {
 
     return this.backendService.update(updateRequest).pipe(
       map(updateResponse => updateResponse.getUpdated()),
-      tap(() => this.kind = this._kind.value)
+      // TODO find another way to reset than resetting kind
+      // tap(() => this.kind = this._kind)
     );
   }
 
   delete(configObject: ConfigObject): Observable<DeleteResponse> {
     return this.backendService.delete(ConfigObject.toProto(configObject)).pipe(
-      tap(() => this._delete(configObject))
+      tap(() => this.remove(configObject))
     );
   }
 
@@ -155,16 +157,10 @@ export class DataService extends DataSource<ConfigObject> {
     this._pageChangeSubscription.unsubscribe();
     this._pageChangeSubscription = pageChange.pipe(
       filter(pageEvent => !!pageEvent)
-    ).subscribe(pageEvent => {
-      this.list().subscribe();
-    });
+    ).subscribe(pageEvent => this.onPage(pageEvent));
 
     const dataStream = this._data;
-    /*
-    const paginatedData = combineLatest(dataStream, pageChange).pipe(
-      tap(([data]) => console.log('combineLatest(dataStream, pageChange)', data)),
-      map(([data]) => this._pageData(data)));
-      */
+
     // Watched for paged data changes and send the result to the table to render.
     this._renderChangesSubscription.unsubscribe();
     this._renderChangesSubscription = dataStream.pipe(
@@ -180,13 +176,18 @@ export class DataService extends DataSource<ConfigObject> {
     if (!this._paginator) {
       return data;
     }
-    this._paginator.length = data.length + 1;
+    this._paginator.length = data.length > 0 ? data.length + 1 : 0;
 
     const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
     return data.slice().splice(startIndex, this._paginator.pageSize);
   }
 
-  _add(configObject: ConfigObject) {
+  protected onPage(pageEvent: PageEvent) {
+    console.debug(Kind[this._kind], ':', pageEvent);
+    this.list().subscribe();
+  }
+
+  protected add(configObject: ConfigObject) {
     if (this._data.value.some(c => c.id === configObject.id)) {
       this._data.next(this._data.value);
     } else {
@@ -194,13 +195,13 @@ export class DataService extends DataSource<ConfigObject> {
     }
   }
 
-  _update(configObject: ConfigObject) {
+  protected replace(configObject: ConfigObject) {
     const index = this.data.findIndex(c => c.id === configObject.id);
     this.data[index] = configObject;
     this._data.next(this.data);
   }
 
-  _delete(configObject: ConfigObject) {
+  protected remove(configObject: ConfigObject) {
     const index = this._data.value.findIndex(c => c.id === configObject.id);
     this.data.splice(index, 1);
     this._data.next(this.data);

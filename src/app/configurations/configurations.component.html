@@ -25,7 +25,8 @@
       <app-base-list
         (rowClick)="onSelectConfig($event)"
         (selectedChange)="onSelectedChange($event)"
-        (selectAll)="onSelectAll()">
+        (selectAll)="onSelectAll()"
+        (page)="onPage($event)">
       </app-base-list>
     </ng-container>
   </ng-container>
@@ -93,6 +94,22 @@
         (save)="onSaveConfig($event)"
         (delete)="onDeleteConfig($event)">
       </app-crawlhostgroupconfig-details>
+    </ng-container>
+    <ng-container *ngSwitchCase="Kind.SEED">
+      <app-seed-details
+        [configObject]="configObject"
+        (update)="onUpdateConfig($event)"
+        (save)="onSaveConfig($event)"
+        (delete)="onDeleteConfig($event)">
+      </app-seed-details>
+    </ng-container>
+    <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
+      <app-entity-details
+        [configObject]="configObject"
+        (update)="onUpdateConfig($event)"
+        (save)="onSaveConfig($event)"
+        (delete)="onDeleteConfig($event)">
+      </app-entity-details>
     </ng-container>
     <ng-container *ngSwitchCase="Kind.ROLEMAPPING">
       <app-rolemapping-details

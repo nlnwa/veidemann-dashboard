@@ -6,6 +6,7 @@ import {map, timeoutWith} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {environment} from '../../../environments/environment';
+import {Kind} from '../../commons/models';
 
 
 @Injectable()
@@ -19,6 +20,7 @@ export class BackendService {
   }
 
   list(listRequest: ListRequest, due = 1000): Observable<ConfigObjectProto> {
+
     const metadata = this.getAuth();
 
     const observable: Observable<ConfigObjectProto> = new Observable((observer: Observer<ConfigObjectProto>) => {

@@ -1,8 +1,6 @@
 import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
-import {ResultType} from '../search.service';
-import {ConfigObject} from '../../../commons/models';
 import {BaseListComponent} from '../../../commons/list';
-import {SearchDataService} from '../../shared/search-data.service';
+import {isEntityName, isEntityLabel, isSeedName, isSeedLabel, SearchDataService} from '../../shared/search-data.service';
 
 @Component({
   selector: 'app-search-list',
@@ -14,30 +12,14 @@ import {SearchDataService} from '../../shared/search-data.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchListComponent extends BaseListComponent {
+  isEntityName = isEntityName;
+  isEntityLabel = isEntityLabel;
+  isSeedName = isSeedName;
+  isSeedLabel = isSeedLabel;
 
   displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
 
   constructor(@Optional() protected dataService: SearchDataService) {
     super(dataService);
-  }
-
-  isEntityName(item: ConfigObject): boolean {
-    /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.EntityName) > 0;
-  }
-
-  isEntityLabel(item: ConfigObject): boolean {
-    /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.EntityLabel) > 0;
-  }
-
-  isSeedName(item: ConfigObject): boolean {
-    /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.SeedName) > 0;
-  }
-
-  isSeedLabel(item: ConfigObject): boolean {
-    /* tslint:disable:no-bitwise */
-    return ((<any>item).type & ResultType.SeedLabel) > 0;
   }
 }
