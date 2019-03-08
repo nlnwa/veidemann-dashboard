@@ -26,6 +26,7 @@ export class AuthConfig {
 export class Environment {
   authConfig: AuthConfig;
   apiGateway: string;
+  grpcWeb: string;
 
   constructor(env: Environment = {} as Environment) {
     if (env.hasOwnProperty('authConfig')) {
@@ -34,8 +35,10 @@ export class Environment {
     const {
       authConfig = environment.authConfig,
       apiGateway = environment.apiGateway,
+      grpcWeb = environment.grpcWeb,
     } = env;
     this.authConfig = authConfig;
     this.apiGateway = apiGateway;
+    this.grpcWeb = grpcWeb;
   }
 }

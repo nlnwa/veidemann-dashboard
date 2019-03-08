@@ -1,8 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {CrawlJob, Meta, Seed} from '../../../commons/models/config.model';
 
-import {RoleService} from '../../../auth/role.service';
+
+import {RoleService} from '../../../auth/';
+import {ConfigObject, Kind, Meta, Seed} from '../../../commons/models';
 
 
 @Component({
@@ -12,6 +13,7 @@ import {RoleService} from '../../../auth/role.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeedDetailComponent implements OnChanges {
+  readonly Kind = Kind;
 
   @Input()
   set data(show) {
@@ -19,48 +21,41 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   @Input()
-  seed: Seed;
+  options: any;
 
   @Input()
-  crawlJobs: CrawlJob[];
+  configObject: ConfigObject;
 
   @Input()
   equalDisabled: boolean;
 
   @Output()
-  save = new EventEmitter<Seed>();
+  save = new EventEmitter<ConfigObject>();
 
   @Output()
-  update = new EventEmitter<Seed>();
+  update = new EventEmitter<ConfigObject>();
 
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<Seed>();
-
-  @Output()
-  clear = new EventEmitter<void>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
+  shouldAddCrawlJob = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      disabled: '',
-      entity_id: {value: '', disabled: true},
-      job_id: [''],
-      scope: this.fb.group({surt_prefix: ''}),
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canEdit(): boolean {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
-  get crawlJobId() {
-    return this.form.get('job_id');
+  get crawlJobRefList() {
+     return this.form.get('jobRefList').value;
   }
 
   get disabled() {
@@ -68,31 +63,33 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    const crawlJob = this.crawlJobId.value;
-    return crawlJob && crawlJob.length > 0;
+     return this.crawlJobRefList.length > 0;
   }
 
   get showSave() {
-    return this.seed ? !this.seed.id : false;
-  }
-
-  onClearClicked() {
-    this.clear.emit();
+    return this.configObject ? !this.configObject.id : false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.seed && !this.seed) {
-      this.form.reset();
-    }
-    if (this.seed && this.crawlJobs) {
-      this.updateForm();
+    if (changes.configObject) {
+      if (this.configObject) {
+        this.updateForm();
+      } else {
+        this.form.reset();
+      }
     }
   }
 
-  getCrawlJobName(id): string {
-    const found = this.crawlJobs.find((job) => job.id === id);
-    return found ? found.meta.name : '';
+
+  getCrawlJobName(id) {
+    const found = this.options.crawlJobs.find(crawlJob => crawlJob.id === id);
+    return found ? found.meta.name : 'crawlJob';
   }
+  //
+  // getCrawlJobName(id): string {
+  //   const found = this.crawlJobs.find((job) => job.id === id);
+  //   return found ? found.meta.name : '';
+  // }
 
   // Disables disable toggle switch if every selected seed doesn't have the same disabled value
   shouldDisableDisabled(): void {
@@ -109,6 +106,16 @@ export class SeedDetailComponent implements OnChanges {
     }
   }
 
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  onToggleShouldAddCrawlJob(shouldAdd: boolean): void {
+    this.shouldAddCrawlJob = shouldAdd;
+    this.form.controls.jobRefList.markAsDirty();
+  }
+
   onSave(): void {
     this.save.emit(this.prepareSaveSeed());
   }
@@ -118,28 +125,45 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.seed);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
     this.updateForm();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      disabled: '',
+      // entityRef: {value: '', disabled: true},
+      entityRef: this.fb.group({
+        kind: '',
+        id: {value: '', disabled: true}
+      }),
+      jobRefList: '',
+      scope: this.fb.group({
+        surtPrefix: ''
+      }),
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
     this.form.patchValue({
-      id: this.seed.id,
-      disabled: this.seed.disabled,
-      entity_id: this.seed.entity_id,
-      job_id: this.seed.job_id || [],
-      scope: {
-        surt_prefix: this.seed.scope.surt_prefix,
+      id: this.configObject.id,
+      disabled: this.configObject.seed.disabled || false,
+      entityRef: {
+        kind: this.configObject.seed.entityRef.kind,
+        id: this.configObject.seed.entityRef.id
       },
-      meta: this.seed.meta,
+      jobRefList: this.configObject.seed.jobRefList || [],
+      scope: {
+        surtPrefix: this.configObject.seed.scope.surtPrefix,
+      },
+      meta: this.configObject.meta,
     });
+
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
@@ -153,7 +177,23 @@ export class SeedDetailComponent implements OnChanges {
    *
    * @returns {Seed}
    */
-  private prepareSaveSeed(): Seed {
-    return this.form.getRawValue();
+  private prepareSaveSeed(): ConfigObject {
+    const formModel = this.form.value;
+
+    const configObject = new ConfigObject({kind: Kind.SEED});
+
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const seed = new Seed();
+    seed.disabled = formModel.disabled;
+    seed.entityRef.id = this.configObject.seed.entityRef.id;
+    seed.jobRefList = formModel.jobRefList;
+    seed.scope.surtPrefix = formModel.scope.surtPrefix;
+
+    configObject.seed = seed;
+    configObject.meta = formModel.meta;
+    return configObject;
   }
 }

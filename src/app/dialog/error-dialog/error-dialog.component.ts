@@ -18,6 +18,6 @@ export class ErrorDialogComponent {
   constructor(public dialogRef: MatDialogRef<ErrorDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.title = data.error.name || 'Error';
-    this.content = data.error.message || data.error.toString();
+    this.content = data.error.message || data.error.code || data.error.toString();
   }
 }

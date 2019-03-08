@@ -1,8 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CrawlHostGroupConfig, IpRange, Meta} from '../../../commons/models/config.model';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {RoleService} from '../../../auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {CrawlHostGroupConfig, Meta} from '../../../commons/models';
+import {Kind} from '../../../commons/models/kind.model';
+import {IpRange} from '../../../commons/models/configs/ip-range.model';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
@@ -18,26 +21,25 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   @Input()
-  crawlHostGroupConfig: CrawlHostGroupConfig;
+  configObject: ConfigObject;
 
   @Output()
-  save = new EventEmitter<CrawlHostGroupConfig>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<CrawlHostGroupConfig>();
+  update = new EventEmitter<ConfigObject>();
   @Output()
-  delete = new EventEmitter<CrawlHostGroupConfig>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
+  shouldAddIpRange = undefined;
+  allSelected = false;
 
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      ip_range: this.fb.array([]),
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canEdit(): boolean {
@@ -45,15 +47,15 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return this.crawlHostGroupConfig && !this.crawlHostGroupConfig.id;
+    return this.configObject && !this.configObject.id;
   }
 
   get canSave(): boolean {
-    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0;
+    return this.form.valid && CrawlHostGroupConfigIpValidation.allRangesValid();
   }
 
   get canUpdate() {
-    return (this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid() && this.ipRangeControlArray.length !== 0);
+    return this.form.valid && this.form.dirty && CrawlHostGroupConfigIpValidation.allRangesValid();
   }
 
   get canRevert() {
@@ -65,11 +67,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   ipFromControl(index: number) {
-    return this.form.get(['ip_range', index, 'ip_from']);
+    return this.form.get(['ipRangeList', index, 'ipFrom']);
   }
 
   ipToControl(index: number) {
-    return this.form.get(['ip_range', index, 'ip_to']);
+    return this.form.get(['ipRangeList', index, 'ipTo']);
 
   }
 
@@ -78,16 +80,16 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get ipRangeControlArray() {
-    return <FormArray>this.form.get('ip_range');
+    return <FormArray>this.form.get('ipRangeList');
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.crawlHostGroupConfig && !changes.crawlHostGroupConfig.currentValue) {
-      this.form.reset();
-      return;
-    }
-    if (this.crawlHostGroupConfig) {
-      this.updateForm();
+    if (changes.configObject) {
+      if (!this.configObject) {
+        this.form.reset();
+      } else {
+        this.updateForm();
+      }
     }
   }
 
@@ -100,7 +102,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.crawlHostGroupConfig);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
@@ -116,21 +118,37 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     this.form.markAsDirty();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  onToggleShouldAddIpRange(shouldAdd: boolean): void {
+    this.shouldAddIpRange = shouldAdd;
+    this.form.controls.ipRangeList.markAsDirty();
+  }
+
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      ipRangeList: this.fb.array([]),
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
-    const ipRangeFG: FormGroup[] = this.crawlHostGroupConfig.ip_range.map(ipRange => this.fb.group(ipRange));
+    const ipRangeFG: FormGroup[] = this.configObject.crawlHostGroupConfig.ipRangeList
+      .map(ipRangeList => this.fb.group(ipRangeList));
+
     const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
     if (this.form.disabled) {
       ipRangeFGArray.disable();
     }
     this.form.patchValue({
-      id: this.crawlHostGroupConfig.id,
-      meta: this.crawlHostGroupConfig.meta,
+      id: this.configObject.id,
+      meta: this.configObject.meta,
     });
-    this.form.setControl('ip_range', ipRangeFGArray);
+    this.form.setControl('ipRangeList', ipRangeFGArray);
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
@@ -138,20 +156,30 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     }
   }
 
-  private prepareSave(): CrawlHostGroupConfig {
+  private prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    const iprangeDeepCopy: IpRange[] = formModel.ip_range.map(ipRange => ({...ipRange}));
-    return {
-      id: this.crawlHostGroupConfig.id,
-      ip_range: iprangeDeepCopy,
-      meta: formModel.meta,
-    };
+
+    const configObject = new ConfigObject({kind: Kind.CRAWLHOSTGROUPCONFIG});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const crawlHostGroupConfig = new CrawlHostGroupConfig();
+    crawlHostGroupConfig.ipRangeList = formModel.ipRangeList
+      .map(ipRange => new IpRange({ipFrom: ipRange.ipFrom, ipTo: ipRange.ipTo}));
+
+    configObject.meta = formModel.meta;
+    configObject.crawlHostGroupConfig = crawlHostGroupConfig;
+
+    return configObject;
+
   }
 
   private initIpRange() {
     return this.fb.group({
-      ip_from: ['', [Validators.required, CrawlHostGroupConfigIpValidation.ipAddressValidator]],
-      ip_to: ['', [Validators.required, CrawlHostGroupConfigIpValidation.ipAddressValidator]],
+      ipFrom: ['', [CrawlHostGroupConfigIpValidation.ipAddressValidator]],
+      ipTo: ['', [CrawlHostGroupConfigIpValidation.ipAddressValidator]],
     });
   }
 }
+

@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoglevelComponent} from './loglevel.component';
 
-xdescribe('LoglevelComponent', () => {
+fdescribe('LoglevelComponent', () => {
   let component: LoglevelComponent;
   let fixture: ComponentFixture<LoglevelComponent>;
 

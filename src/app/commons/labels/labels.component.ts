@@ -1,9 +1,10 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Label} from '../models/config.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../validator/patterns';
+import {Label} from '../models';
+
 
 export enum Kind {
   LABEL = 'Label',
@@ -21,6 +22,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   @Input() removable = true;
   @Input() kind: string = Kind.LABEL;
+
 
   // ControlValueAccessor callback functions
   onChange: (labels: Label[]) => void;
@@ -55,7 +57,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   }
 
   get value() {
-   return this.labelForm.get('value');
+    return this.labelForm.get('value');
   }
 
   ngOnInit(): void {
@@ -67,7 +69,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     if (labels === null) {
       this.labels = [];
     } else {
-      this.labels = labels.map((l) => new Label(l));
+      this.labels = labels.map(label => new Label({key: label.key, value: label.value}));
     }
     this.reset();
   }
@@ -125,7 +127,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();
@@ -152,7 +154,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();
@@ -165,7 +167,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     // remove old
     this.labels.splice(this.clickedIndex, 1);
     // add updated
-    this.labels.push({key, value});
+    this.labels.push(new Label({key, value}));
 
     this.onChange(this.labels);
     this.reset();

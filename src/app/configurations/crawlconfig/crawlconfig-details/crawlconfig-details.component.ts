@@ -1,8 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BrowserConfig, CrawlConfig, Meta, PolitenessConfig} from '../../../commons/models/config.model';
 import {RoleService} from '../../../auth/role.service';
 import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {Meta} from '../../../commons/models/meta/meta.model';
+import {CrawlConfig} from '../../../commons/models';
+import {Kind} from 'app/commons/models/kind.model';
 
 @Component({
   selector: 'app-crawlconfig-details',
@@ -12,53 +15,36 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../commons/validator/patterns';
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
 
+  readonly Kind = Kind;
+
   @Input()
   set data(show) {
     this.shouldShow = show;
   }
-
   @Input()
-  crawlConfig: CrawlConfig;
+  configObject: ConfigObject;
   @Input()
-  browserConfigs: BrowserConfig[];
-  @Input()
-  politenessConfigs: PolitenessConfig[];
-  @Input()
-  equalExtractText: boolean;
-  @Input()
-  equalCreateSnapshot: boolean;
-  @Input()
-  equalDepthFirst: boolean;
+  options: any;
 
   @Output()
-  save = new EventEmitter<CrawlConfig>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<CrawlConfig>();
+  update = new EventEmitter<ConfigObject>();
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<CrawlConfig>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
 
-  browserConfigList: any[];
-  politenessConfigList: any = [];
+  disableExtractText = false;
+  disableCreateScreenshot = false;
 
-  constructor(private fb: FormBuilder,
-              private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      browser_config_id: [''],
-      politeness_id: [''],
-      extra: this.fb.group({
-        extract_text: '',
-        create_snapshot: '',
-      }),
-      minimum_dns_ttl_s: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
-      depth_first: '',
-      priority_weight: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
-      meta: new Meta(),
-    });
+  shouldAddLabel = undefined;
+  allSelected = false;
+
+  constructor(private fb: FormBuilder, private roleService: RoleService) {
+    this.createForm();
   }
 
   get canEdit(): boolean {
@@ -66,102 +52,71 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return (this.crawlConfig && !this.crawlConfig.id);
+    return (this.configObject && !this.configObject.id);
   }
 
   get name() {
     return this.form.get('meta').value.name;
   }
 
-  get browserConfigId() {
-    return this.form.get('browser_config_id');
+  get collectionRef() {
+    return this.form.get('collectionRef').value;
   }
 
-  get politenessId() {
-    return this.form.get('politeness_id');
+  get browserConfigRef() {
+    return this.form.get('browserConfigRef').value;
+  }
+
+  get politenessRef() {
+    return this.form.get('politenessRef').value;
   }
 
   get minDnsTtlSeconds() {
-    return this.form.get('minimum_dns_ttl_s');
+    return this.form.get('minimumDnsTtlS');
   }
 
   get priorityWeight() {
-    return this.form.get('priority_weight');
+    return this.form.get('priorityWeight');
   }
 
   get extractText() {
-    return this.form.get('extra.extract_text');
+    return this.form.get('extra.extractText');
   }
 
-  get createSnapshot() {
-    return this.form.get('extra.create_snapshot');
+  get createScreenshot() {
+    return this.form.get('extra.createScreenshot');
   }
 
-  get depthFirst() {
-    return this.form.get('depth_first');
-  }
-
-  get showPolitenessConfig(): boolean {
-    const politenessConfig = this.politenessId.value;
-    if (politenessConfig != null && politenessConfig !== '') {
-      return true;
-    }
-    return false;
-  }
-
-  get showBrowserConfig(): boolean {
-    const browserConfig = this.browserConfigId.value;
-    if (browserConfig != null && browserConfig !== '') {
-      return true;
-    }
-    return false;
-  }
 
   get showShortcuts(): boolean {
-    if (this.showPolitenessConfig || this.showBrowserConfig) {
-      return true;
-    }
-    return false;
-  }
+     return (this.politenessRef && this.politenessRef.id) || (this.browserConfigRef && this.browserConfigRef.id) || (this.collectionRef && this.collectionRef.id)
+   }
+
+   getPolitenessConfigName(id) {
+    const found = this.options.politenessConfigs.find( politenessConfig => politenessConfig.id === id);
+    return found ? found.meta.name : 'politenessConfig';
+   }
+
+   getCollectionName(id) {
+    const found = this.options.collections.find( collection => collection.id === id);
+    return found ? found.meta.name : 'collection';
+   }
+
+   getBrowserConfigName(id) {
+    const found = this.options.browserConfigs.find( browserConfig => browserConfig.id === id);
+    return found ? found.meta.name : 'browserConfig';
+   }
 
   shouldDisableExtractText(): void {
-    if (this.equalExtractText !== undefined || !this.shouldShow) {
-      if (!this.equalExtractText) {
+      if (this.disableExtractText) {
         this.extractText.disable();
       }
-    }
   }
 
   shouldDisableCreateSnapshot(): void {
-    if (this.equalCreateSnapshot !== undefined || !this.shouldShow) {
-      if (!this.equalCreateSnapshot) {
-        this.createSnapshot.disable();
+      if (this.disableCreateScreenshot) {
+        this.createScreenshot.disable();
       }
-    }
-  }
-
-  shouldDisableDepthFirst(): void {
-    if (this.equalDepthFirst !== undefined || !this.shouldShow) {
-      if (!this.equalDepthFirst) {
-        this.depthFirst.disable();
-      }
-    }
-  }
-
-  getPolitenessConfigName(id): string {
-    for (let i = 0; i < this.politenessConfigList.length; i++) {
-      if (id === this.politenessConfigList[i].id) {
-        return this.politenessConfigList[i].itemName;
-      }
-    }
-  }
-
-  getBrowserConfigName(id): string {
-    for (let i = 0; i < this.browserConfigList.length; i++) {
-      if (id === this.browserConfigList[i].id) {
-        return this.browserConfigList[i].itemName;
-      }
-    }
   }
 
   onEnableExtractText() {
@@ -170,38 +125,20 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     }
   }
 
-  onEnableCreateSnapshot() {
-    if(this.createSnapshot.disabled) {
-      this.createSnapshot.enable();
+  onEnableCreateScreenshot() {
+    if (this.createScreenshot.disabled) {
+      this.createScreenshot.enable();
     }
   }
 
-  onEnableDepthFirst() {
-    if (this.depthFirst.disabled) {
-      this.depthFirst.enable();
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    if (changes.crawlConfig && !changes.crawlConfig.currentValue) {
-      this.form.reset();
-      return;
-    }
-    if (changes.browserConfigs && changes.browserConfigs.currentValue) {
-      this.browserConfigList = this.browserConfigs.map((browserConfig) => ({
-        id: browserConfig.id,
-        itemName: browserConfig.meta.name,
-      }));
-    }
-    if (changes.politenessConfigs && changes.politenessConfigs.currentValue) {
-      this.politenessConfigList = this.politenessConfigs.map((politenessConfig) => ({
-        id: politenessConfig.id,
-        itemName: politenessConfig.meta.name,
-      }));
-    }
-    if (this.crawlConfig && this.browserConfigs && this.politenessConfigs) {
-      this.updateForm();
+    if (changes.configObject) {
+      if (!this.configObject) {
+        this.form.reset();
+      } else {
+        this.updateForm();
+      }
     }
   }
 
@@ -214,30 +151,47 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.crawlConfig);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
     this.updateForm();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      collectionRef: '',
+      browserConfigRef: '',
+      politenessRef: '',
+      extra: this.fb.group({
+        extractText: '',
+        createScreenshot: '',
+      }),
+      minimumDnsTtlS: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      priorityWeight: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
     this.form.patchValue({
-      id: this.crawlConfig.id,
-      minimum_dns_ttl_s: this.crawlConfig.minimum_dns_ttl_s || '',
-      priority_weight: this.crawlConfig.priority_weight || '',
-      depth_first: this.crawlConfig.depth_first,
-      politeness_id: this.crawlConfig.politeness_id || '',
-      browser_config_id: this.crawlConfig.browser_config_id || '',
+      id: this.configObject.id,
+      collectionRef: this.configObject.crawlConfig.collectionRef,
+      politenessRef: this.configObject.crawlConfig.politenessRef,
+      browserConfigRef: this.configObject.crawlConfig.browserConfigRef,
+      minimumDnsTtlS: this.configObject.crawlConfig.minimumDnsTtlS || '',
+      priorityWeight: this.configObject.crawlConfig.priorityWeight || '',
       extra: {
-        extract_text: this.crawlConfig.extra.extract_text,
-        create_snapshot: this.crawlConfig.extra.create_snapshot,
+        extractText: this.configObject.crawlConfig.extra.extractText || null,
+        createScreenshot: this.configObject.crawlConfig.extra.createScreenshot || null,
       },
-      meta: this.crawlConfig.meta,
+      meta: this.configObject.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -246,23 +200,30 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     }
     this.shouldDisableExtractText();
     this.shouldDisableCreateSnapshot();
-    this.shouldDisableDepthFirst();
   }
 
-  private prepareSave(): CrawlConfig {
+  private prepareSave(): ConfigObject {
+
     const formModel = this.form.value;
-    return {
-      id: this.crawlConfig.id,
-      browser_config_id: formModel.browser_config_id,
-      politeness_id: formModel.politeness_id,
-      extra: {
-        extract_text: formModel.extra.extract_text,
-        create_snapshot: formModel.extra.create_snapshot,
-      },
-      minimum_dns_ttl_s: parseInt(formModel.minimum_dns_ttl_s, 10),
-      priority_weight: parseInt(formModel.priority_weight, 10),
-      depth_first: formModel.depth_first,
-      meta: formModel.meta,
-    };
+
+    const configObject = new ConfigObject({kind: Kind.CRAWLCONFIG});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const crawlConfig = new CrawlConfig();
+    crawlConfig.collectionRef = formModel.collectionRef;
+    crawlConfig.browserConfigRef = formModel.browserConfigRef;
+    crawlConfig.politenessRef = formModel.politenessRef;
+    crawlConfig.minimumDnsTtlS = parseInt(formModel.minimumDnsTtlS, 10) || 0;
+    crawlConfig.priorityWeight = parseInt(formModel.priorityWeight, 10) || 0;
+    crawlConfig.extra.extractText = formModel.extra ? formModel.extra.extractText : null;
+    crawlConfig.extra.createScreenshot = formModel.extra ? formModel.extra.createScreenshot : null;
+
+    configObject.meta = formModel.meta;
+    configObject.crawlConfig = crawlConfig;
+
+    return configObject;
   }
 }
+

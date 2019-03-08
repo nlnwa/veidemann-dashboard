@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
-
 import {HttpClient} from '@angular/common/http';
-import {LogLevels} from '../../commons/models/config.model';
+import {Level, LogLevels} from '../../commons/models/';
 
 @Injectable()
 export class LogService {
@@ -14,14 +13,20 @@ export class LogService {
   }
 
   getLevels(): Observable<string[]> {
-    return of(['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF']);
+    const levels: string[] = [];
+    for (const level in Level) {
+      if (isNaN(parseInt(level, 10)) && Level.hasOwnProperty(level)) {
+        levels.push(level);
+      }
+    }
+    return of(levels);
   }
 
   getLogConfig(): Observable<LogLevels> {
     return this.http.get<LogLevels>(this.url);
   }
 
-  saveLogConfig(logConfig: LogLevels): Observable<LogLevels> {
-    return this.http.post<LogLevels>(this.url, logConfig);
+  saveLogConfig(logLevels: LogLevels): Observable<LogLevels> {
+    return this.http.post<LogLevels>(this.url, logLevels);
   }
 }

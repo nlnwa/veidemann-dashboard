@@ -5,19 +5,13 @@ import {ActivityComponent} from './core/activity';
 import {DocumentationComponent} from './core/documentation/documentation.component';
 import {StatisticsComponent} from './core/statistics/statistics.component';
 import {LoglevelComponent} from './configurations/logs/';
-import {SearchComponent} from './configurations/search';
-import {CrawlJobsComponent} from './configurations/crawljobs';
-import {SchedulePageComponent} from './configurations/schedule';
-import {CrawlHostGroupConfigPageComponent} from './configurations/crawlhostgroupconfig';
-import {PolitenessConfigPageComponent} from './configurations/politenessconfig';
-import {BrowserConfigPageComponent} from './configurations/browserconfig';
-import {BrowserScriptPageComponent} from './configurations/browserscript';
-import {CrawlConfigPageComponent} from './configurations/crawlconfig/';
-import {RoleMappingPageComponent} from './configurations/rolemapping';
-import {GuardService} from './auth/guard.service';
-import {Role} from './commons/models/config.model';
-import {WarcStatusPageComponent} from './configurations/warcstatus/warcstatus-page.component';
 
+import {GuardService} from './auth/';
+import {WarcStatusPageComponent} from './configurations/warcstatus/';
+import {ConfigurationsComponent} from './configurations/configurations.component';
+import {SearchComponent} from './configurations/search';
+import {Kind} from './commons/models';
+import {OptionsResolver} from './configurations/options.resolver.service';
 
 const routes: Routes = [
   {
@@ -38,140 +32,33 @@ const routes: Routes = [
     component: StatisticsComponent,
   },
   {
+    path: 'config/:kind',
+    component: ConfigurationsComponent,
+     resolve: {
+       options: OptionsResolver
+     },
+    canActivate: [GuardService],
+  },
+  {
     path: 'search',
     component: SearchComponent,
-    canActivate: [GuardService],
+    pathMatch: 'full',
     data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+      kind: Kind.CRAWLENTITY
     },
-  },
-  {
-    path: 'crawljobs',
-    component: CrawlJobsComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'crawljobs/:id',
-    component: CrawlJobsComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'schedule',
-    component: SchedulePageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'schedule/:id',
-    component: SchedulePageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'crawlconfig',
-    component: CrawlConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'crawlconfig/:id',
-    component: CrawlConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'crawlhostgroupconfig',
-    component: CrawlHostGroupConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'browserconfig',
-    component: BrowserConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'browserconfig/:id',
-    component: BrowserConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'browserscript',
-    component: BrowserScriptPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'browserscript/:id',
-    component: BrowserScriptPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN]
-    },
-  },
-  {
-    path: 'politenessconfig',
-    component: PolitenessConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'politenessconfig/:id',
-    component: PolitenessConfigPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
+    resolve: {
+      options: OptionsResolver
     },
   },
   {
     path: 'logconfig',
     component: LoglevelComponent,
     canActivate: [GuardService],
-    data: {
-      roles: [Role.READONLY, Role.CURATOR, Role.ADMIN],
-    },
-  },
-  {
-    path: 'rolemapping',
-    component: RoleMappingPageComponent,
-    canActivate: [GuardService],
-    data: {
-      roles: [Role.ADMIN],
-    },
   },
   {
     path: 'validator',
     component: WarcStatusPageComponent,
     canActivate: [GuardService],
-    data: {
-      roles: [Role.CURATOR, Role.ADMIN],
-    },
   },
 ];
 

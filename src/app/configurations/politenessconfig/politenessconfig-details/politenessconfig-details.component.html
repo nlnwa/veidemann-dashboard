@@ -5,7 +5,7 @@
         <span i18n="@@politenessconfigDetailsHeader">Politenessconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!politenessConfig.id"
+        <span *ngIf="!configObject.id"
               i18n="@@politenessconfigNewPolitenessConfigHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -18,26 +18,52 @@
                  placeholder="Id"
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
+        <div *ngIf="!shouldShow">
+        <div>
+          <span>Labels:</span>
+          <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+            <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+            <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+          </button>
+          <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+          <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">
+            Skal fjerne labels fra alle konfigurasjoner</span>
+        </div>
+        <div>
+          <span>CrawlHostGroup Selector:</span>
+          <button mat-icon-button (click)="onToggleShouldAddSelector(true)">
+            <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onToggleShouldAddSelector(false)">
+            <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+          </button>
+          <span *ngIf="shouldAddSelector">Skal legge til CrawlHostGroup Selector til alle konfigurasjoner</span>
+          <span *ngIf="!shouldAddSelector && shouldAddSelector !== undefined">
+            Skal fjerne CrawlHostGroup Selector fra alle konfigurasjoner </span>
+        </div>
+      </div>
       </div>
 
       <div fxFlex fxLayout="column">
         <div (click)="robotsPolicy.disabled ? onEnableRobotsPolicy() : null">
-        <mat-form-field>
-          <mat-select placeholder="Velg policy"
-                      formControlName="robots_policy"
-                      i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder"
-                      [matTooltip]="robotsPolicy.disabled ?
+          <mat-form-field>
+            <mat-select placeholder="Velg policy"
+                        formControlName="robotsPolicy"
+                        i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder"
+                        [matTooltip]="robotsPolicy.disabled ?
                         'Instilling er ikke lik for alle markerte konfigurasjoner.'
                         + 'Klikk her og sett ønsket verdi for å overstyre alle,'
                         + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
                         : null"
-          >
-            <mat-option *ngFor="let policy of robotsPolicyList" [value]="policy">{{policy}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+            >
+              <mat-option *ngFor="let policy of robotsPolicies" [value]="policy">{{policy}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
         <!--CrawlHostGroup Selector -->
-        <app-labels kind="CrawlHostGroup Selector" formControlName="crawl_host_group_selector"
+        <app-labels kind="CrawlHostGroup Selector" formControlName="crawlHostGroupSelectorList"
                     [removable]="canEdit"></app-labels>
 
         <ng-container
@@ -45,7 +71,7 @@
           <div class="customRobotTxtInput">
             <mat-form-field>
             <textarea matInput
-                      formControlName="custom_robots"
+                      formControlName="customRobots"
                       placeholder="robots.txt">
             </textarea>
               <mat-error *ngIf="!customRobots.valid"
@@ -58,7 +84,7 @@
 
         <mat-form-field>
           <input matInput
-                 formControlName="minimum_robots_validity_duration_s"
+                 formControlName="minimumRobotsValidityDurationS"
                  placeholder="Minimum robots validity (seconds)"
                  i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
           <mat-error *ngIf="!minRobotsValidDurationSec.valid"
@@ -69,7 +95,7 @@
 
         <mat-form-field>
           <input matInput
-                 formControlName="min_time_between_page_load_ms"
+                 formControlName="minTimeBetweenPageLoadMs"
                  placeholder="Minimum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
           <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
@@ -80,7 +106,7 @@
 
         <mat-form-field>
           <input matInput
-                 formControlName="max_time_between_page_load_ms"
+                 formControlName="maxTimeBetweenPageLoadMs"
                  placeholder="Maximum time between page load (ms)"
                  i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
           <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
@@ -91,7 +117,7 @@
 
         <mat-form-field>
           <input matInput
-                 formControlName="delay_factor"
+                 formControlName="delayFactor"
                  placeholder="Delay factor"
                  i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
         </mat-form-field>
@@ -102,7 +128,7 @@
 
         <mat-form-field>
           <input matInput
-                 formControlName="max_retries"
+                 formControlName="maxRetries"
                  placeholder="Maximum retries"
                  i18n-placeholder="@@mustBeNumberError">
         </mat-form-field>
@@ -112,7 +138,7 @@
         </mat-error>
         <mat-form-field>
           <input matInput
-                 formControlName="retry_delay_seconds"
+                 formControlName="retryDelaySeconds"
                  placeholder="Retry delay (s)"
                  i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
         </mat-form-field>
@@ -146,7 +172,7 @@
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="!showSave"
+              *ngIf="!showSave && !allSelected"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

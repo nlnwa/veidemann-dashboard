@@ -1,0 +1,34 @@
+<mat-card *ngIf="allErrors">
+  <mat-card-title>
+    <span>Oppsummering</span>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <span>Feil oppdaget i WARC-filene</span>
+  </mat-card-subtitle>
+  <mat-card-content>
+    <ng-container *ngFor="let error of this.errors">
+      <mat-accordion>
+        <mat-expansion-panel fxFlex>
+
+          <mat-expansion-panel-header>
+            <mat-panel-title> {{error.type}} ({{error.total}})</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-table [dataSource]="error.subMessages">
+            <ng-container matColumnDef="subMessage">
+              <mat-header-cell *matHeaderCellDef> Feilmelding</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.message}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="subMessageCount">
+              <mat-header-cell *matHeaderCellDef> Antall</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.count}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="errorSummaryColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: errorSummaryColumns;"></mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

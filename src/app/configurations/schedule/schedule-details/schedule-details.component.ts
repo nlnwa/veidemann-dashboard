@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DateTime} from '../../../commons/datetime';
-import {CrawlScheduleConfig, Meta} from '../../../commons/models/config.model';
 import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
@@ -13,6 +12,10 @@ import {RoleService} from '../../../auth/role.service';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import * as moment from 'moment';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {Meta} from '../../../commons/models/meta/meta.model';
+import {CrawlScheduleConfig} from '../../../commons/models';
+import {Kind} from '../../../commons/models/kind.model';
 
 @Component({
   selector: 'app-schedule-details',
@@ -32,42 +35,24 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   @Input()
-  schedule: CrawlScheduleConfig;
-  @Input()
-  equalValidFrom: boolean;
-  @Input()
-  equalValidTo: boolean;
+  configObject: ConfigObject;
 
   @Output()
-  save = new EventEmitter<CrawlScheduleConfig>();
+  save = new EventEmitter<ConfigObject>();
   @Output()
-  update = new EventEmitter<CrawlScheduleConfig>();
+  update = new EventEmitter<ConfigObject>();
   // noinspection ReservedWordAsName
   @Output()
-  delete = new EventEmitter<CrawlScheduleConfig>();
-  @Output()
-  deleteValidFrom = new EventEmitter();
-  @Output()
-  deleteValidTo = new EventEmitter();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
   shouldShow = true;
+  shouldAddLabel = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
-    this.createForm({
-      id: {value: '', disabled: true},
-      valid_from: '',
-      valid_to: '',
-      cron_expression: this.fb.group({
-        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
-        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
-        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
-        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
-        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
-      }),
-      meta: new Meta(),
-    });
+    this.createForm();
   }
 
   get canDelete(): boolean {
@@ -79,7 +64,7 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return this.schedule && !this.schedule.id;
+    return this.configObject && !this.configObject.id;
   }
 
   get canSave(): boolean {
@@ -99,16 +84,16 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get cronExpression() {
-    return this.form.get('cron_expression');
+    return this.form.get('cronExpression');
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.schedule && !changes.schedule.currentValue) {
+    if (changes.configObject && !changes.configObject.currentValue) {
       this.form.reset();
       return;
     }
 
-    if (this.schedule) {
+    if (this.configObject) {
       this.updateForm();
     }
   }
@@ -122,41 +107,48 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.schedule);
-  }
-
-  onDeleteAllValidFrom(): void {
-    this.form.markAsDirty();
-    this.deleteValidFrom.emit(true);
-  }
-
-  onDeleteAllValidTo(): void {
-    this.form.markAsDirty();
-    this.deleteValidTo.emit(true);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
     this.updateForm();
   }
 
-  private createForm(controlsConfig: object) {
-    this.form = this.fb.group(controlsConfig);
+  onToggleShouldAddLabels(shouldAdd: boolean): void {
+    this.shouldAddLabel = shouldAdd;
+    this.form.controls.meta.markAsDirty();
+  }
+
+  private createForm() {
+    this.form = this.fb.group({
+      id: {value: '', disabled: true},
+      validFrom: '',
+      validTo: '',
+      cronExpression: this.fb.group({
+        minute: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MINUTE_PATTERN))]],
+        hour: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_HOUR_PATTERN))]],
+        dom: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOM_PATTERN))]],
+        month: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_MONTH_PATTERN))]],
+        dow: ['', [Validators.required, Validators.pattern(new RegExp(VALID_CRON_DOW_PATTERN))]],
+      }),
+      meta: new Meta(),
+    });
   }
 
   updateForm() {
-    const cronSplit = this.schedule.cron_expression.split(' ');
+    const cronSplit = this.configObject.crawlScheduleConfig.cronExpression.split(' ');
     this.form.patchValue({
-      id: this.schedule.id,
-      valid_from: this.schedule.valid_from ? DateTime.adjustTime(this.schedule.valid_from) : '',
-      valid_to: this.schedule.valid_to ? DateTime.adjustTime(this.schedule.valid_to) : '',
-      cron_expression: {
+      id: this.configObject.id,
+      validFrom: this.configObject.crawlScheduleConfig.validFrom ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validFrom) : null,
+      validTo: this.configObject.crawlScheduleConfig.validTo ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validTo) : null,
+      cronExpression: {
         minute: cronSplit[0],
         hour: cronSplit[1],
         dom: cronSplit[2],
         month: cronSplit[3],
         dow: cronSplit[4],
       },
-      meta: this.schedule.meta,
+      meta: this.configObject.meta,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -173,20 +165,24 @@ export class ScheduleDetailsComponent implements OnChanges {
       + formModel.dow;
   }
 
-  private prepareSave(): CrawlScheduleConfig {
+  private prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    const formCronExpression = this.form.value.cron_expression;
-    const validFromUTC = DateTime.dateToUtc(moment(formModel.valid_from), true);
-    const validToUTC = DateTime.dateToUtc(moment(formModel.valid_to), false);
-    const cronExpression = this.setCronExpression(formCronExpression);
-    return {
 
-      id: this.schedule.id,
-      cron_expression: cronExpression,
-      valid_from: validFromUTC ? validFromUTC : null,
-      valid_to: validToUTC ? validToUTC : null,
-      meta: formModel.meta,
-    };
+    const configObject = new ConfigObject({kind: Kind.CRAWLSCHEDULECONFIG});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const crawlScheduleConfig = new CrawlScheduleConfig();
+    const validFromUTC = DateTime.dateToUtc(moment(formModel.validFrom), true);
+    const validToUTC = DateTime.dateToUtc(moment(formModel.validTo), false);
+
+    crawlScheduleConfig.validFrom = validFromUTC ? validFromUTC : null;
+    crawlScheduleConfig.validTo = validToUTC ? validToUTC : null;
+    crawlScheduleConfig.cronExpression = this.setCronExpression(this.form.value.cronExpression);
+
+    configObject.meta = formModel.meta;
+    configObject.crawlScheduleConfig = crawlScheduleConfig;
+    return configObject;
   }
 }
-

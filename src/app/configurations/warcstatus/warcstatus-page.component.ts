@@ -14,18 +14,17 @@ import {WarcStatusService} from './warcstatus.service';
           <span class="fill-space"></span>
           <span style="color: rgba(0,0,0,0.3);">(Antall gyldige: {{numValid}})</span>
         </app-toolbar>
-        <app-warcstatus-list (rowClick)="onSelectWarcStatus($event)"></app-warcstatus-list>
+        <app-warcstatus-list (rowClick)="onSelectWarcStatus($event)" (allErrors)="onAllErrors($event)"></app-warcstatus-list>
       </div>
-      <app-warcstatus-details
-        [warcError]="warcError"
-        *ngIf="warcError"></app-warcstatus-details>
-
+      <app-warcstatus-summary *ngIf="!warcError" [allErrors]="allErrors"></app-warcstatus-summary>
+      <app-warcstatus-details [warcError]="warcError"></app-warcstatus-details>
     </div>
   `,
   styleUrls: [],
 })
 export class WarcStatusPageComponent implements OnInit {
 
+  allErrors;
   warcError;
   numValid;
   numInvalid;
@@ -49,5 +48,9 @@ export class WarcStatusPageComponent implements OnInit {
 
   onSelectWarcStatus(warcError) {
     this.warcError = warcError;
+  }
+
+  onAllErrors(warcErrors) {
+    this.allErrors = warcErrors;
   }
 }

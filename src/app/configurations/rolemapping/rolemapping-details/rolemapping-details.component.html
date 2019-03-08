@@ -2,37 +2,39 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <span *ngIf="roleMapping" i18n="@@roleMappingHeader">Rolemapping</span>
+        <span *ngIf="configObject" i18n="@@roleMappingHeader">Rolemapping</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!roleMapping.id"
+        <span *ngIf="!configObject.id"
               i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
-        <mat-form-field>
-          <mat-select placeholder="Velg en type" [(value)]="selectedType">
-            <mat-option value="email">E-post</mat-option>
-            <mat-option value="group">Gruppe</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedType === 'email'">
-          <input matInput formControlName="email" placeholder="Epost"
-                 i18n-placeholder="@@emailInputPlaceholder">
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedType === 'group'">
-          <input matInput formControlName="group" placeholder="Gruppe"
-                 i18n-placeholder="@@groupInputPlaceholder">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select placeholder="Velg rolle" formControlName="role" multiple
-                      i18n-placeholder="@@rolemappingRoleMultiselectHeader">
-            <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
-          </mat-select>
-          <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
-          <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
-        </mat-form-field>
+      <div fxLayout="column">
+        <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
+          <mat-form-field *ngIf ="shouldShow">
+            <mat-select placeholder="Velg en type" [(value)]="selectedType">
+              <mat-option value="email">E-post</mat-option>
+              <mat-option value="group">Gruppe</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'email' && shouldShow" >
+            <input matInput formControlName="email" placeholder="Epost"
+                   i18n-placeholder="@@emailInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field *ngIf="selectedType === 'group' && shouldShow">
+            <input matInput formControlName="group" placeholder="Gruppe"
+                   i18n-placeholder="@@groupInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
+                        i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+              <mat-option *ngFor="let role of roles" [value]="role">{{role}}</mat-option>
+            </mat-select>
+            <mat-hint i18n="@@rolemappingFormRolesDropdownHint">Velg rolle(r) for brukeren</mat-hint>
+            <mat-error *ngIf="! role.valid">En rolle for brukeren er påkrevd.</mat-error>
+          </mat-form-field>
+        </div>
       </div>
     </mat-card-content>
 
@@ -58,7 +60,7 @@
         Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="!showSave"
+              *ngIf="!showSave && !allSelected"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

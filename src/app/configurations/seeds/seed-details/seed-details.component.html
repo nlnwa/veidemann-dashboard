@@ -5,25 +5,50 @@
       <mat-card-title>
         <ng-container i18n="@@seedDetailsCardTitle">SEED</ng-container>
       </mat-card-title>
-      <mat-card-subtitle *ngIf="!seed.id">
+      <mat-card-subtitle *ngIf="!configObject.id">
         <span i18n="@@seedDetailsCardSubtitle">Ny (ikke lagret)</span>
       </mat-card-subtitle>
-      <span class="fill-space"></span>
-      <button mat-icon-button (click)="onClearClicked()"><mat-icon>clear</mat-icon></button>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta" [nameIsUrl]="true" [shouldShow]="shouldShow"></app-meta>
-        <mat-form-field *ngIf="seed.id && shouldShow">
+        <mat-form-field *ngIf="configObject.id && shouldShow">
           <input matInput formControlName="id" placeholder="Id"
                  i18n-placeholder="@@seedFormIdPlaceholder">
         </mat-form-field>
-        <mat-form-field *ngIf="shouldShow">
-          <input matInput formControlName="entity_id"
+        <ng-container formGroupName="entityRef">
+          <mat-form-field *ngIf="shouldShow">
+          <input matInput formControlName="id"
                  placeholder="Entitetens Id"
                  i18n-placeholder="@@metaEntityIdInputPlaceholder"
           >
         </mat-form-field>
+        </ng-container>
+        <div *ngIf="!shouldShow">
+          <div>
+            <span>Labels:</span>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+          </div>
+          <div>
+            <span>Crawljob:</span>
+            <button mat-icon-button (click)="onToggleShouldAddCrawlJob(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddCrawlJob(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddCrawlJob">Skal legge til valgte crawljob til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddCrawlJob && shouldAddCrawlJob !== undefined">
+            Skal fjerne valgte crawljob fra alle konfigurasjoner </span>
+          </div>
+        </div>
       </div>
 
       <div fxFlex fxLayout="column">
@@ -39,46 +64,44 @@
             Deaktivert
           </mat-slide-toggle>
           </div>
-            <mat-form-field formGroupName="scope" *ngIf="seed?.id && shouldShow">
+
+        <app-configref formControlName="jobRefList" [multiple]="true" [options]="options.crawlJobs" [kind]="Kind.CRAWLJOB"></app-configref>
+
+            <mat-form-field formGroupName="scope" *ngIf="configObject?.id && shouldShow">
           <input matInput
-                 formControlName="surt_prefix"
+                 formControlName="surtPrefix"
                  placeholder="Surt prefiks"
                  i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-select placeholder="Jobb" formControlName="job_id" multiple
-                      i18n-placeholder="@@seedCrawljobDropDownPlaceholder">
-            <mat-option *ngFor="let job of crawlJobs" [value]="job.id">{{job.meta.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
 
         <ng-container *ngIf="showShortcuts">
           <mat-toolbar>
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-          <mat-form-field>
-            <mat-chip-list placeholder="Crawljob">
-              <mat-chip *ngFor="let job of crawlJobId.value">
-                <a [routerLink]="['/crawljobs', job]">
-                  {{getCrawlJobName(job)}}</a>
-              </mat-chip>
-            </mat-chip-list>
-          </mat-form-field>
+          <ng-container>
+            <mat-form-field>
+              <mat-chip-list placeholder="Crawljobs">
+                <mat-chip *ngFor="let configRef of crawlJobRefList">
+                  <a [routerLink]="['/config/crawljobs']" [queryParams]="{id: configRef.id}">{{ getCrawlJobName(configRef.id) }}</a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
         </ng-container>
       </div>
     </mat-card-content>
 
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="primary"
-              *ngIf="!seed?.id"
+              *ngIf="!configObject?.id"
               [disabled]="!form.valid"
               (click)="onSave()"
               i18n="@@commonButtonSave">Lagre
       </button>
       <button mat-raised-button color="primary"
-              *ngIf="seed?.id"
+              *ngIf="configObject?.id"
               [disabled]="!form.dirty"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">Oppdater
@@ -89,7 +112,7 @@
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="seed?.id"
+              *ngIf="configObject?.id && !allSelected"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>

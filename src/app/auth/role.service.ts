@@ -1,7 +1,8 @@
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Role, RoleList} from '../commons/models/config.model';
+import {Role, RoleList} from '../commons/models/configs/rolemapping.model';
+
 
 @Injectable()
 export class RoleService {

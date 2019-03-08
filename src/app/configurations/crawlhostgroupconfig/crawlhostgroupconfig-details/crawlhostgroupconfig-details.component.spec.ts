@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-details.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
-import {CrawlHostGroupConfig, Label} from '../../../commons/models/config.model';
+import {CrawlHostGroupConfig, Label} from '../../../commons/models/configobject.model';
 
 describe('CrawlHostGroupConfigDetailsComponent', () => {
   let component: CrawlHostGroupConfigDetailsComponent;

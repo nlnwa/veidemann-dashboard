@@ -1,73 +1,48 @@
 <div fxLayout="column" fxLayoutGap="16px">
-  <div fxLayout="column">
-    <div fxLayout="row">
-      <mat-form-field fxFlex>
-        <input matInput
-               (keyup.enter)="onEnterKey($event)"
-               placeholder="Søk"
-               autofocus
-               i18n-placeholder="@@searchSearchFieldPlaceholder">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-toolbar>
-        <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
-        <span class="fill-space"></span>
-        <button mat-mini-fab (click)="onCreateEntity()"
-                *ngIf="canEdit" [disabled]="!entitySingleMode ? true : false">
-          <mat-icon matTooltipShowDelay="500"
-                    [matTooltip]="!entitySingleMode ? 'Kan ikke opprette en ny entitet når flere er valgt.' : 'Legg til en ny entitet.'">
-            add
-          </mat-icon>
-        </button>
-      </mat-toolbar>
-
-      <app-search-list (rowClick)="onSelectEntity($event)"
-                       [data]="entities$ | async"
-                       (selectedChange)="onSelectedEntityChange($event)"
-                       (selectAll)="onSelectAllEntities($event)"
-                       (page)="onPageEntity($event)">
-      </app-search-list>
-
-    </div>
+  <div fxLayout="row">
+    <mat-form-field fxFlex>
+      <input matInput
+             (keyup.enter)="onEnterKey($event)"
+             placeholder="Søk"
+             autofocus
+             i18n-placeholder="@@searchSearchFieldPlaceholder">
+    </mat-form-field>
   </div>
-  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-    <div fxFlex [fxHide]="(!entitySingleMode || (entitySingleMode && !selectedEntity))" [fxShow]="selectedEntity && entitySingleMode">
-      <app-entity-details
-        [entity]="selectedEntity"
-        (save)="onSaveEntity($event)"
-        (update)="onUpdateEntity($event)"
-        (delete)="onDeleteEntity($event)"
-        (clear)="onClearEntity()">
-        <!-- Seedlist -->
-        <mat-toolbar>
-          <span i18n="@@entitySeedlistToolbarHeader">Seed</span>
-          <span class="fill-space"></span>
-          <button mat-mini-fab (click)="onCreateSeed(selectedEntity.id)"
-                  *ngIf="canEdit"
-                  [disabled]="!seedSingleMode ? true : false"
-                  [matTooltip]="!seedSingleMode ? 'Kan ikke opprette en ny seed når flere er valgt.' :'Legg til en ny seed.'">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-toolbar>
-        <app-selection-base-list (rowClick)="onSelectSeed($event)"
-                                 [data]="seeds$ | async"
-                                 (selectedChange)="onSelectedSeedChange($event)"
-                                 (selectAll)="onSelectAllSeeds($event)"
-                                 (page)="onPageSeed($event)">
-        </app-selection-base-list>
-      </app-entity-details>
-    </div>
-    <div fxFlex *ngIf="selectedSeed && seedSingleMode">
-      <app-seed-details
-        [seed]="selectedSeed"
-        [crawlJobs]="crawlJobs"
-        (save)="onSaveSeed($event)"
-        (update)="onUpdateSeed($event)"
-        (delete)="onDeleteSeed($event)"
-        (clear)="onClearSeed()">
-      </app-seed-details>
-    </div>
-    <ng-template detail-host></ng-template>
+  <div>
+    <mat-toolbar>
+      <h1 i18n="@@searchEntityToolbarHeader">Entitet</h1>
+      <span class="fill-space"></span>
+      <button mat-mini-fab (click)="onCreateConfig()"
+              *ngIf="canEdit" [disabled]="!singleMode">
+        <mat-icon matTooltipShowDelay="500"
+                  [matTooltip]="!singleMode ? 'Kan ikke opprette en ny entitet når flere er valgt.' : 'Legg til en ny entitet.'">
+          add
+        </mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <app-search-list (rowClick)="onSelectConfig($event)"
+                     (selectedChange)="onSelectedChange($event)"
+                     (selectAll)="onSelectAll()"
+                     [pageLength]="pageLength$ | async">
+    </app-search-list>
   </div>
+
+  <div *ngIf="configObject$ | async as configObject"
+       fxLayout="row"
+       fxFlex
+       fxLayoutGap="16px"
+       [fxHide]="!singleMode"
+       [fxShow]="singleMode">
+    <app-entity-details
+      fxFlex
+      [configObject]="configObject"
+      (save)="onSaveConfig($event)"
+      (update)="onUpdateConfig($event)"
+      (delete)="onDeleteConfig($event)">
+    </app-entity-details>
+    <app-configurations fxFlex [kind]="Kind.SEED"></app-configurations>
+  </div>
+  <ng-template detail-host></ng-template>
+
 </div>

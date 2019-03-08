@@ -1,19 +1,19 @@
-<table class="mat-table" *ngIf="isAllInPageSelected() && dataSource.length > 0">
+<table class="mat-table" *ngIf="isAllInPageSelected()">
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
-      <span>Alle <b>{{selection.selected.length}}</b> brukere på denne siden er markert. </span>
-      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">
-        Marker alle {{pageLength}} brukere i databasen
+      <span>Alle <b>{{selection.selected.length}}</b> brukere lokalt er markert. </span>
+      <a [routerLink]="" (click)="onSelectAll()">
+        Marker alle brukere i databasen
       </a>
     </td>
     <td  class="mat-cell" *ngIf="allSelected">
-      <span>Alle <b>{{pageLength}}</b> brukere i databasen er markert. </span>
+      <span>Alle <b>{{pageLength || ''}}</b> brukere i databasen er markert. </span>
       <a [routerLink]="" (click)="onDeselectAll()"> Fjern markeringen</a>
     </td>
   </tr>
 </table>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataService" class="mat-elevation-z8">
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
@@ -32,17 +32,17 @@
 
   <ng-container matColumnDef="email">
     <th mat-header-cell *matHeaderCellDef>Email</th>
-    <td mat-cell *matCellDef="let row">{{row.email}}</td>
+    <td mat-cell *matCellDef="let row">{{row.roleMapping.email}}</td>
   </ng-container>
 
   <ng-container matColumnDef="group">
     <th mat-header-cell *matHeaderCellDef>Gruppe</th>
-    <td mat-cell *matCellDef="let row">{{row.group}}</td>
+    <td mat-cell *matCellDef="let row">{{row.roleMapping.group}}</td>
   </ng-container>
 
   <ng-container matColumnDef="role">
     <th mat-header-cell *matHeaderCellDef>Rolle</th>
-    <td mat-cell *matCellDef="let row">{{row.role}}</td>
+    <td mat-cell *matCellDef="let row">{{row.roleMapping.roleList}}</td>
   </ng-container>
 
   <ng-container matColumnDef="id">
@@ -52,7 +52,7 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"
-      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': null|| selectedRow == row.id ? 'highlight' : null"
+      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': selectedRow?.id === row.id ? 'highlight' : ''"
       (click)="onRowClick(row)"></tr>
 </table>
 
@@ -62,4 +62,3 @@
                [pageSize]="pageSize"
                [pageSizeOptions]="pageOptions">
 </mat-paginator>
-

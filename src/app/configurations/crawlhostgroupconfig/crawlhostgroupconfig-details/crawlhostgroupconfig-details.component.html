@@ -2,10 +2,10 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <span *ngIf="crawlHostGroupConfig" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
+        <span *ngIf="configObject" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!crawlHostGroupConfig.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
+        <span *ngIf="!configObject.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
@@ -17,8 +17,31 @@
                  placeholder="Id"
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
+        <div *ngIf="!shouldShow">
+          <div>
+            <span>Labels:</span>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddLabels(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddLabel">Skal legge til label til alle konfigurasjoner</span>
+            <span *ngIf="!shouldAddLabel && shouldAddLabel !== undefined">Skal fjerne labels fra alle konfigurasjoner</span>
+          </div>
+          <div>
+            <span>IpRange:</span>
+            <button mat-icon-button (click)="onToggleShouldAddIpRange(true)">
+              <mat-icon style="color: green; font-size: 15px;">add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onToggleShouldAddIpRange(false)">
+              <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
+            </button>
+            <span *ngIf="shouldAddIpRange">Skal legge til Ip-range for alle valgte konfigurasjoner</span>
+            <span *ngIf="!shouldAddIpRange && shouldAddIpRange !== undefined">Skal fjerne ip-range fra alle konfigurasjoner</span>
+          </div>
+        </div>
       </div>
-
       <div fxFlex fxLayout="column">
         <mat-toolbar>
           <span i18n="@@crawlhostgroupconfigFormIpRangeCardTitle">IP-range</span>
@@ -29,11 +52,11 @@
           </button>
         </mat-toolbar>
 
-        <div formArrayName="ip_range" style="padding: 24px;">
-          <ng-container *ngFor="let ip_range of ipRangeControlArray.controls; let i=index">
-            <div [formGroupName]="i" fxLayout="row" fxLayoutGap="24px" fxFlex>
+        <div formArrayName="ipRangeList" style="padding: 24px;">
+          <ng-container *ngFor="let ipRangeList of ipRangeControlArray.controls; let i=index">
+            <div [formGroupName]="i"  fxLayout="row" fxLayoutGap="24px">
               <mat-form-field fxFlex>
-                <input #ipFrom matInput formControlName="ip_from" placeholder="Fra IP-addresse:"
+                <input #ipFrom matInput formControlName="ipFrom" placeholder="Fra IP-addresse:"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
                 <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
@@ -41,7 +64,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex>
-                <input #ipTo matInput formControlName="ip_to" placeholder="Til IP-addresse"
+                <input #ipTo matInput formControlName="ipTo" placeholder="Til IP-addresse"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
                 <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
@@ -62,10 +85,6 @@
             </div>
           </ng-container>
         </div>
-        <mat-error *ngIf="ipRangeControlArray.length === 0"
-                   i18n="@@crawlhostgroupconfigFormMissingIpRangeError">
-          En gyldig IP-range er påkrevd
-        </mat-error>
       </div>
     </mat-card-content>
 
@@ -92,7 +111,7 @@
       </button>
 
       <button mat-raised-button color="warn"
-              *ngIf="!showSave"
+              *ngIf="!showSave && !allSelected"
               (click)="onDelete(); $event.stopPropagation()"
               i18n="@@commonButtonDelete">
         Slett

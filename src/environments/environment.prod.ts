@@ -6,6 +6,7 @@ export const environment = {
   version: '',
   config: basePath + '/assets/config/environment.json',
   apiGateway: '/api',
+  grpcWeb: '/grpc-web',
   authConfig: {
 
     // Url of the Identity Provider

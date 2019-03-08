@@ -1,7 +1,11 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {RoleMapping} from '../../../commons/models/config.model';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../commons/validator';
+import {ConfigObject} from '../../../commons/models/configobject.model';
+import {RoleMapping} from '../../../commons/models';
+import {Meta} from '../../../commons/models/meta/meta.model';
+import {Kind} from '../../../commons/models/kind.model';
+import {Role} from '../../../commons/models/configs/rolemapping.model';
 
 
 @Component({
@@ -11,7 +15,7 @@ import {CustomValidators} from '../../../commons/validator';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class RoleMappingDetailsComponent implements OnChanges {
+export class RoleMappingDetailsComponent implements OnChanges, OnInit {
 
   @Input()
   set data(show) {
@@ -19,31 +23,30 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   @Input()
-  roleMapping: RoleMapping;
-
-  @Input()
-  roles: string[];
+  configObject: ConfigObject;
 
   @Output()
-  save = new EventEmitter<RoleMapping>();
+  save = new EventEmitter<ConfigObject>();
 
   @Output()
-  update = new EventEmitter<RoleMapping>();
+  update = new EventEmitter<ConfigObject>();
 
   @Output()
-  delete = new EventEmitter<RoleMapping>();
+  delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
-  rolesList: any[];
+  roles: string[] = [];
   selectedType = '';
   shouldShow = true;
+  shouldAddRoles = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
   get showSave(): boolean {
-    return this.roleMapping && !this.roleMapping.id;
+    return this.configObject && !this.configObject.id;
   }
 
   get canSave(): boolean {
@@ -67,20 +70,24 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   get role() {
-    return this.form.get('role');
+    return this.form.get('roleList');
+  }
+
+  ngOnInit() {
+    for (const role in Role) {
+      if (isNaN(Number(role))) {
+        this.roles.push(role.toString());
+      }
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    if (changes.roleMapping && !changes.roleMapping.currentValue) {
-      this.form.reset();
-      return;
-    }
-    if (changes.roles && changes.roles.currentValue) {
-      this.rolesList = changes.roles.currentValue;
-    }
-    if (this.roleMapping && this.rolesList) {
-      this.updateForm();
+    if (changes.configObject) {
+      if (!this.configObject) {
+        this.form.reset();
+      } else {
+        this.updateForm();
+      }
     }
   }
 
@@ -93,11 +100,15 @@ export class RoleMappingDetailsComponent implements OnChanges {
   }
 
   onDelete(): void {
-    this.delete.emit(this.roleMapping);
+    this.delete.emit(this.configObject);
   }
 
   onRevert() {
     this.updateForm();
+  }
+
+  onToggleShouldAddRole(shouldAdd) {
+    this.shouldAddRoles = shouldAdd;
   }
 
   private createForm() {
@@ -105,76 +116,64 @@ export class RoleMappingDetailsComponent implements OnChanges {
       id: {value: '', disabled: true},
       email: '',
       group: '',
-      role: [[], [Validators.required, CustomValidators.nonEmpty]]
+      roleList: [[], [Validators.required, CustomValidators.nonEmpty]]
     });
   }
 
   updateForm() {
     this.form.patchValue({
-      id: this.roleMapping.id,
-      email: this.roleMapping.email,
-      group: this.roleMapping.group,
-      role: this.roleMapping.role,
+      id: this.configObject.id,
+      email: this.configObject.roleMapping.email,
+      group: this.configObject.roleMapping.group,
+      roleList: this.configObject.roleMapping.roleList,
     });
     this.setUserType();
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
 
-  private prepareSave(): RoleMapping {
+  private prepareSave(): ConfigObject {
     const formModel = this.form.value;
+
+    const configObject = new ConfigObject({kind: Kind.ROLEMAPPING});
+    if (this.configObject.id !== '') {
+      configObject.id = this.configObject.id;
+    }
+
+    const roleMapping = new RoleMapping();
+    roleMapping.roleList = formModel.roleList;
     if (this.selectedType === 'email') {
-      return {
-        id: this.roleMapping.id,
-        email: formModel.email,
-        role: formModel.role,
-      };
+      roleMapping.email = formModel.email;
+      roleMapping.group = null;
     }
     if (this.selectedType === 'group') {
-      return {
-        id: this.roleMapping.id,
-        group: formModel.group,
-        role: formModel.role,
-      };
+      roleMapping.group = formModel.group;
+      roleMapping.email = null;
     }
     if (!this.shouldShow && this.selectedType === '') {
-      return {
-        id: this.roleMapping.id,
-        email: '',
-        group: '',
-        role: formModel.role,
-      };
+      roleMapping.group = '';
+      roleMapping.email = '';
     }
+
+    configObject.meta = new Meta({name: 'roleMapping'});
+    configObject.roleMapping = roleMapping;
+    return configObject;
   }
 
   private setUserType() {
-    if (this.shouldShow) {
-        const group = this.roleMapping.hasOwnProperty('group');
-        const email = this.roleMapping.hasOwnProperty('email');
+      const group = this.configObject.roleMapping.hasOwnProperty('group') && this.configObject.roleMapping.group !== '';
+      const email = this.configObject.roleMapping.hasOwnProperty('email') && this.configObject.roleMapping.email !== '';
 
-        if (email) {
-          this.selectedType = 'email';
-        }
+      if (email) {
+        this.selectedType = 'email';
+      }
 
-        if (group) {
-          this.selectedType = 'group';
-        }
+      if (group) {
+        this.selectedType = 'group';
+      }
 
-        if (!(group || email)) {
-          this.selectedType = '';
-        }
-    } else {
-      if (this.roleMapping.group !== undefined || this.roleMapping.email !== undefined) {
-        if (this.roleMapping.group !== undefined) {
-          this.selectedType = 'group';
-        }
-        if (this.roleMapping.email !== undefined) {
-          this.selectedType = 'email';
-        }
-      } else {
+      if (!group && !email) {
         this.selectedType = '';
       }
-    }
-
   }
 }
