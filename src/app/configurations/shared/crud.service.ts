@@ -34,7 +34,6 @@ export abstract class CrudService<T extends ListRequest> {
   }
 
   updateAll(item: T): Observable<T> {
-    console.log('Skal oppdatere alle ', item, 'i databasen ' );
     return item ? throwError('parameter item is falsy') : throwError('Test');
   }
 
@@ -44,7 +43,6 @@ export abstract class CrudService<T extends ListRequest> {
   }
 
   deleteAll(table: string) {
-    console.log('should delete all configs from table: ', table );
     return true;
   }
 }

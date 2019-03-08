@@ -83,10 +83,6 @@ export class DataService extends DataSource<ConfigObject> {
     this._kind = kind;
     this.clear();
 
-    if (this._paginator) {
-      this._paginator.pageIndex = 0;
-      this._paginator._changePageSize(this._paginator.pageSize);
-    }
   }
 
   set paginator(paginator: MatPaginator) {
@@ -155,8 +151,7 @@ export class DataService extends DataSource<ConfigObject> {
 
     return this.backendService.update(updateRequest).pipe(
       map(updateResponse => updateResponse.getUpdated()),
-      // TODO find another way to reset than resetting kind
-      // tap(() => this.kind = this._kind)
+      tap(() => this.kind = this._kind)
     );
   }
 
@@ -226,6 +221,19 @@ export class DataService extends DataSource<ConfigObject> {
   clear() {
     this.reset.emit();
     this._data.next([]);
+
+    if (this._paginator) {
+      this._paginator.pageIndex = 0;
+      this._paginator._changePageSize(this._paginator.pageSize);
+    }
+  }
+
+  clearSelection() {
+    this.reset.emit();
+    if (this._paginator) {
+      this._paginator.pageIndex = 0;
+      this._paginator._changePageSize(this._paginator.pageSize);
+    }
   }
 
   connect(): Observable<ConfigObject[]> {

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {SnackBarService} from '../commons/snack-bar/snack-bar.service';
-import {BehaviorSubject, EMPTY, from, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, EMPTY, from, Subject} from 'rxjs';
 import {catchError, mergeMap} from 'rxjs/operators';
 import {DetailDirective} from './shared/detail.directive';
 import {FormGroup, Validators} from '@angular/forms';
@@ -22,8 +22,7 @@ import {
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
-  Kind,
-  Meta,
+  Kind, Meta,
   PolitenessConfig,
   RoleMapping
 } from '../commons/models';
@@ -156,12 +155,18 @@ export class ConfigurationsComponent implements OnInit {
     });
 
     this.route.queryParamMap.subscribe(queryParamMap => {
-      if (this.embedded || !queryParamMap.has('id')) {
+      if (this.embedded) {
         return;
       }
-      const id = queryParamMap.get('id');
-      const kind = this.kind;
-      this.dataService.get({id, kind}).subscribe(configObject => this.configObject.next(configObject));
+      if (!queryParamMap.has('id')) {
+        this.configObject.next(null);
+        return;
+      }
+      Promise.resolve().then(() => {
+        const id = queryParamMap.get('id');
+        const kind = this.kind;
+        this.dataService.get({id, kind}).subscribe(configObject => this.configObject.next(configObject));
+      });
     });
   }
 
@@ -169,6 +174,7 @@ export class ConfigurationsComponent implements OnInit {
     this.allSelected = true;
     const configObject: ConfigObject = new ConfigObject({id: '1234567', kind: this.kind});
     configObject.meta = new Meta({name: 'update'});
+
     this.loadComponent({configObject});
   }
 
@@ -229,7 +235,8 @@ export class ConfigurationsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.configObject.next(null);
+        this.dataService.clearSelection();
+        this.router.navigate([], {relativeTo: this.route});
         this.snackBarService.openSnackBar('Slettet');
       });
   }
@@ -251,10 +258,12 @@ export class ConfigurationsComponent implements OnInit {
           from(configObjects).pipe(
             mergeMap((configObject) => this.dataService.delete(configObject)),
             catchError((err) => {
-              const errorString = err.message.split(':')[1];
-              const deleteError = /(?=.*delete)(?=.*there are)/gm;
-              if (deleteError.test(errorString)) {
-                numOfDeleted--;
+              if (err.message) {
+                const errorString = err.message.split(':')[1];
+                const deleteError = /(?=.*delete)(?=.*there are)/gm;
+                if (deleteError.test(errorString)) {
+                  numOfDeleted--;
+                }
               } else {
                 this.errorService.dispatch(err);
               }
@@ -263,7 +272,8 @@ export class ConfigurationsComponent implements OnInit {
           ).subscribe(() => {
               this.selectedConfigs = [];
               this.destroyComponent();
-              this.configObject.next(null);
+              this.dataService.clearSelection();
+              this.router.navigate([], {relativeTo: this.route});
               this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
             },
             (error) => console.error(error),
@@ -287,7 +297,7 @@ export class ConfigurationsComponent implements OnInit {
       .subscribe(updatedConfigs => {
         this.selectedConfigs = [];
         this.destroyComponent();
-        this.configObject.next(null);
+        this.router.navigate([], {relativeTo: this.route});
         this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
       });
   }
@@ -300,7 +310,7 @@ export class ConfigurationsComponent implements OnInit {
         this.selectedConfigs = [];
         this.allSelected = false;
         this.destroyComponent();
-        this.configObject.next(null);
+        this.router.navigate([], {relativeTo: this.route});
         this.snackBarService.openSnackBar('Alle ' + updatedConfigs + ' konfigurasjoner av typen ' +
           Kind[this.kind.valueOf()] + ' er oppdatert');
       });

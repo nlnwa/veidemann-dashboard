@@ -241,7 +241,6 @@ export class ConfigObject {
         break;
       case Kind.CRAWLJOB:
         CrawlJob.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);
-        console.log(updateTemplate);
         break;
       case Kind.CRAWLCONFIG:
         CrawlConfig.createUpdateRequest(updateTemplate, pathList, configUpdate, mergedConfigs, formControl);

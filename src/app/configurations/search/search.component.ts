@@ -27,8 +27,11 @@ import {DataService} from '../shared/data.service';
 export class SearchComponent extends ConfigurationsComponent implements OnInit, OnDestroy {
 
   configObject$ = this.configObject.asObservable().pipe(
-    filter(entity => !!entity),
-    tap(entity => this.seedDataService.ref = {id: entity.id, kind: entity.kind})
+    tap(entity => {
+      if (entity) {
+        this.seedDataService.ref = {id: entity.id, kind: entity.kind};
+      }
+    })
   );
 
   private searchTermSubscription: Subscription = Subscription.EMPTY;

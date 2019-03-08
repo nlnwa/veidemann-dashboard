@@ -29,7 +29,6 @@ describe('BrowserScriptDetailsComponent', () => {
       value: 'test',
     });
 
-    console.log(new ConfigObject);
     expectedConfigObject = new ConfigObject({
       id: '1000',
       apiVersion: 'v1',

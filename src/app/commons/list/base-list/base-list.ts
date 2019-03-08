@@ -26,12 +26,17 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedRow: ConfigObject;
   selectedRows: string[] = [];
 
+  @Input()
+  embedded = false;
+
   // paging
   @Input()
   pageLength = 0;
   pageSize = 5;
   pageIndex = 0;
   pageOptions = [5, 10, 25, 50, 100];
+
+  @Input()
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter();
@@ -43,7 +48,7 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedChange: EventEmitter<ConfigObject[]> = new EventEmitter();
 
   @Output()
-  selectAll: EventEmitter<boolean> = new EventEmitter();
+  selectAll: EventEmitter<void> = new EventEmitter();
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -125,14 +130,15 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
   checkboxToggle(item: ConfigObject) {
     this.allSelected = false;
     this.selection.toggle(item);
-    this.selectedRow = this.selection.isSelected(item) ? item : null;
+    this.onRowClick(item);
+    // this.selectedRow = this.selection.isSelected(item) ? item : null;
     this.selectedChange.emit(this.selection.selected);
     this.highlightSelected(this.selection.selected);
   }
 
   onSelectAll() {
     this.allSelected = true;
-    this.selectAll.emit(this.allSelected);
+    this.selectAll.emit();
   }
 
   onDeselectAll() {

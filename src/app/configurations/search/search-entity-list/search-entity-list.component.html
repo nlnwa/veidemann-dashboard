@@ -2,12 +2,12 @@
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
       <span>Alle <b>{{selection.selected.length}}</b> entiteter lokalt er markert. </span>
-      <a *ngIf="isAllInPageSelected()" [routerLink]="" (click)="onSelectAll()">Marker alle {{pageLength || ''}}
-        entiteter i databasen</a>
+      <button mat-flat-button [color]="primary" *ngIf="isAllInPageSelected()" (click)="onSelectAll()">Marker alle {{pageLength || ''}}
+        entiteter i databasen</button>
     </td>
     <td class="mat-cell" *ngIf="allSelected">
       <span>Alle <b>{{pageLength || ''}}</b> entiteter i databasen er markert. </span>
-      <a [routerLink]="" (click)="onDeselectAll()">Fjern markeringen</a>
+      <button mat-flat-button [color]="primary" (click)="onDeselectAll()">Fjern markeringen</button>
     </td>
   </tr>
 </table>

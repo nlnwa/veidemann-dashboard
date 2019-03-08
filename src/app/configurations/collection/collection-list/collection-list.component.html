@@ -17,7 +17,7 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"
-      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': null|| selectedRow == row.id ? 'highlight' : null"
+      [ngClass]="selectedRows.indexOf(row.id) !== -1  ? 'highlightSelected': selectedRow?.id === row.id ? 'highlight' : ''"
       (click)="onRowClick(row)"></tr>
 </table>
 

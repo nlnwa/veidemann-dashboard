@@ -4,7 +4,7 @@ import {DataService, ofKind, paged} from './data.service';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
-import {FieldMask, ListRequest} from '../../../api';
+import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
 
 
 function withQueryTemplate(listRequest: ListRequest, queryTemplate: ConfigObject, queryMask: FieldMask) {
@@ -44,6 +44,34 @@ export class SeedDataService extends DataService {
     }), queryTemplate, queryMask)).pipe(
       map(configObject => ConfigObject.fromProto(configObject)),
       tap(configObject => this.add(configObject))
+    );
+  }
+
+  save(configObject: ConfigObject): Observable<ConfigObject> {
+    configObject.seed.entityRef = this.configRef;
+    return super.save(configObject);
+  }
+
+  updateWithTemplate(updateTemplate: ConfigObject, paths: string[], ids?: string[]): Observable<number> {
+    const queryTemplate = new ConfigObject({kind: Kind.SEED});
+    queryTemplate.seed.entityRef = this.configRef;
+    const queryMask = new FieldMask();
+    queryMask.setPathsList(['seed.entityRef']);
+
+    const listRequest = withQueryTemplate(ofKind(updateTemplate.kind.valueOf()),
+      queryTemplate, queryMask);
+
+    const updateMask = new FieldMask();
+    updateMask.setPathsList(paths);
+
+    const updateRequest = new UpdateRequest();
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(ConfigObject.toProto(updateTemplate));
+    updateRequest.setUpdateMask(updateMask);
+
+    return this.backendService.update(updateRequest).pipe(
+      map(updateResponse => updateResponse.getUpdated()),
+      tap(() => this.kind = this._kind)
     );
   }
 }

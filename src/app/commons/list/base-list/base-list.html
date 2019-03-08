@@ -2,11 +2,11 @@
   <tr class="mat-row">
     <td class="mat-cell" *ngIf="!allSelected">
       <span>Alle <b>{{selection.selected.length}}</b> konfigurasjonene lokalt er markert. </span>
-      <a [routerLink]="" (click)="onSelectAll()">Marker alle konfigurasjoner i databasen</a>
+      <button mat-flat-button [color]="primary" *ngIf="isAllInPageSelected()" (click)="onSelectAll()">Marker alle konfigurasjoner i databasen</button>
     </td>
     <td class="mat-cell" *ngIf="allSelected">
       <span>Alle <b>{{pageLength || ''}}</b> konfigurasjoner i databasen er markert. </span>
-      <a [routerLink]="" (click)="onDeselectAll()">Fjern markeringen</a>
+      <button mat-flat-button [color]="primary" (click)="onDeselectAll()">Fjern markeringen</button>
     </td>
   </tr>
 </table>

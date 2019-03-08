@@ -48,8 +48,20 @@
 
           <a mat-list-item [routerLink]="['/search']" [routerLinkActiveOptions]="{ exact: true }"
              [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">business</mat-icon>
+            <mat-icon class="sidenav--icon__margin">search</mat-icon>
             <ng-container i18n="@@navigationSidebarSearch">Entiteter/Seeds</ng-container>
+          </a>
+
+          <a mat-list-item [routerLink]="['/config/entity']" [routerLinkActiveOptions]="{ exact: true }"
+             [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav--icon__margin">business</mat-icon>
+            <ng-container i18n="@@navigationSidebarCollection">Entity</ng-container>
+          </a>
+
+          <a mat-list-item [routerLink]="['/config/seed']" [routerLinkActiveOptions]="{ exact: true }"
+             [routerLinkActive]="['is-active']">
+            <mat-icon class="sidenav--icon__margin">link</mat-icon>
+            <ng-container i18n="@@navigationSidebarCollection">Seed</ng-container>
           </a>
 
           <a mat-list-item [routerLink]="['/config/collection']" [routerLinkActiveOptions]="{ exact: true }"

@@ -43,6 +43,7 @@ export class SeedDetailComponent implements OnChanges {
   shouldShow = true;
   shouldAddLabel = undefined;
   shouldAddCrawlJob = undefined;
+  allSelected = false;
 
   constructor(private fb: FormBuilder,
               private roleService: RoleService) {
@@ -53,18 +54,17 @@ export class SeedDetailComponent implements OnChanges {
     return this.roleService.isAdmin() || this.roleService.isCurator();
   }
 
-  // get crawlJobId() {
-  //   return this.form.get('job_id');
-  // }
+  get crawlJobRefList() {
+     return this.form.get('jobRefList').value;
+  }
 
   get disabled() {
     return this.form.get('disabled');
   }
 
-  // get showShortcuts(): boolean {
-  //   const crawlJob = this.crawlJobId.value;
-  //   return crawlJob && crawlJob.length > 0;
-  // }
+  get showShortcuts(): boolean {
+     return this.crawlJobRefList.length > 0;
+  }
 
   get showSave() {
     return this.configObject ? !this.configObject.id : false;
@@ -80,6 +80,11 @@ export class SeedDetailComponent implements OnChanges {
     }
   }
 
+
+  getCrawlJobName(id) {
+    const found = this.options.crawlJobs.find(crawlJob => crawlJob.id === id);
+    return found ? found.meta.name : 'crawlJob';
+  }
   //
   // getCrawlJobName(id): string {
   //   const found = this.crawlJobs.find((job) => job.id === id);

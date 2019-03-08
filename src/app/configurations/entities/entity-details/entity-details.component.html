@@ -54,7 +54,7 @@
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="!showSave"
+              *ngIf="!showSave && !allSelected"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>

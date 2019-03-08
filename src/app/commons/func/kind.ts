@@ -20,7 +20,9 @@ const pathToKindMap = {
   browserscript: Kind.BROWSERSCRIPT,
   politenessconfig: Kind.POLITENESSCONFIG,
   rolemapping: Kind.ROLEMAPPING,
-  collection: Kind.COLLECTION
+  collection: Kind.COLLECTION,
+  entity: Kind.CRAWLENTITY,
+  seed: Kind.SEED,
 };
 
 export function componentOfKind(kind: Kind) {

@@ -45,7 +45,7 @@
               <mat-icon style="color: red; font-size: 15px;">remove</mat-icon>
             </button>
             <span *ngIf="shouldAddCrawlJob">Skal legge til valgte crawljob til alle konfigurasjoner</span>
-            <span *ngIf="!shouldAddBCrawlJob && shouldAddCrawlJob !== undefined">
+            <span *ngIf="!shouldAddCrawlJob && shouldAddCrawlJob !== undefined">
             Skal fjerne valgte crawljob fra alle konfigurasjoner </span>
           </div>
         </div>
@@ -80,7 +80,15 @@
             <span i18n="@@configShortCutsToolbarHeader">Snarveier</span>
             <span class="fill-space"></span>
           </mat-toolbar>
-
+          <ng-container>
+            <mat-form-field>
+              <mat-chip-list placeholder="Crawljobs">
+                <mat-chip *ngFor="let configRef of crawlJobRefList">
+                  <a [routerLink]="['/config/crawljobs']" [queryParams]="{id: configRef.id}">{{ getCrawlJobName(configRef.id) }}</a>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+          </ng-container>
         </ng-container>
       </div>
     </mat-card-content>
@@ -104,7 +112,7 @@
               i18n="@@commonButtonRevert">Tilbakestill
       </button>
       <button mat-raised-button color="warn"
-              *ngIf="configObject?.id"
+              *ngIf="configObject?.id && !allSelected"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">Slett
       </button>

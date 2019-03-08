@@ -1,6 +1,7 @@
 <app-toolbar>
   <span class="toolbar--title">{{ title$ | async }}</span>
   <button mat-mini-fab
+          *ngIf="(!embedded && _kind.value !== Kind.SEED) || embedded"
           (click)="onCreateConfig()"
           [disabled]="!singleMode"
           [matTooltip]="!singleMode ? 'Kan ikke opprette en ny konfigurasjon når flere er valgt.':'Legg til en ny konfigurasjon.'">
@@ -25,7 +26,8 @@
       <app-base-list
         (rowClick)="onSelectConfig($event)"
         (selectedChange)="onSelectedChange($event)"
-        (selectAll)="onSelectAll()">
+        (selectAll)="onSelectAll()"
+        [embedded]="embedded">
       </app-base-list>
     </ng-container>
   </ng-container>
