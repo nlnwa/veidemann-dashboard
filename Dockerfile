@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:10-alpine
 
 ARG BASE_HREF=/veidemann
 ARG DEPLOY_URL=/veidemann

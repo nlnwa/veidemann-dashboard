@@ -23,7 +23,7 @@
 
     <app-search-list (rowClick)="onSelectConfig($event)"
                      (selectedChange)="onSelectedChange($event)"
-                     (selectAll)="onSelectAll($event)"
+                     (selectAll)="onSelectAll()"
                      [pageLength]="pageLength$ | async">
     </app-search-list>
   </div>

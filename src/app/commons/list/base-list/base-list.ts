@@ -55,7 +55,7 @@ export class BaseListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private resetSubscription: Subscription = Subscription.EMPTY;
 
-  constructor(protected dataService: DataService) {
+  constructor(public dataService: DataService) {
   }
 
   private get data(): ConfigObject[] {

@@ -52,7 +52,7 @@ import {ReferrerError} from '../error/referrer-error';
 export class ConfigurationsComponent implements OnInit {
   readonly Kind = Kind;
 
-  private embedded = false;
+  embedded = false;
 
   @Input()
   set kind(kind: Kind) {

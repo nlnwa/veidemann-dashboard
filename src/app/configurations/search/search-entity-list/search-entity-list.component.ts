@@ -19,7 +19,7 @@ export class SearchListComponent extends BaseListComponent {
 
   displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
 
-  constructor(protected dataService: SearchDataService) {
+  constructor(public dataService: SearchDataService) {
     super(dataService);
   }
 }
