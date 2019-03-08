@@ -1,6 +1,6 @@
 {
   "name": "veidemann-dashboard",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-beta.1",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
