@@ -21,6 +21,14 @@ export class AppComponent {
               private appConfig: AppConfigService) {
   }
 
+  get initialized(): boolean {
+    return this.appConfig.initialized;
+  }
+
+  get error(): string {
+    return this.appConfig.error;
+  }
+
   get version(): string {
     return environment.version;
   }

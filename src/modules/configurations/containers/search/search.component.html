@@ -19,7 +19,7 @@
   </button>
 </mat-form-field>
 
-<mat-progress-bar mode="indeterminate" *ngIf="this.dataService.loading$|async"></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
 
 <div fxLayout="column" fxLayoutGap="16px">
   <app-search-list #baseList (rowClick)="onSelectConfig($event)"

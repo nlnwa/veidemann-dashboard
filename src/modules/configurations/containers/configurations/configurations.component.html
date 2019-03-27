@@ -15,7 +15,7 @@
   <mat-icon>link</mat-icon>
 </button>
 
-<mat-progress-bar mode="indeterminate" *ngIf="dataService.loading$ | async"></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
 
 <ng-container *ngIf="kind" [ngSwitch]="kind">
   <app-rolemapping-list *ngSwitchCase="Kind.ROLEMAPPING"

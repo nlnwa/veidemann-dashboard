@@ -31,7 +31,7 @@ export class CrawljobDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  protected form: FormGroup;
+  form: FormGroup;
 
   constructor(protected fb: FormBuilder,
               protected roleService: RoleService) {

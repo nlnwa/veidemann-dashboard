@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
-import {combineLatest, EMPTY, from, of, Subject} from 'rxjs';
+import {combineLatest, EMPTY, from, Observable, of, Subject} from 'rxjs';
 
 import {ErrorService, SnackBarService} from '../../../core';
 import {catchError, debounceTime, exhaustMap, filter, map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -71,6 +71,10 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
               public titleService: Title,
               protected dialog: MatDialog,
               protected route: ActivatedRoute) {
+  }
+
+  get loading$(): Observable<boolean> {
+    return this.dataService.loading$;
   }
 
   get showActionButton(): boolean {

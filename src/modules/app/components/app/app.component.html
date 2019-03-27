@@ -151,8 +151,9 @@
       <main fxFlex class="content-padding">
         <router-outlet></router-outlet>
       </main>
-      <div fxFlexFill fxLayoutAlign="center center" *ngIf="!appConfig.initialized">
-        <h1>{{ appConfig.error }}</h1>
+      <div fxFlexFill fxLayoutAlign="center center" *ngIf="!initialized">
+        <h1>Initialisering feilet</h1>
+        <p>{{ error }}</p>
       </div>
     </mat-drawer-content>
 
