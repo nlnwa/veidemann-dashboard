@@ -1,0 +1,50 @@
+<button mat-fab
+        class="action-button"
+        color="primary"
+        (click)="onCreateConfig()"
+        *ngIf="canEdit">
+  <mat-icon>add</mat-icon>
+</button>
+
+<mat-form-field appearance="standard" class="search-form">
+  <input matInput
+         #search
+         class="search-form-input"
+         (keyup.enter)="onSearch(search.value)"
+         placeholder="Søk"
+         autofocus
+         i18n-placeholder="@@searchSearchFieldPlaceholder">
+  <button mat-button mat-icon-button matSuffix *ngIf="search.value" (click)="search.value = ''; onSearch('')">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-progress-bar mode="indeterminate" *ngIf="this.dataService.loading$|async"></mat-progress-bar>
+
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-search-list #baseList (rowClick)="onSelectConfig($event)"
+                   (selectedChange)="onSelectedChange($event)"
+                   (selectAll)="onSelectAll()">
+  </app-search-list>
+
+  <div *ngIf="configObject$ | async as configObject"
+       fxLayout="row"
+       fxFlex
+       fxLayoutGap="16px"
+       [fxHide]="!singleMode"
+       [fxShow]="singleMode">
+    <app-entity-details fxFlex
+                        [configObject]="configObject"
+                        (save)="onSaveConfig($event)"
+                        (update)="onUpdateConfig($event)"
+                        (delete)="onDeleteConfig($event)">
+    </app-entity-details>
+
+    <app-configurations *ngIf="configObject?.id"
+                        fxFlex
+                        [kind]="Kind.SEED"
+                        [embedded]="true">
+    </app-configurations>
+  </div>
+  <ng-template detail-host></ng-template>
+</div>

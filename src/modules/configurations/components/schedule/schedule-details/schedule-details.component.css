@@ -1,0 +1,9 @@
+fieldset {
+  border: 0px;
+}
+
+.cron-expression .mat-form-field {
+  width: 4rem;
+}
+
+

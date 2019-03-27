@@ -1,0 +1,13 @@
+@import "../../../../styles/theme";
+
+table {
+  width: 100%;
+}
+
+.row-checked {
+  background-color: $light-focused;
+}
+
+.row-selected {
+  background-color: $dark-focused;
+}

@@ -14,6 +14,8 @@ grpc.web = require('grpc-web');
 
 var config_v1_resources_pb = require('../../config/v1/resources_pb.js')
 
+var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js')
+
 var google_api_annotations_pb = require('../../google/api/annotations_pb.js')
 
 var protoc$gen$swagger_options_annotations_pb = require('../../protoc-gen-swagger/options/annotations_pb.js')
@@ -73,11 +75,25 @@ proto.veidemann.api.config.v1.ConfigPromiseClient =
   options['format'] = 'text';
 
   /**
-   * @private @const {!proto.veidemann.api.config.v1.ConfigClient} The delegate callback based client
+   * @private @const {!grpc.web.GrpcWebClientBase} The client
    */
-  this.delegateClient_ = new proto.veidemann.api.config.v1.ConfigClient(
-      hostname, credentials, options);
+  this.client_ = new grpc.web.GrpcWebClientBase(options);
 
+  /**
+   * @private @const {string} The hostname
+   */
+  this.hostname_ = hostname;
+
+  /**
+   * @private @const {?Object} The credentials to be used to connect
+   *    to the server
+   */
+  this.credentials_ = credentials;
+
+  /**
+   * @private @const {?Object} Options for the client
+   */
+  this.options_ = options;
 };
 
 
@@ -124,17 +140,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getConfigObject =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ConfigObject>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.getConfigObject =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.getConfigObject(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/GetConfigObject',
+      request,
+      metadata || {},
+      methodInfo_Config_GetConfigObject);
 };
 
 
@@ -166,7 +180,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.listConfigObjects =
   return this.client_.serverStreaming(this.hostname_ +
       '/veidemann.api.config.v1.Config/ListConfigObjects',
       request,
-      metadata,
+      metadata || {},
       methodInfo_Config_ListConfigObjects);
 };
 
@@ -180,10 +194,10 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.listConfigObjects =
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.listConfigObjects =
     function(request, metadata) {
-  return this.delegateClient_.client_.serverStreaming(this.delegateClient_.hostname_ +
+  return this.client_.serverStreaming(this.hostname_ +
       '/veidemann.api.config.v1.Config/ListConfigObjects',
       request,
-      metadata,
+      metadata || {},
       methodInfo_Config_ListConfigObjects);
 };
 
@@ -231,17 +245,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.countConfigObjects =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ListCountResponse>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.countConfigObjects =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.countConfigObjects(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/CountConfigObjects',
+      request,
+      metadata || {},
+      methodInfo_Config_CountConfigObjects);
 };
 
 
@@ -288,17 +300,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.saveConfigObject =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ConfigObject>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.saveConfigObject =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.saveConfigObject(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/SaveConfigObject',
+      request,
+      metadata || {},
+      methodInfo_Config_SaveConfigObject);
 };
 
 
@@ -345,17 +355,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.updateConfigObjects =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.UpdateResponse>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.updateConfigObjects =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.updateConfigObjects(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/UpdateConfigObjects',
+      request,
+      metadata || {},
+      methodInfo_Config_UpdateConfigObjects);
 };
 
 
@@ -402,17 +410,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.deleteConfigObject =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.DeleteResponse>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.deleteConfigObject =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.deleteConfigObject(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/DeleteConfigObject',
+      request,
+      metadata || {},
+      methodInfo_Config_DeleteConfigObject);
 };
 
 
@@ -459,17 +465,15 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getLabelKeys =
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.LabelKeysResponse>}
- *     The XHR Node Readable Stream
+ *     A native promise that resolves to the response
  */
 proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.getLabelKeys =
     function(request, metadata) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    _this.delegateClient_.getLabelKeys(
-      request, metadata, function (error, response) {
-        error ? reject(error) : resolve(response);
-      });
-  });
+  return this.client_.unaryCall(this.hostname_ +
+      '/veidemann.api.config.v1.Config/GetLabelKeys',
+      request,
+      metadata || {},
+      methodInfo_Config_GetLabelKeys);
 };
 
 

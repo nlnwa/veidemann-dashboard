@@ -343,7 +343,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.veidemann.api.config.v1.BrowserScript = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.veidemann.api.config.v1.BrowserScript.repeatedFields_, null);
 };
 goog.inherits(proto.veidemann.api.config.v1.BrowserScript, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -4360,6 +4360,13 @@ proto.veidemann.api.config.v1.PolitenessConfig.prototype.setUseHostname = functi
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.veidemann.api.config.v1.BrowserScript.repeatedFields_ = [4];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -4390,7 +4397,7 @@ proto.veidemann.api.config.v1.BrowserScript.prototype.toObject = function(opt_in
 proto.veidemann.api.config.v1.BrowserScript.toObject = function(includeInstance, msg) {
   var obj = {
     script: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    urlRegexp: jspb.Message.getFieldWithDefault(msg, 4, "")
+    urlRegexpList: jspb.Message.getRepeatedField(msg, 4)
   };
 
   if (includeInstance) {
@@ -4433,7 +4440,7 @@ proto.veidemann.api.config.v1.BrowserScript.deserializeBinaryFromReader = functi
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setUrlRegexp(value);
+      msg.addUrlRegexp(value);
       break;
     default:
       reader.skipField();
@@ -4471,9 +4478,9 @@ proto.veidemann.api.config.v1.BrowserScript.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getUrlRegexp();
+  f = message.getUrlRegexpList();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeRepeatedString(
       4,
       f
     );
@@ -4497,17 +4504,34 @@ proto.veidemann.api.config.v1.BrowserScript.prototype.setScript = function(value
 
 
 /**
- * optional string url_regexp = 4;
- * @return {string}
+ * repeated string url_regexp = 4;
+ * @return {!Array<string>}
  */
-proto.veidemann.api.config.v1.BrowserScript.prototype.getUrlRegexp = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+proto.veidemann.api.config.v1.BrowserScript.prototype.getUrlRegexpList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 4));
 };
 
 
-/** @param {string} value */
-proto.veidemann.api.config.v1.BrowserScript.prototype.setUrlRegexp = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+/** @param {!Array<string>} value */
+proto.veidemann.api.config.v1.BrowserScript.prototype.setUrlRegexpList = function(value) {
+  jspb.Message.setField(this, 4, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.veidemann.api.config.v1.BrowserScript.prototype.addUrlRegexp = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.veidemann.api.config.v1.BrowserScript.prototype.clearUrlRegexpList = function() {
+  this.setUrlRegexpList([]);
 };
 
 
@@ -5542,7 +5566,9 @@ proto.veidemann.api.config.v1.Role = {
   ANY: 1,
   ADMIN: 2,
   CURATOR: 3,
-  READONLY: 4
+  READONLY: 4,
+  OPERATOR: 5,
+  SYSTEM: 6
 };
 
 goog.object.extend(exports, proto.veidemann.api.config.v1);

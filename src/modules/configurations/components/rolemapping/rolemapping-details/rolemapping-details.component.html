@@ -1,0 +1,72 @@
+<form [formGroup]="form" fxFlex>
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>person</mat-icon>
+      <mat-card-title>
+        <span *ngIf="configObject" i18n="@@roleMappingHeader">Rolemapping</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <span *ngIf="!configObject.id"
+              i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="column">
+        <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
+          <mat-form-field>
+            <mat-select placeholder="Velg en type" [(value)]="selectedType">
+              <mat-option value="email">E-post</mat-option>
+              <mat-option value="group">Gruppe</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex *ngIf="selectedType === 'email'">
+            <input matInput formControlName="email" placeholder="Epost"
+                   i18n-placeholder="@@emailInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field fxFlex *ngIf="selectedType === 'group'">
+            <input matInput formControlName="group" placeholder="Gruppe"
+                   i18n-placeholder="@@groupInputPlaceholder">
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
+                        i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+              <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="! roleList.valid">En rolle for brukeren er påkrevd.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="accent"
+              *ngIf="showSave"
+              [disabled]="!canSave"
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
+        LAGRE
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        OPPDATER
+      </button>
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!canRevert"
+              i18n="@@commonButtonRevert">
+        TILBAKESTILL
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!showSave"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">
+        SLETT
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+

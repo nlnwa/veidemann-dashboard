@@ -1,0 +1,51 @@
+<div class="list-container__margin mat-elevation-z1">
+  <table mat-table [dataSource]="dataService">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox #masterCheckbox (change)="onMasterCheckboxToggle(masterCheckbox.checked)"
+                      [checked]="selection.hasValue() && isAllInPageSelected"
+                      [indeterminate]="selection.hasValue() && !isAllInPageSelected">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)=onCheckboxToggle(row)
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let row">{{row.roleMapping.email}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef>Gruppe</th>
+      <td mat-cell *matCellDef="let row">{{row.roleMapping.group}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Rolle(r)</th>
+      <td mat-cell *matCellDef="let row">{{getRoles(row.roleMapping.roleList)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="isSelected(row) ? 'row-selected': isChecked(row) ? 'row-checked' : ''"
+        (click)="onRowClick(row)"></tr>
+  </table>
+
+  <mat-paginator (page)="page.emit($event)"
+                 [length]="pageLength"
+                 [pageIndex]="pageIndex"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="pageOptions">
+  </mat-paginator>
+</div>

@@ -3,34 +3,50 @@ import * as jspb from "google-protobuf"
 import * as google_protobuf_any_pb from 'google-protobuf/google/protobuf/any_pb';
 
 export class Swagger extends jspb.Message {
-  constructor ();
   getSwagger(): string;
   setSwagger(value: string): void;
+
   getInfo(): Info | undefined;
   setInfo(value?: Info): void;
+  hasInfo(): boolean;
   clearInfo(): void;
+
   getHost(): string;
   setHost(value: string): void;
+
   getBasePath(): string;
   setBasePath(value: string): void;
-  getSchemesList(): Swagger.SwaggerScheme[];
-  setSchemesList(value: Swagger.SwaggerScheme[]): void;
+
+  getSchemesList(): Array<Swagger.SwaggerScheme>;
+  setSchemesList(value: Array<Swagger.SwaggerScheme>): void;
   clearSchemesList(): void;
-  getConsumesList(): string[];
-  setConsumesList(value: string[]): void;
+  addSchemes(value: Swagger.SwaggerScheme, index?: number): void;
+
+  getConsumesList(): Array<string>;
+  setConsumesList(value: Array<string>): void;
   clearConsumesList(): void;
-  getProducesList(): string[];
-  setProducesList(value: string[]): void;
+  addConsumes(value: string, index?: number): void;
+
+  getProducesList(): Array<string>;
+  setProducesList(value: Array<string>): void;
   clearProducesList(): void;
+  addProduces(value: string, index?: number): void;
+
   getSecurityDefinitions(): SecurityDefinitions | undefined;
   setSecurityDefinitions(value?: SecurityDefinitions): void;
+  hasSecurityDefinitions(): boolean;
   clearSecurityDefinitions(): void;
-  getSecurityList(): SecurityRequirement[] | undefined;
-  setSecurityList(value?: SecurityRequirement[]): void;
+
+  getSecurityList(): Array<SecurityRequirement>;
+  setSecurityList(value: Array<SecurityRequirement>): void;
   clearSecurityList(): void;
+  addSecurity(value?: SecurityRequirement, index?: number): SecurityRequirement;
+
   getExternalDocs(): ExternalDocumentation | undefined;
   setExternalDocs(value?: ExternalDocumentation): void;
+  hasExternalDocs(): boolean;
   clearExternalDocs(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Swagger.AsObject;
   static toObject(includeInstance: boolean, msg: Swagger): Swagger.AsObject;
@@ -41,16 +57,16 @@ export class Swagger extends jspb.Message {
 
 export namespace Swagger {
   export type AsObject = {
-    swagger: string;
-    info?: Info.AsObject;
-    host: string;
-    basePath: string;
-    schemesList: Swagger.SwaggerScheme[];
-    consumesList: string[];
-    producesList: string[];
-    securityDefinitions?: SecurityDefinitions.AsObject;
-    securityList?: SecurityRequirement.AsObject[];
-    externalDocs?: ExternalDocumentation.AsObject;
+    swagger: string,
+    info?: Info.AsObject,
+    host: string,
+    basePath: string,
+    schemesList: Array<Swagger.SwaggerScheme>,
+    consumesList: Array<string>,
+    producesList: Array<string>,
+    securityDefinitions?: SecurityDefinitions.AsObject,
+    securityList: Array<SecurityRequirement.AsObject>,
+    externalDocs?: ExternalDocumentation.AsObject,
   }
 
   export enum SwaggerScheme { 
@@ -63,33 +79,48 @@ export namespace Swagger {
 }
 
 export class Operation extends jspb.Message {
-  constructor ();
-  getTagsList(): string[];
-  setTagsList(value: string[]): void;
+  getTagsList(): Array<string>;
+  setTagsList(value: Array<string>): void;
   clearTagsList(): void;
+  addTags(value: string, index?: number): void;
+
   getSummary(): string;
   setSummary(value: string): void;
+
   getDescription(): string;
   setDescription(value: string): void;
+
   getExternalDocs(): ExternalDocumentation | undefined;
   setExternalDocs(value?: ExternalDocumentation): void;
+  hasExternalDocs(): boolean;
   clearExternalDocs(): void;
+
   getOperationId(): string;
   setOperationId(value: string): void;
-  getConsumesList(): string[];
-  setConsumesList(value: string[]): void;
+
+  getConsumesList(): Array<string>;
+  setConsumesList(value: Array<string>): void;
   clearConsumesList(): void;
-  getProducesList(): string[];
-  setProducesList(value: string[]): void;
+  addConsumes(value: string, index?: number): void;
+
+  getProducesList(): Array<string>;
+  setProducesList(value: Array<string>): void;
   clearProducesList(): void;
-  getSchemesList(): string[];
-  setSchemesList(value: string[]): void;
+  addProduces(value: string, index?: number): void;
+
+  getSchemesList(): Array<string>;
+  setSchemesList(value: Array<string>): void;
   clearSchemesList(): void;
+  addSchemes(value: string, index?: number): void;
+
   getDeprecated(): boolean;
   setDeprecated(value: boolean): void;
-  getSecurityList(): SecurityRequirement[] | undefined;
-  setSecurityList(value?: SecurityRequirement[]): void;
+
+  getSecurityList(): Array<SecurityRequirement>;
+  setSecurityList(value: Array<SecurityRequirement>): void;
   clearSecurityList(): void;
+  addSecurity(value?: SecurityRequirement, index?: number): SecurityRequirement;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Operation.AsObject;
   static toObject(includeInstance: boolean, msg: Operation): Operation.AsObject;
@@ -100,32 +131,37 @@ export class Operation extends jspb.Message {
 
 export namespace Operation {
   export type AsObject = {
-    tagsList: string[];
-    summary: string;
-    description: string;
-    externalDocs?: ExternalDocumentation.AsObject;
-    operationId: string;
-    consumesList: string[];
-    producesList: string[];
-    schemesList: string[];
-    deprecated: boolean;
-    securityList?: SecurityRequirement.AsObject[];
+    tagsList: Array<string>,
+    summary: string,
+    description: string,
+    externalDocs?: ExternalDocumentation.AsObject,
+    operationId: string,
+    consumesList: Array<string>,
+    producesList: Array<string>,
+    schemesList: Array<string>,
+    deprecated: boolean,
+    securityList: Array<SecurityRequirement.AsObject>,
   }
 }
 
 export class Info extends jspb.Message {
-  constructor ();
   getTitle(): string;
   setTitle(value: string): void;
+
   getDescription(): string;
   setDescription(value: string): void;
+
   getTermsOfService(): string;
   setTermsOfService(value: string): void;
+
   getContact(): Contact | undefined;
   setContact(value?: Contact): void;
+  hasContact(): boolean;
   clearContact(): void;
+
   getVersion(): string;
   setVersion(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Info.AsObject;
   static toObject(includeInstance: boolean, msg: Info): Info.AsObject;
@@ -136,22 +172,24 @@ export class Info extends jspb.Message {
 
 export namespace Info {
   export type AsObject = {
-    title: string;
-    description: string;
-    termsOfService: string;
-    contact?: Contact.AsObject;
-    version: string;
+    title: string,
+    description: string,
+    termsOfService: string,
+    contact?: Contact.AsObject,
+    version: string,
   }
 }
 
 export class Contact extends jspb.Message {
-  constructor ();
   getName(): string;
   setName(value: string): void;
+
   getUrl(): string;
   setUrl(value: string): void;
+
   getEmail(): string;
   setEmail(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Contact.AsObject;
   static toObject(includeInstance: boolean, msg: Contact): Contact.AsObject;
@@ -162,18 +200,19 @@ export class Contact extends jspb.Message {
 
 export namespace Contact {
   export type AsObject = {
-    name: string;
-    url: string;
-    email: string;
+    name: string,
+    url: string,
+    email: string,
   }
 }
 
 export class ExternalDocumentation extends jspb.Message {
-  constructor ();
   getDescription(): string;
   setDescription(value: string): void;
+
   getUrl(): string;
   setUrl(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ExternalDocumentation.AsObject;
   static toObject(includeInstance: boolean, msg: ExternalDocumentation): ExternalDocumentation.AsObject;
@@ -184,26 +223,33 @@ export class ExternalDocumentation extends jspb.Message {
 
 export namespace ExternalDocumentation {
   export type AsObject = {
-    description: string;
-    url: string;
+    description: string,
+    url: string,
   }
 }
 
 export class Schema extends jspb.Message {
-  constructor ();
   getJsonSchema(): JSONSchema | undefined;
   setJsonSchema(value?: JSONSchema): void;
+  hasJsonSchema(): boolean;
   clearJsonSchema(): void;
+
   getDiscriminator(): string;
   setDiscriminator(value: string): void;
+
   getReadOnly(): boolean;
   setReadOnly(value: boolean): void;
+
   getExternalDocs(): ExternalDocumentation | undefined;
   setExternalDocs(value?: ExternalDocumentation): void;
+  hasExternalDocs(): boolean;
   clearExternalDocs(): void;
+
   getExample(): google_protobuf_any_pb.Any | undefined;
   setExample(value?: google_protobuf_any_pb.Any): void;
+  hasExample(): boolean;
   clearExample(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Schema.AsObject;
   static toObject(includeInstance: boolean, msg: Schema): Schema.AsObject;
@@ -214,57 +260,78 @@ export class Schema extends jspb.Message {
 
 export namespace Schema {
   export type AsObject = {
-    jsonSchema?: JSONSchema.AsObject;
-    discriminator: string;
-    readOnly: boolean;
-    externalDocs?: ExternalDocumentation.AsObject;
-    example?: google_protobuf_any_pb.Any.AsObject;
+    jsonSchema?: JSONSchema.AsObject,
+    discriminator: string,
+    readOnly: boolean,
+    externalDocs?: ExternalDocumentation.AsObject,
+    example?: google_protobuf_any_pb.Any.AsObject,
   }
 }
 
 export class JSONSchema extends jspb.Message {
-  constructor ();
   getTitle(): string;
   setTitle(value: string): void;
+
   getDescription(): string;
   setDescription(value: string): void;
+
   getDefault(): string;
   setDefault(value: string): void;
+
   getMultipleOf(): number;
   setMultipleOf(value: number): void;
+
   getMaximum(): number;
   setMaximum(value: number): void;
+
   getExclusiveMaximum(): boolean;
   setExclusiveMaximum(value: boolean): void;
+
   getMinimum(): number;
   setMinimum(value: number): void;
+
   getExclusiveMinimum(): boolean;
   setExclusiveMinimum(value: boolean): void;
+
   getMaxLength(): number;
   setMaxLength(value: number): void;
+
   getMinLength(): number;
   setMinLength(value: number): void;
+
   getPattern(): string;
   setPattern(value: string): void;
+
   getMaxItems(): number;
   setMaxItems(value: number): void;
+
   getMinItems(): number;
   setMinItems(value: number): void;
+
   getUniqueItems(): boolean;
   setUniqueItems(value: boolean): void;
+
   getMaxProperties(): number;
   setMaxProperties(value: number): void;
+
   getMinProperties(): number;
   setMinProperties(value: number): void;
-  getRequiredList(): string[];
-  setRequiredList(value: string[]): void;
+
+  getRequiredList(): Array<string>;
+  setRequiredList(value: Array<string>): void;
   clearRequiredList(): void;
-  getArrayList(): string[];
-  setArrayList(value: string[]): void;
+  addRequired(value: string, index?: number): void;
+
+  getArrayList(): Array<string>;
+  setArrayList(value: Array<string>): void;
   clearArrayList(): void;
-  getTypeList(): JSONSchema.JSONSchemaSimpleTypes[];
-  setTypeList(value: JSONSchema.JSONSchemaSimpleTypes[]): void;
+  addArray(value: string, index?: number): void;
+
+  getTypeList(): Array<JSONSchema.JSONSchemaSimpleTypes>;
+  setTypeList(value: Array<JSONSchema.JSONSchemaSimpleTypes>): void;
   clearTypeList(): void;
+  addType(value: JSONSchema.JSONSchemaSimpleTypes, index?: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): JSONSchema.AsObject;
   static toObject(includeInstance: boolean, msg: JSONSchema): JSONSchema.AsObject;
@@ -275,25 +342,25 @@ export class JSONSchema extends jspb.Message {
 
 export namespace JSONSchema {
   export type AsObject = {
-    title: string;
-    description: string;
-    default: string;
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: boolean;
-    minimum: number;
-    exclusiveMinimum: boolean;
-    maxLength: number;
-    minLength: number;
-    pattern: string;
-    maxItems: number;
-    minItems: number;
-    uniqueItems: boolean;
-    maxProperties: number;
-    minProperties: number;
-    requiredList: string[];
-    arrayList: string[];
-    typeList: JSONSchema.JSONSchemaSimpleTypes[];
+    title: string,
+    description: string,
+    pb_default: string,
+    multipleOf: number,
+    maximum: number,
+    exclusiveMaximum: boolean,
+    minimum: number,
+    exclusiveMinimum: boolean,
+    maxLength: number,
+    minLength: number,
+    pattern: string,
+    maxItems: number,
+    minItems: number,
+    uniqueItems: boolean,
+    maxProperties: number,
+    minProperties: number,
+    requiredList: Array<string>,
+    arrayList: Array<string>,
+    typeList: Array<JSONSchema.JSONSchemaSimpleTypes>,
   }
 
   export enum JSONSchemaSimpleTypes { 
@@ -309,12 +376,14 @@ export namespace JSONSchema {
 }
 
 export class Tag extends jspb.Message {
-  constructor ();
   getDescription(): string;
   setDescription(value: string): void;
+
   getExternalDocs(): ExternalDocumentation | undefined;
   setExternalDocs(value?: ExternalDocumentation): void;
+  hasExternalDocs(): boolean;
   clearExternalDocs(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Tag.AsObject;
   static toObject(includeInstance: boolean, msg: Tag): Tag.AsObject;
@@ -325,15 +394,15 @@ export class Tag extends jspb.Message {
 
 export namespace Tag {
   export type AsObject = {
-    description: string;
-    externalDocs?: ExternalDocumentation.AsObject;
+    description: string,
+    externalDocs?: ExternalDocumentation.AsObject,
   }
 }
 
 export class SecurityDefinitions extends jspb.Message {
-  constructor ();
-  getSecurityMap(): jspb.Map<string, SecurityScheme> | undefined;
+  getSecurityMap(): jspb.Map<string, SecurityScheme>;
   clearSecurityMap(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SecurityDefinitions.AsObject;
   static toObject(includeInstance: boolean, msg: SecurityDefinitions): SecurityDefinitions.AsObject;
@@ -344,52 +413,37 @@ export class SecurityDefinitions extends jspb.Message {
 
 export namespace SecurityDefinitions {
   export type AsObject = {
-    securityMap?: SecurityDefinitions.SecurityEntry.AsObject[];
+    securityMap: Array<[string, SecurityScheme.AsObject]>,
   }
-
-  export class SecurityEntry extends jspb.Message {
-    constructor ();
-    getKey(): string;
-    setKey(value: string): void;
-    getValue(): SecurityScheme | undefined;
-    setValue(value?: SecurityScheme): void;
-    clearValue(): void;
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): SecurityEntry.AsObject;
-    static toObject(includeInstance: boolean, msg: SecurityEntry): SecurityEntry.AsObject;
-    static serializeBinaryToWriter(message: SecurityEntry, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): SecurityEntry;
-    static deserializeBinaryFromReader(message: SecurityEntry, reader: jspb.BinaryReader): SecurityEntry;
-  }
-
-  export namespace SecurityEntry {
-    export type AsObject = {
-      key: string;
-      value?: SecurityScheme.AsObject;
-    }
-  }
-
 }
 
 export class SecurityScheme extends jspb.Message {
-  constructor ();
   getType(): SecurityScheme.Type;
   setType(value: SecurityScheme.Type): void;
+
   getDescription(): string;
   setDescription(value: string): void;
+
   getName(): string;
   setName(value: string): void;
+
   getIn(): SecurityScheme.In;
   setIn(value: SecurityScheme.In): void;
+
   getFlow(): SecurityScheme.Flow;
   setFlow(value: SecurityScheme.Flow): void;
+
   getAuthorizationUrl(): string;
   setAuthorizationUrl(value: string): void;
+
   getTokenUrl(): string;
   setTokenUrl(value: string): void;
+
   getScopes(): Scopes | undefined;
   setScopes(value?: Scopes): void;
+  hasScopes(): boolean;
   clearScopes(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SecurityScheme.AsObject;
   static toObject(includeInstance: boolean, msg: SecurityScheme): SecurityScheme.AsObject;
@@ -400,14 +454,14 @@ export class SecurityScheme extends jspb.Message {
 
 export namespace SecurityScheme {
   export type AsObject = {
-    type: SecurityScheme.Type;
-    description: string;
-    name: string;
-    in: SecurityScheme.In;
-    flow: SecurityScheme.Flow;
-    authorizationUrl: string;
-    tokenUrl: string;
-    scopes?: Scopes.AsObject;
+    type: SecurityScheme.Type,
+    description: string,
+    name: string,
+    pb_in: SecurityScheme.In,
+    flow: SecurityScheme.Flow,
+    authorizationUrl: string,
+    tokenUrl: string,
+    scopes?: Scopes.AsObject,
   }
 
   export enum Type { 
@@ -433,9 +487,9 @@ export namespace SecurityScheme {
 }
 
 export class SecurityRequirement extends jspb.Message {
-  constructor ();
-  getSecurityRequirementMap(): jspb.Map<string, SecurityRequirement.SecurityRequirementValue> | undefined;
+  getSecurityRequirementMap(): jspb.Map<string, SecurityRequirement.SecurityRequirementValue>;
   clearSecurityRequirementMap(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SecurityRequirement.AsObject;
   static toObject(includeInstance: boolean, msg: SecurityRequirement): SecurityRequirement.AsObject;
@@ -446,14 +500,15 @@ export class SecurityRequirement extends jspb.Message {
 
 export namespace SecurityRequirement {
   export type AsObject = {
-    securityRequirementMap?: SecurityRequirement.SecurityRequirementEntry.AsObject[];
+    securityRequirementMap: Array<[string, SecurityRequirement.SecurityRequirementValue.AsObject]>,
   }
 
   export class SecurityRequirementValue extends jspb.Message {
-    constructor ();
-    getScopeList(): string[];
-    setScopeList(value: string[]): void;
+    getScopeList(): Array<string>;
+    setScopeList(value: Array<string>): void;
     clearScopeList(): void;
+    addScope(value: string, index?: number): void;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SecurityRequirementValue.AsObject;
     static toObject(includeInstance: boolean, msg: SecurityRequirementValue): SecurityRequirementValue.AsObject;
@@ -464,39 +519,16 @@ export namespace SecurityRequirement {
 
   export namespace SecurityRequirementValue {
     export type AsObject = {
-      scopeList: string[];
-    }
-  }
-
-
-  export class SecurityRequirementEntry extends jspb.Message {
-    constructor ();
-    getKey(): string;
-    setKey(value: string): void;
-    getValue(): SecurityRequirement.SecurityRequirementValue | undefined;
-    setValue(value?: SecurityRequirement.SecurityRequirementValue): void;
-    clearValue(): void;
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): SecurityRequirementEntry.AsObject;
-    static toObject(includeInstance: boolean, msg: SecurityRequirementEntry): SecurityRequirementEntry.AsObject;
-    static serializeBinaryToWriter(message: SecurityRequirementEntry, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): SecurityRequirementEntry;
-    static deserializeBinaryFromReader(message: SecurityRequirementEntry, reader: jspb.BinaryReader): SecurityRequirementEntry;
-  }
-
-  export namespace SecurityRequirementEntry {
-    export type AsObject = {
-      key: string;
-      value?: SecurityRequirement.SecurityRequirementValue.AsObject;
+      scopeList: Array<string>,
     }
   }
 
 }
 
 export class Scopes extends jspb.Message {
-  constructor ();
-  getScopeMap(): jspb.Map<string, string> | undefined;
+  getScopeMap(): jspb.Map<string, string>;
   clearScopeMap(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Scopes.AsObject;
   static toObject(includeInstance: boolean, msg: Scopes): Scopes.AsObject;
@@ -507,29 +539,7 @@ export class Scopes extends jspb.Message {
 
 export namespace Scopes {
   export type AsObject = {
-    scopeMap?: Scopes.ScopeEntry.AsObject[];
+    scopeMap: Array<[string, string]>,
   }
-
-  export class ScopeEntry extends jspb.Message {
-    constructor ();
-    getKey(): string;
-    setKey(value: string): void;
-    getValue(): string;
-    setValue(value: string): void;
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): ScopeEntry.AsObject;
-    static toObject(includeInstance: boolean, msg: ScopeEntry): ScopeEntry.AsObject;
-    static serializeBinaryToWriter(message: ScopeEntry, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): ScopeEntry;
-    static deserializeBinaryFromReader(message: ScopeEntry, reader: jspb.BinaryReader): ScopeEntry;
-  }
-
-  export namespace ScopeEntry {
-    export type AsObject = {
-      key: string;
-      value: string;
-    }
-  }
-
 }
 

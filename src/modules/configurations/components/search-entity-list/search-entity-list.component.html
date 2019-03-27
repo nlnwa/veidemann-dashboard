@@ -1,0 +1,102 @@
+<div class="mat-elevation-z1">
+  <table class="mat-table" *ngIf="selection.selected.length > 1">
+    <tr class="mat-row">
+      <td class="mat-cell">
+        <span><b>{{selection.selected.length}}</b> entiteter er markert. </span>
+      </td>
+    </tr>
+  </table>
+
+  <table mat-table [dataSource]="dataSource">
+    <!-- checkbox column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="onMasterCheckboxToggle($event.checked)"
+                      [checked]="selection.hasValue() && isAllInPageSelected"
+                      [indeterminate]="selection.hasValue() && !isAllInPageSelected">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)=onCheckboxToggle(row)
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef i18n="@@baselistNameHeaderCell">Navn</th>
+      <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef i18n="@@baselistDescriptionHeaderCell">Beskrivelse</th>
+      <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="entityName">
+      <th mat-header-cell *matHeaderCellDef
+          class="list__column--narrow"
+          i18n="@@baselistIdHeaderCell">
+      </th>
+      <td mat-cell *matCellDef="let row"
+          class="list__column--narrow">
+        <mat-icon *ngIf="isEntityName(row)">business</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="entityLabel">
+      <th mat-header-cell *matHeaderCellDef
+          class="list__column--narrow"
+          i18n="@@baselistIdHeaderCell">
+      </th>
+      <td mat-cell *matCellDef="let row"
+          class="list__column--narrow">
+        <mat-icon *ngIf="isEntityLabel(row)">label</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="seedName">
+      <th mat-header-cell *matHeaderCellDef
+          class="list__column--narrow"
+          i18n="@@baselistIdHeaderCell">
+      </th>
+      <td mat-cell *matCellDef="let row"
+          class="list__column--narrow">
+        <mat-icon *ngIf="isSeedName(row)">link</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="seedLabel">
+      <th mat-header-cell *matHeaderCellDef
+          class="list__column--narrow"
+          i18n="@@baselistIdHeaderCell">
+      </th>
+      <td mat-cell *matCellDef="let row"
+          class="list__column--narrow">
+        <mat-icon *ngIf="isSeedLabel(row)">label_outline</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef
+          i18n="@@baselistIdHeaderCell">ID
+      </th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="isSelected(row)  ? 'row-selected': isChecked(row) ? 'row-checked' : ''"
+        (click)="onRowClick(row)"></tr>
+  </table>
+
+  <mat-paginator
+    (page)="onPage($event)"
+    [ngClass]="pageLength === 0 ? 'hide-mat-paginator-range-label' : ''"
+    [length]="pageLength"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageOptions">
+  </mat-paginator>
+</div>

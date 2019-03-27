@@ -20,7 +20,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/styles.css",
+              "src/styles/styles.scss",
               "src/styles/theme.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
@@ -79,7 +79,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "src/styles/styles.css",
+              "src/styles/styles.scss",
               "src/styles/theme.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",

@@ -23,7 +23,6 @@ export {
 
 export {
   DeleteResponse,
-  FieldMask,
   GetLabelKeysRequest,
   LabelKeysResponse,
   ListCountResponse,
@@ -36,3 +35,7 @@ export {
   ConfigClient,
   ConfigPromiseClient
 } from './gen/config/v1/config_grpc_web_pb';
+
+export {
+  FieldMask,
+} from './gen/commons/v1/resources_pb';

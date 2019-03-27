@@ -1,0 +1,117 @@
+<form [formGroup]="form">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>schedule</mat-icon>
+      <mat-card-title>
+        <span *ngIf="configObject" i18n="@@scheduleDetailsHeader">Schedule</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <span *ngIf="!configObject.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <app-meta formControlName="meta"></app-meta>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 readonly
+                 i18n-placeholder="@@configIdPlaceholder">
+        </mat-form-field>
+      </div>
+
+      <div fxFlex fxLayout="column" fxLayoutAlign="space-evenly">
+        <div formGroupName="cronExpression" class="cron-expression">
+          <h3 mat-subheader i18n="@@scheduleFormCronExpressionHeader">CRON-uttrykk</h3>
+          <div fxLayout="rolw wrap" fxLayoutGap="24px">
+            <mat-form-field>
+              <input matInput formControlName="minute"
+                     placeholder="Minute"
+                     i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
+              <mat-hint>0-59</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="hour"
+                     placeholder="Hour"
+                     i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
+              <mat-hint>0-23</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="dom"
+                     placeholder="Day of month"
+                     i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
+              <mat-hint>1-31</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="month"
+                     placeholder="Month"
+                     i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
+              <mat-hint>1-12</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="dow"
+                     placeholder="Day of week"
+                     i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
+              <mat-hint>0-7</mat-hint>
+            </mat-form-field>
+          </div>
+          <mat-error *ngIf="form.dirty && !form.disabled && !cronExpression.valid"
+                     i18n="@@scheduleFormCronExpressionRequiredError">
+            CRON-uttrykk er påkrevd
+          </mat-error>
+        </div>
+
+        <div>
+          <h3 mat-subheader>Tidsavgrensning</h3>
+          <div fxLayout="row wrap" fxLayoutGap="24px">
+            <mat-form-field>
+              <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
+                     placeholder="Gyldig fra">
+              <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #validFromDatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo" placeholder="Gyldig til">
+              <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #validToDatepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="accent"
+              [disabled]="!canSave"
+              *ngIf="showSave"
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
+        LAGRE
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        OPPDATER
+      </button>
+      <button mat-button
+              [disabled]="!canRevert"
+              (click)="onRevert()"
+              i18n="@@commonButtonRevert">
+        TILBAKESTILL
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!showSave && canDelete"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">
+        SLETT
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+
