@@ -1,25 +1,50 @@
-# Broprox-gui
+# Veidemann Dashboard
 
-Broprox-gui is an frontend web-application of the [broprox harvester](https://github.com/nlnwa/broprox), written in angular2/4.
+Veidemann Dashboard is a web-based UI for [veidemann](https://github.com/nlnwa/veidemann-harvester).
 
-Since GRPC does not work in browsers yet (atleast not officially) we're using an express app as a proxy for the grpc part, in addition to serve the static files.
+### Getting started with veidemann
 
-## Installation
+```
+# start minikube
+$ minikube start --vm-driver kvm2 --memory 8096 --cpus 2
 
-$ git clone https://github.com/nlnwa/broprox-gui.git
+# fetch veidemann helm charts
+$ git clone https://github.com/nlnwa/charts.git
 
-$ cd broprox-gui 
+# enter minikube directory
+$ cd charts/minikube
 
-$ npm install
+# add entry to /etc/hosts mapping veidemann.local to minikube ip  (you will be prompted for a password)
+$ ./hosts.sh 
 
-## Development server
+# install veidemann (5-10 min)
+$ ./install.sh
 
-Run `node/nodemon server.js` to fire up grpc proxy 
-Run `ng serve --proxy proxy-cfg.json --host 0.0.0.0` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-## Build
+# watch installation unfold (in another terminal window/tab)
+$ watch -d kubectl get pod
 
-Run `ng build --aot` to build the project. The build artifacts will be stored in the `dist/` directory.
+# open dashboard at https://veidemann.local/veidemann
+```
 
-## Note
+### Local development setup
 
-Always run `ng serve --aot --proxy proxy-cfg.json --host 0.0.0.0` before pushing to git `--aot` (ahead of time compilation) can sometimes be picky. 
+
+```
+# clone
+$ git clone https://github.com/nlnwa/veidemann-dashboard.git
+
+# install dependencies
+$ yarn
+
+# start development server
+$ yarn start \
+--ssl \
+--ssl-cert 'path/to/charts/minikube/certs/veidemann.local/cert.pem' \
+--ssl-key 'path/to/charts/minikube/certs/veidemann.local/key.pem'
+
+# import path/to/charts/minikube/certs/minica.pem to your browser of choice and visit https://localhost:4200/veidemann
+```
+  
+## License
+
+[Apache License 2.0](https://github.com/nlnwa/veidemann-dashboard/blob/master/LICENSE)
