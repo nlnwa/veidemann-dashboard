@@ -1,0 +1,133 @@
+<style>
+  fieldset {
+    border-width: 0px;
+  }
+</style>
+<form [formGroup]="form" fxFlex>
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>collections_bookmark</mat-icon>
+      <mat-card-title>
+        <span i18n="@@collectionDetailsHeader">Samling</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <span *ngIf="!configObject.id"
+              i18n="@@collectionNewCollectionHeader">Ny (ikke lagret)</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <app-meta formControlName="meta"></app-meta>
+        <mat-form-field *ngIf="!showSave">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 readonly
+                 i18n-placeholder="@@configIdPlaceholder">
+        </mat-form-field>
+      </div>
+
+      <div fxFlex fxLayout="column">
+        <mat-form-field>
+          <mat-select placeholder="Deduplisering policy"
+                      formControlName="collectionDedupPolicy"
+                      i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder">
+            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="Filrotasjon policy"
+                      formControlName="fileRotationPolicy"
+                      i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder">
+            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="fileSize"
+                 placeholder="Filstørrelse"
+                 i18n-placeholder="@@collectionFormFilesizePlaceholder">
+          <mat-error *ngIf="!fileSize.valid"
+                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
+            Må være et tall.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="compress"
+                      labelPosition="after"
+                      i18n="@@collectionFormCompressLabel"
+                      color="accent">
+          Komprimer
+        </mat-checkbox>
+
+        <fieldset class="mat-elevation-z1" formArrayName="subCollectionsList">
+          <legend mat-card-subtitle i18n="@@collectionFromSubCollectionToolbarTitle">Delsamlinger</legend>
+
+          <div *ngFor="let subCollectionsList of subCollectionControlArray.controls; let i=index"
+               [formGroupName]="i"
+               fxLayout="row"
+               fxLayoutGap="16px">
+            <mat-form-field fxFlex>
+              <input matInput formControlName="name" placeholder="Navn"
+                     i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Subcollection type"
+                          formControlName="type"
+                          i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder">
+                <mat-option *ngFor="let type of subCollectionTypes"
+                            [value]="type">{{SubCollectionType[type]}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button mat-button
+                    (click)="onRemoveSubCollection(i)"
+                    *ngIf="canEdit">
+              <mat-icon>remove_circle</mat-icon>&nbsp;
+              <span>FJERN</span>
+            </button>
+          </div>
+
+          <button mat-stroked-button (click)="onAddSubCollection()" *ngIf="canEdit">
+            <mat-icon>add_circle</mat-icon>&nbsp;
+            <span>LEGG TIL DELSAMLING</span>
+          </button>
+        </fieldset>
+
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="accent"
+              *ngIf="showSave"
+              [disabled]="!canSave"
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
+        LAGRE
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        OPPDATER
+      </button>
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!canRevert"
+              i18n="@@commonButtonRevert">
+        TILBAKESTILL
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!showSave"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">
+        SLETT
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

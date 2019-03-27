@@ -1,12 +1,12 @@
-VEIDEMANN_API_VERSION?=v1.0.0-beta2
-PROTOC_VERSION=3.7.0rc2
+VEIDEMANN_API_VERSION?=1.0.0-beta7
+PROTOC_VERSION=3.7.0
 PROTOC_FILE_VERSION=$$(echo ${PROTOC_VERSION} | sed -r 's|(.*)(rc)(.*)|\1-\2-\3|')
-GRPC_WEB_VERSION=1.0.3
+GRPC_WEB_VERSION=1.0.4
 
 PROTOC=tools/bin/protoc
 PROTOC_GEN_GRPC_WEB=tools/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
 
-GRPC_WEB_IMPORT_STYLE=commonjs
+GRPC_WEB_IMPORT_STYLE=commonjs+dts
 OUT=../src/api/gen
 
 .PHONY: all
@@ -32,11 +32,11 @@ tools:
 
 build: veidemann-api
 	@rm -rf ${OUT}; mkdir -p ${OUT}
-	@find veidemann-api/protobuf/config veidemann-api/include/ -name *.proto -exec ${PROTOC} \
+	@find veidemann-api/protobuf/{config,commons} veidemann-api/include/ -name *.proto -exec ${PROTOC} \
 	  -Iveidemann-api/protobuf \
 	  -Iveidemann-api/include \
 	  -Itools/include \
-	  --plugin=${PROTOC_GEN_GRPC_WEB} \
+	  --plugin=protoc-gen-grpc-web=${PROTOC_GEN_GRPC_WEB} \
 	  --js_out=import_style=commonjs:${OUT} \
 	  --grpc-web_out=import_style=${GRPC_WEB_IMPORT_STYLE},mode=grpcwebtext:${OUT} \
 	  {} ';'

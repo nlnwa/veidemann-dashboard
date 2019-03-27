@@ -1,10 +1,11 @@
 import * as jspb from "google-protobuf"
 
 export class Http extends jspb.Message {
-  constructor ();
-  getRulesList(): HttpRule[] | undefined;
-  setRulesList(value?: HttpRule[]): void;
+  getRulesList(): Array<HttpRule>;
+  setRulesList(value: Array<HttpRule>): void;
   clearRulesList(): void;
+  addRules(value?: HttpRule, index?: number): HttpRule;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Http.AsObject;
   static toObject(includeInstance: boolean, msg: Http): Http.AsObject;
@@ -15,32 +16,50 @@ export class Http extends jspb.Message {
 
 export namespace Http {
   export type AsObject = {
-    rulesList?: HttpRule.AsObject[];
+    rulesList: Array<HttpRule.AsObject>,
   }
 }
 
 export class HttpRule extends jspb.Message {
-  constructor ();
   getSelector(): string;
   setSelector(value: string): void;
+
   getGet(): string;
   setGet(value: string): void;
+  hasGet(): boolean;
+
   getPut(): string;
   setPut(value: string): void;
+  hasPut(): boolean;
+
   getPost(): string;
   setPost(value: string): void;
+  hasPost(): boolean;
+
   getDelete(): string;
   setDelete(value: string): void;
+  hasDelete(): boolean;
+
   getPatch(): string;
   setPatch(value: string): void;
+  hasPatch(): boolean;
+
   getCustom(): CustomHttpPattern | undefined;
   setCustom(value?: CustomHttpPattern): void;
+  hasCustom(): boolean;
   clearCustom(): void;
+  hasCustom(): boolean;
+
   getBody(): string;
   setBody(value: string): void;
-  getAdditionalBindingsList(): HttpRule[] | undefined;
-  setAdditionalBindingsList(value?: HttpRule[]): void;
+
+  getAdditionalBindingsList(): Array<HttpRule>;
+  setAdditionalBindingsList(value: Array<HttpRule>): void;
   clearAdditionalBindingsList(): void;
+  addAdditionalBindings(value?: HttpRule, index?: number): HttpRule;
+
+  getPatternCase(): HttpRule.PatternCase;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): HttpRule.AsObject;
   static toObject(includeInstance: boolean, msg: HttpRule): HttpRule.AsObject;
@@ -51,24 +70,35 @@ export class HttpRule extends jspb.Message {
 
 export namespace HttpRule {
   export type AsObject = {
-    selector: string;
-    get: string;
-    put: string;
-    post: string;
-    delete: string;
-    patch: string;
-    custom?: CustomHttpPattern.AsObject;
-    body: string;
-    additionalBindingsList?: HttpRule.AsObject[];
+    selector: string,
+    get: string,
+    put: string,
+    post: string,
+    pb_delete: string,
+    patch: string,
+    custom?: CustomHttpPattern.AsObject,
+    body: string,
+    additionalBindingsList: Array<HttpRule.AsObject>,
+  }
+
+  export enum PatternCase { 
+    PATTERN_NOT_SET = 0,
+    GET = 2,
+    PUT = 3,
+    POST = 4,
+    DELETE = 5,
+    PATCH = 6,
+    CUSTOM = 8,
   }
 }
 
 export class CustomHttpPattern extends jspb.Message {
-  constructor ();
   getKind(): string;
   setKind(value: string): void;
+
   getPath(): string;
   setPath(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CustomHttpPattern.AsObject;
   static toObject(includeInstance: boolean, msg: CustomHttpPattern): CustomHttpPattern.AsObject;
@@ -79,8 +109,8 @@ export class CustomHttpPattern extends jspb.Message {
 
 export namespace CustomHttpPattern {
   export type AsObject = {
-    kind: string;
-    path: string;
+    kind: string,
+    path: string,
   }
 }
 

@@ -3,49 +3,88 @@ import * as jspb from "google-protobuf"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
 
 export class ConfigObject extends jspb.Message {
-  constructor ();
   getId(): string;
   setId(value: string): void;
+
   getApiversion(): string;
   setApiversion(value: string): void;
+
   getKind(): Kind;
   setKind(value: Kind): void;
+
   getMeta(): Meta | undefined;
   setMeta(value?: Meta): void;
+  hasMeta(): boolean;
   clearMeta(): void;
+
   getCrawlEntity(): CrawlEntity | undefined;
   setCrawlEntity(value?: CrawlEntity): void;
+  hasCrawlEntity(): boolean;
   clearCrawlEntity(): void;
+  hasCrawlEntity(): boolean;
+
   getSeed(): Seed | undefined;
   setSeed(value?: Seed): void;
+  hasSeed(): boolean;
   clearSeed(): void;
+  hasSeed(): boolean;
+
   getCrawlJob(): CrawlJob | undefined;
   setCrawlJob(value?: CrawlJob): void;
+  hasCrawlJob(): boolean;
   clearCrawlJob(): void;
+  hasCrawlJob(): boolean;
+
   getCrawlConfig(): CrawlConfig | undefined;
   setCrawlConfig(value?: CrawlConfig): void;
+  hasCrawlConfig(): boolean;
   clearCrawlConfig(): void;
+  hasCrawlConfig(): boolean;
+
   getCrawlScheduleConfig(): CrawlScheduleConfig | undefined;
   setCrawlScheduleConfig(value?: CrawlScheduleConfig): void;
+  hasCrawlScheduleConfig(): boolean;
   clearCrawlScheduleConfig(): void;
+  hasCrawlScheduleConfig(): boolean;
+
   getBrowserConfig(): BrowserConfig | undefined;
   setBrowserConfig(value?: BrowserConfig): void;
+  hasBrowserConfig(): boolean;
   clearBrowserConfig(): void;
+  hasBrowserConfig(): boolean;
+
   getPolitenessConfig(): PolitenessConfig | undefined;
   setPolitenessConfig(value?: PolitenessConfig): void;
+  hasPolitenessConfig(): boolean;
   clearPolitenessConfig(): void;
+  hasPolitenessConfig(): boolean;
+
   getBrowserScript(): BrowserScript | undefined;
   setBrowserScript(value?: BrowserScript): void;
+  hasBrowserScript(): boolean;
   clearBrowserScript(): void;
+  hasBrowserScript(): boolean;
+
   getCrawlHostGroupConfig(): CrawlHostGroupConfig | undefined;
   setCrawlHostGroupConfig(value?: CrawlHostGroupConfig): void;
+  hasCrawlHostGroupConfig(): boolean;
   clearCrawlHostGroupConfig(): void;
+  hasCrawlHostGroupConfig(): boolean;
+
   getRoleMapping(): RoleMapping | undefined;
   setRoleMapping(value?: RoleMapping): void;
+  hasRoleMapping(): boolean;
   clearRoleMapping(): void;
+  hasRoleMapping(): boolean;
+
   getCollection(): Collection | undefined;
   setCollection(value?: Collection): void;
+  hasCollection(): boolean;
   clearCollection(): void;
+  hasCollection(): boolean;
+
+  getSpecCase(): ConfigObject.SpecCase;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ConfigObject.AsObject;
   static toObject(includeInstance: boolean, msg: ConfigObject): ConfigObject.AsObject;
@@ -56,43 +95,67 @@ export class ConfigObject extends jspb.Message {
 
 export namespace ConfigObject {
   export type AsObject = {
-    id: string;
-    apiversion: string;
-    kind: Kind;
-    meta?: Meta.AsObject;
-    crawlEntity?: CrawlEntity.AsObject;
-    seed?: Seed.AsObject;
-    crawlJob?: CrawlJob.AsObject;
-    crawlConfig?: CrawlConfig.AsObject;
-    crawlScheduleConfig?: CrawlScheduleConfig.AsObject;
-    browserConfig?: BrowserConfig.AsObject;
-    politenessConfig?: PolitenessConfig.AsObject;
-    browserScript?: BrowserScript.AsObject;
-    crawlHostGroupConfig?: CrawlHostGroupConfig.AsObject;
-    roleMapping?: RoleMapping.AsObject;
-    collection?: Collection.AsObject;
+    id: string,
+    apiversion: string,
+    kind: Kind,
+    meta?: Meta.AsObject,
+    crawlEntity?: CrawlEntity.AsObject,
+    seed?: Seed.AsObject,
+    crawlJob?: CrawlJob.AsObject,
+    crawlConfig?: CrawlConfig.AsObject,
+    crawlScheduleConfig?: CrawlScheduleConfig.AsObject,
+    browserConfig?: BrowserConfig.AsObject,
+    politenessConfig?: PolitenessConfig.AsObject,
+    browserScript?: BrowserScript.AsObject,
+    crawlHostGroupConfig?: CrawlHostGroupConfig.AsObject,
+    roleMapping?: RoleMapping.AsObject,
+    collection?: Collection.AsObject,
+  }
+
+  export enum SpecCase { 
+    SPEC_NOT_SET = 0,
+    CRAWL_ENTITY = 5,
+    SEED = 6,
+    CRAWL_JOB = 7,
+    CRAWL_CONFIG = 8,
+    CRAWL_SCHEDULE_CONFIG = 9,
+    BROWSER_CONFIG = 10,
+    POLITENESS_CONFIG = 11,
+    BROWSER_SCRIPT = 12,
+    CRAWL_HOST_GROUP_CONFIG = 13,
+    ROLE_MAPPING = 14,
+    COLLECTION = 15,
   }
 }
 
 export class Meta extends jspb.Message {
-  constructor ();
   getName(): string;
   setName(value: string): void;
+
   getDescription(): string;
   setDescription(value: string): void;
+
   getCreated(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setCreated(value?: google_protobuf_timestamp_pb.Timestamp): void;
+  hasCreated(): boolean;
   clearCreated(): void;
+
   getCreatedBy(): string;
   setCreatedBy(value: string): void;
+
   getLastModified(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setLastModified(value?: google_protobuf_timestamp_pb.Timestamp): void;
+  hasLastModified(): boolean;
   clearLastModified(): void;
+
   getLastModifiedBy(): string;
   setLastModifiedBy(value: string): void;
-  getLabelList(): Label[] | undefined;
-  setLabelList(value?: Label[]): void;
+
+  getLabelList(): Array<Label>;
+  setLabelList(value: Array<Label>): void;
   clearLabelList(): void;
+  addLabel(value?: Label, index?: number): Label;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Meta.AsObject;
   static toObject(includeInstance: boolean, msg: Meta): Meta.AsObject;
@@ -103,22 +166,23 @@ export class Meta extends jspb.Message {
 
 export namespace Meta {
   export type AsObject = {
-    name: string;
-    description: string;
-    created?: google_protobuf_timestamp_pb.Timestamp.AsObject;
-    createdBy: string;
-    lastModified?: google_protobuf_timestamp_pb.Timestamp.AsObject;
-    lastModifiedBy: string;
-    labelList?: Label.AsObject[];
+    name: string,
+    description: string,
+    created?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    createdBy: string,
+    lastModified?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    lastModifiedBy: string,
+    labelList: Array<Label.AsObject>,
   }
 }
 
 export class Label extends jspb.Message {
-  constructor ();
   getKey(): string;
   setKey(value: string): void;
+
   getValue(): string;
   setValue(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Label.AsObject;
   static toObject(includeInstance: boolean, msg: Label): Label.AsObject;
@@ -129,17 +193,18 @@ export class Label extends jspb.Message {
 
 export namespace Label {
   export type AsObject = {
-    key: string;
-    value: string;
+    key: string,
+    value: string,
   }
 }
 
 export class ConfigRef extends jspb.Message {
-  constructor ();
   getKind(): Kind;
   setKind(value: Kind): void;
+
   getId(): string;
   setId(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ConfigRef.AsObject;
   static toObject(includeInstance: boolean, msg: ConfigRef): ConfigRef.AsObject;
@@ -150,13 +215,12 @@ export class ConfigRef extends jspb.Message {
 
 export namespace ConfigRef {
   export type AsObject = {
-    kind: Kind;
-    id: string;
+    kind: Kind,
+    id: string,
   }
 }
 
 export class CrawlEntity extends jspb.Message {
-  constructor ();
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlEntity.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlEntity): CrawlEntity.AsObject;
@@ -171,18 +235,24 @@ export namespace CrawlEntity {
 }
 
 export class Seed extends jspb.Message {
-  constructor ();
   getEntityRef(): ConfigRef | undefined;
   setEntityRef(value?: ConfigRef): void;
+  hasEntityRef(): boolean;
   clearEntityRef(): void;
+
   getScope(): CrawlScope | undefined;
   setScope(value?: CrawlScope): void;
+  hasScope(): boolean;
   clearScope(): void;
-  getJobRefList(): ConfigRef[] | undefined;
-  setJobRefList(value?: ConfigRef[]): void;
+
+  getJobRefList(): Array<ConfigRef>;
+  setJobRefList(value: Array<ConfigRef>): void;
   clearJobRefList(): void;
+  addJobRef(value?: ConfigRef, index?: number): ConfigRef;
+
   getDisabled(): boolean;
   setDisabled(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Seed.AsObject;
   static toObject(includeInstance: boolean, msg: Seed): Seed.AsObject;
@@ -193,26 +263,32 @@ export class Seed extends jspb.Message {
 
 export namespace Seed {
   export type AsObject = {
-    entityRef?: ConfigRef.AsObject;
-    scope?: CrawlScope.AsObject;
-    jobRefList?: ConfigRef.AsObject[];
-    disabled: boolean;
+    entityRef?: ConfigRef.AsObject,
+    scope?: CrawlScope.AsObject,
+    jobRefList: Array<ConfigRef.AsObject>,
+    disabled: boolean,
   }
 }
 
 export class CrawlJob extends jspb.Message {
-  constructor ();
   getScheduleRef(): ConfigRef | undefined;
   setScheduleRef(value?: ConfigRef): void;
+  hasScheduleRef(): boolean;
   clearScheduleRef(): void;
+
   getLimits(): CrawlLimitsConfig | undefined;
   setLimits(value?: CrawlLimitsConfig): void;
+  hasLimits(): boolean;
   clearLimits(): void;
+
   getCrawlConfigRef(): ConfigRef | undefined;
   setCrawlConfigRef(value?: ConfigRef): void;
+  hasCrawlConfigRef(): boolean;
   clearCrawlConfigRef(): void;
+
   getDisabled(): boolean;
   setDisabled(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlJob.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlJob): CrawlJob.AsObject;
@@ -223,31 +299,40 @@ export class CrawlJob extends jspb.Message {
 
 export namespace CrawlJob {
   export type AsObject = {
-    scheduleRef?: ConfigRef.AsObject;
-    limits?: CrawlLimitsConfig.AsObject;
-    crawlConfigRef?: ConfigRef.AsObject;
-    disabled: boolean;
+    scheduleRef?: ConfigRef.AsObject,
+    limits?: CrawlLimitsConfig.AsObject,
+    crawlConfigRef?: ConfigRef.AsObject,
+    disabled: boolean,
   }
 }
 
 export class CrawlConfig extends jspb.Message {
-  constructor ();
   getCollectionRef(): ConfigRef | undefined;
   setCollectionRef(value?: ConfigRef): void;
+  hasCollectionRef(): boolean;
   clearCollectionRef(): void;
+
   getBrowserConfigRef(): ConfigRef | undefined;
   setBrowserConfigRef(value?: ConfigRef): void;
+  hasBrowserConfigRef(): boolean;
   clearBrowserConfigRef(): void;
+
   getPolitenessRef(): ConfigRef | undefined;
   setPolitenessRef(value?: ConfigRef): void;
+  hasPolitenessRef(): boolean;
   clearPolitenessRef(): void;
+
   getExtra(): ExtraConfig | undefined;
   setExtra(value?: ExtraConfig): void;
+  hasExtra(): boolean;
   clearExtra(): void;
+
   getMinimumDnsTtlS(): number;
   setMinimumDnsTtlS(value: number): void;
+
   getPriorityWeight(): number;
   setPriorityWeight(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlConfig.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlConfig): CrawlConfig.AsObject;
@@ -258,21 +343,22 @@ export class CrawlConfig extends jspb.Message {
 
 export namespace CrawlConfig {
   export type AsObject = {
-    collectionRef?: ConfigRef.AsObject;
-    browserConfigRef?: ConfigRef.AsObject;
-    politenessRef?: ConfigRef.AsObject;
-    extra?: ExtraConfig.AsObject;
-    minimumDnsTtlS: number;
-    priorityWeight: number;
+    collectionRef?: ConfigRef.AsObject,
+    browserConfigRef?: ConfigRef.AsObject,
+    politenessRef?: ConfigRef.AsObject,
+    extra?: ExtraConfig.AsObject,
+    minimumDnsTtlS: number,
+    priorityWeight: number,
   }
 }
 
 export class ExtraConfig extends jspb.Message {
-  constructor ();
   getExtractText(): boolean;
   setExtractText(value: boolean): void;
+
   getCreateScreenshot(): boolean;
   setCreateScreenshot(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ExtraConfig.AsObject;
   static toObject(includeInstance: boolean, msg: ExtraConfig): ExtraConfig.AsObject;
@@ -283,21 +369,25 @@ export class ExtraConfig extends jspb.Message {
 
 export namespace ExtraConfig {
   export type AsObject = {
-    extractText: boolean;
-    createScreenshot: boolean;
+    extractText: boolean,
+    createScreenshot: boolean,
   }
 }
 
 export class CrawlScheduleConfig extends jspb.Message {
-  constructor ();
   getCronExpression(): string;
   setCronExpression(value: string): void;
+
   getValidFrom(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setValidFrom(value?: google_protobuf_timestamp_pb.Timestamp): void;
+  hasValidFrom(): boolean;
   clearValidFrom(): void;
+
   getValidTo(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setValidTo(value?: google_protobuf_timestamp_pb.Timestamp): void;
+  hasValidTo(): boolean;
   clearValidTo(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlScheduleConfig.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlScheduleConfig): CrawlScheduleConfig.AsObject;
@@ -308,16 +398,16 @@ export class CrawlScheduleConfig extends jspb.Message {
 
 export namespace CrawlScheduleConfig {
   export type AsObject = {
-    cronExpression: string;
-    validFrom?: google_protobuf_timestamp_pb.Timestamp.AsObject;
-    validTo?: google_protobuf_timestamp_pb.Timestamp.AsObject;
+    cronExpression: string,
+    validFrom?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    validTo?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
 export class CrawlScope extends jspb.Message {
-  constructor ();
   getSurtPrefix(): string;
   setSurtPrefix(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlScope.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlScope): CrawlScope.AsObject;
@@ -328,18 +418,20 @@ export class CrawlScope extends jspb.Message {
 
 export namespace CrawlScope {
   export type AsObject = {
-    surtPrefix: string;
+    surtPrefix: string,
   }
 }
 
 export class CrawlLimitsConfig extends jspb.Message {
-  constructor ();
   getDepth(): number;
   setDepth(value: number): void;
+
   getMaxDurationS(): number;
   setMaxDurationS(value: number): void;
+
   getMaxBytes(): number;
   setMaxBytes(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlLimitsConfig.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlLimitsConfig): CrawlLimitsConfig.AsObject;
@@ -350,34 +442,44 @@ export class CrawlLimitsConfig extends jspb.Message {
 
 export namespace CrawlLimitsConfig {
   export type AsObject = {
-    depth: number;
-    maxDurationS: number;
-    maxBytes: number;
+    depth: number,
+    maxDurationS: number,
+    maxBytes: number,
   }
 }
 
 export class BrowserConfig extends jspb.Message {
-  constructor ();
   getUserAgent(): string;
   setUserAgent(value: string): void;
+
   getWindowWidth(): number;
   setWindowWidth(value: number): void;
+
   getWindowHeight(): number;
   setWindowHeight(value: number): void;
+
   getPageLoadTimeoutMs(): number;
   setPageLoadTimeoutMs(value: number): void;
-  getScriptSelectorList(): string[];
-  setScriptSelectorList(value: string[]): void;
+
+  getScriptSelectorList(): Array<string>;
+  setScriptSelectorList(value: Array<string>): void;
   clearScriptSelectorList(): void;
-  getScriptRefList(): ConfigRef[] | undefined;
-  setScriptRefList(value?: ConfigRef[]): void;
+  addScriptSelector(value: string, index?: number): void;
+
+  getScriptRefList(): Array<ConfigRef>;
+  setScriptRefList(value: Array<ConfigRef>): void;
   clearScriptRefList(): void;
-  getHeadersMap(): jspb.Map<string, string> | undefined;
+  addScriptRef(value?: ConfigRef, index?: number): ConfigRef;
+
+  getHeadersMap(): jspb.Map<string, string>;
   clearHeadersMap(): void;
-  getScriptParametersMap(): jspb.Map<string, string> | undefined;
+
+  getScriptParametersMap(): jspb.Map<string, string>;
   clearScriptParametersMap(): void;
+
   getMaxInactivityTimeMs(): number;
   setMaxInactivityTimeMs(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BrowserConfig.AsObject;
   static toObject(includeInstance: boolean, msg: BrowserConfig): BrowserConfig.AsObject;
@@ -388,85 +490,51 @@ export class BrowserConfig extends jspb.Message {
 
 export namespace BrowserConfig {
   export type AsObject = {
-    userAgent: string;
-    windowWidth: number;
-    windowHeight: number;
-    pageLoadTimeoutMs: number;
-    scriptSelectorList: string[];
-    scriptRefList?: ConfigRef.AsObject[];
-    headersMap?: BrowserConfig.HeadersEntry.AsObject[];
-    scriptParametersMap?: BrowserConfig.ScriptParametersEntry.AsObject[];
-    maxInactivityTimeMs: number;
+    userAgent: string,
+    windowWidth: number,
+    windowHeight: number,
+    pageLoadTimeoutMs: number,
+    scriptSelectorList: Array<string>,
+    scriptRefList: Array<ConfigRef.AsObject>,
+    headersMap: Array<[string, string]>,
+    scriptParametersMap: Array<[string, string]>,
+    maxInactivityTimeMs: number,
   }
-
-  export class HeadersEntry extends jspb.Message {
-    constructor ();
-    getKey(): string;
-    setKey(value: string): void;
-    getValue(): string;
-    setValue(value: string): void;
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): HeadersEntry.AsObject;
-    static toObject(includeInstance: boolean, msg: HeadersEntry): HeadersEntry.AsObject;
-    static serializeBinaryToWriter(message: HeadersEntry, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): HeadersEntry;
-    static deserializeBinaryFromReader(message: HeadersEntry, reader: jspb.BinaryReader): HeadersEntry;
-  }
-
-  export namespace HeadersEntry {
-    export type AsObject = {
-      key: string;
-      value: string;
-    }
-  }
-
-
-  export class ScriptParametersEntry extends jspb.Message {
-    constructor ();
-    getKey(): string;
-    setKey(value: string): void;
-    getValue(): string;
-    setValue(value: string): void;
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): ScriptParametersEntry.AsObject;
-    static toObject(includeInstance: boolean, msg: ScriptParametersEntry): ScriptParametersEntry.AsObject;
-    static serializeBinaryToWriter(message: ScriptParametersEntry, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): ScriptParametersEntry;
-    static deserializeBinaryFromReader(message: ScriptParametersEntry, reader: jspb.BinaryReader): ScriptParametersEntry;
-  }
-
-  export namespace ScriptParametersEntry {
-    export type AsObject = {
-      key: string;
-      value: string;
-    }
-  }
-
 }
 
 export class PolitenessConfig extends jspb.Message {
-  constructor ();
   getRobotsPolicy(): PolitenessConfig.RobotsPolicy;
   setRobotsPolicy(value: PolitenessConfig.RobotsPolicy): void;
+
   getMinimumRobotsValidityDurationS(): number;
   setMinimumRobotsValidityDurationS(value: number): void;
+
   getCustomRobots(): string;
   setCustomRobots(value: string): void;
+
   getMinTimeBetweenPageLoadMs(): number;
   setMinTimeBetweenPageLoadMs(value: number): void;
+
   getMaxTimeBetweenPageLoadMs(): number;
   setMaxTimeBetweenPageLoadMs(value: number): void;
+
   getDelayFactor(): number;
   setDelayFactor(value: number): void;
+
   getMaxRetries(): number;
   setMaxRetries(value: number): void;
+
   getRetryDelaySeconds(): number;
   setRetryDelaySeconds(value: number): void;
-  getCrawlHostGroupSelectorList(): string[];
-  setCrawlHostGroupSelectorList(value: string[]): void;
+
+  getCrawlHostGroupSelectorList(): Array<string>;
+  setCrawlHostGroupSelectorList(value: Array<string>): void;
   clearCrawlHostGroupSelectorList(): void;
+  addCrawlHostGroupSelector(value: string, index?: number): void;
+
   getUseHostname(): boolean;
   setUseHostname(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PolitenessConfig.AsObject;
   static toObject(includeInstance: boolean, msg: PolitenessConfig): PolitenessConfig.AsObject;
@@ -477,16 +545,16 @@ export class PolitenessConfig extends jspb.Message {
 
 export namespace PolitenessConfig {
   export type AsObject = {
-    robotsPolicy: PolitenessConfig.RobotsPolicy;
-    minimumRobotsValidityDurationS: number;
-    customRobots: string;
-    minTimeBetweenPageLoadMs: number;
-    maxTimeBetweenPageLoadMs: number;
-    delayFactor: number;
-    maxRetries: number;
-    retryDelaySeconds: number;
-    crawlHostGroupSelectorList: string[];
-    useHostname: boolean;
+    robotsPolicy: PolitenessConfig.RobotsPolicy,
+    minimumRobotsValidityDurationS: number,
+    customRobots: string,
+    minTimeBetweenPageLoadMs: number,
+    maxTimeBetweenPageLoadMs: number,
+    delayFactor: number,
+    maxRetries: number,
+    retryDelaySeconds: number,
+    crawlHostGroupSelectorList: Array<string>,
+    useHostname: boolean,
   }
 
   export enum RobotsPolicy { 
@@ -497,11 +565,14 @@ export namespace PolitenessConfig {
 }
 
 export class BrowserScript extends jspb.Message {
-  constructor ();
   getScript(): string;
   setScript(value: string): void;
-  getUrlRegexp(): string;
-  setUrlRegexp(value: string): void;
+
+  getUrlRegexpList(): Array<string>;
+  setUrlRegexpList(value: Array<string>): void;
+  clearUrlRegexpList(): void;
+  addUrlRegexp(value: string, index?: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BrowserScript.AsObject;
   static toObject(includeInstance: boolean, msg: BrowserScript): BrowserScript.AsObject;
@@ -512,16 +583,17 @@ export class BrowserScript extends jspb.Message {
 
 export namespace BrowserScript {
   export type AsObject = {
-    script: string;
-    urlRegexp: string;
+    script: string,
+    urlRegexpList: Array<string>,
   }
 }
 
 export class CrawlHostGroupConfig extends jspb.Message {
-  constructor ();
-  getIpRangeList(): CrawlHostGroupConfig.IpRange[] | undefined;
-  setIpRangeList(value?: CrawlHostGroupConfig.IpRange[]): void;
+  getIpRangeList(): Array<CrawlHostGroupConfig.IpRange>;
+  setIpRangeList(value: Array<CrawlHostGroupConfig.IpRange>): void;
   clearIpRangeList(): void;
+  addIpRange(value?: CrawlHostGroupConfig.IpRange, index?: number): CrawlHostGroupConfig.IpRange;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlHostGroupConfig.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlHostGroupConfig): CrawlHostGroupConfig.AsObject;
@@ -532,15 +604,16 @@ export class CrawlHostGroupConfig extends jspb.Message {
 
 export namespace CrawlHostGroupConfig {
   export type AsObject = {
-    ipRangeList?: CrawlHostGroupConfig.IpRange.AsObject[];
+    ipRangeList: Array<CrawlHostGroupConfig.IpRange.AsObject>,
   }
 
   export class IpRange extends jspb.Message {
-    constructor ();
     getIpFrom(): string;
     setIpFrom(value: string): void;
+
     getIpTo(): string;
     setIpTo(value: string): void;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): IpRange.AsObject;
     static toObject(includeInstance: boolean, msg: IpRange): IpRange.AsObject;
@@ -551,22 +624,29 @@ export namespace CrawlHostGroupConfig {
 
   export namespace IpRange {
     export type AsObject = {
-      ipFrom: string;
-      ipTo: string;
+      ipFrom: string,
+      ipTo: string,
     }
   }
 
 }
 
 export class RoleMapping extends jspb.Message {
-  constructor ();
   getEmail(): string;
   setEmail(value: string): void;
+  hasEmail(): boolean;
+
   getGroup(): string;
   setGroup(value: string): void;
-  getRoleList(): Role[];
-  setRoleList(value: Role[]): void;
+  hasGroup(): boolean;
+
+  getRoleList(): Array<Role>;
+  setRoleList(value: Array<Role>): void;
   clearRoleList(): void;
+  addRole(value: Role, index?: number): void;
+
+  getEmailOrGroupCase(): RoleMapping.EmailOrGroupCase;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RoleMapping.AsObject;
   static toObject(includeInstance: boolean, msg: RoleMapping): RoleMapping.AsObject;
@@ -577,25 +657,36 @@ export class RoleMapping extends jspb.Message {
 
 export namespace RoleMapping {
   export type AsObject = {
-    email: string;
-    group: string;
-    roleList: Role[];
+    email: string,
+    group: string,
+    roleList: Array<Role>,
+  }
+
+  export enum EmailOrGroupCase { 
+    EMAIL_OR_GROUP_NOT_SET = 0,
+    EMAIL = 2,
+    GROUP = 3,
   }
 }
 
 export class Collection extends jspb.Message {
-  constructor ();
   getCollectionDedupPolicy(): Collection.RotationPolicy;
   setCollectionDedupPolicy(value: Collection.RotationPolicy): void;
+
   getFileRotationPolicy(): Collection.RotationPolicy;
   setFileRotationPolicy(value: Collection.RotationPolicy): void;
+
   getCompress(): boolean;
   setCompress(value: boolean): void;
+
   getFileSize(): number;
   setFileSize(value: number): void;
-  getSubCollectionsList(): Collection.SubCollection[] | undefined;
-  setSubCollectionsList(value?: Collection.SubCollection[]): void;
+
+  getSubCollectionsList(): Array<Collection.SubCollection>;
+  setSubCollectionsList(value: Array<Collection.SubCollection>): void;
   clearSubCollectionsList(): void;
+  addSubCollections(value?: Collection.SubCollection, index?: number): Collection.SubCollection;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Collection.AsObject;
   static toObject(includeInstance: boolean, msg: Collection): Collection.AsObject;
@@ -606,19 +697,20 @@ export class Collection extends jspb.Message {
 
 export namespace Collection {
   export type AsObject = {
-    collectionDedupPolicy: Collection.RotationPolicy;
-    fileRotationPolicy: Collection.RotationPolicy;
-    compress: boolean;
-    fileSize: number;
-    subCollectionsList?: Collection.SubCollection.AsObject[];
+    collectionDedupPolicy: Collection.RotationPolicy,
+    fileRotationPolicy: Collection.RotationPolicy,
+    compress: boolean,
+    fileSize: number,
+    subCollectionsList: Array<Collection.SubCollection.AsObject>,
   }
 
   export class SubCollection extends jspb.Message {
-    constructor ();
     getType(): Collection.SubCollectionType;
     setType(value: Collection.SubCollectionType): void;
+
     getName(): string;
     setName(value: string): void;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubCollection.AsObject;
     static toObject(includeInstance: boolean, msg: SubCollection): SubCollection.AsObject;
@@ -629,8 +721,8 @@ export namespace Collection {
 
   export namespace SubCollection {
     export type AsObject = {
-      type: Collection.SubCollectionType;
-      name: string;
+      type: Collection.SubCollectionType,
+      name: string,
     }
   }
 
@@ -670,4 +762,6 @@ export enum Role {
   ADMIN = 2,
   CURATOR = 3,
   READONLY = 4,
+  OPERATOR = 5,
+  SYSTEM = 6,
 }

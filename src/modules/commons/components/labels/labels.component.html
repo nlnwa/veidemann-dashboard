@@ -1,0 +1,67 @@
+<div fxLayout="column">
+
+  <mat-form-field>
+    <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
+      <ng-container *ngFor="let group of groups$ | async">
+        <mat-chip *ngFor="let value of group.values"
+                  [selectable]="canUpdate"
+                  [removable]="removable"
+                  (removed)="onRemoveLabel(group.key, value)"
+                  (click)="onClickLabel(group.key, value)">
+          {{group.key + ':' + value}}
+          <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
+        </mat-chip>
+      </ng-container>
+      <input #chipInput
+             [disabled]="disabled"
+             [placeholder]="kind"
+             [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="labelInputSeparators"
+             (matChipInputTokenEnd)="onSave($event.value); chipInput.value = ''"
+             [attr.disabled]="canUpdate ? null : ''"/>
+    </mat-chip-list>
+  </mat-form-field>
+
+  <form [formGroup]="labelForm" *ngIf="canUpdate && labelForm.enabled">
+    <mat-card class="label-form">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>label</mat-icon>
+        <mat-card-title>Rediger merkelapp</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="newLabelCard" fxLayout="row" fxLayoutGap="16px">
+        <mat-form-field fxFlex>
+          <input #newKey matInput placeholder="Type" formControlName="key"
+                 i18n-placeholder="@@labelFormAddNewTypePlaceholder">
+          <mat-error *ngIf="!key.valid"
+                     i18n="@@labelKeyError">
+            Kan ikke være tom eller inneholde kolon.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <input #newValue matInput placeholder="Verdi" formControlName="value"
+                 i18n-placeholder="@@labelFormAddNewValuePlaceholder">
+          <mat-error *ngIf="!value.valid"
+                     i18n="@@labelValueError">
+            Kan ikke være tom.
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button i18n="@@commonButtonAdd" color="primary"
+                *ngIf="!showUpdate"
+                [disabled]="!labelForm.valid"
+                (click)="onSave(newKey.value, newValue.value)">Legg til
+        </button>
+        <button mat-raised-button color="accent"
+                *ngIf="showUpdate"
+                [disabled]="!(labelForm.valid && labelForm.dirty)"
+                (click)="onUpdateLabel(newKey.value, newValue.value)">OK
+        </button>
+        <button i18n="@@commonButtonCancel" mat-button
+                (click)="onAbort()">AVBRYT
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

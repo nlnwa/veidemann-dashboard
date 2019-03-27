@@ -1,11 +1,20 @@
-@import '../../node_modules/@angular/material/theming';
+@import '~@angular/material/theming';
 
-@include mat-core();
+$my-app-typography: mat-typography-config(
+  $font-family: 'Lato, Helvetica, Arial, sans-serif'
+);
 
-$my-app-primary: mat-palette($mat-orange);
-$my-app-accent: mat-palette($mat-pink, 500, 900, A100);
+@include mat-core($my-app-typography);
+
+$my-app-primary: mat-palette($mat-blue-gray);
+$my-app-accent: mat-palette($mat-orange);
 $my-app-warn: mat-palette($mat-red);
 
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 @include angular-material-theme($my-app-theme);
+
+$primary: mat-color($my-app-primary);
+$accent: mat-color($my-app-accent);
+$warn: mat-color($my-app-warn);
+$background: map-get(map-get($my-app-theme, background), card);

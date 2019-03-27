@@ -1,0 +1,41 @@
+@import './theme';
+
+html, body, app-root, mat-sidenav-container {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+// hide mat paginator
+.hide-mat-paginator-range-label .mat-paginator-range-label {
+  display: none;
+}
+
+// increase font size for tooltip
+.mat-tooltip {
+  font-size: 0.8rem !important;
+}
+
+.list-container__margin {
+  margin-bottom: 16px;
+}
+
+// floating action button
+.action-button.mat-fab{
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 100;
+}
+
+.action-button-secondary.mat-fab {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1rem;
+  z-index: 100;
+}

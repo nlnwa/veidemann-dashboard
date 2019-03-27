@@ -1,13 +1,14 @@
 import * as jspb from "google-protobuf"
 
 import * as config_v1_resources_pb from '../../config/v1/resources_pb';
+import * as commons_v1_resources_pb from '../../commons/v1/resources_pb';
 import * as google_api_annotations_pb from '../../google/api/annotations_pb';
 import * as protoc$gen$swagger_options_annotations_pb from '../../protoc-gen-swagger/options/annotations_pb';
 
 export class GetLabelKeysRequest extends jspb.Message {
-  constructor ();
-  getKind():config_v1_resources_pb.Kind;
-  setKind(value:config_v1_resources_pb.Kind): void;
+  getKind(): config_v1_resources_pb.Kind;
+  setKind(value: config_v1_resources_pb.Kind): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetLabelKeysRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetLabelKeysRequest): GetLabelKeysRequest.AsObject;
@@ -18,39 +19,54 @@ export class GetLabelKeysRequest extends jspb.Message {
 
 export namespace GetLabelKeysRequest {
   export type AsObject = {
-    kind:config_v1_resources_pb.Kind;
+    kind: config_v1_resources_pb.Kind,
   }
 }
 
 export class ListRequest extends jspb.Message {
-  constructor ();
-  getKind():config_v1_resources_pb.Kind;
-  setKind(value:config_v1_resources_pb.Kind): void;
-  getIdList(): string[];
-  setIdList(value: string[]): void;
+  getKind(): config_v1_resources_pb.Kind;
+  setKind(value: config_v1_resources_pb.Kind): void;
+
+  getIdList(): Array<string>;
+  setIdList(value: Array<string>): void;
   clearIdList(): void;
+  addId(value: string, index?: number): void;
+
   getNameRegex(): string;
   setNameRegex(value: string): void;
-  getLabelSelectorList(): string[];
-  setLabelSelectorList(value: string[]): void;
+
+  getLabelSelectorList(): Array<string>;
+  setLabelSelectorList(value: Array<string>): void;
   clearLabelSelectorList(): void;
+  addLabelSelector(value: string, index?: number): void;
+
   getQueryTemplate(): config_v1_resources_pb.ConfigObject | undefined;
   setQueryTemplate(value?: config_v1_resources_pb.ConfigObject): void;
+  hasQueryTemplate(): boolean;
   clearQueryTemplate(): void;
-  getQueryMask(): FieldMask | undefined;
-  setQueryMask(value?: FieldMask): void;
+
+  getQueryMask(): commons_v1_resources_pb.FieldMask | undefined;
+  setQueryMask(value?: commons_v1_resources_pb.FieldMask): void;
+  hasQueryMask(): boolean;
   clearQueryMask(): void;
-  getReturnedFieldsMask(): FieldMask | undefined;
-  setReturnedFieldsMask(value?: FieldMask): void;
+
+  getReturnedFieldsMask(): commons_v1_resources_pb.FieldMask | undefined;
+  setReturnedFieldsMask(value?: commons_v1_resources_pb.FieldMask): void;
+  hasReturnedFieldsMask(): boolean;
   clearReturnedFieldsMask(): void;
+
   getOrderByPath(): string;
   setOrderByPath(value: string): void;
+
   getOrderDescending(): boolean;
   setOrderDescending(value: boolean): void;
+
   getPageSize(): number;
   setPageSize(value: number): void;
+
   getOffset(): number;
   setOffset(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ListRequest.AsObject;
   static toObject(includeInstance: boolean, msg: ListRequest): ListRequest.AsObject;
@@ -61,31 +77,36 @@ export class ListRequest extends jspb.Message {
 
 export namespace ListRequest {
   export type AsObject = {
-    kind:config_v1_resources_pb.Kind;
-    idList: string[];
-    nameRegex: string;
-    labelSelectorList: string[];
-    queryTemplate?: config_v1_resources_pb.ConfigObject.AsObject;
-    queryMask?: FieldMask.AsObject;
-    returnedFieldsMask?: FieldMask.AsObject;
-    orderByPath: string;
-    orderDescending: boolean;
-    pageSize: number;
-    offset: number;
+    kind: config_v1_resources_pb.Kind,
+    idList: Array<string>,
+    nameRegex: string,
+    labelSelectorList: Array<string>,
+    queryTemplate?: config_v1_resources_pb.ConfigObject.AsObject,
+    queryMask?: commons_v1_resources_pb.FieldMask.AsObject,
+    returnedFieldsMask?: commons_v1_resources_pb.FieldMask.AsObject,
+    orderByPath: string,
+    orderDescending: boolean,
+    pageSize: number,
+    offset: number,
   }
 }
 
 export class UpdateRequest extends jspb.Message {
-  constructor ();
   getListRequest(): ListRequest | undefined;
   setListRequest(value?: ListRequest): void;
+  hasListRequest(): boolean;
   clearListRequest(): void;
-  getUpdateMask(): FieldMask | undefined;
-  setUpdateMask(value?: FieldMask): void;
+
+  getUpdateMask(): commons_v1_resources_pb.FieldMask | undefined;
+  setUpdateMask(value?: commons_v1_resources_pb.FieldMask): void;
+  hasUpdateMask(): boolean;
   clearUpdateMask(): void;
+
   getUpdateTemplate(): config_v1_resources_pb.ConfigObject | undefined;
   setUpdateTemplate(value?: config_v1_resources_pb.ConfigObject): void;
+  hasUpdateTemplate(): boolean;
   clearUpdateTemplate(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateRequest): UpdateRequest.AsObject;
@@ -96,16 +117,16 @@ export class UpdateRequest extends jspb.Message {
 
 export namespace UpdateRequest {
   export type AsObject = {
-    listRequest?: ListRequest.AsObject;
-    updateMask?: FieldMask.AsObject;
-    updateTemplate?: config_v1_resources_pb.ConfigObject.AsObject;
+    listRequest?: ListRequest.AsObject,
+    updateMask?: commons_v1_resources_pb.FieldMask.AsObject,
+    updateTemplate?: config_v1_resources_pb.ConfigObject.AsObject,
   }
 }
 
 export class UpdateResponse extends jspb.Message {
-  constructor ();
   getUpdated(): number;
   setUpdated(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateResponse): UpdateResponse.AsObject;
@@ -116,16 +137,17 @@ export class UpdateResponse extends jspb.Message {
 
 export namespace UpdateResponse {
   export type AsObject = {
-    updated: number;
+    updated: number,
   }
 }
 
 export class ListCountResponse extends jspb.Message {
-  constructor ();
   getCount(): number;
   setCount(value: number): void;
+
   getApproximate(): boolean;
   setApproximate(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ListCountResponse.AsObject;
   static toObject(includeInstance: boolean, msg: ListCountResponse): ListCountResponse.AsObject;
@@ -136,15 +158,15 @@ export class ListCountResponse extends jspb.Message {
 
 export namespace ListCountResponse {
   export type AsObject = {
-    count: number;
-    approximate: boolean;
+    count: number,
+    approximate: boolean,
   }
 }
 
 export class DeleteResponse extends jspb.Message {
-  constructor ();
   getDeleted(): boolean;
   setDeleted(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeleteResponse.AsObject;
   static toObject(includeInstance: boolean, msg: DeleteResponse): DeleteResponse.AsObject;
@@ -155,15 +177,16 @@ export class DeleteResponse extends jspb.Message {
 
 export namespace DeleteResponse {
   export type AsObject = {
-    deleted: boolean;
+    deleted: boolean,
   }
 }
 
 export class LabelKeysResponse extends jspb.Message {
-  constructor ();
-  getKeyList(): string[];
-  setKeyList(value: string[]): void;
+  getKeyList(): Array<string>;
+  setKeyList(value: Array<string>): void;
   clearKeyList(): void;
+  addKey(value: string, index?: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LabelKeysResponse.AsObject;
   static toObject(includeInstance: boolean, msg: LabelKeysResponse): LabelKeysResponse.AsObject;
@@ -174,26 +197,7 @@ export class LabelKeysResponse extends jspb.Message {
 
 export namespace LabelKeysResponse {
   export type AsObject = {
-    keyList: string[];
-  }
-}
-
-export class FieldMask extends jspb.Message {
-  constructor ();
-  getPathsList(): string[];
-  setPathsList(value: string[]): void;
-  clearPathsList(): void;
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): FieldMask.AsObject;
-  static toObject(includeInstance: boolean, msg: FieldMask): FieldMask.AsObject;
-  static serializeBinaryToWriter(message: FieldMask, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): FieldMask;
-  static deserializeBinaryFromReader(message: FieldMask, reader: jspb.BinaryReader): FieldMask;
-}
-
-export namespace FieldMask {
-  export type AsObject = {
-    pathsList: string[];
+    keyList: Array<string>,
   }
 }
 
