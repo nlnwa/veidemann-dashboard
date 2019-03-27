@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 
-import {Subject} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {of, Subject} from 'rxjs';
+import {map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ConfigObject, Kind} from '../../../commons/models';
 
@@ -64,7 +64,11 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
   }
 
   ngOnInit() {
-    super.ngOnInit();
+    this.route.queryParamMap.pipe(
+      map(queryParamMap => queryParamMap.get('id')),
+      switchMap(id => id ? this.dataService.get({id, kind: this.kind}) : of(null)),
+      takeUntil(this.ngOnUnsubscribe)
+    ).subscribe(configObject => this.configObject.next(configObject));
 
     this.searchTerm$.pipe(
       switchMap((term: string) => this.dataService.search(term)),

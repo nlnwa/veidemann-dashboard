@@ -11,10 +11,10 @@ import {
 } from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 
-import {EMPTY, from, of, Subject} from 'rxjs';
+import {combineLatest, EMPTY, from, of, Subject} from 'rxjs';
 
 import {ErrorService, SnackBarService} from '../../../core';
-import {catchError, filter, map, mergeMap, switchMap, takeUntil} from 'rxjs/operators';
+import {catchError, debounceTime, exhaustMap, filter, map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DetailDirective} from '../../directives/detail.directive';
 import {
   BrowserConfig,
@@ -58,7 +58,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   selectedConfigs: ConfigObject[] = [];
   allSelected = false;
 
-  protected ngOnUnsubscribe = new Subject<void>();
+  protected ngOnUnsubscribe = new Subject();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
   @ViewChild('baseList') list: BaseListComponent;
@@ -120,34 +120,30 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.data
-      .pipe(takeUntil(this.ngOnUnsubscribe))
-      .subscribe(data => {
-        this.options = data.options;
-      });
+    this.route.data.pipe(takeUntil(this.ngOnUnsubscribe)).subscribe(data => this.options = data.options);
 
     if (this.embedded) {
       this.dataService.kind = this.kind;
       return;
     }
 
-    this.route.paramMap.pipe(
+    const paramMap$ = this.route.paramMap.pipe(
       map(params => params.get('kind')),
       map(kind => pathToKind(kind)),
       filter(kind => kind !== Kind.UNDEFINED),
-      takeUntil(this.ngOnUnsubscribe)
-    ).subscribe((kind: Kind) => {
-      this.reset();
-      this.dataService.kind = kind;
-      this.kind = kind;
-      this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
-    });
+      tap(kind => {
+        this.kind = this.dataService.kind = kind;
+        this.reset();
+        this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
+      }));
 
-    this.route.queryParamMap.pipe(
-      switchMap(queryParamMap =>
-        queryParamMap.has('id')
-          ? this.dataService.get({id: queryParamMap.get('id'), kind: this.kind})
-          : of(null)),
+    const queryParam$ = this.route.queryParamMap.pipe(
+      map(queryParamMap => queryParamMap.get('id')),
+    );
+
+    combineLatest(paramMap$, queryParam$).pipe(
+      debounceTime(0),
+      mergeMap(([kind, id]) => id ? this.dataService.get({id, kind}) : of(null)),
       takeUntil(this.ngOnUnsubscribe)
     ).subscribe(configObject => this.configObject.next(configObject));
   }
