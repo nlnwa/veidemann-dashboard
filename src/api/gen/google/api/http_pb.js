@@ -113,7 +113,7 @@ proto.google.api.Http.prototype.toObject = function(opt_includeInstance) {
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.google.api.Http.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     rulesList: jspb.Message.toObjectList(msg.getRulesList(),
     proto.google.api.HttpRule.toObject, includeInstance)
   };
@@ -297,7 +297,7 @@ proto.google.api.HttpRule.prototype.toObject = function(opt_includeInstance) {
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.google.api.HttpRule.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     selector: jspb.Message.getFieldWithDefault(msg, 1, ""),
     get: jspb.Message.getFieldWithDefault(msg, 2, ""),
     put: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -765,7 +765,7 @@ proto.google.api.CustomHttpPattern.prototype.toObject = function(opt_includeInst
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.google.api.CustomHttpPattern.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     kind: jspb.Message.getFieldWithDefault(msg, 1, ""),
     path: jspb.Message.getFieldWithDefault(msg, 2, "")
   };

@@ -1,0 +1,109 @@
+<form [formGroup]="form" fxFlex>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{getType()}}</mat-card-title>
+      </mat-card-title-group>
+      <div fxFlex></div>
+      <button mat-flat-button (click)="showInfoToggle()">
+        {{showInfo ? 'Skjul info' : 'Vis info'}}
+        <mat-icon>info</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <ng-container [ngSwitch]="this.eventObject.type">
+          <ng-container *ngSwitchCase="'New seed'">
+            <app-event-new-seed [eventObject]="this.eventObject"></app-event-new-seed>
+          </ng-container>
+          <ng-container *ngSwitchCase="'Warc error'">
+            <app-event-warc-error [eventObject]="this.eventObject"></app-event-warc-error>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div fxFlex fxLayout="column">
+        <ng-container *ngIf="showInfo">
+          <mat-form-field>
+            <input matInput
+                   formControlName="assignee"
+                   placeholder="Tildelt">
+            <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff">Assign to me
+            </button>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Alvorlighetsgrad" formControlName="severity">
+              <mat-option *ngFor="let severity of severities" [value]="severity">{{severity}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <app-labels formControlName="labelList"></app-labels>
+
+          <mat-form-field>
+            <input matInput
+                   formControlName="id"
+                   placeholder="Id">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   formControlName="type"
+                   placeholder="Type">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   formControlName="source"
+                   placeholder="Kilde">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   formControlName="state"
+                   placeholder="Status">
+          </mat-form-field>
+
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="Kommentar"></textarea>
+          </mat-form-field>
+
+          <mat-accordion *ngIf="activityList.length !== 0">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Aktivitetslogg</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-list>
+                <mat-list-item *ngFor="let activity of activityList">
+                  <mat-icon matListIcon>event</mat-icon>
+                  <div *ngFor="let desc of activity.description">
+                    <h3 matLine>
+                      <span style="color: #0066ff">{{activity.modiefiedBy}}</span>:
+                      {{desc.type}} for felt: {{desc.field}}
+                    </h3>
+                    <h3 matLine>Endret til: <i>{{desc.newVal}}</i> fra: <i>{{desc.oldVal}}</i></h3>
+                    <h3 matLine><i>{{activity.comment}}</i></h3>
+                    <p matLine>{{activity.modifiedTime}}</p>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+      </div>
+
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary">
+        Oppdater
+      </button>
+      <button mat-raised-button color="accent">
+        Tilbakestill
+      </button>
+      <button mat-raised-button color="warn">
+        Slett
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+

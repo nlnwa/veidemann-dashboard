@@ -1,0 +1,72 @@
+<div>
+  <mat-table [dataSource]="dataSource">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox #masterCheckbox (change)="masterToggle(masterCheckbox.checked)"
+                      [checked]="selection.hasValue()"
+                      [indeterminate]="selection.hasValue()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="checkboxToggle(row)"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.type}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="source">
+      <mat-header-cell *matHeaderCellDef>Kilde</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.source}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="state">
+      <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.state}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="severity">
+      <mat-header-cell *matHeaderCellDef>Alvorlighetsgrad</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.severity}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="assignee">
+      <mat-header-cell *matHeaderCellDef>Tildelt</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.assignee}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef>Opprettet</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.created}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastupdated">
+      <mat-header-cell *matHeaderCellDef>Sist oppdatert</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.lastupdated}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Tildel</mat-header-cell>
+      <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+        <button mat-icon-button (click)="OnAssignToMe(row)"><mat-icon>person_add</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+             (click)="onRowClick(row)">
+    </mat-row>
+  </mat-table>
+</div>
+
