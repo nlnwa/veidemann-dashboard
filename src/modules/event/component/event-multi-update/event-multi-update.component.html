@@ -1,0 +1,12 @@
+<form [formGroup]="form">
+  <mat-card>
+  <mat-form-field>
+    <input matInput
+           formControlName="assignee"
+           placeholder="Tildelt">
+    <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff">Assign to me
+    </button>
+  </mat-form-field>
+  <app-labels formControlName="labelList"></app-labels>
+  </mat-card>
+</form>

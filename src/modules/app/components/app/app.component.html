@@ -42,12 +42,7 @@
     <mat-drawer mode="side" [(opened)]="showSidenav">
       <!-- Navigation -->
       <mat-nav-list>
-        <!--a mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">dashboard</mat-icon>
-          <ng-container i18n="@@navigationSidebarActivity">Aktivitet</ng-container>
-        </a>
-        <a mat-list-item [routerLink]="['/status']" [routerLinkActive]="['is-active']">
+        <!--a mat-list-item [routerLink]="['/status']" [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">assessment</mat-icon>
           <ng-container i18n="@@navigationSidebarStatistics">Statistikk</ng-container>
         </a-->
@@ -56,6 +51,11 @@
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">info_outline</mat-icon>
           <ng-container i18n="@@navigationSidebarRolemapping">WARC status</ng-container>
+        </a>
+        <a *ngIf="canConfigure" mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{exact: true }"
+           [routerLinkActive]="['is-active']">
+          <mat-icon class="sidenav--icon__margin">update</mat-icon>
+          <ng-container>Hendelser</ng-container>
         </a>
 
         <ng-container *ngIf="canConfigure">

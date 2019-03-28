@@ -16,3 +16,4 @@ export {SubCollection} from './configs/subcollection.model';
 export {ConfigObject} from './configobject.model';
 export {ConfigRef} from './configref.model';
 export {Kind} from './kind.model';
+export {EventObject} from './event/event.model';

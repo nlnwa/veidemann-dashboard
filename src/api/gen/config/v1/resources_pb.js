@@ -522,7 +522,7 @@ proto.veidemann.api.config.v1.ConfigObject.prototype.toObject = function(opt_inc
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.ConfigObject.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     apiversion: jspb.Message.getFieldWithDefault(msg, 2, ""),
     kind: jspb.Message.getFieldWithDefault(msg, 3, 0),
@@ -1272,7 +1272,7 @@ proto.veidemann.api.config.v1.Meta.prototype.toObject = function(opt_includeInst
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.Meta.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     created: (f = msg.getCreated()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
@@ -1621,7 +1621,7 @@ proto.veidemann.api.config.v1.Label.prototype.toObject = function(opt_includeIns
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.Label.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     key: jspb.Message.getFieldWithDefault(msg, 1, ""),
     value: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
@@ -1773,7 +1773,7 @@ proto.veidemann.api.config.v1.ConfigRef.prototype.toObject = function(opt_includ
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.ConfigRef.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     kind: jspb.Message.getFieldWithDefault(msg, 1, 0),
     id: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
@@ -1925,7 +1925,7 @@ proto.veidemann.api.config.v1.CrawlEntity.prototype.toObject = function(opt_incl
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlEntity.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
 
   };
 
@@ -2031,7 +2031,7 @@ proto.veidemann.api.config.v1.Seed.prototype.toObject = function(opt_includeInst
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.Seed.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     entityRef: (f = msg.getEntityRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
     scope: (f = msg.getScope()) && proto.veidemann.api.config.v1.CrawlScope.toObject(includeInstance, f),
     jobRefList: jspb.Message.toObjectList(msg.getJobRefList(),
@@ -2301,7 +2301,7 @@ proto.veidemann.api.config.v1.CrawlJob.prototype.toObject = function(opt_include
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlJob.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     scheduleRef: (f = msg.getScheduleRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
     limits: (f = msg.getLimits()) && proto.veidemann.api.config.v1.CrawlLimitsConfig.toObject(includeInstance, f),
     crawlConfigRef: (f = msg.getCrawlConfigRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
@@ -2569,7 +2569,7 @@ proto.veidemann.api.config.v1.CrawlConfig.prototype.toObject = function(opt_incl
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     collectionRef: (f = msg.getCollectionRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
     browserConfigRef: (f = msg.getBrowserConfigRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
     politenessRef: (f = msg.getPolitenessRef()) && proto.veidemann.api.config.v1.ConfigRef.toObject(includeInstance, f),
@@ -2909,7 +2909,7 @@ proto.veidemann.api.config.v1.ExtraConfig.prototype.toObject = function(opt_incl
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.ExtraConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     extractText: jspb.Message.getFieldWithDefault(msg, 5, false),
     createScreenshot: jspb.Message.getFieldWithDefault(msg, 6, false)
   };
@@ -3065,7 +3065,7 @@ proto.veidemann.api.config.v1.CrawlScheduleConfig.prototype.toObject = function(
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlScheduleConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     cronExpression: jspb.Message.getFieldWithDefault(msg, 3, ""),
     validFrom: (f = msg.getValidFrom()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     validTo: (f = msg.getValidTo()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
@@ -3284,7 +3284,7 @@ proto.veidemann.api.config.v1.CrawlScope.prototype.toObject = function(opt_inclu
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlScope.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     surtPrefix: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
@@ -3409,7 +3409,7 @@ proto.veidemann.api.config.v1.CrawlLimitsConfig.prototype.toObject = function(op
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlLimitsConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     depth: jspb.Message.getFieldWithDefault(msg, 1, 0),
     maxDurationS: jspb.Message.getFieldWithDefault(msg, 2, 0),
     maxBytes: jspb.Message.getFieldWithDefault(msg, 3, 0)
@@ -3595,7 +3595,7 @@ proto.veidemann.api.config.v1.BrowserConfig.prototype.toObject = function(opt_in
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.BrowserConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     userAgent: jspb.Message.getFieldWithDefault(msg, 3, ""),
     windowWidth: jspb.Message.getFieldWithDefault(msg, 4, 0),
     windowHeight: jspb.Message.getFieldWithDefault(msg, 5, 0),
@@ -3992,7 +3992,7 @@ proto.veidemann.api.config.v1.PolitenessConfig.prototype.toObject = function(opt
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.PolitenessConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     robotsPolicy: jspb.Message.getFieldWithDefault(msg, 3, 0),
     minimumRobotsValidityDurationS: jspb.Message.getFieldWithDefault(msg, 11, 0),
     customRobots: jspb.Message.getFieldWithDefault(msg, 20, ""),
@@ -4395,7 +4395,7 @@ proto.veidemann.api.config.v1.BrowserScript.prototype.toObject = function(opt_in
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.BrowserScript.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     script: jspb.Message.getFieldWithDefault(msg, 3, ""),
     urlRegexpList: jspb.Message.getRepeatedField(msg, 4)
   };
@@ -4571,7 +4571,7 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.toObject = function
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlHostGroupConfig.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     ipRangeList: jspb.Message.toObjectList(msg.getIpRangeList(),
     proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.toObject, includeInstance)
   };
@@ -4684,7 +4684,7 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.prototype.toObject = 
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     ipFrom: jspb.Message.getFieldWithDefault(msg, 1, ""),
     ipTo: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
@@ -4903,7 +4903,7 @@ proto.veidemann.api.config.v1.RoleMapping.prototype.toObject = function(opt_incl
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.RoleMapping.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     email: jspb.Message.getFieldWithDefault(msg, 2, ""),
     group: jspb.Message.getFieldWithDefault(msg, 3, ""),
     roleList: jspb.Message.getRepeatedField(msg, 4)
@@ -5140,7 +5140,7 @@ proto.veidemann.api.config.v1.Collection.prototype.toObject = function(opt_inclu
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.Collection.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     collectionDedupPolicy: jspb.Message.getFieldWithDefault(msg, 1, 0),
     fileRotationPolicy: jspb.Message.getFieldWithDefault(msg, 2, 0),
     compress: jspb.Message.getFieldWithDefault(msg, 3, false),
@@ -5321,7 +5321,7 @@ proto.veidemann.api.config.v1.Collection.SubCollection.prototype.toObject = func
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.Collection.SubCollection.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     type: jspb.Message.getFieldWithDefault(msg, 1, 0),
     name: jspb.Message.getFieldWithDefault(msg, 2, "")
   };

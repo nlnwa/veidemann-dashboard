@@ -1,0 +1,53 @@
+<form [formGroup]="form">
+  <div fxLayout="row wrap" fxLayoutGap="24px">
+    <div fxFlex fxLayout="column">
+      <mat-form-field>
+        <input matInput
+               formControlName="uri"
+               placeholder="Discovered URI">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               formControlName="refUri"
+               placeholder="Referring URI">
+      </mat-form-field>
+      <div fxLayout="row wrap" fxLayoutGap="24px">
+        <div fxFlex fxLayout="column">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                Entitet
+              </mat-card-title>
+              <mat-card-subtitle>
+                Opprett ny eller velg eksisterende entitet
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                  <input placeholder="Søk">
+                Opprett ny entitet
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div fxFlex fxLayout="column">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                Seed
+              </mat-card-title>
+              <mat-card-subtitle>
+                Opprett en ny seed
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Opprett ny seed</p>
+
+              <mat-form-field>
+                <input matInput formControlName="seedUri" placeholder="URL">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
