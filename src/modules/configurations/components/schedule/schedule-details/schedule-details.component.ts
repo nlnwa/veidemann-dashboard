@@ -17,7 +17,7 @@ import {
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
 } from '../../../../commons';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 
 
 @Component({
@@ -47,16 +47,16 @@ export class ScheduleDetailsComponent implements OnChanges {
   form: FormGroup;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
   get canDelete(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get canEdit(): boolean {
-    return this.roleService.isCurator() || this.roleService.isAdmin();
+    return this.authService.isCurator() || this.authService.isAdmin();
   }
 
   get showSave(): boolean {

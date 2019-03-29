@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {ConfigObject, CrawlJob, Kind} from '../../../../commons/models';
 import {CrawljobDetailsComponent} from '../crawljob-details/crawljob-details.component';
@@ -16,8 +16,8 @@ export class CrawljobDetailsMultiComponent extends CrawljobDetailsComponent {
   allSelected = false;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList() {

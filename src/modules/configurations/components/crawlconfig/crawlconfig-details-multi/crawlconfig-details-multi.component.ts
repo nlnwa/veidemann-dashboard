@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {ConfigObject, ConfigRef, CrawlConfig, Kind} from '../../../../commons/models';
 import {CrawlConfigDetailsComponent} from '../crawlconfig-details/crawlconfig-details.component';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 
 @Component({
   templateUrl: './crawlconfig-details-multi.component.html',
@@ -14,8 +14,8 @@ export class CrawlConfigDetailsMultiComponent extends CrawlConfigDetailsComponen
   shouldAddLabel = undefined;
   allSelected = false;
 
-  constructor(protected fb: FormBuilder, protected roleService: RoleService) {
-    super(fb, roleService);
+  constructor(protected fb: FormBuilder, protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList() {

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LogService} from '../../services/log.service';
 import {SnackBarService} from '../../../core/services';
-import {RoleService} from '../../../core/services/auth';
+import {AuthService} from '../../../core/services/auth';
 import {LogLevel, LogLevels} from '../../../commons/models';
 import {take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -27,7 +27,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   constructor(private logService: LogService,
               private fb: FormBuilder,
               private snackBarService: SnackBarService,
-              private roleService: RoleService,
+              private authService: AuthService,
               private cdr: ChangeDetectorRef) {
     this.createForm();
   }
@@ -41,7 +41,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
   get logLevelsFormArray(): FormArray {

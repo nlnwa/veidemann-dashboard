@@ -5,13 +5,21 @@ import {registerLocaleData} from '@angular/common';
 import localeNbExtra from '@angular/common/locales/extra/nb';
 import localeNb from '@angular/common/locales/nb';
 
-import {OAuthModule} from 'angular-oauth2-oidc';
+import {JwksValidationHandler, OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
 import {CommonsModule} from '../commons/commons.module';
-import {AuthService, GuardService, RoleService, TokenInterceptor} from './services/auth';
+import {AuthService, GuardService, TokenInterceptor} from './services/auth';
 
 import {AppConfigService, ApplicationErrorHandler, BackendService, ErrorService, SnackBarService} from './services';
+import {AppInitializerService} from './services/app.initializer.service';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
+
+function appInitializerFactory(appInitializerService: AppInitializerService,
+                               appConfigService: AppConfigService,
+                               oAuthService: OAuthService,
+                               authService: AuthService) {
+  return () => appInitializerService.init(appConfigService, oAuthService, authService);
+}
 
 @NgModule({
   imports: [
@@ -19,17 +27,19 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
     OAuthModule.forRoot(),
   ],
   providers: [
+    AppInitializerService,
     BackendService,
     AppConfigService,
     AuthService,
     GuardService,
-    RoleService,
+    AuthService,
     ErrorService,
     SnackBarService,
+    {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
       provide: APP_INITIALIZER,
-      useFactory: (appConfig: AppConfigService, authService: AuthService) => () => appConfig.load(authService),
-      deps: [AppConfigService, AuthService],
+      useFactory: appInitializerFactory,
+      deps: [AppInitializerService, AppConfigService, OAuthService, AuthService],
       multi: true
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

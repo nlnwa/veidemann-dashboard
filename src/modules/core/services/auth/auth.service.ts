@@ -1,42 +1,59 @@
 import {Injectable} from '@angular/core';
-import {AuthConfig, JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {RoleService} from './role.service';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {Role} from '../../../commons/models/configs/rolemapping.model';
 
 
 @Injectable()
 export class AuthService {
 
-  constructor(private oauthService: OAuthService, private roleService: RoleService) {
+  roles: Role[] = [Role.ANY];
+
+  constructor(private oauthService: OAuthService) {
   }
 
-  get groups() {
+  get groups(): string {
     const claims = this.oauthService.getIdentityClaims();
-    return claims ? claims['groups'] : null;
+    return claims ? claims['groups'] : '';
   }
 
-  get name() {
+  get name(): string {
     const claims = this.oauthService.getIdentityClaims();
-    return claims ? claims['name'] : null;
+    return claims ? claims['name'] : '';
   }
 
-  login() {
-    this.oauthService.initImplicitFlow();
+  get idToken(): string {
+    return this.oauthService.getIdToken();
   }
 
-  async logout() {
+  /**
+   * @returns authorization header for API calls
+   */
+  get metadata(): { authorization: string } {
+    return {authorization: 'Bearer ' + this.idToken};
+  }
+
+  get requestedPath(): string {
+    return this.oauthService.state;
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes(Role.ADMIN);
+  }
+
+  isCurator(): boolean {
+    return this.roles.includes(Role.CURATOR);
+  }
+
+  isReadonly(): boolean {
+    return this.roles.includes(Role.READONLY);
+  }
+
+  login(redirectUrl?: string) {
+    this.oauthService.initImplicitFlow(redirectUrl);
+  }
+
+  logout() {
     this.oauthService.logOut();
-    await this.roleService.fetchRoles();
-  }
-
-  async initialize(authConfig: AuthConfig) {
-    this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    try {
-      await this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    } catch (err) {
-      // noop
-    } finally {
-      await this.roleService.fetchRoles();
-    }
+    this.roles = [Role.ANY];
   }
 }

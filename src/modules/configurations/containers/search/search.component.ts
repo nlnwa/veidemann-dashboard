@@ -6,7 +6,7 @@ import {map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ConfigObject, Kind} from '../../../commons/models';
 
-import {RoleService} from '../../../core/services/auth';
+import {AuthService} from '../../../core/services/auth';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SearchDataService} from '../../services/search-data.service';
 
@@ -53,14 +53,14 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     protected dialog: MatDialog,
     protected dataService: SearchDataService,
     public titleService: Title,
-    private roleService: RoleService) {
+    private authService: AuthService) {
     super(dataService, snackBarService, errorService, componentFactoryResolver, router, titleService, dialog, activatedRoute);
 
     this.kind = Kind.CRAWLENTITY;
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
   ngOnInit() {

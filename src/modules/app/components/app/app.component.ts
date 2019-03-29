@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
-import {AppConfigService, AuthService, RoleService} from '../../../core';
+import {AuthService, GuardService, SnackBarService} from '../../../core';
 import {environment} from '../../../../environments/environment';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AppInitializerService} from '../../../core/services/app.initializer.service';
 
 
 @Component({
@@ -11,22 +12,28 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   showSidenav = true;
 
   constructor(private authService: AuthService,
-              private roleService: RoleService,
+              private guardService: GuardService,
               private router: Router,
-              private appConfig: AppConfigService) {
+              private route: ActivatedRoute,
+              private appInitializer: AppInitializerService,
+              private snackBarService: SnackBarService) {
   }
 
   get initialized(): boolean {
-    return this.appConfig.initialized;
+    return this.appInitializer.initialized;
   }
 
   get error(): string {
-    return this.appConfig.error;
+    return this.appInitializer.error.message;
+  }
+
+  get name(): string {
+    return this.authService.name;
   }
 
   get version(): string {
@@ -34,32 +41,42 @@ export class AppComponent {
   }
 
   get canConfigure(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator() || this.roleService.isReadonly();
+    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isReadonly();
   }
 
   get canAdministrate(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get canViewCrawljobs(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
-  get name(): string {
-    return this.authService.name;
+  ngOnInit(): void {
+    // are we logged in or not
+    if (this.name && this.authService.requestedPath) {
+      // navigate to requested path after login
+      this.router.navigate([this.authService.requestedPath]);
+    } else {
+      // force redirect to login
+      // must wait a cycle until guardService.canLoad has been called to learn requested path
+      setTimeout(() => {
+        this.authService.login(this.guardService.requestedPath);
+      });
+    }
   }
 
   onLogin() {
-    this.authService.login();
+    this.authService.login(this.route.snapshot.url.join('/'));
   }
 
-  async onLogout() {
-    await this.authService.logout();
-    this.router.navigate([]);
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/'], {relativeTo: this.route.root})
+      .then(() => this.snackBarService.openSnackBar('Logget ut.'));
   }
 
   onToggleSidenav() {
     this.showSidenav = !this.showSidenav;
   }
-
 }

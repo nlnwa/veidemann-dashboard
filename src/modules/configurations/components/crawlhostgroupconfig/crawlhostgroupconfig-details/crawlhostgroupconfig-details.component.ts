@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
 import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../commons/models';
 import {IpRange} from '../../../../commons/models/configs/ip-range.model';
@@ -27,12 +27,12 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   form: FormGroup;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
   get showSave(): boolean {

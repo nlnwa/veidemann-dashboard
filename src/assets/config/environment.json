@@ -1,12 +1,1 @@
-{
-  "apiGateway": "/api",
-  "authConfig": {
-    "issuer": "",
-
-    "clientId": "veidemann-dashboard",
-
-    "scope": "openid profile email groups offline_access audience:server:client_id:veidemann-api",
-
-    "requireHttps": false
-  }
-}
+{}

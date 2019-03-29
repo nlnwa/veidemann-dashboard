@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {BrowserConfig, ConfigObject, ConfigRef, Kind, Label} from '../../../../commons/models';
 import {BrowserConfigDetailsComponent} from '../browserconfig-details/browserconfig-details.component';
@@ -19,8 +19,8 @@ export class BrowserConfigDetailsMultiComponent extends BrowserConfigDetailsComp
   shouldAddBrowserScript = undefined;
   shouldAddSelector = undefined;
 
-  constructor(protected fb: FormBuilder, protected roleService: RoleService) {
-    super(fb, roleService);
+  constructor(protected fb: FormBuilder, protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get canUpdate(): boolean {

@@ -1,25 +1,28 @@
 <div class="container mat-typography" fxLayout="column">
   <!-- Toolbar -->
   <mat-toolbar color="primary">
-    <button mat-icon-button (click)="onToggleSidenav()" class="header--button__margin">
+    <button mat-icon-button
+            *ngIf="name"
+            (click)="onToggleSidenav()"
+            class="header--button__margin">
       <mat-icon>menu</mat-icon>
     </button>
     <a routerLink="/" class="title"><h1>Veidemann {{ version }}</h1></a>
     <span fxFlex></span>
     <app-time></app-time>
     <span fxFlex></span>
-    <a mat-flat-button color="primary" (click)="onLogin()" *ngIf="!name">
+    <button mat-button mat-flat-button color="primary" (click)="onLogin()" *ngIf="!name">
       <mat-icon>account_box</mat-icon>&nbsp;
       <span i18n="@@toolbarLogon">LOGG PÅ</span>
-    </a>
-    <a color="primary"
-       mat-flat-button
-       matTooltip="{{name}}"
-       (click)="onLogout()" *ngIf="name"
-       [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true}" [routerLinkActive]="['is-active']">
+    </button>
+    <button color="primary"
+            mat-flat-button
+            matTooltip="{{name}}"
+            (click)="onLogout()"
+            *ngIf="name">
       <mat-icon>account_box</mat-icon>&nbsp;
       <span i18n="@@toolbarLogon">LOGG AV</span>
-    </a>
+    </button>
 
     <button mat-icon-button [mat-menu-trigger-for]="menu">
       <mat-icon>more_vert</mat-icon>
@@ -37,20 +40,11 @@
 
   </mat-toolbar>
 
-  <mat-drawer-container fxFlex="grow">
+  <mat-drawer-container fxFlex>
     <!-- Sidenav -->
-    <mat-drawer mode="side" [(opened)]="showSidenav">
+    <mat-drawer mode="side" [opened]="showSidenav">
       <!-- Navigation -->
       <mat-nav-list>
-        <!--a mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{ exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">dashboard</mat-icon>
-          <ng-container i18n="@@navigationSidebarActivity">Aktivitet</ng-container>
-        </a>
-        <a mat-list-item [routerLink]="['/status']" [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">assessment</mat-icon>
-          <ng-container i18n="@@navigationSidebarStatistics">Statistikk</ng-container>
-        </a-->
         <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/validator']"
            [routerLinkActiveOptions]="{ exact: true}"
            [routerLinkActive]="['is-active']">
@@ -148,10 +142,10 @@
     <mat-drawer-content>
 
       <app-dialog></app-dialog>
-      <main fxFlex class="content-padding">
+      <main class="content-padding">
         <router-outlet></router-outlet>
       </main>
-      <div fxFlexFill fxLayoutAlign="center center" *ngIf="!initialized">
+      <div fxFlexFill fxLayout="column" fxLayoutAlign="center center" *ngIf="!initialized">
         <h1>Initialisering feilet</h1>
         <p>{{ error }}</p>
       </div>

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
 
 
@@ -32,7 +32,7 @@ export class SeedDetailComponent implements OnChanges {
   form: FormGroup;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
@@ -57,7 +57,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
   get entityRef() {

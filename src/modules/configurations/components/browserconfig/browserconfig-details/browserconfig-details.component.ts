@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {BrowserConfig, ConfigObject, ConfigRef, Kind, Label, Meta} from '../../../../commons/models';
 
@@ -31,12 +31,12 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(protected fb: FormBuilder, protected roleService: RoleService) {
+  constructor(protected fb: FormBuilder, protected authService: AuthService) {
     this.createForm();
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get showSave(): boolean {
