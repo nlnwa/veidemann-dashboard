@@ -34,6 +34,8 @@ import {
   SeedDetailComponent,
   SeedDetailMultiComponent
 } from './components';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -87,7 +89,10 @@ import {
   ],
   providers: [
     OptionsResolver,
-    DataService
+    DataService,
+    {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ]
 })
 export class ConfigurationsModule {

@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {DateTime} from '../../../commons/func';
 import {Subject} from 'rxjs';
 
 
@@ -16,12 +15,12 @@ import {Subject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeComponent implements OnInit, OnDestroy {
-  time$: Subject<string> = new Subject();
+  time$: Subject<Date> = new Subject();
   interval: number;
 
   ngOnInit() {
     this.interval = setInterval(() => {
-      this.time$.next(DateTime.nowUTC());
+      this.time$.next(new Date());
     }, 1000);
   }
 

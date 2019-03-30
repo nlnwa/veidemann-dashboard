@@ -1,18 +1,10 @@
 import * as moment from 'moment';
-import {Moment} from 'moment';
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
 export class DateTime {
 
-  static nowUTC() {
-    return new Date().toUTCString();
-  }
-
-  static formatTimestamp(timestamp) {
-    return moment.utc(timestamp).format('DD.MM.YYYY,  HH:mm:ss');
-  }
-
-  static dateToUtc(momentObj: Moment, startOfDay: boolean): string {
+  static dateToUtc(dateString: string, startOfDay: boolean): string {
+    const momentObj = moment(dateString);
     if (momentObj.isValid()) {
       const utc = moment.utc()
         .year(momentObj.get('year'))
@@ -52,7 +44,7 @@ export function toTimestampProto(timestamp: string): any {
   if (timestamp) {
     const date = new Date(timestamp);
     const timestampProto = new timestamp_pb.Timestamp();
-    const seconds  = date.getTime() / 1000;
+    const seconds = date.getTime() / 1000;
     timestampProto.setSeconds(~(~seconds));
 
     return timestampProto;

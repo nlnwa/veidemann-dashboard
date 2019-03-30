@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {DateTime} from '../../../commons/func/datetime/datetime';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-warcstatus-details',
@@ -19,14 +19,14 @@ export class WarcStatusDetailsComponent implements OnChanges {
   warcError: any;
 
 
-  constructor() {
+  constructor(private datePipe: DatePipe) {
   }
 
   ngOnChanges() {
     if (this.warcError) {
       this.errors = this.errorSummary(this.warcError);
       this.dataSource.data = this.warcError.messages;
-      this.timestamp = DateTime.formatTimestamp(this.warcError.timestamp);
+      this.timestamp = this.datePipe.transform(this.warcError.timestamp, 'short', 'UTC');
     }
   }
 

@@ -14,7 +14,7 @@ import {AppInitializerService} from './services/app.initializer.service';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
-function appInitializerFactory(appInitializerService: AppInitializerService,
+export function appInitializerFactory(appInitializerService: AppInitializerService,
                                appConfigService: AppConfigService,
                                oAuthService: OAuthService,
                                authService: AuthService) {

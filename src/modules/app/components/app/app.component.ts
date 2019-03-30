@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     if (this.name && this.authService.requestedPath) {
       // navigate to requested path after login
       this.router.navigate([this.authService.requestedPath]);
-    } else {
+    } else if (!this.name) {
       // force redirect to login
       // must wait a cycle until guardService.canLoad has been called to learn requested path
       setTimeout(() => {

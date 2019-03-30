@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnDestroy,
 import {MatDialog} from '@angular/material';
 
 import {of, Subject} from 'rxjs';
-import {map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {ConfigObject, Kind} from '../../../commons/models';
+import {Kind} from '../../../commons/models';
 
 import {AuthService} from '../../../core/services/auth';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -41,8 +41,6 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
 
   pageLength$ = new Subject<number>();
 
-  private ngUnsubscribe = new Subject();
-
   constructor(
     private seedDataService: SeedDataService,
     protected snackBarService: SnackBarService,
@@ -67,7 +65,7 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     this.route.queryParamMap.pipe(
       map(queryParamMap => queryParamMap.get('id')),
       switchMap(id => id ? this.dataService.get({id, kind: this.kind}) : of(null)),
-      takeUntil(this.ngOnUnsubscribe)
+      takeUntil(this.ngUnsubscribe)
     ).subscribe(configObject => this.configObject.next(configObject));
 
     this.searchTerm$.pipe(
@@ -79,19 +77,9 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     this.titleService.setTitle('Veidemann | Search');
   }
 
-  onSelectConfig(configObject: ConfigObject) {
-    this.seedDataService.reset();
-    super.onSelectConfig(configObject);
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   onSearch(term: string) {
-    this.router.navigate([], {relativeTo: this.route});
     this.reset();
+    this.router.navigate([], {relativeTo: this.route});
     this.searchTerm.next(term);
   }
 }

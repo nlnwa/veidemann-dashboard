@@ -1,9 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-
-import * as moment from 'moment';
 
 import {
   ConfigObject,
@@ -24,11 +20,6 @@ import {AuthService} from '../../../../core/services/auth';
   selector: 'app-schedule-details',
   templateUrl: './schedule-details.component.html',
   styleUrls: ['./schedule-details.component.css'],
-  providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-  ],
 })
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()
@@ -49,6 +40,11 @@ export class ScheduleDetailsComponent implements OnChanges {
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
     this.createForm();
+  }
+
+  protected static setCronExpression(cronExpression): string {
+    const {minute, hour, dom, month, dow} = cronExpression;
+    return minute + ' ' + hour + ' ' + dom + ' ' + month + ' ' + dow;
   }
 
   get canDelete(): boolean {
@@ -164,20 +160,15 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
 
     const crawlScheduleConfig = new CrawlScheduleConfig();
-    const validFromUTC = DateTime.dateToUtc(moment(formModel.validFrom), true);
-    const validToUTC = DateTime.dateToUtc(moment(formModel.validTo), false);
+    const validFromUTC = DateTime.dateToUtc(formModel.validFrom, true);
+    const validToUTC = DateTime.dateToUtc(formModel.validTo, false);
 
     crawlScheduleConfig.validFrom = validFromUTC ? validFromUTC : null;
     crawlScheduleConfig.validTo = validToUTC ? validToUTC : null;
-    crawlScheduleConfig.cronExpression = this.setCronExpression(this.form.value.cronExpression);
+    crawlScheduleConfig.cronExpression = ScheduleDetailsComponent.setCronExpression(this.form.value.cronExpression);
 
     configObject.meta = formModel.meta;
     configObject.crawlScheduleConfig = crawlScheduleConfig;
     return configObject;
-  }
-
-  protected setCronExpression(cronExpression): string {
-    const {minute, hour, dom, month, dow} = cronExpression;
-    return minute + ' ' + hour + ' ' + dom + ' ' + month + ' ' + dow;
   }
 }
