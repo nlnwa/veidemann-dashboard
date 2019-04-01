@@ -13,43 +13,7 @@ export class GuardService implements CanActivate, CanLoad {
   constructor(public authService: AuthService) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const allowedRoles = this.getAllowedRolesWhenActivating(route);
-
-    for (const role of this.authService.roles) {
-      if (allowedRoles.includes(role)) {
-        return of(true);
-      }
-    }
-    return of(false);
-  }
-
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    const allowedRoles = this.getAllowedRolesWhenLoading(route);
-
-    for (const role of this.authService.roles) {
-      if (allowedRoles.includes(role)) {
-        return of(true);
-      }
-    }
-    // store requested path
-    this.requestedPath = segments.join('/');
-
-    return of(false);
-  }
-
-  private getAllowedRolesWhenLoading(route: Route): Role[] {
-    return this.getRolesByPath(route.path) || [Role.ANY];
-  }
-
-  private getAllowedRolesWhenActivating(route: ActivatedRouteSnapshot): Role[] {
-    return route.url
-        .map(segment => segment.path)
-        .reduce((roles: Role[], path) => roles || this.getRolesByPath(path), undefined)
-      || [Role.ANY];
-  }
-
-  private getRolesByPath(path: string): Role[] {
+  private static getRolesByPath(path: string): Role[] {
     switch (path) {
       case 'rolemapping':
         return [Role.ADMIN];
@@ -67,5 +31,41 @@ export class GuardService implements CanActivate, CanLoad {
       default:
         return [Role.ANY];
     }
+  }
+
+  private static getAllowedRolesWhenLoading(route: Route): Role[] {
+    return GuardService.getRolesByPath(route.path) || [Role.ANY];
+  }
+
+  private static getAllowedRolesWhenActivating(route: ActivatedRouteSnapshot): Role[] {
+    return route.url
+        .map(segment => segment.path)
+        .reduce((roles: Role[], path) => roles || GuardService.getRolesByPath(path), undefined)
+      || [Role.ANY];
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    const allowedRoles = GuardService.getAllowedRolesWhenActivating(route);
+
+    for (const role of this.authService.roles) {
+      if (allowedRoles.includes(role)) {
+        return of(true);
+      }
+    }
+    return of(false);
+  }
+
+  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
+    const allowedRoles = GuardService.getAllowedRolesWhenLoading(route);
+
+    for (const role of this.authService.roles) {
+      if (allowedRoles.includes(role)) {
+        return of(true);
+      }
+    }
+    // store requested path
+    this.requestedPath = segments.join('/');
+
+    return of(false);
   }
 }
