@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, Kind} from '../../../../commons/models';
 import {BrowserScriptDetailsComponent} from '../browserscript-details/browserscript-details.component';
 
@@ -14,8 +14,8 @@ export class BrowserScriptDetailsMultiComponent extends BrowserScriptDetailsComp
   allSelected = false;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList(): AbstractControl {

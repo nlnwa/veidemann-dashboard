@@ -9,27 +9,27 @@ import {
   UpdateRequest,
   UpdateResponse
 } from '../../../api';
-import {OAuthService} from 'angular-oauth2-oidc';
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {environment} from '../../../environments/environment';
+import {AppConfigService} from './app.config.service';
+import {AuthService} from './auth';
 
 
 @Injectable()
 export class BackendService {
 
-  protected readonly url: string = environment.grpcWeb;
+  configPromiseClient: ConfigPromiseClient;
 
-  configClient = new ConfigPromiseClient(this.url, null, null);
-
-  constructor(protected oauthService: OAuthService) {
+  constructor(protected authService: AuthService,
+              private appConfigService: AppConfigService) {
+    this.configPromiseClient = new ConfigPromiseClient(appConfigService.grpcWebUrl, null, null);
   }
 
   list(listRequest: ListRequest): Observable<ConfigObjectProto> {
-    const metadata = this.getAuth();
+    const metadata = this.authService.metadata;
     return new Observable((observer: Observer<ConfigObjectProto>) => {
-      const stream = this.configClient.listConfigObjects(listRequest, metadata)
+      const stream = this.configPromiseClient.listConfigObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('status', () => observer.complete())
@@ -40,34 +40,29 @@ export class BackendService {
   }
 
   count(request: ListRequest): Observable<number> {
-    const metadata = this.getAuth();
-    return fromPromise(this.configClient.countConfigObjects(request, metadata))
+    const metadata = this.authService.metadata;
+    return fromPromise(this.configPromiseClient.countConfigObjects(request, metadata))
       .pipe(map(listCountResponse => listCountResponse.getCount()));
   }
 
   get(config: ConfigRefProto): Observable<ConfigObjectProto> {
-    const metadata = this.getAuth();
-    return fromPromise(this.configClient.getConfigObject(config, metadata));
+    const metadata = this.authService.metadata;
+    return fromPromise(this.configPromiseClient.getConfigObject(config, metadata));
   }
 
   save(config: ConfigObjectProto): Observable<ConfigObjectProto> {
-    const metadata = this.getAuth();
+    const metadata = this.authService.metadata;
     config.setApiversion('v1');
-    return fromPromise(this.configClient.saveConfigObject(config, metadata));
+    return fromPromise(this.configPromiseClient.saveConfigObject(config, metadata));
   }
 
   update(request: UpdateRequest): Observable<UpdateResponse> {
-    const metadata = this.getAuth();
-    return fromPromise(this.configClient.updateConfigObjects(request, metadata));
+    const metadata = this.authService.metadata;
+    return fromPromise(this.configPromiseClient.updateConfigObjects(request, metadata));
   }
 
   delete(request: ConfigObjectProto): Observable<DeleteResponse> {
-    const metadata = this.getAuth();
-    return fromPromise(this.configClient.deleteConfigObject(request, metadata));
+    const metadata = this.authService.metadata;
+    return fromPromise(this.configPromiseClient.deleteConfigObject(request, metadata));
   }
-
-  private getAuth() {
-    return {authorization: 'Bearer ' + this.oauthService.getIdToken()};
-  }
-
 }

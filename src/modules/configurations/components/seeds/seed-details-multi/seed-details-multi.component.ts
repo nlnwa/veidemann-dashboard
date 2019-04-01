@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../commons/models';
 import {SeedDetailComponent} from '../seed-details/seed-details.component';
 
@@ -17,8 +17,8 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
   allSelected = false;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList() {

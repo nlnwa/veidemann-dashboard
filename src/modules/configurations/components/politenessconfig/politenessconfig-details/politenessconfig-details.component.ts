@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {ConfigObject, Kind, Label, Meta, PolitenessConfig} from '../../../../commons/models';
 import {RobotsPolicy} from '../../../../commons/models/configs/politenessconfig.model';
@@ -33,12 +33,12 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
 
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get showSave(): boolean {

@@ -1,15 +1,17 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Level, LogLevels} from '../../commons/models';
+import {AppConfigService} from '../../core/services';
 
 @Injectable()
 export class LogService {
 
-  private readonly url = `${environment.apiGateway}/control/logconfig`;
+  private readonly url: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private appConfigService: AppConfigService) {
+    this.url = appConfigService.apiGatewayUrl + '/control/logconfig';
   }
 
   getLevels(): Observable<string[]> {

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, Kind, Meta} from '../../../../commons/models';
 
 @Component({
@@ -27,7 +27,7 @@ export class EntityDetailsComponent implements OnChanges {
   form: FormGroup;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
@@ -48,7 +48,7 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin() || this.roleService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

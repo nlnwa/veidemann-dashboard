@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../commons/models';
 
 @Component({
@@ -25,12 +25,12 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   form: FormGroup;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
+              protected authService: AuthService) {
     this.createForm();
   }
 
   get editable(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get canSave(): boolean {

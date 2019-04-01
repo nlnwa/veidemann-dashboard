@@ -9,12 +9,12 @@ import {
   ViewContainerRef,
   ViewRef
 } from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
 import {combineLatest, EMPTY, from, Observable, of, Subject} from 'rxjs';
 
 import {ErrorService, SnackBarService} from '../../../core';
-import {catchError, debounceTime, exhaustMap, filter, map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DetailDirective} from '../../directives/detail.directive';
 import {
   BrowserConfig,
@@ -58,7 +58,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   selectedConfigs: ConfigObject[] = [];
   allSelected = false;
 
-  protected ngOnUnsubscribe = new Subject();
+  protected ngUnsubscribe = new Subject();
 
   @ViewChild(DetailDirective) detailHost: DetailDirective;
   @ViewChild('baseList') list: BaseListComponent;
@@ -124,7 +124,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.data.pipe(takeUntil(this.ngOnUnsubscribe)).subscribe(data => this.options = data.options);
+    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => this.options = data.options);
 
     if (this.embedded) {
       this.dataService.kind = this.kind;
@@ -148,14 +148,14 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     combineLatest(paramMap$, queryParam$).pipe(
       debounceTime(0),
       mergeMap(([kind, id]) => id ? this.dataService.get({id, kind}) : of(null)),
-      takeUntil(this.ngOnUnsubscribe)
+      takeUntil(this.ngUnsubscribe)
     ).subscribe(configObject => this.configObject.next(configObject));
   }
 
   ngOnDestroy(): void {
     this.destroyComponent();
-    this.ngOnUnsubscribe.next();
-    this.ngOnUnsubscribe.complete();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onSelectedChange(configs: ConfigObject[]) {
@@ -188,6 +188,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     this.loadComponent({configObject: new ConfigObject({kind: this.kind})});
   }
 
+  onPage(pageEvent: PageEvent) {
+    if (this.embedded && (pageEvent.previousPageIndex === pageEvent.pageIndex)) {
+      this.reset();
+    }
+  }
+
   onCreateConfig(): void {
     this.reset();
     const configObject = new ConfigObject({kind: this.kind});
@@ -202,7 +208,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
 
   onSaveConfig(configObject: ConfigObject) {
-    this.dataService.save(configObject).pipe(takeUntil(this.ngOnUnsubscribe))
+    this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
         this.snackBarService.openSnackBar('Lagret');
@@ -210,7 +216,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateConfig(configObject: ConfigObject) {
-    this.dataService.update(configObject).pipe(takeUntil(this.ngOnUnsubscribe))
+    this.dataService.update(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
         this.snackBarService.openSnackBar('Oppdatert');
@@ -234,7 +240,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
           }
           return EMPTY;
         }),
-        takeUntil(this.ngOnUnsubscribe)
+        takeUntil(this.ngUnsubscribe)
       )
       .subscribe(() => {
         this.reset();
@@ -273,7 +279,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
               }
               return EMPTY;
             }),
-            takeUntil(this.ngOnUnsubscribe),
+            takeUntil(this.ngUnsubscribe),
           ).subscribe(() => {
               this.reset();
               if (!this.embedded) {
@@ -333,7 +339,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       switchMap(({updateTemplate, pathList}) =>
         this.dataService.updateWithTemplate(
           updateTemplate, pathList, this.allSelected ? undefined : this.selectedConfigs.map(config => config.id))),
-      takeUntil(this.ngOnUnsubscribe),
+      takeUntil(this.ngUnsubscribe),
     ).subscribe(updatedConfigs => {
       this.reset();
       if (!this.embedded) {
@@ -346,7 +352,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       }
     });
 
-    instance.delete.pipe(takeUntil(this.ngOnUnsubscribe))
+    instance.delete.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => this.onDeleteSelectedConfigs(this.selectedConfigs));
 
   }

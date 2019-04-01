@@ -4,7 +4,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material'
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 import {ConfigObject, CrawlScheduleConfig, DateTime, Kind} from '../../../../commons';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ScheduleDetailsComponent} from '../schedule-details/schedule-details.component';
 
 
@@ -23,8 +23,8 @@ export class ScheduleDetailsMultiComponent extends ScheduleDetailsComponent {
   allSelected = false;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList() {

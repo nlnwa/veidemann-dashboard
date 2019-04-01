@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {ConfigObject, Kind, Label, PolitenessConfig} from '../../../../commons/models';
 import {PolitenessConfigDetailsComponent} from '../politenessconfig-details/politenessconfig-details.component';
@@ -18,8 +18,8 @@ export class PolitenessConfigDetailsMultiComponent extends PolitenessConfigDetai
   shouldAddSelector = undefined;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get canUpdate(): boolean {

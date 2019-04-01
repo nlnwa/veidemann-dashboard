@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {Collection, ConfigObject, Kind, Meta} from '../../../../commons/models';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
 import {RotationPolicy} from '../../../../commons/models/configs/collection.model';
 import {SubCollection, SubCollectionType} from '../../../../commons/models/configs/subcollection.model';
@@ -39,12 +39,12 @@ export class CollectionDetailsComponent implements OnChanges {
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private roleService: RoleService) {
+              private authService: AuthService) {
     this.createForm();
   }
 
   get canEdit(): boolean {
-    return this.roleService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   get showSave(): boolean {

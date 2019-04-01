@@ -38,7 +38,8 @@
                  (rowClick)="onSelectConfig($event)"
                  (selectedChange)="onSelectedChange($event)"
                  (selectAll)="onSelectAll()"
-                 [embedded]="embedded">
+                 [embedded]="embedded"
+                 (page)="onPage($event)">
   </app-base-list>
 </ng-container>
 

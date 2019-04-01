@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnChanges} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {RoleService} from '../../../../core/services/auth';
+import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, Kind} from '../../../../commons/models';
 import {EntityDetailsComponent} from '../entity-details/entity-details.component';
 
@@ -14,8 +14,8 @@ export class EntityDetailsMultiComponent extends EntityDetailsComponent implemen
   shouldAddLabel = undefined;
 
   constructor(protected fb: FormBuilder,
-              protected roleService: RoleService) {
-    super(fb, roleService);
+              protected authService: AuthService) {
+    super(fb, authService);
   }
 
   get labelList() {

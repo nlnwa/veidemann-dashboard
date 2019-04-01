@@ -3,11 +3,11 @@
     <tr class="mat-row">
       <td class="mat-cell" *ngIf="!allSelected">
         <span><strong>{{selection.selected.length}}</strong> konfigurasjoner er markert. </span>
-        <button mat-button *ngIf="isAllInPageSelected && !embedded" (click)="onSelectAll()">
+        <button mat-button *ngIf="!embedded && isAllInPageSelected" (click)="onSelectAll()">
           MARKER ALLE KONFIGURASJONENE I DATABASEN
         </button>
       </td>
-      <td class="mat-cell" *ngIf="allSelected && !embedded">
+      <td class="mat-cell" *ngIf="!embedded && allSelected">
         <span>Alle <b>{{pageLength || ''}}</b> konfigurasjonene i databasen er markert. </span>
         <button mat-button (click)="onDeselectAll()">FJERN MARKERINGEN</button>
       </td>
