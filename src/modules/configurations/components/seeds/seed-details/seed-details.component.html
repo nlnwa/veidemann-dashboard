@@ -100,6 +100,7 @@
       </button>
       <span fxFlex></span>
       <button mat-button
+              *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">SLETT
       </button>

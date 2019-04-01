@@ -41,7 +41,7 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return !this.configObject.id;
+    return (this.configObject && !this.configObject.id);
   }
 
   get canSave(): boolean {
