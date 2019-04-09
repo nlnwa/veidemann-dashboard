@@ -66,6 +66,10 @@ export class AppComponent implements OnInit {
     }
   }
 
+  get eventCount(): string {
+    return '99';
+  }
+
   onLogin() {
     this.authService.login(this.route.snapshot.url.join('/'));
   }

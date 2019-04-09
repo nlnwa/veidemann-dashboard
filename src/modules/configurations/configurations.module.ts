@@ -21,8 +21,6 @@ import {
   CrawljobDetailsComponent,
   CrawljobDetailsMultiComponent,
   DeleteDialogComponent,
-  EntityDetailsComponent,
-  EntityDetailsMultiComponent,
   PolitenessConfigDetailsComponent,
   PolitenessConfigDetailsMultiComponent,
   RoleMappingDetailsComponent,
@@ -31,8 +29,6 @@ import {
   ScheduleDetailsComponent,
   ScheduleDetailsMultiComponent,
   SearchListComponent,
-  SeedDetailComponent,
-  SeedDetailMultiComponent
 } from './components';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -40,8 +36,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 @NgModule({
   declarations: [
     SearchComponent,
-    SeedDetailComponent,
-    SeedDetailMultiComponent,
     ConfigurationsComponent,
     CrawljobDetailsComponent,
     CrawljobDetailsMultiComponent,
@@ -55,8 +49,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
     PolitenessConfigDetailsMultiComponent,
     BrowserScriptDetailsComponent,
     BrowserScriptDetailsMultiComponent,
-    EntityDetailsComponent,
-    EntityDetailsMultiComponent,
     LoglevelComponent,
     CrawlHostGroupConfigDetailsComponent,
     CrawlHostGroupConfigDetailsMultiComponent,
@@ -72,8 +64,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
   ],
   entryComponents: [
     CrawljobDetailsMultiComponent,
-    EntityDetailsMultiComponent,
-    SeedDetailMultiComponent,
     BrowserConfigDetailsMultiComponent,
     CrawlHostGroupConfigDetailsMultiComponent,
     BrowserScriptDetailsMultiComponent,

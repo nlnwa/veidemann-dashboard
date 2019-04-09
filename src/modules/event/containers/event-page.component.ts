@@ -7,6 +7,7 @@ import {Subject} from 'rxjs';
 import {MatTableDataSource} from '@angular/material';
 import {EventObject} from '../../commons/models';
 import {AuthService} from '../../core/services/auth';
+import {EventRef} from '../../../api/gen/eventhandler/v1/resources_pb';
 
 @Component({
   selector: 'app-event',
@@ -80,15 +81,24 @@ export class EventPageComponent implements OnInit {
 
 
   ngOnInit() {
-    const listRequest = new EventListRequest();
-    this.eventService.list(listRequest).pipe(
-      map(eventObject => EventObject.fromProto(eventObject)),
-      toArray(),
-    ).subscribe(eventObjects => {
-      this.dataSource.data = eventObjects;
-      this.dataSource.filterPredicate = this.tableFilter();
-      this.onFilterListByAssignee();
+
+    const getReq = new EventRef();
+    getReq.setId('e9998bc1-b6a2-4370-9ef7-94f520fd5a95');
+
+    this.eventService.get(getReq).pipe(map(eventObject => EventObject.fromProto(eventObject))).subscribe(eventObject => {
+      console.log('onInit get: ', eventObject);
     });
+
+    const listRequest = new EventListRequest();
+   //  this.eventService.list(listRequest).pipe(
+   //    map(eventObject => EventObject.fromProto(eventObject)),
+   //    toArray(),
+   //  ).subscribe(eventObjects => {
+   //    this.dataSource.data = eventObjects;
+   // //   this.dataSource.filterPredicate = this.tableFilter();
+   // //   this.onFilterListByAssignee();
+   //  });
+   //  console.log('onInit dataSource: ', this.dataSource.data);
   }
 
   onSelectEvent(eventObject: EventObject) {

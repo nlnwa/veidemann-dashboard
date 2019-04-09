@@ -1,7 +1,11 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {EventService} from '../../services/event.service';
-import {EventObject} from '../../../commons/models';
+import {ConfigObject, CrawlEntity, EventObject, Kind, Meta} from '../../../commons/models';
+import {takeUntil} from 'rxjs/operators';
+import {DataService} from '../../../configurations/services';
+import {SnackBarService} from '../../../core/services';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-event-new-seed',
@@ -10,16 +14,19 @@ import {EventObject} from '../../../commons/models';
 })
 export class EventNewSeedComponent implements OnChanges {
 
+  protected ngOnUnsubscribe = new Subject();
+
   @Input()
   eventObject: EventObject;
 
   form: FormGroup;
 
-  addSeedToEntity = false;
-  createNewEntitySeed = false;
+  crawlEntity: ConfigObject = null;
+  seed: ConfigObject = null;
 
-
-  constructor(private fb: FormBuilder, private eventService: EventService) {
+  constructor(private fb: FormBuilder,
+              private eventService: EventService,
+              protected snackBarService: SnackBarService) {
     this.createForm();
   }
 
@@ -29,6 +36,8 @@ export class EventNewSeedComponent implements OnChanges {
         this.form.reset();
       } else {
         this.updateForm();
+        this.crawlEntity = this.createCrawlEntityObject();
+        this.seed = this.createSeedObject();
       }
     }
   }
@@ -41,6 +50,14 @@ export class EventNewSeedComponent implements OnChanges {
       entityName: '',
       seedUri: ''
     });
+  }
+
+  get uri() {
+    return this.form.get('uri').value;
+  }
+
+  get refUri() {
+    return this.form.get('refUri').value;
   }
 
   updateForm() {
@@ -57,25 +74,60 @@ export class EventNewSeedComponent implements OnChanges {
     this.form.patchValue({
       uri: uri,
       refUri: refUri,
-      seedUri: uri
+    });
+  }
+  //
+  // onToggleAddSeedToEntity() {
+  //   this.createNewEntitySeed = false;
+  //   if (this.addSeedToEntity) {
+  //     this.addSeedToEntity = false;
+  //   } else if (!this.addSeedToEntity) {
+  //     this.addSeedToEntity = true;
+  //   }
+  // }
+  //
+  // onToggleCreateEntitySeed() {
+  //   this.addSeedToEntity = false;
+  //   if (this.createNewEntitySeed) {
+  //     this.createNewEntitySeed = false;
+  //   } else if (!this.createNewEntitySeed) {
+  //     this.createNewEntitySeed = true;
+  //   }
+  // }
+
+  createCrawlEntityObject() {
+    return new ConfigObject({
+      kind: Kind.CRAWLENTITY,
+      id: '12345678',
+      crawlEntity: new CrawlEntity()
     });
   }
 
-  onToggleAddSeedToEntity() {
-    this.createNewEntitySeed = false;
-    if (this.addSeedToEntity) {
-      this.addSeedToEntity = false;
-    } else if (!this.addSeedToEntity) {
-      this.addSeedToEntity = true;
-    }
+  createSeedObject() {
+    const formModel = this.form.value;
+
+    return new ConfigObject({
+      kind: Kind.SEED,
+      meta: {
+        name: formModel.uri
+      }
+    });
   }
 
-  onToggleCreateEntitySeed() {
-    this.addSeedToEntity = false;
-    if (this.createNewEntitySeed) {
-      this.createNewEntitySeed = false;
-    } else if (!this.createNewEntitySeed) {
-      this.createNewEntitySeed = true;
-    }
+  onSaveEntity(entity: ConfigObject) {
+    console.log('onSaveEntity: ', entity);
+    this.eventService.saveCrawlEntity(entity).pipe(takeUntil(this.ngOnUnsubscribe))
+      .subscribe(newEntity => {
+        this.crawlEntity = newEntity;
+        this.snackBarService.openSnackBar('Ny entitet lagret');
+      });
+  }
+
+  onSaveSeed(seed: ConfigObject) {
+    this.eventService.saveSeed(seed).pipe(takeUntil(this.ngOnUnsubscribe))
+      .subscribe(newSeed => {
+        this.seed = newSeed;
+        this.snackBarService.openSnackBar('Ny seed lagret');
+      });
   }
 }

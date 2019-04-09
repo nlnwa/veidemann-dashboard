@@ -5,7 +5,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
 import {MaterialModule} from './material.module';
-import {BaseListComponent, LabelsComponent, MetaComponent, ToolbarComponent} from './components';
+import {
+  BaseListComponent,
+  EntityDetailsComponent,
+  EntityDetailsMultiComponent,
+  LabelsComponent,
+  MetaComponent, SeedDetailComponent, SeedDetailMultiComponent,
+  ToolbarComponent
+} from './components';
 
 
 @NgModule({
@@ -13,7 +20,11 @@ import {BaseListComponent, LabelsComponent, MetaComponent, ToolbarComponent} fro
     ToolbarComponent,
     LabelsComponent,
     MetaComponent,
-    BaseListComponent
+    BaseListComponent,
+    EntityDetailsComponent,
+    EntityDetailsMultiComponent,
+    SeedDetailComponent,
+    SeedDetailMultiComponent
   ],
   imports: [
     MaterialModule,
@@ -33,6 +44,10 @@ import {BaseListComponent, LabelsComponent, MetaComponent, ToolbarComponent} fro
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    SeedDetailComponent,
+    SeedDetailMultiComponent,
+    EntityDetailsComponent,
+    EntityDetailsMultiComponent
   ],
   providers: [DatePipe],
 })

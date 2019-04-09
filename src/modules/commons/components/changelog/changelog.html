@@ -1,0 +1,42 @@
+<h4>Aktivitetslogg
+  <button mat-icon-button (click)="onToggleChangelog()">
+    <mat-icon *ngIf="showChangelog">expand_less</mat-icon>
+    <mat-icon *ngIf="!showChangelog">expand_more</mat-icon>
+  </button>
+</h4>
+<ng-container *ngIf="showChangelog">
+  <mat-card>
+    <mat-card-content>
+      <ng-container *ngFor="let activity of activityList ">
+        <ng-container *ngFor="let desc of activity.description">
+          <div fxLayout="row">
+            <div fxFlex="10" fxLayout="column">
+              <ng-container [ngSwitch]="desc.type">
+                <ng-container *ngSwitchCase="'CREATED'">
+                  <mat-icon matListIcon>note_add</mat-icon>
+                </ng-container>
+                <ng-container *ngSwitchCase="'VALUE_CHANGED'">
+                  <mat-icon matListIcon>edit</mat-icon>
+                </ng-container>
+                <ng-container *ngSwitchCase="'ARRAY_ADD'">
+                  <mat-icon matListIcon>add</mat-icon>
+                </ng-container>
+                <ng-container *ngSwitchCase="'ARRAY_DEL'">
+                  <mat-icon matListIcon>remove</mat-icon>
+                </ng-container>
+              </ng-container>
+            </div>
+            <div fxFlex="90" fxLayout="column">
+              <p><span style="color: #0066ff">{{activity.modiefiedBy}}</span>:{{desc.type}} for felt: {{desc.field}}</p>
+              <p>Endret til: <i>{{desc.newVal}}</i> fra: <i>{{desc.oldVal}}</i></p>
+              <p><i>{{activity.comment}}</i></p>
+              <p>{{dateFormat(activity.modifiedTime)}}</p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+

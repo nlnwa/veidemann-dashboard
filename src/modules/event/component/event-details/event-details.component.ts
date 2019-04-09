@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService, RoleService} from '../../../core/services';
 import {EventObject, Severity} from '../../../commons/models/event/event.model';
+import {ConfigObject, Label} from '../../../commons/models';
 
 @Component({
   selector: 'app-event-details',
@@ -12,8 +13,12 @@ export class EventDetailsComponent implements OnChanges, OnInit {
 
   @Input()
   eventObject: EventObject;
+
   @Output()
   update = new EventEmitter<EventObject>();
+
+  @Output()
+    delete = new EventEmitter<EventObject>();
 
   form: FormGroup;
   showInfo = false;
@@ -22,6 +27,18 @@ export class EventDetailsComponent implements OnChanges, OnInit {
 
   constructor(private fb: FormBuilder, private roleService: RoleService, private authService: AuthService) {
     this.createForm();
+  }
+
+  get canEdit(): boolean {
+    return this.roleService.isAdmin() || this.roleService.isCurator();
+  }
+
+  get canUpdate(): boolean {
+    return (this.form.valid && this.form.dirty);
+  }
+
+  get canRevert(): boolean {
+    return this.form.dirty;
   }
 
   get activityList() {
@@ -56,6 +73,18 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     return this.eventObject.type;
   }
 
+  onUpdate() {
+    this.update.emit(this.prepareSave());
+  }
+
+  onDelete() {
+    this.delete.emit(this.eventObject);
+  }
+
+  onrevert() {
+    this.updateForm();
+  }
+
   private createForm() {
     this.form = this.fb.group({
       id: {value: '', disabled: true},
@@ -66,12 +95,13 @@ export class EventDetailsComponent implements OnChanges, OnInit {
       activityList: '',
       dataList: '',
       severity: '',
-      labelList: []
+      labelList: '',
+      comment: ''
     });
   }
 
   updateForm() {
-    this.form.patchValue({
+    this.form.setValue({
       id: this.eventObject.id,
       type: this.eventObject.type,
       source: this.eventObject.source,
@@ -80,10 +110,31 @@ export class EventDetailsComponent implements OnChanges, OnInit {
       activityList: this.eventObject.activityList || [],
       dataList: this.eventObject.dataList || [],
       severity: this.eventObject.severity,
-      labelList: this.eventObject.labelList || []
+      // labelList: this.eventObject.labelList
+      //   .map(selector => {
+      //   const parts = selector.split(':', 2);
+      //   const key = parts.shift();
+      //   const value = parts.join(':');
+      //   return new Label({key, value});
+      // }),
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
+  }
+
+  prepareSave(): EventObject {
+    const formModel = this.form.value;
+    const eventObject = new EventObject();
+
+    eventObject.id = this.eventObject.id;
+    eventObject.assignee = formModel.assignee;
+    eventObject.labelList = formModel.labelList.map(label => label.key + ':' + label.value);
+    eventObject.severity = formModel.severity;
+
+    return eventObject;
   }
 
   assignToCurrentUser() {

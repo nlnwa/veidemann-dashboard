@@ -23,6 +23,7 @@ import {
   MatTableModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatBadgeModule
 } from '@angular/material';
 
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
@@ -52,6 +53,7 @@ const modules = [
   MatMomentDateModule,
   MatButtonToggleModule,
   MatProgressBarModule,
+  MatBadgeModule
 ];
 
 @NgModule({

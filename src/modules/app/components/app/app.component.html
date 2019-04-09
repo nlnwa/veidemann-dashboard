@@ -54,7 +54,8 @@
         <a *ngIf="canConfigure" mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{exact: true }"
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">update</mat-icon>
-          <ng-container>Hendelser</ng-container>
+          <span matBadge="{{eventCount}}" matBadgeColor="accent" matBadgeOverlap="false"
+                matTooltip="New seeds: 3 Warc Error: 2 Harvest completed: 1">Hendelser</span>
         </a>
 
         <ng-container *ngIf="canConfigure">

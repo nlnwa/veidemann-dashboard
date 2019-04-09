@@ -37,7 +37,7 @@
             </mat-select>
           </mat-form-field>
 
-          <app-labels formControlName="labelList"></app-labels>
+          <app-labels kind="Merkelapp" formControlName="labelList"></app-labels>
 
           <mat-form-field>
             <input matInput
@@ -58,11 +58,6 @@
             <input matInput
                    formControlName="state"
                    placeholder="Status">
-          </mat-form-field>
-
-          <mat-form-field>
-          <textarea matInput
-                    placeholder="Kommentar"></textarea>
           </mat-form-field>
 
           <mat-accordion *ngIf="activityList.length !== 0">
@@ -91,16 +86,28 @@
 
 
     </mat-card-content>
-
-    <mat-card-actions>
-      <button mat-raised-button color="primary">
-        Oppdater
+    <div>
+      <mat-form-field fxFlex>
+          <textarea matInput
+                    formControlName="comment"
+                    placeholder="Kommentar"></textarea>
+      </mat-form-field>
+    </div>
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="primary"
+              *ngIf="canUpdate"
+              (click)="onUpdate()">
+        OPPDATER
       </button>
-      <button mat-raised-button color="accent">
-        Tilbakestill
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!form.dirty">
+        TILBAKESTILL
       </button>
-      <button mat-raised-button color="warn">
-        Slett
+      <span fxFlex></span>
+      <button mat-button
+              (click)="onDelete()">
+        SLETT
       </button>
     </mat-card-actions>
   </mat-card>
