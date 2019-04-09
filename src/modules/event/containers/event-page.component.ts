@@ -1,13 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {EventService} from '../services/event.service';
 import {EventListComponent} from '../component/event-list/event-list.component';
-import {EventListRequest} from '../../../api';
-import {map, toArray} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {MatTableDataSource} from '@angular/material';
-import {EventObject} from '../../commons/models';
+import {EventListRequest, ListRequest} from '../../../api';
+import {catchError, map, mergeMap, takeUntil, toArray} from 'rxjs/operators';
+import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import {ConfigObject, EventObject, Kind} from '../../commons/models';
 import {AuthService} from '../../core/services/auth';
-import {EventRef} from '../../../api/gen/eventhandler/v1/resources_pb';
+import {BackendService, ErrorService, SnackBarService} from '../../core/services';
+import {SearchDataService} from '../../configurations/services';
+import {State} from '../../commons/models/event/event.model';
+import {DeleteDialogComponent} from '../../configurations/components';
+import {EMPTY, from, Subject} from 'rxjs';
+import {ReferrerError} from '../../commons/error';
 
 @Component({
   selector: 'app-event',
@@ -32,26 +36,33 @@ import {EventRef} from '../../../api/gen/eventhandler/v1/resources_pb';
         </app-event-list>
       </div>
       <app-event-details [eventObject]="eventObject"
-                         *ngIf="eventObject && singleMode">
+                         [assigneeList]="assigneeList"
+                         *ngIf="eventObject && singleMode"
+                         (update)="onUpdateEvent($event)"
+                         (delete)="onDeleteEvent($event)">
       </app-event-details>
-      <app-event-multi-update *ngIf="!singleMode"
-                              [eventObjects]="selectedEvents">
-      </app-event-multi-update>
+      <app-event-details-multi *ngIf="!singleMode"
+                               [eventObject]="mergedEvent"
+                               [assigneeList]="assigneeList"
+                               (update)="onUpdateSelected($event)"
+                               (delete)="onDeleteSelected()"
+      >
+      </app-event-details-multi>
     </div>
   `,
   styleUrls: [],
   providers: [
-    EventService
+    EventService,
+    SearchDataService,
   ]
 })
 
 export class EventPageComponent implements OnInit {
+  readonly State = State;
 
   dataSource = new MatTableDataSource<EventObject>();
 
   eventObject: EventObject;
-
-  eventObject$ = new Subject<EventObject[]>();
 
   selectedEvents: EventObject[] = [];
 
@@ -61,14 +72,22 @@ export class EventPageComponent implements OnInit {
 
   eventFilter = 'allEvents';
 
+  assigneeList: string[] = [];
+
+  protected ngUnsubscribe = new Subject();
+
   filterValues = {
     assignee: '',
-    state: ['NEW', 'OPEN']
+    state: [State[State.NEW], State[State.OPEN]]
   };
 
   @ViewChild(EventListComponent) list: EventListComponent;
 
-  constructor(private eventService: EventService, private authService: AuthService) {
+  constructor(private eventService: EventService,
+              private authService: AuthService,
+              private snackBarService: SnackBarService,
+              private backendService: BackendService,
+              private dialog: MatDialog) {
   }
 
   get singleMode(): boolean {
@@ -81,24 +100,39 @@ export class EventPageComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getEvents();
+    this.getAssigneeList();
+  }
 
-    const getReq = new EventRef();
-    getReq.setId('e9998bc1-b6a2-4370-9ef7-94f520fd5a95');
-
-    this.eventService.get(getReq).pipe(map(eventObject => EventObject.fromProto(eventObject))).subscribe(eventObject => {
-      console.log('onInit get: ', eventObject);
-    });
-
+  getEvents(): void {
     const listRequest = new EventListRequest();
-   //  this.eventService.list(listRequest).pipe(
-   //    map(eventObject => EventObject.fromProto(eventObject)),
-   //    toArray(),
-   //  ).subscribe(eventObjects => {
-   //    this.dataSource.data = eventObjects;
-   // //   this.dataSource.filterPredicate = this.tableFilter();
-   // //   this.onFilterListByAssignee();
-   //  });
-   //  console.log('onInit dataSource: ', this.dataSource.data);
+    this.eventService.list(listRequest).pipe(
+      map(eventObject => EventObject.fromProto(eventObject)),
+      toArray(),
+    ).subscribe(eventObjects => {
+      this.dataSource.data = eventObjects;
+      this.dataSource.filterPredicate = this.tableFilter();
+      this.onFilterListByAssignee();
+    });
+  }
+
+  getAssigneeList(): void {
+    const roleRequest = new ListRequest();
+    roleRequest.setIdList([]);
+    roleRequest.setKind(Kind.ROLEMAPPING.valueOf());
+    this.backendService.list(roleRequest).pipe(
+      map(role => ConfigObject.fromProto(role)),
+      toArray(),
+    ).subscribe(roles => {
+      for (const role of roles) {
+        if (role.roleMapping.email !== '') {
+          this.assigneeList.push(role.roleMapping.email);
+        }
+        if (role.roleMapping.group !== '') {
+          this.assigneeList.push(role.roleMapping.group);
+        }
+      }
+    });
   }
 
   onSelectEvent(eventObject: EventObject) {
@@ -110,10 +144,77 @@ export class EventPageComponent implements OnInit {
 
     if (!this.singleMode) {
       this.mergedEvent = EventObject.mergeEvents(this.selectedEvents);
+    } else {
+      this.mergedEvent = null;
     }
   }
 
+  onUpdateEvent(update: any) {
+    this.eventService.update(update.updateTemplate, update.paths, update.id, update.comment)
+      .subscribe(() => {
+        this.getEvents();
+        // this.eventObject = null;
+        // for (const event of this.dataSource.data) {
+        //   if (event.id === update.id[0]) {
+        //     this.onSelectEvent(event);
+        //   }
+        // }
+        this.snackBarService.openSnackBar('Hendelsen er blitt oppdatert');
+      });
+  }
+
+  onDeleteEvent(eventObject: EventObject) {
+    this.eventService.delete(EventObject.toProto(eventObject))
+      .subscribe(() => {
+        this.eventObject = null;
+        this.selectedEvents = [];
+        this.getEvents();
+        this.snackBarService.openSnackBar('Hendelsen er slettet');
+      });
+  }
+
+  onUpdateSelected(update: any) {
+    const ids = [];
+    for (const event of this.selectedEvents) {
+      ids.push(event.id);
+    }
+    this.eventService.update(update.updateTemplate, update.paths, ids, update.comment)
+      .subscribe(updateResponse => {
+        this.getEvents();
+        this.selectedEvents = [];
+        this.snackBarService.openSnackBar(updateResponse.getUpdated() + ' hendelser oppdatert');
+      });
+  }
+
+  onDeleteSelected() {
+    const numberOfEvents = this.selectedEvents.length;
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      numberOfConfigs: numberOfEvents.toString()
+    };
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          from(this.selectedEvents).pipe(
+            mergeMap((eventObject) => this.eventService.delete(EventObject.toProto(eventObject))),
+            takeUntil(this.ngUnsubscribe),
+          ).subscribe(() => {
+            this.getEvents();
+            this.selectedEvents = [];
+            this.snackBarService.openSnackBar(numberOfEvents + ' hendelser slettet');
+          });
+        } else {
+          this.snackBarService.openSnackBar('Sletter ikke hendelsene');
+        }
+      });
+  }
+
   onShowClosed() {
+    this.eventObject = null;
     if (this.eventFilter === 'allEvents') {
       this.onFilterListByAssignee('');
     } else if (this.eventFilter === 'myEvents') {
@@ -122,15 +223,16 @@ export class EventPageComponent implements OnInit {
   }
 
   onFilterListByAssignee(assignee?: string) {
+    this.eventObject = null;
     if (assignee) {
       this.filterValues.assignee = assignee;
     } else {
       this.filterValues.assignee = '';
     }
     if (this.showClosed) {
-      this.filterValues.state = ['CLOSED'];
+      this.filterValues.state = [State[State.CLOSED]];
     } else {
-      this.filterValues.state = ['NEW', 'OPEN'];
+      this.filterValues.state = [State[State.NEW], State[State.OPEN]];
     }
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
@@ -139,7 +241,7 @@ export class EventPageComponent implements OnInit {
   tableFilter(): (data: any, filter: string) => boolean {
     const filterFunction = function (data, filter): boolean {
       const filterValues = JSON.parse(filter);
-      return data.assignee.indexOf(filterValues.assignee) !== -1 && filterValues.state.indexOf(data.state.toString()) !== -1;
+      return data.assignee.indexOf(filterValues.assignee) !== -1 && filterValues.state.indexOf(State[data.state]) !== -1;
     };
     return filterFunction;
   }

@@ -3,6 +3,8 @@ import {MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {EventObject} from '../../../commons/models';
 import {AuthService, SnackBarService} from '../../../core/services';
+import {Severity, State} from '../../../commons/models/event/event.model';
+import {EventService} from '../../services/event.service';
 
 
 @Component({
@@ -11,6 +13,8 @@ import {AuthService, SnackBarService} from '../../../core/services';
   styleUrls: ['./event-list.component.css'],
 })
 export class EventListComponent implements OnInit {
+  readonly Severity = Severity;
+  readonly State = State;
 
   displayedColumns = ['select', 'type', 'source', 'state', 'severity', 'assignee', 'actions'];
 
@@ -31,7 +35,7 @@ export class EventListComponent implements OnInit {
   selectedChange: EventEmitter<EventObject[]> = new EventEmitter();
 
 
-  constructor(protected snackBarService: SnackBarService, private authService: AuthService) {
+  constructor(protected snackBarService: SnackBarService, private authService: AuthService, private eventService: EventService) {
   }
 
   ngOnInit() {
@@ -66,11 +70,18 @@ export class EventListComponent implements OnInit {
     this.highlightSelected(this.selection.selected);
   }
 
-  OnAssignToMe(row) {
-    const id = row.id;
-    const assignee = this.authService.name;
+  OnAssignToMe(row: EventObject) {
+    const id = [row.id];
+    const updateTemplate = new EventObject({assignee: this.authService.email});
+    const paths = ['assignee'];
 
-    this.snackBarService.openSnackBar('Event tildelt ' + assignee);
+    if (row.state === State.NEW.valueOf()) {
+      updateTemplate.state = State.OPEN;
+      paths.push('state');
+    }
+    this.eventService.update(updateTemplate, paths, id);
+
+    this.snackBarService.openSnackBar('Hendelse tildelt bruker: ' + this.authService.email);
   }
 
   highlightSelected(rows) {

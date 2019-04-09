@@ -1,6 +1,5 @@
-import {EventObjectProto} from '../../../../api';
-import {Label} from '../meta/label.model';
-import {fromTimestampProto, intersectLabel} from '../../func';
+import {ActivityProto, DataProto, EventObjectProto} from '../../../../api';
+import {fromTimestampProto, intersectString} from '../../func';
 
 export enum State {
   NEW = 0,
@@ -31,7 +30,7 @@ export class EventObject {
   activityList: Activity[];
   dataList: Data[];
   severity: Severity;
-  labelList?: Label[];
+  labelList?: string[];
 
   constructor(eventObject: EventObject | any = {}) {
     this.id = eventObject.id || '';
@@ -50,7 +49,7 @@ export class EventObject {
       id: proto.getId(),
       type: proto.getType(),
       source: proto.getSource(),
-      state: State[proto.getState()] as any as State,
+      state: proto.getState(),
       assignee: proto.getAssignee(),
       activityList: proto.getActivityList().map(activity => new Activity({
         modifiedTime: fromTimestampProto(activity.getModifiedTime()),
@@ -64,9 +63,27 @@ export class EventObject {
         comment: activity.getComment()
       })),
       dataList: proto.getDataList().map(data => new Data({key: data.getKey(), value: data.getValue()})),
-      severity: Severity[proto.getSeverity()] as any as Severity,
+      severity: proto.getSeverity(),
       labelList: proto.getLabelList()
     });
+  }
+
+  static toProto(eventObject: EventObject): EventObjectProto {
+    const proto = new EventObjectProto();
+    proto.setId(eventObject.id);
+    proto.setAssignee(eventObject.assignee);
+    proto.setSeverity(eventObject.severity);
+    proto.setState(eventObject.state);
+    proto.setSource(eventObject.source);
+    proto.setType(eventObject.type);
+    proto.setDataList(eventObject.dataList.map(data => {
+      const d = new DataProto();
+      d.setKey(data.key);
+      d.setValue(data.value);
+      return d;
+    }));
+    proto.setLabelList(eventObject.labelList);
+    return proto;
   }
 
   static mergeEvents(eventObjects: EventObject[]): EventObject {
@@ -77,16 +94,24 @@ export class EventObject {
       return event.assignee === compareObj.assignee;
     });
 
-    const label = eventObjects.reduce((acc: EventObject, curr: EventObject) => {
-      eventObject.labelList = intersectLabel(acc.labelList, curr.labelList);
-      return eventObject;
+    const equalSeverity = eventObjects.every(function (event) {
+      return event.severity === compareObj.severity;
     });
+
+    eventObject.labelList = eventObjects.map(c => c.labelList).reduce(intersectString);
 
     if (equalAssignee) {
       eventObject.assignee = compareObj.assignee;
     } else {
       eventObject.assignee = null;
     }
+
+    if (equalSeverity) {
+      eventObject.severity = compareObj.severity;
+    } else {
+      eventObject.severity = null;
+    }
+
     return eventObject;
   }
 }
@@ -111,7 +136,7 @@ export class Change {
   newVal: string;
 
   constructor({
-                type =  ChangeType[ChangeType.CREATED] as any as ChangeType,
+                type = ChangeType.CREATED,
                 field = '',
                 oldVal = '',
                 newVal = ''
@@ -121,6 +146,16 @@ export class Change {
     this.oldVal = oldVal;
     this.newVal = newVal;
   }
+
+  static fromProto(proto: ActivityProto.Change): Change {
+    return new Change({
+      type: proto.getType(),
+      field: proto.getField(),
+      oldVal: proto.getOldVal(),
+      newVal: proto.getNewVal()
+    });
+  }
+
 }
 
 export class Activity {

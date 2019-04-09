@@ -1,0 +1,26 @@
+<div fxFlex>
+  <mat-form-field appearance="standard" class="search-form">
+    <input matInput
+           #searchInput
+           class="search-form-input"
+           (keyup.enter)="onSearch(searchInput.value)"
+           placeholder="Søk"
+           autofocus
+           i18n-placeholder="@@searchSearchFieldPlaceholder">
+  </mat-form-field>
+  <app-base-list (rowClick)="onSelectConfig($event)"></app-base-list>
+  <button mat-stroked-button (click)="onCreateEntity()" class="add-button">
+    <mat-icon>add_circle</mat-icon>
+    <span>OPPRETT NY ENTITET</span>
+  </button>
+  <app-entity-details #entityDetails
+                      *ngIf="configObject$ | async as configObject"
+                      [configObject]="configObject"
+                      (save)="onSaveEntity($event)"></app-entity-details>
+  <button mat-stroked-button (click)="onCreateSeed()" *ngIf="configRef" class="add-button">
+    <mat-icon>add_circle</mat-icon>
+    <span>OPPRETT NY SEED</span>
+  </button>
+  <app-seed-details *ngIf="seedObject" [configObject]="seedObject"
+  (save)="onSaveSeed($event)"></app-seed-details>
+</div>

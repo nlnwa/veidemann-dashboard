@@ -36,13 +36,13 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     })
   );
 
-  private searchTerm: Subject<string> = new Subject<string>();
+  protected searchTerm: Subject<string> = new Subject<string>();
   searchTerm$ = this.searchTerm.asObservable();
 
   pageLength$ = new Subject<number>();
 
   constructor(
-    private seedDataService: SeedDataService,
+    protected seedDataService: SeedDataService,
     protected snackBarService: SnackBarService,
     protected errorService: ErrorService,
     protected activatedRoute: ActivatedRoute,
@@ -51,7 +51,7 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     protected dialog: MatDialog,
     protected dataService: SearchDataService,
     public titleService: Title,
-    private authService: AuthService) {
+    protected authService: AuthService) {
     super(dataService, snackBarService, errorService, componentFactoryResolver, router, titleService, dialog, activatedRoute);
 
     this.kind = Kind.CRAWLENTITY;
@@ -81,6 +81,10 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     this.reset();
     this.router.navigate([], {relativeTo: this.route});
     this.searchTerm.next(term);
+  }
+
+  onCreateConfig(): void {
+    super.onCreateConfig();
   }
 }
 

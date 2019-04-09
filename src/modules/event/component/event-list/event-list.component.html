@@ -28,12 +28,12 @@
 
     <ng-container matColumnDef="state">
       <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.state}}</mat-cell>
+      <mat-cell *matCellDef="let row">{{State[row.state]}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="severity">
       <mat-header-cell *matHeaderCellDef>Alvorlighetsgrad</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.severity}}</mat-cell>
+      <mat-cell *matCellDef="let row">{{Severity[row.severity]}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="assignee">

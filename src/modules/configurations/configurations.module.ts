@@ -77,6 +77,9 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
     CommonsModule,
     ConfigurationsRoutingModule,
   ],
+  exports: [
+    SearchComponent,
+  ],
   providers: [
     OptionsResolver,
     DataService,

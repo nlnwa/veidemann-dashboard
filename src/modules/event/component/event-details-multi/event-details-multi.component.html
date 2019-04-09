@@ -1,12 +1,59 @@
 <form [formGroup]="form">
   <mat-card>
-  <mat-form-field>
-    <input matInput
-           formControlName="assignee"
-           placeholder="Tildelt">
-    <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff">Assign to me
-    </button>
-  </mat-form-field>
-  <app-labels formControlName="labelList"></app-labels>
+    <div fxLayout="row">
+      <mat-form-field fxFlex="80">
+        <mat-select placeholder="Tildelt" formControlName="assignee">
+          <mat-option *ngFor="let assignee of assigneeList"
+                      [value]="assignee">
+            {{assignee}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff" fxFlex="20">
+        Assign to me
+      </button>
+    </div>
+    <div fxlayout="row" fxLayoutGap="16px">
+      <app-labels fxFlex kind="Merkelapp" formControlName="labelList" [removable]="canEdit"></app-labels>
+      <div>
+        <mat-button-toggle-group
+          [value]="shouldAddLabel"
+          (valueChange)="onToggleShouldAddLabels($event)"
+          name="shouldAddSelector">
+          <mat-button-toggle [value]="true">
+            <mat-icon>add</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [value]="false">
+            <mat-icon>remove</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+    <mat-form-field>
+      <mat-select placeholder="Alvorlighetsgrad" formControlName="severity">
+        <mat-option *ngFor="let severity of severities" [value]="severity">{{Severity[severity]}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="accent"
+      [disabled]="!canUpdate"
+      (click)="onUpdate()"
+      i18n="@@commonButtonSave">
+      OPPDATER
+      </button>
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!canRevert"
+              i18n="@@commonButtonRevert">
+        TILBAKESTILL
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!allSelected"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">
+        SLETT
+      </button>
+    </mat-card-actions>
   </mat-card>
 </form>

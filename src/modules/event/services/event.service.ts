@@ -1,36 +1,36 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
-import {EventHandlerPromiseClient, EventListRequest, EventObjectProto, EventRefProto} from '../../../api';
-import {OAuthService} from 'angular-oauth2-oidc';
+import {
+  EventDeleteResponse,
+  EventHandlerPromiseClient,
+  EventListRequest,
+  EventObjectProto,
+  EventRefProto,
+  EventUpdateRequest,
+  EventUpdateResponse,
+  FieldMask
+} from '../../../api';
 import {Observable, Observer} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {map, tap} from 'rxjs/operators';
-import {ConfigObject} from '../../commons/models';
-import {BackendService} from '../../core/services';
+import {map} from 'rxjs/operators';
+import {EventObject} from '../../commons/models';
+import {AppConfigService, AuthService} from '../../core/services';
+
 
 @Injectable()
 export class EventService {
 
-  protected readonly url: string = environment.grpcWeb;
+  eventClient: EventHandlerPromiseClient;
 
-  eventClient = new EventHandlerPromiseClient(this.url, null, null);
-
-  constructor(protected oauthService: OAuthService, protected  backendService: BackendService) {
+  constructor(protected authService: AuthService, private appConfigService: AppConfigService) {
+    this.eventClient = new EventHandlerPromiseClient(appConfigService.grpcWebUrl, null, null);
   }
 
   list(listRequest: EventListRequest): Observable<EventObjectProto> {
-    console.log('kaller list req');
-    const metadata = this.getAuth();
+    const metadata = this.authService.metadata;
     return new Observable((observer: Observer<EventObjectProto>) => {
       const stream = this.eventClient.listEventObjects(listRequest, metadata)
-        .on('data', data => {
-          console.log('list data: ', data);
-          observer.next(data);
-        })
-        .on('error', error => {
-          console.log('service error: ', error);
-          observer.error(error);
-        })
+        .on('data', data => observer.next(data))
+        .on('error', error => observer.error(error))
         .on('status', () => observer.complete())
         .on('end', () => console.log('end'));
 
@@ -39,29 +39,39 @@ export class EventService {
   }
 
   count(request: EventListRequest): Observable<number> {
-    const metadata = this.getAuth();
+    const metadata = this.authService.metadata;
     return fromPromise(this.eventClient.countEventObjects(request, metadata))
       .pipe(map(listCountResponse => listCountResponse.getCount()));
   }
 
   get(event: EventRefProto): Observable<EventObjectProto> {
-    const metadata = this.getAuth();
-    console.log(fromPromise(this.eventClient.getEventObject(event, metadata)));
+    const metadata = this.authService.metadata;
     return fromPromise(this.eventClient.getEventObject(event, metadata));
   }
 
-  private getAuth() {
-    return {authorization: 'Bearer ' + this.oauthService.getIdToken()};
+  update(updateTemplate: EventObject, paths: string[], id: string[], comment?: string): Observable<EventUpdateResponse> {
+
+
+    const listRequest = new EventListRequest();
+    listRequest.setIdList(id);
+
+    const updateMask = new FieldMask();
+    updateMask.setPathsList(paths);
+
+    const updateRequest = new EventUpdateRequest();
+    updateRequest.setListRequest(listRequest);
+    updateRequest.setUpdateTemplate(EventObject.toProto(updateTemplate));
+    updateRequest.setUpdateMask(updateMask);
+    updateRequest.setComment(comment);
+
+    const metadata = this.authService.metadata;
+
+    return fromPromise(this.eventClient.updateEventObjects(updateRequest, metadata));
   }
 
-
-  saveCrawlEntity(configObject: ConfigObject): Observable<ConfigObject> {
-    return this.backendService.save(ConfigObject.toProto(configObject))
-      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)));
-  }
-
-  saveSeed(configObject: ConfigObject): Observable<ConfigObject> {
-    return this.backendService.save(ConfigObject.toProto(configObject))
-      .pipe(map(newConfig => ConfigObject.fromProto(newConfig)));
+  delete(request: EventObjectProto): Observable<EventDeleteResponse> {
+    const metadata = this.authService.metadata;
+    return fromPromise(this.eventClient.deleteEventObject(request, metadata));
   }
 }
+

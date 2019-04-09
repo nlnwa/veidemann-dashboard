@@ -6,7 +6,7 @@ import {RouterModule} from '@angular/router';
 
 import {MaterialModule} from './material.module';
 import {
-  BaseListComponent,
+  BaseListComponent, ChangelogComponent,
   EntityDetailsComponent,
   EntityDetailsMultiComponent,
   LabelsComponent,
@@ -24,7 +24,12 @@ import {
     EntityDetailsComponent,
     EntityDetailsMultiComponent,
     SeedDetailComponent,
-    SeedDetailMultiComponent
+    SeedDetailMultiComponent,
+    ChangelogComponent,
+  ],
+  entryComponents: [
+    EntityDetailsMultiComponent,
+    SeedDetailMultiComponent,
   ],
   imports: [
     MaterialModule,
@@ -47,7 +52,8 @@ import {
     SeedDetailComponent,
     SeedDetailMultiComponent,
     EntityDetailsComponent,
-    EntityDetailsMultiComponent
+    EntityDetailsMultiComponent,
+    ChangelogComponent,
   ],
   providers: [DatePipe],
 })

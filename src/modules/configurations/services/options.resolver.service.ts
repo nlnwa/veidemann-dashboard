@@ -22,13 +22,7 @@ export class OptionsResolver implements Resolve<any> {
     const kind: Kind = pathToKind(route.paramMap.get('kind')) || route.data.kind;
 
     switch (kind) {
-      case Kind.SEED:
-      case Kind.CRAWLENTITY:
-        return this.backendService.list(ofKind(Kind.CRAWLJOB.valueOf())).pipe(
-          map(configObject => ConfigObject.fromProto(configObject)),
-          toArray(),
-          map(crawlJobs => ({crawlJobs}))
-        );
+
 
       case Kind.CRAWLJOB:
         const crawlScheduleConfig$ = this.backendService.list(ofKind(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
@@ -106,7 +100,13 @@ export class OptionsResolver implements Resolve<any> {
         };
 
       default:
-        return {};
+      case Kind.SEED:
+      case Kind.CRAWLENTITY:
+        return this.backendService.list(ofKind(Kind.CRAWLJOB.valueOf())).pipe(
+          map(configObject => ConfigObject.fromProto(configObject)),
+          toArray(),
+          map(crawlJobs => ({crawlJobs}))
+        );
     }
   }
 

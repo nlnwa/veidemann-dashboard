@@ -6,8 +6,10 @@ import {EventDetailsComponent} from './component/event-details/event-details.com
 import {EventPageComponent} from './containers/event-page.component';
 import {EventNewSeedComponent} from './component/event-new-seed/event-new-seed.component';
 import {EventWarcErrorComponent} from './component/event-warc-error/event-warc-error.component';
-import {EventMultiUpdateComponent} from './component/event-multi-update/event-multi-update.component';
+import {EventDetailsMultiComponent} from './component/event-details-multi/event-details-multi.component';
 import {CommonsModule} from '../commons/commons.module';
+import {ConfigurationsModule} from '../configurations/configurations.module';
+import {EventSearchComponent} from './containers/event-search/event-search.component';
 
 @NgModule({
   declarations: [
@@ -16,11 +18,13 @@ import {CommonsModule} from '../commons/commons.module';
     EventPageComponent,
     EventNewSeedComponent,
     EventWarcErrorComponent,
-    EventMultiUpdateComponent,
+    EventDetailsMultiComponent,
+    EventSearchComponent,
   ],
   imports: [
     CommonsModule,
     EventRoutingModule,
+    ConfigurationsModule,
   ],
   providers: [
     EventService

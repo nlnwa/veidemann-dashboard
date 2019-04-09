@@ -16,28 +16,24 @@
         <a mat-icon-button matSuffix [attr.href]="refUri" target="_blank"
            matTooltip="Trykk for å åpne lenke i nytt vindu"><mat-icon>link</mat-icon></a>
       </mat-form-field>
-      <div fxLayout="row wrap" fxLayoutGap="24px">
-        <div fxFlex fxLayout="column">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>
-                Entitet
-              </mat-card-title>
-              <mat-card-subtitle>
-                Opprett ny eller velg eksisterende entitet
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                  <input placeholder="Søk">
-                Opprett ny entitet
-            </mat-card-content>
-          </mat-card>
-          <app-entity-details [configObject]="crawlEntity" (save)="onSaveEntity($event)"></app-entity-details>
-        </div>
-        <div fxFlex fxLayout="column">
-          <app-seed-details *ngIf="crawlEntity.id !== ''" [configObject]="seed"></app-seed-details>
-        </div>
-      </div>
+<div *ngIf="crawlEntityId && seedId">
+  <h3>Entitet og seed tildelt hendelsen</h3>
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matTooltip="Seed">link</mat-icon>&nbsp;
+          <a class="shortcut-link"
+             [routerLink]="['/config/seed']"
+             [queryParams]="{id: seedId}">Seed</a>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon matTooltip="Entitet">domain</mat-icon>&nbsp;
+          <a class="shortcut-link"
+             [routerLink]="['/config/entity']"
+             [queryParams]="{id: crawlEntityId}">Entitet</a>
+        </mat-list-item>
+      </mat-list>
+</div>
+       <app-event-search [discoveredUri]="uri" (seedCreated)="onSeedCreated($event)"></app-event-search>
     </div>
   </div>
 </form>

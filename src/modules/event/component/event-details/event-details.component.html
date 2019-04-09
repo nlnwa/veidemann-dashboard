@@ -1,8 +1,8 @@
 <form [formGroup]="form" fxFlex>
-  <mat-card>
+  <mat-card *ngIf="showInfo">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title>{{getType()}}</mat-card-title>
+        <mat-card-title>Informasjon om hendelsen</mat-card-title>
       </mat-card-title-group>
       <div fxFlex></div>
       <button mat-flat-button (click)="showInfoToggle()">
@@ -10,37 +10,48 @@
         <mat-icon>info</mat-icon>
       </button>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
-      <div fxFlex fxLayout="column">
-        <ng-container [ngSwitch]="this.eventObject.type">
-          <ng-container *ngSwitchCase="'New seed'">
-            <app-event-new-seed [eventObject]="this.eventObject"></app-event-new-seed>
-          </ng-container>
-          <ng-container *ngSwitchCase="'Warc error'">
-            <app-event-warc-error [eventObject]="this.eventObject"></app-event-warc-error>
-          </ng-container>
-        </ng-container>
-      </div>
-
-      <div fxFlex fxLayout="column">
-        <ng-container *ngIf="showInfo">
-          <mat-form-field>
-            <input matInput
-                   formControlName="assignee"
-                   placeholder="Tildelt">
-            <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff">Assign to me
-            </button>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="24px">
+        <div fxFlex fxLayout="column">
+          <div fxLayout="row">
+          <mat-form-field fxFlex="80">
+            <mat-select placeholder="Tildelt" formControlName="assignee">
+              <mat-option *ngFor="let assignee of assigneeList"
+                          [value]="assignee">
+                {{assignee}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
+            <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff" fxFlex="20">
+              Assign to me
+            </button>
+          </div>
           <mat-form-field>
             <mat-select placeholder="Alvorlighetsgrad" formControlName="severity">
-              <mat-option *ngFor="let severity of severities" [value]="severity">{{severity}}</mat-option>
+              <mat-option *ngFor="let severity of severities" [value]="severity">{{Severity[severity]}}</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <app-labels kind="Merkelapp" formControlName="labelList"></app-labels>
+          <div fxlayout="row" fxLayoutGap="16px">
+          <app-labels fxFlex kind="Merkelapp" formControlName="labelList" [removable]="canEdit"></app-labels>
+            <div>
+              <mat-button-toggle-group
+                [value]="shouldAddLabel"
+                (valueChange)="onToggleShouldAddLabels($event)"
+                name="shouldAddSelector">
+                <mat-button-toggle [value]="true">
+                  <mat-icon>add</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle [value]="false">
+                  <mat-icon>remove</mat-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
 
           <mat-form-field>
             <input matInput
+                   readonly
                    formControlName="id"
                    placeholder="Id">
           </mat-form-field>
@@ -56,35 +67,42 @@
           </mat-form-field>
           <mat-form-field>
             <input matInput
+                   readonly
                    formControlName="state"
                    placeholder="Status">
           </mat-form-field>
+        </div>
+        <div fxFlex fxLayout="column">
+          <app-changelog *ngIf="activityList.length > 0" [activityList]="activityList"></app-changelog>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-          <mat-accordion *ngIf="activityList.length !== 0">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>Aktivitetslogg</mat-panel-title>
-              </mat-expansion-panel-header>
-              <mat-list>
-                <mat-list-item *ngFor="let activity of activityList">
-                  <mat-icon matListIcon>event</mat-icon>
-                  <div *ngFor="let desc of activity.description">
-                    <h3 matLine>
-                      <span style="color: #0066ff">{{activity.modiefiedBy}}</span>:
-                      {{desc.type}} for felt: {{desc.field}}
-                    </h3>
-                    <h3 matLine>Endret til: <i>{{desc.newVal}}</i> fra: <i>{{desc.oldVal}}</i></h3>
-                    <h3 matLine><i>{{activity.comment}}</i></h3>
-                    <p matLine>{{activity.modifiedTime}}</p>
-                  </div>
-                </mat-list-item>
-              </mat-list>
-            </mat-expansion-panel>
-          </mat-accordion>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{getType()}}</mat-card-title>
+      </mat-card-title-group>
+      <div fxFlex></div>
+      <button mat-flat-button (click)="showInfoToggle()">
+        {{showInfo ? 'Skjul info' : 'Vis info'}}
+        <mat-icon>info</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <ng-container [ngSwitch]="this.eventObject.type">
+          <ng-container *ngSwitchCase="'New seed'">
+            <app-event-new-seed [eventObject]="this.eventObject" (seedAssigned)="onSeedAssigned($event)"></app-event-new-seed>
+          </ng-container>
+          <ng-container *ngSwitchCase="'Warc error'">
+            <app-event-warc-error [eventObject]="this.eventObject"></app-event-warc-error>
+          </ng-container>
         </ng-container>
       </div>
-
-
+      </div>
     </mat-card-content>
     <div>
       <mat-form-field fxFlex>

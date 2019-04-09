@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EventDetailsMultiComponent } from './event-details-multi.component';
+import { EventSearchComponent } from './event-search.component';
 
-describe('EventMultiUpdateComponent', () => {
-  let component: EventDetailsMultiComponent;
-  let fixture: ComponentFixture<EventDetailsMultiComponent>;
+describe('EventSearchComponent', () => {
+  let component: EventSearchComponent;
+  let fixture: ComponentFixture<EventSearchComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventDetailsMultiComponent ]
+      declarations: [ EventSearchComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EventDetailsMultiComponent);
+    fixture = TestBed.createComponent(EventSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
