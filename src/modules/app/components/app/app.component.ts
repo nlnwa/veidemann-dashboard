@@ -4,24 +4,34 @@ import {AuthService, GuardService, SnackBarService} from '../../../core';
 import {environment} from '../../../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppInitializerService} from '../../../core/services/app.initializer.service';
+import {EventService} from '../../../event/services/event.service';
+import {Subject} from 'rxjs';
+import {map, toArray} from 'rxjs/operators';
+import {AppService} from '../../services';
+import {EventObject} from '../../../commons/models';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [AppService, EventService]
 })
 export class AppComponent implements OnInit {
 
   showSidenav = true;
+  eventCount: Subject<number> = new Subject();
+  eventCount$ = this.eventCount.asObservable();
+  types = [];
 
   constructor(private authService: AuthService,
               private guardService: GuardService,
               private router: Router,
               private route: ActivatedRoute,
               private appInitializer: AppInitializerService,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private appService: AppService) {
   }
 
   get initialized(): boolean {
@@ -52,6 +62,17 @@ export class AppComponent implements OnInit {
     return this.authService.isAdmin() || this.authService.isCurator();
   }
 
+  getEventTypes() {
+    const eventTypes = [];
+    let total = 0;
+    for (const type of this.types) {
+      eventTypes.push(type.type + ' : ' + type.count);
+      total += type.count;
+
+    }
+    return {summary: eventTypes.join('\n'), total: total};
+  }
+
   ngOnInit(): void {
     // are we logged in or not
     if (this.name && this.authService.requestedPath) {
@@ -64,10 +85,26 @@ export class AppComponent implements OnInit {
         this.authService.login(this.guardService.requestedPath);
       });
     }
-  }
 
-  get eventCount(): string {
-    return '99';
+    // timer(0, 60000).pipe(
+    //   mergeMap(() => this.appService.getEventCount())
+    // ).subscribe(count => this.eventCount.next(count));
+
+
+      this.appService.getEventSummary().pipe(
+        map(event => EventObject.fromProto(event)),
+        toArray(),
+      ).subscribe(events => {
+        for (const event of events) {
+          const type = event.type;
+          const index = this.types.findIndex(t => t.type === type);
+          if (index !== -1) {
+            this.types[index].count++;
+          } else {
+            this.types.push({type: event.type, count: 1});
+          }
+        }
+      });
   }
 
   onLogin() {

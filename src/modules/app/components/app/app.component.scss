@@ -18,3 +18,7 @@
 .header--button__margin {
   margin-right: 1rem;
 }
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line;
+}
