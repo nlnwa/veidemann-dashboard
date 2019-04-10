@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ComponentFactoryResolver,
@@ -27,7 +27,7 @@ import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../commons/models
   providers: [SeedDataService, SearchDataService, {provide: DataService, useExisting: SearchDataService}]
 })
 
-export class EventSearchComponent extends SearchComponent implements OnInit, AfterViewChecked {
+export class EventSearchComponent extends SearchComponent implements OnInit {
 
   @Input()
     discoveredUri: string;
@@ -35,14 +35,11 @@ export class EventSearchComponent extends SearchComponent implements OnInit, Aft
   @Output()
     seedCreated = new EventEmitter<ConfigObject>();
 
-  @ViewChild('entityDetails')  entityDetails: ElementRef;
-  @ViewChild('seedDetails')  seedDetails: ElementRef;
+  @ViewChild('entityDetails') entityDetails: ElementRef;
+  @ViewChild('seedDetails') seedDetails: ElementRef;
 
   seedObject: ConfigObject;
   configRef: ConfigRef;
-
-  focusEntityDetails = false;
-  focusSeedDetails = false;
 
   constructor(
     protected seedDataService: SeedDataService,
@@ -70,16 +67,6 @@ export class EventSearchComponent extends SearchComponent implements OnInit, Aft
     }, (error) => this.errorService.dispatch(error));
   }
 
-  ngAfterViewChecked(): void {
-    if (this.focusEntityDetails) {
-      this.entityDetails.nativeElement.focus();
-    }
-    if(this.focusSeedDetails) {
-      this.focusEntityDetails = false;
-      this.seedDetails.nativeElement.focus();
-    }
-  }
-
   onSearch(term: string) {
     this.searchTerm.next(term);
   }
@@ -87,19 +74,19 @@ export class EventSearchComponent extends SearchComponent implements OnInit, Aft
   onSelectConfig(configObject: ConfigObject) {
     this.configRef = new ConfigRef({kind: configObject.kind, id: configObject.id});
     this.configObject.next(configObject);
-    this.focusEntityDetails = true;
+    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
   onCreateEntity() {
     this.configObject.next(new ConfigObject({kind: Kind.CRAWLENTITY}));
-    this.focusEntityDetails = true;
+    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
   onCreateSeed() {
     const meta = new Meta({name: this.discoveredUri});
     const seed = new Seed({entityRef: this.configRef});
     this.seedObject = new ConfigObject({kind: Kind.SEED, meta, seed});
-    this.focusSeedDetails = true;
+    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
   onSaveEntity(configObject: ConfigObject) {
