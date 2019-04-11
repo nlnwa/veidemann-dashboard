@@ -5,8 +5,8 @@ import {environment} from '../../../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppInitializerService} from '../../../core/services/app.initializer.service';
 import {EventService} from '../../../event/services/event.service';
-import {Subject} from 'rxjs';
-import {map, toArray} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {map, mergeMap, tap, toArray} from 'rxjs/operators';
 import {AppService} from '../../services';
 import {EventObject} from '../../../commons/models';
 
@@ -21,9 +21,12 @@ import {EventObject} from '../../../commons/models';
 export class AppComponent implements OnInit {
 
   showSidenav = true;
+
   eventCount: Subject<number> = new Subject();
   eventCount$ = this.eventCount.asObservable();
-  types = [];
+  eventSummary: Subject<string> = new Subject();
+  eventSummary$ = this.eventSummary.asObservable();
+
 
   constructor(private authService: AuthService,
               private guardService: GuardService,
@@ -62,17 +65,6 @@ export class AppComponent implements OnInit {
     return this.authService.isAdmin() || this.authService.isCurator();
   }
 
-  getEventTypes() {
-    const eventTypes = [];
-    let total = 0;
-    for (const type of this.types) {
-      eventTypes.push(type.type + ' : ' + type.count);
-      total += type.count;
-
-    }
-    return {summary: eventTypes.join('\n'), total: total};
-  }
-
   ngOnInit(): void {
     // are we logged in or not
     if (this.name && this.authService.requestedPath) {
@@ -86,26 +78,26 @@ export class AppComponent implements OnInit {
       });
     }
 
-    // timer(0, 60000).pipe(
-    //   mergeMap(() => this.appService.getEventCount())
-    // ).subscribe(count => this.eventCount.next(count));
-
-
-      this.appService.getEventSummary().pipe(
+    timer(0, 60000).pipe(
+      mergeMap(() => this.appService.getEventSummary().pipe(
         map(event => EventObject.fromProto(event)),
         toArray(),
-      ).subscribe(events => {
-        for (const event of events) {
-          const type = event.type;
-          const index = this.types.findIndex(t => t.type === type);
-          if (index !== -1) {
-            this.types[index].count++;
-          } else {
-            this.types.push({type: event.type, count: 1});
+        tap(events => this.eventCount.next(events.length)),
+        tap(events => {
+          const types = [];
+          for (const event of events) {
+            const type = event.type;
+            const index = types.findIndex(t => t.type === type);
+            if (index !== -1) {
+              types[index].count++;
+            } else {
+              types.push({type: event.type, count: 1});
+            }
           }
-        }
-      });
+          this.eventSummary.next(types.map(type => type.type + ' : ' + type.count).join('\n'));
+        })))).subscribe();
   }
+
 
   onLogin() {
     this.authService.login(this.route.snapshot.url.join('/'));

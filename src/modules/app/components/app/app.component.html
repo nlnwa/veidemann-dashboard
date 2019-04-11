@@ -54,8 +54,8 @@
         <a *ngIf="canConfigure" mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{exact: true }"
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">update</mat-icon>
-          <span matBadge="{{getEventTypes().total}}" matBadgeColor="accent" matBadgeOverlap="false"
-                matTooltip="{{getEventTypes().summary}}">Hendelser</span>
+          <span matBadge="{{eventCount$ | async}}" matBadgeColor="accent" matBadgeOverlap="false"
+                matTooltip="{{eventSummary$ | async}}">Hendelser</span>
         </a>
 
         <ng-container *ngIf="canConfigure">
