@@ -124,10 +124,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('re', Kind[this.kind]);
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       this.options = data.options;
-      console.log(this.options);
     });
 
     if (this.embedded) {

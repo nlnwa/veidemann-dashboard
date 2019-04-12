@@ -1,4 +1,14 @@
 <div>
+  <table class="mat-table" *ngIf="selection.selected.length > 1">
+  <tr class="mat-row">
+    <td class="mat-cell" *ngIf="!allSelected">
+      <span><strong>{{selection.selected.length}}</strong> konfigurasjoner er markert. </span>
+    </td>
+    <td class="mat-cell" *ngIf="allSelected">
+      <span>Alle konfigurasjonene i databasen er markert. </span>
+    </td>
+  </tr>
+  </table>
   <mat-table [dataSource]="dataSource">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -46,11 +56,6 @@
       <mat-cell *matCellDef="let row">{{row.created}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="lastupdated">
-      <mat-header-cell *matHeaderCellDef>Sist oppdatert</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.lastupdated}}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
@@ -65,7 +70,8 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"
-             (click)="onRowClick(row)">
+             (click)="onRowClick(row)"
+             [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''">
     </mat-row>
   </mat-table>
 </div>

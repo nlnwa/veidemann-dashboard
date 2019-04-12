@@ -26,6 +26,7 @@
 <div #seedDetails>
   <app-seed-details  *ngIf="seedObject"
                      [configObject]="seedObject"
+                     [crawlJobs]="crawlJobs"
                      (save)="onSaveSeed($event)">
   </app-seed-details>
 </div>

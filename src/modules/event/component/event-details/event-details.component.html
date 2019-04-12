@@ -1,84 +1,85 @@
 <form [formGroup]="form" fxFlex>
-  <mat-card *ngIf="showInfo">
-    <mat-card-header>
-      <mat-card-title-group>
-        <mat-card-title>Informasjon om hendelsen</mat-card-title>
-      </mat-card-title-group>
-      <div fxFlex></div>
-      <button mat-flat-button (click)="showInfoToggle()">
-        {{showInfo ? 'Skjul info' : 'Vis info'}}
-        <mat-icon>info</mat-icon>
-      </button>
-    </mat-card-header>
-    <mat-card-content>
-      <div fxLayout="row wrap" fxLayoutGap="24px">
-        <div fxFlex fxLayout="column">
-          <div fxLayout="row">
-          <mat-form-field fxFlex="80">
-            <mat-select placeholder="Tildelt" formControlName="assignee">
-              <mat-option *ngFor="let assignee of assigneeList"
-                          [value]="assignee">
-                {{assignee}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-            <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff" fxFlex="20">
-              Assign to me
-            </button>
-          </div>
-          <mat-form-field>
-            <mat-select placeholder="Alvorlighetsgrad" formControlName="severity">
-              <mat-option *ngFor="let severity of severities" [value]="severity">{{Severity[severity]}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div fxlayout="row" fxLayoutGap="16px">
-          <app-labels fxFlex kind="Merkelapp" formControlName="labelList" [removable]="canEdit"></app-labels>
-            <div>
-              <mat-button-toggle-group
-                [value]="shouldAddLabel"
-                (valueChange)="onToggleShouldAddLabels($event)"
-                name="shouldAddSelector">
-                <mat-button-toggle [value]="true">
-                  <mat-icon>add</mat-icon>
-                </mat-button-toggle>
-                <mat-button-toggle [value]="false">
-                  <mat-icon>remove</mat-icon>
-                </mat-button-toggle>
-              </mat-button-toggle-group>
+  <div [hidden]="!showInfo">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>Informasjon om hendelsen</mat-card-title>
+        </mat-card-title-group>
+        <div fxFlex></div>
+        <button mat-flat-button (click)="showInfoToggle()">
+          {{showInfo ? 'Skjul info' : 'Vis info'}}
+          <mat-icon>info</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutGap="24px">
+          <div fxFlex fxLayout="column">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="80">
+                <mat-select placeholder="Tildelt" formControlName="assignee">
+                  <mat-option *ngFor="let assignee of assigneeList"
+                              [value]="assignee">
+                    {{assignee}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff" fxFlex="20">
+                Assign to me
+              </button>
             </div>
+            <mat-form-field>
+              <mat-select placeholder="Alvorlighetsgrad" formControlName="severity">
+                <mat-option *ngFor="let severity of severities" [value]="severity">{{Severity[severity]}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div fxlayout="row" fxLayoutGap="16px">
+              <app-labels fxFlex kind="Merkelapp" formControlName="labelList" [removable]="canEdit"></app-labels>
+              <div>
+                <mat-button-toggle-group
+                  [value]="shouldAddLabel"
+                  (valueChange)="onToggleShouldAddLabels($event)"
+                  name="shouldAddSelector">
+                  <mat-button-toggle [value]="true">
+                    <mat-icon>add</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle [value]="false">
+                    <mat-icon>remove</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </div>
+
+            <mat-form-field>
+              <input matInput
+                     readonly
+                     formControlName="id"
+                     placeholder="Id">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     formControlName="type"
+                     placeholder="Type">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     formControlName="source"
+                     placeholder="Kilde">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     readonly
+                     formControlName="state"
+                     placeholder="Status">
+            </mat-form-field>
           </div>
-
-          <mat-form-field>
-            <input matInput
-                   readonly
-                   formControlName="id"
-                   placeholder="Id">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput
-                   formControlName="type"
-                   placeholder="Type">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput
-                   formControlName="source"
-                   placeholder="Kilde">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput
-                   readonly
-                   formControlName="state"
-                   placeholder="Status">
-          </mat-form-field>
+          <div fxFlex fxLayout="column">
+            <app-changelog *ngIf="activityList.length > 0" [activityList]="activityList"></app-changelog>
+          </div>
         </div>
-        <div fxFlex fxLayout="column">
-          <app-changelog *ngIf="activityList.length > 0" [activityList]="activityList"></app-changelog>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
+      </mat-card-content>
+    </mat-card>
+  </div>
   <mat-card>
     <mat-card-header>
       <mat-card-title-group>
@@ -92,16 +93,17 @@
     </mat-card-header>
     <mat-card-content>
       <div fxLayout="row wrap" fxLayoutGap="24px">
-      <div fxFlex fxLayout="column">
-        <ng-container [ngSwitch]="this.eventObject.type">
-          <ng-container *ngSwitchCase="'New seed'">
-            <app-event-new-seed [eventObject]="this.eventObject" (seedAssigned)="onSeedAssigned($event)"></app-event-new-seed>
+        <div fxFlex fxLayout="column">
+          <ng-container [ngSwitch]="this.eventObject.type">
+            <ng-container *ngSwitchCase="'New seed'">
+              <app-event-new-seed [eventObject]="this.eventObject"
+                                  (seedAssigned)="onSeedAssigned($event)"></app-event-new-seed>
+            </ng-container>
+            <ng-container *ngSwitchCase="'Warc error'">
+              <app-event-warc-error [eventObject]="this.eventObject"></app-event-warc-error>
+            </ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="'Warc error'">
-            <app-event-warc-error [eventObject]="this.eventObject"></app-event-warc-error>
-          </ng-container>
-        </ng-container>
-      </div>
+        </div>
       </div>
     </mat-card-content>
     <div>

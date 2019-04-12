@@ -175,6 +175,9 @@ export class EventPageComponent implements OnInit {
     this.eventService.update(update.updateTemplate, update.paths, ids, update.comment)
       .subscribe(updateResponse => {
         this.getEvents();
+        if (this.list) {
+          this.list.reset();
+        }
         this.selectedEvents = [];
         this.snackBarService.openSnackBar(updateResponse.getUpdated() + ' hendelser oppdatert');
       });

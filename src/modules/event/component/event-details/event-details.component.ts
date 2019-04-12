@@ -87,7 +87,6 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     }
   }
 
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.eventObject) {
       if (!this.eventObject) {

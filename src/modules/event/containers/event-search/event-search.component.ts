@@ -16,7 +16,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {Title} from '@angular/platform-browser';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../commons/models';
+import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta, Seed} from '../../../commons/models';
 
 @Component({
   selector: 'app-event-search',
@@ -39,6 +39,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
 
   seedObject: ConfigObject;
   configRef: ConfigRef;
+  crawlJobs: CrawlJob[];
 
   constructor(
     protected seedDataService: SeedDataService,
@@ -57,6 +58,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.crawlJobs = this.route.snapshot.data.options.crawlJobs;
 
     this.searchTerm$.pipe(
       switchMap((term: string) => this.dataService.search(term)),
