@@ -1,5 +1,4 @@
 import {
-  AfterViewChecked, AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ComponentFactoryResolver,
@@ -93,15 +92,18 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
     this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newEntity => {
         this.configRef = new ConfigRef({kind: newEntity.kind, id: newEntity.id});
+        this.configObject.next(newEntity);
       });
   }
 
   onSaveSeed(configObject: ConfigObject) {
     this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(newConfig => {
-        this.seedCreated.emit(newConfig);
+      .subscribe(newSeed => {
+        this.seedCreated.emit(newSeed);
+        this.seedObject = newSeed;
         this.snackBarService.openSnackBar('Seed Lagret');
       });
   }
+
 }
 

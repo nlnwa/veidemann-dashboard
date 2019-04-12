@@ -24,7 +24,9 @@
   </button>
   </div>
 <div #seedDetails>
-  <app-seed-details  *ngIf="seedObject" [configObject]="seedObject"
-  (save)="onSaveSeed($event)"></app-seed-details>
+  <app-seed-details  *ngIf="seedObject"
+                     [configObject]="seedObject"
+                     (save)="onSaveSeed($event)">
+  </app-seed-details>
 </div>
 </div>

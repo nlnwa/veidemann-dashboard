@@ -2,16 +2,15 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {EventService} from '../services/event.service';
 import {EventListComponent} from '../component/event-list/event-list.component';
 import {EventListRequest, ListRequest} from '../../../api';
-import {catchError, map, mergeMap, takeUntil, toArray} from 'rxjs/operators';
+import {map, mergeMap, takeUntil, toArray} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
 import {ConfigObject, EventObject, Kind} from '../../commons/models';
 import {AuthService} from '../../core/services/auth';
-import {BackendService, ErrorService, SnackBarService} from '../../core/services';
+import {BackendService, SnackBarService} from '../../core/services';
 import {SearchDataService} from '../../configurations/services';
 import {State} from '../../commons/models/event/event.model';
 import {DeleteDialogComponent} from '../../configurations/components';
-import {EMPTY, from, Subject} from 'rxjs';
-import {ReferrerError} from '../../commons/error';
+import {from, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-event',
@@ -152,13 +151,8 @@ export class EventPageComponent implements OnInit {
   onUpdateEvent(update: any) {
     this.eventService.update(update.updateTemplate, update.paths, update.id, update.comment)
       .subscribe(() => {
+        this.eventObject = null;
         this.getEvents();
-        // this.eventObject = null;
-        // for (const event of this.dataSource.data) {
-        //   if (event.id === update.id[0]) {
-        //     this.onSelectEvent(event);
-        //   }
-        // }
         this.snackBarService.openSnackBar('Hendelsen er blitt oppdatert');
       });
   }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../core/services';
 import {Data, EventObject, Severity, State} from '../../../commons/models/event/event.model';
@@ -7,7 +7,8 @@ import {ConfigObject, Label} from '../../../commons/models';
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
-  styleUrls: ['./event-details.component.css']
+  styleUrls: ['./event-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventDetailsComponent implements OnChanges, OnInit {
   readonly Severity = Severity;
@@ -245,6 +246,14 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     this.form.patchValue({
       state: State.CLOSED
     });
+
+    if (this.assignee.value === '') {
+      this.form.patchValue({
+        assignee: this.authService.email
+      });
+      this.assignee.markAsDirty();
+    }
+
     this.form.get('state').markAsDirty();
   }
 }

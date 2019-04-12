@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigObject, EventObject} from '../../../commons/models';
 
 @Component({
   selector: 'app-event-new-seed',
   templateUrl: './event-new-seed.component.html',
-  styleUrls: ['./event-new-seed.component.css']
+  styleUrls: ['./event-new-seed.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventNewSeedComponent implements OnChanges {
 
