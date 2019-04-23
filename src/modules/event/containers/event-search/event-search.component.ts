@@ -38,6 +38,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   @ViewChild('seedDetails') seedDetails: ElementRef;
 
   seedObject: ConfigObject;
+  entityObject: ConfigObject;
   configRef: ConfigRef;
   crawlJobs: CrawlJob[];
 
@@ -75,6 +76,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   onSelectConfig(configObject: ConfigObject) {
     this.configRef = new ConfigRef({kind: configObject.kind, id: configObject.id});
     this.configObject.next(configObject);
+    this.entityObject = configObject;
     setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
@@ -95,6 +97,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
       .subscribe(newEntity => {
         this.configRef = new ConfigRef({kind: newEntity.kind, id: newEntity.id});
         this.configObject.next(newEntity);
+        this.entityObject = newEntity;
       });
   }
 

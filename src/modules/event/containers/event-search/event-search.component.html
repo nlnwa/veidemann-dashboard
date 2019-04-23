@@ -14,20 +14,20 @@
     <span>OPPRETT NY ENTITET</span>
   </button>
   <div #entityDetails>
-  <app-entity-details
-                      *ngIf="configObject$ | async as configObject"
-                      [configObject]="configObject"
-                      (save)="onSaveEntity($event)"></app-entity-details>
-  <button mat-stroked-button (click)="onCreateSeed()" *ngIf="configRef" class="add-button">
-    <mat-icon>add_circle</mat-icon>
-    <span>OPPRETT NY SEED</span>
-  </button>
+    <app-entity-details
+      *ngIf="configObject$ | async as configObject"
+      [configObject]="configObject"
+      (save)="onSaveEntity($event)"></app-entity-details>
+    <button mat-stroked-button (click)="onCreateSeed()" *ngIf="configRef" class="add-button">
+      <mat-icon>add_circle</mat-icon>
+      <span>OPPRETT NY SEED</span>
+    </button>
   </div>
-<div #seedDetails>
-  <app-seed-details  *ngIf="seedObject"
-                     [configObject]="seedObject"
-                     [crawlJobs]="crawlJobs"
-                     (save)="onSaveSeed($event)">
-  </app-seed-details>
-</div>
+  <div #seedDetails>
+    <app-seed-details *ngIf="seedObject"
+                      [configObject]="seedObject"
+                      [crawlJobs]="crawlJobs"
+                      (save)="onSaveSeed($event)">
+    </app-seed-details>
+  </div>
 </div>
