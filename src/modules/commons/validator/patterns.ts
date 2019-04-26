@@ -34,3 +34,5 @@ export const NUMBER_OR_EMPTY_STRING = /^\s*\d*\s*$/;
 
 export const NO_COLON = /^[^:]*$/;
 
+export const VALID_URL = /^\s*(https?:\/\/([\S]+)\.[\S]{2,}\s*)+$/;
+

@@ -10,14 +10,25 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field *ngIf="nameIsUrl">
-    <input matInput formControlName="name" placeholder="URL"
-           i18n="@@metaUrlInputPlaceholder">
-    <mat-error
-      i18n="@@metaUrlRequiredError">
-      En gyldig URL er påkrevd
-    </mat-error>
-  </mat-form-field>
+  <ng-container *ngIf="nameIsUrl">
+    <mat-form-field *ngIf="id === ''">
+    <textarea matInput formControlName="name" placeholder="URL"
+              i18n="@@metaUrlInputPlaceholder">
+    </textarea>
+      <mat-error
+        i18n="@@metaUrlRequiredError">
+        En gyldig URL er påkrevd
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="id !== ''">
+      <input matInput formControlName="name" placeholder="URL"
+             i18n="@@metaUrlInputPlaceholder">
+      <mat-error
+        i18n="@@metaUrlRequiredError">
+        En gyldig URL er påkrevd
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
 
   <mat-form-field>
     <textarea matInput formControlName="description" placeholder="Beskrivelse"
