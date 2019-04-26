@@ -22,8 +22,9 @@
       </div>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta" [nameIsUrl]="true"></app-meta>
+        <app-meta formControlName="meta" [nameIsUrl]="true" [id]="configObject.id"></app-meta>
         <mat-form-field *ngIf="configObject.id">
           <input matInput
                  formControlName="id"

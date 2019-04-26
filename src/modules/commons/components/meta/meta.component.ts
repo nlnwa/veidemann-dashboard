@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Meta} from '../../models';
+import {VALID_URL} from '../../validator/patterns';
 
 
 @Component({
@@ -28,6 +29,9 @@ import {Meta} from '../../models';
 export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
   @Input()
   nameIsUrl: boolean;
+
+  @Input()
+  id: string;
 
   form: FormGroup;
 
@@ -63,16 +67,16 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.nameIsUrl) {
-      if (this.nameIsUrl) {
-        this.form.get('name').setValidators(
-          Validators.compose(
-            [
-              Validators.pattern('^(http[s]?:\\/\\/).*'),
-              Validators.required,
-              Validators.minLength(2)
-            ]));
-      }
-    }
+       if (this.nameIsUrl) {
+         this.form.get('name').setValidators(
+           Validators.compose(
+             [
+               Validators.pattern(VALID_URL),
+               Validators.required,
+               Validators.minLength(2)
+             ]));
+       }
+     }
   }
 
   ngAfterViewInit() {

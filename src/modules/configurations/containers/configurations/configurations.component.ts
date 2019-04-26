@@ -24,7 +24,7 @@ import {
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
-  Kind,
+  Kind, Meta,
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
@@ -373,6 +373,22 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       this.list.reset();
     }
     this.destroyComponent();
+  }
+
+  private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
+    const configObjects = seeds.map(seed => Object.assign({...configObject}, {meta: new Meta({name: seed})}));
+
+    from(configObjects).pipe(
+      mergeMap(c => this.dataService.save(c)),
+      takeUntil(this.ngUnsubscribe),
+    ).subscribe(() => {
+      this.reset();
+      if (!this.embedded) {
+        this.router.navigate([], {relativeTo: this.route});
+      }
+
+      this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
+    });
   }
 }
 
