@@ -377,7 +377,15 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
-    const configObjects = seeds.map(seed => Object.assign({...configObject}, {meta: new Meta({name: seed})}));
+    const configObjects = seeds.map(
+      seed => Object.assign({...configObject}, {
+        meta: new Meta
+        ({
+          name: seed,
+          description: configObject.meta.description,
+          labelList: configObject.meta.labelList
+        })
+      }));
 
     from(configObjects).pipe(
       mergeMap(c => this.dataService.save(c)),
