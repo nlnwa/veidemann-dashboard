@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
@@ -14,6 +14,7 @@ import {
 import {Subscription} from 'rxjs';
 import {Meta} from '../../models';
 import {VALID_URL} from '../../validator/patterns';
+import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 
 
 @Component({
@@ -32,6 +33,9 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
 
   @Input()
   id: string;
+
+  @ViewChild('autosize')
+  txtAreaAutosize: CdkTextareaAutosize;
 
   form: FormGroup;
 

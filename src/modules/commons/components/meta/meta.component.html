@@ -13,7 +13,11 @@
   <ng-container *ngIf="nameIsUrl">
     <mat-form-field *ngIf="id === ''">
     <textarea matInput formControlName="name" placeholder="URL"
-              i18n="@@metaUrlInputPlaceholder">
+              i18n="@@metaUrlInputPlaceholder"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="10"
+              #autosize="cdkTextareaAutosize">
     </textarea>
       <mat-error
         i18n="@@metaUrlRequiredError">
