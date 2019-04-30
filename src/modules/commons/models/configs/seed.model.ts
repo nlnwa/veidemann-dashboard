@@ -10,16 +10,13 @@ export class Seed {
   jobRefList?: ConfigRef[];
   disabled: boolean;
 
-  constructor({
-                entityRef = new ConfigRef({kind: Kind.CRAWLENTITY}),
-                scope = new CrawlScope(),
-                jobRefList = [],
-                disabled = false
-              } = {}) {
-    this.entityRef = entityRef;
-    this.scope = scope;
-    this.jobRefList = jobRefList;
-    this.disabled = disabled;
+  constructor(seed?: Partial<Seed>) {
+    if (seed) {
+      this.entityRef = new ConfigRef(seed.entityRef || {kind: Kind.CRAWLENTITY});
+      this.scope = new CrawlScope(seed.scope);
+      this.jobRefList = seed.jobRefList ? seed.jobRefList.map(configRef => new ConfigRef(configRef)) : [];
+      this.disabled = seed.disabled || false;
+    }
   }
 
   static fromProto(proto: SeedProto): Seed {
@@ -45,7 +42,8 @@ export class Seed {
   }
 
   static mergeConfigs(configObjects: ConfigObject[]): Seed {
-    const seed = new Seed();
+    const seed = new Seed({});
+    console.log('mergeConfig med ny seed: ', seed);
     const compareObj: Seed = configObjects[0].seed;
 
     const equalDisabledStatus = configObjects.every(function (cfg: ConfigObject) {
@@ -54,8 +52,11 @@ export class Seed {
     const commonCrawlJobs = this.commonCrawlJobs(configObjects);
 
     for (const crawlJob of commonCrawlJobs) {
+      console.log('crawljob from commonCrawljobs', crawlJob);
       const gotCrawlJob = configObjects.every(function (cfg) {
+        console.log('cfg jobRefList: ', cfg.seed.jobRefList);
         for (const job of cfg.seed.jobRefList) {
+          console.log('jobben: ', job);
           if (job.id === crawlJob.id) {
             return true;
           }
@@ -63,6 +64,7 @@ export class Seed {
         return false;
       });
       if (gotCrawlJob) {
+        console.log('gotCrawlJob true skal legge til jobRefList: ', seed);
         seed.jobRefList.push(crawlJob);
       }
     }
@@ -87,17 +89,18 @@ export class Seed {
     const unique = crawlJobs.filter(function ({id}) {
       return !this.has(id) && this.add(id);
     }, new Set);
+    console.log('unique jobreflist: ', unique);
     return unique;
   }
 }
 
 export class CrawlScope {
-  surtPrefix?: string;
+  surtPrefix: string;
 
-  constructor({
-                surtPrefix = ''
-              } = {}) {
-    this.surtPrefix = surtPrefix;
+  constructor(crawlScope: Partial<CrawlScope>) {
+    if (crawlScope) {
+      this.surtPrefix = crawlScope.surtPrefix || '';
+    }
   }
 
   static fromProto(proto: CrawlScopeProto): CrawlScope {

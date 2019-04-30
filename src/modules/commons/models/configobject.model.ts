@@ -16,22 +16,75 @@ import {Meta} from './meta/meta.model';
 
 
 export class ConfigObject {
-  id?: string;
-  apiVersion?: string;
-  kind?: Kind;
-  meta?: Meta;
-  crawlEntity?: CrawlEntity;
-  seed?: Seed;
-  crawlJob?: CrawlJob;
-  crawlConfig?: CrawlConfig;
-  crawlScheduleConfig?: CrawlScheduleConfig;
-  browserConfig?: BrowserConfig;
-  politenessConfig?: PolitenessConfig;
-  browserScript?: BrowserScript;
-  crawlHostGroupConfig?: CrawlHostGroupConfig;
-  roleMapping?: RoleMapping;
-  collection?: Collection;
+  id: string;
+  apiVersion: string;
+  kind: Kind;
+  meta: Meta;
+  crawlEntity: CrawlEntity;
+  seed: Seed;
+  crawlJob: CrawlJob;
+  crawlConfig: CrawlConfig;
+  crawlScheduleConfig: CrawlScheduleConfig;
+  browserConfig: BrowserConfig;
+  politenessConfig: PolitenessConfig;
+  browserScript: BrowserScript;
+  crawlHostGroupConfig: CrawlHostGroupConfig;
+  roleMapping: RoleMapping;
+  collection: Collection;
 
+  constructor(configObject: Partial<ConfigObject>) {
+    this.id = configObject.id || '';
+    this.apiVersion = configObject.apiVersion || 'v1';
+    this.kind = configObject.kind || Kind.UNDEFINED;
+    this.meta = new Meta(configObject.meta);
+    switch (configObject.kind) {
+      case Kind.UNDEFINED:
+        break;
+      case Kind.CRAWLENTITY:
+        this.crawlEntity = new CrawlEntity();
+        break;
+      case Kind.SEED:
+        this.seed = new Seed(configObject.seed);
+        break;
+      case Kind.CRAWLJOB:
+        this.crawlJob = new CrawlJob(configObject.crawlJob);
+        break;
+      case Kind.CRAWLCONFIG:
+        // this.crawlConfig = configObject.crawlConfig || new CrawlConfig();
+        this.crawlConfig = new CrawlConfig(configObject.crawlConfig);
+        break;
+      case Kind.CRAWLSCHEDULECONFIG:
+        // this.crawlScheduleConfig = configObject.crawlScheduleConfig || new CrawlScheduleConfig();
+        this.crawlScheduleConfig = new CrawlScheduleConfig(configObject.crawlScheduleConfig);
+        break;
+      case Kind.BROWSERCONFIG:
+        // this.browserConfig = configObject.browserConfig || new BrowserConfig();
+        this.browserConfig = new BrowserConfig(configObject.browserConfig);
+        break;
+      case Kind.POLITENESSCONFIG:
+        // this.politenessConfig = configObject.politenessConfig || new PolitenessConfig();
+        this.politenessConfig = new PolitenessConfig(configObject.politenessConfig);
+        break;
+      case Kind.BROWSERSCRIPT:
+        this.browserScript = new BrowserScript(configObject.browserScript);
+        // this.browserScript = configObject.browserScript || new BrowserScript();
+        break;
+      case Kind.CRAWLHOSTGROUPCONFIG:
+        // this.crawlHostGroupConfig = configObject.crawlHostGroupConfig || new CrawlHostGroupConfig();
+        this.crawlHostGroupConfig = new CrawlHostGroupConfig(configObject.crawlHostGroupConfig);
+        break;
+      case Kind.ROLEMAPPING:
+        // this.roleMapping = configObject.roleMapping || new RoleMapping();
+        this.roleMapping = new RoleMapping(configObject.roleMapping);
+        break;
+      case Kind.COLLECTION:
+        // this.collection = configObject.collection || new Collection();
+        this.collection = new Collection(configObject.collection);
+        break;
+    }
+  }
+
+  /*
   constructor(configObject: ConfigObject = {}) {
     this.id = configObject.id || '';
     this.apiVersion = configObject.apiVersion || 'v1';
@@ -75,14 +128,15 @@ export class ConfigObject {
         break;
     }
   }
+   */
 
   static fromProto(proto: ConfigObjectProto): ConfigObject {
-    const config = new ConfigObject();
-    config.id = proto.getId();
-    config.apiVersion = proto.getApiversion();
-    config.kind = proto.getKind().valueOf();
-    config.meta = Meta.fromProto(proto.getMeta());
-
+    const config = new ConfigObject({
+      id: proto.getId(),
+      apiVersion: proto.getApiversion(),
+      kind: proto.getKind().valueOf(),
+      meta: Meta.fromProto(proto.getMeta()),
+    });
     if (proto.getCrawlEntity()) {
       config.crawlEntity = CrawlEntity.fromProto(proto.getCrawlEntity());
 
@@ -119,6 +173,7 @@ export class ConfigObject {
   }
 
   static toProto(configObject: ConfigObject): ConfigObjectProto {
+    console.log('configObject toProto: ', configObject);
     const proto = new ConfigObjectProto();
     proto.setApiversion('v1');
     proto.setId(configObject.id);
@@ -158,8 +213,14 @@ export class ConfigObject {
     } else if (configObject.collection) {
       proto.setCollection(Collection.toProto(configObject.collection));
     }
-
     return proto;
+  }
+
+  static clone(configObject: ConfigObject): ConfigObject {
+    const clone = new ConfigObject(configObject);
+    clone.id = '';
+    clone.meta.name = clone.meta.name + ' (clone)';
+    return clone;
   }
 
   static mergeConfigs(configs: ConfigObject[]): ConfigObject {

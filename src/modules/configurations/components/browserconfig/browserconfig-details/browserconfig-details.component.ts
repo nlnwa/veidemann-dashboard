@@ -29,6 +29,9 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
+  @Output()
+  clone = new EventEmitter<ConfigObject>();
+
   form: FormGroup;
 
   constructor(protected fb: FormBuilder, protected authService: AuthService) {
@@ -120,6 +123,10 @@ export class BrowserConfigDetailsComponent implements OnChanges {
 
   onRevert() {
     this.updateForm();
+  }
+
+  onClone() {
+    this.clone.emit(this.prepareSave());
   }
 
   protected createForm() {

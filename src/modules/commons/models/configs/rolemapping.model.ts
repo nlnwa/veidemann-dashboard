@@ -16,14 +16,17 @@ export class RoleMapping {
   group?: string;
   roleList: Role[];
 
-  constructor({
-                email = '',
-                group = '',
-                roleList = []
-              } = {}) {
-    this.email = email;
-    this.group = group;
-    this.roleList = roleList;
+  // constructor({
+  //               email = '',
+  //               group = '',
+  //               roleList = []
+  //             } = {}) {
+  constructor(roleMapping?: Partial<RoleMapping>) {
+    if (roleMapping) {
+      this.email = roleMapping.email || '';
+      this.group = roleMapping.group || '';
+      this.roleList = roleMapping.roleList ? [...roleMapping.roleList] : [];
+    }
   }
 
   static fromProto(proto: RoleMappingProto): RoleMapping {

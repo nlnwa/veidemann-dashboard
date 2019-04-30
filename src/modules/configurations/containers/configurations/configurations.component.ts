@@ -24,7 +24,7 @@ import {
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
-  Kind,
+  Kind, Meta,
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
@@ -178,7 +178,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.embedded) {
       this.configObject.next(configObject);
     } else if (!configObject) {
-      this.configObject.next(null);
       this.router.navigate([], {relativeTo: this.route});
     } else {
       this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route});
@@ -196,18 +195,17 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCreateConfig(): void {
+  onCreateConfig(newConfigObject?: ConfigObject): void {
     this.reset();
-    const configObject = new ConfigObject({kind: this.kind});
+    const configObject = newConfigObject || new ConfigObject({kind: this.kind});
 
     if (!this.embedded) {
       this.router.navigate([], {relativeTo: this.route})
-        .then(() => this.configObject.next(configObject));
+        .then(() => setTimeout(() => this.configObject.next(configObject)));
     } else {
       this.configObject.next(configObject);
     }
   }
-
 
   onSaveConfig(configObject: ConfigObject) {
     this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))

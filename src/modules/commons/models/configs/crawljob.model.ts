@@ -9,22 +9,25 @@ export class CrawlJob {
   crawlConfigRef?: ConfigRef;
   disabled: boolean;
 
-  constructor({
-                scheduleRef = {
-                  id: '',
-                  kind: Kind.CRAWLSCHEDULECONFIG
-                },
-                crawlConfigRef = {
-                  id: '',
-                  kind: Kind.CRAWLCONFIG
-                },
-                disabled = false,
-                limits = new CrawlLimitsConfig()
-              } = {}) {
-    this.scheduleRef = scheduleRef;
-    this.limits = limits;
-    this.crawlConfigRef = crawlConfigRef;
-    this.disabled = disabled;
+  // constructor({
+  //               scheduleRef = {
+  //                 id: '',
+  //                 kind: Kind.CRAWLSCHEDULECONFIG
+  //               },
+  //               crawlConfigRef = {
+  //                 id: '',
+  //                 kind: Kind.CRAWLCONFIG
+  //               },
+  //               disabled = false,
+  //               limits = new CrawlLimitsConfig()
+  //             } = {}) {
+  constructor(crawlJob?: Partial<CrawlJob>) {
+    if (crawlJob) {
+      this.scheduleRef = new ConfigRef(crawlJob.scheduleRef || {kind: Kind.CRAWLSCHEDULECONFIG});
+      this.limits = new CrawlLimitsConfig(crawlJob.limits || {});
+      this.crawlConfigRef = new ConfigRef(crawlJob.crawlConfigRef || {kind: Kind.CRAWLCONFIG});
+      this.disabled = crawlJob.disabled || false;
+    }
   }
 
   static fromProto(proto: CrawlJobProto): CrawlJob {
@@ -105,14 +108,17 @@ export class CrawlLimitsConfig {
   maxDurationS?: number; // int64
   maxBytes?: number; // int64
 
-  constructor({
-                depth = 0,
-                maxDurationS = 0,
-                maxBytes = 0,
-              } = {}) {
-    this.depth = depth;
-    this.maxDurationS = maxDurationS;
-    this.maxBytes = maxBytes;
+  // constructor({
+  //               depth = 0,
+  //               maxDurationS = 0,
+  //               maxBytes = 0,
+  //             } = {}) {
+  constructor(crawlLimitsConfig?: Partial<CrawlLimitsConfig>) {
+    if (crawlLimitsConfig) {
+      this.depth = crawlLimitsConfig.depth || 0;
+      this.maxDurationS = crawlLimitsConfig.maxDurationS || 0;
+      this.maxBytes = crawlLimitsConfig.maxBytes || 0;
+    }
   }
 
   static fromProto(proto: CrawlLimitsConfigProto): CrawlLimitsConfig {

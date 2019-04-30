@@ -7,14 +7,17 @@ export class CrawlScheduleConfig {
   validFrom?: string;
   validTo?: string;
 
-  constructor({
-                cronExpression = '',
-                validFrom = '',
-                validTo = '',
-              } = {}) {
-    this.cronExpression = cronExpression;
-    this.validFrom = validFrom;
-    this.validTo = validTo;
+  // constructor({
+  //               cronExpression = '',
+  //               validFrom = '',
+  //               validTo = '',
+  //             } = {}) {
+  constructor(crawlScheduleConfig?: Partial<CrawlScheduleConfig>) {
+    if (crawlScheduleConfig) {
+      this.cronExpression = crawlScheduleConfig.cronExpression || '';
+      this.validFrom = crawlScheduleConfig.validFrom || '';
+      this.validTo = crawlScheduleConfig.validTo || '';
+    }
   }
 
   static fromProto(proto: CrawlScheduleConfigProto): CrawlScheduleConfig {

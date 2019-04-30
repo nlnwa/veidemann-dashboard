@@ -15,6 +15,7 @@ import {
 import {MatPaginator, MatTableDataSource, PageEvent} from '@angular/material';
 import {Subject} from 'rxjs';
 import {DataService} from '../../../configurations/services/data.service';
+import {ConfigObject} from '../../models';
 
 @Component({
   selector: 'app-base-list',
@@ -27,7 +28,7 @@ import {DataService} from '../../../configurations/services/data.service';
 
 export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'name', 'description'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'clone'];
 
   @Input()
   dataSource: (DataSource<any> & { data: any[] }) | MatTableDataSource<any>;
@@ -59,6 +60,9 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output()
   selectAll: EventEmitter<void> = new EventEmitter();
 
+  @Output()
+  clone: EventEmitter<ConfigObject> = new EventEmitter();
+
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
 
@@ -78,6 +82,10 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       return (this.dataSource as MatTableDataSource<any>).filteredData;
     }
+  }
+
+  get selectionCount(): number {
+    return this.selection.selected.length;
   }
 
   ngOnInit(): void {
@@ -109,7 +117,12 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.page.emit(pageEvent);
   }
 
+  onClone(configObject: ConfigObject) {
+    this.clone.emit(ConfigObject.clone(configObject));
+  }
+
   onRowClick(item: any) {
+
     if (this.selection.selected.length < 2) {
       if (!this.selectedRow) {
         this.selectedRow = item;

@@ -5,12 +5,9 @@ export class Label {
   key?: string;
   value?: string;
 
-  constructor({
-                key = '',
-                value = ''
-              } = {}) {
-    this.key = key;
-    this.value = value;
+  constructor(label?: Partial<Label> ) {
+    this.key = label.key || '';
+    this.value = label.value || '';
   }
 
   static fromProto(proto: LabelProto): Label {

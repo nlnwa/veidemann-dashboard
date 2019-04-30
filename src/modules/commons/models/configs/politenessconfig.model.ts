@@ -19,26 +19,29 @@ export class PolitenessConfig {
   retryDelaySeconds?: number;
   crawlHostGroupSelectorList?: string [];
 
-  constructor({
-                robotsPolicy = RobotsPolicy.OBEY_ROBOTS,
-                customRobots = '',
-                minimumRobotsValidityDurationS = 0,
-                minTimeBetweenPageLoadMs = 0,
-                maxTimeBetweenPageLoadMs = 0,
-                delayFactor = 0,
-                maxRetries = 0,
-                retryDelaySeconds = 0,
-                crawlHostGroupSelectorList = []
-              } = {}) {
-    this.robotsPolicy = robotsPolicy;
-    this.customRobots = customRobots;
-    this.minimumRobotsValidityDurationS = minimumRobotsValidityDurationS;
-    this.minTimeBetweenPageLoadMs = minTimeBetweenPageLoadMs;
-    this.maxTimeBetweenPageLoadMs = maxTimeBetweenPageLoadMs;
-    this.delayFactor = delayFactor;
-    this.maxRetries = maxRetries;
-    this.retryDelaySeconds = retryDelaySeconds;
-    this.crawlHostGroupSelectorList = crawlHostGroupSelectorList;
+  // constructor({
+  //               robotsPolicy = RobotsPolicy.OBEY_ROBOTS,
+  //               customRobots = '',
+  //               minimumRobotsValidityDurationS = 0,
+  //               minTimeBetweenPageLoadMs = 0,
+  //               maxTimeBetweenPageLoadMs = 0,
+  //               delayFactor = 0,
+  //               maxRetries = 0,
+  //               retryDelaySeconds = 0,
+  //               crawlHostGroupSelectorList = []
+  //             } = {}) {
+  constructor(politenessConfig?: Partial<PolitenessConfig>) {
+    if (politenessConfig) {
+      this.robotsPolicy = politenessConfig.robotsPolicy || RobotsPolicy.OBEY_ROBOTS;
+      this.customRobots = politenessConfig.customRobots || '';
+      this.minimumRobotsValidityDurationS = politenessConfig.minimumRobotsValidityDurationS || 0;
+      this.minTimeBetweenPageLoadMs = politenessConfig.minTimeBetweenPageLoadMs || 0;
+      this.maxTimeBetweenPageLoadMs = politenessConfig.maxTimeBetweenPageLoadMs || 0;
+      this.delayFactor = politenessConfig.delayFactor || 0;
+      this.maxRetries = politenessConfig.maxRetries || 0;
+      this.retryDelaySeconds = politenessConfig.retryDelaySeconds || 0;
+      this.crawlHostGroupSelectorList = politenessConfig.crawlHostGroupSelectorList ? [...politenessConfig.crawlHostGroupSelectorList] : [];
+    }
   }
 
   static fromProto(proto: PolitenessConfigProto): PolitenessConfig {

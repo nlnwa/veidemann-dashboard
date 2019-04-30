@@ -11,20 +11,23 @@ export class CrawlConfig {
   minimumDnsTtlS: number;
   priorityWeight: number;
 
-  constructor({
-                collectionRef = new ConfigRef({kind: Kind.COLLECTION}),
-                browserConfigRef = new ConfigRef({kind: Kind.BROWSERCONFIG}),
-                politenessRef = new ConfigRef({kind: Kind.POLITENESSCONFIG}),
-                extra = new ExtraConfig(),
-                minimumDnsTtlS = 0,
-                priorityWeight = 0,
-              } = {}) {
-    this.collectionRef = collectionRef;
-    this.browserConfigRef = browserConfigRef;
-    this.politenessRef = politenessRef;
-    this.extra = extra;
-    this.minimumDnsTtlS = minimumDnsTtlS;
-    this.priorityWeight = priorityWeight;
+  // constructor({
+  //               collectionRef = new ConfigRef({kind: Kind.COLLECTION}),
+  //               browserConfigRef = new ConfigRef({kind: Kind.BROWSERCONFIG}),
+  //               politenessRef = new ConfigRef({kind: Kind.POLITENESSCONFIG}),
+  //               extra = new ExtraConfig(),
+  //               minimumDnsTtlS = 0,
+  //               priorityWeight = 0,
+  //             } = {}) {
+  constructor(crawlConfig?: Partial<CrawlConfig>) {
+    if (crawlConfig) {
+      this.collectionRef = new ConfigRef(crawlConfig.collectionRef || {kind: Kind.COLLECTION});
+      this.browserConfigRef = new ConfigRef(crawlConfig.browserConfigRef || {kind: Kind.BROWSERCONFIG});
+      this.politenessRef = new ConfigRef(crawlConfig.politenessRef || {kind: Kind.POLITENESSCONFIG});
+      this.extra = new ExtraConfig(crawlConfig.extra || {});
+      this.minimumDnsTtlS = crawlConfig.minimumDnsTtlS || 0;
+      this.priorityWeight = crawlConfig.priorityWeight || 0;
+    }
   }
 
   static fromProto(proto: CrawlConfigProto): CrawlConfig {
@@ -139,13 +142,16 @@ export class ExtraConfig {
   extractText?: boolean;
   createScreenshot?: boolean;
 
-  constructor({
-                extractText = true,
-                createScreenshot = true
-              } = {}) {
+  // constructor({
+  //               extractText = true,
+  //               createScreenshot = true
+  //             } = {}) {
 
-    this.extractText = extractText;
-    this.createScreenshot = createScreenshot;
+  constructor(extraConfig?: Partial<ExtraConfig>) {
+    if (extraConfig) {
+      this.extractText = extraConfig.extractText || true;
+      this.createScreenshot = extraConfig.createScreenshot || true;
+    }
   }
 
   static fromProto(proto: ExtraConfigProto): ExtraConfig {

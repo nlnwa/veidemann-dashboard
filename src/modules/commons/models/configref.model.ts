@@ -5,12 +5,9 @@ export class ConfigRef {
   kind: Kind;
   id: string;
 
-  constructor({
-                kind = Kind.UNDEFINED,
-                id = ''
-              } = {}) {
-    this.id = id;
-    this.kind = kind;
+  constructor(configRef: Partial<ConfigRef>) {
+    this.id = configRef.id || '';
+    this.kind = configRef.kind || Kind.UNDEFINED;
   }
 
   static fromProto(proto: ConfigRefProto): ConfigRef {

@@ -4,12 +4,15 @@ export class IpRange {
   ipFrom: string;
   ipTo: string;
 
-  constructor({
-                ipFrom = '',
-                ipTo = ''
-              } = {}) {
-    this.ipFrom = ipFrom;
-    this.ipTo = ipTo;
+  // constructor({
+  //               ipFrom = '',
+  //               ipTo = ''
+  //             } = {}) {
+  constructor(ipRange: Partial<IpRange>) {
+    if (ipRange) {
+      this.ipFrom = ipRange.ipFrom || '';
+      this.ipTo = ipRange.ipTo || '';
+    }
   }
 
   static fromProto(proto: CrawlHostGroupConfigProto.IpRange): IpRange {

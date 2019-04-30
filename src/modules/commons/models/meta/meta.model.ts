@@ -5,29 +5,23 @@ import {Label} from './label.model';
 
 export class Meta {
   name: string;
-  description?: string;
-  created?: string;
-  createdBy?: string;
-  lastModified?: string;
-  lastModifiedBy?: string;
-  labelList?: Label[];
+  description: string;
+  created: string;
+  createdBy: string;
+  lastModified: string;
+  lastModifiedBy: string;
+  labelList: Label[];
 
-  constructor({
-                name = '',
-                description = '',
-                created = '',
-                createdBy = '',
-                lastModified = '',
-                lastModifiedBy = '',
-                labelList = []
-              } = {}) {
-    this.name = name;
-    this.description = description;
-    this.created = created;
-    this.createdBy = createdBy;
-    this.lastModified = lastModified;
-    this.lastModifiedBy = lastModifiedBy;
-    this.labelList = labelList;
+  constructor(meta?: Partial<Meta>) {
+    if (meta) {
+      this.name = meta.name || '';
+      this.description = meta.description || '';
+      this.created = meta.created || '';
+      this.createdBy = meta.createdBy || '';
+      this.lastModified = meta.lastModified || '';
+      this.lastModifiedBy = meta.lastModifiedBy || '';
+      this.labelList = meta.labelList ? meta.labelList.map(label => new Label(label)) : [];
+    }
   }
 
   static createUpdateRequest(updateTemplate: ConfigObject,
@@ -78,6 +72,7 @@ export class Meta {
   }
 
   static toProto(meta: Meta): MetaProto {
+    console.log('toProto meta: ', meta);
     const proto = new MetaProto();
     proto.setName(meta.name);
     proto.setDescription(meta.description);

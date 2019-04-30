@@ -12,12 +12,15 @@ export class SubCollection {
   type: SubCollectionType;
   name: string;
 
-  constructor({
-                type = SubCollectionType.UNDEFINED,
-                name = '',
-              } = {}) {
-    this.type = type;
-    this.name = name;
+  // constructor({
+  //               type = SubCollectionType.UNDEFINED,
+  //               name = '',
+  //             } = {}) {
+  constructor(subCollection?: Partial<SubCollection>) {
+    if (subCollection) {
+      this.type = subCollection.type || SubCollectionType.UNDEFINED;
+      this.name = subCollection.name || '';
+    }
   }
 
   static fromProto(proto: CollectionProto.SubCollection): SubCollection {

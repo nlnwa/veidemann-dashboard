@@ -16,18 +16,22 @@ export class Collection {
   fileSize: number;
   subCollectionsList: SubCollection[];
 
-  constructor({
-                collectionDedupPolicy = RotationPolicy.NONE,
-                fileRotationPolicy = RotationPolicy.NONE,
-                compress = false,
-                fileSize = 0,
-                subCollectionsList = []
-              } = {}) {
-    this.collectionDedupPolicy = collectionDedupPolicy;
-    this.fileRotationPolicy = fileRotationPolicy;
-    this.compress = compress;
-    this.fileSize = fileSize;
-    this.subCollectionsList = subCollectionsList;
+  // constructor({
+  //               collectionDedupPolicy = RotationPolicy.NONE,
+  //               fileRotationPolicy = RotationPolicy.NONE,
+  //               compress = false,
+  //               fileSize = 0,
+  //               subCollectionsList = []
+  //             } = {}) {
+
+  constructor(collection?: Partial<Collection>) {
+    if (collection) {
+      this.collectionDedupPolicy = collection.collectionDedupPolicy || RotationPolicy.NONE;
+      this.fileRotationPolicy = collection.fileRotationPolicy || RotationPolicy.NONE;
+      this.compress = collection.compress || false;
+      this.fileSize = collection.fileSize || 0;
+      this.subCollectionsList = collection.subCollectionsList ? collection.subCollectionsList.map(subCollection => new SubCollection(subCollection)) : [];
+    }
   }
 
   static fromProto(proto: CollectionProto): Collection {
