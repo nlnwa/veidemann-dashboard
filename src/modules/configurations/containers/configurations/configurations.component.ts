@@ -24,7 +24,7 @@ import {
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
-  Kind, Meta,
+  Kind,
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
@@ -198,7 +198,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   onCreateConfig(newConfigObject?: ConfigObject): void {
     this.reset();
     const configObject = newConfigObject || new ConfigObject({kind: this.kind});
-
     if (!this.embedded) {
       this.router.navigate([], {relativeTo: this.route})
         .then(() => setTimeout(() => this.configObject.next(configObject)));

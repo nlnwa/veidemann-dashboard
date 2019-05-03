@@ -15,16 +15,22 @@ export class BrowserConfig {
   // script_parameters?: Map<string, string>; not implemented
   maxInactivityTimeMs: number; // int64
 
-  constructor(browserConfig?: Partial<BrowserConfig>) {
-    if (browserConfig) {
-      this.userAgent = browserConfig.userAgent || '';
-      this.windowWidth = browserConfig.windowWidth || 0;
-      this.windowHeight = browserConfig.windowHeight || 0;
-      this.pageLoadTimeoutMs = browserConfig.pageLoadTimeoutMs || 0;
-      this.scriptSelectorList = browserConfig.scriptSelectorList ? [...browserConfig.scriptSelectorList] : [];
-      this.scriptRefList = browserConfig.scriptRefList ? browserConfig.scriptRefList.map(scriptRef => new ConfigRef(scriptRef)) : [];
-      this.maxInactivityTimeMs = browserConfig.maxInactivityTimeMs || 0;
-    }
+  constructor({
+                userAgent = '',
+                windowWidth = 0,
+                windowHeight = 0,
+                pageLoadTimeoutMs = 0,
+                maxInactivityTimeMs = 0,
+                scriptSelectorList = [],
+                scriptRefList = []
+              }: Partial<BrowserConfig> = {}) {
+    this.userAgent = userAgent;
+    this.windowWidth = windowWidth;
+    this.windowHeight = windowHeight;
+    this.pageLoadTimeoutMs = pageLoadTimeoutMs;
+    this.maxInactivityTimeMs = maxInactivityTimeMs;
+    this.scriptSelectorList = scriptSelectorList ? [...scriptSelectorList] : [];
+    this.scriptRefList = scriptRefList ? scriptRefList.map(scriptRef => new ConfigRef(scriptRef)) : [];
   }
 
   static fromProto(proto: BrowserConfigProto): BrowserConfig {
@@ -122,13 +128,13 @@ export class BrowserConfig {
     for (const config of configObjects) {
       for (const script of config.browserConfig.scriptRefList) {
         if (script !== undefined) {
-            scripts.push(script);
+          scripts.push(script);
         }
       }
     }
-     const unique = scripts.filter(function({id}) {
-       return !this.has(id) && this.add(id);
-     }, new Set);
+    const unique = scripts.filter(function ({id}) {
+      return !this.has(id) && this.add(id);
+    }, new Set);
 
     return unique;
   }

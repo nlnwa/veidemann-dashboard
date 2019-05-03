@@ -10,12 +10,6 @@
               i18n="@@browserconfigNewConfigHeader">
         Ny (ikke lagret)</span>
       </mat-card-subtitle>
-      <span fxFlex></span>
-      <button mat-icon-button
-              matTooltip="Opprett en ny konfigurasjon baser på klone av denne konfigurasjonen"
-              *ngIf="configObject.id"
-              (click)="onClone()"
-      ><mat-icon>file_copy</mat-icon></button>
     </mat-card-header>
 
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">

@@ -3,7 +3,7 @@ import {FormBuilder} from '@angular/forms';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
-import {ConfigObject, CrawlScheduleConfig, DateTime, Kind} from '../../../../commons';
+import {ConfigObject, CrawlScheduleConfig, Kind} from '../../../../commons';
 import {AuthService} from '../../../../core/services/auth';
 import {ScheduleDetailsComponent} from '../schedule-details/schedule-details.component';
 

@@ -6,11 +6,10 @@ import {IpRange} from './ip-range.model';
 export class CrawlHostGroupConfig {
   ipRangeList: IpRange[];
 
-  // constructor({ipRangeList = []} = {}) {
-  constructor(crawlHostGroupConfig?: Partial<CrawlHostGroupConfig>) {
-    if (crawlHostGroupConfig) {
-      this.ipRangeList = crawlHostGroupConfig.ipRangeList ? crawlHostGroupConfig.ipRangeList.map(ipRange => new IpRange(ipRange)) : [];
-    }
+  constructor({
+                ipRangeList = []
+              }: Partial<CrawlHostGroupConfig> = {}) {
+    this.ipRangeList = ipRangeList ? ipRangeList.map(ipRange => new IpRange(ipRange)) : [];
   }
 
   static fromProto(proto): CrawlHostGroupConfig {

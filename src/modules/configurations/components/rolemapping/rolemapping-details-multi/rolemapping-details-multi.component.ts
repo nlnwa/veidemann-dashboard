@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {ConfigObject, Kind, RoleMapping} from '../../../../commons/models';
+import {ConfigObject, Kind} from '../../../../commons/models';
 import {RoleMappingDetailsComponent} from '../rolemapping-details/rolemapping-details.component';
 import {CustomValidators} from '../../../../commons/validator';
 
@@ -35,8 +35,9 @@ export class RoleMappingDetailsMultiComponent extends RoleMappingDetailsComponen
   protected prepareSave(): any {
     const formModel = this.form.value;
     const pathList: string[] = [];
-    const roleMapping = new RoleMapping();
-    const updateTemplate = new ConfigObject({kind: Kind.ROLEMAPPING, roleMapping});
+
+    const updateTemplate = new ConfigObject({kind: Kind.ROLEMAPPING});
+    const roleMapping = updateTemplate.roleMapping;
 
     roleMapping.roleList = formModel.roleList;
 

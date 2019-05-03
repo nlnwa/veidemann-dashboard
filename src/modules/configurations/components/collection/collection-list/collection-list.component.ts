@@ -12,6 +12,6 @@ import {BaseListComponent} from '../../../../commons/components';
 })
 
 export class CollectionListComponent extends BaseListComponent {
-  displayedColumns = ['name', 'description'];
+  displayedColumns = ['name', 'description', 'clone'];
 }
 

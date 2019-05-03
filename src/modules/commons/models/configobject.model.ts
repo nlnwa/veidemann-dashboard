@@ -37,6 +37,7 @@ export class ConfigObject {
     this.apiVersion = configObject.apiVersion || 'v1';
     this.kind = configObject.kind || Kind.UNDEFINED;
     this.meta = new Meta(configObject.meta);
+
     switch (configObject.kind) {
       case Kind.UNDEFINED:
         break;
@@ -50,85 +51,31 @@ export class ConfigObject {
         this.crawlJob = new CrawlJob(configObject.crawlJob);
         break;
       case Kind.CRAWLCONFIG:
-        // this.crawlConfig = configObject.crawlConfig || new CrawlConfig();
         this.crawlConfig = new CrawlConfig(configObject.crawlConfig);
         break;
       case Kind.CRAWLSCHEDULECONFIG:
-        // this.crawlScheduleConfig = configObject.crawlScheduleConfig || new CrawlScheduleConfig();
         this.crawlScheduleConfig = new CrawlScheduleConfig(configObject.crawlScheduleConfig);
         break;
       case Kind.BROWSERCONFIG:
-        // this.browserConfig = configObject.browserConfig || new BrowserConfig();
         this.browserConfig = new BrowserConfig(configObject.browserConfig);
         break;
       case Kind.POLITENESSCONFIG:
-        // this.politenessConfig = configObject.politenessConfig || new PolitenessConfig();
         this.politenessConfig = new PolitenessConfig(configObject.politenessConfig);
         break;
       case Kind.BROWSERSCRIPT:
         this.browserScript = new BrowserScript(configObject.browserScript);
-        // this.browserScript = configObject.browserScript || new BrowserScript();
         break;
       case Kind.CRAWLHOSTGROUPCONFIG:
-        // this.crawlHostGroupConfig = configObject.crawlHostGroupConfig || new CrawlHostGroupConfig();
         this.crawlHostGroupConfig = new CrawlHostGroupConfig(configObject.crawlHostGroupConfig);
         break;
       case Kind.ROLEMAPPING:
-        // this.roleMapping = configObject.roleMapping || new RoleMapping();
         this.roleMapping = new RoleMapping(configObject.roleMapping);
         break;
       case Kind.COLLECTION:
-        // this.collection = configObject.collection || new Collection();
         this.collection = new Collection(configObject.collection);
         break;
     }
   }
-
-  /*
-  constructor(configObject: ConfigObject = {}) {
-    this.id = configObject.id || '';
-    this.apiVersion = configObject.apiVersion || 'v1';
-    this.kind = configObject.kind || Kind.UNDEFINED;
-    this.meta = configObject.meta || new Meta();
-    switch (configObject.kind) {
-      case Kind.UNDEFINED:
-        break;
-      case Kind.CRAWLENTITY:
-        this.crawlEntity = configObject.crawlEntity || new CrawlEntity();
-        break;
-      case Kind.SEED:
-        this.seed = configObject.seed || new Seed();
-        break;
-      case Kind.CRAWLJOB:
-        this.crawlJob = configObject.crawlJob || new CrawlJob();
-        break;
-      case Kind.CRAWLCONFIG:
-        this.crawlConfig = configObject.crawlConfig || new CrawlConfig();
-        break;
-      case Kind.CRAWLSCHEDULECONFIG:
-        this.crawlScheduleConfig = configObject.crawlScheduleConfig || new CrawlScheduleConfig();
-        break;
-      case Kind.BROWSERCONFIG:
-        this.browserConfig = configObject.browserConfig || new BrowserConfig();
-        break;
-      case Kind.POLITENESSCONFIG:
-        this.politenessConfig = configObject.politenessConfig || new PolitenessConfig();
-        break;
-      case Kind.BROWSERSCRIPT:
-        this.browserScript = configObject.browserScript || new BrowserScript();
-        break;
-      case Kind.CRAWLHOSTGROUPCONFIG:
-        this.crawlHostGroupConfig = configObject.crawlHostGroupConfig || new CrawlHostGroupConfig();
-        break;
-      case Kind.ROLEMAPPING:
-        this.roleMapping = configObject.roleMapping || new RoleMapping();
-        break;
-      case Kind.COLLECTION:
-        this.collection = configObject.collection || new Collection();
-        break;
-    }
-  }
-   */
 
   static fromProto(proto: ConfigObjectProto): ConfigObject {
     const config = new ConfigObject({
@@ -173,7 +120,6 @@ export class ConfigObject {
   }
 
   static toProto(configObject: ConfigObject): ConfigObjectProto {
-    console.log('configObject toProto: ', configObject);
     const proto = new ConfigObjectProto();
     proto.setApiversion('v1');
     proto.setId(configObject.id);

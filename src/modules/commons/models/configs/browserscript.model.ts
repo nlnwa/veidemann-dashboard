@@ -6,15 +6,12 @@ export class BrowserScript {
   script?: string;
   urlRegexpList?: string[]; // Not implemented
 
-  // constructor({
-  //               script = '',
-  //               urlRegexpList = []
-  //             } = {}) {
-  constructor(browserScript?: Partial<BrowserScript>) {
-    if (browserScript) {
-      this.script = browserScript.script || '';
-      this.urlRegexpList = browserScript.urlRegexpList ? [...browserScript.urlRegexpList] : [];
-    }
+  constructor({
+                script = '',
+                urlRegexpList = []
+              }: Partial<BrowserScript> = {}) {
+    this.script = script;
+    this.urlRegexpList = urlRegexpList ? [...urlRegexpList] : [];
   }
 
   static fromProto(proto: BrowserScriptProto): BrowserScript {

@@ -150,8 +150,6 @@ export class DataService extends DataSource<ConfigObject> implements OnDestroy {
     updateRequest.setUpdateTemplate(ConfigObject.toProto(updateTemplate));
     updateRequest.setUpdateMask(updateMask);
 
-    console.log('updateTemplate updateReq: ', updateRequest);
-
     return this.backendService.update(updateRequest).pipe(
       map(updateResponse => updateResponse.getUpdated()),
       tap(() => this.kind = this._kind)

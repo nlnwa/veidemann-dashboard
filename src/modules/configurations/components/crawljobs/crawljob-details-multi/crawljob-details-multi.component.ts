@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, CrawlJob, Kind} from '../../../../commons/models';
+import {ConfigObject, Kind} from '../../../../commons/models';
 import {CrawljobDetailsComponent} from '../crawljob-details/crawljob-details.component';
 
 
@@ -93,12 +93,8 @@ export class CrawljobDetailsMultiComponent extends CrawljobDetailsComponent {
 
     const formModel = this.form.value;
 
-    const crawlJob = new CrawlJob();
-
-    const updateTemplate = new ConfigObject({
-      kind: Kind.CRAWLJOB,
-      crawlJob: crawlJob,
-    });
+    const updateTemplate = new ConfigObject({kind: Kind.CRAWLJOB});
+    const crawlJob = updateTemplate.crawlJob;
 
     if (this.labelList.value.length && this.shouldAddLabel !== undefined) {
       updateTemplate.meta.labelList = formModel.labelList;
@@ -129,14 +125,14 @@ export class CrawljobDetailsMultiComponent extends CrawljobDetailsComponent {
       pathList.push('crawlJob.limits.maxDurationS');
     }
 
-    if (this.scheduleRef.dirty && (this.allSelected || formModel.scheduleRef !== this.configObject.crawlJob.scheduleRef)) {
+    if (formModel.scheduleRef.id && this.scheduleRef.dirty && (this.allSelected || formModel.scheduleRef !== this.configObject.crawlJob.scheduleRef)) {
       crawlJob.scheduleRef = formModel.scheduleRef;
       pathList.push('crawlJob.scheduleRef');
     } else {
       updateTemplate.crawlJob.scheduleRef = null;
     }
 
-    if (this.crawlConfigRef.dirty && (this.allSelected || formModel.crawlConfigRef !== this.configObject.crawlJob.crawlConfigRef)) {
+    if (formModel.crawlConfigRef.id && this.crawlConfigRef.dirty && (this.allSelected || formModel.crawlConfigRef !== this.configObject.crawlJob.crawlConfigRef)) {
       crawlJob.crawlConfigRef = formModel.crawlConfigRef;
       pathList.push('crawlJob.crawlConfigRef');
     } else {

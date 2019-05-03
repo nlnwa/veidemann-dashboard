@@ -7,20 +7,16 @@ export enum SubCollectionType {
   DNS = 2,
 }
 
-
 export class SubCollection {
   type: SubCollectionType;
   name: string;
 
-  // constructor({
-  //               type = SubCollectionType.UNDEFINED,
-  //               name = '',
-  //             } = {}) {
-  constructor(subCollection?: Partial<SubCollection>) {
-    if (subCollection) {
-      this.type = subCollection.type || SubCollectionType.UNDEFINED;
-      this.name = subCollection.name || '';
-    }
+  constructor({
+    type = SubCollectionType.UNDEFINED,
+    name = ''
+              }: Partial<SubCollection> = {}) {
+    this.type = type;
+    this.name = name;
   }
 
   static fromProto(proto: CollectionProto.SubCollection): SubCollection {

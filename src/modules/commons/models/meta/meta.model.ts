@@ -12,16 +12,18 @@ export class Meta {
   lastModifiedBy: string;
   labelList: Label[];
 
-  constructor(meta?: Partial<Meta>) {
-    if (meta) {
-      this.name = meta.name || '';
-      this.description = meta.description || '';
-      this.created = meta.created || '';
-      this.createdBy = meta.createdBy || '';
-      this.lastModified = meta.lastModified || '';
-      this.lastModifiedBy = meta.lastModifiedBy || '';
-      this.labelList = meta.labelList ? meta.labelList.map(label => new Label(label)) : [];
-    }
+  constructor({
+                labelList,
+                description = '',
+                name = ''
+              }: Partial<Meta> = {}) {
+    this.name = name;
+    this.description = description;
+    this.created = '';
+    this.createdBy = '';
+    this.lastModified = '';
+    this.lastModifiedBy = '';
+    this.labelList = labelList ? labelList.map(label => new Label(label)) : [];
   }
 
   static createUpdateRequest(updateTemplate: ConfigObject,
@@ -72,7 +74,6 @@ export class Meta {
   }
 
   static toProto(meta: Meta): MetaProto {
-    console.log('toProto meta: ', meta);
     const proto = new MetaProto();
     proto.setName(meta.name);
     proto.setDescription(meta.description);

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, ConfigRef, CrawlConfig, Kind} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind} from '../../../../commons/models';
 import {CrawlConfigDetailsComponent} from '../crawlconfig-details/crawlconfig-details.component';
 import {AuthService} from '../../../../core/services/auth';
 
@@ -94,9 +94,8 @@ export class CrawlConfigDetailsMultiComponent extends CrawlConfigDetailsComponen
 
     const formModel = this.form.value;
 
-    const crawlConfig = new CrawlConfig();
-
-    const updateTemplate = new ConfigObject({kind: Kind.CRAWLCONFIG, crawlConfig});
+    const updateTemplate = new ConfigObject({kind: Kind.CRAWLCONFIG});
+    const crawlConfig = updateTemplate.crawlConfig;
 
     if (this.labelList.dirty && this.shouldAddLabel !== undefined) {
       updateTemplate.meta.labelList = formModel.labelList;
@@ -129,7 +128,7 @@ export class CrawlConfigDetailsMultiComponent extends CrawlConfigDetailsComponen
       pathList.push('crawlConfig.extra.createScreenshot');
     }
 
-    if (this.collectionRefId.dirty && (this.allSelected
+    if (formModel.collectionRefId && this.collectionRefId.dirty && (this.allSelected
       || formModel.collectionRefId !== (this.configObject.crawlConfig.collectionRef && this.configObject.crawlConfig.collectionRef.id))) {
       crawlConfig.collectionRef = new ConfigRef({kind: Kind.COLLECTION, id: formModel.collectionRefId});
       pathList.push('crawlConfig.collectionRef');
@@ -137,7 +136,7 @@ export class CrawlConfigDetailsMultiComponent extends CrawlConfigDetailsComponen
       crawlConfig.collectionRef = null;
     }
 
-    if (this.browserConfigRefId.dirty && (this.allSelected
+    if (formModel.browserConfigRefId && this.browserConfigRefId.dirty && (this.allSelected
       || formModel.browserConfigRefId !== (this.configObject.crawlConfig.browserConfigRef
         && this.configObject.crawlConfig.browserConfigRef.id))) {
       crawlConfig.browserConfigRef = new ConfigRef({kind: Kind.BROWSERCONFIG, id: formModel.browserConfigRefId});
@@ -146,7 +145,7 @@ export class CrawlConfigDetailsMultiComponent extends CrawlConfigDetailsComponen
       crawlConfig.browserConfigRef = null;
     }
 
-    if (this.politenessRefId.dirty && (this.allSelected
+    if (formModel.politenessRefId && this.politenessRefId.dirty && (this.allSelected
       || formModel.politenessRefId !== (this.configObject.crawlConfig.politenessRef
         && this.configObject.crawlConfig.politenessRef.id))) {
       crawlConfig.politenessRef = new ConfigRef({kind: Kind.POLITENESSCONFIG, id: formModel.politenessRefId});
