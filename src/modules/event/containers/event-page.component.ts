@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EventService} from '../services/event.service';
 import {EventListComponent} from '../component/event-list/event-list.component';
 import {EventListRequest, ListRequest} from '../../../api';
@@ -31,7 +31,8 @@ import {from, Subject} from 'rxjs';
         </div>
         <app-event-list [dataSource]="dataSource"
                         (rowClick)="onSelectEvent($event)"
-                        (selectedChange)="onSelectedChange($event)">
+                        (selectedChange)="onSelectedChange($event)"
+                        (assignToMe)="onAssignToMe($event)">
         </app-event-list>
       </div>
       <app-event-details [eventObject]="eventObject"
@@ -56,7 +57,7 @@ import {from, Subject} from 'rxjs';
   ]
 })
 
-export class EventPageComponent implements OnInit {
+export class EventPageComponent implements OnInit, OnDestroy {
   readonly State = State;
 
   dataSource = new MatTableDataSource<EventObject>();
@@ -73,14 +74,14 @@ export class EventPageComponent implements OnInit {
 
   assigneeList: string[] = [];
 
-  protected ngUnsubscribe = new Subject();
-
   filterValues = {
     assignee: '',
     state: [State[State.NEW], State[State.OPEN]]
   };
 
   @ViewChild(EventListComponent) list: EventListComponent;
+
+  private ngUnsubscribe: Subject<void> = new Subject();
 
   constructor(private eventService: EventService,
               private authService: AuthService,
@@ -103,10 +104,16 @@ export class EventPageComponent implements OnInit {
     this.getAssigneeList();
   }
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   getEvents(): void {
     const listRequest = new EventListRequest();
     this.eventService.list(listRequest).pipe(
       map(eventObject => EventObject.fromProto(eventObject)),
+      takeUntil(this.ngUnsubscribe),
       toArray(),
     ).subscribe(eventObjects => {
       this.dataSource.data = eventObjects;
@@ -121,6 +128,7 @@ export class EventPageComponent implements OnInit {
     roleRequest.setKind(Kind.ROLEMAPPING.valueOf());
     this.backendService.list(roleRequest).pipe(
       map(role => ConfigObject.fromProto(role)),
+      takeUntil(this.ngUnsubscribe),
       toArray(),
     ).subscribe(roles => {
       for (const role of roles) {
@@ -150,6 +158,7 @@ export class EventPageComponent implements OnInit {
 
   onUpdateEvent(update: any) {
     this.eventService.update(update.updateTemplate, update.paths, update.id, update.comment)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.eventObject = null;
         this.getEvents();
@@ -159,6 +168,7 @@ export class EventPageComponent implements OnInit {
 
   onDeleteEvent(eventObject: EventObject) {
     this.eventService.delete(EventObject.toProto(eventObject))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.eventObject = null;
         this.selectedEvents = [];
@@ -173,6 +183,7 @@ export class EventPageComponent implements OnInit {
       ids.push(event.id);
     }
     this.eventService.update(update.updateTemplate, update.paths, ids, update.comment)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(updateResponse => {
         this.getEvents();
         if (this.list) {
@@ -194,6 +205,7 @@ export class EventPageComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
     dialogRef.afterClosed()
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
           from(this.selectedEvents).pipe(
@@ -234,6 +246,23 @@ export class EventPageComponent implements OnInit {
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
 
+  onAssignToMe(eventObject: EventObject) {
+    const id = [eventObject.id];
+    const updateTemplate = new EventObject({assignee: this.authService.email});
+    const paths = ['assignee'];
+
+    if (eventObject.state === State.NEW.valueOf()) {
+      updateTemplate.state = State.OPEN;
+      paths.push('state');
+    }
+    this.eventService.update(updateTemplate, paths, id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((response) => {
+        if (response.getUpdated() > 0) {
+          this.snackBarService.openSnackBar('Hendelse tildelt bruker: ' + this.authService.email);
+        }
+      });
+  }
 
   tableFilter(): (data: any, filter: string) => boolean {
     const filterFunction = function (data, filter): boolean {

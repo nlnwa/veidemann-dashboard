@@ -1,10 +1,8 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ConfigObject, EventObject} from '../../../commons/models';
-import {AuthService, SnackBarService} from '../../../core/services';
 import {Severity, State} from '../../../commons/models/event/event.model';
-import {EventService} from '../../services/event.service';
 
 
 @Component({
@@ -12,7 +10,7 @@ import {EventService} from '../../services/event.service';
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
 })
-export class EventListComponent implements OnInit {
+export class EventListComponent {
   readonly Severity = Severity;
   readonly State = State;
 
@@ -26,21 +24,16 @@ export class EventListComponent implements OnInit {
   allSelected = false;
   selectedRow: EventObject;
 
-
   @Output()
   protected rowClick = new EventEmitter<EventObject>();
 
   @Output()
   selectedChange: EventEmitter<EventObject[]> = new EventEmitter();
 
+  @Output()
+  assignToMe: EventEmitter<EventObject> = new EventEmitter();
 
-  constructor(protected snackBarService: SnackBarService,
-              private authService: AuthService,
-              private eventService: EventService,
-              public cdr: ChangeDetectorRef) {
-  }
-
-  ngOnInit() {
+  constructor(public cdr: ChangeDetectorRef) {
   }
 
   reset() {
@@ -91,18 +84,8 @@ export class EventListComponent implements OnInit {
   }
 
 
-  OnAssignToMe(row: EventObject) {
-    const id = [row.id];
-    const updateTemplate = new EventObject({assignee: this.authService.email});
-    const paths = ['assignee'];
-
-    if (row.state === State.NEW.valueOf()) {
-      updateTemplate.state = State.OPEN;
-      paths.push('state');
-    }
-    this.eventService.update(updateTemplate, paths, id);
-
-    this.snackBarService.openSnackBar('Hendelse tildelt bruker: ' + this.authService.email);
+  onAssignToMe(eventObject: EventObject) {
+    this.assignToMe.emit(eventObject);
   }
 
 }

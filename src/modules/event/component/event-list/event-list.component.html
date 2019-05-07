@@ -64,7 +64,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>Tildel</mat-header-cell>
       <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
-        <button mat-icon-button (click)="OnAssignToMe(row)"><mat-icon>person_add</mat-icon></button>
+        <button mat-icon-button (click)="onAssignToMe(row)"><mat-icon>person_add</mat-icon></button>
       </mat-cell>
     </ng-container>
 
