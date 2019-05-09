@@ -159,7 +159,7 @@ export class Change {
 }
 
 export class Activity {
-  modiefiedBy?: string;
+  modifiedBy?: string;
   modifiedTime?: string;
   description?: Change[];
   comment?: string;
@@ -170,7 +170,7 @@ export class Activity {
                 description = [],
                 comment = '',
               } = {}) {
-    this.modiefiedBy = modifiedBy;
+    this.modifiedBy = modifiedBy;
     this.modifiedTime = modifiedTime;
     this.description = description;
     this.comment = comment;
