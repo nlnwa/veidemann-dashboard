@@ -6,4 +6,3 @@ export {EntityDetailsComponent} from './entities/entity-details/entity-details.c
 export {EntityDetailsMultiComponent} from './entities/entity-details-multi/entity-details-multi.component';
 export {SeedDetailComponent} from './seeds/seed-details/seed-details.component';
 export {SeedDetailMultiComponent}from './seeds/seed-details-multi/seed-details-multi.component';
-export {ChangelogComponent} from './changelog/changelog';

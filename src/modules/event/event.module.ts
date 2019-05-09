@@ -1,15 +1,18 @@
 import {NgModule} from '@angular/core';
 import {EventRoutingModule} from './routing/event-routing.module';
-import {EventService} from './services/event.service';
-import {EventListComponent} from './component/event-list/event-list.component';
-import {EventDetailsComponent} from './component/event-details/event-details.component';
+import {EventService} from '../core/services/event/event.service';
 import {EventPageComponent} from './containers/event-page.component';
-import {EventNewSeedComponent} from './component/event-new-seed/event-new-seed.component';
-import {EventWarcErrorComponent} from './component/event-warc-error/event-warc-error.component';
-import {EventDetailsMultiComponent} from './component/event-details-multi/event-details-multi.component';
 import {CommonsModule} from '../commons/commons.module';
 import {ConfigurationsModule} from '../configurations/configurations.module';
 import {EventSearchComponent} from './containers/event-search/event-search.component';
+import {
+  ChangelogComponent,
+  EventDetailsComponent,
+  EventDetailsMultiComponent,
+  EventListComponent,
+  EventNewSeedComponent,
+  EventWarcErrorComponent
+} from './component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,7 @@ import {EventSearchComponent} from './containers/event-search/event-search.compo
     EventWarcErrorComponent,
     EventDetailsMultiComponent,
     EventSearchComponent,
+    ChangelogComponent,
   ],
   imports: [
     CommonsModule,
@@ -30,4 +34,5 @@ import {EventSearchComponent} from './containers/event-search/event-search.compo
     EventService
   ]
 })
-export class EventModule { }
+export class EventModule {
+}

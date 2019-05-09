@@ -3,14 +3,15 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-
 import {MaterialModule} from './material.module';
 import {
-  BaseListComponent, ChangelogComponent,
+  BaseListComponent,
   EntityDetailsComponent,
   EntityDetailsMultiComponent,
   LabelsComponent,
-  MetaComponent, SeedDetailComponent, SeedDetailMultiComponent,
+  MetaComponent,
+  SeedDetailComponent,
+  SeedDetailMultiComponent,
   ToolbarComponent
 } from './components';
 
@@ -25,7 +26,6 @@ import {
     EntityDetailsMultiComponent,
     SeedDetailComponent,
     SeedDetailMultiComponent,
-    ChangelogComponent,
   ],
   entryComponents: [
     EntityDetailsMultiComponent,
@@ -53,7 +53,6 @@ import {
     SeedDetailMultiComponent,
     EntityDetailsComponent,
     EntityDetailsMultiComponent,
-    ChangelogComponent,
   ],
   providers: [DatePipe],
 })
