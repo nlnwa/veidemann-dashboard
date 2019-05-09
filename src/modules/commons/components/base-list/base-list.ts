@@ -15,7 +15,6 @@ import {
 import {MatPaginator, MatTableDataSource, PageEvent} from '@angular/material';
 import {Subject} from 'rxjs';
 import {DataService} from '../../../configurations/services/data.service';
-import {ConfigObject} from '../../models';
 
 @Component({
   selector: 'app-base-list',
@@ -61,7 +60,7 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   selectAll: EventEmitter<void> = new EventEmitter();
 
   @Output()
-  clone: EventEmitter<ConfigObject> = new EventEmitter();
+  clone: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -117,8 +116,8 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.page.emit(pageEvent);
   }
 
-  onClone(configObject: ConfigObject) {
-    this.clone.emit(ConfigObject.clone(configObject));
+  onClone(configObject: any) {
+    this.clone.emit(configObject.constructor.clone(configObject));
   }
 
   onRowClick(item: any) {
