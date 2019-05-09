@@ -1,108 +1,22 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
 import {EventObject, Label} from '../../../commons/models';
 import {AuthService} from '../../../core/services/auth';
-import {Severity, State} from '../../../commons/models/event/event.model';
+import {State} from '../../../commons/models/event/event.model';
+import {EventDetailsComponent} from '../event-details/event-details.component';
 
 @Component({
   selector: 'app-event-details-multi',
   templateUrl: './event-details-multi.component.html',
   styleUrls: ['./event-details-multi.component.css']
 })
-export class EventDetailsMultiComponent implements OnInit, OnChanges {
-  readonly Severity = Severity;
+export class EventDetailsMultiComponent extends EventDetailsComponent {
 
-  @Input()
-  eventObject: EventObject;
-
-  @Input()
-  assigneeList: [];
-
-  @Output()
-  update = new EventEmitter<EventObject>();
-
-  @Output()
-  delete = new EventEmitter<EventObject>();
-
-  form: FormGroup;
-  shouldAddLabel = undefined;
-  severities: Severity[] = [];
-
-  constructor(private fb: FormBuilder, private authService: AuthService) {
-    this.createForm();
+  constructor(protected fb: FormBuilder, protected authService: AuthService) {
+    super(fb, authService);
   }
 
-  get canEdit() {
-    return this.authService.isAdmin() || this.authService.isCurator();
-  }
-
-  get canUpdate(): boolean {
-    return this.form.valid && (
-      this.form.dirty
-      || (this.shouldAddLabel !== undefined && this.labelList.value.length)
-    );
-  }
-
-  get canRevert(): boolean {
-    return this.form.dirty
-      || (this.shouldAddLabel !== undefined);
-  }
-
-  get labelList() {
-    return this.form.get('labelList');
-  }
-
-  get assignee() {
-    return this.form.get('assignee');
-  }
-
-  get severity() {
-    return this.form.get('severity');
-  }
-
-  get comment() {
-    return this.form.get('comment');
-  }
-
-  ngOnInit() {
-    for (const severity in Severity) {
-      if (!isNaN(Number(severity))) {
-        this.severities.push(Number(severity));
-      }
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.eventObject) {
-      if (!this.eventObject) {
-        this.form.reset();
-      } else {
-        this.updateForm();
-      }
-    }
-  }
-
-  onToggleShouldAddLabels(value: boolean) {
-    this.shouldAddLabel = value;
-    if (value !== undefined) {
-      this.labelList.enable();
-    }
-  }
-
-  onUpdate() {
-    this.update.emit(this.prepareSave());
-  }
-
-  onDelete() {
-    this.delete.emit(this.eventObject);
-  }
-
-  onRevert() {
-    this.updateForm();
-    this.shouldAddLabel = undefined;
-  }
-
-  private createForm() {
+  protected createForm() {
     this.form = this.fb.group({
       assignee: '',
       severity: '',
@@ -111,7 +25,7 @@ export class EventDetailsMultiComponent implements OnInit, OnChanges {
     });
   }
 
-  updateForm() {
+  protected updateForm() {
     this.form.setValue({
       assignee: this.eventObject.assignee,
       severity: this.eventObject.severity,
@@ -162,14 +76,6 @@ export class EventDetailsMultiComponent implements OnInit, OnChanges {
       }
     }
     return {updateTemplate, paths, comment};
-  }
-
-
-  assignToCurrentUser() {
-    this.form.patchValue({
-      assignee: this.authService.email
-    });
-    this.assignee.markAsDirty();
   }
 
 }

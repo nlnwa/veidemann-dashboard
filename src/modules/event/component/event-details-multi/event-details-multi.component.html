@@ -9,7 +9,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button matSuffix mat-flat-button (click)="assignToCurrentUser()" style="color: #0066ff" fxFlex="20">
+      <button matSuffix mat-flat-button (click)="onAssignToCurrentUser()" style="color: #0066ff" fxFlex="20">
         Assign to me
       </button>
     </div>
@@ -49,7 +49,6 @@
       </button>
       <span fxFlex></span>
       <button mat-button
-              *ngIf="!allSelected"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
         SLETT
