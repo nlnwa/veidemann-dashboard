@@ -29,17 +29,15 @@ import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta, Seed} from '../../../comm
 export class EventSearchComponent extends SearchComponent implements OnInit {
 
   @Input()
-    discoveredUri: string;
+  discoveredUri: string;
 
   @Output()
-    seedCreated = new EventEmitter<ConfigObject>();
+  seedCreated = new EventEmitter<ConfigObject>();
 
   @ViewChild('entityDetails') entityDetails: ElementRef;
   @ViewChild('seedDetails') seedDetails: ElementRef;
 
   seedObject: ConfigObject;
-  entityObject: ConfigObject;
-  configRef: ConfigRef;
   crawlJobs: CrawlJob[];
 
   constructor(
@@ -56,6 +54,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
 
     super(seedDataService, snackBarService, errorService, activatedRoute,
       componentFactoryResolver, router, dialog, dataService, titleService, authService);
+    this.embedded = true;
   }
 
   ngOnInit() {
@@ -74,35 +73,37 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   }
 
   onSelectConfig(configObject: ConfigObject) {
-    this.configRef = new ConfigRef({kind: configObject.kind, id: configObject.id});
+    if (configObject) {
+      const entityRef = new ConfigRef({kind: configObject.kind, id: configObject.id});
+      this.onCreateSeed(entityRef);
+    } else {
+      this.seedObject = null;
+    }
     this.configObject.next(configObject);
-    this.entityObject = configObject;
-    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
   onCreateEntity() {
-    this.configObject.next(new ConfigObject({kind: Kind.CRAWLENTITY}));
-    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
+    this.seedObject = null;
+    super.onCreateConfig();
   }
 
-  onCreateSeed() {
+  onCreateSeed(entityRef: ConfigRef) {
     const meta = new Meta({name: this.discoveredUri});
-    const seed = new Seed({entityRef: this.configRef});
+    const seed = new Seed({entityRef});
     this.seedObject = new ConfigObject({kind: Kind.SEED, meta, seed});
-    setTimeout(() => this.seedDetails.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 1);
   }
 
   onSaveEntity(configObject: ConfigObject) {
     this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newEntity => {
-        this.configRef = new ConfigRef({kind: newEntity.kind, id: newEntity.id});
+        const entityRef = new ConfigRef({kind: newEntity.kind, id: newEntity.id});
         this.configObject.next(newEntity);
-        this.entityObject = newEntity;
+        this.onCreateSeed(entityRef);
       });
   }
 
   onSaveSeed(configObject: ConfigObject) {
-    this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
+    this.seedDataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newSeed => {
         this.seedCreated.emit(newSeed);
         this.seedObject = newSeed;
