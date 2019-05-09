@@ -1,0 +1,47 @@
+<form [formGroup]="form" fxLayout="column">
+  <div fxLayout="row" fxLayout.sm="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex>
+      <input matInput
+             readonly
+             formControlName="uri"
+             placeholder="Discovered URI">
+      <a mat-icon-button matSuffix [attr.href]="uri" target="_blank"
+         matTooltip="Trykk for å åpne lenke i nytt vindu">
+        <mat-icon>link</mat-icon>
+      </a>
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <input matInput
+             readonly
+             formControlName="refUri"
+             placeholder="Referring URI">
+      <a mat-icon-button matSuffix [attr.href]="refUri" target="_blank"
+         matTooltip="Trykk for å åpne lenke i nytt vindu">
+        <mat-icon>link</mat-icon>
+      </a>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="crawlEntityId && seedId; else search">
+    <h3>Entitet og seed knyttet til hendelsen</h3>
+    <mat-list>
+      <mat-list-item>
+        <mat-icon matTooltip="Seed">link</mat-icon>&nbsp;
+        <a class="shortcut-link"
+           [routerLink]="['/config/seed']"
+           [queryParams]="{id: seedId}">Seed</a>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matTooltip="Entitet">domain</mat-icon>&nbsp;
+        <a class="shortcut-link"
+           [routerLink]="['/config/entity']"
+           [queryParams]="{id: crawlEntityId}">Entitet</a>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <ng-template #search>
+    <app-event-search *ngIf="!seedId" [discoveredUri]="uri"
+                      (seedCreated)="onSeedCreated($event)"></app-event-search>
+  </ng-template>
+</form>

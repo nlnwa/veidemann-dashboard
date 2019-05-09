@@ -21,6 +21,11 @@ export class AuthService {
     return claims ? claims['name'] : '';
   }
 
+  get email(): string {
+    const claims = this.oauthService.getIdentityClaims();
+    return claims ? claims['email'] : '';
+  }
+
   get idToken(): string {
     return this.oauthService.getIdToken();
   }

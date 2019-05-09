@@ -84,7 +84,7 @@ proto.veidemann.api.commons.v1.Error.prototype.toObject = function(opt_includeIn
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.commons.v1.Error.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     code: jspb.Message.getFieldWithDefault(msg, 1, 0),
     msg: jspb.Message.getFieldWithDefault(msg, 2, ""),
     detail: jspb.Message.getFieldWithDefault(msg, 3, "")
@@ -270,7 +270,7 @@ proto.veidemann.api.commons.v1.FieldMask.prototype.toObject = function(opt_inclu
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.commons.v1.FieldMask.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     pathsList: jspb.Message.getRepeatedField(msg, 1)
   };
 

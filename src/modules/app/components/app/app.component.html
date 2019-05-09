@@ -51,6 +51,12 @@
           <mat-icon class="sidenav--icon__margin">info_outline</mat-icon>
           <ng-container i18n="@@navigationSidebarRolemapping">WARC status</ng-container>
         </a>
+        <a *ngIf="canConfigure" mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{exact: true }"
+           [routerLinkActive]="['is-active']">
+          <mat-icon class="sidenav--icon__margin">update</mat-icon>
+          <span matBadge="{{eventCount$ | async}}" matBadgeColor="accent" matBadgeOverlap="false"
+                matTooltip="{{eventSummary$ | async}}">Hendelser</span>
+        </a>
 
         <ng-container *ngIf="canConfigure">
           <mat-divider></mat-divider>

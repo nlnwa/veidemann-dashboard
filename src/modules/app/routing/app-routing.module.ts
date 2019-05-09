@@ -3,15 +3,10 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {GuardService} from '../../core/services/auth';
 
 const routes: Routes = [
-  /*{
-    path: 'activity',
-    loadChildren: '../modules/activity/activity.module#ActivityModule',
-  },
   {
-    path: 'status',
-    loadChildren: '../modules/status/status.module#StatusModule',
+    path: 'activity',
+    loadChildren: '../../event/event.module#EventModule',
   },
-  */
   {
     path: 'config',
     loadChildren: '../../configurations/configurations.module#ConfigurationsModule',

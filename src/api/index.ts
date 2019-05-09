@@ -1,3 +1,6 @@
+import {Activity} from './gen/eventhandler/v1/resources_pb';
+import Change = Activity.Change;
+
 export {
   CrawlHostGroupConfig as CrawlHostGroupConfigProto,
   Collection as CollectionProto,
@@ -39,3 +42,23 @@ export {
 export {
   FieldMask,
 } from './gen/commons/v1/resources_pb';
+
+export {
+  EventObject as EventObjectProto,
+  EventRef as EventRefProto,
+  Activity as ActivityProto,
+  Data as DataProto
+} from './gen/eventhandler/v1/resources_pb';
+
+export {
+  DeleteResponse as EventDeleteResponse,
+  ListCountResponse as EventListCountResponse,
+  ListRequest as EventListRequest,
+  UpdateRequest as EventUpdateRequest,
+  UpdateResponse as EventUpdateResponse
+} from './gen/eventhandler/v1/eventhandler_pb';
+
+export {
+  EventHandlerClient,
+  EventHandlerPromiseClient
+} from './gen/eventhandler/v1/eventhandler_grpc_web_pb';

@@ -6,12 +6,13 @@ import {
   CrawlConfigDetailsMultiComponent,
   CrawlHostGroupConfigDetailsMultiComponent,
   CrawljobDetailsMultiComponent,
-  EntityDetailsMultiComponent,
   PolitenessConfigDetailsMultiComponent,
   RoleMappingDetailsMultiComponent,
   ScheduleDetailsMultiComponent,
-  SeedDetailMultiComponent
 } from '../components';
+
+import {EntityDetailsMultiComponent} from '../../commons/components/entities/entity-details-multi/entity-details-multi.component';
+import {SeedDetailMultiComponent} from '../../commons/components/seeds/seed-details-multi/seed-details-multi.component';
 
 const pathToKindMap = {
   crawljobs: Kind.CRAWLJOB,

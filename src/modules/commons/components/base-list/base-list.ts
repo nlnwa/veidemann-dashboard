@@ -8,13 +8,13 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
   ViewChild
 } from '@angular/core';
-import {MatPaginator, PageEvent} from '@angular/material';
-import {ConfigObject} from '../../models';
-import {DataService} from '../../../configurations/services/data.service';
+import {MatPaginator, MatTableDataSource, PageEvent} from '@angular/material';
 import {Subject} from 'rxjs';
+import {DataService} from '../../../configurations/services/data.service';
 
 @Component({
   selector: 'app-base-list',
@@ -29,17 +29,18 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   displayedColumns: string[] = ['select', 'name', 'description'];
 
-  dataSource: DataSource<ConfigObject>;
+  @Input()
+  dataSource: (DataSource<any> & { data: any[] }) | MatTableDataSource<any>;
 
   // selection
-  selection = new SelectionModel<ConfigObject>(true, []);
+  selection = new SelectionModel<any>(true, []);
   allSelected = false;
-  selectedRow: ConfigObject;
+  selectedRow: any;
 
   // paging
   @Input()
   pageLength = 0;
-  pageSize = 5;
+  pageSize = 10;
   pageIndex = 0;
   pageOptions = [5, 10, 25, 50, 100];
 
@@ -50,10 +51,10 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   page: EventEmitter<PageEvent> = new EventEmitter();
 
   @Output()
-  rowClick = new EventEmitter<ConfigObject | ConfigObject[]>();
+  rowClick = new EventEmitter<any | any[]>();
 
   @Output()
-  selectedChange: EventEmitter<ConfigObject[]> = new EventEmitter();
+  selectedChange: EventEmitter<any[]> = new EventEmitter();
 
   @Output()
   selectAll: EventEmitter<void> = new EventEmitter();
@@ -63,16 +64,26 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private ngUnsubscribe = new Subject();
 
-  constructor(public dataService: DataService,
-              public cdr: ChangeDetectorRef) {
+  constructor(protected cdr: ChangeDetectorRef,
+              @Optional() protected dataService: DataService = null) {
   }
 
   get isAllInPageSelected(): boolean {
-    return this.selection.hasValue() ? this.selection.selected.length === this.dataService.data.length : false;
+    return this.selection.hasValue() && this.selection.selected.length === this.data.length;
+  }
+
+  get data(): any[] {
+    if (this.dataService) {
+      return this.dataSource.data;
+    } else {
+      return (this.dataSource as MatTableDataSource<any>).filteredData;
+    }
   }
 
   ngOnInit(): void {
-    this.dataSource = this.dataService;
+    if (this.dataService) {
+      this.dataSource = this.dataService;
+    }
   }
 
   ngOnDestroy(): void {
@@ -81,7 +92,9 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataService.paginator = this.paginator;
+    if (this.dataService) {
+      this.dataService.paginator = this.paginator;
+    }
   }
 
   reset() {
@@ -96,7 +109,7 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.page.emit(pageEvent);
   }
 
-  onRowClick(item: ConfigObject) {
+  onRowClick(item: any) {
     if (this.selection.selected.length < 2) {
       if (!this.selectedRow) {
         this.selectedRow = item;
@@ -112,14 +125,14 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.allSelected = false;
     this.selectedRow = null;
     if (checked) {
-      this.dataService.data.forEach(row => this.selection.select(row));
+      this.data.forEach(row => this.selection.select(row));
     } else {
       this.selection.clear();
     }
     this.selectedChange.emit(this.selection.selected);
   }
 
-  onCheckboxToggle(item: ConfigObject) {
+  onCheckboxToggle(item: any) {
     this.allSelected = false;
     this.selection.toggle(item);
     this.selectedChange.emit(this.selection.selected);
@@ -139,11 +152,11 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.onMasterCheckboxToggle(true);
   }
 
-  isChecked(item: ConfigObject): boolean {
+  isChecked(item: any): boolean {
     return this.selection.selected.find(selected => selected.id === item.id) !== undefined;
   }
 
-  isSelected(item: ConfigObject): boolean {
+  isSelected(item: any): boolean {
     return this.selectedRow && this.selection.selected.length < 2 ? this.selectedRow.id === item.id : false;
   }
 }

@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
+  ComponentFactoryResolver, ComponentRef,
   Input,
   OnDestroy,
   OnInit,
@@ -60,6 +60,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   protected ngUnsubscribe = new Subject();
 
+  componentRef: ComponentRef<any>;
+
   @ViewChild(DetailDirective) detailHost: DetailDirective;
   @ViewChild('baseList') list: BaseListComponent;
 
@@ -81,9 +83,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     return !this.embedded && !(!this.embedded && this.kind === Kind.SEED);
   }
 
-  get componentRef(): ViewRef {
-    return this.detailHost.viewContainerRef.get(0);
-  }
+
 
   get viewContainerRef(): ViewContainerRef {
     return this.detailHost.viewContainerRef;
@@ -124,7 +124,9 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => this.options = data.options);
+    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      this.options = data.options;
+    });
 
     if (this.embedded) {
       this.dataService.kind = this.kind;
@@ -308,8 +310,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
    */
   protected loadComponent(instanceData = {}) {
     this.destroyComponent();
-    const componentRef = this.createComponent(componentOfKind(this.kind));
-    this.initComponent(componentRef.instance, instanceData);
+    this.componentRef = this.createComponent(componentOfKind(this.kind));
+    this.initComponent(this.componentRef.instance, instanceData);
   }
 
   /**
@@ -318,7 +320,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
    * @param component
    * @param viewContainerRef
    */
-  protected createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): any {
+  protected createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): ComponentRef<any> {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     viewContainerRef.clear();
     return viewContainerRef.createComponent(componentFactory);

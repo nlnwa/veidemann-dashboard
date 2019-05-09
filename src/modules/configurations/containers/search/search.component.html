@@ -21,30 +21,36 @@
 
 <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
 
-<div fxLayout="column" fxLayoutGap="16px">
-  <app-search-list #baseList (rowClick)="onSelectConfig($event)"
-                   (selectedChange)="onSelectedChange($event)"
-                   (selectAll)="onSelectAll()">
-  </app-search-list>
+<div fxLayout="row" fxLayoutGap="16px">
+  <div fxFlex fxLayout="column" fxLayoutGap="16px">
+    <app-search-list #baseList (rowClick)="onSelectConfig($event)"
+                     (selectedChange)="onSelectedChange($event)"
+                     (selectAll)="onSelectAll()">
+    </app-search-list>
 
-  <div *ngIf="configObject$ | async as configObject"
-       fxLayout="row"
-       fxFlex
-       fxLayoutGap="16px"
-       [fxHide]="!singleMode"
-       [fxShow]="singleMode">
-    <app-entity-details fxFlex
-                        [configObject]="configObject"
-                        (save)="onSaveConfig($event)"
-                        (update)="onUpdateConfig($event)"
-                        (delete)="onDeleteConfig($event)">
-    </app-entity-details>
+    <div *ngIf="configObject$ | async as configObject"
+         fxLayout="row"
+         fxFlex
+         fxLayoutGap="16px"
+         [fxHide]="!singleMode"
+         [fxShow]="singleMode">
+      <app-entity-details fxFlex
+                          [configObject]="configObject"
+                          (save)="onSaveConfig($event)"
+                          (update)="onUpdateConfig($event)"
+                          (delete)="onDeleteConfig($event)">
+      </app-entity-details>
 
+
+    </div>
+
+    <ng-template detail-host></ng-template>
+  </div>
+  <ng-container *ngIf="configObject$ | async as configObject">
     <app-configurations *ngIf="configObject?.id"
                         fxFlex
                         [kind]="Kind.SEED"
                         [embedded]="true">
     </app-configurations>
-  </div>
-  <ng-template detail-host></ng-template>
+  </ng-container>
 </div>

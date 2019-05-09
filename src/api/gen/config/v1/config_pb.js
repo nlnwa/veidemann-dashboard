@@ -202,7 +202,7 @@ proto.veidemann.api.config.v1.GetLabelKeysRequest.prototype.toObject = function(
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.GetLabelKeysRequest.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     kind: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
@@ -334,7 +334,7 @@ proto.veidemann.api.config.v1.ListRequest.prototype.toObject = function(opt_incl
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.ListRequest.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     kind: jspb.Message.getFieldWithDefault(msg, 1, 0),
     idList: jspb.Message.getRepeatedField(msg, 2),
     nameRegex: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -825,7 +825,7 @@ proto.veidemann.api.config.v1.UpdateRequest.prototype.toObject = function(opt_in
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.UpdateRequest.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     listRequest: (f = msg.getListRequest()) && proto.veidemann.api.config.v1.ListRequest.toObject(includeInstance, f),
     updateMask: (f = msg.getUpdateMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     updateTemplate: (f = msg.getUpdateTemplate()) && config_v1_resources_pb.ConfigObject.toObject(includeInstance, f)
@@ -1064,7 +1064,7 @@ proto.veidemann.api.config.v1.UpdateResponse.prototype.toObject = function(opt_i
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.UpdateResponse.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     updated: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
@@ -1189,7 +1189,7 @@ proto.veidemann.api.config.v1.ListCountResponse.prototype.toObject = function(op
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.ListCountResponse.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     count: jspb.Message.getFieldWithDefault(msg, 1, 0),
     approximate: jspb.Message.getFieldWithDefault(msg, 2, false)
   };
@@ -1343,7 +1343,7 @@ proto.veidemann.api.config.v1.DeleteResponse.prototype.toObject = function(opt_i
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.DeleteResponse.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     deleted: jspb.Message.getFieldWithDefault(msg, 1, false)
   };
 
@@ -1477,7 +1477,7 @@ proto.veidemann.api.config.v1.LabelKeysResponse.prototype.toObject = function(op
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.veidemann.api.config.v1.LabelKeysResponse.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     keyList: jspb.Message.getRepeatedField(msg, 1)
   };
 

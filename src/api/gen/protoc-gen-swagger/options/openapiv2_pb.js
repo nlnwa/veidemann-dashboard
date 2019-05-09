@@ -340,7 +340,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Swagger.prototype.toObject = funct
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Swagger.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     swagger: jspb.Message.getFieldWithDefault(msg, 1, ""),
     info: (f = msg.getInfo()) && proto.grpc.gateway.protoc_gen_swagger.options.Info.toObject(includeInstance, f),
     host: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -859,7 +859,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Operation.prototype.toObject = fun
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Operation.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     tagsList: jspb.Message.getRepeatedField(msg, 1),
     summary: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -1339,7 +1339,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Info.prototype.toObject = function
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Info.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     title: jspb.Message.getFieldWithDefault(msg, 1, ""),
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     termsOfService: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -1592,7 +1592,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Contact.prototype.toObject = funct
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Contact.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     url: jspb.Message.getFieldWithDefault(msg, 2, ""),
     email: jspb.Message.getFieldWithDefault(msg, 3, "")
@@ -1771,7 +1771,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.ExternalDocumentation.prototype.to
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.ExternalDocumentation.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     description: jspb.Message.getFieldWithDefault(msg, 1, ""),
     url: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
@@ -1923,7 +1923,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Schema.prototype.toObject = functi
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Schema.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     jsonSchema: (f = msg.getJsonSchema()) && proto.grpc.gateway.protoc_gen_swagger.options.JSONSchema.toObject(includeInstance, f),
     discriminator: jspb.Message.getFieldWithDefault(msg, 2, ""),
     readOnly: jspb.Message.getFieldWithDefault(msg, 3, false),
@@ -2225,7 +2225,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.JSONSchema.prototype.toObject = fu
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.JSONSchema.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     title: jspb.Message.getFieldWithDefault(msg, 5, ""),
     description: jspb.Message.getFieldWithDefault(msg, 6, ""),
     pb_default: jspb.Message.getFieldWithDefault(msg, 7, ""),
@@ -2907,7 +2907,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Tag.prototype.toObject = function(
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Tag.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     externalDocs: (f = msg.getExternalDocs()) && proto.grpc.gateway.protoc_gen_swagger.options.ExternalDocumentation.toObject(includeInstance, f)
   };
@@ -3079,7 +3079,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.SecurityDefinitions.prototype.toOb
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.SecurityDefinitions.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     securityMap: (f = msg.getSecurityMap()) ? f.toObject(includeInstance, proto.grpc.gateway.protoc_gen_swagger.options.SecurityScheme.toObject) : []
   };
 
@@ -3209,7 +3209,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.SecurityScheme.prototype.toObject 
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.SecurityScheme.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     type: jspb.Message.getFieldWithDefault(msg, 1, 0),
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     name: jspb.Message.getFieldWithDefault(msg, 3, ""),
@@ -3573,7 +3573,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.SecurityRequirement.prototype.toOb
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.SecurityRequirement.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     securityRequirementMap: (f = msg.getSecurityRequirementMap()) ? f.toObject(includeInstance, proto.grpc.gateway.protoc_gen_swagger.options.SecurityRequirement.SecurityRequirementValue.toObject) : []
   };
 
@@ -3689,7 +3689,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.SecurityRequirement.SecurityRequir
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.SecurityRequirement.SecurityRequirementValue.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     scopeList: jspb.Message.getRepeatedField(msg, 1)
   };
 
@@ -3852,7 +3852,7 @@ proto.grpc.gateway.protoc_gen_swagger.options.Scopes.prototype.toObject = functi
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.grpc.gateway.protoc_gen_swagger.options.Scopes.toObject = function(includeInstance, msg) {
-  var obj = {
+  var f, obj = {
     scopeMap: (f = msg.getScopeMap()) ? f.toObject(includeInstance, undefined) : []
   };
 
