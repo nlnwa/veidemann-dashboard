@@ -27,31 +27,35 @@
 
   <app-labels [removable]="editable" formControlName="labelList"></app-labels>
 
-  <mat-form-field *ngIf="created.value">
-    <input matInput
-           formControlName="created"
-           placeholder="Opprettet"
-           i18n-placeholder="@@metaCreatedInputPlaceholder">
-  </mat-form-field>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="created.value">
+      <input matInput
+             formControlName="created"
+             placeholder="Opprettet"
+             i18n-placeholder="@@metaCreatedInputPlaceholder">
+    </mat-form-field>
 
-  <mat-form-field *ngIf="createdBy.value">
-    <input matInput
-           formControlName="createdBy"
-           placeholder="Opprettet av"
-           i18n-placeholder="@@metaCreatedByInputPlaceholder">
-  </mat-form-field>
+    <mat-form-field fxFlex *ngIf="createdBy.value">
+      <input matInput
+             formControlName="createdBy"
+             placeholder="Opprettet av"
+             i18n-placeholder="@@metaCreatedByInputPlaceholder">
+    </mat-form-field>
+  </div>
 
-  <mat-form-field *ngIf="lastModified.value">
-    <input matInput
-           formControlName=lastModified
-           placeholder="Sist endret"
-           i18n-placeholder="@@metaLastModifiedInputPlaceholder">
-  </mat-form-field>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="lastModified.value">
+      <input matInput
+             formControlName=lastModified
+             placeholder="Sist endret"
+             i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+    </mat-form-field>
 
-  <mat-form-field *ngIf="lastModifiedBy.value">
-    <input matInput
-           formControlName="lastModifiedBy"
-           placeholder="Sist endret av"
-           i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
-  </mat-form-field>
+    <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
+      <input matInput
+             formControlName="lastModifiedBy"
+             placeholder="Sist endret av"
+             i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+    </mat-form-field>
+  </div>
 </div>
