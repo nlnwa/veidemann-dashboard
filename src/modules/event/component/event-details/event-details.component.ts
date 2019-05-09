@@ -20,7 +20,7 @@ export class EventDetailsComponent implements OnChanges, OnInit {
   assigneeList: string[];
 
   @Output()
-  update = new EventEmitter<EventObject>();
+  update = new EventEmitter<any>();
 
   @Output()
   delete = new EventEmitter<EventObject>();
@@ -31,8 +31,8 @@ export class EventDetailsComponent implements OnChanges, OnInit {
   shouldAddLabel = undefined;
 
 
-  constructor(private fb: FormBuilder,
-              private authService: AuthService) {
+  constructor(protected fb: FormBuilder,
+              protected authService: AuthService) {
     this.createForm();
   }
 
@@ -43,7 +43,7 @@ export class EventDetailsComponent implements OnChanges, OnInit {
   get canUpdate(): boolean {
     return this.form.valid && (
       this.form.dirty
-    || (this.shouldAddLabel !== undefined && this.labelList.value.length));
+      || (this.shouldAddLabel !== undefined && this.labelList.value.length));
   }
 
   get canRevert(): boolean {
@@ -51,32 +51,36 @@ export class EventDetailsComponent implements OnChanges, OnInit {
       || (this.shouldAddLabel !== undefined);
   }
 
-  get activityList() {
-    return this.form.get('activityList').value;
+  get activityList(): AbstractControl {
+    return this.form.get('activityList');
   }
 
-  get assignee() {
+  get assignee(): AbstractControl {
     return this.form.get('assignee');
   }
 
-  get severity() {
+  get severity(): AbstractControl {
     return this.form.get('severity');
   }
 
-  get state() {
+  get state(): AbstractControl {
     return this.form.get('state');
   }
 
-  get dataList() {
+  get dataList(): AbstractControl {
     return this.form.get('dataList');
   }
 
-  get comment() {
+  get comment(): AbstractControl {
     return this.form.get('comment');
   }
 
   get labelList(): AbstractControl {
     return this.form.get('labelList');
+  }
+
+  get type(): AbstractControl {
+    return this.form.get('type');
   }
 
   ngOnInit() {
@@ -98,8 +102,12 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     }
   }
 
-  getType() {
+  getType(): string {
     return this.eventObject.type;
+  }
+
+  getState(): string {
+    return State[this.eventObject.state];
   }
 
   onUpdate() {
@@ -122,7 +130,30 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     }
   }
 
-  private createForm() {
+  onAssignToCurrentUser() {
+    this.assignee.setValue(this.authService.email);
+    this.form.get('assignee').markAsDirty();
+  }
+
+  onShowInfoToggle() {
+    this.showInfo = !this.showInfo;
+  }
+
+  onSeedAssigned(configObject: ConfigObject) {
+    const seedData = new Data({
+      key: 'seed',
+      value: configObject.id
+    });
+    const entityData = new Data({
+      key: 'entity',
+      value: configObject.seed.entityRef.id
+    });
+
+    this.dataList.setValue([...this.dataList.value, seedData, entityData]);
+    this.dataList.markAsDirty();
+  }
+
+  protected createForm() {
     this.form = this.fb.group({
       id: {value: ''},
       type: {value: '', disabled: true},
@@ -137,7 +168,7 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     });
   }
 
-  updateForm() {
+  protected updateForm() {
     this.form.setValue({
       id: this.eventObject.id,
       type: this.eventObject.type,
@@ -148,13 +179,12 @@ export class EventDetailsComponent implements OnChanges, OnInit {
       dataList: this.eventObject.dataList || [],
       severity: this.eventObject.severity,
       comment: '',
-      labelList: this.eventObject.labelList
-        .map(label => {
-          const parts = label.split(':', 2);
-          const key = parts.shift();
-          const value = parts.join(':');
-          return new Label({key, value});
-        }),
+      labelList: this.eventObject.labelList.map(label => {
+        const parts = label.split(':', 2);
+        const key = parts.shift();
+        const value = parts.join(':');
+        return new Label({key, value});
+      }),
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -170,29 +200,32 @@ export class EventDetailsComponent implements OnChanges, OnInit {
     const formModel = this.form.value;
     const updateTemplate = new EventObject();
 
-    if (this.assignee.dirty) {
+    if (this.assignee.value === '') {
+      updateTemplate.assignee = this.authService.email;
+      paths.push('assignee');
+    } else if (formModel.assignee !== this.eventObject.assignee) {
       updateTemplate.assignee = formModel.assignee;
       paths.push('assignee');
-
-      if (formModel.state === State[State.NEW]) {
-        updateTemplate.state = State.OPEN;
-        paths.push('state');
-      }
-    }
-
-    if (this.severity.dirty) {
-      updateTemplate.severity = formModel.severity;
-      paths.push('severity');
     }
 
     if (this.dataList.dirty) {
-      updateTemplate.dataList = this.eventObject.dataList;
+      updateTemplate.dataList = formModel.dataList;
       paths.push('data+');
     }
 
-    if (this.state.dirty) {
-      updateTemplate.state = formModel.state;
+    if (formModel.state === State[State.NEW] || formModel.state === State[State.OPEN]) {
+      if (formModel.dataList.findIndex(data => data.key === 'seed') !== -1
+        && formModel.dataList.findIndex(data => data.key === 'entity') !== -1) {
+        updateTemplate.state = State.CLOSED;
+      } else if (formModel.state === State[State.NEW]) {
+        updateTemplate.state = State.OPEN;
+      }
       paths.push('state');
+    }
+
+    if (formModel.severity !== this.eventObject.severity) {
+      updateTemplate.severity = formModel.severity;
+      paths.push('severity');
     }
 
     if (this.labelList.value.length && this.shouldAddLabel !== undefined) {
@@ -204,55 +237,13 @@ export class EventDetailsComponent implements OnChanges, OnInit {
       }
     }
 
-    if (this.comment.dirty) {
+    if (formModel.comment) {
       comment = formModel.comment;
     }
-
 
     const id = [formModel.id];
 
     return {updateTemplate, paths, id, comment};
   }
 
-  assignToCurrentUser() {
-    this.form.patchValue({
-      assignee: this.authService.email
-    });
-    this.form.get('assignee').markAsDirty();
-  }
-
-  showInfoToggle() {
-    if (this.showInfo) {
-      this.showInfo = false;
-    } else if (!this.showInfo) {
-      this.showInfo = true;
-    }
-  }
-
-  onSeedAssigned(configObject: ConfigObject) {
-    const seedData = new Data({
-      key: 'seed',
-      value: configObject.id
-    });
-    const entityData = new Data({
-      key: 'entity',
-      value: configObject.seed.entityRef.id
-    });
-
-    this.eventObject.dataList.push(seedData, entityData);
-    this.form.get('dataList').markAsDirty();
-
-    this.form.patchValue({
-      state: State.CLOSED
-    });
-
-    if (this.assignee.value === '') {
-      this.form.patchValue({
-        assignee: this.authService.email
-      });
-      this.assignee.markAsDirty();
-    }
-
-    this.form.get('state').markAsDirty();
-  }
 }
