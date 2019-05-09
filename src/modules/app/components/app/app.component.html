@@ -46,7 +46,7 @@
       <!-- Navigation -->
       <mat-nav-list>
         <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/validator']"
-           [routerLinkActiveOptions]="{ exact: true}"
+           [routerLinkActiveOptions]="{ exact: true }"
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">info_outline</mat-icon>
           <ng-container i18n="@@navigationSidebarRolemapping">WARC status</ng-container>
@@ -55,7 +55,7 @@
            [routerLinkActive]="['is-active']">
           <mat-icon class="sidenav--icon__margin">update</mat-icon>
           <span matBadge="{{eventCount$ | async}}" matBadgeColor="accent" matBadgeOverlap="false"
-                matTooltip="{{eventSummary$ | async}}">Hendelser</span>
+                matTooltip="{{eventSummary$ | async}}" matTooltipClass="tooltip">Hendelser</span>
         </a>
 
         <ng-container *ngIf="canConfigure">
@@ -72,7 +72,7 @@
             <span i18n="@@navigationSidebarCollection">Entity</span>
           </a>
 
-          <a mat-list-item [routerLink]="['/config/seed']"[routerLinkActive]="['is-active']">
+          <a mat-list-item [routerLink]="['/config/seed']" [routerLinkActive]="['is-active']">
             <mat-icon class="sidenav--icon__margin">link</mat-icon>
             <span i18n="@@navigationSidebarCollection">Seed</span>
           </a>
