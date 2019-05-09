@@ -82,9 +82,5 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     this.router.navigate([], {relativeTo: this.route});
     this.searchTerm.next(term);
   }
-
-  onCreateConfig(): void {
-    super.onCreateConfig();
-  }
 }
 
