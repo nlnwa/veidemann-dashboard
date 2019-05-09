@@ -4,10 +4,9 @@ import {AuthService, GuardService, SnackBarService} from '../../../core';
 import {environment} from '../../../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppInitializerService} from '../../../core/services/app.initializer.service';
-import {EventService} from '../../../event/services/event.service';
+import {EventService} from '../../../core/services/event/event.service';
 import {Subject, timer} from 'rxjs';
 import {map, mergeMap, tap, toArray} from 'rxjs/operators';
-import {AppService} from '../../services';
 import {EventObject} from '../../../commons/models';
 
 
@@ -16,7 +15,7 @@ import {EventObject} from '../../../commons/models';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [AppService, EventService]
+  providers: [EventService]
 })
 export class AppComponent implements OnInit {
 
@@ -34,7 +33,7 @@ export class AppComponent implements OnInit {
               private route: ActivatedRoute,
               private appInitializer: AppInitializerService,
               private snackBarService: SnackBarService,
-              private appService: AppService) {
+              private eventService: EventService) {
   }
 
   get initialized(): boolean {
@@ -66,20 +65,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // are we logged in or not
+    // this.name tells us whether we are logged in or not
     if (this.name && this.authService.requestedPath) {
       // navigate to requested path after login
       this.router.navigate([this.authService.requestedPath]);
     } else if (!this.name) {
       // force redirect to login
-      // must wait a cycle until guardService.canLoad has been called to learn requested path
+      // we must wait a cycle (setTimeout) until guardService.canLoad has been called to learn requested path
       setTimeout(() => {
         this.authService.login(this.guardService.requestedPath);
       });
     }
 
     timer(0, 60000).pipe(
-      mergeMap(() => this.appService.getEventSummary().pipe(
+      mergeMap(() => this.eventService.listNew().pipe(
         map(event => EventObject.fromProto(event)),
         toArray(),
         tap(events => this.eventCount.next(events.length)),

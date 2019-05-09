@@ -8,12 +8,13 @@ import {
   EventUpdateRequest,
   EventUpdateResponse,
   FieldMask
-} from '../../../api';
+} from '../../../../api';
 import {Observable, Observer} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
-import {EventObject} from '../../commons/models';
-import {AppConfigService, AuthService} from '../../core/services';
+import {EventObject} from '../../../commons/models';
+import {AppConfigService, AuthService} from '../index';
+import {State} from '../../../commons/models/event/event.model';
 
 
 @Injectable()
@@ -44,14 +45,14 @@ export class EventService {
       .pipe(map(listCountResponse => listCountResponse.getCount()));
   }
 
-  get(event: EventRefProto): Observable<EventObjectProto> {
+  get(id: string): Observable<EventObjectProto> {
     const metadata = this.authService.metadata;
-    return fromPromise(this.eventClient.getEventObject(event, metadata));
+    const eventRef = new EventRefProto();
+    eventRef.setId(id);
+    return fromPromise(this.eventClient.getEventObject(eventRef, metadata));
   }
 
   update(updateTemplate: EventObject, paths: string[], id: string[], comment?: string): Observable<EventUpdateResponse> {
-
-
     const listRequest = new EventListRequest();
     listRequest.setIdList(id);
 
@@ -72,6 +73,18 @@ export class EventService {
   delete(request: EventObjectProto): Observable<EventDeleteResponse> {
     const metadata = this.authService.metadata;
     return fromPromise(this.eventClient.deleteEventObject(request, metadata));
+  }
+
+  listNew(): Observable<EventObjectProto> {
+    const request = new EventListRequest();
+    const template = new EventObject();
+    const mask = new FieldMask();
+    mask.setPathsList(['state']);
+    template.state = State.NEW;
+    request.setIdList([]);
+    request.setQueryMask(mask);
+    request.setQueryTemplate(EventObject.toProto(template));
+    return this.list(request);
   }
 }
 
