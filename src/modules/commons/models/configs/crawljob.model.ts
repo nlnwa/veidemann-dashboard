@@ -10,20 +10,14 @@ export class CrawlJob {
   disabled: boolean;
 
   constructor({
-                scheduleRef = {
-                  id: '',
-                  kind: Kind.CRAWLSCHEDULECONFIG
-                },
-                crawlConfigRef = {
-                  id: '',
-                  kind: Kind.CRAWLCONFIG
-                },
-                disabled = false,
-                limits = new CrawlLimitsConfig()
-              } = {}) {
-    this.scheduleRef = scheduleRef;
-    this.limits = limits;
-    this.crawlConfigRef = crawlConfigRef;
+                scheduleRef,
+                crawlConfigRef,
+                limits,
+                disabled = false
+              }: Partial<CrawlJob> = {}) {
+    this.scheduleRef = new ConfigRef(scheduleRef || {kind: Kind.CRAWLSCHEDULECONFIG});
+    this.crawlConfigRef = new ConfigRef(crawlConfigRef || {kind: Kind.CRAWLCONFIG});
+    this.limits = new CrawlLimitsConfig(limits);
     this.disabled = disabled;
   }
 
@@ -46,7 +40,7 @@ export class CrawlJob {
   }
 
   static mergeConfigs(configObjects: ConfigObject[]): CrawlJob {
-    const crawlJob = new CrawlJob();
+    const crawlJob = new CrawlJob({});
     const compareObj: CrawlJob = configObjects[0].crawlJob;
 
     const equalDisabledStatus = configObjects.every(function (cfg: ConfigObject) {
@@ -109,7 +103,7 @@ export class CrawlLimitsConfig {
                 depth = 0,
                 maxDurationS = 0,
                 maxBytes = 0,
-              } = {}) {
+              }: Partial<CrawlLimitsConfig> = {}) {
     this.depth = depth;
     this.maxDurationS = maxDurationS;
     this.maxBytes = maxBytes;

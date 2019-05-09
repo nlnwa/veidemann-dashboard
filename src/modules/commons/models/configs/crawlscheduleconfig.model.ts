@@ -11,7 +11,7 @@ export class CrawlScheduleConfig {
                 cronExpression = '',
                 validFrom = '',
                 validTo = '',
-              } = {}) {
+              }: Partial<CrawlScheduleConfig> = {}) {
     this.cronExpression = cronExpression;
     this.validFrom = validFrom;
     this.validTo = validTo;

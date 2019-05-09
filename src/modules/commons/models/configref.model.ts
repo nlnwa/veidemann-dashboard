@@ -8,7 +8,7 @@ export class ConfigRef {
   constructor({
                 kind = Kind.UNDEFINED,
                 id = ''
-              } = {}) {
+              }: Partial<ConfigRef> = {}) {
     this.id = id;
     this.kind = kind;
   }

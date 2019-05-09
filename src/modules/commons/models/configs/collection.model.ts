@@ -22,12 +22,12 @@ export class Collection {
                 compress = false,
                 fileSize = 0,
                 subCollectionsList = []
-              } = {}) {
+              }: Partial<Collection> = {}) {
     this.collectionDedupPolicy = collectionDedupPolicy;
     this.fileRotationPolicy = fileRotationPolicy;
     this.compress = compress;
     this.fileSize = fileSize;
-    this.subCollectionsList = subCollectionsList;
+    this.subCollectionsList = subCollectionsList ? subCollectionsList.map(subCollection => new SubCollection(subCollection)) : [];
   }
 
   static fromProto(proto: CollectionProto): Collection {

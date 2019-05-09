@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {BrowserConfig, ConfigObject, ConfigRef, Kind, Label} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, Label} from '../../../../commons/models';
 import {BrowserConfigDetailsComponent} from '../browserconfig-details/browserconfig-details.component';
 
 
@@ -116,11 +116,9 @@ export class BrowserConfigDetailsMultiComponent extends BrowserConfigDetailsComp
   protected prepareSave(): any {
     const pathList: string[] = [];
     const formModel = this.form.value;
-    const browserConfig = new BrowserConfig();
-    const updateTemplate = new ConfigObject({
-      kind: Kind.BROWSERCONFIG,
-      browserConfig: browserConfig
-    });
+
+    const updateTemplate = new ConfigObject({kind: Kind.BROWSERCONFIG});
+    const browserConfig = updateTemplate.browserConfig;
 
 
     if (this.userAgent.dirty && (this.allSelected || formModel.userAgent !== this.configObject.browserConfig.userAgent)) {

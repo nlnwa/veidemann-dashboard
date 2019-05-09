@@ -29,7 +29,7 @@ export class PolitenessConfig {
                 maxRetries = 0,
                 retryDelaySeconds = 0,
                 crawlHostGroupSelectorList = []
-              } = {}) {
+              }: Partial<PolitenessConfig> = {}) {
     this.robotsPolicy = robotsPolicy;
     this.customRobots = customRobots;
     this.minimumRobotsValidityDurationS = minimumRobotsValidityDurationS;
@@ -38,7 +38,7 @@ export class PolitenessConfig {
     this.delayFactor = delayFactor;
     this.maxRetries = maxRetries;
     this.retryDelaySeconds = retryDelaySeconds;
-    this.crawlHostGroupSelectorList = crawlHostGroupSelectorList;
+    this.crawlHostGroupSelectorList = crawlHostGroupSelectorList ? [...crawlHostGroupSelectorList] : [];
   }
 
   static fromProto(proto: PolitenessConfigProto): PolitenessConfig {

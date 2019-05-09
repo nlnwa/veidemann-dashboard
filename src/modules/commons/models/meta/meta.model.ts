@@ -5,29 +5,25 @@ import {Label} from './label.model';
 
 export class Meta {
   name: string;
-  description?: string;
-  created?: string;
-  createdBy?: string;
-  lastModified?: string;
-  lastModifiedBy?: string;
-  labelList?: Label[];
+  description: string;
+  created: string;
+  createdBy: string;
+  lastModified: string;
+  lastModifiedBy: string;
+  labelList: Label[];
 
   constructor({
-                name = '',
+                labelList,
                 description = '',
-                created = '',
-                createdBy = '',
-                lastModified = '',
-                lastModifiedBy = '',
-                labelList = []
-              } = {}) {
+                name = ''
+              }: Partial<Meta> = {}) {
     this.name = name;
     this.description = description;
-    this.created = created;
-    this.createdBy = createdBy;
-    this.lastModified = lastModified;
-    this.lastModifiedBy = lastModifiedBy;
-    this.labelList = labelList;
+    this.created = '';
+    this.createdBy = '';
+    this.lastModified = '';
+    this.lastModifiedBy = '';
+    this.labelList = labelList ? labelList.map(label => new Label(label)) : [];
   }
 
   static createUpdateRequest(updateTemplate: ConfigObject,

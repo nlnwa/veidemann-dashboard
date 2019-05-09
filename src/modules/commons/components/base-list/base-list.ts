@@ -27,7 +27,7 @@ import {DataService} from '../../../configurations/services/data.service';
 
 export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'name', 'description'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'clone'];
 
   @Input()
   dataSource: (DataSource<any> & { data: any[] }) | MatTableDataSource<any>;
@@ -59,6 +59,9 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output()
   selectAll: EventEmitter<void> = new EventEmitter();
 
+  @Output()
+  clone: EventEmitter<any> = new EventEmitter();
+
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
 
@@ -78,6 +81,10 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       return (this.dataSource as MatTableDataSource<any>).filteredData;
     }
+  }
+
+  get selectionCount(): number {
+    return this.selection.selected.length;
   }
 
   ngOnInit(): void {
@@ -109,7 +116,12 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.page.emit(pageEvent);
   }
 
+  onClone(configObject: any) {
+    this.clone.emit(configObject.constructor.clone(configObject));
+  }
+
   onRowClick(item: any) {
+
     if (this.selection.selected.length < 2) {
       if (!this.selectedRow) {
         this.selectedRow = item;

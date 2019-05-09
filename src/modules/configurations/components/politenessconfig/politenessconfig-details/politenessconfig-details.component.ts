@@ -168,14 +168,14 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
 
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    const politenessConfig = new PolitenessConfig();
+
     const configObject = new ConfigObject({
-      id: this.configObject.id,
+      id: formModel.id,
       kind: Kind.POLITENESSCONFIG,
-      meta: formModel.meta,
-      politenessConfig
+      meta: formModel.meta
     });
 
+    const politenessConfig = new PolitenessConfig();
     politenessConfig.robotsPolicy = formModel.robotsPolicy;
     politenessConfig.minimumRobotsValidityDurationS = parseInt(formModel.minimumRobotsValidityDurationS, 10) || 0;
     politenessConfig.customRobots = formModel.customRobots;
@@ -185,6 +185,8 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
     politenessConfig.maxRetries = parseInt(formModel.maxRetries, 10) || 0;
     politenessConfig.retryDelaySeconds = parseInt(formModel.retryDelaySeconds, 10) || 0;
     politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);
+
+    configObject.politenessConfig = politenessConfig;
 
     return configObject;
   }

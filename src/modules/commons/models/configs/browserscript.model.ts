@@ -9,9 +9,9 @@ export class BrowserScript {
   constructor({
                 script = '',
                 urlRegexpList = []
-              } = {}) {
+              }: Partial<BrowserScript> = {}) {
     this.script = script;
-    this.urlRegexpList = urlRegexpList;
+    this.urlRegexpList = urlRegexpList ? [...urlRegexpList] : [];
   }
 
   static fromProto(proto: BrowserScriptProto): BrowserScript {

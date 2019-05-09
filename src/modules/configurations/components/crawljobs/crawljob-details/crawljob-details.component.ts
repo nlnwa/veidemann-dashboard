@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, CrawlJob, Kind, Meta} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../commons/models';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -169,19 +169,22 @@ export class CrawljobDetailsComponent implements OnChanges {
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
+    const configObject = new ConfigObject({
+      id: formModel.id,
+      kind: Kind.CRAWLJOB,
+      meta: formModel.meta
+    });
+
     const crawlJob = new CrawlJob();
     crawlJob.disabled = formModel.disabled;
-    crawlJob.crawlConfigRef = formModel.crawlConfigRef.id ? formModel.crawlConfigRef : undefined;
-    crawlJob.scheduleRef = formModel.scheduleRef.id ? formModel.scheduleRef : undefined;
+    crawlJob.crawlConfigRef = formModel.crawlConfigRef.id ? new ConfigRef({id: formModel.crawlConfigRef.id, kind: Kind.CRAWLCONFIG}) : null;
+    crawlJob.scheduleRef = formModel.scheduleRef.id ?  new ConfigRef({id: formModel.scheduleRef.id, kind: Kind.CRAWLSCHEDULECONFIG}) : null;
     crawlJob.limits.depth = parseInt(formModel.limits.depth, 10);
     crawlJob.limits.maxDurationS = parseInt(formModel.limits.maxDurationS, 10);
     crawlJob.limits.maxBytes = parseInt(formModel.limits.maxBytes, 10);
 
-    return new ConfigObject({
-      id: formModel.id,
-      kind: Kind.CRAWLJOB,
-      meta: formModel.meta,
-      crawlJob: crawlJob,
-    });
+    configObject.crawlJob = crawlJob;
+
+    return configObject;
   }
 }

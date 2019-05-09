@@ -7,7 +7,7 @@ export class IpRange {
   constructor({
                 ipFrom = '',
                 ipTo = ''
-              } = {}) {
+              }: Partial<IpRange> = {}) {
     this.ipFrom = ipFrom;
     this.ipTo = ipTo;
   }

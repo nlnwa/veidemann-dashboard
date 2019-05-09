@@ -27,9 +27,13 @@
           </div>
         </div>
       </div>
-      <!--div fxFlex fxLayout="column">
-        <div fxLayout="row wrap" fxLayoutGap="24px">
-          <div fxLayout="row">
+      <div fxFlex fxLayout="column wrap">
+        <div fxLayout="row" fxLayoutGap="24px">
+          <div (click)="validFrom.disabled ? validFrom.enable() : null"
+               [matTooltip]="validFrom.disabled ?
+                        'Verdien for dette feltet er ulik for markerte konfigurasjoner. Klikk og sett ønsket verdi' +
+                         ' for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi.'
+                        : null">
             <mat-form-field>
               <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
                      placeholder="Gyldig fra">
@@ -37,15 +41,24 @@
               <mat-datepicker #validFromDatepicker></mat-datepicker>
             </mat-form-field>
           </div>
-          <div fxLayout="row">
+          <div (click)="validTo.disabled ? validTo.enable() : null"
+               [matTooltip]="validFrom.disabled ?
+                        'Verdien for dette feltet er ulik for markerte konfigurasjoner. Klikk og sett ønsket verdi ' +
+                         'for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi.'
+                        : null">
             <mat-form-field>
-              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo" placeholder="Gyldig til">
+              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
+                     placeholder="Gyldig til">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validToDatepicker></mat-datepicker>
             </mat-form-field>
           </div>
+          <button mat-icon-button (click)="onRemoveValidFromTo()"
+                  [matTooltip]="'Fjern gyldig fra / gyldig til for alle markerte konfigurasjoner'">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
-      </div-->
+      </div>
     </mat-card-content>
 
     <mat-card-actions *ngIf="canEdit">

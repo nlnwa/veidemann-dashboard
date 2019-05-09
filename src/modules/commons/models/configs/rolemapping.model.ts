@@ -20,10 +20,10 @@ export class RoleMapping {
                 email = '',
                 group = '',
                 roleList = []
-              } = {}) {
+              }: Partial<RoleMapping> = {}) {
     this.email = email;
     this.group = group;
-    this.roleList = roleList;
+    this.roleList = roleList ? [...roleList] : [];
   }
 
   static fromProto(proto: RoleMappingProto): RoleMapping {

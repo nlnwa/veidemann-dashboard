@@ -12,38 +12,26 @@ export class CrawlConfig {
   priorityWeight: number;
 
   constructor({
-                collectionRef = new ConfigRef({kind: Kind.COLLECTION}),
-                browserConfigRef = new ConfigRef({kind: Kind.BROWSERCONFIG}),
-                politenessRef = new ConfigRef({kind: Kind.POLITENESSCONFIG}),
-                extra = new ExtraConfig(),
+                extra,
+                browserConfigRef,
+                politenessRef,
+                collectionRef,
                 minimumDnsTtlS = 0,
-                priorityWeight = 0,
-              } = {}) {
-    this.collectionRef = collectionRef;
-    this.browserConfigRef = browserConfigRef;
-    this.politenessRef = politenessRef;
-    this.extra = extra;
+                priorityWeight = 0
+              }: Partial<CrawlConfig> = {}) {
+    this.browserConfigRef = new ConfigRef(browserConfigRef || {kind: Kind.BROWSERCONFIG});
+    this.politenessRef = new ConfigRef(politenessRef || {kind: Kind.POLITENESSCONFIG});
+    this.collectionRef = new ConfigRef(collectionRef || {kind: Kind.COLLECTION});
+    this.extra = new ExtraConfig(extra);
     this.minimumDnsTtlS = minimumDnsTtlS;
     this.priorityWeight = priorityWeight;
   }
 
   static fromProto(proto: CrawlConfigProto): CrawlConfig {
-    const collectionRef = proto.getCollectionRef() ?
-      ConfigRef.fromProto(proto.getCollectionRef()) :
-      new ConfigRef({kind: Kind.COLLECTION});
-
-    const browserConfigRef = proto.getBrowserConfigRef() ?
-      ConfigRef.fromProto(proto.getBrowserConfigRef()) :
-      new ConfigRef({kind: Kind.BROWSERCONFIG});
-
-    const politenessRef = proto.getPolitenessRef() ?
-      ConfigRef.fromProto(proto.getPolitenessRef()) :
-      new ConfigRef({kind: Kind.POLITENESSCONFIG});
-
     return new CrawlConfig({
-      collectionRef: collectionRef,
-      browserConfigRef: browserConfigRef,
-      politenessRef: politenessRef,
+      collectionRef: proto.getCollectionRef() ? ConfigRef.fromProto(proto.getCollectionRef()) : null,
+      browserConfigRef: proto.getBrowserConfigRef() ? ConfigRef.fromProto(proto.getBrowserConfigRef()) : null,
+      politenessRef: proto.getPolitenessRef() ? ConfigRef.fromProto(proto.getPolitenessRef()) : null,
       extra: ExtraConfig.fromProto(proto.getExtra()),
       minimumDnsTtlS: proto.getMinimumDnsTtlS(),
       priorityWeight: proto.getPriorityWeight(),
@@ -136,14 +124,10 @@ export class CrawlConfig {
 }
 
 export class ExtraConfig {
-  extractText?: boolean;
-  createScreenshot?: boolean;
+  extractText: boolean;
+  createScreenshot: boolean;
 
-  constructor({
-                extractText = true,
-                createScreenshot = true
-              } = {}) {
-
+  constructor({createScreenshot = true, extractText = true}: Partial<ExtraConfig> = {}) {
     this.extractText = extractText;
     this.createScreenshot = createScreenshot;
   }

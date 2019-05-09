@@ -167,6 +167,12 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
+    const configObject = new ConfigObject({
+      id: formModel.id,
+      kind: Kind.BROWSERCONFIG,
+      meta: formModel.meta,
+    });
+
     const browserConfig = new BrowserConfig();
     browserConfig.userAgent = formModel.userAgent;
     browserConfig.windowWidth = parseInt(formModel.windowWidth, 10) || null;
@@ -177,11 +183,8 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     browserConfig.scriptSelectorList = formModel.scriptSelectorList.map(label => label.key + ':' + label.value);
     // browserConfig.headersList = formModel.headers;
 
-    return new ConfigObject({
-      id: formModel.id,
-      kind: Kind.BROWSERCONFIG,
-      meta: formModel.meta,
-      browserConfig
-    });
+    configObject.browserConfig = browserConfig;
+
+    return configObject;
   }
 }

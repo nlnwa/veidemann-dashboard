@@ -5,15 +5,15 @@ import {ConfigObject} from '../configobject.model';
 
 
 export class BrowserConfig {
-  userAgent?: string;
-  windowWidth?: number;
-  windowHeight?: number;
-  pageLoadTimeoutMs?: number; // int64
-  scriptSelectorList?: string[];
-  scriptRefList?: ConfigRef[];
+  userAgent: string;
+  windowWidth: number;
+  windowHeight: number;
+  pageLoadTimeoutMs: number; // int64
+  scriptSelectorList: string[];
+  scriptRefList: ConfigRef[];
   // headers?: Map<string, string>;
   // script_parameters?: Map<string, string>; not implemented
-  maxInactivityTimeMs?: number; // int64
+  maxInactivityTimeMs: number; // int64
 
   constructor({
                 userAgent = '',
@@ -21,17 +21,16 @@ export class BrowserConfig {
                 windowHeight = 0,
                 pageLoadTimeoutMs = 0,
                 maxInactivityTimeMs = 0,
-                scriptRefList = [],
-                scriptSelectorList = []
-              } = {}) {
+                scriptSelectorList = [],
+                scriptRefList = []
+              }: Partial<BrowserConfig> = {}) {
     this.userAgent = userAgent;
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
     this.pageLoadTimeoutMs = pageLoadTimeoutMs;
-    this.scriptSelectorList = scriptSelectorList;
-    this.scriptRefList = scriptRefList;
     this.maxInactivityTimeMs = maxInactivityTimeMs;
-
+    this.scriptSelectorList = scriptSelectorList ? [...scriptSelectorList] : [];
+    this.scriptRefList = scriptRefList ? scriptRefList.map(scriptRef => new ConfigRef(scriptRef)) : [];
   }
 
   static fromProto(proto: BrowserConfigProto): BrowserConfig {
@@ -129,13 +128,13 @@ export class BrowserConfig {
     for (const config of configObjects) {
       for (const script of config.browserConfig.scriptRefList) {
         if (script !== undefined) {
-            scripts.push(script);
+          scripts.push(script);
         }
       }
     }
-     const unique = scripts.filter(function({id}) {
-       return !this.has(id) && this.add(id);
-     }, new Set);
+    const unique = scripts.filter(function ({id}) {
+      return !this.has(id) && this.add(id);
+    }, new Set);
 
     return unique;
   }

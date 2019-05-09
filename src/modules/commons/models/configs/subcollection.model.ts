@@ -7,15 +7,14 @@ export enum SubCollectionType {
   DNS = 2,
 }
 
-
 export class SubCollection {
   type: SubCollectionType;
   name: string;
 
   constructor({
-                type = SubCollectionType.UNDEFINED,
-                name = '',
-              } = {}) {
+    type = SubCollectionType.UNDEFINED,
+    name = ''
+              }: Partial<SubCollection> = {}) {
     this.type = type;
     this.name = name;
   }

@@ -11,14 +11,14 @@ export class Seed {
   disabled: boolean;
 
   constructor({
-                entityRef = new ConfigRef({kind: Kind.CRAWLENTITY}),
-                scope = new CrawlScope(),
+                entityRef,
+                scope,
                 jobRefList = [],
                 disabled = false
-              } = {}) {
-    this.entityRef = entityRef;
-    this.scope = scope;
-    this.jobRefList = jobRefList;
+              }: Partial<Seed> = {}) {
+    this.entityRef = new ConfigRef(entityRef || {kind: Kind.CRAWLENTITY});
+    this.scope = new CrawlScope(scope);
+    this.jobRefList = jobRefList ? jobRefList.map(configRef => new ConfigRef(configRef)) : [];
     this.disabled = disabled;
   }
 
@@ -92,11 +92,11 @@ export class Seed {
 }
 
 export class CrawlScope {
-  surtPrefix?: string;
+  surtPrefix: string;
 
   constructor({
                 surtPrefix = ''
-              } = {}) {
+              }: Partial<CrawlScope> = {}) {
     this.surtPrefix = surtPrefix;
   }
 

@@ -23,12 +23,14 @@
                         [fxHide]="dataService.data.length === 0"
                         (rowClick)="onSelectConfig($event)"
                         (selectedChange)="onSelectedChange($event)"
+                        (clone)="onCreateConfig($event)"
                         (selectAll)="onSelectAll()">
   </app-rolemapping-list>
 
   <app-collection-list *ngSwitchCase="Kind.COLLECTION"
                        #baseList
                        [fxHide]="dataService.data.length === 0"
+                       (clone)="onCreateConfig($event)"
                        (rowClick)="onSelectConfig($event)">
   </app-collection-list>
 
@@ -38,6 +40,7 @@
                  (rowClick)="onSelectConfig($event)"
                  (selectedChange)="onSelectedChange($event)"
                  (selectAll)="onSelectAll()"
+                 (clone)="onCreateConfig($event)"
                  [embedded]="embedded"
                  (page)="onPage($event)">
   </app-base-list>
