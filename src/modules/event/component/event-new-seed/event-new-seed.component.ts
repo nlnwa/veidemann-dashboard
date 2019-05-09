@@ -25,6 +25,14 @@ export class EventNewSeedComponent implements OnChanges {
     this.createForm();
   }
 
+  get uri() {
+    return this.form.get('uri').value;
+  }
+
+  get refUri() {
+    return this.form.get('refUri').value;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.eventObject) {
       if (!this.eventObject) {
@@ -35,6 +43,9 @@ export class EventNewSeedComponent implements OnChanges {
     }
   }
 
+  onSeedCreated(seed: ConfigObject) {
+    this.seedAssigned.emit(seed);
+  }
 
   private createForm() {
     this.form = this.fb.group({
@@ -43,15 +54,7 @@ export class EventNewSeedComponent implements OnChanges {
     });
   }
 
-  get uri() {
-    return this.form.get('uri').value;
-  }
-
-  get refUri() {
-    return this.form.get('refUri').value;
-  }
-
-  updateForm() {
+  private updateForm() {
     let uri = '';
     let refUri = '';
 
@@ -73,10 +76,5 @@ export class EventNewSeedComponent implements OnChanges {
       uri: uri,
       refUri: refUri,
     });
-  }
-
-  onSeedCreated(seed: ConfigObject) {
-    this.seedAssigned.emit(seed);
-
   }
 }
