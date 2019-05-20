@@ -28,17 +28,20 @@
     </mat-error>
     <mat-error *ngIf="name.hasError('seedExists')">
       Url(er) er allerede i bruk
-              <ul>
-                <li *ngFor="let exists of name.errors.seedExists">
-                  <a  class="seed-exists-link "
-                      target="_blank"
-                      [routerLink]="['../search']"
-                      [queryParams]="{id: exists.entity}">
-                    {{exists.uri}}
-                  </a>
-                  <button mat-icon-button (click)="onRemoveExistingUrl(exists.uri)"><mat-icon>close</mat-icon></button>
-                </li>
-              </ul>
+        <mat-chip-list #chipList  fxLayout="row wrap" fxLayoutGap="8px" style="margin-top: 1em; margin-bottom: 1em;">
+          <mat-chip class = "mat-chip-error"
+                    *ngFor="let seed of name.errors.seedExists"
+                    (removed)="onRemoveExistingUrl(seed.uri)">
+                              <a  class="mat-chip-error"
+                                  target="_blank"
+                                  matTooltip="Gå til entiten som allerede har en seed med denne nettadressen"
+                                  [routerLink]="['../search']"
+                                  [queryParams]="{id: seed.entity}">
+                                {{seed.uri}}
+                              </a>
+              <mat-icon  matTooltip="Fjern url fra listen" matChipRemove>cancel</mat-icon>
+            </mat-chip>
+        </mat-chip-list>
     </mat-error>
     <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
       Inneholder ikke en gyldig formatert url
