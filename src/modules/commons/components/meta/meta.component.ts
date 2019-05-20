@@ -1,20 +1,33 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
+  AsyncValidator,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
-  NG_VALIDATORS,
+  NG_ASYNC_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  Validator,
   Validators
 } from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {Meta} from '../../models';
 import {VALID_URL} from '../../validator/patterns';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {SeedUrlValidator} from '../../validator/existing-url-validation';
+import {debounceTime, delay, takeUntil, tap} from 'rxjs/operators';
 
 
 @Component({
@@ -22,12 +35,13 @@ import {CdkTextareaAutosize} from '@angular/cdk/text-field';
   templateUrl: './meta.component.html',
   styleUrls: ['./meta.component.css'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: MetaComponent, multi: true},
-    {provide: NG_VALIDATORS, useExisting: MetaComponent, multi: true}
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MetaComponent), multi: true},
+    {provide: NG_ASYNC_VALIDATORS, useExisting: forwardRef(() => MetaComponent), multi: true},
+    SeedUrlValidator
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
+export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor, AsyncValidator {
   @Input()
   nameIsUrl: boolean;
 
@@ -43,25 +57,37 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   onChange: (meta: Meta) => void;
   onTouched: (meta: Meta) => void;
 
-  private valueSubscription: Subscription;
+  ngUnsubscribe: Subject<void> = new Subject<void>();
+  timeoutHandle: number;
 
-  constructor(private fb: FormBuilder, private datePipe: DatePipe) {
+  constructor(private fb: FormBuilder,
+              private datePipe: DatePipe,
+              private cdr: ChangeDetectorRef,
+              public urlValidator: SeedUrlValidator) {
     this.createForm();
   }
 
-  get created() {
+  get name(): AbstractControl {
+    return this.form.get('name');
+  }
+
+  get description(): AbstractControl {
+    return this.form.get('description');
+  }
+
+  get created(): AbstractControl {
     return this.form.get('created');
   }
 
-  get createdBy() {
+  get createdBy(): AbstractControl {
     return this.form.get('createdBy');
   }
 
-  get lastModified() {
+  get lastModified(): AbstractControl {
     return this.form.get('lastModified');
   }
 
-  get lastModifiedBy() {
+  get lastModifiedBy(): AbstractControl {
     return this.form.get('lastModifiedBy');
   }
 
@@ -70,30 +96,35 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.nameIsUrl) {
-       if (this.nameIsUrl) {
-         this.form.get('name').setValidators(
-           Validators.compose(
-             [
-               Validators.pattern(VALID_URL),
-               Validators.required,
-               Validators.minLength(2)
-             ]));
-       }
-     }
+    if (this.nameIsUrl && changes.id) {
+      if (this.nameIsUrl) {
+        if (!this.id) {
+          this.name.setAsyncValidators(this.urlValidator.validate.bind(this.urlValidator));
+        } else {
+          clearTimeout(this.timeoutHandle);
+          this.name.clearAsyncValidators();
+          this.name.markAsPristine();
+          this.name.markAsUntouched();
+          this.cdr.markForCheck();
+
+        }
+        this.name.setValidators(
+          Validators.compose([
+            Validators.required,
+            Validators.minLength(2),
+            Validators.pattern(VALID_URL)
+          ]));
+      }
+    }
   }
 
   ngAfterViewInit() {
-    this.valueSubscription = this.form.valueChanges.subscribe(
-      ({name, description, created, createdBy, lastModified, lastModifiedBy, labelList}) => this.onChange(new Meta({
-        name, description, created, createdBy, lastModified, lastModifiedBy, labelList
-      })));
+    this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => this.onChange(new Meta(value)));
   }
 
   ngOnDestroy() {
-    if (this.valueSubscription) {
-      this.valueSubscription.unsubscribe();
-    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   // implement ControlValueAccessor
@@ -121,8 +152,24 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   }
 
   // implement Validator
-  validate(ctrl: AbstractControl): ValidationErrors | null {
-    return this.form.valid ? null : {'invalidMeta': true};
+  validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
+    if (this.form.valid) {
+      return of(null);
+    }
+    if (this.nameIsUrl) {
+      const that = this;
+      this.timeoutHandle = setTimeout(() => {
+        that.onChange(that.form.value);
+        that.cdr.markForCheck();
+      });
+    }
+    return of({invalid: true});
+  }
+
+  onRemoveExistingUrl(url: string) {
+    const urls = this.name.value;
+    const replaced = urls.replace(url, '');
+    this.name.setValue(replaced);
   }
 
   private dateFormat(timestamp: string): string {
@@ -144,11 +191,13 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
       lastModifiedBy: {value: meta.lastModifiedBy, disabled: true},
       labelList: meta.labelList,
     });
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   private updateForm(meta: Meta): void {
     // setting the emitEvent option to false  prevents the valueChange subscription above to fire
-    this.form.patchValue({
+    this.form.setValue({
       name: meta.name,
       description: meta.description || '',
       created: this.dateFormat(meta.created),

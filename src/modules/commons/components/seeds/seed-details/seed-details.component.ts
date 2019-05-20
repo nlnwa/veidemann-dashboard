@@ -154,6 +154,7 @@ export class SeedDetailComponent implements OnChanges {
 
     const seed = new Seed({
       disabled: formModel.disabled,
+      entityRef: {kind: Kind.CRAWLENTITY, id: formModel.entityRef.id} // Nødvendig?
     });
     seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
     seed.scope.surtPrefix = formModel.scope.surtPrefix;
@@ -164,7 +165,6 @@ export class SeedDetailComponent implements OnChanges {
       meta: formModel.meta,
       seed
     });
-
     return configObject;
   }
 

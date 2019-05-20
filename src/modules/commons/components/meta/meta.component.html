@@ -10,6 +10,7 @@
     </mat-error>
   </mat-form-field>
 
+  <!-- Multi url input, only available when creating new seed -->
   <ng-container *ngIf="nameIsUrl">
     <mat-form-field *ngIf="id === ''">
     <textarea matInput formControlName="name" placeholder="URL"
@@ -19,17 +20,56 @@
               cdkAutosizeMaxRows="10"
               #autosize="cdkTextareaAutosize">
     </textarea>
-      <mat-error
-        i18n="@@metaUrlRequiredError">
-        En gyldig URL er påkrevd
-      </mat-error>
     </mat-form-field>
+    <mat-error
+      *ngIf="name.hasError('required') && name.dirty"
+      i18n="@@metaUrlRequiredError">
+      En gyldig URL er påkrevd
+    </mat-error>
+    <mat-error *ngIf="name.hasError('seedExists')">
+      Url(er) er allerede i bruk
+              <ul>
+                <li *ngFor="let exists of name.errors.seedExists">
+                  <a  class="seed-exists-link "
+                      target="_blank"
+                      [routerLink]="['../search']"
+                      [queryParams]="{id: exists.entity}">
+                    {{exists.uri}}
+                  </a>
+                  <button mat-icon-button (click)="onRemoveExistingUrl(exists.uri)"><mat-icon>close</mat-icon></button>
+                </li>
+              </ul>
+    </mat-error>
+    <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
+      Inneholder ikke en gyldig formatert url
+    </mat-error>
+
+    <!-- Seed url input, when updating existing seed -->
     <mat-form-field *ngIf="id !== ''">
       <input matInput formControlName="name" placeholder="URL"
              i18n="@@metaUrlInputPlaceholder">
       <mat-error
+        *ngIf="name.hasError('required') && name.dirty"
         i18n="@@metaUrlRequiredError">
         En gyldig URL er påkrevd
+      </mat-error>
+      <mat-error *ngIf="name.hasError('seedExists')">
+
+        Url(er) er allerede i bruk
+        <ul>
+          <li *ngFor="let exists of name.errors.seedExists">
+            <a  class="seed-exists-link "
+                target="_blank"
+                [routerLink]="['../search']"
+                [queryParams]="{id: exists.entity}">
+              {{exists.uri}}
+            </a>
+            <button mat-icon-button (click)="onRemoveExistingUrl(exists.uri)"><mat-icon>close</mat-icon></button>
+          </li>
+        </ul>
+      </mat-error>
+      <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
+        Inneholder ikke en gyldig formatert url
       </mat-error>
     </mat-form-field>
   </ng-container>

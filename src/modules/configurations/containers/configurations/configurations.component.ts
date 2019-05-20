@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver, ComponentRef,
+  ComponentFactoryResolver,
+  ComponentRef,
   Input,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef,
-  ViewRef
+  ViewContainerRef
 } from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
@@ -24,7 +24,8 @@ import {
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
-  Kind, Meta,
+  Kind,
+  Meta,
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
@@ -34,6 +35,7 @@ import {DataService} from '../../services/data.service';
 import {Title} from '@angular/platform-browser';
 import {componentOfKind, pathToKind} from '../../func/kind';
 import {BaseListComponent, ReferrerError} from '../../../commons';
+
 
 @Component({
   selector: 'app-configurations',
@@ -376,28 +378,29 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
-    const configObjects = seeds.map(
-      seed => Object.assign({...configObject}, {
-        meta: new Meta
-        ({
-          name: seed,
-          description: configObject.meta.description,
-          labelList: configObject.meta.labelList
-        })
-      }));
+      const configObjects = seeds.map(
+        seed => Object.assign({...configObject}, {
+          meta: new Meta
+          ({
+            name: seed,
+            description: configObject.meta.description,
+            labelList: configObject.meta.labelList
+          })
+        }));
 
-    from(configObjects).pipe(
-      mergeMap(c => this.dataService.save(c)),
-      takeUntil(this.ngUnsubscribe),
-    ).subscribe(() => {
-      this.reset();
-      if (!this.embedded) {
-        this.router.navigate([], {relativeTo: this.route});
-      }
+      from(configObjects).pipe(
+        mergeMap(c => this.dataService.save(c)),
+        takeUntil(this.ngUnsubscribe),
+      ).subscribe(() => {
+        this.reset();
+        if (!this.embedded) {
+          this.router.navigate([], {relativeTo: this.route});
+        }
 
-      this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
-    });
-  }
+        this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
+      });
+    }
+
 }
 
 
