@@ -169,7 +169,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (!this.singleMode) {
       this.loadComponent({configObject: ConfigObject.mergeConfigs(configs)});
       if (!this.embedded) {
-        this.router.navigate([], {relativeTo: this.route});
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
       }
     } else {
       this.destroyComponent();
@@ -180,9 +181,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.embedded) {
       this.configObject.next(configObject);
     } else if (!configObject) {
-      this.router.navigate([], {relativeTo: this.route});
+      this.router.navigate([], {relativeTo: this.route})
+        .catch(error => this.errorService.dispatch(error));
+
     } else {
-      this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route});
+      this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route})
+        .catch(error => this.errorService.dispatch(error));
     }
   }
 
@@ -202,7 +206,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     const configObject = newConfigObject || new ConfigObject({kind: this.kind});
     if (!this.embedded) {
       this.router.navigate([], {relativeTo: this.route})
-        .then(() => setTimeout(() => this.configObject.next(configObject)));
+        .then(() => setTimeout(() => this.configObject.next(configObject)))
+        .catch(error => this.errorService.dispatch(error));
     } else {
       this.configObject.next(configObject);
     }
@@ -246,7 +251,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.reset();
         if (!this.embedded) {
-          this.router.navigate([], {relativeTo: this.route});
+          this.router.navigate([], {relativeTo: this.route})
+            .catch(error => this.errorService.dispatch(error));
         }
         this.snackBarService.openSnackBar('Slettet');
       });
@@ -284,7 +290,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
           ).subscribe(() => {
               this.reset();
               if (!this.embedded) {
-                this.router.navigate([], {relativeTo: this.route});
+                this.router.navigate([], {relativeTo: this.route})
+                  .catch(error => this.errorService.dispatch(error));
               }
               this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
             },
@@ -344,7 +351,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     ).subscribe(updatedConfigs => {
       this.reset();
       if (!this.embedded) {
-        this.router.navigate([], {relativeTo: this.route});
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
       }
       if (!this.allSelected) {
         this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
@@ -394,7 +402,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       ).subscribe(() => {
         this.reset();
         if (!this.embedded) {
-          this.router.navigate([], {relativeTo: this.route});
+          this.router.navigate([], {relativeTo: this.route})
+            .catch(error => this.errorService.dispatch(error));
         }
 
         this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
