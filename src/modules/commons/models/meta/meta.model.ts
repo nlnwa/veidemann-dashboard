@@ -26,41 +26,6 @@ export class Meta {
     this.labelList = labelList ? labelList.map(label => new Label(label)) : [];
   }
 
-  static createUpdateRequest(updateTemplate: ConfigObject,
-                             pathList: string[],
-                             updateConfig: ConfigObject,
-                             mergedConfig: ConfigObject,
-                             options: any): void {
-    const meta = new Meta();
-    updateTemplate.meta = meta;
-
-    const {addLabel} = options;
-
-    if (mergedConfig) {
-      if (addLabel !== undefined) {
-        if (addLabel) {
-          if (mergedConfig.meta.labelList !== updateConfig.meta.labelList) {
-            meta.labelList = updateConfig.meta.labelList;
-            pathList.push('meta.label+');
-          }
-        } else {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label-');
-        }
-      }
-    } else {
-      if (addLabel !== undefined) {
-        if (addLabel) {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label+');
-        } else {
-          meta.labelList = updateConfig.meta.labelList;
-          pathList.push('meta.label-');
-        }
-      }
-    }
-  }
-
   static fromProto(proto: MetaProto): Meta {
     return new Meta({
       name: proto.getName(),

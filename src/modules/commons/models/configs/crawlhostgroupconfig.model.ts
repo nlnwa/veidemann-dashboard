@@ -38,41 +38,6 @@ export class CrawlHostGroupConfig {
     proto.setIpRangeList(crawlHostGroupConfig.ipRangeList.map(ipRange => IpRange.toProto(ipRange)));
     return proto;
   }
-
-  static createUpdateRequest(updateTemplate: ConfigObject,
-                             pathList: string[],
-                             configUpdate: ConfigObject,
-                             mergedConfig: ConfigObject,
-                             formControl: any,
-                             options): void {
-    const crawlHostGroupConfig = new CrawlHostGroupConfig();
-    updateTemplate.crawlHostGroupConfig = crawlHostGroupConfig;
-
-    const {addIpRange} = options;
-
-
-    if (mergedConfig) {
-      if (configUpdate.crawlHostGroupConfig.ipRangeList !== mergedConfig.crawlHostGroupConfig.ipRangeList) {
-        crawlHostGroupConfig.ipRangeList = configUpdate.crawlHostGroupConfig.ipRangeList;
-        if (addIpRange !== undefined) {
-          if (addIpRange) {
-            pathList.push('crawlHostGroupConfig.ipRange+');
-          } else {
-            pathList.push('crawlHostGroupConfig.ipRange-');
-          }
-        }
-      }
-    } else {
-      crawlHostGroupConfig.ipRangeList = configUpdate.crawlHostGroupConfig.ipRangeList;
-      if (addIpRange !== undefined) {
-        if (addIpRange) {
-          pathList.push('crawlHostGroupConfig.ipRange+');
-        } else {
-          pathList.push('crawlHostGroupConfig.ipRange-');
-        }
-      }
-    }
-  }
 }
 
 
