@@ -149,7 +149,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       map(queryParamMap => queryParamMap.get('id')),
     );
 
-    combineLatest(paramMap$, queryParam$).pipe(
+    combineLatest([paramMap$, queryParam$]).pipe(
       debounceTime(0),
       mergeMap(([kind, id]) => id ? this.dataService.get({id, kind}) : of(null)),
       takeUntil(this.ngUnsubscribe)
