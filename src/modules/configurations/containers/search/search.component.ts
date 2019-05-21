@@ -39,8 +39,6 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
   protected searchTerm: Subject<string> = new Subject<string>();
   searchTerm$ = this.searchTerm.asObservable();
 
-  pageLength$ = new Subject<number>();
-
   constructor(
     protected seedDataService: SeedDataService,
     protected snackBarService: SnackBarService,
