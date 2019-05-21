@@ -400,7 +400,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
       });
     }
-
 }
 
 
