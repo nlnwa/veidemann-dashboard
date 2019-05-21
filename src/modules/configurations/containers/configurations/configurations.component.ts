@@ -29,9 +29,9 @@ import {
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
-import {DeleteDialogComponent} from '../../components/delete-dialog/delete-dialog.component';
+import {DeleteDialogComponent} from '../../components';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DataService} from '../../services/data.service';
+import {DataService} from '../../services';
 import {Title} from '@angular/platform-browser';
 import {componentOfKind, pathToKind} from '../../func/kind';
 import {BaseListComponent, ReferrerError} from '../../../commons';
