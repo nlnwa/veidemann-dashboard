@@ -32,7 +32,7 @@ export class ConfigObject {
   roleMapping: RoleMapping;
   collection: Collection;
 
-  constructor(configObject: Partial<ConfigObject>) {
+  constructor(configObject: Partial<ConfigObject> = {}) {
     this.id = configObject.id || '';
     this.apiVersion = configObject.apiVersion || 'v1';
     this.kind = configObject.kind || Kind.UNDEFINED;

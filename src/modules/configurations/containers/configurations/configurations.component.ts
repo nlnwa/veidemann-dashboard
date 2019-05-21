@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver, ComponentRef,
+  ComponentFactoryResolver,
+  ComponentRef,
   Input,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef,
-  ViewRef
+  ViewContainerRef
 } from '@angular/core';
 import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
 
@@ -25,15 +25,17 @@ import {
   CrawlJob,
   CrawlScheduleConfig,
   Kind,
+  Meta,
   PolitenessConfig,
   RoleMapping
 } from '../../../commons/models';
-import {DeleteDialogComponent} from '../../components/delete-dialog/delete-dialog.component';
+import {DeleteDialogComponent} from '../../components';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DataService} from '../../services/data.service';
+import {DataService} from '../../services';
 import {Title} from '@angular/platform-browser';
 import {componentOfKind, pathToKind} from '../../func/kind';
 import {BaseListComponent, ReferrerError} from '../../../commons';
+
 
 @Component({
   selector: 'app-configurations',
@@ -147,7 +149,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       map(queryParamMap => queryParamMap.get('id')),
     );
 
-    combineLatest(paramMap$, queryParam$).pipe(
+    combineLatest([paramMap$, queryParam$]).pipe(
       debounceTime(0),
       mergeMap(([kind, id]) => id ? this.dataService.get({id, kind}) : of(null)),
       takeUntil(this.ngUnsubscribe)
@@ -167,7 +169,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (!this.singleMode) {
       this.loadComponent({configObject: ConfigObject.mergeConfigs(configs)});
       if (!this.embedded) {
-        this.router.navigate([], {relativeTo: this.route});
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
       }
     } else {
       this.destroyComponent();
@@ -178,9 +181,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.embedded) {
       this.configObject.next(configObject);
     } else if (!configObject) {
-      this.router.navigate([], {relativeTo: this.route});
+      this.router.navigate([], {relativeTo: this.route})
+        .catch(error => this.errorService.dispatch(error));
+
     } else {
-      this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route});
+      this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route})
+        .catch(error => this.errorService.dispatch(error));
     }
   }
 
@@ -200,7 +206,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     const configObject = newConfigObject || new ConfigObject({kind: this.kind});
     if (!this.embedded) {
       this.router.navigate([], {relativeTo: this.route})
-        .then(() => setTimeout(() => this.configObject.next(configObject)));
+        .then(() => setTimeout(() => this.configObject.next(configObject)))
+        .catch(error => this.errorService.dispatch(error));
     } else {
       this.configObject.next(configObject);
     }
@@ -244,7 +251,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.reset();
         if (!this.embedded) {
-          this.router.navigate([], {relativeTo: this.route});
+          this.router.navigate([], {relativeTo: this.route})
+            .catch(error => this.errorService.dispatch(error));
         }
         this.snackBarService.openSnackBar('Slettet');
       });
@@ -282,7 +290,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
           ).subscribe(() => {
               this.reset();
               if (!this.embedded) {
-                this.router.navigate([], {relativeTo: this.route});
+                this.router.navigate([], {relativeTo: this.route})
+                  .catch(error => this.errorService.dispatch(error));
               }
               this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
             },
@@ -342,7 +351,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     ).subscribe(updatedConfigs => {
       this.reset();
       if (!this.embedded) {
-        this.router.navigate([], {relativeTo: this.route});
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
       }
       if (!this.allSelected) {
         this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
@@ -374,6 +384,31 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     }
     this.destroyComponent();
   }
+
+  private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
+      const configObjects = seeds.map(
+        seed => Object.assign({...configObject}, {
+          meta: new Meta
+          ({
+            name: seed,
+            description: configObject.meta.description,
+            labelList: configObject.meta.labelList
+          })
+        }));
+
+      from(configObjects).pipe(
+        mergeMap(c => this.dataService.save(c)),
+        takeUntil(this.ngUnsubscribe),
+      ).subscribe(() => {
+        this.reset();
+        if (!this.embedded) {
+          this.router.navigate([], {relativeTo: this.route})
+            .catch(error => this.errorService.dispatch(error));
+        }
+
+        this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
+      });
+    }
 }
 
 

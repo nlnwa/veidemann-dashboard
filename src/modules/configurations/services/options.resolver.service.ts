@@ -35,7 +35,7 @@ export class OptionsResolver implements Resolve<any> {
           toArray(),
         );
 
-        return combineLatest(crawlScheduleConfig$, crawlConfig$).pipe(
+        return combineLatest([crawlScheduleConfig$, crawlConfig$]).pipe(
           map(([crawlScheduleConfigs, crawlConfigs]) => ({crawlScheduleConfigs, crawlConfigs}))
         );
 
@@ -52,7 +52,7 @@ export class OptionsResolver implements Resolve<any> {
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
-        return combineLatest(collection$, browserConfig$, politenessConfig$).pipe(
+        return combineLatest([collection$, browserConfig$, politenessConfig$]).pipe(
           map(([collections, browserConfigs, politenessConfigs]) => ({collections, browserConfigs, politenessConfigs})));
 
       case Kind.BROWSERCONFIG:

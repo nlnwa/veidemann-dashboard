@@ -5,7 +5,6 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
 
-
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
@@ -21,6 +20,9 @@ export class SeedDetailComponent implements OnChanges {
 
   @Output()
   save = new EventEmitter<ConfigObject>();
+
+  @Output()
+  saveMultiple = new EventEmitter<{ seeds: string[], configObject: ConfigObject }>();
 
   @Output()
   update = new EventEmitter<ConfigObject>();
@@ -88,7 +90,11 @@ export class SeedDetailComponent implements OnChanges {
   }
 
   onSave(): void {
-    this.save.emit(this.prepareSave());
+    if (this.isMultipleSeed()) {
+      this.saveMultiple.emit(this.prepareSaveMultiple());
+    } else {
+      this.save.emit(this.prepareSave());
+    }
   }
 
   onUpdate(): void {
@@ -145,8 +151,34 @@ export class SeedDetailComponent implements OnChanges {
    */
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
+
     const seed = new Seed({
-      entityRef: formModel.entityRef,
+      disabled: formModel.disabled,
+      entityRef: {kind: Kind.CRAWLENTITY, id: formModel.entityRef.id} // Nødvendig?
+    });
+    seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
+    seed.scope.surtPrefix = formModel.scope.surtPrefix;
+
+    const configObject = new ConfigObject({
+      id: formModel.id,
+      kind: Kind.SEED,
+      meta: formModel.meta,
+      seed
+    });
+    return configObject;
+  }
+
+  private isMultipleSeed() {
+    const formModel = this.form.value;
+    const parts = formModel.meta.name.split(/\s+/);
+    return parts.length > 1;
+  }
+
+  private prepareSaveMultiple(): { seeds: string[], configObject: ConfigObject } {
+    const formModel = this.form.value;
+
+    const seeds = formModel.meta.name.trim().split(/\s+/).filter(s => !!s);
+    const seed = new Seed({
       disabled: formModel.disabled,
     });
     seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
@@ -159,6 +191,6 @@ export class SeedDetailComponent implements OnChanges {
       seed
     });
 
-    return configObject;
+    return {seeds, configObject};
   }
 }

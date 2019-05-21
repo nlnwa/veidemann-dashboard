@@ -8,12 +8,12 @@ import {Kind} from '../../../commons/models';
 
 import {AuthService} from '../../../core/services/auth';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SearchDataService} from '../../services/search-data.service';
+import {SearchDataService} from '../../services';
 
 
 import {Title} from '@angular/platform-browser';
-import {SeedDataService} from '../../services/seed-data.service';
-import {DataService} from '../../services/data.service';
+import {SeedDataService} from '../../services';
+import {DataService} from '../../services';
 import {ConfigurationsComponent} from '../configurations/configurations.component';
 import {ErrorService, SnackBarService} from '../../../core/services';
 
@@ -38,8 +38,6 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
 
   protected searchTerm: Subject<string> = new Subject<string>();
   searchTerm$ = this.searchTerm.asObservable();
-
-  pageLength$ = new Subject<number>();
 
   constructor(
     protected seedDataService: SeedDataService,
