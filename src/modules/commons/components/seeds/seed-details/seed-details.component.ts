@@ -95,7 +95,7 @@ export class SeedDetailComponent implements OnChanges, OnInit {
          const entityId = this.configObject.seed.entityRef.id;
           for (const seed of existingSeeds) {
             const seedEntityRef = seed.seed.entityRef.id;
-            if (seedEntityRef === entityId) {
+            if (seedEntityRef === entityId && !this.configObject.id) {
               this.onRemoveExistingUrl(seed.meta.name);
             }
           }
