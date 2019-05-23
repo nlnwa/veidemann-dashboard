@@ -150,12 +150,10 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onSave(): void {
-    if (this.isMultipleSeed() && this.form.valid) {
+    if (this.isMultipleSeed()) {
       this.saveMultiple.emit(this.prepareSaveMultiple());
     } else {
-      if (this.form.valid) {
-        this.save.emit(this.prepareSave());
-      }
+      this.save.emit(this.prepareSave());
     }
   }
 
