@@ -46,11 +46,11 @@
 
     <ng-template detail-host></ng-template>
   </div>
-  <ng-container *ngIf="configObject$ | async as configObject">
-    <app-configurations *ngIf="configObject?.id"
+  <ng-container *ngIf="configObject$ | async as entityObject">
+    <app-configurations *ngIf="entityObject?.id"
                         fxFlex
                         [kind]="Kind.SEED"
-                        [embedded]="true">
+                        [entityRef]="ConfigObject.toConfigRef(entityObject)">
     </app-configurations>
   </ng-container>
 </div>

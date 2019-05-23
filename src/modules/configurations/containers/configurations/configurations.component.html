@@ -6,7 +6,7 @@
   <mat-icon>add</mat-icon>
 </button>
 
-<button *ngIf="embedded"
+<button *ngIf="entityRef"
         mat-fab
         color="primary"
         class="action-button-secondary"
@@ -41,7 +41,7 @@
                  (selectedChange)="onSelectedChange($event)"
                  (selectAll)="onSelectAll()"
                  (clone)="onCreateConfig($event)"
-                 [embedded]="embedded"
+                 [embedded]="entityRef"
                  (page)="onPage($event)">
   </app-base-list>
 </ng-container>
@@ -118,6 +118,7 @@
                     (update)="onUpdateConfig($event)"
                     (save)="onSaveConfig($event)"
                     (saveMultiple)="onSaveMultipleSeeds($event)"
+                    (move)="onMove($event)"
                     (delete)="onDeleteConfig($event)">
   </app-seed-details>
 

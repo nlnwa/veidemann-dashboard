@@ -25,12 +25,7 @@ export class SeedUrlValidator implements AsyncValidator {
     return from(urls).pipe(
       mergeMap((url) => this.seedExists(url)),
       toArray(),
-      map((seed: ConfigObject[]) => seed.length > 0 ? {
-        seedExists: seed.map(s => ({
-          uri: s.meta.name,
-          entity: s.seed.entityRef.id
-        }))
-      } : null),
+      map((seeds: ConfigObject[]) => seeds.length > 0 ? {seedExists: seeds} : null),
       catchError((error) => {
         console.error(error);
         return of(null);

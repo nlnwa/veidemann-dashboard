@@ -1,22 +1,27 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
+import {MetaComponent} from '../../meta/meta.component';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailComponent implements OnChanges {
+export class SeedDetailComponent implements OnChanges, OnInit {
 
   @Input()
   configObject: ConfigObject;
 
   @Input()
   crawlJobs: ConfigObject[];
+
+  @Input()
+  seedToMove: ConfigObject;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -27,11 +32,16 @@ export class SeedDetailComponent implements OnChanges {
   @Output()
   update = new EventEmitter<ConfigObject>();
 
+  @Output()
+  move = new EventEmitter<ConfigObject>();
+
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
+
+  @ViewChild(MetaComponent) metaComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
@@ -70,8 +80,27 @@ export class SeedDetailComponent implements OnChanges {
     return this.form.get('jobRefListId');
   }
 
+  get meta(): AbstractControl {
+    return this.form.get('meta');
+  }
+
   get disabled() {
     return this.form.get('disabled');
+  }
+
+  ngOnInit(): void {
+     this.form.valueChanges.subscribe(() => {
+       if (this.form.dirty && this.form.status === 'INVALID' && this.meta.errors && this.meta.errors.name && this.meta.errors.name.seedExists) {
+         const existingSeeds = this.meta.errors.name.seedExists;
+         const entityId = this.configObject.seed.entityRef.id;
+          for (const seed of existingSeeds) {
+            const seedEntityRef = seed.seed.entityRef.id;
+            if (seedEntityRef === entityId) {
+              this.onRemoveExistingUrl(seed.meta.name);
+            }
+          }
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -84,16 +113,29 @@ export class SeedDetailComponent implements OnChanges {
     }
   }
 
+  onRemoveExistingUrl(url: string) {
+    const urls = this.metaComponent.name.value;
+    const replaced = urls.replace(url, '');
+    this.metaComponent.name.setValue(replaced);
+  }
+
+  onMoveSeedToCurrentEntity(seed: any) {
+    this.onRemoveExistingUrl(seed.meta.name);
+    this.move.emit(seed);
+  }
+
   getCrawlJobName(id) {
     const found = this.crawlJobs.find(crawlJob => crawlJob.id === id);
     return found ? found.meta.name : 'crawlJob';
   }
 
   onSave(): void {
-    if (this.isMultipleSeed()) {
+    if (this.isMultipleSeed() && this.form.valid) {
       this.saveMultiple.emit(this.prepareSaveMultiple());
     } else {
-      this.save.emit(this.prepareSave());
+      if (this.form.valid) {
+        this.save.emit(this.prepareSave());
+      }
     }
   }
 
@@ -193,4 +235,5 @@ export class SeedDetailComponent implements OnChanges {
 
     return {seeds, configObject};
   }
+
 }

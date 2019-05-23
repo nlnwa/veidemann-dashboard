@@ -20,6 +20,7 @@ import {
   BrowserConfig,
   BrowserScript,
   ConfigObject,
+  ConfigRef,
   CrawlConfig,
   CrawlHostGroupConfig,
   CrawlJob,
@@ -51,7 +52,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   kind: Kind;
 
   @Input()
-  embedded = false;
+  entityRef;
 
   configObject: Subject<ConfigObject> = new Subject();
   configObject$ = this.configObject.asObservable();
@@ -82,9 +83,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   get showActionButton(): boolean {
-    return !this.embedded && !(!this.embedded && this.kind === Kind.SEED);
+    return !this.entityRef && !(!this.entityRef && this.kind === Kind.SEED);
   }
-
 
 
   get viewContainerRef(): ViewContainerRef {
@@ -130,7 +130,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       this.options = data.options;
     });
 
-    if (this.embedded) {
+    if (this.entityRef) {
       this.dataService.kind = this.kind;
       return;
     }
@@ -168,7 +168,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
     if (!this.singleMode) {
       this.loadComponent({configObject: ConfigObject.mergeConfigs(configs)});
-      if (!this.embedded) {
+      if (!this.entityRef) {
         this.router.navigate([], {relativeTo: this.route})
           .catch(error => this.errorService.dispatch(error));
       }
@@ -178,7 +178,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onSelectConfig(configObject: ConfigObject) {
-    if (this.embedded) {
+    if (this.entityRef) {
       this.configObject.next(configObject);
     } else if (!configObject) {
       this.router.navigate([], {relativeTo: this.route})
@@ -196,19 +196,20 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onPage(pageEvent: PageEvent) {
-    if (this.embedded && (pageEvent.previousPageIndex === pageEvent.pageIndex)) {
-      this.reset();
+    if (this.entityRef && (pageEvent.previousPageIndex === pageEvent.pageIndex)) {
+      // this.reset();
     }
   }
 
   onCreateConfig(newConfigObject?: ConfigObject): void {
     this.reset();
     const configObject = newConfigObject || new ConfigObject({kind: this.kind});
-    if (!this.embedded) {
+    if (!this.entityRef) {
       this.router.navigate([], {relativeTo: this.route})
         .then(() => setTimeout(() => this.configObject.next(configObject)))
         .catch(error => this.errorService.dispatch(error));
     } else {
+      configObject.seed.entityRef = this.entityRef;
       this.configObject.next(configObject);
     }
   }
@@ -250,7 +251,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.reset();
-        if (!this.embedded) {
+        if (!this.entityRef) {
           this.router.navigate([], {relativeTo: this.route})
             .catch(error => this.errorService.dispatch(error));
         }
@@ -289,7 +290,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
             takeUntil(this.ngUnsubscribe),
           ).subscribe(() => {
               this.reset();
-              if (!this.embedded) {
+              if (!this.entityRef) {
                 this.router.navigate([], {relativeTo: this.route})
                   .catch(error => this.errorService.dispatch(error));
               }
@@ -306,6 +307,21 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         } else {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
+      });
+  }
+
+  onMove(configObject: ConfigObject) {
+    const ref = configObject.seed.entityRef;
+    this.dataService.move(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(updated => {
+        this.dataService.reset();
+        this.snackBarService.openSnackBar('Flyttet ' + updated);
+
+        // TODO
+        // if (updated > 0) {
+          // sjekk om entitet er tom for seeds og slett etc.
+        //}
       });
   }
 
@@ -350,7 +366,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe),
     ).subscribe(updatedConfigs => {
       this.reset();
-      if (!this.embedded) {
+      this.dataService.reset();
+      if (!this.entityRef) {
         this.router.navigate([], {relativeTo: this.route})
           .catch(error => this.errorService.dispatch(error));
       }
@@ -401,7 +418,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe),
       ).subscribe(() => {
         this.reset();
-        if (!this.embedded) {
+        if (!this.entityRef) {
           this.router.navigate([], {relativeTo: this.route})
             .catch(error => this.errorService.dispatch(error));
         }

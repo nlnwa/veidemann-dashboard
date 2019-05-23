@@ -3,7 +3,7 @@ import {ConfigObject, ConfigRef, Kind} from '../../commons/models';
 import {DataService, ofKind, paged} from './data.service';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {finalize, map, tap} from 'rxjs/operators';
+import {finalize, map, takeUntil, tap} from 'rxjs/operators';
 import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
 
 
@@ -16,6 +16,7 @@ function withQueryTemplate(listRequest: ListRequest, queryTemplate: ConfigObject
 @Injectable()
 export class SeedDataService extends DataService {
 
+  // entityRef
   private configRef: ConfigRef;
 
   constructor(protected backendService: BackendService) {
@@ -49,21 +50,14 @@ export class SeedDataService extends DataService {
     return super.save(configObject);
   }
 
-  updateWithTemplate(updateTemplate: ConfigObject, paths: string[], ids?: string[]): Observable<number> {
-    const listRequest = this.withConfigRef(ofKind(updateTemplate.kind.valueOf()));
+  move(configObject: ConfigObject): Observable<number> {
+    const updateTemplate = new ConfigObject({kind: Kind.SEED});
+    const seed = updateTemplate.seed;
 
-    const updateMask = new FieldMask();
-    updateMask.setPathsList(paths);
+    seed.entityRef = new ConfigRef(this.configRef);
+    const pathList = ['seed.entityRef'];
 
-    const updateRequest = new UpdateRequest();
-    updateRequest.setListRequest(listRequest);
-    updateRequest.setUpdateTemplate(ConfigObject.toProto(updateTemplate));
-    updateRequest.setUpdateMask(updateMask);
-
-    return this.backendService.update(updateRequest).pipe(
-      map(updateResponse => updateResponse.getUpdated()),
-      tap(() => this.kind = this._kind)
-    );
+    return this.updateWithTemplate(updateTemplate, pathList, [configObject.id]);
   }
 
   protected count(): Observable<number> {

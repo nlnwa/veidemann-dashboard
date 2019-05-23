@@ -59,7 +59,6 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   onTouched: (meta: Meta) => void;
 
   ngUnsubscribe: Subject<void> = new Subject<void>();
-  timeoutHandle: number;
 
   constructor(private fb: FormBuilder,
               private datePipe: DatePipe,
@@ -102,10 +101,8 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
         if (!this.id) {
           this.name.setAsyncValidators(this.urlValidator.validate.bind(this.urlValidator));
         } else {
-          clearTimeout(this.timeoutHandle);
-          this.name.clearAsyncValidators();
-          this.name.markAsPristine();
-          this.name.markAsUntouched();
+
+
           this.cdr.markForCheck();
 
         }
@@ -120,7 +117,9 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   }
 
   ngAfterViewInit() {
-    this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => this.onChange(new Meta(value)));
+    this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => {
+      this.onChange(new Meta(value));
+    });
   }
 
   ngOnDestroy() {
@@ -157,20 +156,16 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
     if (this.form.valid) {
       return of(null);
     }
-    if (this.nameIsUrl) {
-      const that = this;
-      this.timeoutHandle = setTimeout(() => {
-        that.onChange(that.form.value);
-        that.cdr.markForCheck();
-      });
-    }
-    return of({invalid: true});
-  }
 
-  onRemoveExistingUrl(url: string) {
-    const urls = this.name.value;
-    const replaced = urls.replace(url, '');
-    this.name.setValue(replaced);
+    if (this.nameIsUrl && !this.name.hasError('seedExists') && !this.name.hasError('required') && !this.name.hasError('pattern')) {
+      const that = this;
+      setTimeout(() => {
+        that.onChange(that.form.value);
+        this.cdr.markForCheck();
+      }, 250);
+    }
+
+    return of({name: this.name.errors});
   }
 
   private dateFormat(timestamp: string): string {

@@ -14,6 +14,7 @@ import {
   SeedDetailMultiComponent,
   ToolbarComponent
 } from './components';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    DragDropModule,
   ],
   exports: [
     ToolbarComponent,

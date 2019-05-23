@@ -22,9 +22,11 @@
       </div>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
-
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta" [nameIsUrl]="true" [id]="configObject.id"></app-meta>
+        <app-meta formControlName="meta"
+                  [nameIsUrl]="true"
+                  [id]="configObject.id">
+        </app-meta>
         <mat-form-field *ngIf="configObject.id">
           <input matInput
                  formControlName="id"
@@ -49,6 +51,32 @@
                         [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <ng-container *ngIf="meta.errors?.name?.seedExists">
+          <mat-error>
+            Andre entiteter inneholder seed med samme url som er skrevet inn
+          </mat-error>
+            <mat-chip-list fxLayout="row wrap"
+                           fxLayoutGap="8px">
+              <mat-chip class="mat-chip-error"
+                        *ngFor="let seed of meta.errors.name.seedExists"
+                        (removed)="onRemoveExistingUrl(seed.meta.name)">
+                <button mat-icon-button>
+                  <mat-icon matTooltip="Flytt seed til denne entiteten"
+                            (click)="onMoveSeedToCurrentEntity(seed)">arrow_back
+                  </mat-icon>
+                </button>
+                <a class="mat-chip-error"
+                   target="_blank"
+                   matTooltip="Gå til entiten som allerede har en seed med lik url"
+                   [routerLink]="['../search']"
+                   [queryParams]="{id: seed.seed.entityRef.id}">
+                  {{seed.meta.name}}
+                </a>
+                <mat-icon matTooltip="Fjern url fra listen" matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+        </ng-container>
 
         <mat-form-field formGroupName="scope" *ngIf="configObject?.id">
           <input matInput

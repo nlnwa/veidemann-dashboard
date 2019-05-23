@@ -13,6 +13,7 @@ import {CrawlHostGroupConfig} from './configs/crawlhostgroupconfig.model';
 import {RoleMapping} from './configs/rolemapping.model';
 import {Kind} from './kind.model';
 import {Meta} from './meta/meta.model';
+import {ConfigRef} from './configref.model';
 
 
 export class ConfigObject {
@@ -160,6 +161,10 @@ export class ConfigObject {
       proto.setCollection(Collection.toProto(configObject.collection));
     }
     return proto;
+  }
+
+  static toConfigRef(configObject: ConfigObject): ConfigRef {
+    return new ConfigRef({id: configObject.id, kind: configObject.kind});
   }
 
   static clone(configObject: ConfigObject): ConfigObject {

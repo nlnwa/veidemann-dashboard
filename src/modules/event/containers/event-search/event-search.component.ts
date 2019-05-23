@@ -54,7 +54,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
 
     super(seedDataService, snackBarService, errorService, activatedRoute,
       componentFactoryResolver, router, dialog, dataService, titleService, authService);
-    this.embedded = true;
+    this.entityRef = true;
   }
 
   ngOnInit() {
