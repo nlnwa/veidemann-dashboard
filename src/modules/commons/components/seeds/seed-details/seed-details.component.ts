@@ -1,17 +1,30 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
 import {MetaComponent} from '../../meta/meta.component';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailComponent implements OnChanges, OnInit {
+export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   configObject: ConfigObject;
@@ -39,6 +52,7 @@ export class SeedDetailComponent implements OnChanges, OnInit {
   delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
+  ngUnsubscribe = new Subject<void>();
 
   @ViewChild(MetaComponent) metaComponent;
 
@@ -88,18 +102,20 @@ export class SeedDetailComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.form.valueChanges.subscribe(() => {
-      if (this.form.dirty && this.form.status === 'INVALID' && this.meta.errors && this.meta.errors.name && this.meta.errors.name.seedExists) {
-        const existingSeeds = this.meta.errors.name.seedExists;
-        const entityId = this.configObject.seed.entityRef.id;
-        for (const seed of existingSeeds) {
-          const seedEntityRef = seed.seed.entityRef.id;
-          if (seedEntityRef === entityId && !this.configObject.id) {
-            this.onRemoveExistingUrl(seed.meta.name);
+    this.form.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        if (this.form.dirty && this.form.status === 'INVALID' && this.meta.errors && this.meta.errors.name && this.meta.errors.name.seedExists) {
+          const existingSeeds = this.meta.errors.name.seedExists;
+          const entityId = this.configObject.seed.entityRef.id;
+          for (const seed of existingSeeds) {
+            const seedEntityRef = seed.seed.entityRef.id;
+            if (seedEntityRef === entityId && !this.configObject.id) {
+              this.onRemoveExistingUrl(seed.meta.name);
+            }
           }
         }
-      }
-    });
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,6 +126,11 @@ export class SeedDetailComponent implements OnChanges, OnInit {
         this.form.reset();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onRemoveExistingUrl(url: string) {
