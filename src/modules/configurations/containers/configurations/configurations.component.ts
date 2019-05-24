@@ -310,28 +310,34 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onMove(configObject: ConfigObject) {
-    this.dataService.move(configObject)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(updated => {
-        this.dataService.reset();
-
+    this.dataService.move(configObject).pipe(
+      switchMap(updated => {
         if (updated > 0) {
-          this.dataService.seedsOfEntity(configObject).subscribe((count) => {
-            if (count === 0) {
-              const config = new ConfigObject({kind: Kind.CRAWLENTITY, id: configObject.seed.entityRef.id});
-              this.dataService.delete(config).subscribe((deleted) => {
-                if (deleted.getDeleted()) {
-                  this.snackBarService
-                    .openSnackBar('Seed flyttet, og den gamle entiteten er slettet',
-                      null, 5000);
-                }
-              });
-            } else {
-              this.snackBarService.openSnackBar('Seed flyttet ');
-            }
-          });
+          return this.dataService.seedsOfEntity(configObject).pipe(
+            switchMap(count => {
+              if (count === 0) {
+                const config = new ConfigObject({kind: Kind.CRAWLENTITY, id: configObject.seed.entityRef.id});
+                return this.dataService.delete(config).pipe(
+                  map(response => response.getDeleted()),
+                  map((deleted) => deleted ? {updated, deleted: 1} : {updated, deleted: 0})
+                );
+              } else {
+                return of({updated, deleted: 0});
+              }
+            }));
+        } else {
+          return of({updated, deleted: 0});
         }
-      });
+      }),
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe(response => {
+      this.dataService.reset();
+      if (response.deleted) {
+        this.snackBarService.openSnackBar('Seed flyttet, og den gamle entiteten er slettet', null, 5000);
+      } else {
+        this.snackBarService.openSnackBar('Seed flyttet');
+      }
+    });
   }
 
   /**
