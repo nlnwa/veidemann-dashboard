@@ -1,30 +1,17 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
-import {MetaComponent} from '../../meta/meta.component';
+import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../models';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
+export class SeedDetailComponent implements OnChanges, OnDestroy {
 
   @Input()
   configObject: ConfigObject;
@@ -52,17 +39,12 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
   delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
-  ngUnsubscribe = new Subject<void>();
 
-  @ViewChild(MetaComponent) metaComponent;
+  ngUnsubscribe = new Subject<void>();
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
     this.createForm();
-  }
-
-  get showShortcuts(): boolean {
-    return !this.showSave;
   }
 
   get showSave(): boolean {
@@ -101,23 +83,6 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
     return this.form.get('disabled');
   }
 
-  ngOnInit(): void {
-    this.form.valueChanges
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        if (this.form.dirty && this.form.status === 'INVALID' && this.meta.errors && this.meta.errors.name && this.meta.errors.name.seedExists) {
-          const existingSeeds = this.meta.errors.name.seedExists;
-          const entityId = this.configObject.seed.entityRef.id;
-          for (const seed of existingSeeds) {
-            const seedEntityRef = seed.seed.entityRef.id;
-            if (seedEntityRef === entityId && !this.configObject.id) {
-              this.onRemoveExistingUrl(seed.meta.name);
-            }
-          }
-        }
-      });
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.configObject) {
       if (this.configObject) {
@@ -131,17 +96,6 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  onRemoveExistingUrl(url: string) {
-    const urls = this.metaComponent.name.value;
-    const replaced = urls.replace(url, '');
-    this.metaComponent.name.setValue(replaced);
-  }
-
-  onMoveSeedToCurrentEntity(seed: any) {
-    this.onRemoveExistingUrl(seed.meta.name);
-    this.move.emit(seed);
   }
 
   getCrawlJobName(id) {
@@ -219,20 +173,14 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
     seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
     seed.scope.surtPrefix = formModel.scope.surtPrefix;
 
-    const configObject = new ConfigObject({
+    return new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
       meta: formModel.meta,
       seed
     });
-    return configObject;
   }
 
-  private isMultipleSeed() {
-    const formModel = this.form.value;
-    const parts = formModel.meta.name.split(/\s+/);
-    return parts.length > 1;
-  }
 
   private prepareSaveMultiple(): { seeds: string[], configObject: ConfigObject } {
     const formModel = this.form.value;
@@ -254,4 +202,9 @@ export class SeedDetailComponent implements OnChanges, OnInit, OnDestroy {
     return {seeds, configObject};
   }
 
+  private isMultipleSeed() {
+    const meta = this.meta.value;
+    const parts = meta.name.split(/\s+/);
+    return parts.length > 1;
+  }
 }
