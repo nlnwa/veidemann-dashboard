@@ -3,8 +3,8 @@ import {ConfigObject, ConfigRef, Kind} from '../../commons/models';
 import {DataService, ofKind, paged} from './data.service';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {finalize, map, takeUntil, tap} from 'rxjs/operators';
-import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
+import {finalize, map, tap} from 'rxjs/operators';
+import {FieldMask, ListRequest} from '../../../api';
 
 
 function withQueryTemplate(listRequest: ListRequest, queryTemplate: ConfigObject, queryMask: FieldMask) {
@@ -58,6 +58,23 @@ export class SeedDataService extends DataService {
     const pathList = ['seed.entityRef'];
 
     return this.updateWithTemplate(updateTemplate, pathList, [configObject.id]);
+  }
+
+  seedsOfEntity(configObject: ConfigObject): any {
+    const listRequest = new ListRequest();
+
+    const queryMask = new FieldMask();
+    queryMask.setPathsList(['seed.entityRef']);
+
+    const queryTemplate = new ConfigObject({kind: Kind.SEED});
+    queryTemplate.seed.entityRef = configObject.seed.entityRef;
+
+    listRequest.setIdList([]);
+    listRequest.setQueryMask(queryMask);
+    listRequest.setKind(Kind.SEED.valueOf());
+    listRequest.setQueryTemplate(ConfigObject.toProto(queryTemplate));
+
+    return this.backendService.count(listRequest);
   }
 
   protected count(): Observable<number> {

@@ -20,7 +20,6 @@ import {
   BrowserConfig,
   BrowserScript,
   ConfigObject,
-  ConfigRef,
   CrawlConfig,
   CrawlHostGroupConfig,
   CrawlJob,
@@ -311,18 +310,34 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onMove(configObject: ConfigObject) {
-    const ref = configObject.seed.entityRef;
-    this.dataService.move(configObject)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(updated => {
-        this.dataService.reset();
-        this.snackBarService.openSnackBar('Flyttet ' + updated);
-
-        // TODO
-        // if (updated > 0) {
-          // sjekk om entitet er tom for seeds og slett etc.
-        //}
-      });
+    this.dataService.move(configObject).pipe(
+      switchMap(updated => {
+        if (updated > 0) {
+          return this.dataService.seedsOfEntity(configObject).pipe(
+            switchMap(count => {
+              if (count === 0) {
+                const config = new ConfigObject({kind: Kind.CRAWLENTITY, id: configObject.seed.entityRef.id});
+                return this.dataService.delete(config).pipe(
+                  map(response => response.getDeleted()),
+                  map((deleted) => deleted ? {updated, deleted: 1} : {updated, deleted: 0})
+                );
+              } else {
+                return of({updated, deleted: 0});
+              }
+            }));
+        } else {
+          return of({updated, deleted: 0});
+        }
+      }),
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe(response => {
+      this.dataService.reset();
+      if (response.deleted) {
+        this.snackBarService.openSnackBar('Seed flyttet, og den gamle entiteten er slettet', null, 5000);
+      } else {
+        this.snackBarService.openSnackBar('Seed flyttet');
+      }
+    });
   }
 
   /**
@@ -403,29 +418,29 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
-      const configObjects = seeds.map(
-        seed => Object.assign({...configObject}, {
-          meta: new Meta
-          ({
-            name: seed,
-            description: configObject.meta.description,
-            labelList: configObject.meta.labelList
-          })
-        }));
+    const configObjects = seeds.map(
+      seed => Object.assign({...configObject}, {
+        meta: new Meta
+        ({
+          name: seed,
+          description: configObject.meta.description,
+          labelList: configObject.meta.labelList
+        })
+      }));
 
-      from(configObjects).pipe(
-        mergeMap(c => this.dataService.save(c)),
-        takeUntil(this.ngUnsubscribe),
-      ).subscribe(() => {
-        this.reset();
-        if (!this.entityRef) {
-          this.router.navigate([], {relativeTo: this.route})
-            .catch(error => this.errorService.dispatch(error));
-        }
+    from(configObjects).pipe(
+      mergeMap(c => this.dataService.save(c)),
+      takeUntil(this.ngUnsubscribe),
+    ).subscribe(() => {
+      this.reset();
+      if (!this.entityRef) {
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
+      }
 
-        this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
-      });
-    }
+      this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
+    });
+  }
 }
 
 

@@ -130,6 +130,10 @@ export class DataService extends DataSource<ConfigObject> implements OnDestroy {
     return of(0);
   }
 
+  seedsOfEntity(configObject: ConfigObject): Observable<number> {
+    return of (0);
+  }
+
   update(configObject): Observable<ConfigObject> {
     return this.backendService.save(ConfigObject.toProto(configObject))
       .pipe(
