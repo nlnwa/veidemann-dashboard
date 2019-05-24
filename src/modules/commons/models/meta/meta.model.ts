@@ -1,6 +1,5 @@
 import {LabelProto, MetaProto} from '../../../../api';
 import {fromTimestampProto} from '../../func/datetime/datetime';
-import {ConfigObject} from '../configobject.model';
 import {Label} from './label.model';
 
 export class Meta {
@@ -15,14 +14,18 @@ export class Meta {
   constructor({
                 labelList,
                 description = '',
-                name = ''
+                name = '',
+                created = '',
+                createdBy = '',
+                lastModified = '',
+                lastModifiedBy = '',
               }: Partial<Meta> = {}) {
     this.name = name;
     this.description = description;
-    this.created = '';
-    this.createdBy = '';
-    this.lastModified = '';
-    this.lastModifiedBy = '';
+    this.created = created;
+    this.createdBy = createdBy;
+    this.lastModified = lastModified;
+    this.lastModifiedBy = lastModifiedBy;
     this.labelList = labelList ? labelList.map(label => new Label(label)) : [];
   }
 

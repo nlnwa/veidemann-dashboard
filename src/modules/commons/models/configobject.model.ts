@@ -170,7 +170,7 @@ export class ConfigObject {
   static clone(configObject: ConfigObject): ConfigObject {
     const clone = new ConfigObject(configObject);
     clone.id = '';
-    clone.meta.name = clone.meta.name + ' (clone)';
+    Object.assign(clone.meta, {created: '', createdBy: '', lastModified: '', lastModifiedBy: '', name: ''});
     return clone;
   }
 
