@@ -1,33 +1,19 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 
 import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
-  AsyncValidator,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
-  NG_ASYNC_VALIDATORS,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
+  Validator,
   Validators
 } from '@angular/forms';
-import {Observable, of, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {Meta} from '../../models';
-import {VALID_URL} from '../../validator/patterns';
-import {CdkTextareaAutosize} from '@angular/cdk/text-field';
-import {SeedUrlValidator} from '../../validator/existing-url-validation';
 import {takeUntil} from 'rxjs/operators';
 
 
@@ -37,20 +23,11 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./meta.component.css'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MetaComponent), multi: true},
-    {provide: NG_ASYNC_VALIDATORS, useExisting: forwardRef(() => MetaComponent), multi: true},
-    SeedUrlValidator
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => MetaComponent), multi: true},
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor, AsyncValidator {
-  @Input()
-  nameIsUrl: boolean;
-
-  @Input()
-  id: string;
-
-  @ViewChild('autosize')
-  txtAreaAutosize: CdkTextareaAutosize;
+export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor, Validator {
 
   form: FormGroup;
 
@@ -59,13 +36,9 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   onTouched: (meta: Meta) => void;
 
   ngUnsubscribe: Subject<void> = new Subject<void>();
-  timeoutHandle: number;
 
-  constructor(private fb: FormBuilder,
-              private datePipe: DatePipe,
-              private cdr: ChangeDetectorRef,
-              public urlValidator: SeedUrlValidator) {
-    this.createForm();
+  constructor(protected fb: FormBuilder,
+              protected datePipe: DatePipe) {
   }
 
   get name(): AbstractControl {
@@ -96,31 +69,14 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
     return this.form.enabled;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.nameIsUrl && changes.id) {
-      if (this.nameIsUrl) {
-        if (!this.id) {
-          this.name.setAsyncValidators(this.urlValidator.validate.bind(this.urlValidator));
-        } else {
-          clearTimeout(this.timeoutHandle);
-          this.name.clearAsyncValidators();
-          this.name.markAsPristine();
-          this.name.markAsUntouched();
-          this.cdr.markForCheck();
-
-        }
-        this.name.setValidators(
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(2),
-            Validators.pattern(VALID_URL)
-          ]));
-      }
-    }
+  ngOnInit() {
+    this.createForm();
   }
 
   ngAfterViewInit() {
-    this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => this.onChange(new Meta(value)));
+    this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => {
+      this.onChange(new Meta(value));
+    });
   }
 
   ngOnDestroy() {
@@ -153,27 +109,11 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
   }
 
   // implement Validator
-  validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
-    if (this.form.valid) {
-      return of(null);
-    }
-    if (this.nameIsUrl) {
-      const that = this;
-      this.timeoutHandle = setTimeout(() => {
-        that.onChange(that.form.value);
-        that.cdr.markForCheck();
-      });
-    }
-    return of({invalid: true});
+  validate(ctrl: AbstractControl): ValidationErrors | null {
+    return this.name.valid ? null : this.name.errors;
   }
 
-  onRemoveExistingUrl(url: string) {
-    const urls = this.name.value;
-    const replaced = urls.replace(url, '');
-    this.name.setValue(replaced);
-  }
-
-  private dateFormat(timestamp: string): string {
+  protected dateFormat(timestamp: string): string {
     if (timestamp) {
       return this.datePipe.transform(timestamp, 'medium', 'UTC');
     } else {
@@ -181,7 +121,7 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
     }
   }
 
-  private createForm(): void {
+  protected createForm(): void {
     const meta = new Meta();
     this.form = this.fb.group({
       name: [meta.name, [Validators.required, Validators.minLength(2)]],
@@ -192,11 +132,9 @@ export class MetaComponent implements AfterViewInit, OnChanges, OnDestroy, Contr
       lastModifiedBy: {value: meta.lastModifiedBy, disabled: true},
       labelList: meta.labelList,
     });
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
   }
 
-  private updateForm(meta: Meta): void {
+  protected updateForm(meta: Meta): void {
     // setting the emitEvent option to false  prevents the valueChange subscription above to fire
     this.form.setValue({
       name: meta.name,

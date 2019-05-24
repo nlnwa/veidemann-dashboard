@@ -1,6 +1,6 @@
 <div [formGroup]="form" fxLayout="column">
 
-  <mat-form-field *ngIf="!nameIsUrl" [hideRequiredMarker]="nameInput.value.length >= 2">
+  <mat-form-field [hideRequiredMarker]="nameInput.value.length >= 2">
     <input matInput #nameInput formControlName="name" placeholder="Navn"
            i18n-placeholder="@@metaNameInputPlaceholder" required>
     <mat-hint *ngIf="nameInput.value.length < 2">Minimum 2 tegn</mat-hint>
@@ -9,80 +9,6 @@
       Navn er påkrevd
     </mat-error>
   </mat-form-field>
-
-
-  <!-- Multi url input, only available when creating new seed -->
-  <ng-container *ngIf="nameIsUrl">
-    <mat-form-field *ngIf="id === ''">
-    <textarea matInput formControlName="name" placeholder="URL"
-              i18n="@@metaUrlInputPlaceholder"
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="2"
-              cdkAutosizeMaxRows="10"
-              #autosize="cdkTextareaAutosize">
-    </textarea>
-
-      <mat-error
-        *ngIf="name.hasError('required') && name.dirty"
-        i18n="@@metaUrlRequiredError">
-        En gyldig URL er påkrevd
-      </mat-error>
-      <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
-        Inneholder ikke en gyldig formatert url
-      </mat-error>
-    </mat-form-field>
-    <ng-container *ngIf="id === ''">
-      <mat-error *ngIf="name.hasError('seedExists')">
-        Url(er) er allerede i bruk
-        <mat-chip-list #chipList fxLayout="row wrap" fxLayoutGap="8px" style="margin-top: 1em; margin-bottom: 1em;">
-          <mat-chip class="mat-chip-error"
-                    *ngFor="let seed of name.errors.seedExists"
-                    (removed)="onRemoveExistingUrl(seed.uri)">
-            <a class="mat-chip-error"
-               target="_blank"
-               matTooltip="Gå til entiten som allerede har en seed med denne nettadressen"
-               [routerLink]="['../search']"
-               [queryParams]="{id: seed.entity}">
-              {{seed.uri}}
-            </a>
-            <mat-icon matTooltip="Fjern url fra listen" matChipRemove>cancel</mat-icon>
-          </mat-chip>
-        </mat-chip-list>
-      </mat-error>
-    </ng-container>
-
-    <!-- Seed url input, when updating existing seed -->
-
-    <mat-form-field *ngIf="id !== ''">
-      <input matInput formControlName="name" placeholder="URL"
-             i18n="@@metaUrlInputPlaceholder">
-      <mat-error
-        *ngIf="name.hasError('required') && name.dirty"
-        i18n="@@metaUrlRequiredError">
-        En gyldig URL er påkrevd
-      </mat-error>
-      <mat-error *ngIf="name.hasError('seedExists')">
-
-        Url(er) er allerede i bruk
-        <ul>
-          <li *ngFor="let exists of name.errors.seedExists">
-            <a class="seed-exists-link "
-               target="_blank"
-               [routerLink]="['../search']"
-               [queryParams]="{id: exists.entity}">
-              {{exists.uri}}
-            </a>
-            <button mat-icon-button (click)="onRemoveExistingUrl(exists.uri)">
-              <mat-icon>close</mat-icon>
-            </button>
-          </li>
-        </ul>
-      </mat-error>
-      <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
-        Inneholder ikke en gyldig formatert url
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
 
   <mat-form-field>
     <textarea matInput formControlName="description" placeholder="Beskrivelse"

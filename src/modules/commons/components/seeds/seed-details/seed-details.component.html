@@ -22,9 +22,10 @@
       </div>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
-
       <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta" [nameIsUrl]="true" [id]="configObject.id"></app-meta>
+        <app-seed-meta formControlName="meta"
+                       (move)="move.emit($event)"
+                       [entityRef]="configObject.seed.entityRef"></app-seed-meta>
         <mat-form-field *ngIf="configObject.id">
           <input matInput
                  formControlName="id"
@@ -32,14 +33,14 @@
                  readonly
                  i18n-placeholder="@@seedFormIdPlaceholder">
         </mat-form-field>
-        <ng-container formGroupName="entityRef">
-          <mat-form-field *ngIf="configObject?.id">
-            <input matInput formControlName="id"
-                   placeholder="Entitetens Id"
-                   readonly
-                   i18n-placeholder="@@metaEntityIdInputPlaceholder">
-          </mat-form-field>
-        </ng-container>
+
+        <mat-form-field formGroupName="entityRef"
+                        *ngIf="configObject?.id">
+          <input matInput formControlName="id"
+                 placeholder="Entitetens Id"
+                 readonly
+                 i18n-placeholder="@@metaEntityIdInputPlaceholder">
+        </mat-form-field>
       </div>
 
       <div fxFlex fxLayout="column">

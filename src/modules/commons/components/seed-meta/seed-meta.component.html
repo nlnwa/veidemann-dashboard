@@ -1,0 +1,94 @@
+<div [formGroup]="form" fxLayout="column">
+  <mat-form-field>
+    <textarea matInput formControlName="name" placeholder="URL"
+              *ngIf="!created.value"
+              i18n="@@metaUrlInputPlaceholder"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="10"
+              #autosize="cdkTextareaAutosize">
+    </textarea>
+
+    <input matInput formControlName="name" placeholder="URL"
+           *ngIf="created.value"
+           i18n="@@metaUrlInputPlaceholder">
+
+    <mat-error
+      *ngIf="name.hasError('required') && name.dirty"
+      i18n="@@metaUrlRequiredError">
+      Feltet må fylles ut
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
+      Inneholder en ugyldig formatert url
+    </mat-error>
+  </mat-form-field>
+
+  <mat-list *ngIf="name.hasError('seedExists')">
+    <mat-list-item>
+      <mat-error>
+        Andre entiteter inneholder seed med samme url som er skrevet inn
+      </mat-error>
+    </mat-list-item>
+    <mat-list-item *ngFor="let seed of name.errors.seedExists">
+
+      <a target="_blank"
+         matTooltip="Gå til entiten som allerede har en seed med lik url"
+         [routerLink]="['../search']"
+         [queryParams]="{id: seed.seed.entityRef.id}">
+        {{seed.meta.name}}
+      </a>
+
+      <button mat-icon-button
+              (click)="onMoveSeedToCurrentEntity(seed)"
+              matTooltip="Flytt seed til denne entiteten">
+        <mat-icon mat-list-icon>merge_type</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
+              matTooltip="Fjern url fra listen">
+        <mat-icon mat-list-icon>cancel</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Beskrivelse"
+              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
+    </textarea>
+  </mat-form-field>
+
+  <app-labels [removable]="editable" formControlName="labelList"></app-labels>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="created.value">
+      <input matInput
+             formControlName="created"
+             placeholder="Opprettet"
+             i18n-placeholder="@@metaCreatedInputPlaceholder">
+    </mat-form-field>
+
+    <mat-form-field fxFlex *ngIf="createdBy.value">
+      <input matInput
+             formControlName="createdBy"
+             placeholder="Opprettet av"
+             i18n-placeholder="@@metaCreatedByInputPlaceholder">
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="lastModified.value">
+      <input matInput
+             formControlName=lastModified
+             placeholder="Sist endret"
+             i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+    </mat-form-field>
+
+    <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
+      <input matInput
+             formControlName="lastModifiedBy"
+             placeholder="Sist endret av"
+             i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+    </mat-form-field>
+  </div>
+</div>

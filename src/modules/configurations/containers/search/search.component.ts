@@ -4,16 +4,14 @@ import {MatDialog} from '@angular/material';
 import {of, Subject} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {Kind} from '../../../commons/models';
+import {ConfigObject, Kind} from '../../../commons/models';
 
 import {AuthService} from '../../../core/services/auth';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SearchDataService} from '../../services';
+import {DataService, SearchDataService, SeedDataService} from '../../services';
 
 
 import {Title} from '@angular/platform-browser';
-import {SeedDataService} from '../../services';
-import {DataService} from '../../services';
 import {ConfigurationsComponent} from '../configurations/configurations.component';
 import {ErrorService, SnackBarService} from '../../../core/services';
 
@@ -27,6 +25,7 @@ import {ErrorService, SnackBarService} from '../../../core/services';
 })
 
 export class SearchComponent extends ConfigurationsComponent implements OnInit, OnDestroy {
+  readonly ConfigObject = ConfigObject;
 
   configObject$ = this.configObject.asObservable().pipe(
     tap(entity => {
@@ -47,10 +46,10 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected router: Router,
     protected dialog: MatDialog,
-    protected dataService: SearchDataService,
+    protected searchDataService: SearchDataService,
     public titleService: Title,
     protected authService: AuthService) {
-    super(dataService, snackBarService, errorService, componentFactoryResolver, router, titleService, dialog, activatedRoute);
+    super(searchDataService, snackBarService, errorService, componentFactoryResolver, router, titleService, dialog, activatedRoute);
 
     this.kind = Kind.CRAWLENTITY;
   }
@@ -62,12 +61,12 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
   ngOnInit() {
     this.route.queryParamMap.pipe(
       map(queryParamMap => queryParamMap.get('id')),
-      switchMap(id => id ? this.dataService.get({id, kind: this.kind}) : of(null)),
+      switchMap(id => id ? this.searchDataService.get({id, kind: this.kind}) : of(null)),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(configObject => this.configObject.next(configObject));
 
     this.searchTerm$.pipe(
-      switchMap((term: string) => this.dataService.search(term)),
+      switchMap((term: string) => this.searchDataService.search(term)),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(() => {
     }, (error) => this.errorService.dispatch(error));

@@ -126,6 +126,10 @@ export class DataService extends DataSource<ConfigObject> implements OnDestroy {
       );
   }
 
+  move(configObject: ConfigObject): Observable<number> {
+    return of(0);
+  }
+
   update(configObject): Observable<ConfigObject> {
     return this.backendService.save(ConfigObject.toProto(configObject))
       .pipe(
@@ -135,8 +139,7 @@ export class DataService extends DataSource<ConfigObject> implements OnDestroy {
   }
 
   updateWithTemplate(updateTemplate: ConfigObject, paths: string[], ids?: string[]): Observable<number> {
-    const listRequest = new ListRequest();
-    listRequest.setKind(updateTemplate.kind.valueOf());
+    const listRequest = ofKind(updateTemplate.kind.valueOf());
 
     if (ids && ids.length) {
       listRequest.setIdList(ids);
@@ -151,8 +154,7 @@ export class DataService extends DataSource<ConfigObject> implements OnDestroy {
     updateRequest.setUpdateMask(updateMask);
 
     return this.backendService.update(updateRequest).pipe(
-      map(updateResponse => updateResponse.getUpdated()),
-      tap(() => this.kind = this._kind)
+      map(updateResponse => updateResponse.getUpdated())
     );
   }
 

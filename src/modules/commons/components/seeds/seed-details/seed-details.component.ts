@@ -1,22 +1,26 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../models';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailComponent implements OnChanges {
+export class SeedDetailComponent implements OnChanges, OnDestroy {
 
   @Input()
   configObject: ConfigObject;
 
   @Input()
   crawlJobs: ConfigObject[];
+
+  @Input()
+  seedToMove: ConfigObject;
 
   @Output()
   save = new EventEmitter<ConfigObject>();
@@ -27,19 +31,20 @@ export class SeedDetailComponent implements OnChanges {
   @Output()
   update = new EventEmitter<ConfigObject>();
 
+  @Output()
+  move = new EventEmitter<ConfigObject>();
+
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
 
+  ngUnsubscribe = new Subject<void>();
+
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
     this.createForm();
-  }
-
-  get showShortcuts(): boolean {
-    return !this.showSave;
   }
 
   get showSave(): boolean {
@@ -70,6 +75,10 @@ export class SeedDetailComponent implements OnChanges {
     return this.form.get('jobRefListId');
   }
 
+  get meta(): AbstractControl {
+    return this.form.get('meta');
+  }
+
   get disabled() {
     return this.form.get('disabled');
   }
@@ -82,6 +91,11 @@ export class SeedDetailComponent implements OnChanges {
         this.form.reset();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   getCrawlJobName(id) {
@@ -159,20 +173,14 @@ export class SeedDetailComponent implements OnChanges {
     seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
     seed.scope.surtPrefix = formModel.scope.surtPrefix;
 
-    const configObject = new ConfigObject({
+    return new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
       meta: formModel.meta,
       seed
     });
-    return configObject;
   }
 
-  private isMultipleSeed() {
-    const formModel = this.form.value;
-    const parts = formModel.meta.name.split(/\s+/);
-    return parts.length > 1;
-  }
 
   private prepareSaveMultiple(): { seeds: string[], configObject: ConfigObject } {
     const formModel = this.form.value;
@@ -192,5 +200,11 @@ export class SeedDetailComponent implements OnChanges {
     });
 
     return {seeds, configObject};
+  }
+
+  private isMultipleSeed() {
+    const meta = this.meta.value;
+    const parts = meta.name.split(/\s+/);
+    return parts.length > 1;
   }
 }
