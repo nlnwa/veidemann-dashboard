@@ -1,4 +1,5 @@
 import {Kind} from '../../commons/models';
+
 import {
   BrowserConfigDetailsMultiComponent,
   BrowserScriptDetailsMultiComponent,

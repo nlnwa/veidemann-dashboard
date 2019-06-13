@@ -32,7 +32,7 @@ export class WarcStatusPageComponent implements OnInit {
   numValid;
   numInvalid;
 
-  @ViewChild(WarcStatusListComponent) list: WarcStatusListComponent;
+  @ViewChild(WarcStatusListComponent, { static: true }) list: WarcStatusListComponent;
 
   constructor(private warcStatusService: WarcStatusService) {
   }

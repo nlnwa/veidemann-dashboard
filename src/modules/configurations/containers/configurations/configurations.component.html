@@ -1,50 +1,33 @@
 <button class="action-button"
         color="primary"
         mat-fab
-        *ngIf="showActionButton"
         (click)="onCreateConfig()">
   <mat-icon>add</mat-icon>
 </button>
 
-<button *ngIf="entityRef"
-        mat-fab
-        color="primary"
-        class="action-button-secondary"
-        matTooltip="Legg til seed"
-        (click)="onCreateConfig()">
-  <mat-icon>link</mat-icon>
-</button>
-
 <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
 
-<ng-container *ngIf="kind" [ngSwitch]="kind">
+<div [ngSwitch]="kind">
   <app-rolemapping-list *ngSwitchCase="Kind.ROLEMAPPING"
                         #baseList
-                        [fxHide]="dataService.data.length === 0"
                         (rowClick)="onSelectConfig($event)"
                         (selectedChange)="onSelectedChange($event)"
-                        (clone)="onCreateConfig($event)"
                         (selectAll)="onSelectAll()">
   </app-rolemapping-list>
 
   <app-collection-list *ngSwitchCase="Kind.COLLECTION"
                        #baseList
-                       [fxHide]="dataService.data.length === 0"
-                       (clone)="onCreateConfig($event)"
                        (rowClick)="onSelectConfig($event)">
   </app-collection-list>
 
   <app-base-list *ngSwitchDefault
                  #baseList
-                 [fxHide]="dataService.data.length === 0"
+                 (action)="onAction($event)"
                  (rowClick)="onSelectConfig($event)"
                  (selectedChange)="onSelectedChange($event)"
-                 (selectAll)="onSelectAll()"
-                 (clone)="onCreateConfig($event)"
-                 [embedded]="entityRef"
-                 (page)="onPage($event)">
+                 (selectAll)="onSelectAll()">
   </app-base-list>
-</ng-container>
+</div>
 
 <ng-container [ngSwitch]="kind" *ngIf="singleMode && configObject$ | async as configObject">
   <app-collection-details *ngSwitchCase="Kind.COLLECTION"
@@ -117,8 +100,6 @@
                     [crawlJobs]="options.crawlJobs"
                     (update)="onUpdateConfig($event)"
                     (save)="onSaveConfig($event)"
-                    (saveMultiple)="onSaveMultipleSeeds($event)"
-                    (move)="onMove($event)"
                     (delete)="onDeleteConfig($event)">
   </app-seed-details>
 

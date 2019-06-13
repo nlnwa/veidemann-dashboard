@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ConfigurationsComponent, LoglevelComponent, SearchComponent} from '../containers';
-import {OptionsResolver} from '../services/options.resolver.service';
+import {OptionsResolver} from '../services';
 import {GuardService} from '../../core/services/auth';
 import {Kind} from '../../commons/models';
 

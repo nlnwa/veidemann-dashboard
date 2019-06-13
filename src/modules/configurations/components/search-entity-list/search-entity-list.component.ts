@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components';
-import {isEntityLabel, isEntityName, isSeedLabel, isSeedName, SearchDataService} from '../../services/search-data.service';
+import {isEntityLabel, isEntityName, isSeedLabel, isSeedName, SearchDataService} from '../../services/data/search-data.service';
 
 @Component({
   selector: 'app-search-list',
@@ -19,7 +19,8 @@ export class SearchListComponent extends BaseListComponent {
 
   displayedColumns = ['select', 'name', 'description', 'entityName', 'entityLabel', 'seedName', 'seedLabel'];
 
-  constructor(protected cdr: ChangeDetectorRef, protected dataService: SearchDataService) {
-    super(cdr, dataService);
+  constructor(protected cdr: ChangeDetectorRef,
+              private searchDataService: SearchDataService) {
+    super(cdr, searchDataService);
   }
 }

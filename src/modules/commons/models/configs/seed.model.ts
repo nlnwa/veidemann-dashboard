@@ -16,7 +16,7 @@ export class Seed {
                 jobRefList = [],
                 disabled = false
               }: Partial<Seed> = {}) {
-    this.entityRef = new ConfigRef(entityRef || {kind: Kind.CRAWLENTITY});
+    this.entityRef = entityRef ? new ConfigRef(entityRef) : null;
     this.scope = new CrawlScope(scope);
     this.jobRefList = jobRefList ? jobRefList.map(configRef => new ConfigRef(configRef)) : [];
     this.disabled = disabled;

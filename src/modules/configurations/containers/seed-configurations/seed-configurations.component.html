@@ -1,0 +1,29 @@
+<button mat-fab
+        color="primary"
+        class="action-button-secondary"
+        matTooltip="Legg til seed"
+        (click)="onCreateConfig()">
+  <mat-icon>link</mat-icon>
+</button>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+
+<app-base-list #baseList
+               (action)="onAction($event)"
+               (rowClick)="onSelectConfig($event)"
+               (selectedChange)="onSelectedChange($event)"
+               (selectAll)="onSelectAll()"
+               [embedded]="entityRef">
+</app-base-list>
+
+<app-seed-details *ngIf="singleMode && configObject$ | async as configObject"
+                  [configObject]="configObject"
+                  [crawlJobs]="options.crawlJobs"
+                  (update)="onUpdateConfig($event)"
+                  (save)="onSaveConfig($event)"
+                  (saveMultiple)="onSaveSeeds($event)"
+                  (move)="onMove($event)"
+                  (delete)="onDeleteConfig($event)">
+</app-seed-details>
+
+<ng-template detail-host></ng-template>

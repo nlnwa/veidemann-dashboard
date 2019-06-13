@@ -3,7 +3,8 @@ import {EventService} from '../../core/services/event/event.service';
 import {EventListComponent} from '../component/';
 import {EventListRequest, ListRequest} from '../../../api';
 import {map, mergeMap, takeUntil, toArray} from 'rxjs/operators';
-import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import {ConfigObject, EventObject, Kind} from '../../commons/models';
 import {AuthService} from '../../core/services/auth';
 import {BackendService, SnackBarService} from '../../core/services';
@@ -80,7 +81,7 @@ export class EventPageComponent implements OnInit, OnDestroy {
     state: [State[State.NEW], State[State.OPEN]]
   };
 
-  @ViewChild(EventListComponent) eventList: EventListComponent;
+  @ViewChild(EventListComponent, { static: true }) eventList: EventListComponent;
 
   private ngUnsubscribe: Subject<void> = new Subject();
 

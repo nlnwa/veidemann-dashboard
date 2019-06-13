@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Out
 import {EventObject} from '../../../commons/models';
 import {Severity, State} from '../../../commons/models/event/event.model';
 import {BaseListComponent} from '../../../commons/components';
+import {SearchDataService} from '../../../configurations/services';
 
 
 @Component({
@@ -19,8 +20,9 @@ export class EventListComponent extends BaseListComponent {
   @Output()
   assignToMe: EventEmitter<EventObject> = new EventEmitter();
 
-  constructor(public cdr: ChangeDetectorRef) {
-    super(cdr);
+  constructor(public cdr: ChangeDetectorRef,
+              private searchDataService: SearchDataService) {
+    super(cdr, searchDataService);
   }
 
   onAssignToMe(eventObject: EventObject) {
