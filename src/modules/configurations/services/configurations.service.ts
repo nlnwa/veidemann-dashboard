@@ -55,28 +55,6 @@ export class ConfigurationsService implements OnDestroy {
     this.dataService.resetPaginator();
   }
 
-  move(configObject: ConfigObject): Observable<number> {
-    return this.dataService.move(configObject)
-      .pipe(
-        switchMap(updated => {
-          if (updated > 0) {
-            return this.dataService.seedsOfEntity(configObject).pipe(
-              switchMap(nrOfSeeds => {
-                if (nrOfSeeds === 0) {
-                  const config = new ConfigObject({kind: Kind.CRAWLENTITY, id: configObject.seed.entityRef.id});
-
-                  // TODO
-                  // should not delete entity but label seed and entity or something
-                  return of(null);
-                }
-              }),
-              map(() => updated));
-          } else {
-            return of(updated);
-          }
-        })
-      );
-  }
 
   save(configObject: ConfigObject) {
     return this.dataService.save(configObject);

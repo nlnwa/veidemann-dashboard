@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnDestroy, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 import {Observable, Subject} from 'rxjs';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
@@ -15,7 +15,6 @@ import {Title} from '@angular/platform-browser';
 import {ConfigurationsComponent} from '../configurations/configurations.component';
 import {ErrorService, SnackBarService} from '../../../core/services';
 import {SearchConfigurationService} from '../../services/search-configuration.service';
-import {ConfigurationsService} from '../../services/configurations.service';
 import {SeedConfigurationService} from '../../services/seed-configuration.service';
 
 
@@ -27,10 +26,9 @@ import {SeedConfigurationService} from '../../services/seed-configuration.servic
   providers: [
     SearchConfigurationService,
     SearchDataService,
-    SeedDataService,
     SeedConfigurationService,
+    SeedDataService,
     {provide: DataService, useExisting: SeedDataService},
-    {provide: ConfigurationsService, useExisting: SeedConfigurationService}
   ]
 })
 
@@ -38,7 +36,8 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
   readonly ConfigObject = ConfigObject;
 
   protected searchTerm: Subject<string> = new Subject<string>();
-  searchTerm$ = this.searchTerm.asObservable();
+
+  searchTerm$: Observable<string>;
 
   entityRef$: Observable<ConfigRef>;
 
@@ -55,6 +54,7 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     super(searchService, snackBarService, errorService, componentFactoryResolver,
       router, titleService, dialog, activatedRoute);
 
+    this.searchTerm$ = this.searchTerm.asObservable();
     this.kind = Kind.CRAWLENTITY;
   }
 
@@ -89,6 +89,10 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     this.reset();
     this.router.navigate([], {relativeTo: this.route});
     this.searchTerm.next(term);
+  }
+
+  onInvalidate() {
+    this.searchService.reload();
   }
 }
 

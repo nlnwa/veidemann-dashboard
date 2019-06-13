@@ -163,14 +163,6 @@ export class DataService implements DataSource<ConfigObject>, OnDestroy {
     );
   }
 
-  move(configObject: ConfigObject): Observable<number> {
-    return of(0);
-  }
-
-  seedsOfEntity(configObject: ConfigObject): Observable<number> {
-    return of(0);
-  }
-
   update(configObject): Observable<ConfigObject> {
     this.loading.next(true);
     return this.backendService.save(ConfigObject.toProto(configObject))

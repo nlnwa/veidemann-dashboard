@@ -47,6 +47,7 @@
   </div>
   <app-seed-configurations *ngIf="entityRef$ | async as entityRef"
                            fxFlex
-                           [entityRef]="entityRef">
+                           [entityRef]="entityRef"
+                           (invalidate)="onInvalidate()">
   </app-seed-configurations>
 </div>
