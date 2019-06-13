@@ -1831,10 +1831,15 @@ core-js@3.0.1:
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.0.1.tgz#1343182634298f7f38622f95e73f54e48ddf4738"
   integrity sha512-sco40rF+2KlE0ROMvydjkrVMMG1vYilP2ALoRXcYR4obqbYIuV3Bg+51GEDW+HF8n7NRA+iaA4qD0nD9lo9mew==
 
-core-js@^2.2.0, core-js@^2.4.0, core-js@^2.5.5:
+core-js@^2.2.0, core-js@^2.4.0:
   version "2.6.5"
   resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
+
+core-js@^2.6.9:
+  version "2.6.9"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.9.tgz#6b4b214620c834152e179323727fc19741b084f2"
+  integrity sha512-HOpZf6eXmnl7la+cUdMnLvUxKNqLUzJvgIziQ0DiF3JwSImNphIqdGqzj6hIKyX04MmV0poclQ7+wjWvxQyR2A==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -2939,10 +2944,10 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-protobuf@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.7.1.tgz#9ef0fa3bc9ee416ba3fbe32b21ec6b7626f898e2"
-  integrity sha512-6fvlUey6cNKtWSEn1bt4CT4wc2EID1fVluHS1dOnqIlxyIu3cBid2BvWE8Rwl6wN+hRTgiAKhfyydAGV/weZYQ==
+google-protobuf@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.8.0.tgz#4fd2ee3a97751cb543dc5de85ffd264aff9f4980"
+  integrity sha512-tx39PTc//HaIT7K/baUF/8JYLGDozEi1e4xwPP1qSx3InP78cNpbSJpxiDsDMwj77qNOndVBDXnn7oi9zKxZew==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   version "4.1.15"
@@ -3335,18 +3340,14 @@ invert-kv@^2.0.0:
   resolved "https://registry.npmjs.org/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-ip-address@^5.9.0:
-  version "5.9.0"
-  resolved "https://registry.npmjs.org/ip-address/-/ip-address-5.9.0.tgz#e501b3a0da9e31d9a14ef7ccdc05c5552c465954"
-  integrity sha512-+4yKpEyent8IpjuDQVkIpzIDbxSlCHTPdmaXCRLH0ttt3YsrbNxuZJ6h+1wLPx10T7gWsLN7M6BXIHV2vZNOGw==
+ip-address@^5.9.2:
+  version "5.9.2"
+  resolved "https://registry.npmjs.org/ip-address/-/ip-address-5.9.2.tgz#8e7d2dab5cbf3cbf34e1f730ec6913f55fec8c74"
+  integrity sha512-7aeFm/7oqo0mMhubTSjZ2Juw/F+WJ3hyfCScNVRQdz5RSRhw1Rj4ZlBFsmEajeKgQDI8asqVs31h8DpxEv7IfQ==
   dependencies:
     jsbn "1.1.0"
-    lodash.find "^4.6.0"
-    lodash.max "^4.0.1"
-    lodash.merge "^4.6.1"
-    lodash.padstart "^4.6.1"
-    lodash.repeat "^4.1.0"
-    sprintf-js "1.1.1"
+    lodash "^4.17.11"
+    sprintf-js "1.1.2"
 
 ip-regex@^2.1.0:
   version "2.1.0"
@@ -4026,35 +4027,10 @@ lodash.clonedeep@^4.5.0:
   resolved "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
-lodash.find@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.npmjs.org/lodash.find/-/lodash.find-4.6.0.tgz#cb0704d47ab71789ffa0de8b97dd926fb88b13b1"
-  integrity sha1-ywcE1Hq3F4n/oN6Ll92Sb7iLE7E=
-
-lodash.max@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/lodash.max/-/lodash.max-4.0.1.tgz#8735566c618b35a9f760520b487ae79658af136a"
-  integrity sha1-hzVWbGGLNan3YFILSHrnllivE2o=
-
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
-
-lodash.merge@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
-  integrity sha512-AOYza4+Hf5z1/0Hztxpm2/xiPZgi/cjMqdnKTUWTBSKchJlxXXuUSxCCl8rJlf4g6yww/j6mA8nC8Hw/EZWxKQ==
-
-lodash.padstart@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.npmjs.org/lodash.padstart/-/lodash.padstart-4.6.1.tgz#d2e3eebff0d9d39ad50f5cbd1b52a7bce6bb611b"
-  integrity sha1-0uPuv/DZ05rVD1y9G1KnvOa7YRs=
-
-lodash.repeat@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.npmjs.org/lodash.repeat/-/lodash.repeat-4.1.0.tgz#fc7de8131d8c8ac07e4b49f74ffe829d1f2bec44"
-  integrity sha1-/H3oEx2MisB+S0n3T/6CnR8r7EQ=
 
 lodash.tail@^4.1.1:
   version "4.1.1"
@@ -6227,12 +6203,7 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
-sprintf-js@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.1.1.tgz#36be78320afe5801f6cea3ee78b6e5aab940ea0c"
-  integrity sha1-Nr54Mgr+WAH2zqPueLblqrlA6gw=
-
-sprintf-js@^1.1.2:
+sprintf-js@1.1.2, sprintf-js@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
   integrity sha512-VE0SOVEHCk7Qc8ulkWw3ntAzXuqf7S2lvwQaDLRnUeIEaKNQJzV6BwmLKhOqT61aGhfUMrXeaBk+oDGCzvhcug==
