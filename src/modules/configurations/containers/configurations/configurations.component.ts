@@ -67,7 +67,7 @@ export interface ConfigOptions {
 export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
   readonly Kind = Kind;
 
-  protected kind: Kind;
+  kind: Kind;
 
   protected configObject: Subject<ConfigObject> = new Subject();
 
