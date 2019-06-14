@@ -36,9 +36,9 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   entityRef: ConfigRef;
 
   @Output()
-  move = new EventEmitter<ConfigObject>();
+  move = new EventEmitter<ConfigObject | ConfigObject[]>();
 
-  @ViewChild('autosize', { static: false })
+  @ViewChild('autosize', {static: false})
   txtAreaAutosize: CdkTextareaAutosize;
 
   constructor(protected fb: FormBuilder,
@@ -68,9 +68,14 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     this.name.setValue(replaced);
   }
 
-  onMoveSeedToCurrentEntity(seed: any) {
+  onMoveSeedToCurrentEntity(seed: ConfigObject) {
     this.onRemoveExistingUrl(seed.meta.name);
     this.move.emit(seed);
+  }
+
+  onMoveSeedsToCurrentEntity(seeds: ConfigObject[]) {
+    this.name.setValue('');
+    this.move.emit(seeds);
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {

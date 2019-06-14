@@ -1,11 +1,11 @@
 import {BackendService} from '../../../core/services';
-import {ConfigObject, ConfigRef, Kind} from '../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, Label} from '../../../commons/models';
 import {createListRequest, DataService, pageListRequest} from './data.service';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {finalize, map, tap} from 'rxjs/operators';
+import {from, Observable, of} from 'rxjs';
+import {count, finalize, map, mergeMap, tap} from 'rxjs/operators';
 import {FieldMask, ListRequest} from '../../../../api';
-import { PageEvent } from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 
 
 export function withQueryTemplate(listRequest: ListRequest, queryTemplate: ConfigObject, queryMask: FieldMask) {
@@ -59,39 +59,20 @@ export class SeedDataService extends DataService {
   }
 
   move(configObject: ConfigObject): Observable<number> {
-    const updateTemplate = new ConfigObject({kind: Kind.SEED});
-    const seed = updateTemplate.seed;
-
-    seed.entityRef = new ConfigRef(this.configRef);
-    const pathList = ['seed.entityRef'];
-
     this.loading.next(true);
-    return this.updateWithTemplate(updateTemplate, pathList, [configObject.id])
+    return this._move(configObject)
       .pipe(finalize(() => this.loading.next(false)));
   }
 
-  seedsOfEntity(configObject: ConfigObject): any {
-    const listRequest = createListRequest(Kind.SEED.valueOf());
-
-    listRequest.setIdList([]);
-
-    const queryMask = new FieldMask();
-    queryMask.setPathsList(['seed.entityRef']);
-
-    listRequest.setQueryMask(queryMask);
-
-    const queryTemplate = new ConfigObject({kind: Kind.SEED});
-    queryTemplate.seed.entityRef = configObject.seed.entityRef;
-
-    listRequest.setQueryTemplate(ConfigObject.toProto(queryTemplate));
-
-    return this.backendService.count(listRequest);
+  moveMultiple(configObjects: ConfigObject[]): Observable<number> {
+    this.loading.next(true);
+    return from(configObjects).pipe(
+      mergeMap(configObject => this._move(configObject)),
+      count(updated => !!updated),
+      finalize(() => this.loading.next(false))
+    );
   }
 
-  /**
-   * @param configObject
-   * @private
-   */
   protected _save(configObject: ConfigObject): Observable<ConfigObject> {
     return super._save(configObject);
   }
@@ -113,5 +94,15 @@ export class SeedDataService extends DataService {
         this._paginator.length = countOfKind;
       })
     );
+  }
+
+  private _move(configObject: ConfigObject): Observable<number> {
+    const refLabel = new Label({key: 'entityRef', value: configObject.seed.entityRef.id});
+    const updateTemplate = new ConfigObject({kind: Kind.SEED});
+    updateTemplate.meta.labelList = [refLabel];
+    updateTemplate.seed.entityRef = new ConfigRef(this.configRef);
+    const pathList = ['seed.entityRef', 'meta.label+'];
+
+    return this.updateWithTemplate(updateTemplate, pathList, [configObject.id]);
   }
 }

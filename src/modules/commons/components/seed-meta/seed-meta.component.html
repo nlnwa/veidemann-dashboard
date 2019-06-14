@@ -30,7 +30,24 @@
         Andre entiteter inneholder seed med samme url som er skrevet inn
       </mat-error>
     </mat-list-item>
+    <mat-list-item *ngIf="name.errors.seedExists?.length > 1">
+      <button mat-button
+              (click)="onMoveSeedsToCurrentEntity(name.errors.seedExists)">
+        <mat-icon mat-list-icon>swap_vert</mat-icon>
+        <span>Flytt alle til denne entiteten</span>
+      </button>
+    </mat-list-item>
     <mat-list-item *ngFor="let seed of name.errors.seedExists">
+      <button mat-icon-button
+              (click)="onMoveSeedToCurrentEntity(seed)"
+              matTooltip="Flytt seed til denne entiteten">
+        <mat-icon mat-list-icon>swap_horiz</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
+              matTooltip="Fjern url fra listen">
+        <mat-icon mat-list-icon>cancel</mat-icon>
+      </button>
 
       <a target="_blank"
          matTooltip="Gå til entiten som allerede har en seed med lik url"
@@ -38,17 +55,6 @@
          [queryParams]="{id: seed.seed.entityRef.id}">
         {{seed.meta.name}}
       </a>
-
-      <button mat-icon-button
-              (click)="onMoveSeedToCurrentEntity(seed)"
-              matTooltip="Flytt seed til denne entiteten">
-        <mat-icon mat-list-icon>merge_type</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
-              matTooltip="Fjern url fra listen">
-        <mat-icon mat-list-icon>cancel</mat-icon>
-      </button>
     </mat-list-item>
   </mat-list>
 

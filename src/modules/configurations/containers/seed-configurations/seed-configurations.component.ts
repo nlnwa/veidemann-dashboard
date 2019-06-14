@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {MatDialog} from '@angular/material/dialog';
@@ -7,8 +17,8 @@ import {takeUntil} from 'rxjs/operators';
 import {ErrorService, SnackBarService} from '../../../core';
 import {ConfigObject, Kind, Meta} from '../../../commons/models';
 import {ReferrerError} from '../../../commons';
-import {ConfigurationsService} from '../../services/configurations.service';
 import {ConfigurationsComponent} from '..';
+import {SeedConfigurationService} from '../../services/seed-configuration.service';
 
 @Component({
   selector: 'app-seed-configurations',
@@ -21,7 +31,10 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
   @Input()
   entityRef;
 
-  constructor(protected configurationsService: ConfigurationsService,
+  @Output()
+  invalidate: EventEmitter<void> = new EventEmitter();
+
+  constructor(protected configurationsService: SeedConfigurationService,
               protected snackBarService: SnackBarService,
               protected errorService: ErrorService,
               protected componentFactoryResolver: ComponentFactoryResolver,
@@ -78,14 +91,17 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
       });
   }
 
-  onMove(configObject: ConfigObject) {
-    this.configurationsService.move(configObject)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(response => {
-        this.snackBarService.openSnackBar('Seed flyttet');
+  onMove(configObject: ConfigObject | ConfigObject[]) {
+    const observable = Array.isArray(configObject)
+      ? this.configurationsService.moveMultiple(configObject)
+      : this.configurationsService.move(configObject);
+    observable.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(updated => {
+        this.invalidate.emit();
+        this.configurationsService.reload();
+        this.snackBarService.openSnackBar(updated + 'seed(s) flyttet');
       });
   }
-
 
   onSaveSeeds({seeds = [], configObject: template = new ConfigObject()}) {
     const configObjects = seeds.map(
