@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {WarcStatusService} from '../../services/warcstatus.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class WarcStatusListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource();
   displayedColumns = ['filename', 'status'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private warcStatusService: WarcStatusService) {
   }

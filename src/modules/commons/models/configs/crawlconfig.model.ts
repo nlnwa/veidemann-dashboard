@@ -3,6 +3,30 @@ import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
 import {ConfigObject} from '../configobject.model';
 
+export class ExtraConfig {
+  extractText: boolean;
+  createScreenshot: boolean;
+
+  constructor({createScreenshot = true, extractText = true}: Partial<ExtraConfig> = {}) {
+    this.extractText = extractText;
+    this.createScreenshot = createScreenshot;
+  }
+
+  static fromProto(proto: ExtraConfigProto): ExtraConfig {
+    return new ExtraConfig({
+      extractText: proto.getExtractText(),
+      createScreenshot: proto.getCreateScreenshot()
+    });
+  }
+
+  static toProto(extraConfig: ExtraConfig): ExtraConfigProto {
+    const proto = new ExtraConfigProto();
+    proto.setExtractText(extraConfig.extractText);
+    proto.setCreateScreenshot(extraConfig.createScreenshot);
+    return proto;
+  }
+}
+
 export class CrawlConfig {
   collectionRef: ConfigRef;
   browserConfigRef: ConfigRef;
@@ -122,32 +146,3 @@ export class CrawlConfig {
     return crawlConfig;
   }
 }
-
-export class ExtraConfig {
-  extractText: boolean;
-  createScreenshot: boolean;
-
-  constructor({createScreenshot = true, extractText = true}: Partial<ExtraConfig> = {}) {
-    this.extractText = extractText;
-    this.createScreenshot = createScreenshot;
-  }
-
-  static fromProto(proto: ExtraConfigProto): ExtraConfig {
-    return new ExtraConfig({
-      extractText: proto.getExtractText(),
-      createScreenshot: proto.getCreateScreenshot()
-    });
-  }
-
-  static toProto(extraConfig: ExtraConfig): ExtraConfigProto {
-    const proto = new ExtraConfigProto();
-    proto.setExtractText(extraConfig.extractText);
-    proto.setCreateScreenshot(extraConfig.createScreenshot);
-    return proto;
-  }
-}
-
-
-
-
-

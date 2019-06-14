@@ -6,15 +6,27 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Optional,
   Output,
   ViewChild
 } from '@angular/core';
-import {MatPaginator, MatTableDataSource, PageEvent} from '@angular/material';
-import {Subject} from 'rxjs';
-import {DataService} from '../../../configurations/services/data.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import {DataService} from '../../../configurations/services/data/data.service';
+
+export enum Action {
+  Clone = 'Clone'
+}
+
+export interface ActionView {
+  icon: string;
+  type: Action;
+}
+
+export interface ActionEvent {
+  item: any;
+  action: Action;
+}
 
 @Component({
   selector: 'app-base-list',
@@ -24,25 +36,29 @@ import {DataService} from '../../../configurations/services/data.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+export class BaseListComponent implements AfterViewInit {
 
-export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
+  displayedColumns: string[] = ['select', 'name', 'description', 'action'];
 
-  displayedColumns: string[] = ['select', 'name', 'description', 'clone'];
-
-  @Input()
-  dataSource: (DataSource<any> & { data: any[] }) | MatTableDataSource<any>;
+  actions: ActionView[] = [
+    {icon: 'file_copy', type: Action.Clone}
+  ];
 
   // selection
   selection = new SelectionModel<any>(true, []);
   allSelected = false;
   selectedRow: any;
 
-  // paging
-  @Input()
   pageLength = 0;
+
   pageSize = 10;
+
   pageIndex = 0;
+
   pageOptions = [5, 10, 25, 50, 100];
+
+  @Input()
+  dataSource: (DataSource<any> & { data: any[], paginator?: MatPaginator, filteredData?: any[] }) | MatTableDataSource<any>;
 
   @Input()
   embedded = false;
@@ -60,15 +76,13 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   selectAll: EventEmitter<void> = new EventEmitter();
 
   @Output()
-  clone: EventEmitter<any> = new EventEmitter();
+  action: EventEmitter<ActionEvent> = new EventEmitter();
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-
-  private ngUnsubscribe = new Subject();
+  @ViewChild(MatPaginator, {static: false}) paginator;
 
   constructor(protected cdr: ChangeDetectorRef,
-              @Optional() protected dataService: DataService = null) {
+              @Optional() protected _dataSource: DataService) {
+    this.dataSource = _dataSource;
   }
 
   get isAllInPageSelected(): boolean {
@@ -76,38 +90,22 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get data(): any[] {
-    if (this.dataService) {
-      return this.dataSource.data;
-    } else {
-      return (this.dataSource as MatTableDataSource<any>).filteredData;
-    }
+    return this.dataSource.filteredData || this.dataSource.data;
   }
 
   get selectionCount(): number {
     return this.selection.selected.length;
   }
 
-  ngOnInit(): void {
-    if (this.dataService) {
-      this.dataSource = this.dataService;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   ngAfterViewInit(): void {
-    if (this.dataService) {
-      this.dataService.paginator = this.paginator;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
     }
   }
 
   reset() {
     this.selection.clear();
     this.selectedRow = null;
-    this.pageLength = 0;
     this.pageIndex = 0;
     this.cdr.markForCheck();
   }
@@ -116,12 +114,11 @@ export class BaseListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.page.emit(pageEvent);
   }
 
-  onClone(configObject: any) {
-    this.clone.emit(configObject.constructor.clone(configObject));
+  onAction(item: any, action: Action) {
+    this.action.emit({item, action});
   }
 
   onRowClick(item: any) {
-
     if (this.selection.selected.length < 2) {
       if (!this.selectedRow) {
         this.selectedRow = item;

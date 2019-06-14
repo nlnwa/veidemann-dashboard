@@ -2,9 +2,8 @@ import {NgModule} from '@angular/core';
 
 import {CommonsModule} from '../commons/commons.module';
 import {DetailDirective} from './directives/detail.directive';
-import {SearchComponent} from './containers';
-import {ConfigurationsComponent, LoglevelComponent} from './containers';
-import {DataService, OptionsResolver} from './services';
+import {ConfigurationsComponent, LoglevelComponent, SearchComponent} from './containers';
+import {OptionsResolver} from './services';
 import {ConfigurationsRoutingModule} from './routing/configurations-routing.module';
 import {
   BrowserConfigDetailsComponent,
@@ -30,8 +29,9 @@ import {
   ScheduleDetailsMultiComponent,
   SearchListComponent,
 } from './components';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {SeedConfigurationsComponent} from './containers/seed-configurations/seed-configurations.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +61,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
     CollectionDetailsComponent,
     CollectionListComponent,
     DeleteDialogComponent,
+    SeedConfigurationsComponent
   ],
   entryComponents: [
     CrawljobDetailsMultiComponent,
@@ -82,7 +83,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
   ],
   providers: [
     OptionsResolver,
-    DataService,
     {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},

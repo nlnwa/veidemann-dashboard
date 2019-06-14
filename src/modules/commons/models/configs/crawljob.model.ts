@@ -3,6 +3,38 @@ import {ConfigRef} from '../configref.model';
 import {ConfigObject} from '../configobject.model';
 import {Kind} from '../kind.model';
 
+export class CrawlLimitsConfig {
+  depth?: number;
+  maxDurationS?: number; // int64
+  maxBytes?: number; // int64
+
+  constructor({
+                depth = 0,
+                maxDurationS = 0,
+                maxBytes = 0,
+              }: Partial<CrawlLimitsConfig> = {}) {
+    this.depth = depth;
+    this.maxDurationS = maxDurationS;
+    this.maxBytes = maxBytes;
+  }
+
+  static fromProto(proto: CrawlLimitsConfigProto): CrawlLimitsConfig {
+    return new CrawlLimitsConfig({
+      depth: proto.getDepth(),
+      maxDurationS: proto.getMaxDurationS(),
+      maxBytes: proto.getMaxBytes()
+    });
+  }
+
+  static toProto(crawlLimitsConfig): CrawlLimitsConfigProto {
+    const proto = new CrawlLimitsConfigProto();
+    proto.setDepth(crawlLimitsConfig.depth || 0);
+    proto.setMaxDurationS(crawlLimitsConfig.maxDurationS || 0);
+    proto.setMaxBytes(crawlLimitsConfig.maxBytes || 0);
+    return proto;
+  }
+}
+
 export class CrawlJob {
   scheduleRef?: ConfigRef;
   limits: CrawlLimitsConfig;
@@ -93,36 +125,3 @@ export class CrawlJob {
     return crawlJob;
   }
 }
-
-export class CrawlLimitsConfig {
-  depth?: number;
-  maxDurationS?: number; // int64
-  maxBytes?: number; // int64
-
-  constructor({
-                depth = 0,
-                maxDurationS = 0,
-                maxBytes = 0,
-              }: Partial<CrawlLimitsConfig> = {}) {
-    this.depth = depth;
-    this.maxDurationS = maxDurationS;
-    this.maxBytes = maxBytes;
-  }
-
-  static fromProto(proto: CrawlLimitsConfigProto): CrawlLimitsConfig {
-    return new CrawlLimitsConfig({
-      depth: proto.getDepth(),
-      maxDurationS: proto.getMaxDurationS(),
-      maxBytes: proto.getMaxBytes()
-    });
-  }
-
-  static toProto(crawlLimitsConfig): CrawlLimitsConfigProto {
-    const proto = new CrawlLimitsConfigProto();
-    proto.setDepth(crawlLimitsConfig.depth || 0);
-    proto.setMaxDurationS(crawlLimitsConfig.maxDurationS || 0);
-    proto.setMaxBytes(crawlLimitsConfig.maxBytes || 0);
-    return proto;
-  }
-}
-

@@ -5,16 +5,16 @@ import {GuardService} from '../../core/services/auth';
 const routes: Routes = [
   {
     path: 'activity',
-    loadChildren: '../../event/event.module#EventModule',
+    loadChildren: () => import('../../event/event.module').then(m => m.EventModule),
   },
   {
     path: 'config',
-    loadChildren: '../../configurations/configurations.module#ConfigurationsModule',
+    loadChildren: () => import('../../configurations/configurations.module').then(m => m.ConfigurationsModule),
     canLoad: [GuardService]
   },
   {
     path: 'validator',
-    loadChildren: '../../warc/warc.module#WarcModule',
+    loadChildren: () => import('../../warc/warc.module').then(m => m.WarcModule),
     canLoad: [GuardService]
   },
 ];

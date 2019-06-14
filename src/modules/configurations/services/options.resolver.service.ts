@@ -1,36 +1,33 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {ConfigObject, Kind} from '../../commons/models';
+import {ConfigObject, Kind, RobotsPolicy, Role, RotationPolicy, SubCollectionType} from '../../commons/models';
 import {map, toArray} from 'rxjs/operators';
 import {BackendService} from '../../core/services';
 import {pathToKind} from '../func/kind';
-import {combineLatest, Observable} from 'rxjs';
-import {ofKind} from './data.service';
-import {RobotsPolicy} from '../../commons/models/configs/politenessconfig.model';
-import {RotationPolicy} from '../../commons/models/configs/collection.model';
-import {SubCollectionType} from '../../commons/models/configs/subcollection.model';
-import {Role} from '../../commons/models/configs/rolemapping.model';
+import {combineLatest, Observable, of} from 'rxjs';
+import {createListRequest} from './data/data.service';
+import {ConfigOptions} from '../containers/configurations/configurations.component';
 
 @Injectable()
-export class OptionsResolver implements Resolve<any> {
+export class OptionsResolver implements Resolve<ConfigOptions> {
 
 
   constructor(private backendService: BackendService) {
   }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
+  resolve(route: ActivatedRouteSnapshot): Observable<ConfigOptions> | Promise<ConfigOptions> | ConfigOptions {
     const kind: Kind = pathToKind(route.paramMap.get('kind')) || route.data.kind;
 
     switch (kind) {
 
 
       case Kind.CRAWLJOB:
-        const crawlScheduleConfig$ = this.backendService.list(ofKind(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
+        const crawlScheduleConfig$ = this.backendService.list(createListRequest(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
 
-        const crawlConfig$ = this.backendService.list(ofKind(Kind.CRAWLCONFIG.valueOf())).pipe(
+        const crawlConfig$ = this.backendService.list(createListRequest(Kind.CRAWLCONFIG.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
@@ -40,15 +37,15 @@ export class OptionsResolver implements Resolve<any> {
         );
 
       case Kind.CRAWLCONFIG:
-        const collection$ = this.backendService.list(ofKind(Kind.COLLECTION.valueOf())).pipe(
+        const collection$ = this.backendService.list(createListRequest(Kind.COLLECTION.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
-        const browserConfig$ = this.backendService.list(ofKind(Kind.BROWSERCONFIG.valueOf())).pipe(
+        const browserConfig$ = this.backendService.list(createListRequest(Kind.BROWSERCONFIG.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
-        const politenessConfig$ = this.backendService.list(ofKind(Kind.POLITENESSCONFIG.valueOf())).pipe(
+        const politenessConfig$ = this.backendService.list(createListRequest(Kind.POLITENESSCONFIG.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
         );
@@ -56,7 +53,7 @@ export class OptionsResolver implements Resolve<any> {
           map(([collections, browserConfigs, politenessConfigs]) => ({collections, browserConfigs, politenessConfigs})));
 
       case Kind.BROWSERCONFIG:
-        return this.backendService.list(ofKind(Kind.BROWSERSCRIPT.valueOf())).pipe(
+        return this.backendService.list(createListRequest(Kind.BROWSERSCRIPT.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
           map(browserScripts => ({browserScripts}))
@@ -99,14 +96,16 @@ export class OptionsResolver implements Resolve<any> {
           ]
         };
 
-      default:
       case Kind.SEED:
       case Kind.CRAWLENTITY:
-        return this.backendService.list(ofKind(Kind.CRAWLJOB.valueOf())).pipe(
+        return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
           map(configObject => ConfigObject.fromProto(configObject)),
           toArray(),
           map(crawlJobs => ({crawlJobs}))
         );
+
+      default:
+        return of(null);
     }
   }
 

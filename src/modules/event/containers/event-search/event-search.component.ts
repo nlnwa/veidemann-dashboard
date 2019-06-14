@@ -13,10 +13,11 @@ import {SearchComponent} from '../../../configurations/containers';
 import {AuthService, ErrorService, SnackBarService} from '../../../core/services';
 import {DataService, SearchDataService, SeedDataService} from '../../../configurations/services';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {Title} from '@angular/platform-browser';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta, Seed} from '../../../commons/models';
+import {SearchConfigurationService} from '../../../configurations/services/search-configuration.service';
 
 @Component({
   selector: 'app-event-search',
@@ -34,8 +35,8 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   @Output()
   seedCreated = new EventEmitter<ConfigObject>();
 
-  @ViewChild('entityDetails') entityDetails: ElementRef;
-  @ViewChild('seedDetails') seedDetails: ElementRef;
+  @ViewChild('entityDetails', {static: false}) entityDetails: ElementRef;
+  @ViewChild('seedDetails', {static: false}) seedDetails: ElementRef;
 
   seedObject: ConfigObject;
   crawlJobs: CrawlJob[];
@@ -48,24 +49,23 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected router: Router,
     protected dialog: MatDialog,
-    protected dataService: SearchDataService,
+    protected searchService: SearchConfigurationService,
     public titleService: Title,
     protected authService: AuthService) {
 
-    super(seedDataService, snackBarService, errorService, activatedRoute,
-      componentFactoryResolver, router, dialog, dataService, titleService, authService);
-    this.entityRef = true;
+    super(snackBarService, errorService, activatedRoute,
+      componentFactoryResolver, router, dialog, searchService, titleService, authService);
   }
 
   ngOnInit() {
     this.crawlJobs = this.route.snapshot.data.options.crawlJobs;
 
     this.searchTerm$.pipe(
-      switchMap((term: string) => this.dataService.search(term)),
+      switchMap((term: string) => this.searchService.search(term)),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(() => {
-
-    }, (error) => this.errorService.dispatch(error));
+      },
+      (error) => this.errorService.dispatch(error));
   }
 
   onSearch(term: string) {
@@ -94,7 +94,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   }
 
   onSaveEntity(configObject: ConfigObject) {
-    this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
+    this.searchService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newEntity => {
         const entityRef = new ConfigRef({kind: newEntity.kind, id: newEntity.id});
         this.configObject.next(newEntity);

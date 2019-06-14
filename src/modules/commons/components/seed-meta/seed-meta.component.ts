@@ -38,7 +38,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   @Output()
   move = new EventEmitter<ConfigObject>();
 
-  @ViewChild('autosize')
+  @ViewChild('autosize', { static: false })
   txtAreaAutosize: CdkTextareaAutosize;
 
   constructor(protected fb: FormBuilder,

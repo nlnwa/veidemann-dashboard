@@ -110,29 +110,34 @@ export class CrawljobDetailsMultiComponent extends CrawljobDetailsComponent {
       pathList.push('crawlJob.disabled');
     }
 
-    if (this.depth.dirty && (this.allSelected || formModel.limits.depth !== this.configObject.crawlJob.limits.depth)) {
+    if (this.depth.dirty &&
+      (this.allSelected || formModel.limits.depth !== this.configObject.crawlJob.limits.depth)) {
       crawlJob.limits.depth = formModel.limits.depth;
       pathList.push('crawlJob.limits.depth');
     }
 
-    if (this.maxBytes.dirty && (this.allSelected || formModel.limits.maxBytes !== this.configObject.crawlJob.limits.maxBytes)) {
+    if (this.maxBytes.dirty &&
+      (this.allSelected || formModel.limits.maxBytes !== this.configObject.crawlJob.limits.maxBytes)) {
       crawlJob.limits.maxBytes = formModel.limits.maxBytes;
       pathList.push('crawlJob.limits.maxBytes');
     }
 
-    if (this.maxDurationSeconds.dirty && (this.allSelected || formModel.limits.maxDurationS !== this.configObject.crawlJob.limits.maxDurationS)) {
+    if (this.maxDurationSeconds.dirty &&
+      (this.allSelected || formModel.limits.maxDurationS !== this.configObject.crawlJob.limits.maxDurationS)) {
       crawlJob.limits.maxDurationS = formModel.limits.maxDurationS;
       pathList.push('crawlJob.limits.maxDurationS');
     }
 
-    if (formModel.scheduleRef.id && this.scheduleRef.dirty && (this.allSelected || formModel.scheduleRef !== this.configObject.crawlJob.scheduleRef)) {
+    if (formModel.scheduleRef.id &&
+      this.scheduleRef.dirty && (this.allSelected || formModel.scheduleRef !== this.configObject.crawlJob.scheduleRef)) {
       crawlJob.scheduleRef = formModel.scheduleRef;
       pathList.push('crawlJob.scheduleRef');
     } else {
       updateTemplate.crawlJob.scheduleRef = null;
     }
 
-    if (formModel.crawlConfigRef.id && this.crawlConfigRef.dirty && (this.allSelected || formModel.crawlConfigRef !== this.configObject.crawlJob.crawlConfigRef)) {
+    if (formModel.crawlConfigRef.id && this.crawlConfigRef.dirty &&
+      (this.allSelected || formModel.crawlConfigRef !== this.configObject.crawlJob.crawlConfigRef)) {
       crawlJob.crawlConfigRef = formModel.crawlConfigRef;
       pathList.push('crawlJob.crawlConfigRef');
     } else {

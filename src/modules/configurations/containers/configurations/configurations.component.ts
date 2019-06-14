@@ -3,88 +3,104 @@ import {
   Component,
   ComponentFactoryResolver,
   ComponentRef,
-  Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import {MatDialog, MatDialogConfig, PageEvent} from '@angular/material';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
-import {combineLatest, EMPTY, from, Observable, of, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
+import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ErrorService, SnackBarService} from '../../../core';
-import {catchError, debounceTime, filter, map, mergeMap, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DetailDirective} from '../../directives/detail.directive';
 import {
   BrowserConfig,
   BrowserScript,
+  Collection,
   ConfigObject,
   CrawlConfig,
   CrawlHostGroupConfig,
   CrawlJob,
   CrawlScheduleConfig,
   Kind,
-  Meta,
   PolitenessConfig,
-  RoleMapping
+  RobotsPolicy,
+  Role,
+  RoleMapping,
+  RotationPolicy,
+  SubCollectionType
 } from '../../../commons/models';
 import {DeleteDialogComponent} from '../../components';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DataService} from '../../services';
-import {Title} from '@angular/platform-browser';
-import {componentOfKind, pathToKind} from '../../func/kind';
+import {componentOfKind} from '../../func/kind';
 import {BaseListComponent, ReferrerError} from '../../../commons';
+import {Action} from '../../../commons/components/base-list/base-list';
+import {ConfigurationsService} from '../../services/configurations.service';
+import {DataService} from '../../services/data';
 
+export interface ConfigOptions {
+  rotationPolicies?: RotationPolicy[];
+  subCollectionTypes?: SubCollectionType[];
+  crawlConfigs?: ConfigObject[];
+  crawlScheduleConfigs?: ConfigObject[];
+  browserConfigs?: ConfigObject[];
+  collections?: ConfigObject[];
+  politenessConfigs?: ConfigObject[];
+  browserScripts?: ConfigObject[];
+  robotsPolicies?: RobotsPolicy[];
+  crawlJobs?: ConfigObject[];
+  roles?: Role[];
+}
 
 @Component({
   selector: 'app-configurations',
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ConfigurationsService, DataService]
 })
-
-export class ConfigurationsComponent implements OnInit, OnDestroy {
+export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
   readonly Kind = Kind;
 
-  @Input()
   kind: Kind;
 
-  @Input()
-  entityRef;
+  protected configObject: Subject<ConfigObject> = new Subject();
 
-  configObject: Subject<ConfigObject> = new Subject();
-  configObject$ = this.configObject.asObservable();
-  options: any = {};
+  protected options: ConfigOptions = {};
 
-  selectedConfigs: ConfigObject[] = [];
-  allSelected = false;
+  protected selectedConfigs: ConfigObject[] = [];
+
+  protected isAllSelected = false;
 
   protected ngUnsubscribe = new Subject();
 
-  componentRef: ComponentRef<any>;
+  protected componentRef: ComponentRef<any>;
 
-  @ViewChild(DetailDirective) detailHost: DetailDirective;
-  @ViewChild('baseList') list: BaseListComponent;
+  configObject$: Observable<ConfigObject>;
 
-  constructor(protected dataService: DataService,
+  @ViewChild(DetailDirective, {static: true}) detailHost: DetailDirective;
+
+  @ViewChild('baseList', {static: false}) list: BaseListComponent;
+
+  constructor(protected configurationsService: ConfigurationsService,
               protected snackBarService: SnackBarService,
               protected errorService: ErrorService,
               protected componentFactoryResolver: ComponentFactoryResolver,
               protected router: Router,
-              public titleService: Title,
+              protected titleService: Title,
               protected dialog: MatDialog,
               protected route: ActivatedRoute) {
+    this.configObject$ = this.configObject.asObservable();
   }
 
   get loading$(): Observable<boolean> {
-    return this.dataService.loading$;
+    return this.configurationsService.loading$;
   }
-
-  get showActionButton(): boolean {
-    return !this.entityRef && !(!this.entityRef && this.kind === Kind.SEED);
-  }
-
 
   get viewContainerRef(): ViewContainerRef {
     return this.detailHost.viewContainerRef;
@@ -121,38 +137,26 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   get singleMode(): boolean {
-    return !this.allSelected && this.selectedConfigs.length < 2;
+    return !this.isAllSelected && this.selectedConfigs.length < 2;
   }
 
   ngOnInit() {
-    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      this.options = data.options;
+    this.route.data.subscribe(data => this.options = data.options);
+
+    this.configurationsService.configObject$.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(configObject => this.configObject.next(configObject));
+
+    this.configurationsService.kind$.subscribe(kind => {
+      this.kind = kind;
+      this.reset();
+      this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
     });
+  }
 
-    if (this.entityRef) {
-      this.dataService.kind = this.kind;
-      return;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.entityRef) {
+      this.reset();
     }
-
-    const paramMap$ = this.route.paramMap.pipe(
-      map(params => params.get('kind')),
-      map(kind => pathToKind(kind)),
-      filter(kind => kind !== Kind.UNDEFINED),
-      tap(kind => {
-        this.kind = this.dataService.kind = kind;
-        this.reset();
-        this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
-      }));
-
-    const queryParam$ = this.route.queryParamMap.pipe(
-      map(queryParamMap => queryParamMap.get('id')),
-    );
-
-    combineLatest([paramMap$, queryParam$]).pipe(
-      debounceTime(0),
-      mergeMap(([kind, id]) => id ? this.dataService.get({id, kind}) : of(null)),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(configObject => this.configObject.next(configObject));
   }
 
   ngOnDestroy(): void {
@@ -163,58 +167,53 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   onSelectedChange(configs: ConfigObject[]) {
     this.selectedConfigs = configs;
-    this.allSelected = false;
+    this.isAllSelected = false;
 
     if (!this.singleMode) {
       this.loadComponent({configObject: ConfigObject.mergeConfigs(configs)});
-      if (!this.entityRef) {
-        this.router.navigate([], {relativeTo: this.route})
-          .catch(error => this.errorService.dispatch(error));
-      }
+      this.router.navigate([], {relativeTo: this.route})
+        .catch(error => this.errorService.dispatch(error));
     } else {
       this.destroyComponent();
     }
   }
 
   onSelectConfig(configObject: ConfigObject) {
-    if (this.entityRef) {
-      this.configObject.next(configObject);
-    } else if (!configObject) {
+    if (!configObject) {
+      // navigate to self without any query parameters
       this.router.navigate([], {relativeTo: this.route})
         .catch(error => this.errorService.dispatch(error));
-
     } else {
+      // navigate to self with id query parameter
       this.router.navigate([], {queryParams: {id: configObject.id}, relativeTo: this.route})
         .catch(error => this.errorService.dispatch(error));
     }
   }
 
+  // called when user selects every object of current kind
   onSelectAll() {
-    this.allSelected = true;
+    this.isAllSelected = true;
+    // load multi view for selection
     this.loadComponent({configObject: new ConfigObject({kind: this.kind})});
-  }
-
-  onPage(pageEvent: PageEvent) {
-    if (this.entityRef && (pageEvent.previousPageIndex === pageEvent.pageIndex)) {
-      // this.reset();
-    }
   }
 
   onCreateConfig(newConfigObject?: ConfigObject): void {
     this.reset();
     const configObject = newConfigObject || new ConfigObject({kind: this.kind});
-    if (!this.entityRef) {
-      this.router.navigate([], {relativeTo: this.route})
-        .then(() => setTimeout(() => this.configObject.next(configObject)))
-        .catch(error => this.errorService.dispatch(error));
-    } else {
-      configObject.seed.entityRef = this.entityRef;
-      this.configObject.next(configObject);
+    this.router.navigate([], {relativeTo: this.route})
+      .then(() => setTimeout(() => this.configObject.next(configObject)))
+      .catch(error => this.errorService.dispatch(error));
+  }
+
+  onAction(event): void {
+    if (event.action === Action.Clone) {
+      this.onCreateConfig(event.item.constructor.clone(event.item));
     }
   }
 
   onSaveConfig(configObject: ConfigObject) {
-    this.dataService.save(configObject).pipe(takeUntil(this.ngUnsubscribe))
+    this.configurationsService.save(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
         this.snackBarService.openSnackBar('Lagret');
@@ -222,7 +221,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateConfig(configObject: ConfigObject) {
-    this.dataService.update(configObject).pipe(takeUntil(this.ngUnsubscribe))
+    this.configurationsService.update(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
         this.snackBarService.openSnackBar('Oppdatert');
@@ -230,118 +230,69 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteConfig(configObject: ConfigObject) {
-    this.dataService.delete(configObject)
-      .pipe(
-        catchError((error) => {
-          if (error.message) {
-            const errorString = error.message.split(':')[1];
-            const deleteError = /(?=.*delete)(?=.*there are)/gm;
-            if (deleteError.test(errorString)) {
-              this.errorService.dispatch(new ReferrerError('Error deleting config ' + configObject.meta.name + ': ' + errorString));
-            } else {
-              this.errorService.dispatch(error);
-            }
-          } else {
-            this.errorService.dispatch(error);
-          }
-          return EMPTY;
-        }),
-        takeUntil(this.ngUnsubscribe)
-      )
+    this.configurationsService.delete(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.reset();
-        if (!this.entityRef) {
-          this.router.navigate([], {relativeTo: this.route})
-            .catch(error => this.errorService.dispatch(error));
-        }
+        this.router.navigate([], {relativeTo: this.route})
+          .catch(error => this.errorService.dispatch(error));
         this.snackBarService.openSnackBar('Slettet');
       });
   }
 
   onDeleteSelectedConfigs(configObjects: ConfigObject[]) {
-    const numOfConfigs = this.selectedConfigs.length;
-    let numOfDeleted = this.selectedConfigs.length;
+    const numConfigs = this.selectedConfigs.length;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
-      numberOfConfigs: numOfConfigs.toString()
+      numberOfConfigs: numConfigs.toString()
     };
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          from(configObjects).pipe(
-            mergeMap((configObject) => this.dataService.delete(configObject)),
-            catchError((err) => {
-              if (err.message) {
-                const errorString = err.message.split(':')[1];
-                const deleteError = /(?=.*delete)(?=.*there are)/gm;
-                if (deleteError.test(errorString)) {
-                  numOfDeleted--;
-                }
-              } else {
-                this.errorService.dispatch(err);
-              }
-              return EMPTY;
-            }),
-            takeUntil(this.ngUnsubscribe),
-          ).subscribe(() => {
-              this.reset();
-              if (!this.entityRef) {
-                this.router.navigate([], {relativeTo: this.route})
-                  .catch(error => this.errorService.dispatch(error));
-              }
-              this.snackBarService.openSnackBar(numOfConfigs + ' konfigurasjoner slettet');
-            },
-            (error) => console.error(error),
-            () => {
-              if (numOfConfigs !== numOfDeleted) {
-                const notDeletedMsg = numOfConfigs - numOfDeleted + ' ble ikke slettet siden de brukes i andre konfigurasjoner ';
-                const deletedMsg = numOfDeleted + '/' + numOfConfigs + ' konfigurasjoner  ble  slettet. ';
-                this.errorService.dispatch(new ReferrerError(deletedMsg + notDeletedMsg));
-              }
-            });
-        } else {
+
+    const result$ = dialogRef.afterClosed().pipe(map(result => !!result));
+    const positive$ = result$.pipe(filter(_ => _));
+    const negative$ = result$.pipe(filter(_ => !_));
+
+    negative$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
           this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
         }
-      });
+      );
+
+    positive$
+      .pipe(
+        switchMap(() => this.configurationsService.deleteMultiple(configObjects)),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(numDeleted => this.onDeletedSelectedConfigs(numConfigs, numDeleted));
   }
 
-  onMove(configObject: ConfigObject) {
-    this.dataService.move(configObject).pipe(
-      switchMap(updated => {
-        if (updated > 0) {
-          return this.dataService.seedsOfEntity(configObject).pipe(
-            switchMap(count => {
-              if (count === 0) {
-                const config = new ConfigObject({kind: Kind.CRAWLENTITY, id: configObject.seed.entityRef.id});
-                return this.dataService.delete(config).pipe(
-                  map(response => response.getDeleted()),
-                  map((deleted) => deleted ? {updated, deleted: 1} : {updated, deleted: 0})
-                );
-              } else {
-                return of({updated, deleted: 0});
-              }
-            }));
-        } else {
-          return of({updated, deleted: 0});
-        }
-      }),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(response => {
-      this.dataService.reset();
-      if (response.deleted) {
-        this.snackBarService.openSnackBar('Seed flyttet, og den gamle entiteten er slettet', null, 5000);
-      } else {
-        this.snackBarService.openSnackBar('Seed flyttet');
-      }
-    });
+  protected onDeletedSelectedConfigs(numConfigs: number, numDeleted: number) {
+    if (numConfigs !== numDeleted) {
+      this.errorService.dispatch(new ReferrerError({numConfigs, numDeleted}));
+    } else {
+      this.snackBarService.openSnackBar(numConfigs + ' konfigurasjoner slettet');
+    }
+    this.reset();
+    this.router.navigate([], {relativeTo: this.route})
+      .catch(error => this.errorService.dispatch(error));
+  }
+
+  protected reset() {
+    this.configObject.next(null);
+    this.isAllSelected = false;
+    this.selectedConfigs = [];
+    if (this.list) {
+      this.list.reset();
+    }
+    this.destroyComponent();
   }
 
   /**
-   * Load component creates a dynamic component and initializes
+   * Load component creates a dynamic component and initializes it
    *
    * @param instanceData
    */
@@ -364,41 +315,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Initialize dynamic component
-   *
-   * @param instance
-   * @param instanceData
-   */
-  private initComponent(instance, instanceData) {
-    Object.assign(instance, instanceData, ...this.options, {allSelected: this.allSelected});
-
-    instance.updateForm();
-
-    instance.update.pipe(
-      switchMap(({updateTemplate, pathList}) =>
-        this.dataService.updateWithTemplate(
-          updateTemplate, pathList, this.allSelected ? undefined : this.selectedConfigs.map(config => config.id))),
-      takeUntil(this.ngUnsubscribe),
-    ).subscribe(updatedConfigs => {
-      this.reset();
-      this.dataService.reset();
-      if (!this.entityRef) {
-        this.router.navigate([], {relativeTo: this.route})
-          .catch(error => this.errorService.dispatch(error));
-      }
-      if (!this.allSelected) {
-        this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
-      } else {
-        this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner av typen ' + Kind[this.kind.valueOf()] + ' ble oppdatert');
-      }
-    });
-
-    instance.delete.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.onDeleteSelectedConfigs(this.selectedConfigs));
-
-  }
-
-  /**
    * Destroy dynamic component
    */
   protected destroyComponent() {
@@ -407,39 +323,41 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected reset() {
-    this.configObject.next(null);
-    this.allSelected = false;
-    this.selectedConfigs = [];
-    if (this.list) {
-      this.list.reset();
-    }
-    this.destroyComponent();
+  /**
+   * Initialize dynamic component:
+   * - set data
+   * - update form
+   * - subscribe to update and delete actions
+   *
+   * @param component Component to initialize
+   * @param instanceData Data to initialize component with
+   */
+  protected initComponent(component, instanceData) {
+    Object.assign(component, instanceData, this.options, {allSelected: this.isAllSelected});
+
+    // must run updateForm because ngOnChanges in not fired automatically in a dynamic component
+    component.updateForm();
+
+    component.update.pipe(
+      switchMap(({updateTemplate, pathList}) =>
+        this.configurationsService.updateWithTemplate(
+          updateTemplate, pathList, this.isAllSelected ? undefined : this.selectedConfigs.map(config => config.id))),
+      takeUntil(this.ngUnsubscribe),
+    ).subscribe(updatedConfigs => this.onUpdatedConfigs(updatedConfigs));
+
+    component.delete.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => this.onDeleteSelectedConfigs(this.selectedConfigs));
   }
 
-  private onSaveMultipleSeeds({seeds = [], configObject = new ConfigObject()}) {
-    const configObjects = seeds.map(
-      seed => Object.assign({...configObject}, {
-        meta: new Meta
-        ({
-          name: seed,
-          description: configObject.meta.description,
-          labelList: configObject.meta.labelList
-        })
-      }));
-
-    from(configObjects).pipe(
-      mergeMap(c => this.dataService.save(c)),
-      takeUntil(this.ngUnsubscribe),
-    ).subscribe(() => {
-      this.reset();
-      if (!this.entityRef) {
-        this.router.navigate([], {relativeTo: this.route})
-          .catch(error => this.errorService.dispatch(error));
-      }
-
-      this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
-    });
+  protected onUpdatedConfigs(updatedConfigs: ConfigObject[]) {
+    this.reset();
+    this.router.navigate([], {relativeTo: this.route})
+      .catch(error => this.errorService.dispatch(error));
+    if (!this.isAllSelected) {
+      this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
+    } else {
+      this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner av typen ' + Kind[this.kind.valueOf()] + ' ble oppdatert');
+    }
   }
 }
 

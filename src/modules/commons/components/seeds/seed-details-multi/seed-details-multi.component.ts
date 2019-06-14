@@ -93,12 +93,11 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
   protected prepareSave(): any {
     const formModel = this.form.value;
     const pathList: string[] = [];
-    const seed = new Seed({entityRef: null});
+    const seed = new Seed();
     const updateTemplate = new ConfigObject({
       kind: Kind.SEED,
       seed: seed
     });
-
 
     if (formModel.disabled !== undefined) {
       seed.disabled = formModel.disabled;
