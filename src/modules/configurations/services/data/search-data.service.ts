@@ -5,7 +5,7 @@ import {BackendService} from '../../../core/services';
 import {EMPTY, merge, Observable, race, timer} from 'rxjs';
 import {finalize, map, mergeMap, takeUntil, tap} from 'rxjs/operators';
 import {ConfigObjectProto} from '../../../../api';
-import { PageEvent } from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 
 
 /* tslint:disable:no-bitwise */
@@ -36,16 +36,16 @@ export function isSeedLabel(item: ConfigObject): boolean {
   return ((<any>item).type & ResultType.SeedLabel) > 0;
 }
 
-const entityNameType = (item: any) => applyType(item, ResultType.EntityName);
-const entityLabelType = (item: any) => applyType(item, ResultType.EntityLabel);
-const seedNameType = (item: any) => applyType(item, ResultType.SeedName);
-const seedLabelType = (item: any) => applyType(item, ResultType.SeedLabel);
-
 const applyType = (item: any, type: ResultType) => {
   item.type |= type;
 
   return item;
 };
+
+const entityNameType = (item: any) => applyType(item, ResultType.EntityName);
+const entityLabelType = (item: any) => applyType(item, ResultType.EntityLabel);
+const seedNameType = (item: any) => applyType(item, ResultType.SeedName);
+const seedLabelType = (item: any) => applyType(item, ResultType.SeedLabel);
 
 function typeTag(term: string, entity: ConfigObject, seed?: ConfigObject) {
   if (!term) {

@@ -20,6 +20,67 @@ export enum ChangeType {
   ARRAY_DEL = 3
 }
 
+export class Data {
+  key?: string;
+  value?: string;
+
+  constructor({
+                key = '',
+                value = ''
+              } = {}) {
+    this.key = key;
+    this.value = value;
+  }
+}
+
+export class Change {
+  type: ChangeType;
+  field: string;
+  oldVal: string;
+  newVal: string;
+
+  constructor({
+                type = ChangeType.CREATED,
+                field = '',
+                oldVal = '',
+                newVal = ''
+              } = {}) {
+    this.type = type;
+    this.field = field;
+    this.oldVal = oldVal;
+    this.newVal = newVal;
+  }
+
+  static fromProto(proto: ActivityProto.Change): Change {
+    return new Change({
+      type: proto.getType(),
+      field: proto.getField(),
+      oldVal: proto.getOldVal(),
+      newVal: proto.getNewVal()
+    });
+  }
+
+}
+
+export class Activity {
+  modifiedBy?: string;
+  modifiedTime?: string;
+  description?: Change[];
+  comment?: string;
+
+  constructor({
+                modifiedBy = '',
+                modifiedTime = '',
+                description = [],
+                comment = '',
+              } = {}) {
+    this.modifiedBy = modifiedBy;
+    this.modifiedTime = modifiedTime;
+    this.description = description;
+    this.comment = comment;
+  }
+}
+
 
 export class EventObject {
   id?: string;
@@ -115,65 +176,3 @@ export class EventObject {
     return eventObject;
   }
 }
-
-export class Data {
-  key?: string;
-  value?: string;
-
-  constructor({
-                key = '',
-                value = ''
-              } = {}) {
-    this.key = key;
-    this.value = value;
-  }
-}
-
-export class Change {
-  type: ChangeType;
-  field: string;
-  oldVal: string;
-  newVal: string;
-
-  constructor({
-                type = ChangeType.CREATED,
-                field = '',
-                oldVal = '',
-                newVal = ''
-              } = {}) {
-    this.type = type;
-    this.field = field;
-    this.oldVal = oldVal;
-    this.newVal = newVal;
-  }
-
-  static fromProto(proto: ActivityProto.Change): Change {
-    return new Change({
-      type: proto.getType(),
-      field: proto.getField(),
-      oldVal: proto.getOldVal(),
-      newVal: proto.getNewVal()
-    });
-  }
-
-}
-
-export class Activity {
-  modifiedBy?: string;
-  modifiedTime?: string;
-  description?: Change[];
-  comment?: string;
-
-  constructor({
-                modifiedBy = '',
-                modifiedTime = '',
-                description = [],
-                comment = '',
-              } = {}) {
-    this.modifiedBy = modifiedBy;
-    this.modifiedTime = modifiedTime;
-    this.description = description;
-    this.comment = comment;
-  }
-}
-
