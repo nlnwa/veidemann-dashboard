@@ -20,7 +20,7 @@ export class EventDetailsMultiComponent extends EventDetailsComponent {
     this.form = this.fb.group({
       assignee: '',
       severity: '',
-      labelList: '',
+      labelList: [],
       comment: ''
     });
   }

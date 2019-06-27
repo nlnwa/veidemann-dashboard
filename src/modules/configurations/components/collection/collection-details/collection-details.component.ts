@@ -1,10 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Collection, ConfigObject, Kind, Meta} from '../../../../commons/models';
+import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../commons/models';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {RotationPolicy} from '../../../../commons/models/configs/collection.model';
-import {SubCollection, SubCollectionType} from '../../../../commons/models/configs/subcollection.model';
 
 
 @Component({
@@ -68,7 +66,7 @@ export class CollectionDetailsComponent implements OnChanges {
   }
 
   get subCollectionControlArray(): FormArray {
-    return <FormArray>this.form.get('subCollectionsList');
+    return this.form.get('subCollectionsList') as FormArray;
   }
 
   ngOnChanges(changes: SimpleChanges) {

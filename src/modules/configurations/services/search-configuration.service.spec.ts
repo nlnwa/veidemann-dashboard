@@ -1,27 +1,31 @@
 import {TestBed} from '@angular/core/testing';
 
-import {ConfigurationsService} from './configurations.service';
-import {DataService} from './data';
+import {SearchConfigurationService} from './search-configuration.service';
+import {SearchDataService, SeedDataService} from './data';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CoreTestingModule} from '../../core/core.testing.module';
 
-describe('ConfigurationsService', () => {
+describe('SearchConfigurationService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       RouterTestingModule,
       CoreTestingModule.forRoot()
     ],
     providers: [
-      ConfigurationsService,
+      SearchConfigurationService,
       {
-        provide: DataService,
+        provide: SearchDataService,
+        useValue: {}
+      },
+      {
+        provide: SeedDataService,
         useValue: {}
       }
     ]
   }));
 
   it('should be created', () => {
-    const service: ConfigurationsService = TestBed.get(ConfigurationsService);
+    const service: SearchConfigurationService = TestBed.get(SearchConfigurationService);
     expect(service).toBeTruthy();
   });
 });

@@ -293,8 +293,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Load component creates a dynamic component and initializes it
-   *
-   * @param instanceData
    */
   protected loadComponent(instanceData = {}) {
     this.destroyComponent();
@@ -304,9 +302,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Create dynamic component
-   *
-   * @param component
-   * @param viewContainerRef
    */
   protected createComponent(component: any, viewContainerRef: ViewContainerRef = this.viewContainerRef): ComponentRef<any> {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);

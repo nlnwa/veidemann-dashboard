@@ -1,14 +1,23 @@
-import {inject, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {LogService} from './log.service';
+import {CoreTestingModule} from '../../core/core.testing.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-xdescribe('LogService', () => {
+describe('LogService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LogService]
+      imports: [
+        CoreTestingModule.forRoot(),
+        HttpClientTestingModule
+      ],
+      providers: [
+        LogService
+      ]
     });
   });
 
-  it('should ...', inject([LogService], (service: LogService) => {
+  it('should be created', () => {
+    const service: LogService = TestBed.get(LogService);
     expect(service).toBeTruthy();
-  }));
+  });
 });

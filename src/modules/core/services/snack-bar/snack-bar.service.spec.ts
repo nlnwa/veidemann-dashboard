@@ -1,9 +1,11 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {SnackBarService} from './snack-bar.service';
+import {MaterialModule} from '../../../commons/material.module';
 
-xdescribe('SnackBarService', () => {
+describe('SnackBarService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [MaterialModule],
       providers: [SnackBarService]
     });
   });

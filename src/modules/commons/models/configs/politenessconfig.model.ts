@@ -76,37 +76,28 @@ export class PolitenessConfig {
     const politenessConfig = new PolitenessConfig();
     const compareObj: PolitenessConfig = configObjects[0].politenessConfig;
 
-    const equalRobotsPolicy = configObjects.every(function (cfg) {
-      return cfg.politenessConfig.robotsPolicy === compareObj.robotsPolicy;
-    });
+    const equalRobotsPolicy = configObjects.every(cfg => cfg.politenessConfig.robotsPolicy === compareObj.robotsPolicy);
 
-    const equalMinRobotsValidity = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.minimumRobotsValidityDurationS === compareObj.minimumRobotsValidityDurationS;
-    });
+    const equalMinRobotsValidity = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.minimumRobotsValidityDurationS === compareObj.minimumRobotsValidityDurationS);
 
-    const equalMinTimeBetweenPageload = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.minTimeBetweenPageLoadMs === compareObj.minTimeBetweenPageLoadMs;
-    });
+    const equalMinTimeBetweenPageload = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.minTimeBetweenPageLoadMs === compareObj.minTimeBetweenPageLoadMs);
 
-    const equalMaxTimeBetweenPageload = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.maxTimeBetweenPageLoadMs === compareObj.maxTimeBetweenPageLoadMs;
-    });
+    const equalMaxTimeBetweenPageload = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.maxTimeBetweenPageLoadMs === compareObj.maxTimeBetweenPageLoadMs);
 
-    const equalDelayFactor = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.delayFactor === compareObj.delayFactor;
-    });
+    const equalDelayFactor = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.delayFactor === compareObj.delayFactor);
 
-    const equalMaxRetries = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.maxRetries === compareObj.maxRetries;
-    });
+    const equalMaxRetries = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.maxRetries === compareObj.maxRetries);
 
-    const equalRetryDelay = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.retryDelaySeconds === compareObj.retryDelaySeconds;
-    });
+    const equalRetryDelay = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.retryDelaySeconds === compareObj.retryDelaySeconds);
 
-    const equalCustomRobot = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.politenessConfig.customRobots === compareObj.customRobots;
-    });
+    const equalCustomRobot = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.customRobots === compareObj.customRobots);
 
     if (equalRobotsPolicy) {
       politenessConfig.robotsPolicy = compareObj.robotsPolicy;

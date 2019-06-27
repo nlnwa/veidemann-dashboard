@@ -7,17 +7,25 @@ import localeNb from '@angular/common/locales/nb';
 
 import {JwksValidationHandler, OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
 import {CommonsModule} from '../commons/commons.module';
-import {AuthService, GuardService, TokenInterceptor} from './services/auth';
 
-import {AppConfigService, ApplicationErrorHandler, BackendService, ErrorService, SnackBarService} from './services';
+import {
+  AppConfigService,
+  ApplicationErrorHandler,
+  AuthService,
+  BackendService,
+  ErrorService,
+  GuardService,
+  SnackBarService,
+  TokenInterceptor
+} from './services';
 import {AppInitializerService} from './services/app.initializer.service';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
 export function appInitializerFactory(appInitializerService: AppInitializerService,
-                               appConfigService: AppConfigService,
-                               oAuthService: OAuthService,
-                               authService: AuthService) {
+                                      appConfigService: AppConfigService,
+                                      oAuthService: OAuthService,
+                                      authService: AuthService) {
   return () => appInitializerService.init(appConfigService, oAuthService, authService);
 }
 

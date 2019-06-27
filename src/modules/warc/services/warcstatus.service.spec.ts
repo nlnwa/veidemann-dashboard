@@ -1,15 +1,19 @@
 import {inject, TestBed} from '@angular/core/testing';
 
-import {WarcstatusService} from './warcstatus.service';
+import {WarcStatusService} from './warcstatus.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('WarcstatusService', () => {
+describe('WarcStatusService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WarcstatusService]
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [WarcStatusService]
     });
   });
 
-  it('should be created', inject([WarcstatusService], (service: WarcstatusService) => {
+  it('should be created', inject([WarcStatusService], (service: WarcStatusService) => {
     expect(service).toBeTruthy();
   }));
 });

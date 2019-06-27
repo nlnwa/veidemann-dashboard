@@ -151,13 +151,9 @@ export class EventObject {
     const eventObject = new EventObject();
     const compareObj: EventObject = eventObjects[0];
 
-    const equalAssignee = eventObjects.every(function (event) {
-      return event.assignee === compareObj.assignee;
-    });
+    const equalAssignee = eventObjects.every(event => event.assignee === compareObj.assignee);
 
-    const equalSeverity = eventObjects.every(function (event) {
-      return event.severity === compareObj.severity;
-    });
+    const equalSeverity = eventObjects.every(event => event.severity === compareObj.severity);
 
     eventObject.labelList = eventObjects.map(c => c.labelList).reduce(intersectString);
 

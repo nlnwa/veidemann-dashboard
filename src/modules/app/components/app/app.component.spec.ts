@@ -1,12 +1,53 @@
 import {async, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
+import {MaterialModule} from '../../../commons/material.module';
+import {DialogComponent, TimeComponent} from '..';
+import {RouterTestingModule} from '@angular/router/testing';
+import {AppInitializerService} from '../../../core/services/app.initializer.service';
+import {AuthService, GuardService} from '../../../core/services/auth';
+import {AppConfigService, ErrorService, SnackBarService} from '../../../core/services';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-xdescribe('AppComponent', () => {
+describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [MaterialModule, RouterTestingModule, NoopAnimationsModule],
       declarations: [
-        AppComponent
+        AppComponent,
+        TimeComponent,
+        DialogComponent
       ],
+      providers: [
+        {
+          provide: AppInitializerService,
+          useValue: {
+            initialized: true,
+            error: {message: ''}
+          }
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            isAdmin: () => true,
+          }
+        },
+        {
+          provide: AppConfigService,
+          useValue: {}
+        },
+        {
+          provide: GuardService,
+          useValue: {}
+        },
+        {
+          provide: SnackBarService,
+          useValue: {}
+        },
+        {
+          provide: ErrorService,
+          useValue: {}
+        }
+      ]
     }).compileComponents();
   }));
 
@@ -14,18 +55,5 @@ xdescribe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-
-  it(`should have as title 'app works!'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
-  }));
-
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
   }));
 });

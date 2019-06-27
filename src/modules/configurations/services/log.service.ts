@@ -3,6 +3,7 @@ import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Level, LogLevels} from '../../commons/models';
 import {AppConfigService} from '../../core/services';
+import {map, tap} from 'rxjs/operators';
 
 @Injectable()
 export class LogService {
@@ -25,10 +26,14 @@ export class LogService {
   }
 
   getLogConfig(): Observable<LogLevels> {
-    return this.http.get<LogLevels>(this.url);
+    return this.http.get<LogLevels>(this.url).pipe(
+      map(logLevels => LogLevels.fromWire(logLevels))
+    );
   }
 
   saveLogConfig(logLevels: LogLevels): Observable<LogLevels> {
-    return this.http.post<LogLevels>(this.url, logLevels);
+    return this.http.post<LogLevels>(this.url, LogLevels.toWire(logLevels)).pipe(
+      map(LogLevels.fromWire)
+    );
   }
 }

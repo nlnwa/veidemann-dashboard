@@ -10,7 +10,6 @@ import {EventObject} from '../../../commons/models';
 export class EventWarcErrorComponent implements OnChanges {
 
 
-
   @Input()
   eventObject: EventObject;
 
@@ -51,8 +50,8 @@ export class EventWarcErrorComponent implements OnChanges {
       }
     }
     this.form.patchValue({
-      error: error,
-      errorText: errorText
+      error,
+      errorText
     });
   }
 }

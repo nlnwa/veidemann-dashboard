@@ -1,23 +1,22 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {CollectionListComponent} from './collection-list.component';
-import {MaterialModule} from '../../../../commons/material.module';
+import {MaterialModule} from '../../material.module';
+import {BaseListComponent} from '..';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-describe('CollectionListComponent', () => {
-  let component: CollectionListComponent;
-  let fixture: ComponentFixture<CollectionListComponent>;
+describe('BaseListComponent', () => {
+  let component: BaseListComponent;
+  let fixture: ComponentFixture<BaseListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollectionListComponent ],
+      declarations: [BaseListComponent],
       imports: [MaterialModule, NoopAnimationsModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CollectionListComponent);
+    fixture = TestBed.createComponent(BaseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

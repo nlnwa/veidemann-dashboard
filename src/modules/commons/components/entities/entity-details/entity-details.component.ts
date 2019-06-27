@@ -32,7 +32,7 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   get showSave(): boolean {
-    return !this.configObject.id;
+    return this.configObject ? !this.configObject.id : false;
   }
 
   get canSave(): boolean {

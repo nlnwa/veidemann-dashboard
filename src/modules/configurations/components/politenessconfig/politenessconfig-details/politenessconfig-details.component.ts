@@ -134,7 +134,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
       delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      crawlHostGroupSelectorList: '',
+      crawlHostGroupSelectorList: [],
       meta: new Meta(),
     });
   }

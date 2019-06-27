@@ -189,7 +189,7 @@ export class ConfigObject {
         configObject.crawlEntity = CrawlEntity.mergeConfigs(configs);
         return configObject;
       case Kind.SEED:
-        configObject.seed = Seed.mergeConfigs(configs);
+        configObject.seed = Seed.merge(configs.map(config => config.seed));
         return configObject;
       case Kind.CRAWLJOB:
         configObject.crawlJob = CrawlJob.mergeConfigs(configs);

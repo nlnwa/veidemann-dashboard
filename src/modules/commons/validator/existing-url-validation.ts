@@ -3,26 +3,19 @@ import {from, Observable, of} from 'rxjs';
 import {catchError, map, mergeMap, toArray} from 'rxjs/operators';
 import {ConfigObject, Kind} from '../models';
 import {BackendService} from '../../core/services';
-import {FieldMask, ListRequest} from '../../../api';
+import {ListRequest} from '../../../api';
+import {createListRequest} from '../../configurations/services/data/data.service';
 
 function seedWithMatchingUrl(url: string): ListRequest {
-  const request = new ListRequest();
-  const template = new ConfigObject({kind: Kind.SEED});
-  const mask = new FieldMask();
+  const urlRegex = url;
 
-  mask.setPathsList(['meta.name']);
-  template.meta.name = url;
-  request.setKind(Kind.SEED.valueOf());
-  request.setIdList([]);
-  request.setQueryMask(mask);
-  request.setQueryTemplate(ConfigObject.toProto(template));
+  const request = createListRequest(Kind.SEED);
+  request.setNameRegex(urlRegex);
 
   return request;
 }
 
 export class SeedUrlValidator {
-
-
   static createValidator(backendService: BackendService) {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const urls: string = control.value.split(/\s+/).filter(u => !!u);

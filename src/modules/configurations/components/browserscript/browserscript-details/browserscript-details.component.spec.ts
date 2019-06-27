@@ -1,8 +1,13 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
+import {SimpleChange} from '@angular/core';
 import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../../commons/models';
+import {RouterTestingModule} from '@angular/router/testing';
+import {CommonsModule} from '../../../../commons/commons.module';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {BrowserScriptDirective} from './browserscript.directive';
+import {FormGroup} from '@angular/forms';
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
@@ -13,9 +18,13 @@ describe('BrowserScriptDetailsComponent', () => {
   // Async beforeEach needed when using external template
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowserScriptDetailsComponent],
-      providers: [FormBuilder],
-      schemas: [NO_ERRORS_SCHEMA]
+      declarations: [BrowserScriptDetailsComponent, BrowserScriptDirective],
+      imports: [
+        RouterTestingModule,
+        CommonsModule,
+        NoopAnimationsModule,
+        CoreTestingModule.forRoot()
+      ]
     })
       .compileComponents();
   }));
@@ -33,7 +42,9 @@ describe('BrowserScriptDetailsComponent', () => {
       id: '1000',
       apiVersion: 'v1',
       kind: Kind.BROWSERSCRIPT,
-      browserScript: new BrowserScript({script: 'var test=5; console.log(test)'}),
+      browserScript: {
+        script: 'var test=5; console.log(test)'
+      },
       meta: new Meta({
         name: 'Test',
         description: 'Dette er en test',
@@ -48,7 +59,7 @@ describe('BrowserScriptDetailsComponent', () => {
     component.configObject = expectedConfigObject;
 
     component.ngOnChanges({
-      browserScript: new SimpleChange(null, component.configObject, null)
+      configObject: new SimpleChange(null, component.configObject, null)
     });
 
     fixture.detectChanges();
@@ -76,7 +87,6 @@ describe('BrowserScriptDetailsComponent', () => {
 
   it('should have a valid form', () => {
     expect(component.form.valid).toBe(true);
-    expect(component.form.valid).not.toBe(false);
   });
 
   it('Form should not be valid after removing a required field', () => {
@@ -93,6 +103,7 @@ describe('BrowserScriptDetailsComponent', () => {
     // Update the form with an invalid value
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'E',
       }
     });
@@ -101,6 +112,7 @@ describe('BrowserScriptDetailsComponent', () => {
 
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'Endret navn',
       }
     });
@@ -108,7 +120,7 @@ describe('BrowserScriptDetailsComponent', () => {
 
     component.update.subscribe((value: ConfigObject) => {
       expect(value.id).toBe(expectedConfigObject.id);
-      expect(value.browserScript).toBe(expectedConfigObject.browserScript);
+      expect(value.browserScript).toEqual(expectedConfigObject.browserScript);
       expect(value.meta.name).toBe('Endret navn');
       expect(value.meta.description).toBe(expectedConfigObject.meta.description);
       expect(value.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
@@ -123,10 +135,8 @@ describe('BrowserScriptDetailsComponent', () => {
 
     component.save.subscribe((value: ConfigObject) => {
       expect(value.id).toBe(expectedConfigObject.id);
-      expect(value.browserScript).toBe(expectedConfigObject.browserScript);
-      expect(value.meta.name).toBe(expectedConfigObject.meta.name);
-      expect(value.meta.description).toBe(expectedConfigObject.meta.description);
-      expect(value.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
+      expect(value.browserScript).toEqual(expectedConfigObject.browserScript);
+      expect(value.meta).toEqual(expectedConfigObject.meta);
       done();
     });
 

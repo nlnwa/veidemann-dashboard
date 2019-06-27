@@ -15,7 +15,7 @@ export class CustomValidators {
       if (val <= max) {
         return null;
       }
-      return {'max': true};
+      return {max: true};
     };
   }
 
@@ -30,7 +30,7 @@ export class CustomValidators {
       if (val >= min) {
         return null;
       }
-      return {'min': true};
+      return {min: true};
     };
   }
 

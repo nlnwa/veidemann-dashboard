@@ -1,7 +1,7 @@
 import {async} from '@angular/core/testing';
 import {Label} from './label.model';
 
-fdescribe('Label', () => {
+describe('Label', () => {
   beforeEach(async(() => {
 
   }));

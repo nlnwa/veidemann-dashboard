@@ -1,5 +1,5 @@
 import {CrawlScheduleConfigProto} from '../../../../api';
-import {fromTimestampProto, toTimestampProto} from '../../func/datetime/datetime';
+import {fromTimestampProto, toTimestampProto} from '../../func';
 import {ConfigObject} from '../configobject.model';
 
 export class CrawlScheduleConfig {
@@ -49,18 +49,14 @@ export class CrawlScheduleConfig {
 
   static commonValidFrom(configObjects: ConfigObject[]): boolean {
     const compareObj = configObjects[0];
-    const equalValidFrom = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlScheduleConfig.validFrom === compareObj.crawlScheduleConfig.validFrom;
-    });
-    return equalValidFrom;
+    return configObjects.every(
+      (cfg: ConfigObject) => cfg.crawlScheduleConfig.validFrom === compareObj.crawlScheduleConfig.validFrom);
   }
 
   static commonValidTo(configObjects: ConfigObject[]): boolean {
     const compareObj = configObjects[0];
-    const equalValidTo = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlScheduleConfig.validTo === compareObj.crawlScheduleConfig.validTo;
-    });
-    return equalValidTo;
+    return configObjects.every(
+      (cfg: ConfigObject) => cfg.crawlScheduleConfig.validTo === compareObj.crawlScheduleConfig.validTo);
   }
 
   static toProto(crawlScheduleConfig: CrawlScheduleConfig): CrawlScheduleConfigProto {

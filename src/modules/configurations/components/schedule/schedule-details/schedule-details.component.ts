@@ -111,7 +111,7 @@ export class ScheduleDetailsComponent implements OnChanges {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       validFrom: '',
       validTo: '',
       cronExpression: this.fb.group({

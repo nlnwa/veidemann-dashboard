@@ -77,7 +77,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       script: '',
       meta: new Meta(),
     });

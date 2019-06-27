@@ -1,6 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EventDetailsComponent } from './event-details.component';
+import {EventDetailsComponent} from './event-details.component';
+import {CommonsModule} from '../../../commons/commons.module';
+import {ChangelogComponent, EventNewSeedComponent, EventWarcErrorComponent} from '..';
+import {RouterTestingModule} from '@angular/router/testing';
+import {EventSearchComponent} from '../../containers/event-search/event-search.component';
+import {CoreTestingModule} from '../../../core/core.testing.module';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('EventDetailsComponent', () => {
   let component: EventDetailsComponent;
@@ -8,9 +14,21 @@ describe('EventDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventDetailsComponent ]
+      imports: [
+        CommonsModule,
+        RouterTestingModule,
+        CoreTestingModule.forRoot(),
+        NoopAnimationsModule
+      ],
+      declarations: [
+        EventDetailsComponent,
+        EventNewSeedComponent,
+        EventWarcErrorComponent,
+        EventSearchComponent,
+        ChangelogComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

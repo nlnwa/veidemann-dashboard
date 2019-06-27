@@ -1,6 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {MetaComponent} from './meta.component';
+import {MaterialModule} from '../../material.module';
+import {ReactiveFormsModule} from '@angular/forms';
+import {LabelsComponent} from '..';
+import {DatePipe} from '@angular/common';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('MetaComponent', () => {
   let component: MetaComponent;
@@ -8,7 +13,9 @@ describe('MetaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MetaComponent]
+      declarations: [MetaComponent, LabelsComponent],
+      imports: [MaterialModule, ReactiveFormsModule, NoopAnimationsModule],
+      providers: [DatePipe]
     })
       .compileComponents();
   }));

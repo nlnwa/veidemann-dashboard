@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatTableDataSource} from '@angular/material/table';
 import {DatePipe} from '@angular/common';
 
 @Component({
@@ -33,9 +33,7 @@ export class WarcStatusDetailsComponent implements OnChanges {
   errorSummary(warcError: any): any {
     const errors = [];
     for (const error of warcError.messages) {
-      const errorTypeIndex = errors.findIndex(function (err) {
-        return err.type === error.text;
-      });
+      const errorTypeIndex = errors.findIndex(err => err.type === error.text);
       if (errorTypeIndex !== -1) {
         errors[errorTypeIndex].total += 1;
         errors[errorTypeIndex].subMessages.push({message: error.subMessage});
@@ -53,9 +51,7 @@ export class WarcStatusDetailsComponent implements OnChanges {
     const filtered = [];
     for (const subMessage of subMessages) {
       const split = subMessage.message.split(',');
-      const index = filtered.findIndex(function (sub) {
-        return sub.message === split[0];
-      });
+      const index = filtered.findIndex(sub => sub.message === split[0]);
       if (index !== -1) {
         filtered[index].count += 1;
       } else {

@@ -52,25 +52,17 @@ export class BrowserConfig {
     const compareObj: ConfigObject = configObjects[0];
     const commonScripts = this.commonScript(configObjects);
 
-    const equalUserAgent = configObjects.every(function (cfg) {
-      return cfg.browserConfig.userAgent === compareObj.browserConfig.userAgent;
-    });
+    const equalUserAgent = configObjects.every(cfg => cfg.browserConfig.userAgent === compareObj.browserConfig.userAgent);
 
-    const equalWindowWidth = configObjects.every(function (cfg) {
-      return cfg.browserConfig.windowWidth === compareObj.browserConfig.windowWidth;
-    });
+    const equalWindowWidth = configObjects.every(cfg => cfg.browserConfig.windowWidth === compareObj.browserConfig.windowWidth);
 
-    const equalWindowHeight = configObjects.every(function (cfg) {
-      return cfg.browserConfig.windowHeight === compareObj.browserConfig.windowHeight;
-    });
+    const equalWindowHeight = configObjects.every(cfg => cfg.browserConfig.windowHeight === compareObj.browserConfig.windowHeight);
 
-    const equalPageLoadTimeout = configObjects.every(function (cfg) {
-      return cfg.browserConfig.pageLoadTimeoutMs === compareObj.browserConfig.pageLoadTimeoutMs;
-    });
+    const equalPageLoadTimeout = configObjects.every(
+      cfg => cfg.browserConfig.pageLoadTimeoutMs === compareObj.browserConfig.pageLoadTimeoutMs);
 
-    const equalSleepAfterPageload = configObjects.every(function (cfg) {
-      return cfg.browserConfig.maxInactivityTimeMs === compareObj.browserConfig.maxInactivityTimeMs;
-    });
+    const equalSleepAfterPageload = configObjects.every(
+      cfg => cfg.browserConfig.maxInactivityTimeMs === compareObj.browserConfig.maxInactivityTimeMs);
 
     if (equalUserAgent) {
       browserConfig.userAgent = compareObj.browserConfig.userAgent;
@@ -103,14 +95,8 @@ export class BrowserConfig {
     }
 
     for (const browserScript of commonScripts) {
-      const gotScript = configObjects.every(function (cfg) {
-        for (const script of cfg.browserConfig.scriptRefList) {
-          if (script.id === browserScript.id) {
-            return true;
-          }
-        }
-        return false;
-      });
+      const gotScript = configObjects.every((cfg) =>
+        cfg.browserConfig.scriptRefList.some(scriptRef => scriptRef.id === browserScript.id));
       if (gotScript) {
         browserConfig.scriptRefList.push(browserScript);
       }
@@ -123,20 +109,13 @@ export class BrowserConfig {
     return browserConfig;
   }
 
-  static commonScript(configObjects: ConfigObject[]) {
-    const scripts = [];
-    for (const config of configObjects) {
-      for (const script of config.browserConfig.scriptRefList) {
-        if (script !== undefined) {
-          scripts.push(script);
-        }
-      }
-    }
-    const unique = scripts.filter(function ({id}) {
+  static commonScript(configObjects: ConfigObject[]): ConfigRef[] {
+    return configObjects
+      .map(configObject => configObject.browserConfig.scriptRefList)
+      .reduce((acc, curr) => acc.concat(curr), [])
+      .filter(function({id}) {
       return !this.has(id) && this.add(id);
-    }, new Set);
-
-    return unique;
+    }, new Set());
   }
 
   static toProto(browserConfig: BrowserConfig): BrowserConfigProto {

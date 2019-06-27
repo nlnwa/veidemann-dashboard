@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, Seed} from '../../../models';
 import {SeedDetailComponent} from '../seed-details/seed-details.component';
 
 
@@ -86,9 +86,7 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
   }
 
   /**
-   * Disabled values in form must be copied from model and not the view model (form.value)
-   *
-   * @returns {Seed}
+   * NB: Disabled values in form must be copied from model and not the view model (form.value)
    */
   protected prepareSave(): any {
     const formModel = this.form.value;
@@ -96,7 +94,7 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
     const seed = new Seed();
     const updateTemplate = new ConfigObject({
       kind: Kind.SEED,
-      seed: seed
+      seed
     });
 
     if (formModel.disabled !== undefined) {
