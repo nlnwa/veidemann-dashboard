@@ -1,6 +1,7 @@
 <button class="action-button"
         color="primary"
         mat-fab
+        *ngIf="kind !== Kind.SEED"
         (click)="onCreateConfig()">
   <mat-icon>add</mat-icon>
 </button>
