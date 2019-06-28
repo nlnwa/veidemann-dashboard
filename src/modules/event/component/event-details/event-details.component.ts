@@ -103,11 +103,11 @@ export class EventDetailsComponent implements OnChanges, OnInit {
   }
 
   getType(): string {
-    return this.eventObject.type;
+    return this.eventObject ? this.eventObject.type : '';
   }
 
   getState(): string {
-    return State[this.eventObject.state];
+    return this.eventObject ? State[this.eventObject.state] : '';
   }
 
   onUpdate() {
@@ -155,15 +155,15 @@ export class EventDetailsComponent implements OnChanges, OnInit {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       type: {value: '', disabled: true},
       source: {value: '', disabled: true},
-      state: {value: ''},
+      state: '',
       assignee: '',
-      activityList: '',
-      dataList: '',
+      activityList: [],
+      dataList: [],
       severity: '',
-      labelList: '',
+      labelList: [],
       comment: ''
     });
   }

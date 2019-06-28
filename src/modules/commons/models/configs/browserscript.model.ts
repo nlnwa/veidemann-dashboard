@@ -25,9 +25,7 @@ export class BrowserScript {
     const browserScript = new BrowserScript();
     const compareObj: BrowserScript = configObjects[0].browserScript;
 
-    const equalScript = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.browserScript.script === compareObj.script;
-    });
+    const equalScript = configObjects.every((cfg: ConfigObject) => cfg.browserScript.script === compareObj.script);
 
     if (equalScript) {
       browserScript.script = compareObj.script;

@@ -13,17 +13,20 @@ export class AuthService {
 
   get groups(): string {
     const claims = this.oauthService.getIdentityClaims();
-    return claims ? claims['groups'] : '';
+    // @ts-ignore
+    return claims ? claims.groups : '';
   }
 
   get name(): string {
     const claims = this.oauthService.getIdentityClaims();
-    return claims ? claims['name'] : '';
+    // @ts-ignore
+    return claims ? claims.name : '';
   }
 
   get email(): string {
     const claims = this.oauthService.getIdentityClaims();
-    return claims ? claims['email'] : '';
+    // @ts-ignore
+    return claims ? claims.email : '';
   }
 
   get idToken(): string {

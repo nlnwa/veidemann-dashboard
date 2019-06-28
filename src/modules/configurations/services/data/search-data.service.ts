@@ -18,22 +18,22 @@ export enum ResultType {
 
 export function isEntityName(item: ConfigObject): boolean {
   /* tslint:disable:no-bitwise */
-  return ((<any>item).type & ResultType.EntityName) > 0;
+  return ((item as any).type & ResultType.EntityName) > 0;
 }
 
 export function isEntityLabel(item: ConfigObject): boolean {
   /* tslint:disable:no-bitwise */
-  return ((<any>item).type & ResultType.EntityLabel) > 0;
+  return ((item as any).type & ResultType.EntityLabel) > 0;
 }
 
 export function isSeedName(item: ConfigObject): boolean {
   /* tslint:disable:no-bitwise */
-  return ((<any>item).type & ResultType.SeedName) > 0;
+  return ((item as any).type & ResultType.SeedName) > 0;
 }
 
 export function isSeedLabel(item: ConfigObject): boolean {
   /* tslint:disable:no-bitwise */
-  return ((<any>item).type & ResultType.SeedLabel) > 0;
+  return ((item as any).type & ResultType.SeedLabel) > 0;
 }
 
 const applyType = (item: any, type: ResultType) => {
@@ -194,7 +194,7 @@ export class SearchDataService extends DataService {
     const found = this.data.find(c => c.id === configObject.id);
     if (found) {
       // tslint:disable:no-bitwise
-      (<any>found).type |= (<any>configObject).type;
+      (found as any).type |= (configObject as any).type;
       super.replace(found);
     } else {
       super.add(configObject);

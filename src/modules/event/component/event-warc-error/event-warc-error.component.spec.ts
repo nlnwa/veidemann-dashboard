@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EventWarcErrorComponent } from './event-warc-error.component';
+import {EventWarcErrorComponent} from './event-warc-error.component';
+import {MaterialModule} from '../../../commons/material.module';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('EventWarcErrorComponent', () => {
   let component: EventWarcErrorComponent;
@@ -8,9 +11,10 @@ describe('EventWarcErrorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventWarcErrorComponent ]
+      declarations: [EventWarcErrorComponent],
+      imports: [MaterialModule, ReactiveFormsModule, NoopAnimationsModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

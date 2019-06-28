@@ -54,10 +54,7 @@ export class RoleMapping {
 
 
     for (const role of commonRoles) {
-      const gotRole = configObjects.every(function (cfg) {
-        return cfg.roleMapping.roleList.indexOf(role) !== -1;
-      });
-
+      const gotRole = configObjects.every((cfg) => cfg.roleMapping.roleList.indexOf(role) !== -1);
       if (gotRole) {
         roleMapping.roleList.push(role);
       }
@@ -66,21 +63,12 @@ export class RoleMapping {
   }
 }
 
-function getCommonRoles(configObjects: ConfigObject[]): any {
-  const allRoles = [];
-  for (const cfg of configObjects) {
-    if (cfg.roleMapping.roleList !== undefined) {
-      for (const role of cfg.roleMapping.roleList) {
-        if (role !== undefined) {
-          allRoles.push(role);
-        }
-      }
-    }
-  }
-  const unique = allRoles.filter(function (item, pos, self) {
-    return self.indexOf(item) === pos;
-  });
-  return unique;
+function getCommonRoles(configObjects: ConfigObject[]): Role[] {
+  return Array.from(new Set(
+    configObjects
+      .map(configObject => configObject.roleMapping.roleList)
+      .reduce((acc, curr) => acc.concat(curr), [])
+  ));
 }
 
 export class RoleList {

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 
 import {Observable, Subject} from 'rxjs';
@@ -32,7 +32,7 @@ import {SeedConfigurationService} from '../../services/seed-configuration.servic
   ]
 })
 
-export class SearchComponent extends ConfigurationsComponent implements OnInit, OnDestroy {
+export class SearchComponent extends ConfigurationsComponent implements OnInit {
   readonly ConfigObject = ConfigObject;
 
   protected searchTerm: Subject<string> = new Subject<string>();
@@ -44,7 +44,7 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
   constructor(
     protected snackBarService: SnackBarService,
     protected errorService: ErrorService,
-    protected activatedRoute: ActivatedRoute,
+    protected route: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected router: Router,
     protected dialog: MatDialog,
@@ -52,7 +52,7 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit, 
     protected titleService: Title,
     protected authService: AuthService) {
     super(searchService, snackBarService, errorService, componentFactoryResolver,
-      router, titleService, dialog, activatedRoute);
+      router, titleService, dialog, route);
 
     this.searchTerm$ = this.searchTerm.asObservable();
     this.kind = Kind.CRAWLENTITY;

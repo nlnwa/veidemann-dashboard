@@ -81,8 +81,8 @@ export class BaseListComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: false}) paginator;
 
   constructor(protected cdr: ChangeDetectorRef,
-              @Optional() protected _dataSource: DataService) {
-    this.dataSource = _dataSource;
+              @Optional() dataSource: DataService) {
+    this.dataSource = dataSource;
   }
 
   get isAllInPageSelected(): boolean {

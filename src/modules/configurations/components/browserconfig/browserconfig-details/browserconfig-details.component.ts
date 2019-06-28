@@ -88,7 +88,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   }
 
   get showShortcuts(): boolean {
-    return this.scriptRefIdList.value.length > 0;
+    return this.scriptRefIdList.value ? this.scriptRefIdList.value.length > 0 : false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -125,15 +125,15 @@ export class BrowserConfigDetailsComponent implements OnChanges {
   protected createForm() {
     this.form = this.fb.group(
       {
-        id: {value: ''},
+        id: '',
         userAgent: ['', [Validators.minLength(1)]],
         windowWidth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         windowHeight: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         pageLoadTimeoutMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         maxInactivityTimeMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         // headers: this.fb.group({''}),
-        scriptRefIdList: '',
-        scriptSelectorList: '',
+        scriptRefIdList: [],
+        scriptSelectorList: [],
         meta: new Meta(),
       });
   }

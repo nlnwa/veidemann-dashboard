@@ -16,7 +16,7 @@ import {Subject} from 'rxjs';
 })
 export class TimeComponent implements OnInit, OnDestroy {
   time$: Subject<Date> = new Subject();
-  interval: number;
+  interval: any;
 
   ngOnInit() {
     this.interval = setInterval(() => {

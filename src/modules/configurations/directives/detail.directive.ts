@@ -1,7 +1,7 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[detail-host]',
+  selector: '[appDetailHost]',
 })
 export class DetailDirective {
   constructor(public viewContainerRef: ViewContainerRef) { }

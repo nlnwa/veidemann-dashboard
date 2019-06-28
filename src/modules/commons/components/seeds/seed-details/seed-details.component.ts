@@ -160,8 +160,6 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
 
   /**
    * Disabled values in form must be copied from model and not the view model (form.value)
-   *
-   * @returns {Seed}
    */
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;

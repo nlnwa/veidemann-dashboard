@@ -5,9 +5,11 @@ export class Label {
   key?: string;
   value?: string;
 
-  constructor(label?: Partial<Label> ) {
-    this.key = label.key || '';
-    this.value = label.value || '';
+  constructor(label?: Partial<Label>) {
+    if (label) {
+      this.key = label.key || '';
+      this.value = label.value || '';
+    }
   }
 
   static fromProto(proto: LabelProto): Label {
@@ -17,10 +19,10 @@ export class Label {
     });
   }
 
-  toProto(): LabelProto {
+  static toProto(label: Label): LabelProto {
     const proto = new LabelProto();
-    proto.setKey(this.key);
-    proto.setValue(this.value);
+    proto.setKey(label.key);
+    proto.setValue(label.value);
     return proto;
   }
 }

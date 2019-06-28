@@ -45,7 +45,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   }
 
   get logLevelsFormArray(): FormArray {
-    return this.form.get('log_level') as FormArray;
+    return this.form.get('logLevel') as FormArray;
   }
 
   ngOnInit() {
@@ -62,6 +62,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
     this.logService.saveLogConfig(this.prepareSave())
       .subscribe(logLevels => {
         this.logLevels = logLevels;
+        this.addOrRemoved = false;
         this.updateForm();
         this.snackBarService.openSnackBar('Lagret');
       });
@@ -85,20 +86,20 @@ export class LoglevelComponent implements OnInit, OnDestroy {
 
   private createForm() {
     this.form = this.fb.group({
-      log_level: this.fb.array([])
+      logLevel: this.fb.array([])
     });
   }
 
   private updateForm() {
-    this.form.setControl('log_level', this.fb.array(this.logLevels.log_level.map(this.createLogLevel.bind(this))));
+    this.form.setControl('logLevel', this.fb.array(this.logLevels.logLevelList.map(this.createLogLevel.bind(this))));
     if (this.form.disabled) {
       this.logLevelsFormArray.disable();
     }
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
     if (!this.canEdit) {
       this.form.disable();
     }
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
     this.cdr.markForCheck();
   }
 

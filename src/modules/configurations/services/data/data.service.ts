@@ -2,7 +2,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, from, Observable, of, Subject, Subscription} from 'rxjs';
 import {ConfigObject, ConfigRef, Kind} from '../../../commons/models';
 import {DataSource} from '@angular/cdk/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged, filter, finalize, ignoreElements, map, mergeMap, share, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FieldMask, ListRequest, UpdateRequest} from '../../../../api';
 import {BackendService} from '../../../core/services';
@@ -60,10 +60,13 @@ export class DataService implements DataSource<ConfigObject>, OnDestroy {
 
   protected loading: Subject<boolean> = new Subject<boolean>();
 
+  // tslint:disable-next-line:variable-name
   protected _kind: Kind;
 
+  // tslint:disable-next-line:variable-name
   protected _data: BehaviorSubject<ConfigObject[]> = new BehaviorSubject([]);
 
+  // tslint:disable-next-line:variable-name
   protected _paginator: MatPaginator | null;
 
   protected countCache = {};

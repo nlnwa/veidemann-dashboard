@@ -77,33 +77,22 @@ export class CrawlConfig {
     const crawlConfig = new CrawlConfig();
     const compareObj: CrawlConfig = configObjects[0].crawlConfig;
 
-    const equalCollectionRef = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.collectionRef.id === compareObj.collectionRef.id;
-    });
+    const equalCollectionRef = configObjects.every(
+      cfg => cfg.crawlConfig.collectionRef.id === compareObj.collectionRef.id);
 
-    const equalBrowserConfigRef = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.browserConfigRef.id === compareObj.browserConfigRef.id;
-    });
+    const equalBrowserConfigRef = configObjects.every(
+      cfg => cfg.crawlConfig.browserConfigRef.id === compareObj.browserConfigRef.id);
 
-    const equalPolitenessRef = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.politenessRef.id === compareObj.politenessRef.id;
-    });
+    const equalPolitenessRef = configObjects.every(cfg => cfg.crawlConfig.politenessRef.id === compareObj.politenessRef.id);
 
-    const equalDnsTtlS = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.minimumDnsTtlS === compareObj.minimumDnsTtlS;
-    });
+    const equalDnsTtlS = configObjects.every(cfg => cfg.crawlConfig.minimumDnsTtlS === compareObj.minimumDnsTtlS);
 
-    const equalPriorityWeight = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.priorityWeight === compareObj.priorityWeight;
-    });
+    const equalPriorityWeight = configObjects.every(cfg => cfg.crawlConfig.priorityWeight === compareObj.priorityWeight);
 
-    const equalExtractText = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.extra.extractText === compareObj.extra.extractText;
-    });
+    const equalExtractText = configObjects.every(cfg => cfg.crawlConfig.extra.extractText === compareObj.extra.extractText);
 
-    const equalCreateScreenshot = configObjects.every(function (cfg) {
-      return cfg.crawlConfig.extra.createScreenshot === compareObj.extra.createScreenshot;
-    });
+    const equalCreateScreenshot = configObjects.every(
+      cfg => cfg.crawlConfig.extra.createScreenshot === compareObj.extra.createScreenshot);
 
     if (equalCollectionRef) {
       crawlConfig.collectionRef = compareObj.collectionRef;

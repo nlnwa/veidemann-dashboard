@@ -75,30 +75,19 @@ export class CrawlJob {
     const crawlJob = new CrawlJob({});
     const compareObj: CrawlJob = configObjects[0].crawlJob;
 
-    const equalDisabledStatus = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.disabled === compareObj.disabled;
-    });
+    const equalDisabledStatus = configObjects.every((cfg: ConfigObject) => cfg.crawlJob.disabled === compareObj.disabled);
 
-    const equalDepth = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.limits.depth === compareObj.limits.depth;
-    });
+    const equalDepth = configObjects.every((cfg: ConfigObject) => cfg.crawlJob.limits.depth === compareObj.limits.depth);
 
-    const equalMaxDuration = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.limits.maxDurationS === compareObj.limits.maxDurationS;
-    });
+    const equalMaxDuration = configObjects.every(
+      (cfg: ConfigObject) => cfg.crawlJob.limits.maxDurationS === compareObj.limits.maxDurationS);
 
-    const equalMaxBytes = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.limits.maxBytes === compareObj.limits.maxBytes;
-    });
+    const equalMaxBytes = configObjects.every((cfg: ConfigObject) => cfg.crawlJob.limits.maxBytes === compareObj.limits.maxBytes);
 
-    const equalSchedule = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.scheduleRef.id === compareObj.scheduleRef.id;
-    });
+    const equalSchedule = configObjects.every((cfg: ConfigObject) => cfg.crawlJob.scheduleRef.id === compareObj.scheduleRef.id);
 
-
-    const equalCrawlConfig = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.crawlJob.crawlConfigRef.id === compareObj.crawlConfigRef.id;
-    });
+    const equalCrawlConfig = configObjects.every(
+      cfg => cfg.crawlJob.crawlConfigRef.id === compareObj.crawlConfigRef.id);
 
     if (equalDisabledStatus) {
       crawlJob.disabled = compareObj.disabled;

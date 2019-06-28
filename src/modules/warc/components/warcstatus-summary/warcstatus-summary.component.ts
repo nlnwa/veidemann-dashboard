@@ -13,33 +13,32 @@ export class WarcStatusSummaryComponent implements OnChanges {
   @Input()
   allErrors: any;
 
-  constructor () {}
+  constructor() {
+  }
 
   ngOnChanges() {
     if (this.allErrors) {
-     this.errors = this.errorSummary(this.allErrors);
+      this.errors = this.errorSummary(this.allErrors);
     }
   }
 
 
   errorSummary(warcErrors: any): any {
     const errorsSummary = [];
-      for (const errors of warcErrors) {
-        for (const error of errors.messages) {
-          const errorTypeIndex = errorsSummary.findIndex(function (err) {
-            return err.type === error.text;
-          });
-          if (errorTypeIndex !== -1) {
-            errorsSummary[errorTypeIndex].total += 1;
-            errorsSummary[errorTypeIndex].subMessages.push({message: error.subMessage});
-          } else {
-            errorsSummary.push({type: error.text, total: 1, subMessages: [{message: error.subMessage}]});
-          }
+    for (const errors of warcErrors) {
+      for (const error of errors.messages) {
+        const errorTypeIndex = errorsSummary.findIndex(err => err.type === error.text);
+        if (errorTypeIndex !== -1) {
+          errorsSummary[errorTypeIndex].total += 1;
+          errorsSummary[errorTypeIndex].subMessages.push({message: error.subMessage});
+        } else {
+          errorsSummary.push({type: error.text, total: 1, subMessages: [{message: error.subMessage}]});
         }
       }
-      for (const error of errorsSummary) {
-        error.subMessages = this.filterSubMessages(error.subMessages);
-      }
+    }
+    for (const error of errorsSummary) {
+      error.subMessages = this.filterSubMessages(error.subMessages);
+    }
     return errorsSummary;
   }
 
@@ -47,9 +46,7 @@ export class WarcStatusSummaryComponent implements OnChanges {
     const filtered = [];
     for (const subMessage of subMessages) {
       const split = subMessage.message.split(',');
-      const index = filtered.findIndex(function (sub) {
-        return sub.message === split[0];
-      });
+      const index = filtered.findIndex(sub => sub.message === split[0]);
       if (index !== -1) {
         filtered[index].count += 1;
       } else {

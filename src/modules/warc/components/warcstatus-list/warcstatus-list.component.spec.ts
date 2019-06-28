@@ -1,14 +1,25 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {WarcStatusListComponent} from './warcstatus-list.component';
+import {MaterialModule} from '../../../commons/material.module';
+import {WarcStatusService} from '../../services/warcstatus.service';
+import {of} from 'rxjs';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-describe('WarcstatusListComponent', () => {
+describe('WarcStatusListComponent', () => {
   let component: WarcStatusListComponent;
   let fixture: ComponentFixture<WarcStatusListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WarcStatusListComponent]
+      declarations: [WarcStatusListComponent],
+      imports: [MaterialModule, NoopAnimationsModule],
+      providers: [{
+        provide: WarcStatusService,
+        useValue: {
+          getValidationErrors: () => of([])
+        }
+      }]
     })
       .compileComponents();
   }));

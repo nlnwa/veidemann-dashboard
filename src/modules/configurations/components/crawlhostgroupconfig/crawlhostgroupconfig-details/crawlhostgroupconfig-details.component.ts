@@ -59,7 +59,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get ipRangeControlArray(): FormArray {
-    return <FormArray>this.form.get('ipRangeList');
+    return this.form.get('ipRangeList') as FormArray;
   }
 
   ipFromControl(index: number): AbstractControl {
@@ -71,8 +71,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   }
 
-  isValidIpRange(from_ip, to_ip): boolean {
-    return CrawlHostGroupConfigIpValidation.isValidRange(from_ip, to_ip);
+  isValidIpRange(fromIp: string, toIp: string): boolean {
+    return CrawlHostGroupConfigIpValidation.isValidRange(fromIp, toIp);
   }
 
 

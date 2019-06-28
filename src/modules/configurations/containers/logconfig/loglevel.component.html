@@ -12,7 +12,7 @@
       <mat-card-title>Loggnivå</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <ng-container formArrayName="log_level" *ngFor="let logLevelItem of logLevelsFormArray.controls; let i=index">
+      <ng-container formArrayName="logLevel" *ngFor="let logLevelItem of logLevelsFormArray.controls; let i=index">
         <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
           <mat-form-field fxFlex="2 1 100%">
             <input matInput formControlName="logger" placeholder="Logger"

@@ -36,3 +36,4 @@ export const NO_COLON = /^[^:]*$/;
 
 export const VALID_URL = /^\s*(https?:\/\/([\S]+)\.[\S]{2,}\s*)+$/;
 
+export const NO_NAME_REGEX = /https/;

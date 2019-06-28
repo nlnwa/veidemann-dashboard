@@ -1,20 +1,28 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
-import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {CrawlScheduleConfig, Label} from '../../../../commons/models/configobject.model';
+import {SimpleChange} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {ConfigObject, Kind, Label} from '../../../../commons/models';
+import {CommonsModule} from '../../../../commons/commons.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
 
 describe('ScheduleDetailsComponent', () => {
   let component: ScheduleDetailsComponent;
   let fixture: ComponentFixture<ScheduleDetailsComponent>;
-  let expectedSchedule: CrawlScheduleConfig;
+  let expectedConfigObject: ConfigObject;
   let expectedLabel: Label;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ScheduleDetailsComponent],
-      providers: [FormBuilder],
-      schemas: [NO_ERRORS_SCHEMA]
+      imports: [
+        CommonsModule,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        CoreTestingModule.forRoot()
+      ]
     })
       .compileComponents();
   }));
@@ -23,35 +31,36 @@ describe('ScheduleDetailsComponent', () => {
     fixture = TestBed.createComponent(ScheduleDetailsComponent);
     component = fixture.componentInstance;
 
-    expectedSchedule = new CrawlScheduleConfig();
-    expectedLabel = new Label();
-
-    expectedLabel = {
+    expectedLabel = new Label({
       key: 'Label',
       value: 'Test'
-    };
+    });
 
-    expectedSchedule = {
+    expectedConfigObject = new ConfigObject({
       id: '100',
-      cron_expression: '0 6 * * *',
-      valid_from: null,
-      valid_to: null,
+      kind: Kind.CRAWLSCHEDULECONFIG,
+      crawlScheduleConfig: {
+        cronExpression: '0 6 * * *',
+        validFrom: null,
+        validTo: null
+      },
       meta: {
         name: 'CrawlScheduleConfig test',
         description: 'CrawlScheduleConfig mock',
         created: '1511964561',
-        created_by: 'admin',
-        last_modified: '1511964561',
-        last_modified_by: 'admin',
-        label: [expectedLabel]
+        createdBy: 'admin',
+        lastModified: '1511964561',
+        lastModifiedBy: 'admin',
+        labelList: [expectedLabel]
       }
-    };
+    });
 
-    component.schedule = expectedSchedule;
+    component.configObject = expectedConfigObject;
 
     component.ngOnChanges({
-      schedule: new SimpleChange(null, component.schedule, null)
+      configObject: new SimpleChange(null, expectedConfigObject, null)
     });
+
     fixture.detectChanges();
   });
 
@@ -64,13 +73,14 @@ describe('ScheduleDetailsComponent', () => {
   });
 
   it('should have the correct data from @Input ', () => {
-    expect(component.schedule.id).toEqual('100');
-    expect(component.schedule.cron_expression).toEqual('0 6 * * *');
-    expect(component.schedule.valid_from).toBe(null);
-    expect(component.schedule.valid_to).toBe(null);
-    expect(component.schedule.meta.name).toEqual('CrawlScheduleConfig test');
-    expect(component.schedule.meta.description).toEqual('CrawlScheduleConfig mock');
-    expect(component.schedule.meta.label).toEqual([expectedLabel]);
+    expect(component.configObject.id).toEqual('100');
+    expect(component.configObject.crawlScheduleConfig.cronExpression).toEqual('0 6 * * *');
+    expect(component.configObject.crawlScheduleConfig.validFrom).toBe(null);
+    expect(component.configObject.crawlScheduleConfig.validTo).toBe(null);
+    expect(component.configObject.meta.name).toEqual('CrawlScheduleConfig test');
+    expect(component.configObject.meta.description).toEqual('CrawlScheduleConfig mock');
+    expect(component.configObject.meta.labelList).toEqual([expectedLabel]);
+    expect(component.configObject).toEqual(expectedConfigObject);
   });
 
   it('should create a "FormGroup"', () => {
@@ -79,7 +89,6 @@ describe('ScheduleDetailsComponent', () => {
 
   it('should have a valid form', () => {
     expect(component.form.valid).toBe(true);
-    expect(component.form.valid).not.toBe(false);
   });
 
   it('Form should not be valid after removing a required field', () => {
@@ -91,14 +100,10 @@ describe('ScheduleDetailsComponent', () => {
     expect(component.form.valid).toBe(false);
   });
 
-  it('Should not allow invalid cronjob input', () => {
-
-  });
-
-
   it('Should update correct data', (done) => {
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'E',
       }
     });
@@ -107,18 +112,19 @@ describe('ScheduleDetailsComponent', () => {
 
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'Changed name',
       }
     });
     expect(component.form.valid).toBe(true);
 
-    component.update.subscribe((scheduleValue: CrawlScheduleConfig) => {
-      expect(scheduleValue.id).toBe(expectedSchedule.id);
-      expect(scheduleValue.cron_expression).toBe(expectedSchedule.cron_expression);
+    component.update.subscribe((scheduleValue: ConfigObject) => {
+      expect(scheduleValue.id).toBe(expectedConfigObject.id);
+      expect(scheduleValue.crawlScheduleConfig.cronExpression).toBe(expectedConfigObject.crawlScheduleConfig.cronExpression);
       expect(scheduleValue.meta.name).toBe('Changed name');
       expect(scheduleValue.meta.name).not.toBe('changed name');
-      expect(scheduleValue.meta.description).toBe(expectedSchedule.meta.description);
-      expect(scheduleValue.meta.label).toEqual(expectedSchedule.meta.label);
+      expect(scheduleValue.meta.description).toBe(expectedConfigObject.meta.description);
+      expect(scheduleValue.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
       done();
     });
 
@@ -128,12 +134,12 @@ describe('ScheduleDetailsComponent', () => {
   it('Should save correct data', (done) => {
     expect(component.form.valid).toBe(true);
 
-    component.save.subscribe((scheduleValue: CrawlScheduleConfig) => {
-      expect(scheduleValue.id).toBe(expectedSchedule.id);
-      expect(scheduleValue.cron_expression).toBe(expectedSchedule.cron_expression);
-      expect(scheduleValue.meta.name).toBe(expectedSchedule.meta.name);
-      expect(scheduleValue.meta.description).toBe(expectedSchedule.meta.description);
-      expect(scheduleValue.meta.label).toEqual(expectedSchedule.meta.label);
+    component.save.subscribe((scheduleValue: ConfigObject) => {
+      expect(scheduleValue.id).toBe(expectedConfigObject.id);
+      expect(scheduleValue.crawlScheduleConfig.cronExpression).toBe(expectedConfigObject.crawlScheduleConfig.cronExpression);
+      expect(scheduleValue.meta.name).toBe(expectedConfigObject.meta.name);
+      expect(scheduleValue.meta.description).toBe(expectedConfigObject.meta.description);
+      expect(scheduleValue.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
       done();
     });
 

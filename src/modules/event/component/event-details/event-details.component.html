@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div [ngSwitch]="this.eventObject.type">
+        <div [ngSwitch]="this.eventObject?.type">
           <app-event-new-seed *ngSwitchCase="'New seed'"
                               [eventObject]="this.eventObject"
                               (seedAssigned)="onSeedAssigned($event)"></app-event-new-seed>
@@ -112,5 +112,5 @@
       </mat-card-actions>
     </mat-card>
   </form>
-  <app-changelog *ngIf="activityList.value.length > 0" [activityList]="activityList.value"></app-changelog>
+  <app-changelog *ngIf="activityList.value?.length > 0" [activityList]="activityList.value"></app-changelog>
 </div>

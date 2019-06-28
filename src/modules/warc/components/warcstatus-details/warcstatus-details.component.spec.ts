@@ -1,20 +1,25 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {WarcstatusDetailsComponent} from './warcstatus-details.component';
+import {WarcStatusDetailsComponent} from './warcstatus-details.component';
+import {MaterialModule} from '../../../commons/material.module';
+import {FormsModule} from '@angular/forms';
+import {DatePipe} from '@angular/common';
 
-describe('WarcstatusDetailsComponent', () => {
-  let component: WarcstatusDetailsComponent;
-  let fixture: ComponentFixture<WarcstatusDetailsComponent>;
+describe('WarcStatusDetailsComponent', () => {
+  let component: WarcStatusDetailsComponent;
+  let fixture: ComponentFixture<WarcStatusDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WarcstatusDetailsComponent]
+      declarations: [WarcStatusDetailsComponent],
+      imports: [MaterialModule, FormsModule],
+      providers: [DatePipe]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WarcstatusDetailsComponent);
+    fixture = TestBed.createComponent(WarcStatusDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

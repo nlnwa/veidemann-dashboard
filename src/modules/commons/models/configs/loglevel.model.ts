@@ -10,10 +10,22 @@ export enum Level {
 }
 
 export class LogLevels {
-  log_level: LogLevel[];
+  logLevelList: LogLevel[];
 
-  constructor({log_level = []} = {}) {
-    this.log_level = log_level;
+  constructor({logLevel: logLevel = []} = {}) {
+    this.logLevelList = logLevel;
+  }
+
+  static toWire(logLevels: LogLevels): any {
+    return {
+      log_level: logLevels.logLevelList
+    };
+  }
+
+  static fromWire(logLevels: any): LogLevels {
+    return {
+      logLevelList: logLevels.log_level
+    };
   }
 }
 

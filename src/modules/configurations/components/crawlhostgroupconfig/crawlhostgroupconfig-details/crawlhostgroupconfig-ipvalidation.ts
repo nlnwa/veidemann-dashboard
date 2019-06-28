@@ -12,8 +12,6 @@ export class CrawlHostGroupConfigIpValidation {
 
   /**
    * Checks if an IP address is a valid ipv4 or ipv6 address, using ip-address library
-   * @param {string} ip
-   * @returns {boolean}
    */
 
   static isValidIp(ip: string): boolean {
@@ -33,8 +31,6 @@ export class CrawlHostGroupConfigIpValidation {
   /**
    *
    * Custom validator
-   * @param {FormControl} control
-   * @returns {any}
    */
 
   static ipAddressValidator(control: FormControl) {
@@ -50,10 +46,6 @@ export class CrawlHostGroupConfigIpValidation {
    *
    * if the input address is ipv6 the groups gets split on ':'
    * for ipv4 groups are split on '.'
-   * @param {string} ipFrom
-   * @param {string} ipTo
-   * @param {boolean} isIpv6
-   * @returns {boolean}
    */
   static isInRange(ipFrom: string, ipTo: string, isIpv6: boolean) {
 
@@ -76,10 +68,6 @@ export class CrawlHostGroupConfigIpValidation {
   /**
    * Checks if the from and to IP address is valid and that both are of the same version (ipv4 / ipv6)
    * Then it check if both addresses first groups is the same, and returns the result
-   *
-   * @param {string} fromIp
-   * @param {string} toIp
-   * @returns {boolean}
    */
   static isValidRange(fromIp: string, toIp: string): boolean {
     const ipv6 = ipaddress.Address6;

@@ -45,7 +45,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
     protected seedDataService: SeedDataService,
     protected snackBarService: SnackBarService,
     protected errorService: ErrorService,
-    protected activatedRoute: ActivatedRoute,
+    protected route: ActivatedRoute,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected router: Router,
     protected dialog: MatDialog,
@@ -53,7 +53,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
     public titleService: Title,
     protected authService: AuthService) {
 
-    super(snackBarService, errorService, activatedRoute,
+    super(snackBarService, errorService, route,
       componentFactoryResolver, router, dialog, searchService, titleService, authService);
   }
 

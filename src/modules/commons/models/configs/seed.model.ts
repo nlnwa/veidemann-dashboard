@@ -1,7 +1,6 @@
 import {CrawlScopeProto, SeedProto} from '../../../../api';
 import {ConfigRef} from '../configref.model';
 import {Kind} from '../kind.model';
-import {ConfigObject} from '../configobject.model';
 
 export class CrawlScope {
   surtPrefix: string;
@@ -66,49 +65,25 @@ export class Seed {
     return proto;
   }
 
-  static mergeConfigs(configObjects: ConfigObject[]): Seed {
-    const seed = new Seed();
-    const compareObj: Seed = configObjects[0].seed;
+  static merge(seeds: Seed[]): Seed {
+    const mergedSeed = new Seed();
+    const compareObj: Seed = seeds[0];
 
-    const equalDisabledStatus = configObjects.every(function (cfg: ConfigObject) {
-      return cfg.seed.disabled === compareObj.disabled;
-    });
-    const commonCrawlJobs = this.commonCrawlJobs(configObjects);
+    mergedSeed.disabled = seeds.every(seed => seed.disabled === compareObj.disabled)
+      ? compareObj.disabled
+      : undefined;
 
-    for (const crawlJob of commonCrawlJobs) {
-      const gotCrawlJob = configObjects.every(function (cfg) {
-        for (const job of cfg.seed.jobRefList) {
-          if (job.id === crawlJob.id) {
-            return true;
-          }
-        }
-        return false;
-      });
-      if (gotCrawlJob) {
-        seed.jobRefList.push(crawlJob);
-      }
-    }
+    mergedSeed.jobRefList = Seed.commonCrawlJobRefs(seeds);
 
-    if (equalDisabledStatus) {
-      seed.disabled = compareObj.disabled;
-    } else {
-      seed.disabled = undefined;
-    }
-    return seed;
+    return mergedSeed;
   }
 
-  static commonCrawlJobs(configObjects: ConfigObject[]) {
-    const crawlJobs = [];
-    for (const config of configObjects) {
-      for (const job of config.seed.jobRefList) {
-        if (job) {
-          crawlJobs.push(job);
-        }
-      }
-    }
-    const unique = crawlJobs.filter(function ({id}) {
-      return !this.has(id) && this.add(id);
-    }, new Set);
-    return unique;
+  static commonCrawlJobRefs(seeds: Seed[]): ConfigRef[] {
+    return seeds
+      .map(seed => seed.jobRefList)
+      .reduce((acc, curr) => acc.concat(curr), [])
+      .filter(function({id}) {
+        return !this.has(id) && this.add(id);
+      }, new Set());
   }
 }

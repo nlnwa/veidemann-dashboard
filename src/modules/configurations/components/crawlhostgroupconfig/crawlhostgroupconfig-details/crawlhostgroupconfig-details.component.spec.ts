@@ -1,21 +1,30 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-details.component';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
-import {CrawlHostGroupConfig, Label} from '../../../../commons/models/configobject.model';
+import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {SimpleChange} from '@angular/core';
+import {ConfigObject, Kind, Label} from '../../../../commons/models';
+import {CommonsModule} from '../../../../commons/commons.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {IpRange} from '../../../../commons/models/configs/ip-range.model';
 
 describe('CrawlHostGroupConfigDetailsComponent', () => {
   let component: CrawlHostGroupConfigDetailsComponent;
   let fixture: ComponentFixture<CrawlHostGroupConfigDetailsComponent>;
-  let expectedCrawlHostGroupConfig: CrawlHostGroupConfig;
+  let expectedConfigObject: ConfigObject;
   let expectedLabel: Label;
   let expectedIpRange;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CrawlHostGroupConfigDetailsComponent],
-      providers: [FormBuilder],
-      schemas: [NO_ERRORS_SCHEMA]
+      imports: [
+        CommonsModule,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        CoreTestingModule.forRoot()
+      ]
     })
       .compileComponents();
   }));
@@ -25,35 +34,38 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
     component = fixture.componentInstance;
 
 
-    expectedLabel = {
+    expectedLabel = new Label({
       key: 'Test',
       value: 'test',
-    };
+    });
 
-    expectedIpRange = {
-      ip_from: '10.0.0.1',
-      ip_to: '10.0.0.100'
-    };
+    expectedIpRange = new IpRange({
+      ipFrom: '10.0.0.1',
+      ipTo: '10.0.0.100'
+    });
 
 
-    expectedCrawlHostGroupConfig = {
-      id: '100',
-      ip_range: [expectedIpRange],
+    expectedConfigObject = new ConfigObject({
       meta: {
         name: 'Test crawlhostgroupconfig',
         description: 'CrawlHostGroupConfig mock',
         created: '1511964561',
-        created_by: 'admin',
-        last_modified: '1511964561',
-        last_modified_by: 'admin',
-        label: [expectedLabel]
+        createdBy: 'admin',
+        lastModified: '1511964561',
+        lastModifiedBy: 'admin',
+        labelList: [expectedLabel]
+      },
+      id: '100',
+      kind: Kind.CRAWLHOSTGROUPCONFIG,
+      crawlHostGroupConfig: {
+        ipRangeList: [expectedIpRange],
       }
-    };
+    });
 
-    component.crawlHostGroupConfig = expectedCrawlHostGroupConfig;
+    component.configObject = expectedConfigObject;
 
     component.ngOnChanges({
-      crawlHostGroupConfig: new SimpleChange(null, component.crawlHostGroupConfig, null)
+      configObject: new SimpleChange(null, component.configObject, null)
     });
 
     fixture.detectChanges();
@@ -68,11 +80,9 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
   });
 
   it('should have the correct data from @Input ', () => {
-    expect(component.crawlHostGroupConfig.id).toEqual('100');
-    expect(component.crawlHostGroupConfig.ip_range).toEqual([{ip_from: '10.0.0.1', ip_to: '10.0.0.100'}]);
-    expect(component.crawlHostGroupConfig.meta.name).toEqual('Test crawlhostgroupconfig');
-    expect(component.crawlHostGroupConfig.meta.description).toEqual('CrawlHostGroupConfig mock');
-    expect(component.crawlHostGroupConfig.meta.label).toEqual([expectedLabel]);
+    expect(component.configObject.id).toEqual('100');
+    expect(component.configObject.crawlHostGroupConfig.ipRangeList).toEqual([expectedIpRange]);
+    expect(component.configObject.meta).toEqual(expectedConfigObject.meta);
   });
 
   it('should create a "FormGroup"', () => {
@@ -81,7 +91,6 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
 
   it('should have a valid form', () => {
     expect(component.form.valid).toBe(true);
-    expect(component.form.valid).not.toBe(false);
   });
 
   it('Form should not be valid after removing a required field', () => {
@@ -97,6 +106,7 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
   it('Should update correct data', (done) => {
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'E',
       }
     });
@@ -104,18 +114,19 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
 
     component.form.patchValue({
       meta: {
+        ...expectedConfigObject.meta,
         name: 'Changed name',
       }
     });
 
     expect(component.form.valid).toBe(true);
 
-    component.update.subscribe((crawlHostGroupConfigValue: CrawlHostGroupConfig) => {
-      expect(crawlHostGroupConfigValue.id).toBe(expectedCrawlHostGroupConfig.id);
-      expect(crawlHostGroupConfigValue.ip_range).toEqual(expectedCrawlHostGroupConfig.ip_range);
-      expect(crawlHostGroupConfigValue.meta.name).toBe('Changed name');
-      expect(crawlHostGroupConfigValue.meta.description).toBe(expectedCrawlHostGroupConfig.meta.description);
-      expect(crawlHostGroupConfigValue.meta.label).toEqual(expectedCrawlHostGroupConfig.meta.label);
+    component.update.subscribe((configObject: ConfigObject) => {
+      expect(configObject.id).toBe(expectedConfigObject.id);
+      expect(configObject.crawlHostGroupConfig.ipRangeList).toEqual(expectedConfigObject.crawlHostGroupConfig.ipRangeList);
+      expect(configObject.meta.name).toBe('Changed name');
+      expect(configObject.meta.description).toBe(expectedConfigObject.meta.description);
+      expect(configObject.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
       done();
     });
 
@@ -125,12 +136,10 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
   it('Should save correct data', (done) => {
     expect(component.form.valid).toBe(true);
 
-    component.save.subscribe((crawlHostGroupConfigValue: CrawlHostGroupConfig) => {
-      expect(crawlHostGroupConfigValue.id).toBe(expectedCrawlHostGroupConfig.id);
-      expect(crawlHostGroupConfigValue.ip_range).toEqual(expectedCrawlHostGroupConfig.ip_range);
-      expect(crawlHostGroupConfigValue.meta.name).toBe(expectedCrawlHostGroupConfig.meta.name);
-      expect(crawlHostGroupConfigValue.meta.description).toBe(expectedCrawlHostGroupConfig.meta.description);
-      expect(crawlHostGroupConfigValue.meta.label).toEqual(expectedCrawlHostGroupConfig.meta.label);
+    component.save.subscribe((configObject: ConfigObject) => {
+      expect(configObject.id).toBe(expectedConfigObject.id);
+      expect(configObject.crawlHostGroupConfig.ipRangeList).toEqual(expectedConfigObject.crawlHostGroupConfig.ipRangeList);
+      expect(configObject.meta).toEqual(expectedConfigObject.meta);
       done();
     });
 

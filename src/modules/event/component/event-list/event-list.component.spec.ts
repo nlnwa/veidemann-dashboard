@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EventListComponent } from './event-list.component';
+import {EventListComponent} from './event-list.component';
+import {CommonsModule} from '../../../commons/commons.module';
+import {SearchDataService} from '../../../configurations/services/data';
+import {of} from 'rxjs';
 
 describe('EventListComponent', () => {
   let component: EventListComponent;
@@ -8,9 +11,19 @@ describe('EventListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventListComponent ]
+      declarations: [EventListComponent],
+      imports: [CommonsModule],
+      providers: [
+        {
+          provide: SearchDataService,
+          useValue: {
+            connect: () => of([]),
+            disconnect: () => {
+            }
+          }
+        }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

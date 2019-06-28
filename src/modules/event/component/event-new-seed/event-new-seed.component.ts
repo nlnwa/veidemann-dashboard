@@ -73,8 +73,8 @@ export class EventNewSeedComponent implements OnChanges {
       }
     }
     this.form.patchValue({
-      uri: uri,
-      refUri: refUri,
+      uri,
+      refUri,
     });
   }
 }
