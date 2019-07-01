@@ -67,11 +67,11 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     return this.authService.isAdmin() || this.authService.isCurator();
   }
 
-  get entityRef() {
+  get entityRef(): AbstractControl {
     return this.form.get('entityRef');
   }
 
-  get jobRefListId() {
+  get jobRefListId(): AbstractControl {
     return this.form.get('jobRefListId');
   }
 
@@ -79,7 +79,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     return this.form.get('meta');
   }
 
-  get disabled() {
+  get disabled(): AbstractControl {
     return this.form.get('disabled');
   }
 
@@ -140,6 +140,9 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   }
 
   protected updateForm() {
+    if (!this.canEdit) {
+      this.form.disable();
+    }
     this.form.setValue({
       id: this.configObject.id,
       disabled: !!this.configObject.seed.disabled,
@@ -150,12 +153,8 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
       },
       meta: this.configObject.meta,
     });
-
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    if (!this.canEdit) {
-      this.form.disable();
-    }
   }
 
   /**

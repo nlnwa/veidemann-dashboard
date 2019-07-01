@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Output} from '@angular/core';
 
 import {DatePipe} from '@angular/common';
 import {
@@ -10,14 +10,14 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 import {SeedUrlValidator} from '../../validator/existing-url-validation';
-import {MetaComponent} from '../meta/meta.component';
+import {MetaComponent} from '..';
 import {BackendService} from '../../../core/services';
 import {Observable, of} from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {first, map, tap} from 'rxjs/operators';
 import {VALID_URL} from '../../validator/patterns';
-import {ConfigObject, ConfigRef, Meta} from '../../models';
+import {ConfigObject, Meta} from '../../models';
+import {SeedDataService} from '../../../configurations/services/data';
 
 
 @Component({
@@ -32,40 +32,44 @@ import {ConfigObject, ConfigRef, Meta} from '../../models';
 })
 export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
 
-  @Input()
-  entityRef: ConfigRef;
-
   @Output()
   move = new EventEmitter<ConfigObject | ConfigObject[]>();
-
-  @ViewChild('autosize', {static: false})
-  txtAreaAutosize: CdkTextareaAutosize;
 
   constructor(protected fb: FormBuilder,
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef,
-              private backendService: BackendService) {
+              private backendService: BackendService,
+              private seedDataService: SeedDataService) {
     super(fb, datePipe);
   }
 
   protected createForm(): void {
     super.createForm();
-    this.name.setValidators(Validators.compose([this.name.validator, Validators.pattern(VALID_URL)]));
+    this.name.setValidators(Validators.compose([
+      this.name.validator,
+      Validators.pattern(VALID_URL),
+      SeedUrlValidator.createValidator(this.seedDataService)
+    ]));
   }
 
   protected updateForm(meta: Meta): void {
     if (meta.created) {
       this.name.clearAsyncValidators();
     } else {
-      this.name.setAsyncValidators(SeedUrlValidator.createValidator(this.backendService));
+      this.name.setAsyncValidators(SeedUrlValidator.createBackendValidator(this.backendService));
     }
     super.updateForm(meta);
   }
 
   onRemoveExistingUrl(url: string) {
-    const urls: string = this.name.value;
-    const replaced = urls.replace(url, '').trim();
+    this.name.setValue(this.name.value.replace(url, '').trim());
+  }
+
+  onRemoveExistingUrls(urls: string[]) {
+    const replaced = urls.reduce((acc, url) => acc.replace(url, '').trim(), this.name.value);
     this.name.setValue(replaced);
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   onMoveSeedToCurrentEntity(seed: ConfigObject) {
@@ -79,28 +83,16 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    if (!this.name.pending) {
-      return this.name.valid ? of(null) : of(this.name.errors);
-    } else {
-      return this.name.statusChanges.pipe(
-        tap(state => {
-          if (state === 'INVALID') {
-            this.checkSeedExistsWithSameEntity(this.name.errors.seedExists);
-          }
-        }),
-        map(state => state === 'VALID' ? null : this.name.errors),
-        tap(() => this.cdr.markForCheck()),
-        take(1)
-      );
-    }
-  }
-
-  private checkSeedExistsWithSameEntity(seeds) {
-    for (const seed of seeds) {
-      const seedEntityId = seed.seed.entityRef.id;
-      if (seedEntityId === this.entityRef.id && !this.created.value) {
-        Promise.resolve().then(() => this.onRemoveExistingUrl(seed.meta.name));
-      }
-    }
+    return (this.name.pending
+        ? this.name.statusChanges.pipe(
+          map(state => state === 'VALID' ? null : this.name.errors),
+          tap(() => this.cdr.markForCheck())
+        )
+        : this.name.valid
+          ? of(null)
+          : of(this.name.errors)
+    ).pipe(
+      first() // must ensure observable returned is completed
+    );
   }
 }
