@@ -21,17 +21,17 @@ export class ConfigObject {
   apiVersion: string;
   kind: Kind;
   meta: Meta;
-  crawlEntity: CrawlEntity;
-  seed: Seed;
-  crawlJob: CrawlJob;
-  crawlConfig: CrawlConfig;
-  crawlScheduleConfig: CrawlScheduleConfig;
-  browserConfig: BrowserConfig;
-  politenessConfig: PolitenessConfig;
-  browserScript: BrowserScript;
-  crawlHostGroupConfig: CrawlHostGroupConfig;
-  roleMapping: RoleMapping;
-  collection: Collection;
+  crawlEntity?: CrawlEntity;
+  seed?: Seed;
+  crawlJob?: CrawlJob;
+  crawlConfig?: CrawlConfig;
+  crawlScheduleConfig?: CrawlScheduleConfig;
+  browserConfig?: BrowserConfig;
+  politenessConfig?: PolitenessConfig;
+  browserScript?: BrowserScript;
+  crawlHostGroupConfig?: CrawlHostGroupConfig;
+  roleMapping?: RoleMapping;
+  collection?: Collection;
 
   constructor(configObject: Partial<ConfigObject> = {}) {
     this.id = configObject.id || '';
