@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Optional, Output} from '@angular/core';
 
 import {DatePipe} from '@angular/common';
 import {
@@ -39,23 +39,30 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef,
               private backendService: BackendService,
-              private seedDataService: SeedDataService) {
+              @Optional() private seedDataService: SeedDataService) {
     super(fb, datePipe);
   }
 
   protected createForm(): void {
     super.createForm();
-    this.name.setValidators(Validators.compose([
-      this.name.validator,
-      Validators.pattern(VALID_URL),
-      SeedUrlValidator.createValidator(this.seedDataService)
-    ]));
   }
 
   protected updateForm(meta: Meta): void {
     if (meta.created) {
+      this.name.clearValidators();
       this.name.clearAsyncValidators();
+      this.name.setValidators(Validators.compose([
+        Validators.required,
+        Validators.pattern(VALID_URL)
+      ]));
     } else {
+      this.name.clearValidators();
+      this.name.clearAsyncValidators();
+      this.name.setValidators(Validators.compose([
+        Validators.required,
+        Validators.pattern(VALID_URL),
+        SeedUrlValidator.createValidator(this.seedDataService)
+      ]));
       this.name.setAsyncValidators(SeedUrlValidator.createBackendValidator(this.backendService));
     }
     super.updateForm(meta);
