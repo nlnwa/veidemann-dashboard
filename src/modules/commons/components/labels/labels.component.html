@@ -1,13 +1,15 @@
 <div fxLayout="column">
-
   <mat-form-field>
-    <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
+    <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList (cdkDropListDropped)="onDrop($event)">
       <ng-container *ngFor="let group of groups$ | async">
         <mat-chip *ngFor="let value of group.values"
                   [selectable]="canUpdate"
                   [removable]="removable"
                   (removed)="onRemoveLabel(group.key, value)"
-                  (click)="onClickLabel(group.key, value)">
+                  (click)="onClickLabel(group.key, value)"
+                  cdkDrag
+                  [cdkDragData]="group.key + ':' + value"
+                  >
           {{group.key + ':' + value}}
           <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
         </mat-chip>
@@ -65,3 +67,5 @@
     </mat-card>
   </form>
 </div>
+
+

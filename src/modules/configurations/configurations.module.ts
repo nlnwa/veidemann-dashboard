@@ -32,6 +32,7 @@ import {
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {SeedConfigurationsComponent} from './containers/seed-configurations/seed-configurations.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {SeedConfigurationsComponent} from './containers/seed-configurations/seed
   imports: [
     CommonsModule,
     ConfigurationsRoutingModule,
+    DragDropModule,
   ],
   exports: [
     SearchComponent,
