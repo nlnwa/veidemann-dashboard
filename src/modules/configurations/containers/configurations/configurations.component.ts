@@ -257,10 +257,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
 
     negative$
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-          this.snackBarService.openSnackBar('Sletter ikke konfigurasjonene');
-        }
-      );
+      .subscribe();
 
     positive$
       .pipe(

@@ -116,9 +116,12 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
     this.configurationsService.saveMultiple(configObjects).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe(() => {
-      this.reset();
-      this.snackBarService.openSnackBar(configObjects.length + ' seeds er lagret');
-    });
+      },
+      (error) => this.errorService.dispatch(error),
+      () => {
+        this.reset();
+        this.snackBarService.openSnackBar(configObjects.length + ' seeds ble lagret');
+      });
   }
 
   protected onDeletedSelectedConfigs(numConfigs: number, numDeleted: number) {

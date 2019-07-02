@@ -34,7 +34,7 @@
         </mat-form-field>
 
         <mat-form-field formGroupName="entityRef"
-                        *ngIf="configObject?.id">
+                        *ngIf="configObject?.seed?.entityRef">
           <input matInput formControlName="id"
                  placeholder="Entitetens Id"
                  readonly
