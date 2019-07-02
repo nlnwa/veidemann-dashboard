@@ -101,6 +101,11 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     this.labelForm.reset({key, value});
   }
 
+  onDrop(event) {
+    const label = event.item.data;
+    this.onSaveLabel(label);
+  }
+
   onSave(value: string): void {
     if (Kind.LABEL === this.kind) {
       this.onSaveLabel(value);

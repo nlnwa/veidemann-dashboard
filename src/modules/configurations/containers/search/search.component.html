@@ -21,7 +21,7 @@
 
 <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
 
-<div fxLayout="row" fxLayoutGap="16px">
+<div fxLayout="row" fxLayoutGap="16px" cdkDropListGroup>
   <div fxFlex fxLayout="column" fxLayoutGap="16px">
     <app-search-list #baseList
                      (rowClick)="onSelectConfig($event)"
@@ -51,3 +51,4 @@
                            (invalidate)="onInvalidate()">
   </app-seed-configurations>
 </div>
+
