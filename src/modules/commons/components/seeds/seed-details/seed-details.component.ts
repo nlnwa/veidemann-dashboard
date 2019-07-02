@@ -3,7 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../models';
+import {ConfigObject, ConfigRef, Kind, Meta} from '../../../models';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -52,7 +52,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   }
 
   get canSave(): boolean {
-    return !(this.meta.hasError('required') || this.meta.hasError('pattern'));
+    return !(this.meta.hasError('required') || this.meta.hasError('pattern') || this.meta.pending);
   }
 
   get canUpdate(): boolean {
@@ -163,38 +163,35 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
-    const seed = new Seed({
-      disabled: formModel.disabled,
-      entityRef: {kind: Kind.CRAWLENTITY, id: formModel.entityRef.id} // Nødvendig?
-    });
-    seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
-    seed.scope.surtPrefix = formModel.scope.surtPrefix;
-
     return new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
       meta: formModel.meta,
-      seed
+      seed: {
+        disabled: formModel.disabled,
+        entityRef: formModel.entityRef,
+        jobRefList: formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id})),
+        scope: formModel.scope
+      }
     });
   }
 
-
   private prepareSaveMultiple(): { seeds: string[], configObject: ConfigObject } {
     const formModel = this.form.value;
-
-    const seeds = formModel.meta.name.trim().split(/\s+/).filter(s => !!s);
-    const seed = new Seed({
-      disabled: formModel.disabled,
-    });
-    seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
-    seed.scope.surtPrefix = formModel.scope.surtPrefix;
 
     const configObject = new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
       meta: formModel.meta,
-      seed
+      seed: {
+        disabled: formModel.disabled,
+        entityRef: formModel.entityRef,
+        jobRefList: formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id})),
+        scope: formModel.scope
+      }
     });
+
+    const seeds = formModel.meta.name.trim().split(/\s+/).filter(s => !!s);
 
     return {seeds, configObject};
   }

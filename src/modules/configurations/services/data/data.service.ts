@@ -202,14 +202,22 @@ export class DataService implements DataSource<ConfigObject>, OnDestroy {
   delete(configObject: ConfigObject): Observable<boolean> {
     this.loading.next(true);
     return this._delete(configObject)
-      .pipe(finalize(() => this.loading.next(false)));
+      .pipe(
+        finalize(() => {
+          this.resetPaginator();
+          this.loading.next(false);
+        })
+      );
   }
 
   deleteMultiple(configObjects: ConfigObject[]): Observable<boolean> {
     this.loading.next(true);
     return from(configObjects).pipe(
       mergeMap((configObject) => this._delete(configObject)),
-      finalize(() => this.loading.next(false))
+      finalize(() => {
+        this.resetPaginator();
+        this.loading.next(false);
+      })
     );
   }
 
@@ -227,8 +235,7 @@ export class DataService implements DataSource<ConfigObject>, OnDestroy {
       .pipe(
         map(deleteResponse => deleteResponse.getDeleted()),
         tap(deleted => deleted && this.remove(configObject)),
-        tap(deleted => deleted && this.decrementCount()),
-        tap(() => this.resetPaginator())
+        tap(deleted => deleted && this.decrementCount())
       );
   }
 

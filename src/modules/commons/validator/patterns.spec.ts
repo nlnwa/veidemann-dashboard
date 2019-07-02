@@ -89,7 +89,7 @@ describe('Regular expression patterns', () => {
       validUrls.forEach(validUrl => expect(validUrl).toMatch(VALID_URL));
     });
 
-    // TODO excluded becase we use a simple validation pattern that fails this test for a number of invalid url's
+    // TODO excluded becase we use a simple VALID_URL pattern that fails the test for a number of invalid url's
     xit('should not match invalid urls', () => {
       invalidUrls.forEach(invalidUrl => expect(invalidUrl).not.toMatch(VALID_URL));
     });

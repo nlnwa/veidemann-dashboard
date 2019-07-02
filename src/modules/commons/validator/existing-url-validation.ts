@@ -41,6 +41,9 @@ export class SeedUrlValidator {
    * @returns A validator that checks with the seedDataService (local) exists on same entity
    */
   static createValidator(seedDataService: SeedDataService) {
+    if (!seedDataService) {
+      return () => null;
+    }
     return (control: AbstractControl): ValidationErrors | null => {
       const urlsWithinSameEntity = seedDataService.data.map(configObject => configObject.meta.name);
       const urls: string[] = control.value.split(/\s+/).filter(_ => !!_);
