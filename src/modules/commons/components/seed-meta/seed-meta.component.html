@@ -1,37 +1,56 @@
 <div [formGroup]="form" fxLayout="column">
   <mat-form-field>
-    <textarea matInput formControlName="name" placeholder="URL"
-              *ngIf="!created.value"
+    <textarea matInput
+              formControlName="name"
+              placeholder="URL"
               i18n="@@metaUrlInputPlaceholder"
               cdkTextareaAutosize
-              cdkAutosizeMinRows="2"
+              cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="10"
               #autosize="cdkTextareaAutosize">
     </textarea>
 
-    <input matInput formControlName="name" placeholder="URL"
-           *ngIf="created.value"
-           i18n="@@metaUrlInputPlaceholder">
-
     <mat-error
-      *ngIf="name.hasError('required') && name.dirty"
+      *ngIf="name.hasError('required')"
       i18n="@@metaUrlRequiredError">
       Feltet må fylles ut
     </mat-error>
 
-    <mat-error *ngIf="name.hasError('pattern') && !name.hasError('required')">
+    <mat-error *ngIf="name.hasError('pattern')">
       Inneholder en ugyldig formatert url
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('seedExistsOnEntity')">
+      URL med samme domene eksisterer allerede på samme entitet
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('seedExists')">
+      URL med samme domene eksisterer på annen entitet som en av url'ene i listen
     </mat-error>
   </mat-form-field>
 
+  <mat-action-list *ngIf="name.hasError('seedExistsOnEntity')" dense>
+    <button mat-list-item
+            *ngIf="name.errors.seedExistsOnEntity?.length > 1"
+            (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
+      <mat-icon mat-list-icon>remove_circle</mat-icon>
+      <span>Fjern alle fra listen</span>
+    </button>
+
+    <button mat-list-item
+            *ngFor="let url of name.errors.seedExistsOnEntity"
+            (click)="onRemoveExistingUrl(url)"
+            matTooltip="Fjern url fra listen">
+      <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+      {{url}}
+    </button>
+
+
+  </mat-action-list>
+
   <mat-list *ngIf="name.hasError('seedExists')">
-    <mat-list-item>
-      <mat-error>
-        Andre entiteter inneholder seed med samme url som er skrevet inn
-      </mat-error>
-    </mat-list-item>
     <mat-list-item *ngIf="name.errors.seedExists?.length > 1">
-      <button mat-button
+      <button mat-stroked-button
               (click)="onMoveSeedsToCurrentEntity(name.errors.seedExists)">
         <mat-icon mat-list-icon>swap_vert</mat-icon>
         <span>Flytt alle til denne entiteten</span>
@@ -46,11 +65,11 @@
 
       <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
               matTooltip="Fjern url fra listen">
-        <mat-icon mat-list-icon>cancel</mat-icon>
+        <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
       </button>
 
       <a target="_blank"
-         matTooltip="Gå til entiten som allerede har en seed med lik url"
+         matTooltip="Gå til entitet som url refererer til i et nytt vindu"
          [routerLink]="['../search']"
          [queryParams]="{id: seed.seed.entityRef.id}">
         {{seed.meta.name}}
