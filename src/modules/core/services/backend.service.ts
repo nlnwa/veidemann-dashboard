@@ -5,6 +5,8 @@ import {
   ConfigPromiseClient,
   ConfigRefProto,
   DeleteResponse,
+  GetLabelKeysRequest,
+  LabelKeysResponse,
   ListRequest,
   UpdateRequest,
   UpdateResponse
@@ -64,5 +66,10 @@ export class BackendService {
   delete(request: ConfigObjectProto): Observable<DeleteResponse> {
     const metadata = this.authService.metadata;
     return fromPromise(this.configPromiseClient.deleteConfigObject(request, metadata));
+  }
+
+  getLabelKeys(request: GetLabelKeysRequest): Observable<LabelKeysResponse> {
+    const metadata = this.authService.metadata;
+    return fromPromise(this.configPromiseClient.getLabelKeys(request, metadata));
   }
 }

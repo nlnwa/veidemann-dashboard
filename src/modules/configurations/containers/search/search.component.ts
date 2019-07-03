@@ -16,6 +16,7 @@ import {ConfigurationsComponent} from '../configurations/configurations.componen
 import {ErrorService, SnackBarService} from '../../../core/services';
 import {SearchConfigurationService} from '../../services/search-configuration.service';
 import {SeedConfigurationService} from '../../services/seed-configuration.service';
+import {LabelService} from '../../services/label.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ import {SeedConfigurationService} from '../../services/seed-configuration.servic
     SearchDataService,
     SeedConfigurationService,
     SeedDataService,
+    LabelService,
     {provide: DataService, useExisting: SeedDataService},
   ]
 })
@@ -50,12 +52,14 @@ export class SearchComponent extends ConfigurationsComponent implements OnInit {
     protected dialog: MatDialog,
     protected searchService: SearchConfigurationService,
     protected titleService: Title,
-    protected authService: AuthService) {
+    protected authService: AuthService,
+    protected labelService: LabelService) {
     super(searchService, snackBarService, errorService, componentFactoryResolver,
-      router, titleService, dialog, route);
+      router, titleService, dialog, route, labelService);
 
     this.searchTerm$ = this.searchTerm.asObservable();
     this.kind = Kind.CRAWLENTITY;
+    this.labelService.kind = this.kind;
   }
 
   get canEdit(): boolean {

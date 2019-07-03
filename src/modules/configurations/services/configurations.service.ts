@@ -1,7 +1,7 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {combineLatest, EMPTY, Observable, of, Subject} from 'rxjs';
 import {DataService} from './data';
-import {catchError, count, debounceTime, filter, map, mergeMap, share, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, count, debounceTime, filter, map, mergeMap, share, shareReplay, tap} from 'rxjs/operators';
 import {pathToKind} from '../func/kind';
 import {ConfigObject, Kind} from '../../commons/models';
 import {ActivatedRoute} from '@angular/router';

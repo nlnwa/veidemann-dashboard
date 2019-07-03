@@ -42,6 +42,7 @@ import {BaseListComponent, ReferrerError} from '../../../commons';
 import {Action} from '../../../commons/components/base-list/base-list';
 import {ConfigurationsService} from '../../services/configurations.service';
 import {DataService} from '../../services/data';
+import {LabelService} from '../../services/label.service';
 
 export interface ConfigOptions {
   rotationPolicies?: RotationPolicy[];
@@ -62,7 +63,7 @@ export interface ConfigOptions {
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ConfigurationsService, DataService]
+  providers: [ConfigurationsService, DataService, LabelService]
 })
 export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
   readonly Kind = Kind;
@@ -94,7 +95,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
               protected router: Router,
               protected titleService: Title,
               protected dialog: MatDialog,
-              protected route: ActivatedRoute) {
+              protected route: ActivatedRoute,
+              protected labelService: LabelService) {
     this.configObject$ = this.configObject.asObservable();
   }
 
@@ -148,6 +150,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, OnChanges {
 
     this.configurationsService.kind$.subscribe(kind => {
       this.kind = kind;
+      this.labelService.kind = kind;
       this.reset();
       this.titleService.setTitle('Veidemann | ' + ConfigurationsComponent.getTitle(kind));
     });

@@ -1,28 +1,36 @@
 <div fxLayout="column">
-  <mat-form-field>
-    <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList (cdkDropListDropped)="onDrop($event)">
-      <ng-container *ngFor="let group of groups$ | async">
-        <mat-chip *ngFor="let value of group.values"
-                  [selectable]="canUpdate"
-                  [removable]="removable"
-                  (removed)="onRemoveLabel(group.key, value)"
-                  (click)="onClickLabel(group.key, value)"
-                  cdkDrag
-                  [cdkDragData]="group.key + ':' + value"
-                  >
-          {{group.key + ':' + value}}
-          <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
-        </mat-chip>
-      </ng-container>
-      <input #chipInput
-             [disabled]="disabled"
-             [placeholder]="kind"
-             [matChipInputFor]="chipList"
-             [matChipInputSeparatorKeyCodes]="labelInputSeparators"
-             (matChipInputTokenEnd)="onSave($event.value); chipInput.value = ''"
-             [attr.disabled]="canUpdate ? null : ''"/>
-    </mat-chip-list>
-  </mat-form-field>
+<form>
+    <mat-form-field>
+      <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList
+                     (cdkDropListDropped)="onDrop($event)">
+        <ng-container *ngFor="let group of groups$ | async">
+          <mat-chip *ngFor="let value of group.values"
+                    [selectable]="canUpdate"
+                    [removable]="removable"
+                    (removed)="onRemoveLabel(group.key, value)"
+                    (click)="onClickLabel(group.key, value)"
+                    cdkDrag
+                    [cdkDragData]="group.key + ':' + value"
+          >
+            {{group.key + ':' + value}}
+            <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
+          </mat-chip>
+        </ng-container>
+        <input #chipInput
+               matInput
+               [formControl]="control"
+               [placeholder]="kind"
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="labelInputSeparators"
+               (matChipInputTokenEnd)="onSave($event);"
+               [matAutocomplete]="auto"/>
+      </mat-chip-list>
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteOptionSelected($event)">
+      <mat-option *ngFor="let key of filteredKey$ | async" [value]="key">{{key}}</mat-option>
+    </mat-autocomplete>
+</form>
 
   <form [formGroup]="labelForm" *ngIf="canUpdate && labelForm.enabled">
     <mat-card class="label-form">
@@ -50,11 +58,6 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-raised-button i18n="@@commonButtonAdd" color="primary"
-                *ngIf="!showUpdate"
-                [disabled]="!labelForm.valid"
-                (click)="onSave(newKey.value, newValue.value)">Legg til
-        </button>
         <button mat-raised-button color="accent"
                 *ngIf="showUpdate"
                 [disabled]="!(labelForm.valid && labelForm.dirty)"
