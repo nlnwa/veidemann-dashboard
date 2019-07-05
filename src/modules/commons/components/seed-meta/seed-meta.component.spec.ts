@@ -8,6 +8,7 @@ import {LabelsComponent} from '..';
 import {DatePipe} from '@angular/common';
 import {BackendService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 describe('SeedMetaComponent', () => {
   let component: SeedMetaComponent;
@@ -16,7 +17,13 @@ describe('SeedMetaComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SeedMetaComponent, LabelsComponent],
-      imports: [MaterialModule, ReactiveFormsModule, RouterTestingModule, NoopAnimationsModule],
+      imports: [
+        MaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        DragDropModule,
+        NoopAnimationsModule
+      ],
       providers: [
         DatePipe,
         {

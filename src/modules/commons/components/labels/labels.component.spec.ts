@@ -4,6 +4,7 @@ import {LabelsComponent} from './labels.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../material.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 describe('LabelsComponent', () => {
   let component: LabelsComponent;
@@ -12,7 +13,7 @@ describe('LabelsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LabelsComponent],
-      imports: [MaterialModule, ReactiveFormsModule, NoopAnimationsModule]
+      imports: [MaterialModule, ReactiveFormsModule, DragDropModule, NoopAnimationsModule]
     })
       .compileComponents();
   }));

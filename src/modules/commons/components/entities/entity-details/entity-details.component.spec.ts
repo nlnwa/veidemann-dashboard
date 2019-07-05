@@ -6,6 +6,7 @@ import {LabelsComponent, MetaComponent} from '../..';
 import {AuthService} from '../../../../core/services/auth';
 import {DatePipe} from '@angular/common';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 describe('EntityDetailsComponent', () => {
   let component: EntityDetailsComponent;
@@ -14,7 +15,12 @@ describe('EntityDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EntityDetailsComponent, MetaComponent, LabelsComponent],
-      imports: [MaterialModule, ReactiveFormsModule, NoopAnimationsModule],
+      imports: [
+        MaterialModule,
+        ReactiveFormsModule,
+        DragDropModule,
+        NoopAnimationsModule
+      ],
       providers: [
         DatePipe,
         {
