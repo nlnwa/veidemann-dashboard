@@ -4,6 +4,8 @@ import {EventDetailsMultiComponent} from './event-details-multi.component';
 import {CommonsModule} from '../../../commons/commons.module';
 import {CoreTestingModule} from '../../../core/core.testing.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {LabelService} from '../../../configurations/services/label.service';
+import {of} from 'rxjs';
 
 describe('EventDetailsMultiComponent', () => {
   let component: EventDetailsMultiComponent;
@@ -12,7 +14,15 @@ describe('EventDetailsMultiComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EventDetailsMultiComponent],
-      imports: [CommonsModule, CoreTestingModule.forRoot(), NoopAnimationsModule]
+      imports: [CommonsModule, CoreTestingModule.forRoot(), NoopAnimationsModule],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
+      ]
     })
       .compileComponents();
   }));

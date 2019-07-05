@@ -39,6 +39,7 @@ describe('EventNewSeedComponent', () => {
       ]
     }).overrideProvider(SearchDataService, {
       useValue: {
+        ngOnDestroy: () => {},
         connect: () => of([]),
         disconnect: () => {}
       }

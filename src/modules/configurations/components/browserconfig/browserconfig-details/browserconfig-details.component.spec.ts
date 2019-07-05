@@ -5,6 +5,8 @@ import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {DatePipe} from '@angular/common';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {LabelService} from '../../../services/label.service';
+import {of} from 'rxjs';
 
 describe('BrowserConfigDetailsComponent', () => {
   let component: BrowserConfigDetailsComponent;
@@ -19,7 +21,15 @@ describe('BrowserConfigDetailsComponent', () => {
         NoopAnimationsModule,
         CoreTestingModule.forRoot()
       ],
-      providers: [DatePipe]
+      providers: [
+        DatePipe,
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
+      ]
     })
       .compileComponents();
   }));

@@ -8,6 +8,8 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {BrowserScriptDirective} from './browserscript.directive';
 import {FormGroup} from '@angular/forms';
+import {LabelService} from '../../../services/label.service';
+import {of} from 'rxjs';
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
@@ -24,6 +26,14 @@ describe('BrowserScriptDetailsComponent', () => {
         CommonsModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot()
+      ],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
       ]
     })
       .compileComponents();

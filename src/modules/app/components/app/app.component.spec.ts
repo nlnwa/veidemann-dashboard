@@ -7,6 +7,7 @@ import {AppInitializerService} from '../../../core/services/app.initializer.serv
 import {AuthService, GuardService} from '../../../core/services/auth';
 import {AppConfigService, ErrorService, SnackBarService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MatDialogRef} from '@angular/material';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -46,6 +47,12 @@ describe('AppComponent', () => {
         {
           provide: ErrorService,
           useValue: {}
+        },
+        {
+          provide: MatDialogRef,
+          useValue: {
+            close: () => {}
+          }
         }
       ]
     }).compileComponents();

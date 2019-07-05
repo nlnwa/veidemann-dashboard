@@ -4,6 +4,8 @@ import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {LabelService} from '../../../services/label.service';
+import {of} from 'rxjs';
 
 describe('PolitenessconfigDetailsComponent', () => {
   let component: PolitenessConfigDetailsComponent;
@@ -16,7 +18,15 @@ describe('PolitenessconfigDetailsComponent', () => {
         CommonsModule,
         RouterTestingModule,
         NoopAnimationsModule,
-        CoreTestingModule.forRoot()
+        CoreTestingModule.forRoot(),
+      ],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
       ]
     })
       .compileComponents();

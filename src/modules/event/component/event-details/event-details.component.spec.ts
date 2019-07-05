@@ -7,6 +7,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {EventSearchComponent} from '../../containers/event-search/event-search.component';
 import {CoreTestingModule} from '../../../core/core.testing.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {of} from 'rxjs';
+import {LabelService} from '../../../configurations/services/label.service';
 
 describe('EventDetailsComponent', () => {
   let component: EventDetailsComponent;
@@ -26,6 +28,14 @@ describe('EventDetailsComponent', () => {
         EventWarcErrorComponent,
         EventSearchComponent,
         ChangelogComponent
+      ],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
       ]
     })
       .compileComponents();
