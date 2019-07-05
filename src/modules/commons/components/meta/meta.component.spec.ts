@@ -2,11 +2,13 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {MetaComponent} from './meta.component';
 import {MaterialModule} from '../../material.module';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LabelsComponent} from '..';
 import {DatePipe} from '@angular/common';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {LabelService} from '../../../configurations/services/label.service';
+import {of} from 'rxjs';
 
 describe('MetaComponent', () => {
   let component: MetaComponent;
@@ -17,11 +19,20 @@ describe('MetaComponent', () => {
       declarations: [MetaComponent, LabelsComponent],
       imports: [
         MaterialModule,
+        FormsModule,
         ReactiveFormsModule,
         DragDropModule,
         NoopAnimationsModule
       ],
-      providers: [DatePipe]
+      providers: [
+        DatePipe,
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
+      ]
     })
       .compileComponents();
   }));

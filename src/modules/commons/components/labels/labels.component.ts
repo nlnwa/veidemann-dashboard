@@ -1,9 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../../validator/patterns';
 import {Label} from '../../models';
+import {map, startWith} from 'rxjs/operators';
+import {MatChipInputEvent} from '@angular/material';
+import {LabelService} from '../../../configurations/services/label.service';
 
 
 export enum Kind {
@@ -23,6 +26,10 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   @Input() removable = true;
   @Input() kind: string = Kind.LABEL;
 
+  keys: Subject<string[]>;
+  key$: Observable<string[]>;
+
+  control = new FormControl();
 
   // ControlValueAccessor callback functions
   onChange: (labels: Label[]) => void;
@@ -33,6 +40,10 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   disabled = false;
 
+  // hack to sequence events between matAutocomplete and matChipList
+  // see: https://github.com/angular/components/issues/8176
+  private seq = false;
+
   private clickedIndex = -1;
   private showUpdateLabel = false;
 
@@ -41,8 +52,16 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   private labels: Label[];
 
+  filteredKey$: Observable<string[]>;
+
+  @ViewChild('chipInput', {static: true}) chipInputControl: ElementRef;
+
   constructor(private fb: FormBuilder,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private labelService: LabelService) {
+    this.createForm();
+    this.keys = new Subject();
+    this.key$ = this.keys.asObservable();
   }
 
   get showUpdate(): boolean {
@@ -53,16 +72,35 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     return !this.disabled;
   }
 
-  get key() {
+  get key(): AbstractControl {
     return this.labelForm.get('key');
   }
 
-  get value() {
+  get value(): AbstractControl {
     return this.labelForm.get('value');
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.fetchLabelKeys();
+    this.filteredKey$ = combineLatest([this.control.valueChanges.pipe(startWith('')), this.key$])
+      .pipe(
+        map(([value, keys]) => {
+          const filterValue = value.toLowerCase();
+          return keys.filter(key => key.toLowerCase().startsWith(filterValue));
+        })
+      );
+  }
+
+  fetchLabelKeys() {
+    this.labelService.getLabelKeys()
+      .subscribe(keys => {
+        this.keys.next(keys);
+      });
+  }
+
+  onAutocompleteOptionSelected(event) {
+    this.seq = true;
+    this.chipInputControl.nativeElement.value = event.option.value;
   }
 
   // implement ControlValueAccessor
@@ -88,6 +126,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   // implement ControlValueAccessor
   setDisabledState(disabled: boolean): void {
     this.disabled = disabled;
+    this.disabled ? this.control.disable() : this.control.enable();
     this.cdr.markForCheck();
   }
 
@@ -106,12 +145,17 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
     this.onSaveLabel(label);
   }
 
-  onSave(value: string): void {
-    if (Kind.LABEL === this.kind) {
-      this.onSaveLabel(value);
-    } else {
-      this.onSaveSelector(value);
+  onSave(event: MatChipInputEvent): void {
+    if (this.seq) {
+      this.seq = false;
+      return;
     }
+    if (Kind.LABEL === this.kind) {
+      this.onSaveLabel(event.value);
+    } else {
+      this.onSaveSelector(event.value);
+    }
+    this.chipInputControl.nativeElement.value = '';
   }
 
   onSaveLabel(value: string): void {
@@ -197,6 +241,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
   }
 
   private reset() {
+    this.fetchLabelKeys();
     this.regroup();
     this.labelForm.reset();
     this.labelForm.disable();

@@ -7,7 +7,7 @@ import {SeedConfigurationsComponent} from '../seed-configurations/seed-configura
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SearchConfigurationService} from '../../services/search-configuration.service';
-import {SearchDataService, SeedDataService} from '../../services/data';
+import {DataService, SearchDataService, SeedDataService} from '../../services/data';
 import {SeedConfigurationService} from '../../services/seed-configuration.service';
 import {of} from 'rxjs';
 
@@ -21,18 +21,33 @@ describe('SearchComponent', () => {
       imports: [CommonsModule, RouterTestingModule, CoreTestingModule.forRoot(), NoopAnimationsModule],
     }).overrideProvider(SearchConfigurationService, {
       useValue: {
+        ngOnDestroy: () => {
+        },
         configObject$: of(null)
       }
     }).overrideProvider(SearchDataService, {
       useValue: {
+        ngOnDestroy: () => {
+        },
         connect: () => of([]),
         disconnect: () => {
         }
       }
     }).overrideProvider(SeedConfigurationService, {
-      useValue: {}
+      useValue: {
+        ngOnDestroy: () => {
+        }
+      }
     }).overrideProvider(SeedDataService, {
-      useValue: {}
+      useValue: {
+        ngOnDestroy: () => {
+        }
+      }
+    }).overrideProvider(DataService, {
+      useValue: {
+        ngOnDestroy: () => {
+        }
+      }
     }).compileComponents();
   }));
 

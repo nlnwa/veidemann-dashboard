@@ -4,6 +4,8 @@ import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {LabelService} from '../../../services/label.service';
+import {of} from 'rxjs';
 
 describe('CrawljobDetailsComponent', () => {
   let component: CrawljobDetailsComponent;
@@ -17,6 +19,14 @@ describe('CrawljobDetailsComponent', () => {
         RouterTestingModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot()
+      ],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
       ]
     })
       .compileComponents();

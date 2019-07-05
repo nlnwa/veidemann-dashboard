@@ -18,13 +18,14 @@ import {Title} from '@angular/platform-browser';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta, Seed} from '../../../commons/models';
 import {SearchConfigurationService} from '../../../configurations/services/search-configuration.service';
+import {LabelService} from '../../../configurations/services/label.service';
 
 @Component({
   selector: 'app-event-search',
   templateUrl: './event-search.component.html',
   styleUrls: ['./event-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SeedDataService, SearchDataService, {provide: DataService, useExisting: SearchDataService}]
+  providers: [SeedDataService, SearchDataService, {provide: DataService, useExisting: SearchDataService}, LabelService]
 })
 
 export class EventSearchComponent extends SearchComponent implements OnInit {
@@ -51,10 +52,11 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
     protected dialog: MatDialog,
     protected searchService: SearchConfigurationService,
     public titleService: Title,
-    protected authService: AuthService) {
+    protected authService: AuthService,
+    protected labelService: LabelService) {
 
     super(snackBarService, errorService, route,
-      componentFactoryResolver, router, dialog, searchService, titleService, authService);
+      componentFactoryResolver, router, dialog, searchService, titleService, authService, labelService);
   }
 
   ngOnInit() {

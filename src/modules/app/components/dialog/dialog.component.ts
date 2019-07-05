@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
 import {ErrorService} from '../../../core/services';
@@ -32,6 +32,8 @@ export class DialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    this.dialogRef.close();
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 }

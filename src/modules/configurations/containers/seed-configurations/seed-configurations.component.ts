@@ -19,12 +19,14 @@ import {ConfigObject, Kind, Meta} from '../../../commons/models';
 import {ReferrerError} from '../../../commons';
 import {ConfigurationsComponent} from '..';
 import {SeedConfigurationService} from '../../services/seed-configuration.service';
+import {LabelService} from '../../services/label.service';
 
 @Component({
   selector: 'app-seed-configurations',
   templateUrl: './seed-configurations.component.html',
   styleUrls: ['./seed-configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [LabelService]
 })
 export class SeedConfigurationsComponent extends ConfigurationsComponent implements OnInit, OnChanges {
 
@@ -41,11 +43,13 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
               protected router: Router,
               protected titleService: Title,
               protected dialog: MatDialog,
-              protected route: ActivatedRoute) {
+              protected route: ActivatedRoute,
+              protected labelService: LabelService) {
     super(configurationsService, snackBarService, errorService, componentFactoryResolver, router,
-      titleService, dialog, route);
+      titleService, dialog, route, labelService);
 
     this.kind = Kind.SEED;
+    this.labelService.kind = this.kind;
   }
 
   ngOnInit() {

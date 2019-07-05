@@ -1,10 +1,12 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {LabelsComponent} from './labels.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../material.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {LabelService} from '../../../configurations/services/label.service';
+import {of} from 'rxjs';
 
 describe('LabelsComponent', () => {
   let component: LabelsComponent;
@@ -13,7 +15,15 @@ describe('LabelsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LabelsComponent],
-      imports: [MaterialModule, ReactiveFormsModule, DragDropModule, NoopAnimationsModule]
+      imports: [MaterialModule, FormsModule, ReactiveFormsModule, DragDropModule, NoopAnimationsModule],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {
+            getLabelKeys: () => of([])
+          }
+        }
+      ]
     })
       .compileComponents();
   }));

@@ -38,11 +38,17 @@ describe('EventSearchComponent', () => {
       ]
     }).overrideProvider(SearchDataService, {
       useValue: {
+        ngOnDestroy: () => {
+        },
         connect: () => of([]),
-        disconnect: () => {}
+        disconnect: () => {
+        }
       }
     }).overrideProvider(SeedDataService, {
-      useValue: {}
+      useValue: {
+        ngOnDestroy: () => {
+        }
+      }
     }).compileComponents();
   }));
 

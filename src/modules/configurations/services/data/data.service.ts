@@ -4,7 +4,7 @@ import {ConfigObject, ConfigRef, Kind} from '../../../commons/models';
 import {DataSource} from '@angular/cdk/table';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged, filter, finalize, ignoreElements, map, mergeMap, share, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {FieldMask, ListRequest, UpdateRequest} from '../../../../api';
+import {FieldMask, GetLabelKeysRequest, LabelKeysResponse, ListRequest, UpdateRequest} from '../../../../api';
 import {BackendService} from '../../../core/services';
 
 
