@@ -82,7 +82,12 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this.fetchLabelKeys();
-    this.filteredKey$ = combineLatest([this.control.valueChanges.pipe(startWith('')), this.key$])
+    this.filteredKey$ = combineLatest([
+      this.control.valueChanges.pipe(
+        startWith(''),
+        map(value => value || '')),
+      this.key$
+    ])
       .pipe(
         map(([value, keys]) => {
           const filterValue = value.toLowerCase();
@@ -93,9 +98,7 @@ export class LabelsComponent implements ControlValueAccessor, OnInit {
 
   fetchLabelKeys() {
     this.labelService.getLabelKeys()
-      .subscribe(keys => {
-        this.keys.next(keys);
-      });
+      .subscribe(keys => this.keys.next(keys));
   }
 
   onAutocompleteOptionSelected(event) {
