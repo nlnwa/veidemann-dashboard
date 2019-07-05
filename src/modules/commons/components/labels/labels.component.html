@@ -1,5 +1,5 @@
 <div fxLayout="column">
-<form>
+  <form>
     <mat-form-field>
       <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList
                      (cdkDropListDropped)="onDrop($event)">
@@ -10,8 +10,7 @@
                     (removed)="onRemoveLabel(group.key, value)"
                     (click)="onClickLabel(group.key, value)"
                     cdkDrag
-                    [cdkDragData]="group.key + ':' + value"
-          >
+                    [cdkDragData]="group.key + ':' + value">
             {{group.key + ':' + value}}
             <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
           </mat-chip>
@@ -30,7 +29,7 @@
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteOptionSelected($event)">
       <mat-option *ngFor="let key of filteredKey$ | async" [value]="key">{{key}}</mat-option>
     </mat-autocomplete>
-</form>
+  </form>
 
   <form [formGroup]="labelForm" *ngIf="canUpdate && labelForm.enabled">
     <mat-card class="label-form">

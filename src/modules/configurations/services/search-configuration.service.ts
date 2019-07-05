@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ConfigurationsService} from './configurations.service';
 import {ActivatedRoute} from '@angular/router';
 import {ErrorService} from '../../core/services';
-import { PageEvent } from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 import {SearchDataService, SeedDataService} from './data';
 import {map, mergeMap, share, tap} from 'rxjs/operators';
 import {Kind} from '../../commons/models';
