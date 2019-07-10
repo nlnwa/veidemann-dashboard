@@ -7,7 +7,6 @@ export const environment = {
   production: false,
   version: '',
   config: '/veidemann/assets/config/environment.json',
-  apiGatewayUrl: '/api',
   grpcWebUrl: '/grpc-web',
   authConfig: {
 

@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {CommonsModule} from '../commons/commons.module';
 import {DetailDirective} from './directives/detail.directive';
 import {ConfigurationsComponent, LoglevelComponent, SearchComponent} from './containers';
-import {OptionsResolver} from './services';
+import {LogResolver, OptionsResolver} from './services';
 import {ConfigurationsRoutingModule} from './routing/configurations-routing.module';
 import {
   BrowserConfigDetailsComponent,
@@ -29,7 +29,7 @@ import {
   ScheduleDetailsMultiComponent,
   SearchListComponent,
 } from './components';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {SeedConfigurationsComponent} from './containers/seed-configurations/seed-configurations.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -85,6 +85,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
   ],
   providers: [
     OptionsResolver,
+    LogResolver,
     {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},

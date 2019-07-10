@@ -5,8 +5,8 @@ import {environment} from '../../../environments/environment';
 import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
-import {ControllerPromiseClient} from '../../../api/gen/veidemann_api/controller_grpc_web_pb';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
+import {ControllerPromiseClient} from '../../../api';
 
 @Injectable()
 export class AppInitializerService {
@@ -29,7 +29,6 @@ export class AppInitializerService {
     try {
       const appConfig: AppConfig = await this.getAppConfig(environment.config);
 
-      appConfigService.apiGatewayUrl = appConfig.apiGatewayUrl || environment.apiGatewayUrl;
       appConfigService.grpcWebUrl = appConfig.grpcWebUrl || environment.grpcWebUrl;
 
       const controllerPromiseClient = new ControllerPromiseClient(appConfigService.grpcWebUrl, null, null);

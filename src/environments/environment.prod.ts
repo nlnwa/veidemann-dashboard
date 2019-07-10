@@ -5,7 +5,6 @@ export const environment = {
   production: true,
   version: '',
   config: basePath + '/assets/config/environment.json',
-  apiGatewayUrl: '/api',
   grpcWebUrl: '/grpc-web',
   authConfig: {
 

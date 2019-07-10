@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ConfigurationsComponent, LoglevelComponent, SearchComponent} from '../containers';
-import {OptionsResolver} from '../services';
+import {LogResolver, OptionsResolver} from '../services';
 import {GuardService} from '../../core/services/auth';
 import {Kind} from '../../commons/models';
 
@@ -21,6 +21,9 @@ const routes: Routes = [
   {
     path: 'logconfig',
     component: LoglevelComponent,
+    resolve: {
+      levels: LogResolver
+    },
     canActivate: [GuardService]
   },
   {
