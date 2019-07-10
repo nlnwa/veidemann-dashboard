@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LogService} from '../../services/log.service';
 import {SnackBarService} from '../../../core/services';
 import {AuthService} from '../../../core/services/auth';
 import {LogLevel, LogLevels} from '../../../commons/models';
-import {take, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {LogService} from '../../services';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class LoglevelComponent implements OnInit, OnDestroy {
               private fb: FormBuilder,
               private snackBarService: SnackBarService,
               private authService: AuthService,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private route: ActivatedRoute) {
     this.createForm();
   }
 
@@ -44,12 +46,12 @@ export class LoglevelComponent implements OnInit, OnDestroy {
     return this.authService.isAdmin() || this.authService.isCurator();
   }
 
-  get logLevelsFormArray(): FormArray {
-    return this.form.get('logLevel') as FormArray;
+  get logLevelList(): FormArray {
+    return this.form.get('logLevelList') as FormArray;
   }
 
   ngOnInit() {
-    this.logService.getLevels().pipe(take(1)).subscribe(levels => this.levelOptions = levels);
+    this.levelOptions = this.route.snapshot.data.levels;
     this.getLogLevels();
   }
 
@@ -69,12 +71,12 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   }
 
   onAdd() {
-    this.logLevelsFormArray.push(this.createLogLevel());
+    this.logLevelList.push(this.createLogLevel());
     this.addOrRemoved = true;
   }
 
   onDelete(i: number) {
-    this.logLevelsFormArray.removeAt(i);
+    this.logLevelList.removeAt(i);
     this.addOrRemoved = true;
   }
 
@@ -86,14 +88,14 @@ export class LoglevelComponent implements OnInit, OnDestroy {
 
   private createForm() {
     this.form = this.fb.group({
-      logLevel: this.fb.array([])
+      logLevelList: this.fb.array([])
     });
   }
 
   private updateForm() {
-    this.form.setControl('logLevel', this.fb.array(this.logLevels.logLevelList.map(this.createLogLevel.bind(this))));
+    this.form.setControl('logLevelList', this.fb.array(this.logLevels.logLevelList.map(this.createLogLevel.bind(this))));
     if (this.form.disabled) {
-      this.logLevelsFormArray.disable();
+      this.logLevelList.disable();
     }
     if (!this.canEdit) {
       this.form.disable();

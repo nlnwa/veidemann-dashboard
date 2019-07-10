@@ -1,5 +1,4 @@
 import {Activity} from './gen/eventhandler/v1/resources_pb';
-import Change = Activity.Change;
 
 export {
   CrawlHostGroupConfig as CrawlHostGroupConfigProto,
@@ -62,3 +61,13 @@ export {
   EventHandlerClient,
   EventHandlerPromiseClient
 } from './gen/eventhandler/v1/eventhandler_grpc_web_pb';
+
+export {
+  ControllerPromiseClient
+} from './gen/veidemann_api/controller_grpc_web_pb';
+
+export {
+  RoleMapping as LegacyRoleMappingProto,
+  Role as LegacyRoleProto,
+  LogLevels as LogLevelsProto,
+} from './gen/veidemann_api/config_pb';

@@ -1,39 +1,32 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {Level, LogLevels} from '../../commons/models';
-import {AppConfigService} from '../../core/services';
-import {map, tap} from 'rxjs/operators';
+import {AppConfigService, AuthService} from '../../core/services';
+import {map} from 'rxjs/operators';
+import {ControllerPromiseClient} from '../../../api/gen/veidemann_api/controller_grpc_web_pb';
+import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
+import {fromPromise} from 'rxjs/internal-compatibility';
 
 @Injectable()
 export class LogService {
+  private controllerPromiseClient: ControllerPromiseClient;
 
-  private readonly url: string;
-
-  constructor(private http: HttpClient,
+  constructor(private authService: AuthService,
               private appConfigService: AppConfigService) {
-    this.url = appConfigService.apiGatewayUrl + '/control/logconfig';
-  }
-
-  getLevels(): Observable<string[]> {
-    const levels: string[] = [];
-    for (const level in Level) {
-      if (isNaN(parseInt(level, 10)) && Level.hasOwnProperty(level)) {
-        levels.push(level);
-      }
-    }
-    return of(levels);
+    this.controllerPromiseClient = new ControllerPromiseClient(appConfigService.grpcWebUrl, null, null);
   }
 
   getLogConfig(): Observable<LogLevels> {
-    return this.http.get<LogLevels>(this.url).pipe(
-      map(logLevels => LogLevels.fromWire(logLevels))
+    const metadata = this.authService.metadata;
+    return fromPromise(this.controllerPromiseClient.getLogConfig(new Empty(), metadata)).pipe(
+      map(_ => LogLevels.fromProto(_))
     );
   }
 
   saveLogConfig(logLevels: LogLevels): Observable<LogLevels> {
-    return this.http.post<LogLevels>(this.url, LogLevels.toWire(logLevels)).pipe(
-      map(LogLevels.fromWire)
+    const metadata = this.authService.metadata;
+    return fromPromise(this.controllerPromiseClient.saveLogConfig(LogLevels.toProto(logLevels), metadata)).pipe(
+      map(_ => LogLevels.fromProto(_))
     );
   }
 }
