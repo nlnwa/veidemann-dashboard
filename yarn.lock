@@ -370,6 +370,11 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/google-protobuf@^3.7.1":
+  version "3.7.1"
+  resolved "https://registry.npmjs.org/@types/google-protobuf/-/google-protobuf-3.7.1.tgz#69503856e717a4ed2fd0216d4aa3f0bebf5df5df"
+  integrity sha512-kiLxbqoi2C7NmkGj1ZpkSDyIqj4vqDEIjx7wX+O0GXV6bLX6u/oLz49CwefD0c0vzaKeBdOqmUtI8bC0bBRr0w==
+
 "@types/jasmine@*":
   version "3.3.9"
   resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-3.3.9.tgz#ee886a9113db567e722a8a0c37f0e6283f2cefa3"

@@ -2,13 +2,20 @@ import {ConfigObject} from '../configobject.model';
 import {RoleMappingProto} from '../../../../api';
 
 export enum Role {
-  ANY_USER,
-  ANY,
-  ADMIN,
-  CURATOR,
-  READONLY,
-  OPERATOR,
-  SYSTEM,
+  // Any authenticated user
+  ANY_USER = 0,
+  // Any user including unauthenticated users
+  ANY = 1,
+  // Administrator
+  ADMIN = 2,
+  // Curator
+  CURATOR = 3,
+  // A user with permission to read internal data
+  READONLY = 4,
+  // A crawl operator
+  OPERATOR = 5,
+  // Machine to machine
+  SYSTEM = 6,
 }
 
 export class RoleMapping {
@@ -52,7 +59,6 @@ export class RoleMapping {
 
     const commonRoles = getCommonRoles(configObjects);
 
-
     for (const role of commonRoles) {
       const gotRole = configObjects.every((cfg) => cfg.roleMapping.roleList.indexOf(role) !== -1);
       if (gotRole) {
@@ -69,8 +75,4 @@ function getCommonRoles(configObjects: ConfigObject[]): Role[] {
       .map(configObject => configObject.roleMapping.roleList)
       .reduce((acc, curr) => acc.concat(curr), [])
   ));
-}
-
-export class RoleList {
-  role: string[];
 }

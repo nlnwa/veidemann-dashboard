@@ -32,7 +32,7 @@ tools:
 
 build: veidemann-api
 	@rm -rf ${OUT}; mkdir -p ${OUT}
-	@find veidemann-api/protobuf/{config,commons,eventhandler} veidemann-api/include/ -name *.proto -exec ${PROTOC} \
+	@find veidemann-api/protobuf/{config,commons,eventhandler} veidemann-api/protobuf/veidemann_api/{controller,config}.proto veidemann-api/include/ -name *.proto -exec ${PROTOC} \
 	  -Iveidemann-api/protobuf \
 	  -Iveidemann-api/include \
 	  -Itools/include \
