@@ -12,27 +12,6 @@ export enum Level {
   'OFF'
 }
 
-export class LogLevels {
-  logLevelList: LogLevel[];
-
-  constructor({logLevelList = []}: Partial<LogLevels> = {}) {
-    this.logLevelList = logLevelList;
-  }
-
-  static toProto(logLevels: LogLevels): LogLevelsProto {
-    const proto = new LogLevelsProto();
-    proto.setLogLevelList(logLevels.logLevelList.map(logLevel => LogLevel.toProto(logLevel)));
-    return proto;
-  }
-
-  static fromProto(logLevels: LogLevelsProto): LogLevels {
-    return {
-      logLevelList: logLevels.getLogLevelList()
-        .map(logLevel => new LogLevel({logger: logLevel.getLogger(), level: Level[logLevel.getLevel().valueOf()]}))
-    };
-  }
-}
-
 export class LogLevel {
   logger: string;
   level: string;
@@ -55,5 +34,25 @@ export class LogLevel {
       logger: logLevel.getLogger()
     });
   }
+}
 
+export class LogLevels {
+  logLevelList: LogLevel[];
+
+  constructor({logLevelList = []}: Partial<LogLevels> = {}) {
+    this.logLevelList = logLevelList;
+  }
+
+  static toProto(logLevels: LogLevels): LogLevelsProto {
+    const proto = new LogLevelsProto();
+    proto.setLogLevelList(logLevels.logLevelList.map(logLevel => LogLevel.toProto(logLevel)));
+    return proto;
+  }
+
+  static fromProto(logLevels: LogLevelsProto): LogLevels {
+    return {
+      logLevelList: logLevels.getLogLevelList()
+        .map(logLevel => new LogLevel({logger: logLevel.getLogger(), level: Level[logLevel.getLevel().valueOf()]}))
+    };
+  }
 }
