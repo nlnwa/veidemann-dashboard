@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Seed} from '../../../models';
+import {ConfigObject, ConfigRef, Kind} from '../../../models';
 import {SeedDetailComponent} from '../seed-details/seed-details.component';
 
 
@@ -91,20 +91,17 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
   protected prepareSave(): any {
     const formModel = this.form.value;
     const pathList: string[] = [];
-    const seed = new Seed();
-    const updateTemplate = new ConfigObject({
-      kind: Kind.SEED,
-      seed
-    });
+    const updateTemplate = new ConfigObject({kind: Kind.SEED});
+    const seed = updateTemplate.seed;
 
     if (formModel.disabled !== undefined) {
       seed.disabled = formModel.disabled;
       pathList.push('seed.disabled');
     }
 
-
     if (this.shouldAddCrawlJob !== undefined) {
-      seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({kind: Kind.CRAWLJOB, id}));
+      seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
+      console.log('jobRefList: ', seed.jobRefList);
       if (this.shouldAddCrawlJob) {
         pathList.push('seed.jobRef+');
       } else {
