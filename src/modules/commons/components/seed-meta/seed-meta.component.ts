@@ -60,7 +60,6 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
       this.name.clearAsyncValidators();
       this.name.setValidators(Validators.compose([
         Validators.required,
-        Validators.pattern(VALID_URL),
         SeedUrlValidator.createValidator(this.seedDataService)
       ]));
       this.name.setAsyncValidators(SeedUrlValidator.createBackendValidator(this.backendService));

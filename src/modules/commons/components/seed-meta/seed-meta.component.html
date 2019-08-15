@@ -1,4 +1,5 @@
 <div [formGroup]="form" fxLayout="column">
+
   <mat-form-field>
     <textarea matInput
               formControlName="name"
@@ -9,7 +10,6 @@
               cdkAutosizeMaxRows="10"
               #autosize="cdkTextareaAutosize">
     </textarea>
-
     <mat-error
       *ngIf="name.hasError('required')"
       i18n="@@metaUrlRequiredError">
@@ -17,7 +17,7 @@
     </mat-error>
 
     <mat-error *ngIf="name.hasError('pattern')">
-      Inneholder en ugyldig formatert url
+      Inneholder en ugyldig formatert url: {{ name.errors.pattern }}
     </mat-error>
 
     <mat-error *ngIf="name.hasError('seedExistsOnEntity')">
@@ -27,6 +27,8 @@
     <mat-error *ngIf="name.hasError('seedExists')">
       URL med samme domene eksisterer på annen entitet som en av url'ene i listen
     </mat-error>
+
+   <mat-progress-bar matHint mode="indeterminate" *ngIf="this.name.pending"></mat-progress-bar>
   </mat-form-field>
 
   <mat-action-list *ngIf="name.hasError('seedExistsOnEntity')" dense>
