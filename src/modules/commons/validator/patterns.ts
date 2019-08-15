@@ -41,7 +41,7 @@ export const NUMBER_OR_EMPTY_STRING = /^\s*\d*\s*$/;
 
 export const NO_COLON = /^[^:]*$/;
 
-export const VALID_URL = /^\s*(?:https?:\/\/(?:[\S]{1,}\.)?(?:[\S]{1,})\.[\S]{2,}\s*)+$/;
+export const VALID_URL = /^https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$/;
 
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
@@ -49,12 +49,11 @@ export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 export const escapeStringForUseInRegexp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export const createSimilarDomainRegExpString = url => {
-  try {
-    const domain = url.match(SIMILAR_URL)[1];
-
+  const match = url.match(SIMILAR_URL);
+  if (match) {
+    const domain = match[1];
     return 'https?://(?:www\.)?' + escapeStringForUseInRegexp(domain) + '(/?$|/.*)';
-  } catch (error) {
-    console.error(error);
-    return 'that never a real world invalid pattern matches in scenario';
+  } else {
+    return null;
   }
 };

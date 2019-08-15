@@ -1,19 +1,22 @@
 import {AbstractControl, ValidationErrors} from '@angular/forms';
 import {from, Observable, of} from 'rxjs';
-import {catchError, map, mergeMap, toArray} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap, toArray} from 'rxjs/operators';
 import {ConfigObject, Kind} from '../models';
 import {BackendService} from '../../core/services';
 import {ListRequest} from '../../../api';
 import {createListRequest} from '../../configurations/services/data/data.service';
-import {createSimilarDomainRegExpString} from './patterns';
+import {createSimilarDomainRegExpString, VALID_URL} from './patterns';
 import {SeedDataService} from '../../configurations/services/data';
 
-function seedWithMatchingUrl(url: string): ListRequest {
+function seedWithMatchingUrl(url: string): ListRequest | null {
   const request = createListRequest(Kind.SEED);
-
-  request.setNameRegex(createSimilarDomainRegExpString(url));
-
-  return request;
+  const similarUrlRegexp = createSimilarDomainRegExpString(url);
+  if (similarUrlRegexp) {
+    request.setNameRegex(similarUrlRegexp);
+    return request;
+  } else {
+    return null;
+  }
 }
 
 export class SeedUrlValidator {
@@ -25,7 +28,9 @@ export class SeedUrlValidator {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const urls: string = control.value.split(/\s+/).filter(url => !!url);
       return from(urls).pipe(
-        mergeMap((url) => backendService.list(seedWithMatchingUrl(url))),
+        map(url => seedWithMatchingUrl(url)),
+        filter(_ => !!_),
+        mergeMap(request => backendService.list(request)),
         map(configObject => ConfigObject.fromProto(configObject)),
         toArray(),
         map((seeds: ConfigObject[]) => seeds.length > 0 ? {seedExists: seeds} : null),
@@ -48,8 +53,18 @@ export class SeedUrlValidator {
       const urlsWithinSameEntity = seedDataService.data.map(configObject => configObject.meta.name);
       const urls: string[] = control.value.split(/\s+/).filter(_ => !!_);
 
+      for (const url of urls) {
+        const match = url.match(VALID_URL);
+        if (!match) {
+          return {pattern: url};
+        }
+      }
       const intersection = urls.filter(url => {
-        const similarUrlPredicate = (u) => (new RegExp(createSimilarDomainRegExpString(url)).test(u));
+        const similarUrlRegexp = createSimilarDomainRegExpString(url);
+        if (similarUrlRegexp === null) {
+          return false;
+        }
+        const similarUrlPredicate = (u) => (new RegExp(similarUrlRegexp).test(u));
         return urlsWithinSameEntity.find(similarUrlPredicate);
       });
 
