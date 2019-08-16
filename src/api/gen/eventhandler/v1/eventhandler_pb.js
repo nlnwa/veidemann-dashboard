@@ -1,3 +1,4 @@
+// source: eventhandler/v1/eventhandler.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -207,13 +208,15 @@ proto.veidemann.api.eventhandler.v1.ListRequest.repeatedFields_ = [1];
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.ListRequest.prototype.toObject = function(opt_includeInstance) {
@@ -223,8 +226,8 @@ proto.veidemann.api.eventhandler.v1.ListRequest.prototype.toObject = function(op
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} msg The msg instance to transform.
  * @return {!Object}
@@ -232,7 +235,7 @@ proto.veidemann.api.eventhandler.v1.ListRequest.prototype.toObject = function(op
  */
 proto.veidemann.api.eventhandler.v1.ListRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    idList: jspb.Message.getRepeatedField(msg, 1),
+    idList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
     queryTemplate: (f = msg.getQueryTemplate()) && eventhandler_v1_resources_pb.EventObject.toObject(includeInstance, f),
     queryMask: (f = msg.getQueryMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     returnedFieldsMask: (f = msg.getReturnedFieldsMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
@@ -544,13 +547,15 @@ proto.veidemann.api.eventhandler.v1.ListRequest.prototype.setOffset = function(v
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.UpdateRequest.prototype.toObject = function(opt_includeInstance) {
@@ -560,8 +565,8 @@ proto.veidemann.api.eventhandler.v1.UpdateRequest.prototype.toObject = function(
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} msg The msg instance to transform.
  * @return {!Object}
@@ -810,13 +815,15 @@ proto.veidemann.api.eventhandler.v1.UpdateRequest.prototype.setComment = functio
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.SaveRequest.prototype.toObject = function(opt_includeInstance) {
@@ -826,8 +833,8 @@ proto.veidemann.api.eventhandler.v1.SaveRequest.prototype.toObject = function(op
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} msg The msg instance to transform.
  * @return {!Object}
@@ -982,13 +989,15 @@ proto.veidemann.api.eventhandler.v1.SaveRequest.prototype.setComment = function(
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.UpdateResponse.prototype.toObject = function(opt_includeInstance) {
@@ -998,8 +1007,8 @@ proto.veidemann.api.eventhandler.v1.UpdateResponse.prototype.toObject = function
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.UpdateResponse} msg The msg instance to transform.
  * @return {!Object}
@@ -1107,13 +1116,15 @@ proto.veidemann.api.eventhandler.v1.UpdateResponse.prototype.setUpdated = functi
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.toObject = function(opt_includeInstance) {
@@ -1123,8 +1134,8 @@ proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.toObject = funct
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.ListCountResponse} msg The msg instance to transform.
  * @return {!Object}
@@ -1133,7 +1144,7 @@ proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.toObject = funct
 proto.veidemann.api.eventhandler.v1.ListCountResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     count: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    approximate: jspb.Message.getFieldWithDefault(msg, 2, false)
+    approximate: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
   };
 
   if (includeInstance) {
@@ -1241,12 +1252,10 @@ proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.setCount = funct
 
 /**
  * optional bool approximate = 2;
- * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
- * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.getApproximate = function() {
-  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 2, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
 };
 
 
@@ -1261,13 +1270,15 @@ proto.veidemann.api.eventhandler.v1.ListCountResponse.prototype.setApproximate =
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.DeleteResponse.prototype.toObject = function(opt_includeInstance) {
@@ -1277,8 +1288,8 @@ proto.veidemann.api.eventhandler.v1.DeleteResponse.prototype.toObject = function
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.DeleteResponse} msg The msg instance to transform.
  * @return {!Object}
@@ -1286,7 +1297,7 @@ proto.veidemann.api.eventhandler.v1.DeleteResponse.prototype.toObject = function
  */
 proto.veidemann.api.eventhandler.v1.DeleteResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    deleted: jspb.Message.getFieldWithDefault(msg, 1, false)
+    deleted: jspb.Message.getBooleanFieldWithDefault(msg, 1, false)
   };
 
   if (includeInstance) {
@@ -1368,12 +1379,10 @@ proto.veidemann.api.eventhandler.v1.DeleteResponse.serializeBinaryToWriter = fun
 
 /**
  * optional bool deleted = 1;
- * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
- * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.veidemann.api.eventhandler.v1.DeleteResponse.prototype.getDeleted = function() {
-  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 1, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
 };
 
 
@@ -1388,13 +1397,15 @@ proto.veidemann.api.eventhandler.v1.DeleteResponse.prototype.setDeleted = functi
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.ListLabelRequest.prototype.toObject = function(opt_includeInstance) {
@@ -1404,8 +1415,8 @@ proto.veidemann.api.eventhandler.v1.ListLabelRequest.prototype.toObject = functi
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} msg The msg instance to transform.
  * @return {!Object}
@@ -1520,13 +1531,15 @@ proto.veidemann.api.eventhandler.v1.ListLabelResponse.repeatedFields_ = [1];
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto suitable for use in Soy templates.
+ * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
  * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
  * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
  * @return {!Object}
  */
 proto.veidemann.api.eventhandler.v1.ListLabelResponse.prototype.toObject = function(opt_includeInstance) {
@@ -1536,8 +1549,8 @@ proto.veidemann.api.eventhandler.v1.ListLabelResponse.prototype.toObject = funct
 
 /**
  * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
  * @param {!proto.veidemann.api.eventhandler.v1.ListLabelResponse} msg The msg instance to transform.
  * @return {!Object}
@@ -1545,7 +1558,7 @@ proto.veidemann.api.eventhandler.v1.ListLabelResponse.prototype.toObject = funct
  */
 proto.veidemann.api.eventhandler.v1.ListLabelResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    labelList: jspb.Message.getRepeatedField(msg, 1)
+    labelList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {

@@ -99,6 +99,25 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient =
 
 /**
  * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.EventRef,
+ *   !proto.veidemann.api.eventhandler.v1.EventObject>}
+ */
+const methodDescriptor_EventHandler_GetEventObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/GetEventObject',
+  grpc.web.MethodType.UNARY,
+  eventhandler_v1_resources_pb.EventRef,
+  eventhandler_v1_resources_pb.EventObject,
+  /** @param {!proto.veidemann.api.eventhandler.v1.EventRef} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  eventhandler_v1_resources_pb.EventObject.deserializeBinary
+);
+
+
+/**
+ * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.veidemann.api.eventhandler.v1.EventRef,
  *   !proto.veidemann.api.eventhandler.v1.EventObject>}
@@ -129,7 +148,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.getEventObject 
       '/veidemann.api.eventhandler.v1.EventHandler/GetEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_GetEventObject,
+      methodDescriptor_EventHandler_GetEventObject,
       callback);
 };
 
@@ -148,8 +167,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.getEvent
       '/veidemann.api.eventhandler.v1.EventHandler/GetEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_GetEventObject);
+      methodDescriptor_EventHandler_GetEventObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.ListRequest,
+ *   !proto.veidemann.api.eventhandler.v1.EventObject>}
+ */
+const methodDescriptor_EventHandler_ListEventObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/ListEventObjects',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.veidemann.api.eventhandler.v1.ListRequest,
+  eventhandler_v1_resources_pb.EventObject,
+  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  eventhandler_v1_resources_pb.EventObject.deserializeBinary
+);
 
 
 /**
@@ -181,7 +219,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.listEventObject
       '/veidemann.api.eventhandler.v1.EventHandler/ListEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_ListEventObjects);
+      methodDescriptor_EventHandler_ListEventObjects);
 };
 
 
@@ -198,8 +236,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.listEven
       '/veidemann.api.eventhandler.v1.EventHandler/ListEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_ListEventObjects);
+      methodDescriptor_EventHandler_ListEventObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.ListRequest,
+ *   !proto.veidemann.api.eventhandler.v1.ListCountResponse>}
+ */
+const methodDescriptor_EventHandler_CountEventObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/CountEventObjects',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.eventhandler.v1.ListRequest,
+  proto.veidemann.api.eventhandler.v1.ListCountResponse,
+  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.eventhandler.v1.ListCountResponse.deserializeBinary
+);
 
 
 /**
@@ -234,7 +291,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.countEventObjec
       '/veidemann.api.eventhandler.v1.EventHandler/CountEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_CountEventObjects,
+      methodDescriptor_EventHandler_CountEventObjects,
       callback);
 };
 
@@ -253,8 +310,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.countEve
       '/veidemann.api.eventhandler.v1.EventHandler/CountEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_CountEventObjects);
+      methodDescriptor_EventHandler_CountEventObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.SaveRequest,
+ *   !proto.veidemann.api.eventhandler.v1.EventObject>}
+ */
+const methodDescriptor_EventHandler_SaveEventObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/SaveEventObject',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.eventhandler.v1.SaveRequest,
+  eventhandler_v1_resources_pb.EventObject,
+  /** @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  eventhandler_v1_resources_pb.EventObject.deserializeBinary
+);
 
 
 /**
@@ -289,7 +365,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.saveEventObject
       '/veidemann.api.eventhandler.v1.EventHandler/SaveEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_SaveEventObject,
+      methodDescriptor_EventHandler_SaveEventObject,
       callback);
 };
 
@@ -308,8 +384,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.saveEven
       '/veidemann.api.eventhandler.v1.EventHandler/SaveEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_SaveEventObject);
+      methodDescriptor_EventHandler_SaveEventObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.UpdateRequest,
+ *   !proto.veidemann.api.eventhandler.v1.UpdateResponse>}
+ */
+const methodDescriptor_EventHandler_UpdateEventObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/UpdateEventObjects',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.eventhandler.v1.UpdateRequest,
+  proto.veidemann.api.eventhandler.v1.UpdateResponse,
+  /** @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.eventhandler.v1.UpdateResponse.deserializeBinary
+);
 
 
 /**
@@ -344,7 +439,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.updateEventObje
       '/veidemann.api.eventhandler.v1.EventHandler/UpdateEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_UpdateEventObjects,
+      methodDescriptor_EventHandler_UpdateEventObjects,
       callback);
 };
 
@@ -363,8 +458,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.updateEv
       '/veidemann.api.eventhandler.v1.EventHandler/UpdateEventObjects',
       request,
       metadata || {},
-      methodInfo_EventHandler_UpdateEventObjects);
+      methodDescriptor_EventHandler_UpdateEventObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.EventObject,
+ *   !proto.veidemann.api.eventhandler.v1.DeleteResponse>}
+ */
+const methodDescriptor_EventHandler_DeleteEventObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/DeleteEventObject',
+  grpc.web.MethodType.UNARY,
+  eventhandler_v1_resources_pb.EventObject,
+  proto.veidemann.api.eventhandler.v1.DeleteResponse,
+  /** @param {!proto.veidemann.api.eventhandler.v1.EventObject} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.eventhandler.v1.DeleteResponse.deserializeBinary
+);
 
 
 /**
@@ -399,7 +513,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.deleteEventObje
       '/veidemann.api.eventhandler.v1.EventHandler/DeleteEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_DeleteEventObject,
+      methodDescriptor_EventHandler_DeleteEventObject,
       callback);
 };
 
@@ -418,8 +532,27 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.deleteEv
       '/veidemann.api.eventhandler.v1.EventHandler/DeleteEventObject',
       request,
       metadata || {},
-      methodInfo_EventHandler_DeleteEventObject);
+      methodDescriptor_EventHandler_DeleteEventObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.eventhandler.v1.ListLabelRequest,
+ *   !proto.veidemann.api.eventhandler.v1.ListLabelResponse>}
+ */
+const methodDescriptor_EventHandler_ListLabels = new grpc.web.MethodDescriptor(
+  '/veidemann.api.eventhandler.v1.EventHandler/ListLabels',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.eventhandler.v1.ListLabelRequest,
+  proto.veidemann.api.eventhandler.v1.ListLabelResponse,
+  /** @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.eventhandler.v1.ListLabelResponse.deserializeBinary
+);
 
 
 /**
@@ -454,7 +587,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.listLabels =
       '/veidemann.api.eventhandler.v1.EventHandler/ListLabels',
       request,
       metadata || {},
-      methodInfo_EventHandler_ListLabels,
+      methodDescriptor_EventHandler_ListLabels,
       callback);
 };
 
@@ -473,7 +606,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient.prototype.listLabe
       '/veidemann.api.eventhandler.v1.EventHandler/ListLabels',
       request,
       metadata || {},
-      methodInfo_EventHandler_ListLabels);
+      methodDescriptor_EventHandler_ListLabels);
 };
 
 

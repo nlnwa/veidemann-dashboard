@@ -26,29 +26,23 @@ export class HttpRule extends jspb.Message {
 
   getGet(): string;
   setGet(value: string): void;
-  hasGet(): boolean;
 
   getPut(): string;
   setPut(value: string): void;
-  hasPut(): boolean;
 
   getPost(): string;
   setPost(value: string): void;
-  hasPost(): boolean;
 
   getDelete(): string;
   setDelete(value: string): void;
-  hasDelete(): boolean;
 
   getPatch(): string;
   setPatch(value: string): void;
-  hasPatch(): boolean;
 
   getCustom(): CustomHttpPattern | undefined;
   setCustom(value?: CustomHttpPattern): void;
   hasCustom(): boolean;
   clearCustom(): void;
-  hasCustom(): boolean;
 
   getBody(): string;
   setBody(value: string): void;

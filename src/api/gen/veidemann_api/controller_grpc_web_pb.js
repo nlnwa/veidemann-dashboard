@@ -97,6 +97,25 @@ proto.veidemann.api.ControllerPromiseClient =
 
 /**
  * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.CrawlEntity>}
+ */
+const methodDescriptor_Controller_GetCrawlEntity = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetCrawlEntity',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.CrawlEntity,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlEntity.deserializeBinary
+);
+
+
+/**
+ * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.veidemann.api.GetRequest,
  *   !proto.veidemann.api.CrawlEntity>}
@@ -127,7 +146,7 @@ proto.veidemann.api.ControllerClient.prototype.getCrawlEntity =
       '/veidemann.api.Controller/GetCrawlEntity',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlEntity,
+      methodDescriptor_Controller_GetCrawlEntity,
       callback);
 };
 
@@ -146,8 +165,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getCrawlEntity =
       '/veidemann.api.Controller/GetCrawlEntity',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlEntity);
+      methodDescriptor_Controller_GetCrawlEntity);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.CrawlEntityListReply>}
+ */
+const methodDescriptor_Controller_ListCrawlEntities = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListCrawlEntities',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.CrawlEntityListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.CrawlEntityListReply.deserializeBinary
+);
 
 
 /**
@@ -182,7 +220,7 @@ proto.veidemann.api.ControllerClient.prototype.listCrawlEntities =
       '/veidemann.api.Controller/ListCrawlEntities',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlEntities,
+      methodDescriptor_Controller_ListCrawlEntities,
       callback);
 };
 
@@ -201,8 +239,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listCrawlEntities =
       '/veidemann.api.Controller/ListCrawlEntities',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlEntities);
+      methodDescriptor_Controller_ListCrawlEntities);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlEntity,
+ *   !proto.veidemann.api.CrawlEntity>}
+ */
+const methodDescriptor_Controller_SaveEntity = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveEntity',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlEntity,
+  veidemann_api_config_pb.CrawlEntity,
+  /** @param {!proto.veidemann.api.CrawlEntity} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlEntity.deserializeBinary
+);
 
 
 /**
@@ -237,7 +294,7 @@ proto.veidemann.api.ControllerClient.prototype.saveEntity =
       '/veidemann.api.Controller/SaveEntity',
       request,
       metadata || {},
-      methodInfo_Controller_SaveEntity,
+      methodDescriptor_Controller_SaveEntity,
       callback);
 };
 
@@ -256,8 +313,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveEntity =
       '/veidemann.api.Controller/SaveEntity',
       request,
       metadata || {},
-      methodInfo_Controller_SaveEntity);
+      methodDescriptor_Controller_SaveEntity);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlEntity,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteEntity = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteEntity',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlEntity,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.CrawlEntity} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -292,7 +368,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteEntity =
       '/veidemann.api.Controller/DeleteEntity',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteEntity,
+      methodDescriptor_Controller_DeleteEntity,
       callback);
 };
 
@@ -311,8 +387,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteEntity =
       '/veidemann.api.Controller/DeleteEntity',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteEntity);
+      methodDescriptor_Controller_DeleteEntity);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.Seed>}
+ */
+const methodDescriptor_Controller_GetSeed = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetSeed',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.Seed,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.Seed.deserializeBinary
+);
 
 
 /**
@@ -347,7 +442,7 @@ proto.veidemann.api.ControllerClient.prototype.getSeed =
       '/veidemann.api.Controller/GetSeed',
       request,
       metadata || {},
-      methodInfo_Controller_GetSeed,
+      methodDescriptor_Controller_GetSeed,
       callback);
 };
 
@@ -366,8 +461,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getSeed =
       '/veidemann.api.Controller/GetSeed',
       request,
       metadata || {},
-      methodInfo_Controller_GetSeed);
+      methodDescriptor_Controller_GetSeed);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.SeedListRequest,
+ *   !proto.veidemann.api.SeedListReply>}
+ */
+const methodDescriptor_Controller_ListSeeds = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListSeeds',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.SeedListRequest,
+  proto.veidemann.api.SeedListReply,
+  /** @param {!proto.veidemann.api.SeedListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.SeedListReply.deserializeBinary
+);
 
 
 /**
@@ -402,7 +516,7 @@ proto.veidemann.api.ControllerClient.prototype.listSeeds =
       '/veidemann.api.Controller/ListSeeds',
       request,
       metadata || {},
-      methodInfo_Controller_ListSeeds,
+      methodDescriptor_Controller_ListSeeds,
       callback);
 };
 
@@ -421,8 +535,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listSeeds =
       '/veidemann.api.Controller/ListSeeds',
       request,
       metadata || {},
-      methodInfo_Controller_ListSeeds);
+      methodDescriptor_Controller_ListSeeds);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.Seed,
+ *   !proto.veidemann.api.Seed>}
+ */
+const methodDescriptor_Controller_SaveSeed = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveSeed',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.Seed,
+  veidemann_api_config_pb.Seed,
+  /** @param {!proto.veidemann.api.Seed} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.Seed.deserializeBinary
+);
 
 
 /**
@@ -457,7 +590,7 @@ proto.veidemann.api.ControllerClient.prototype.saveSeed =
       '/veidemann.api.Controller/SaveSeed',
       request,
       metadata || {},
-      methodInfo_Controller_SaveSeed,
+      methodDescriptor_Controller_SaveSeed,
       callback);
 };
 
@@ -476,8 +609,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveSeed =
       '/veidemann.api.Controller/SaveSeed',
       request,
       metadata || {},
-      methodInfo_Controller_SaveSeed);
+      methodDescriptor_Controller_SaveSeed);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.Seed,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteSeed = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteSeed',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.Seed,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.Seed} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -512,7 +664,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteSeed =
       '/veidemann.api.Controller/DeleteSeed',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteSeed,
+      methodDescriptor_Controller_DeleteSeed,
       callback);
 };
 
@@ -531,8 +683,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteSeed =
       '/veidemann.api.Controller/DeleteSeed',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteSeed);
+      methodDescriptor_Controller_DeleteSeed);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.CrawlJob>}
+ */
+const methodDescriptor_Controller_GetCrawlJob = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetCrawlJob',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.CrawlJob,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlJob.deserializeBinary
+);
 
 
 /**
@@ -567,7 +738,7 @@ proto.veidemann.api.ControllerClient.prototype.getCrawlJob =
       '/veidemann.api.Controller/GetCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlJob,
+      methodDescriptor_Controller_GetCrawlJob,
       callback);
 };
 
@@ -586,8 +757,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getCrawlJob =
       '/veidemann.api.Controller/GetCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlJob);
+      methodDescriptor_Controller_GetCrawlJob);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.CrawlJobListReply>}
+ */
+const methodDescriptor_Controller_ListCrawlJobs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListCrawlJobs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.CrawlJobListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.CrawlJobListReply.deserializeBinary
+);
 
 
 /**
@@ -622,7 +812,7 @@ proto.veidemann.api.ControllerClient.prototype.listCrawlJobs =
       '/veidemann.api.Controller/ListCrawlJobs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlJobs,
+      methodDescriptor_Controller_ListCrawlJobs,
       callback);
 };
 
@@ -641,8 +831,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listCrawlJobs =
       '/veidemann.api.Controller/ListCrawlJobs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlJobs);
+      methodDescriptor_Controller_ListCrawlJobs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlJob,
+ *   !proto.veidemann.api.CrawlJob>}
+ */
+const methodDescriptor_Controller_SaveCrawlJob = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveCrawlJob',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlJob,
+  veidemann_api_config_pb.CrawlJob,
+  /** @param {!proto.veidemann.api.CrawlJob} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlJob.deserializeBinary
+);
 
 
 /**
@@ -677,7 +886,7 @@ proto.veidemann.api.ControllerClient.prototype.saveCrawlJob =
       '/veidemann.api.Controller/SaveCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlJob,
+      methodDescriptor_Controller_SaveCrawlJob,
       callback);
 };
 
@@ -696,8 +905,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveCrawlJob =
       '/veidemann.api.Controller/SaveCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlJob);
+      methodDescriptor_Controller_SaveCrawlJob);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlJob,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteCrawlJob = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteCrawlJob',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlJob,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.CrawlJob} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -732,7 +960,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteCrawlJob =
       '/veidemann.api.Controller/DeleteCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlJob,
+      methodDescriptor_Controller_DeleteCrawlJob,
       callback);
 };
 
@@ -751,8 +979,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteCrawlJob =
       '/veidemann.api.Controller/DeleteCrawlJob',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlJob);
+      methodDescriptor_Controller_DeleteCrawlJob);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.CrawlConfig>}
+ */
+const methodDescriptor_Controller_GetCrawlConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetCrawlConfig',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.CrawlConfig,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlConfig.deserializeBinary
+);
 
 
 /**
@@ -787,7 +1034,7 @@ proto.veidemann.api.ControllerClient.prototype.getCrawlConfig =
       '/veidemann.api.Controller/GetCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlConfig,
+      methodDescriptor_Controller_GetCrawlConfig,
       callback);
 };
 
@@ -806,8 +1053,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getCrawlConfig =
       '/veidemann.api.Controller/GetCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlConfig);
+      methodDescriptor_Controller_GetCrawlConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.CrawlConfigListReply>}
+ */
+const methodDescriptor_Controller_ListCrawlConfigs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListCrawlConfigs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.CrawlConfigListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.CrawlConfigListReply.deserializeBinary
+);
 
 
 /**
@@ -842,7 +1108,7 @@ proto.veidemann.api.ControllerClient.prototype.listCrawlConfigs =
       '/veidemann.api.Controller/ListCrawlConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlConfigs,
+      methodDescriptor_Controller_ListCrawlConfigs,
       callback);
 };
 
@@ -861,8 +1127,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listCrawlConfigs =
       '/veidemann.api.Controller/ListCrawlConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlConfigs);
+      methodDescriptor_Controller_ListCrawlConfigs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlConfig,
+ *   !proto.veidemann.api.CrawlConfig>}
+ */
+const methodDescriptor_Controller_SaveCrawlConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveCrawlConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlConfig,
+  veidemann_api_config_pb.CrawlConfig,
+  /** @param {!proto.veidemann.api.CrawlConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlConfig.deserializeBinary
+);
 
 
 /**
@@ -897,7 +1182,7 @@ proto.veidemann.api.ControllerClient.prototype.saveCrawlConfig =
       '/veidemann.api.Controller/SaveCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlConfig,
+      methodDescriptor_Controller_SaveCrawlConfig,
       callback);
 };
 
@@ -916,8 +1201,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveCrawlConfig =
       '/veidemann.api.Controller/SaveCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlConfig);
+      methodDescriptor_Controller_SaveCrawlConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlConfig,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteCrawlConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteCrawlConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlConfig,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.CrawlConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -952,7 +1256,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteCrawlConfig =
       '/veidemann.api.Controller/DeleteCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlConfig,
+      methodDescriptor_Controller_DeleteCrawlConfig,
       callback);
 };
 
@@ -971,8 +1275,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteCrawlConfig =
       '/veidemann.api.Controller/DeleteCrawlConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlConfig);
+      methodDescriptor_Controller_DeleteCrawlConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.CrawlScheduleConfig>}
+ */
+const methodDescriptor_Controller_GetCrawlScheduleConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetCrawlScheduleConfig',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.CrawlScheduleConfig,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlScheduleConfig.deserializeBinary
+);
 
 
 /**
@@ -1007,7 +1330,7 @@ proto.veidemann.api.ControllerClient.prototype.getCrawlScheduleConfig =
       '/veidemann.api.Controller/GetCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlScheduleConfig,
+      methodDescriptor_Controller_GetCrawlScheduleConfig,
       callback);
 };
 
@@ -1026,8 +1349,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getCrawlScheduleConfig =
       '/veidemann.api.Controller/GetCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlScheduleConfig);
+      methodDescriptor_Controller_GetCrawlScheduleConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.CrawlScheduleConfigListReply>}
+ */
+const methodDescriptor_Controller_ListCrawlScheduleConfigs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListCrawlScheduleConfigs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.CrawlScheduleConfigListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.CrawlScheduleConfigListReply.deserializeBinary
+);
 
 
 /**
@@ -1062,7 +1404,7 @@ proto.veidemann.api.ControllerClient.prototype.listCrawlScheduleConfigs =
       '/veidemann.api.Controller/ListCrawlScheduleConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlScheduleConfigs,
+      methodDescriptor_Controller_ListCrawlScheduleConfigs,
       callback);
 };
 
@@ -1081,8 +1423,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listCrawlScheduleConfigs =
       '/veidemann.api.Controller/ListCrawlScheduleConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlScheduleConfigs);
+      methodDescriptor_Controller_ListCrawlScheduleConfigs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlScheduleConfig,
+ *   !proto.veidemann.api.CrawlScheduleConfig>}
+ */
+const methodDescriptor_Controller_SaveCrawlScheduleConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveCrawlScheduleConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlScheduleConfig,
+  veidemann_api_config_pb.CrawlScheduleConfig,
+  /** @param {!proto.veidemann.api.CrawlScheduleConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlScheduleConfig.deserializeBinary
+);
 
 
 /**
@@ -1117,7 +1478,7 @@ proto.veidemann.api.ControllerClient.prototype.saveCrawlScheduleConfig =
       '/veidemann.api.Controller/SaveCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlScheduleConfig,
+      methodDescriptor_Controller_SaveCrawlScheduleConfig,
       callback);
 };
 
@@ -1136,8 +1497,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveCrawlScheduleConfig =
       '/veidemann.api.Controller/SaveCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlScheduleConfig);
+      methodDescriptor_Controller_SaveCrawlScheduleConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlScheduleConfig,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteCrawlScheduleConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteCrawlScheduleConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlScheduleConfig,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.CrawlScheduleConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -1172,7 +1552,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteCrawlScheduleConfig =
       '/veidemann.api.Controller/DeleteCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlScheduleConfig,
+      methodDescriptor_Controller_DeleteCrawlScheduleConfig,
       callback);
 };
 
@@ -1191,8 +1571,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteCrawlScheduleConfig 
       '/veidemann.api.Controller/DeleteCrawlScheduleConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlScheduleConfig);
+      methodDescriptor_Controller_DeleteCrawlScheduleConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.PolitenessConfig>}
+ */
+const methodDescriptor_Controller_GetPolitenessConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetPolitenessConfig',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.PolitenessConfig,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.PolitenessConfig.deserializeBinary
+);
 
 
 /**
@@ -1227,7 +1626,7 @@ proto.veidemann.api.ControllerClient.prototype.getPolitenessConfig =
       '/veidemann.api.Controller/GetPolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetPolitenessConfig,
+      methodDescriptor_Controller_GetPolitenessConfig,
       callback);
 };
 
@@ -1246,8 +1645,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getPolitenessConfig =
       '/veidemann.api.Controller/GetPolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetPolitenessConfig);
+      methodDescriptor_Controller_GetPolitenessConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.PolitenessConfigListReply>}
+ */
+const methodDescriptor_Controller_ListPolitenessConfigs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListPolitenessConfigs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.PolitenessConfigListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.PolitenessConfigListReply.deserializeBinary
+);
 
 
 /**
@@ -1282,7 +1700,7 @@ proto.veidemann.api.ControllerClient.prototype.listPolitenessConfigs =
       '/veidemann.api.Controller/ListPolitenessConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListPolitenessConfigs,
+      methodDescriptor_Controller_ListPolitenessConfigs,
       callback);
 };
 
@@ -1301,8 +1719,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listPolitenessConfigs =
       '/veidemann.api.Controller/ListPolitenessConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListPolitenessConfigs);
+      methodDescriptor_Controller_ListPolitenessConfigs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.PolitenessConfig,
+ *   !proto.veidemann.api.PolitenessConfig>}
+ */
+const methodDescriptor_Controller_SavePolitenessConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SavePolitenessConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.PolitenessConfig,
+  veidemann_api_config_pb.PolitenessConfig,
+  /** @param {!proto.veidemann.api.PolitenessConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.PolitenessConfig.deserializeBinary
+);
 
 
 /**
@@ -1337,7 +1774,7 @@ proto.veidemann.api.ControllerClient.prototype.savePolitenessConfig =
       '/veidemann.api.Controller/SavePolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SavePolitenessConfig,
+      methodDescriptor_Controller_SavePolitenessConfig,
       callback);
 };
 
@@ -1356,8 +1793,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.savePolitenessConfig =
       '/veidemann.api.Controller/SavePolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SavePolitenessConfig);
+      methodDescriptor_Controller_SavePolitenessConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.PolitenessConfig,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeletePolitenessConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeletePolitenessConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.PolitenessConfig,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.PolitenessConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -1392,7 +1848,7 @@ proto.veidemann.api.ControllerClient.prototype.deletePolitenessConfig =
       '/veidemann.api.Controller/DeletePolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeletePolitenessConfig,
+      methodDescriptor_Controller_DeletePolitenessConfig,
       callback);
 };
 
@@ -1411,8 +1867,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deletePolitenessConfig =
       '/veidemann.api.Controller/DeletePolitenessConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeletePolitenessConfig);
+      methodDescriptor_Controller_DeletePolitenessConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.BrowserConfig>}
+ */
+const methodDescriptor_Controller_GetBrowserConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetBrowserConfig',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.BrowserConfig,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.BrowserConfig.deserializeBinary
+);
 
 
 /**
@@ -1447,7 +1922,7 @@ proto.veidemann.api.ControllerClient.prototype.getBrowserConfig =
       '/veidemann.api.Controller/GetBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetBrowserConfig,
+      methodDescriptor_Controller_GetBrowserConfig,
       callback);
 };
 
@@ -1466,8 +1941,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getBrowserConfig =
       '/veidemann.api.Controller/GetBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetBrowserConfig);
+      methodDescriptor_Controller_GetBrowserConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.BrowserConfigListReply>}
+ */
+const methodDescriptor_Controller_ListBrowserConfigs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListBrowserConfigs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.BrowserConfigListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.BrowserConfigListReply.deserializeBinary
+);
 
 
 /**
@@ -1502,7 +1996,7 @@ proto.veidemann.api.ControllerClient.prototype.listBrowserConfigs =
       '/veidemann.api.Controller/ListBrowserConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListBrowserConfigs,
+      methodDescriptor_Controller_ListBrowserConfigs,
       callback);
 };
 
@@ -1521,8 +2015,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listBrowserConfigs =
       '/veidemann.api.Controller/ListBrowserConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListBrowserConfigs);
+      methodDescriptor_Controller_ListBrowserConfigs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.BrowserConfig,
+ *   !proto.veidemann.api.BrowserConfig>}
+ */
+const methodDescriptor_Controller_SaveBrowserConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveBrowserConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.BrowserConfig,
+  veidemann_api_config_pb.BrowserConfig,
+  /** @param {!proto.veidemann.api.BrowserConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.BrowserConfig.deserializeBinary
+);
 
 
 /**
@@ -1557,7 +2070,7 @@ proto.veidemann.api.ControllerClient.prototype.saveBrowserConfig =
       '/veidemann.api.Controller/SaveBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveBrowserConfig,
+      methodDescriptor_Controller_SaveBrowserConfig,
       callback);
 };
 
@@ -1576,8 +2089,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveBrowserConfig =
       '/veidemann.api.Controller/SaveBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveBrowserConfig);
+      methodDescriptor_Controller_SaveBrowserConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.BrowserConfig,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteBrowserConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteBrowserConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.BrowserConfig,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.BrowserConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -1612,7 +2144,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteBrowserConfig =
       '/veidemann.api.Controller/DeleteBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteBrowserConfig,
+      methodDescriptor_Controller_DeleteBrowserConfig,
       callback);
 };
 
@@ -1631,8 +2163,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteBrowserConfig =
       '/veidemann.api.Controller/DeleteBrowserConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteBrowserConfig);
+      methodDescriptor_Controller_DeleteBrowserConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.BrowserScript>}
+ */
+const methodDescriptor_Controller_GetBrowserScript = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetBrowserScript',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.BrowserScript,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.BrowserScript.deserializeBinary
+);
 
 
 /**
@@ -1667,7 +2218,7 @@ proto.veidemann.api.ControllerClient.prototype.getBrowserScript =
       '/veidemann.api.Controller/GetBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_GetBrowserScript,
+      methodDescriptor_Controller_GetBrowserScript,
       callback);
 };
 
@@ -1686,8 +2237,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getBrowserScript =
       '/veidemann.api.Controller/GetBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_GetBrowserScript);
+      methodDescriptor_Controller_GetBrowserScript);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.BrowserScriptListReply>}
+ */
+const methodDescriptor_Controller_ListBrowserScripts = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListBrowserScripts',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.BrowserScriptListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.BrowserScriptListReply.deserializeBinary
+);
 
 
 /**
@@ -1722,7 +2292,7 @@ proto.veidemann.api.ControllerClient.prototype.listBrowserScripts =
       '/veidemann.api.Controller/ListBrowserScripts',
       request,
       metadata || {},
-      methodInfo_Controller_ListBrowserScripts,
+      methodDescriptor_Controller_ListBrowserScripts,
       callback);
 };
 
@@ -1741,8 +2311,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listBrowserScripts =
       '/veidemann.api.Controller/ListBrowserScripts',
       request,
       metadata || {},
-      methodInfo_Controller_ListBrowserScripts);
+      methodDescriptor_Controller_ListBrowserScripts);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.BrowserScript,
+ *   !proto.veidemann.api.BrowserScript>}
+ */
+const methodDescriptor_Controller_SaveBrowserScript = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveBrowserScript',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.BrowserScript,
+  veidemann_api_config_pb.BrowserScript,
+  /** @param {!proto.veidemann.api.BrowserScript} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.BrowserScript.deserializeBinary
+);
 
 
 /**
@@ -1777,7 +2366,7 @@ proto.veidemann.api.ControllerClient.prototype.saveBrowserScript =
       '/veidemann.api.Controller/SaveBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_SaveBrowserScript,
+      methodDescriptor_Controller_SaveBrowserScript,
       callback);
 };
 
@@ -1796,8 +2385,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveBrowserScript =
       '/veidemann.api.Controller/SaveBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_SaveBrowserScript);
+      methodDescriptor_Controller_SaveBrowserScript);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.BrowserScript,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteBrowserScript = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteBrowserScript',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.BrowserScript,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.BrowserScript} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -1832,7 +2440,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteBrowserScript =
       '/veidemann.api.Controller/DeleteBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteBrowserScript,
+      methodDescriptor_Controller_DeleteBrowserScript,
       callback);
 };
 
@@ -1851,8 +2459,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteBrowserScript =
       '/veidemann.api.Controller/DeleteBrowserScript',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteBrowserScript);
+      methodDescriptor_Controller_DeleteBrowserScript);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.GetRequest,
+ *   !proto.veidemann.api.CrawlHostGroupConfig>}
+ */
+const methodDescriptor_Controller_GetCrawlHostGroupConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetCrawlHostGroupConfig',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.GetRequest,
+  veidemann_api_config_pb.CrawlHostGroupConfig,
+  /** @param {!proto.veidemann.api.GetRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlHostGroupConfig.deserializeBinary
+);
 
 
 /**
@@ -1887,7 +2514,7 @@ proto.veidemann.api.ControllerClient.prototype.getCrawlHostGroupConfig =
       '/veidemann.api.Controller/GetCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlHostGroupConfig,
+      methodDescriptor_Controller_GetCrawlHostGroupConfig,
       callback);
 };
 
@@ -1906,8 +2533,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getCrawlHostGroupConfig =
       '/veidemann.api.Controller/GetCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetCrawlHostGroupConfig);
+      methodDescriptor_Controller_GetCrawlHostGroupConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.ListRequest,
+ *   !proto.veidemann.api.CrawlHostGroupConfigListReply>}
+ */
+const methodDescriptor_Controller_ListCrawlHostGroupConfigs = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListCrawlHostGroupConfigs',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.ListRequest,
+  proto.veidemann.api.CrawlHostGroupConfigListReply,
+  /** @param {!proto.veidemann.api.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.CrawlHostGroupConfigListReply.deserializeBinary
+);
 
 
 /**
@@ -1942,7 +2588,7 @@ proto.veidemann.api.ControllerClient.prototype.listCrawlHostGroupConfigs =
       '/veidemann.api.Controller/ListCrawlHostGroupConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlHostGroupConfigs,
+      methodDescriptor_Controller_ListCrawlHostGroupConfigs,
       callback);
 };
 
@@ -1961,8 +2607,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listCrawlHostGroupConfigs 
       '/veidemann.api.Controller/ListCrawlHostGroupConfigs',
       request,
       metadata || {},
-      methodInfo_Controller_ListCrawlHostGroupConfigs);
+      methodDescriptor_Controller_ListCrawlHostGroupConfigs);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlHostGroupConfig,
+ *   !proto.veidemann.api.CrawlHostGroupConfig>}
+ */
+const methodDescriptor_Controller_SaveCrawlHostGroupConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveCrawlHostGroupConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlHostGroupConfig,
+  veidemann_api_config_pb.CrawlHostGroupConfig,
+  /** @param {!proto.veidemann.api.CrawlHostGroupConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.CrawlHostGroupConfig.deserializeBinary
+);
 
 
 /**
@@ -1997,7 +2662,7 @@ proto.veidemann.api.ControllerClient.prototype.saveCrawlHostGroupConfig =
       '/veidemann.api.Controller/SaveCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlHostGroupConfig,
+      methodDescriptor_Controller_SaveCrawlHostGroupConfig,
       callback);
 };
 
@@ -2016,8 +2681,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveCrawlHostGroupConfig =
       '/veidemann.api.Controller/SaveCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveCrawlHostGroupConfig);
+      methodDescriptor_Controller_SaveCrawlHostGroupConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.CrawlHostGroupConfig,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteCrawlHostGroupConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteCrawlHostGroupConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.CrawlHostGroupConfig,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.CrawlHostGroupConfig} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -2052,7 +2736,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteCrawlHostGroupConfig =
       '/veidemann.api.Controller/DeleteCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlHostGroupConfig,
+      methodDescriptor_Controller_DeleteCrawlHostGroupConfig,
       callback);
 };
 
@@ -2071,8 +2755,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteCrawlHostGroupConfig
       '/veidemann.api.Controller/DeleteCrawlHostGroupConfig',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteCrawlHostGroupConfig);
+      methodDescriptor_Controller_DeleteCrawlHostGroupConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.google.protobuf.Empty,
+ *   !proto.veidemann.api.LogLevels>}
+ */
+const methodDescriptor_Controller_GetLogConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetLogConfig',
+  grpc.web.MethodType.UNARY,
+  google_protobuf_empty_pb.Empty,
+  veidemann_api_config_pb.LogLevels,
+  /** @param {!proto.google.protobuf.Empty} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.LogLevels.deserializeBinary
+);
 
 
 /**
@@ -2107,7 +2810,7 @@ proto.veidemann.api.ControllerClient.prototype.getLogConfig =
       '/veidemann.api.Controller/GetLogConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetLogConfig,
+      methodDescriptor_Controller_GetLogConfig,
       callback);
 };
 
@@ -2126,8 +2829,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getLogConfig =
       '/veidemann.api.Controller/GetLogConfig',
       request,
       metadata || {},
-      methodInfo_Controller_GetLogConfig);
+      methodDescriptor_Controller_GetLogConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.LogLevels,
+ *   !proto.veidemann.api.LogLevels>}
+ */
+const methodDescriptor_Controller_SaveLogConfig = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveLogConfig',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.LogLevels,
+  veidemann_api_config_pb.LogLevels,
+  /** @param {!proto.veidemann.api.LogLevels} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.LogLevels.deserializeBinary
+);
 
 
 /**
@@ -2162,7 +2884,7 @@ proto.veidemann.api.ControllerClient.prototype.saveLogConfig =
       '/veidemann.api.Controller/SaveLogConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveLogConfig,
+      methodDescriptor_Controller_SaveLogConfig,
       callback);
 };
 
@@ -2181,8 +2903,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveLogConfig =
       '/veidemann.api.Controller/SaveLogConfig',
       request,
       metadata || {},
-      methodInfo_Controller_SaveLogConfig);
+      methodDescriptor_Controller_SaveLogConfig);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.RoleMappingsListRequest,
+ *   !proto.veidemann.api.RoleMappingsListReply>}
+ */
+const methodDescriptor_Controller_ListRoleMappings = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/ListRoleMappings',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.RoleMappingsListRequest,
+  proto.veidemann.api.RoleMappingsListReply,
+  /** @param {!proto.veidemann.api.RoleMappingsListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.RoleMappingsListReply.deserializeBinary
+);
 
 
 /**
@@ -2217,7 +2958,7 @@ proto.veidemann.api.ControllerClient.prototype.listRoleMappings =
       '/veidemann.api.Controller/ListRoleMappings',
       request,
       metadata || {},
-      methodInfo_Controller_ListRoleMappings,
+      methodDescriptor_Controller_ListRoleMappings,
       callback);
 };
 
@@ -2236,8 +2977,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.listRoleMappings =
       '/veidemann.api.Controller/ListRoleMappings',
       request,
       metadata || {},
-      methodInfo_Controller_ListRoleMappings);
+      methodDescriptor_Controller_ListRoleMappings);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.RoleMapping,
+ *   !proto.veidemann.api.RoleMapping>}
+ */
+const methodDescriptor_Controller_SaveRoleMapping = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/SaveRoleMapping',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.RoleMapping,
+  veidemann_api_config_pb.RoleMapping,
+  /** @param {!proto.veidemann.api.RoleMapping} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  veidemann_api_config_pb.RoleMapping.deserializeBinary
+);
 
 
 /**
@@ -2272,7 +3032,7 @@ proto.veidemann.api.ControllerClient.prototype.saveRoleMapping =
       '/veidemann.api.Controller/SaveRoleMapping',
       request,
       metadata || {},
-      methodInfo_Controller_SaveRoleMapping,
+      methodDescriptor_Controller_SaveRoleMapping,
       callback);
 };
 
@@ -2291,8 +3051,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.saveRoleMapping =
       '/veidemann.api.Controller/SaveRoleMapping',
       request,
       metadata || {},
-      methodInfo_Controller_SaveRoleMapping);
+      methodDescriptor_Controller_SaveRoleMapping);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.RoleMapping,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_Controller_DeleteRoleMapping = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/DeleteRoleMapping',
+  grpc.web.MethodType.UNARY,
+  veidemann_api_config_pb.RoleMapping,
+  google_protobuf_empty_pb.Empty,
+  /** @param {!proto.veidemann.api.RoleMapping} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
 
 
 /**
@@ -2327,7 +3106,7 @@ proto.veidemann.api.ControllerClient.prototype.deleteRoleMapping =
       '/veidemann.api.Controller/DeleteRoleMapping',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteRoleMapping,
+      methodDescriptor_Controller_DeleteRoleMapping,
       callback);
 };
 
@@ -2346,8 +3125,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.deleteRoleMapping =
       '/veidemann.api.Controller/DeleteRoleMapping',
       request,
       metadata || {},
-      methodInfo_Controller_DeleteRoleMapping);
+      methodDescriptor_Controller_DeleteRoleMapping);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.google.protobuf.Empty,
+ *   !proto.veidemann.api.RoleList>}
+ */
+const methodDescriptor_Controller_GetRolesForActiveUser = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetRolesForActiveUser',
+  grpc.web.MethodType.UNARY,
+  google_protobuf_empty_pb.Empty,
+  proto.veidemann.api.RoleList,
+  /** @param {!proto.google.protobuf.Empty} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.RoleList.deserializeBinary
+);
 
 
 /**
@@ -2382,7 +3180,7 @@ proto.veidemann.api.ControllerClient.prototype.getRolesForActiveUser =
       '/veidemann.api.Controller/GetRolesForActiveUser',
       request,
       metadata || {},
-      methodInfo_Controller_GetRolesForActiveUser,
+      methodDescriptor_Controller_GetRolesForActiveUser,
       callback);
 };
 
@@ -2401,8 +3199,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getRolesForActiveUser =
       '/veidemann.api.Controller/GetRolesForActiveUser',
       request,
       metadata || {},
-      methodInfo_Controller_GetRolesForActiveUser);
+      methodDescriptor_Controller_GetRolesForActiveUser);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.RunCrawlRequest,
+ *   !proto.veidemann.api.RunCrawlReply>}
+ */
+const methodDescriptor_Controller_RunCrawl = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/RunCrawl',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.RunCrawlRequest,
+  proto.veidemann.api.RunCrawlReply,
+  /** @param {!proto.veidemann.api.RunCrawlRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.RunCrawlReply.deserializeBinary
+);
 
 
 /**
@@ -2437,7 +3254,7 @@ proto.veidemann.api.ControllerClient.prototype.runCrawl =
       '/veidemann.api.Controller/RunCrawl',
       request,
       metadata || {},
-      methodInfo_Controller_RunCrawl,
+      methodDescriptor_Controller_RunCrawl,
       callback);
 };
 
@@ -2456,8 +3273,27 @@ proto.veidemann.api.ControllerPromiseClient.prototype.runCrawl =
       '/veidemann.api.Controller/RunCrawl',
       request,
       metadata || {},
-      methodInfo_Controller_RunCrawl);
+      methodDescriptor_Controller_RunCrawl);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.google.protobuf.Empty,
+ *   !proto.veidemann.api.OpenIdConnectIssuerReply>}
+ */
+const methodDescriptor_Controller_GetOpenIdConnectIssuer = new grpc.web.MethodDescriptor(
+  '/veidemann.api.Controller/GetOpenIdConnectIssuer',
+  grpc.web.MethodType.UNARY,
+  google_protobuf_empty_pb.Empty,
+  proto.veidemann.api.OpenIdConnectIssuerReply,
+  /** @param {!proto.google.protobuf.Empty} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.OpenIdConnectIssuerReply.deserializeBinary
+);
 
 
 /**
@@ -2492,7 +3328,7 @@ proto.veidemann.api.ControllerClient.prototype.getOpenIdConnectIssuer =
       '/veidemann.api.Controller/GetOpenIdConnectIssuer',
       request,
       metadata || {},
-      methodInfo_Controller_GetOpenIdConnectIssuer,
+      methodDescriptor_Controller_GetOpenIdConnectIssuer,
       callback);
 };
 
@@ -2511,7 +3347,7 @@ proto.veidemann.api.ControllerPromiseClient.prototype.getOpenIdConnectIssuer =
       '/veidemann.api.Controller/GetOpenIdConnectIssuer',
       request,
       metadata || {},
-      methodInfo_Controller_GetOpenIdConnectIssuer);
+      methodDescriptor_Controller_GetOpenIdConnectIssuer);
 };
 
 

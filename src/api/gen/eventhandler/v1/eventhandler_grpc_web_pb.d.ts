@@ -17,8 +17,8 @@ import {
 
 export class EventHandlerClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getEventObject(
     request: eventhandler_v1_resources_pb.EventRef,
@@ -71,8 +71,8 @@ export class EventHandlerClient {
 
 export class EventHandlerPromiseClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getEventObject(
     request: eventhandler_v1_resources_pb.EventRef,

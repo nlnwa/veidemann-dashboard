@@ -99,6 +99,25 @@ proto.veidemann.api.config.v1.ConfigPromiseClient =
 
 /**
  * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.ConfigRef,
+ *   !proto.veidemann.api.config.v1.ConfigObject>}
+ */
+const methodDescriptor_Config_GetConfigObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/GetConfigObject',
+  grpc.web.MethodType.UNARY,
+  config_v1_resources_pb.ConfigRef,
+  config_v1_resources_pb.ConfigObject,
+  /** @param {!proto.veidemann.api.config.v1.ConfigRef} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  config_v1_resources_pb.ConfigObject.deserializeBinary
+);
+
+
+/**
+ * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.veidemann.api.config.v1.ConfigRef,
  *   !proto.veidemann.api.config.v1.ConfigObject>}
@@ -129,7 +148,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getConfigObject =
       '/veidemann.api.config.v1.Config/GetConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_GetConfigObject,
+      methodDescriptor_Config_GetConfigObject,
       callback);
 };
 
@@ -148,8 +167,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.getConfigObject =
       '/veidemann.api.config.v1.Config/GetConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_GetConfigObject);
+      methodDescriptor_Config_GetConfigObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.ListRequest,
+ *   !proto.veidemann.api.config.v1.ConfigObject>}
+ */
+const methodDescriptor_Config_ListConfigObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/ListConfigObjects',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.veidemann.api.config.v1.ListRequest,
+  config_v1_resources_pb.ConfigObject,
+  /** @param {!proto.veidemann.api.config.v1.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  config_v1_resources_pb.ConfigObject.deserializeBinary
+);
 
 
 /**
@@ -181,7 +219,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.listConfigObjects =
       '/veidemann.api.config.v1.Config/ListConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_ListConfigObjects);
+      methodDescriptor_Config_ListConfigObjects);
 };
 
 
@@ -198,8 +236,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.listConfigObjects =
       '/veidemann.api.config.v1.Config/ListConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_ListConfigObjects);
+      methodDescriptor_Config_ListConfigObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.ListRequest,
+ *   !proto.veidemann.api.config.v1.ListCountResponse>}
+ */
+const methodDescriptor_Config_CountConfigObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/CountConfigObjects',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.config.v1.ListRequest,
+  proto.veidemann.api.config.v1.ListCountResponse,
+  /** @param {!proto.veidemann.api.config.v1.ListRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.config.v1.ListCountResponse.deserializeBinary
+);
 
 
 /**
@@ -234,7 +291,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.countConfigObjects =
       '/veidemann.api.config.v1.Config/CountConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_CountConfigObjects,
+      methodDescriptor_Config_CountConfigObjects,
       callback);
 };
 
@@ -253,8 +310,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.countConfigObjects =
       '/veidemann.api.config.v1.Config/CountConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_CountConfigObjects);
+      methodDescriptor_Config_CountConfigObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.ConfigObject,
+ *   !proto.veidemann.api.config.v1.ConfigObject>}
+ */
+const methodDescriptor_Config_SaveConfigObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/SaveConfigObject',
+  grpc.web.MethodType.UNARY,
+  config_v1_resources_pb.ConfigObject,
+  config_v1_resources_pb.ConfigObject,
+  /** @param {!proto.veidemann.api.config.v1.ConfigObject} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  config_v1_resources_pb.ConfigObject.deserializeBinary
+);
 
 
 /**
@@ -289,7 +365,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.saveConfigObject =
       '/veidemann.api.config.v1.Config/SaveConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_SaveConfigObject,
+      methodDescriptor_Config_SaveConfigObject,
       callback);
 };
 
@@ -308,8 +384,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.saveConfigObject =
       '/veidemann.api.config.v1.Config/SaveConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_SaveConfigObject);
+      methodDescriptor_Config_SaveConfigObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.UpdateRequest,
+ *   !proto.veidemann.api.config.v1.UpdateResponse>}
+ */
+const methodDescriptor_Config_UpdateConfigObjects = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/UpdateConfigObjects',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.config.v1.UpdateRequest,
+  proto.veidemann.api.config.v1.UpdateResponse,
+  /** @param {!proto.veidemann.api.config.v1.UpdateRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.config.v1.UpdateResponse.deserializeBinary
+);
 
 
 /**
@@ -344,7 +439,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.updateConfigObjects =
       '/veidemann.api.config.v1.Config/UpdateConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_UpdateConfigObjects,
+      methodDescriptor_Config_UpdateConfigObjects,
       callback);
 };
 
@@ -363,8 +458,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.updateConfigObjects 
       '/veidemann.api.config.v1.Config/UpdateConfigObjects',
       request,
       metadata || {},
-      methodInfo_Config_UpdateConfigObjects);
+      methodDescriptor_Config_UpdateConfigObjects);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.ConfigObject,
+ *   !proto.veidemann.api.config.v1.DeleteResponse>}
+ */
+const methodDescriptor_Config_DeleteConfigObject = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/DeleteConfigObject',
+  grpc.web.MethodType.UNARY,
+  config_v1_resources_pb.ConfigObject,
+  proto.veidemann.api.config.v1.DeleteResponse,
+  /** @param {!proto.veidemann.api.config.v1.ConfigObject} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.config.v1.DeleteResponse.deserializeBinary
+);
 
 
 /**
@@ -399,7 +513,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.deleteConfigObject =
       '/veidemann.api.config.v1.Config/DeleteConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_DeleteConfigObject,
+      methodDescriptor_Config_DeleteConfigObject,
       callback);
 };
 
@@ -418,8 +532,27 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.deleteConfigObject =
       '/veidemann.api.config.v1.Config/DeleteConfigObject',
       request,
       metadata || {},
-      methodInfo_Config_DeleteConfigObject);
+      methodDescriptor_Config_DeleteConfigObject);
 };
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.veidemann.api.config.v1.GetLabelKeysRequest,
+ *   !proto.veidemann.api.config.v1.LabelKeysResponse>}
+ */
+const methodDescriptor_Config_GetLabelKeys = new grpc.web.MethodDescriptor(
+  '/veidemann.api.config.v1.Config/GetLabelKeys',
+  grpc.web.MethodType.UNARY,
+  proto.veidemann.api.config.v1.GetLabelKeysRequest,
+  proto.veidemann.api.config.v1.LabelKeysResponse,
+  /** @param {!proto.veidemann.api.config.v1.GetLabelKeysRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.veidemann.api.config.v1.LabelKeysResponse.deserializeBinary
+);
 
 
 /**
@@ -454,7 +587,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getLabelKeys =
       '/veidemann.api.config.v1.Config/GetLabelKeys',
       request,
       metadata || {},
-      methodInfo_Config_GetLabelKeys,
+      methodDescriptor_Config_GetLabelKeys,
       callback);
 };
 
@@ -473,7 +606,7 @@ proto.veidemann.api.config.v1.ConfigPromiseClient.prototype.getLabelKeys =
       '/veidemann.api.config.v1.Config/GetLabelKeys',
       request,
       metadata || {},
-      methodInfo_Config_GetLabelKeys);
+      methodDescriptor_Config_GetLabelKeys);
 };
 
 

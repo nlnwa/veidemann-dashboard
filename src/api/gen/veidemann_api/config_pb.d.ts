@@ -620,11 +620,9 @@ export class RoleMapping extends jspb.Message {
 
   getEmail(): string;
   setEmail(value: string): void;
-  hasEmail(): boolean;
 
   getGroup(): string;
   setGroup(value: string): void;
-  hasGroup(): boolean;
 
   getRoleList(): Array<Role>;
   setRoleList(value: Array<Role>): void;

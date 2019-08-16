@@ -16,8 +16,8 @@ import {
 
 export class ConfigClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getConfigObject(
     request: config_v1_resources_pb.ConfigRef,
@@ -70,8 +70,8 @@ export class ConfigClient {
 
 export class ConfigPromiseClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getConfigObject(
     request: config_v1_resources_pb.ConfigRef,

@@ -21,67 +21,56 @@ export class ConfigObject extends jspb.Message {
   setCrawlEntity(value?: CrawlEntity): void;
   hasCrawlEntity(): boolean;
   clearCrawlEntity(): void;
-  hasCrawlEntity(): boolean;
 
   getSeed(): Seed | undefined;
   setSeed(value?: Seed): void;
   hasSeed(): boolean;
   clearSeed(): void;
-  hasSeed(): boolean;
 
   getCrawlJob(): CrawlJob | undefined;
   setCrawlJob(value?: CrawlJob): void;
   hasCrawlJob(): boolean;
   clearCrawlJob(): void;
-  hasCrawlJob(): boolean;
 
   getCrawlConfig(): CrawlConfig | undefined;
   setCrawlConfig(value?: CrawlConfig): void;
   hasCrawlConfig(): boolean;
   clearCrawlConfig(): void;
-  hasCrawlConfig(): boolean;
 
   getCrawlScheduleConfig(): CrawlScheduleConfig | undefined;
   setCrawlScheduleConfig(value?: CrawlScheduleConfig): void;
   hasCrawlScheduleConfig(): boolean;
   clearCrawlScheduleConfig(): void;
-  hasCrawlScheduleConfig(): boolean;
 
   getBrowserConfig(): BrowserConfig | undefined;
   setBrowserConfig(value?: BrowserConfig): void;
   hasBrowserConfig(): boolean;
   clearBrowserConfig(): void;
-  hasBrowserConfig(): boolean;
 
   getPolitenessConfig(): PolitenessConfig | undefined;
   setPolitenessConfig(value?: PolitenessConfig): void;
   hasPolitenessConfig(): boolean;
   clearPolitenessConfig(): void;
-  hasPolitenessConfig(): boolean;
 
   getBrowserScript(): BrowserScript | undefined;
   setBrowserScript(value?: BrowserScript): void;
   hasBrowserScript(): boolean;
   clearBrowserScript(): void;
-  hasBrowserScript(): boolean;
 
   getCrawlHostGroupConfig(): CrawlHostGroupConfig | undefined;
   setCrawlHostGroupConfig(value?: CrawlHostGroupConfig): void;
   hasCrawlHostGroupConfig(): boolean;
   clearCrawlHostGroupConfig(): void;
-  hasCrawlHostGroupConfig(): boolean;
 
   getRoleMapping(): RoleMapping | undefined;
   setRoleMapping(value?: RoleMapping): void;
   hasRoleMapping(): boolean;
   clearRoleMapping(): void;
-  hasRoleMapping(): boolean;
 
   getCollection(): Collection | undefined;
   setCollection(value?: Collection): void;
   hasCollection(): boolean;
   clearCollection(): void;
-  hasCollection(): boolean;
 
   getSpecCase(): ConfigObject.SpecCase;
 
@@ -634,11 +623,9 @@ export namespace CrawlHostGroupConfig {
 export class RoleMapping extends jspb.Message {
   getEmail(): string;
   setEmail(value: string): void;
-  hasEmail(): boolean;
 
   getGroup(): string;
   setGroup(value: string): void;
-  hasGroup(): boolean;
 
   getRoleList(): Array<Role>;
   setRoleList(value: Array<Role>): void;
@@ -743,18 +730,18 @@ export namespace Collection {
 }
 
 export enum Kind { 
-  undefined = 0,
-  crawlEntity = 5,
-  seed = 6,
-  crawlJob = 7,
-  crawlConfig = 8,
-  crawlScheduleConfig = 9,
-  browserConfig = 10,
-  politenessConfig = 11,
-  browserScript = 12,
-  crawlHostGroupConfig = 13,
-  roleMapping = 14,
-  collection = 15,
+  UNDEFINED = 0,
+  CRAWLENTITY = 5,
+  SEED = 6,
+  CRAWLJOB = 7,
+  CRAWLCONFIG = 8,
+  CRAWLSCHEDULECONFIG = 9,
+  BROWSERCONFIG = 10,
+  POLITENESSCONFIG = 11,
+  BROWSERSCRIPT = 12,
+  CRAWLHOSTGROUPCONFIG = 13,
+  ROLEMAPPING = 14,
+  COLLECTION = 15,
 }
 export enum Role { 
   ANY_USER = 0,

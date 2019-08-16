@@ -27,8 +27,8 @@ import {
 
 export class ControllerClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getCrawlEntity(
     request: GetRequest,
@@ -342,8 +342,8 @@ export class ControllerClient {
 
 export class ControllerPromiseClient {
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; });
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; });
 
   getCrawlEntity(
     request: GetRequest,

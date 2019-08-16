@@ -1,3 +1,4 @@
+// source: protoc-gen-swagger/options/annotations.proto
 /**
  * @fileoverview
  * @enhanceable
