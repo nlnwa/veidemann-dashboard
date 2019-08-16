@@ -101,7 +101,6 @@ export class SeedDetailMultiComponent extends SeedDetailComponent {
 
     if (this.shouldAddCrawlJob !== undefined) {
       seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
-      console.log('jobRefList: ', seed.jobRefList);
       if (this.shouldAddCrawlJob) {
         pathList.push('seed.jobRef+');
       } else {
