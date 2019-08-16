@@ -64,7 +64,8 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "veidemann-web:build:production"
+              "browserTarget": "veidemann-web:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
               "baseHref": "/veidemann/",
@@ -115,11 +116,11 @@
           "builder": "@@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "bromin:serve"
+            "devServerTarget": "veidemann-web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "bromin:serve:production"
+              "devServerTarget": "veidemann-web:serve:production"
             }
           }
         }
