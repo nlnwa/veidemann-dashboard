@@ -64,12 +64,12 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "veidemann-web:build:production",
-              "proxyConfig": "proxy.conf.json"
+              "browserTarget": "veidemann-web:build:production"
             },
             "development": {
               "baseHref": "/veidemann/",
-              "servePath": "/veidemann/"
+              "servePath": "/veidemann/",
+              "proxyConfig": "proxy.conf.json"
             }
           }
         },
