@@ -1,0 +1,26 @@
+@import "../../../../styles/theme";
+
+table {
+  width: 100%;
+}
+
+.row-checked {
+  background-color: $light-focused;
+}
+
+.row-selected {
+  background-color: $dark-focused;
+}
+
+.mat-row:hover {
+  background-color: lighten($dark-focused, 50%);
+  cursor: pointer;
+}
+
+.checkbox-padding {
+  padding-right: 16px;
+}
+
+.seed-filter {
+  width: 100%;
+}

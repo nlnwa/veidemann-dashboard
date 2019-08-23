@@ -60,11 +60,12 @@ export class SeedUrlValidator {
         }
       }
       const intersection = urls.filter(url => {
-        const similarUrlRegexp = createSimilarDomainRegExpString(url);
-        if (similarUrlRegexp === null) {
+        const similarUrlRegexpStr = createSimilarDomainRegExpString(url);
+        if (similarUrlRegexpStr === null) {
           return false;
         }
-        const similarUrlPredicate = (u) => (new RegExp(similarUrlRegexp).test(u));
+        const similarUrlRegexp = new RegExp(similarUrlRegexpStr);
+        const similarUrlPredicate = (u) => (similarUrlRegexp.test(u));
         return urlsWithinSameEntity.find(similarUrlPredicate);
       });
 

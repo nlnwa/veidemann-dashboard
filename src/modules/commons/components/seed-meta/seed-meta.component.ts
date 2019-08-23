@@ -77,7 +77,9 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   onRemoveExistingUrls(urls: string[]) {
-    const replaced = urls.reduce((acc, url) => acc.replace(url, '').trim(), this.name.value);
+    const replaced = urls.reduce((acc, url) => acc.replace(url, '')
+      .trim()
+      .replace(/\s{2,}/, ' \n'), this.name.value);
     this.name.setValue(replaced);
     this.form.markAsPristine();
     this.form.markAsUntouched();

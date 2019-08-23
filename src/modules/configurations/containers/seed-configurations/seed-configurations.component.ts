@@ -20,6 +20,7 @@ import {ReferrerError} from '../../../commons';
 import {ConfigurationsComponent} from '..';
 import {SeedConfigurationService} from '../../services/seed-configuration.service';
 import {LabelService} from '../../services/label.service';
+import {DataSource} from '@angular/cdk/table';
 
 @Component({
   selector: 'app-seed-configurations',
@@ -36,6 +37,7 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
   @Output()
   invalidate: EventEmitter<void> = new EventEmitter();
 
+
   constructor(protected configurationsService: SeedConfigurationService,
               protected snackBarService: SnackBarService,
               protected errorService: ErrorService,
@@ -50,6 +52,10 @@ export class SeedConfigurationsComponent extends ConfigurationsComponent impleme
 
     this.kind = Kind.SEED;
     this.labelService.kind = this.kind;
+  }
+
+  get dataSource(): DataSource<ConfigObject> {
+    return this.configurationsService.getDataSource();
   }
 
   ngOnInit() {

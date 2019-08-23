@@ -10,9 +10,10 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import {DataService} from '../../../configurations/services/data/data.service';
+import {MatSort} from '@angular/material';
 
 export enum Action {
   Clone = 'Clone'
@@ -58,7 +59,11 @@ export class BaseListComponent implements AfterViewInit {
   pageOptions = [5, 10, 25, 50, 100];
 
   @Input()
-  dataSource: (DataSource<any> & { data: any[], paginator?: MatPaginator, filteredData?: any[] }) | MatTableDataSource<any>;
+  dataSource: (DataSource<any> & {
+    data: any[], paginator?: MatPaginator,
+    filteredData?: any[], sort?: MatSort, filter?: string,
+    filterPredicate?: any, sortingDataAccessor?: any
+  }) | MatTableDataSource<any>;
 
   @Input()
   embedded = false;
@@ -78,11 +83,13 @@ export class BaseListComponent implements AfterViewInit {
   @Output()
   action: EventEmitter<ActionEvent> = new EventEmitter();
 
-  @ViewChild(MatPaginator, {static: false}) paginator;
+  @ViewChild(MatPaginator, {static: true}) paginator;
 
   constructor(protected cdr: ChangeDetectorRef,
               @Optional() dataSource: DataService) {
-    this.dataSource = dataSource;
+    if (!this.dataSource && dataSource) {
+      this.dataSource = dataSource;
+    }
   }
 
   get isAllInPageSelected(): boolean {
