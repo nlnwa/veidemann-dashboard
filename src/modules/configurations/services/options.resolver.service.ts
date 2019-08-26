@@ -65,6 +65,10 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
             RobotsPolicy.OBEY_ROBOTS,
             RobotsPolicy.IGNORE_ROBOTS,
             RobotsPolicy.CUSTOM_ROBOTS,
+            RobotsPolicy.OBEY_ROBOTS_CLASSIC,
+            RobotsPolicy.CUSTOM_ROBOTS_CLASSIC,
+            RobotsPolicy.CUSTOM_IF_MISSING,
+            RobotsPolicy.CUSTOM_IF_MISSING_CLASSIC
           ]
         };
 

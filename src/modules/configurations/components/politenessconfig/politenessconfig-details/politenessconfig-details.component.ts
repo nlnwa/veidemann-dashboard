@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, Kind, Label, Meta, PolitenessConfig} from '../../../../commons/models';
-import {RobotsPolicy} from '../../../../commons/models/configs/politenessconfig.model';
+import {ConfigObject, Kind, Label, Meta, PolitenessConfig, RobotsPolicy} from '../../../../commons/models';
+
 
 @Component({
   selector: 'app-politenessconfig-details',
