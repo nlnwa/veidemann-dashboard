@@ -4210,7 +4210,11 @@ proto.veidemann.api.config.v1.PolitenessConfig.serializeBinaryToWriter = functio
 proto.veidemann.api.config.v1.PolitenessConfig.RobotsPolicy = {
   OBEY_ROBOTS: 0,
   IGNORE_ROBOTS: 1,
-  CUSTOM_ROBOTS: 2
+  CUSTOM_ROBOTS: 2,
+  OBEY_ROBOTS_CLASSIC: 3,
+  CUSTOM_ROBOTS_CLASSIC: 4,
+  CUSTOM_IF_MISSING: 5,
+  CUSTOM_IF_MISSING_CLASSIC: 6
 };
 
 /**

@@ -6,6 +6,10 @@ export enum RobotsPolicy {
   OBEY_ROBOTS,
   IGNORE_ROBOTS,
   CUSTOM_ROBOTS,
+  OBEY_ROBOTS_CLASSIC,
+  CUSTOM_ROBOTS_CLASSIC,
+  CUSTOM_IF_MISSING,
+  CUSTOM_IF_MISSING_CLASSIC
 }
 
 export class PolitenessConfig {
