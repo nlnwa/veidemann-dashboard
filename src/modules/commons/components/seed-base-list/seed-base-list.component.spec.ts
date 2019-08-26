@@ -1,6 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SeedBaseListComponent } from './seed-base-list.component';
+import {SeedBaseListComponent} from './seed-base-list.component';
+import {MaterialModule} from '../../material.module';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {DataService} from '../../../configurations/services/data';
+import {MatTableDataSource} from '@angular/material';
 
 describe('SeedBaseListComponent', () => {
   let component: SeedBaseListComponent;
@@ -8,9 +12,16 @@ describe('SeedBaseListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SeedBaseListComponent ]
+      declarations: [SeedBaseListComponent],
+      imports: [MaterialModule, NoopAnimationsModule],
+      providers: [
+        {
+          provide: DataService,
+          useFactory: () => new MatTableDataSource([])
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -4,6 +4,7 @@ import {CommonsModule} from '../../../commons/commons.module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {CoreTestingModule} from '../../../core/core.testing.module';
 import {SnackBarService} from '../../../core/services';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('LoglevelComponent', () => {
   let component: LoglevelComponent;
@@ -13,6 +14,7 @@ describe('LoglevelComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         CommonsModule,
+        RouterTestingModule,
         CoreTestingModule.forRoot(),
         HttpClientTestingModule
       ],
