@@ -8,7 +8,7 @@ import {_isNumberValue} from '@angular/cdk/coercion';
 @Component({
   selector: 'app-seed-base-list',
   templateUrl: './seed-base-list.component.html',
-  styleUrls: ['./seed-base-list.component.scss'],
+  styleUrls: ['../base-list/base-list.scss', './seed-base-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeedBaseListComponent extends BaseListComponent implements AfterViewInit {
