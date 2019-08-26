@@ -3,9 +3,10 @@ import {ConfigObject, ConfigRef, Kind, Label} from '../../../commons/models';
 import {createListRequest, DataService, pageListRequest} from './data.service';
 import {Injectable} from '@angular/core';
 import {from, Observable, of} from 'rxjs';
-import {count, finalize, map, mergeMap, tap} from 'rxjs/operators';
+import {catchError, count, finalize, map, mergeMap, takeUntil, tap} from 'rxjs/operators';
 import {FieldMask, ListRequest} from '../../../../api';
 import {PageEvent} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material';
 
 
 export function withQueryTemplate(listRequest: ListRequest, queryTemplate: ConfigObject, queryMask: FieldMask) {
@@ -36,21 +37,38 @@ export class SeedDataService extends DataService {
   // entityRef
   private configRef: ConfigRef;
 
+  dataSource: MatTableDataSource<ConfigObject>;
+
   constructor(protected backendService: BackendService) {
     super(backendService);
     this._kind = Kind.SEED;
+    this.dataSource = new MatTableDataSource([]);
   }
 
   set ref(configRef: ConfigRef) {
     this.configRef = configRef;
-    delete this.countCache[Kind.SEED];
+
     this.reset();
-    this.resetPaginator();
+
+    if (this.configRef) {
+      this.list()
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe();
+    }
   }
 
-  list(page: PageEvent): Observable<ConfigObject> {
+  reset() {
+    this.dataSource.data = [];
+  }
+
+  reload() {
+    this.reset();
+    this.list().pipe(takeUntil(this.ngUnsubscribe)).subscribe();
+  }
+
+  list(page?: PageEvent): Observable<ConfigObject> {
     this.loading.next(true);
-    return this.backendService.list(withConfigRef(pageListRequest(createListRequest(this._kind), page), this.configRef))
+    return this.backendService.list(withConfigRef(createListRequest(this._kind), this.configRef))
       .pipe(
         map(configObject => ConfigObject.fromProto(configObject)),
         tap(configObject => this.add(configObject)),
@@ -78,22 +96,24 @@ export class SeedDataService extends DataService {
   }
 
   protected add(configObject: ConfigObject) {
-    super.add(configObject);
+    this.dataSource.data = this.dataSource.data.concat(configObject);
   }
 
-  protected count(): Observable<number> {
-    if (this.countCache[this._kind.valueOf()] !== undefined) {
-      this._paginator.length = this.countCache[this._kind.valueOf()];
-      this.pageLength = this.countCache[this._kind.valueOf()];
-      return of(this.pageLength);
-    }
-    return this.backendService.count(withConfigRef(createListRequest(this._kind.valueOf()), this.configRef)).pipe(
-      tap(countOfKind => {
-        this.countCache[this._kind.valueOf()] = countOfKind;
-        this.pageLength = countOfKind;
-        this._paginator.length = countOfKind;
-      })
-    );
+  protected decrementCount() {
+  }
+
+  protected incrementCount() {
+  }
+
+  protected replace(configObject: ConfigObject) {
+    const data = this.dataSource.data;
+    const index = data.findIndex(c => c.id === configObject.id);
+    data[index] = configObject;
+    this.dataSource.data = data;
+  }
+
+  protected remove(configObject: ConfigObject) {
+     this.dataSource.data = this.dataSource.data.filter(config => config !== configObject);
   }
 
   private _move(configObject: ConfigObject): Observable<number> {

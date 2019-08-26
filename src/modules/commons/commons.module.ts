@@ -16,6 +16,7 @@ import {
 } from './components';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {SeedMetaComponent} from './components/seed-meta/seed-meta.component';
+import { SeedBaseListComponent } from './components/seed-base-list/seed-base-list.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {SeedMetaComponent} from './components/seed-meta/seed-meta.component';
     EntityDetailsMultiComponent,
     SeedDetailComponent,
     SeedDetailMultiComponent,
+    SeedBaseListComponent,
   ],
   entryComponents: [
     EntityDetailsMultiComponent,
@@ -48,6 +50,7 @@ import {SeedMetaComponent} from './components/seed-meta/seed-meta.component';
     LabelsComponent,
     MetaComponent,
     BaseListComponent,
+    SeedBaseListComponent,
     CommonModule,
     MaterialModule,
     FlexLayoutModule,

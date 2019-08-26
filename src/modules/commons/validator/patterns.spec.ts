@@ -105,12 +105,12 @@ describe('Regular expression patterns', () => {
       const expected = 'behave.properly';
       const actual = url.match(SIMILAR_URL)[1];
 
-      expect(expected).toBe(actual);
+      expect(actual).toBe(expected);
 
       const expected1 = 'not.behave.properly';
       const actual1 = url1.match(SIMILAR_URL)[1];
 
-      expect(expected1).toBe(actual1);
+      expect(actual1).toBe(expected1);
     }));
   });
 

@@ -297,11 +297,11 @@ export class DataService implements DataSource<ConfigObject>, OnDestroy {
       : null;
   }
 
-  private incrementCount() {
+  protected incrementCount() {
     this.pageLength += 1;
   }
 
-  private decrementCount() {
+  protected decrementCount() {
     this.pageLength -= 1;
   }
 

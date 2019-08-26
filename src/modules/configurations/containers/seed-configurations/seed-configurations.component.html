@@ -7,14 +7,14 @@
 </button>
 
 <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-
-<app-base-list #baseList
+<app-seed-base-list #baseList
+               [dataSource]="dataSource"
                (action)="onAction($event)"
                (rowClick)="onSelectConfig($event)"
                (selectedChange)="onSelectedChange($event)"
                (selectAll)="onSelectAll()"
                [embedded]="entityRef">
-</app-base-list>
+</app-seed-base-list>
 
 <app-seed-details *ngIf="singleMode && configObject$ | async as configObject"
                   [configObject]="configObject"
