@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {GetLabelKeysRequest, LabelKeysResponse} from '../../../api';
 import {map} from 'rxjs/operators';
 import {BackendService} from '../../core/services';
@@ -16,11 +16,18 @@ export class LabelService {
   constructor(private backendService: BackendService) {
   }
 
+  get kind(): Kind {
+    return this._kind;
+  }
+
   set kind(kind: Kind) {
     this._kind = kind;
   }
 
   getLabelKeys(): Observable<string[]> {
+    if (!this.kind) {
+      return of([]);
+    }
     const request = new GetLabelKeysRequest();
     request.setKind(this._kind.valueOf());
     return this.backendService.getLabelKeys(request)

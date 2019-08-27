@@ -25,7 +25,13 @@ import {LabelService} from '../../../configurations/services/label.service';
   templateUrl: './event-search.component.html',
   styleUrls: ['./event-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SeedDataService, SearchDataService, {provide: DataService, useExisting: SearchDataService}, LabelService]
+  providers: [
+    SeedDataService,
+    SearchDataService,
+    {provide: DataService, useExisting: SearchDataService},
+    LabelService,
+    SearchConfigurationService
+  ]
 })
 
 export class EventSearchComponent extends SearchComponent implements OnInit {
@@ -40,7 +46,7 @@ export class EventSearchComponent extends SearchComponent implements OnInit {
   @ViewChild('seedDetails', {static: false}) seedDetails: ElementRef;
 
   seedObject: ConfigObject;
-  crawlJobs: CrawlJob[];
+  crawlJobs: ConfigObject[];
 
   constructor(
     protected seedDataService: SeedDataService,
