@@ -13,6 +13,7 @@ import {
   EventNewSeedComponent,
   EventWarcErrorComponent
 } from './component';
+import {OptionsResolver} from './services/options.resolver.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {
     ConfigurationsModule,
   ],
   providers: [
-    EventService
+    EventService,
+    OptionsResolver
   ]
 })
 export class EventModule {

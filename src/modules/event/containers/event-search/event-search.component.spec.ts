@@ -1,7 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EventSearchComponent} from './event-search.component';
-import {of} from 'rxjs';
 import {SearchDataService, SeedDataService} from '../../../configurations/services/data';
 import {CommonsModule} from '../../../commons/commons.module';
 import {CoreTestingModule} from '../../../core/core.testing.module';
@@ -9,6 +8,8 @@ import {SearchConfigurationService} from '../../../configurations/services/searc
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {of} from 'rxjs';
+import {LabelService} from '../../../configurations/services/label.service';
 
 describe('EventSearchComponent', () => {
   let component: EventSearchComponent;
@@ -22,6 +23,8 @@ describe('EventSearchComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
+            paramMap: of(),
+            queryParamMap: of(),
             snapshot: {
               data: {
                 options: {
@@ -33,6 +36,13 @@ describe('EventSearchComponent', () => {
         },
         {
           provide: SearchConfigurationService,
+          useValue: {
+            configObject$: of(null),
+            search: () => of()
+          }
+        },
+        {
+          provide: LabelService,
           useValue: {}
         }
       ]
@@ -47,6 +57,9 @@ describe('EventSearchComponent', () => {
     }).overrideProvider(SeedDataService, {
       useValue: {
         ngOnDestroy: () => {
+        },
+        connect: () => of([]),
+        disconnect: () => {
         }
       }
     }).compileComponents();

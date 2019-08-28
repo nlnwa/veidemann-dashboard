@@ -8,8 +8,9 @@ import {CoreTestingModule} from '../../../core/core.testing.module';
 import {SearchConfigurationService} from '../../../configurations/services/search-configuration.service';
 import {ActivatedRoute} from '@angular/router';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {SearchDataService} from '../../../configurations/services/data';
+import {SearchDataService, SeedDataService} from '../../../configurations/services/data';
 import {of} from 'rxjs';
+import {LabelService} from '../../../configurations/services/label.service';
 
 describe('EventNewSeedComponent', () => {
   let component: EventNewSeedComponent;
@@ -23,6 +24,8 @@ describe('EventNewSeedComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
+            paramMap: of(),
+            queryParamMap: of(),
             snapshot: {
               data: {
                 options: {
@@ -34,17 +37,33 @@ describe('EventNewSeedComponent', () => {
         },
         {
           provide: SearchConfigurationService,
+          useValue: {
+            configObject$: of(null),
+            search: () => of()
+          }
+        },
+        {
+          provide: LabelService,
           useValue: {}
         }
       ]
     }).overrideProvider(SearchDataService, {
       useValue: {
-        ngOnDestroy: () => {},
+        ngOnDestroy: () => {
+        },
         connect: () => of([]),
-        disconnect: () => {}
+        disconnect: () => {
+        }
       }
-    })
-      .compileComponents();
+    }).overrideProvider(SeedDataService, {
+      useValue: {
+        ngOnDestroy: () => {
+        },
+        connect: () => of([]),
+        disconnect: () => {
+        }
+      }
+    }).compileComponents();
   }));
 
   beforeEach(() => {
