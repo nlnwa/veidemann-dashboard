@@ -20,7 +20,7 @@ export class AuthService {
   get name(): string {
     const claims = this.oauthService.getIdentityClaims();
     // @ts-ignore
-    return claims ? claims.name : '';
+    return claims ? claims.name : this.isAdmin() ? 'No authorization' : '';
   }
 
   get email(): string {
