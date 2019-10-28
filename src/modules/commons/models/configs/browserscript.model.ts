@@ -4,7 +4,7 @@ import {ConfigObject} from '../configobject.model';
 
 export class BrowserScript {
   script?: string;
-  urlRegexpList?: string[]; // Not implemented
+  urlRegexpList?: string[];
 
   constructor({
                 script = '',

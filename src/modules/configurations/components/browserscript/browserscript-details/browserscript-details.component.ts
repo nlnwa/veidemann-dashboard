@@ -1,7 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../commons/models';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +24,15 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
+  private selectedRegexpIndex = -1;
+
   form: FormGroup;
+
+  regexpForm: FormGroup;
+  control = new FormControl();
+  removable = true;
+
+  labelInputSeparators = [ENTER, COMMA];
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
@@ -41,12 +51,20 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     return this.form.valid && this.form.dirty;
   }
 
+  get canUpdateRegex(): boolean {
+    return this.regexpForm.get('regexp').valid && this.regexpForm.get('regexp').dirty;
+  }
+
   get showSave(): boolean {
     return (this.configObject && !this.configObject.id);
   }
 
   get name(): string {
     return this.form.get('meta').value.name;
+  }
+
+  get urlRegexpList(): string[] {
+    return this.form.get('urlRegexpList').value;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,12 +93,63 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
+  onRemoveRegex(regex: string) {
+    const index = this.urlRegexpList.indexOf(regex);
+
+    if (index >= 0) {
+      this.urlRegexpList.splice(index, 1);
+      this.form.markAsDirty();
+    }
+  }
+
+  onClickRegex(regex: string) {
+    this.selectedRegexpIndex = this.findRegexpIndex(regex);
+    this.regexpForm.enable();
+    this.regexpForm.reset({regexp: regex});
+  }
+
+  onSaveRegexp(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+
+    if (value === '') {
+      return;
+    }
+    if (this.findRegexpIndex(value) > -1) {
+      input.value = '';
+      return;
+    }
+    this.urlRegexpList.push(value);
+    this.form.markAsDirty();
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  onUpdateRegexp(regexp: string): void {
+    regexp = regexp.trim();
+    this.urlRegexpList.splice(this.selectedRegexpIndex, 1);
+    this.urlRegexpList.push(regexp);
+    this.regexpForm.disable();
+    this.form.markAsDirty();
+  }
+
+  onAbort(): void {
+    this.regexpForm.disable();
+  }
+
   protected createForm() {
     this.form = this.fb.group({
       id: '',
+      urlRegexpList: [],
       script: '',
       meta: new Meta(),
     });
+    this.regexpForm = this.fb.group({
+      regexp: '',
+    });
+    this.regexpForm.disable();
   }
 
   protected updateForm(): void {
@@ -88,6 +157,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       id: this.configObject.id,
       script: this.configObject.browserScript.script,
       meta: this.configObject.meta,
+      urlRegexpList: this.configObject.browserScript.urlRegexpList.map(_ => _)
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -104,10 +174,18 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
     const browserScript = new BrowserScript();
     browserScript.script = formModel.script;
+    browserScript.urlRegexpList = formModel.urlRegexpList;
 
     configObject.meta = formModel.meta;
     configObject.browserScript = browserScript;
 
     return configObject;
   }
+
+  private findRegexpIndex(regexp: string): number {
+    return this.urlRegexpList.findIndex((regex) => {
+      return regex === regexp;
+    });
+  }
+
 }
