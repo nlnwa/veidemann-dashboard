@@ -18,8 +18,8 @@ export class CrawlScope {
   }
 
   static toProto(crawlScope: CrawlScope): CrawlScopeProto {
-    const proto = new CrawlScopeProto() as any as CrawlScopeProto.AsObject;
-    proto.surtPrefix = crawlScope.surtPrefix;
+    const proto = new CrawlScopeProto();
+    proto.setSurtPrefix(crawlScope.surtPrefix);
 
     return proto as any as CrawlScopeProto;
   }
@@ -62,6 +62,7 @@ export class Seed {
     proto.setScope(CrawlScope.toProto(seed.scope));
     proto.setJobRefList(seed.jobRefList.map(ConfigRef.toProto));
     proto.setDisabled(seed.disabled);
+
     return proto;
   }
 
