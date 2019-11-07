@@ -69,12 +69,19 @@ export class Seed {
   static merge(seeds: Seed[]): Seed {
     const mergedSeed = new Seed();
     const compareObj: Seed = seeds[0];
+    const commonCrawljobs = this.commonCrawlJobRefs(seeds);
 
     mergedSeed.disabled = seeds.every(seed => seed.disabled === compareObj.disabled)
       ? compareObj.disabled
       : undefined;
 
-    mergedSeed.jobRefList = Seed.commonCrawlJobRefs(seeds);
+    for (const crawlJob of commonCrawljobs) {
+      const gotJob = seeds.every((cfg) =>
+        cfg.jobRefList.some(jobRef => jobRef.id === crawlJob.id));
+      if (gotJob) {
+        mergedSeed.jobRefList.push(crawlJob);
+      }
+    }
 
     return mergedSeed;
   }
