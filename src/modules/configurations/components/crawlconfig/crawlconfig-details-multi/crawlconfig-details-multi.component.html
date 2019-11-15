@@ -83,12 +83,12 @@
         <div formGroupName="extra" (click)="createScreenshot.disabled ? createScreenshot.enable() : null">
           <mat-checkbox formControlName="createScreenshot"
                         labelPosition="after"
-                        i18n="@@crawlconfigFormCreateSnapshotLabel"
-                        i18n-matTooltip="@@crawlconfigFormDisabledCreateSnapshotExplaination"
+                        i18n="@@crawlconfigFormCreateScreenshotLabel"
+                        i18n-matTooltip="@@crawlconfigFormDisabledCreateScreenshotExplaination"
                         color="accent"
                         [matTooltip]="createScreenshot.disabled ?
                         'Instilling er ikke lik for alle markerte konfigurasjoner. Klikk for å aktivere.' : null">
-            Lag snapshot
+            Ta skjermbilde
           </mat-checkbox>
         </div>
       </div>
