@@ -7,7 +7,6 @@ import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 import {ControllerPromiseClient} from '../../../api';
-import {Role} from '../../commons/models';
 
 @Injectable()
 export class AppInitializerService {
@@ -49,15 +48,7 @@ export class AppInitializerService {
       }
 
       authService.roles = await controllerPromiseClient.getRolesForActiveUser(new Empty(), authService.metadata)
-        .then(roleList => roleList.getRoleList())
-        .catch(error => {
-          // TODO this catch clause can be removed when bug in veidemann-controller is resolved
-          if (!issuer) {
-            return [Role.ANY, Role.ANY_USER, Role.ADMIN];
-          } else {
-            throw error;
-          }
-        });
+        .then(roleList => roleList.getRoleList());
 
       this.initialized = true;
     } catch (error) {
