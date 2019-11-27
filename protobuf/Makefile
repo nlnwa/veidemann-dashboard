@@ -1,7 +1,7 @@
-VEIDEMANN_API_VERSION?=1.0.0-beta10
-PROTOC_VERSION=3.9.1
+VEIDEMANN_API_VERSION?=1.0.0-beta12
+PROTOC_VERSION=3.10.1
 PROTOC_FILE_VERSION=$$(echo ${PROTOC_VERSION} | sed -r 's|(.*)(rc)(.*)|\1-\2-\3|')
-GRPC_WEB_VERSION=1.0.6
+GRPC_WEB_VERSION=1.0.7
 
 PROTOC=tools/bin/protoc
 PROTOC_GEN_GRPC_WEB=tools/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
@@ -32,9 +32,8 @@ tools:
 
 build: veidemann-api
 	@rm -rf ${OUT}; mkdir -p ${OUT}
-	@find veidemann-api/protobuf/{config,commons,eventhandler} veidemann-api/protobuf/veidemann_api/{controller,config}.proto veidemann-api/include/ -name *.proto -exec ${PROTOC} \
+	@find veidemann-api/protobuf/{config,commons,controller,eventhandler,frontier} -name *.proto -exec ${PROTOC} \
 	  -Iveidemann-api/protobuf \
-	  -Iveidemann-api/include \
 	  -Itools/include \
 	  --plugin=protoc-gen-grpc-web=${PROTOC_GEN_GRPC_WEB} \
 	  --js_out=import_style=commonjs:${OUT} \

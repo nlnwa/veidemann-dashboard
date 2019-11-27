@@ -21,6 +21,9 @@ export {
   Role as RoleProto,
   RoleMapping as RoleMappingProto,
   Seed as SeedProto,
+  RoleMapping as LegacyRoleMappingProto,
+  Role as LegacyRoleProto,
+  LogLevels as LogLevelsProto,
 } from './gen/config/v1/resources_pb';
 
 export {
@@ -63,11 +66,5 @@ export {
 } from './gen/eventhandler/v1/eventhandler_grpc_web_pb';
 
 export {
-  ControllerPromiseClient
-} from './gen/veidemann_api/controller_grpc_web_pb';
-
-export {
-  RoleMapping as LegacyRoleMappingProto,
-  Role as LegacyRoleProto,
-  LogLevels as LogLevelsProto,
-} from './gen/veidemann_api/config_pb';
+  ControllerPromiseClient,
+} from './gen/controller/v1/controller_grpc_web_pb';
