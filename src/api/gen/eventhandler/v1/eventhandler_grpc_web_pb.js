@@ -15,10 +15,6 @@ grpc.web = require('grpc-web');
 var eventhandler_v1_resources_pb = require('../../eventhandler/v1/resources_pb.js')
 
 var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js')
-
-var google_api_annotations_pb = require('../../google/api/annotations_pb.js')
-
-var protoc$gen$swagger_options_annotations_pb = require('../../protoc-gen-swagger/options/annotations_pb.js')
 const proto = {};
 proto.veidemann = {};
 proto.veidemann.api = {};
@@ -48,16 +44,6 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient =
    */
   this.hostname_ = hostname;
 
-  /**
-   * @private @const {?Object} The credentials to be used to connect
-   *    to the server
-   */
-  this.credentials_ = credentials;
-
-  /**
-   * @private @const {?Object} Options for the client
-   */
-  this.options_ = options;
 };
 
 
@@ -84,16 +70,6 @@ proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient =
    */
   this.hostname_ = hostname;
 
-  /**
-   * @private @const {?Object} The credentials to be used to connect
-   *    to the server
-   */
-  this.credentials_ = credentials;
-
-  /**
-   * @private @const {?Object} Options for the client
-   */
-  this.options_ = options;
 };
 
 
@@ -108,7 +84,10 @@ const methodDescriptor_EventHandler_GetEventObject = new grpc.web.MethodDescript
   grpc.web.MethodType.UNARY,
   eventhandler_v1_resources_pb.EventRef,
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.EventRef} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.EventRef} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -124,7 +103,10 @@ const methodDescriptor_EventHandler_GetEventObject = new grpc.web.MethodDescript
  */
 const methodInfo_EventHandler_GetEventObject = new grpc.web.AbstractClientBase.MethodInfo(
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.EventRef} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.EventRef} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -182,7 +164,10 @@ const methodDescriptor_EventHandler_ListEventObjects = new grpc.web.MethodDescri
   grpc.web.MethodType.SERVER_STREAMING,
   proto.veidemann.api.eventhandler.v1.ListRequest,
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -198,7 +183,10 @@ const methodDescriptor_EventHandler_ListEventObjects = new grpc.web.MethodDescri
  */
 const methodInfo_EventHandler_ListEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -251,7 +239,10 @@ const methodDescriptor_EventHandler_CountEventObjects = new grpc.web.MethodDescr
   grpc.web.MethodType.UNARY,
   proto.veidemann.api.eventhandler.v1.ListRequest,
   proto.veidemann.api.eventhandler.v1.ListCountResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -267,7 +258,10 @@ const methodDescriptor_EventHandler_CountEventObjects = new grpc.web.MethodDescr
  */
 const methodInfo_EventHandler_CountEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
   proto.veidemann.api.eventhandler.v1.ListCountResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -325,7 +319,10 @@ const methodDescriptor_EventHandler_SaveEventObject = new grpc.web.MethodDescrip
   grpc.web.MethodType.UNARY,
   proto.veidemann.api.eventhandler.v1.SaveRequest,
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -341,7 +338,10 @@ const methodDescriptor_EventHandler_SaveEventObject = new grpc.web.MethodDescrip
  */
 const methodInfo_EventHandler_SaveEventObject = new grpc.web.AbstractClientBase.MethodInfo(
   eventhandler_v1_resources_pb.EventObject,
-  /** @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -399,7 +399,10 @@ const methodDescriptor_EventHandler_UpdateEventObjects = new grpc.web.MethodDesc
   grpc.web.MethodType.UNARY,
   proto.veidemann.api.eventhandler.v1.UpdateRequest,
   proto.veidemann.api.eventhandler.v1.UpdateResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -415,7 +418,10 @@ const methodDescriptor_EventHandler_UpdateEventObjects = new grpc.web.MethodDesc
  */
 const methodInfo_EventHandler_UpdateEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
   proto.veidemann.api.eventhandler.v1.UpdateResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -473,7 +479,10 @@ const methodDescriptor_EventHandler_DeleteEventObject = new grpc.web.MethodDescr
   grpc.web.MethodType.UNARY,
   eventhandler_v1_resources_pb.EventObject,
   proto.veidemann.api.eventhandler.v1.DeleteResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.EventObject} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.EventObject} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -489,7 +498,10 @@ const methodDescriptor_EventHandler_DeleteEventObject = new grpc.web.MethodDescr
  */
 const methodInfo_EventHandler_DeleteEventObject = new grpc.web.AbstractClientBase.MethodInfo(
   proto.veidemann.api.eventhandler.v1.DeleteResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.EventObject} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.EventObject} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -547,7 +559,10 @@ const methodDescriptor_EventHandler_ListLabels = new grpc.web.MethodDescriptor(
   grpc.web.MethodType.UNARY,
   proto.veidemann.api.eventhandler.v1.ListLabelRequest,
   proto.veidemann.api.eventhandler.v1.ListLabelResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },
@@ -563,7 +578,10 @@ const methodDescriptor_EventHandler_ListLabels = new grpc.web.MethodDescriptor(
  */
 const methodInfo_EventHandler_ListLabels = new grpc.web.AbstractClientBase.MethodInfo(
   proto.veidemann.api.eventhandler.v1.ListLabelResponse,
-  /** @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request */
+  /**
+   * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request
+   * @return {!Uint8Array}
+   */
   function(request) {
     return request.serializeBinary();
   },

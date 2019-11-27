@@ -375,9 +375,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getId = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setId = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -390,9 +393,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getType = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setType = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -405,9 +411,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getSource = function()
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setSource = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -420,9 +429,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getState = function() 
 };
 
 
-/** @param {!proto.veidemann.api.eventhandler.v1.EventObject.State} value */
+/**
+ * @param {!proto.veidemann.api.eventhandler.v1.EventObject.State} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setState = function(value) {
-  jspb.Message.setProto3EnumField(this, 4, value);
+  return jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
@@ -435,9 +447,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getAssignee = function
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setAssignee = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -451,9 +466,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getDataList = function
 };
 
 
-/** @param {!Array<!proto.veidemann.api.eventhandler.v1.Data>} value */
+/**
+ * @param {!Array<!proto.veidemann.api.eventhandler.v1.Data>} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+*/
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setDataList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  return jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -469,9 +487,10 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.addData = function(opt
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
  */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.clearDataList = function() {
-  this.setDataList([]);
+  return this.setDataList([]);
 };
 
 
@@ -484,9 +503,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getSeverity = function
 };
 
 
-/** @param {!proto.veidemann.api.eventhandler.v1.EventObject.Severity} value */
+/**
+ * @param {!proto.veidemann.api.eventhandler.v1.EventObject.Severity} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setSeverity = function(value) {
-  jspb.Message.setProto3EnumField(this, 7, value);
+  return jspb.Message.setProto3EnumField(this, 7, value);
 };
 
 
@@ -499,26 +521,31 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getLabelList = functio
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setLabelList = function(value) {
-  jspb.Message.setField(this, 8, value || []);
+  return jspb.Message.setField(this, 8, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
  */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.addLabel = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 8, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 8, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
  */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.clearLabelList = function() {
-  this.setLabelList([]);
+  return this.setLabelList([]);
 };
 
 
@@ -532,9 +559,12 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.getActivityList = func
 };
 
 
-/** @param {!Array<!proto.veidemann.api.eventhandler.v1.Activity>} value */
+/**
+ * @param {!Array<!proto.veidemann.api.eventhandler.v1.Activity>} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
+*/
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.setActivityList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 9, value);
+  return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -550,9 +580,10 @@ proto.veidemann.api.eventhandler.v1.EventObject.prototype.addActivity = function
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.veidemann.api.eventhandler.v1.EventObject} returns this
  */
 proto.veidemann.api.eventhandler.v1.EventObject.prototype.clearActivityList = function() {
-  this.setActivityList([]);
+  return this.setActivityList([]);
 };
 
 
@@ -677,9 +708,12 @@ proto.veidemann.api.eventhandler.v1.EventRef.prototype.getId = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.EventRef} returns this
+ */
 proto.veidemann.api.eventhandler.v1.EventRef.prototype.setId = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1010,9 +1044,12 @@ proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.getType = function
 };
 
 
-/** @param {!proto.veidemann.api.eventhandler.v1.Activity.ChangeType} value */
+/**
+ * @param {!proto.veidemann.api.eventhandler.v1.Activity.ChangeType} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity.Change} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.setType = function(value) {
-  jspb.Message.setProto3EnumField(this, 1, value);
+  return jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 
@@ -1025,9 +1062,12 @@ proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.getField = functio
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity.Change} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.setField = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1040,9 +1080,12 @@ proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.getOldVal = functi
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity.Change} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.setOldVal = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -1055,9 +1098,12 @@ proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.getNewVal = functi
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity.Change} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.Change.prototype.setNewVal = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -1070,9 +1116,12 @@ proto.veidemann.api.eventhandler.v1.Activity.prototype.getModifiedBy = function(
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.prototype.setModifiedBy = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1086,17 +1135,21 @@ proto.veidemann.api.eventhandler.v1.Activity.prototype.getModifiedTime = functio
 };
 
 
-/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
+*/
 proto.veidemann.api.eventhandler.v1.Activity.prototype.setModifiedTime = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
+  return jspb.Message.setWrapperField(this, 2, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
  */
 proto.veidemann.api.eventhandler.v1.Activity.prototype.clearModifiedTime = function() {
-  this.setModifiedTime(undefined);
+  return this.setModifiedTime(undefined);
 };
 
 
@@ -1119,9 +1172,12 @@ proto.veidemann.api.eventhandler.v1.Activity.prototype.getDescriptionList = func
 };
 
 
-/** @param {!Array<!proto.veidemann.api.eventhandler.v1.Activity.Change>} value */
+/**
+ * @param {!Array<!proto.veidemann.api.eventhandler.v1.Activity.Change>} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
+*/
 proto.veidemann.api.eventhandler.v1.Activity.prototype.setDescriptionList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 3, value);
+  return jspb.Message.setRepeatedWrapperField(this, 3, value);
 };
 
 
@@ -1137,9 +1193,10 @@ proto.veidemann.api.eventhandler.v1.Activity.prototype.addDescription = function
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
  */
 proto.veidemann.api.eventhandler.v1.Activity.prototype.clearDescriptionList = function() {
-  this.setDescriptionList([]);
+  return this.setDescriptionList([]);
 };
 
 
@@ -1152,9 +1209,12 @@ proto.veidemann.api.eventhandler.v1.Activity.prototype.getComment = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Activity} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Activity.prototype.setComment = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -1291,9 +1351,12 @@ proto.veidemann.api.eventhandler.v1.Data.prototype.getKey = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Data} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Data.prototype.setKey = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1306,9 +1369,12 @@ proto.veidemann.api.eventhandler.v1.Data.prototype.getValue = function() {
 };
 
 
-/** @param {string} value */
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.eventhandler.v1.Data} returns this
+ */
 proto.veidemann.api.eventhandler.v1.Data.prototype.setValue = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

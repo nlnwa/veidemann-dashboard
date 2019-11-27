@@ -2,8 +2,6 @@ import * as grpcWeb from 'grpc-web';
 
 import * as eventhandler_v1_resources_pb from '../../eventhandler/v1/resources_pb';
 import * as commons_v1_resources_pb from '../../commons/v1/resources_pb';
-import * as google_api_annotations_pb from '../../google/api/annotations_pb';
-import * as protoc$gen$swagger_options_annotations_pb from '../../protoc-gen-swagger/options/annotations_pb';
 
 import {
   DeleteResponse,

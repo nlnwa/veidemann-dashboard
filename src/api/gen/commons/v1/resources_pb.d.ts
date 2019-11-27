@@ -46,3 +46,49 @@ export namespace FieldMask {
   }
 }
 
+export class ExtractedText extends jspb.Message {
+  getWarcId(): string;
+  setWarcId(value: string): void;
+
+  getText(): string;
+  setText(value: string): void;
+
+  getSentenceCount(): number;
+  setSentenceCount(value: number): void;
+
+  getWordCount(): number;
+  setWordCount(value: number): void;
+
+  getLongWordCount(): number;
+  setLongWordCount(value: number): void;
+
+  getCharacterCount(): number;
+  setCharacterCount(value: number): void;
+
+  getLix(): number;
+  setLix(value: number): void;
+
+  getLanguage(): string;
+  setLanguage(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ExtractedText.AsObject;
+  static toObject(includeInstance: boolean, msg: ExtractedText): ExtractedText.AsObject;
+  static serializeBinaryToWriter(message: ExtractedText, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ExtractedText;
+  static deserializeBinaryFromReader(message: ExtractedText, reader: jspb.BinaryReader): ExtractedText;
+}
+
+export namespace ExtractedText {
+  export type AsObject = {
+    warcId: string,
+    text: string,
+    sentenceCount: number,
+    wordCount: number,
+    longWordCount: number,
+    characterCount: number,
+    lix: number,
+    language: string,
+  }
+}
+

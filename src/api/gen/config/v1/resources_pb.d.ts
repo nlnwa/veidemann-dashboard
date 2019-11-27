@@ -624,7 +624,36 @@ export namespace CrawlHostGroupConfig {
 
 }
 
+export class ApiKey extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): void;
+
+  getValiduntil(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setValiduntil(value?: google_protobuf_timestamp_pb.Timestamp): void;
+  hasValiduntil(): boolean;
+  clearValiduntil(): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ApiKey.AsObject;
+  static toObject(includeInstance: boolean, msg: ApiKey): ApiKey.AsObject;
+  static serializeBinaryToWriter(message: ApiKey, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ApiKey;
+  static deserializeBinaryFromReader(message: ApiKey, reader: jspb.BinaryReader): ApiKey;
+}
+
+export namespace ApiKey {
+  export type AsObject = {
+    token: string,
+    validuntil?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+  }
+}
+
 export class RoleMapping extends jspb.Message {
+  getApiKey(): ApiKey | undefined;
+  setApiKey(value?: ApiKey): void;
+  hasApiKey(): boolean;
+  clearApiKey(): void;
+
   getEmail(): string;
   setEmail(value: string): void;
 
@@ -648,6 +677,7 @@ export class RoleMapping extends jspb.Message {
 
 export namespace RoleMapping {
   export type AsObject = {
+    apiKey?: ApiKey.AsObject,
     email: string,
     group: string,
     roleList: Array<Role>,
@@ -655,6 +685,7 @@ export namespace RoleMapping {
 
   export enum EmailOrGroupCase { 
     EMAIL_OR_GROUP_NOT_SET = 0,
+    API_KEY = 1,
     EMAIL = 2,
     GROUP = 3,
   }
@@ -730,6 +761,61 @@ export namespace Collection {
     UNDEFINED = 0,
     SCREENSHOT = 1,
     DNS = 2,
+  }
+}
+
+export class LogLevels extends jspb.Message {
+  getLogLevelList(): Array<LogLevels.LogLevel>;
+  setLogLevelList(value: Array<LogLevels.LogLevel>): void;
+  clearLogLevelList(): void;
+  addLogLevel(value?: LogLevels.LogLevel, index?: number): LogLevels.LogLevel;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LogLevels.AsObject;
+  static toObject(includeInstance: boolean, msg: LogLevels): LogLevels.AsObject;
+  static serializeBinaryToWriter(message: LogLevels, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LogLevels;
+  static deserializeBinaryFromReader(message: LogLevels, reader: jspb.BinaryReader): LogLevels;
+}
+
+export namespace LogLevels {
+  export type AsObject = {
+    logLevelList: Array<LogLevels.LogLevel.AsObject>,
+  }
+
+  export class LogLevel extends jspb.Message {
+    getLogger(): string;
+    setLogger(value: string): void;
+
+    getLevel(): LogLevels.Level;
+    setLevel(value: LogLevels.Level): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): LogLevel.AsObject;
+    static toObject(includeInstance: boolean, msg: LogLevel): LogLevel.AsObject;
+    static serializeBinaryToWriter(message: LogLevel, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): LogLevel;
+    static deserializeBinaryFromReader(message: LogLevel, reader: jspb.BinaryReader): LogLevel;
+  }
+
+  export namespace LogLevel {
+    export type AsObject = {
+      logger: string,
+      level: LogLevels.Level,
+    }
+  }
+
+
+  export enum Level { 
+    UNDEFINED = 0,
+    ALL = 1,
+    TRACE = 2,
+    DEBUG = 3,
+    INFO = 4,
+    WARN = 5,
+    ERROR = 6,
+    FATAL = 7,
+    OFF = 8,
   }
 }
 

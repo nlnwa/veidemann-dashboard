@@ -3745,20 +3745,20 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-protobuf@^3.9.1:
-  version "3.9.1"
-  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.9.1.tgz#87e6a16b7fb16405b515a6c6622d5ace45578d86"
-  integrity sha512-tkz7SVwBktFbqFK3teXFUY/VM57+mbUgV9bSD+sZH1ocHJ7uk7BfEWMRdU24dd0ciUDokreA7ghH2fYFIczQdw==
+google-protobuf@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.10.0.tgz#f36171128090615049f9b0e42252b1a10a4bc534"
+  integrity sha512-d0cMO8TJ6xtB/WrVHCv5U81L2ulX+aCD58IljyAN6mHwdHHJ2jbcauX5glvivi3s3hx7EYEo7eUA9WftzamMnw==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.15"
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
 
-grpc-web@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/grpc-web/-/grpc-web-1.0.6.tgz#9dc2886b5bff5cee08e51960e33702322890376e"
-  integrity sha512-iwqchQXNsA8bcJwuYEv/A8ScEaf5nA5+vtptEv2KN646KW94tsq7O+Q7hy5+gADOg6XhmJqPhSlvTMdiHlVfcw==
+grpc-web@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/grpc-web/-/grpc-web-1.0.7.tgz#9e4fbcf63d3734515332ab59e42baa7d0d290015"
+  integrity sha512-Fkbz1nyvvt6GC6ODcxh9Fen6LLB3OTCgGHzHwM2Eni44SUhzqPz1UQgFp9sfBEfInOhx3yBdwo9ZLjZAmJ+TtA==
 
 hammerjs@^2.0.8:
   version "2.0.8"

@@ -2,8 +2,7 @@ import * as jspb from "google-protobuf"
 
 import * as config_v1_resources_pb from '../../config/v1/resources_pb';
 import * as commons_v1_resources_pb from '../../commons/v1/resources_pb';
-import * as google_api_annotations_pb from '../../google/api/annotations_pb';
-import * as protoc$gen$swagger_options_annotations_pb from '../../protoc-gen-swagger/options/annotations_pb';
+import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 
 export class GetLabelKeysRequest extends jspb.Message {
   getKind(): config_v1_resources_pb.Kind;

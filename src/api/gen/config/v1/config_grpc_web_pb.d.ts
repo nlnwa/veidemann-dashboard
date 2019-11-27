@@ -2,8 +2,7 @@ import * as grpcWeb from 'grpc-web';
 
 import * as config_v1_resources_pb from '../../config/v1/resources_pb';
 import * as commons_v1_resources_pb from '../../commons/v1/resources_pb';
-import * as google_api_annotations_pb from '../../google/api/annotations_pb';
-import * as protoc$gen$swagger_options_annotations_pb from '../../protoc-gen-swagger/options/annotations_pb';
+import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 
 import {
   DeleteResponse,
@@ -66,6 +65,20 @@ export class ConfigClient {
                response: LabelKeysResponse) => void
   ): grpcWeb.ClientReadableStream<LabelKeysResponse>;
 
+  getLogConfig(
+    request: google_protobuf_empty_pb.Empty,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.Error,
+               response: config_v1_resources_pb.LogLevels) => void
+  ): grpcWeb.ClientReadableStream<config_v1_resources_pb.LogLevels>;
+
+  saveLogConfig(
+    request: config_v1_resources_pb.LogLevels,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.Error,
+               response: config_v1_resources_pb.LogLevels) => void
+  ): grpcWeb.ClientReadableStream<config_v1_resources_pb.LogLevels>;
+
 }
 
 export class ConfigPromiseClient {
@@ -107,6 +120,16 @@ export class ConfigPromiseClient {
     request: GetLabelKeysRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<LabelKeysResponse>;
+
+  getLogConfig(
+    request: google_protobuf_empty_pb.Empty,
+    metadata?: grpcWeb.Metadata
+  ): Promise<config_v1_resources_pb.LogLevels>;
+
+  saveLogConfig(
+    request: config_v1_resources_pb.LogLevels,
+    metadata?: grpcWeb.Metadata
+  ): Promise<config_v1_resources_pb.LogLevels>;
 
 }
 
