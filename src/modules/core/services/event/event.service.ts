@@ -32,8 +32,7 @@ export class EventService {
       const stream = this.eventClient.listEventObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
-        .on('status', () => observer.complete())
-        .on('end', () => console.log('end'));
+        .on('end', () => observer.complete());
 
       return () => stream.cancel();
     });

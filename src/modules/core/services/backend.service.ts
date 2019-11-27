@@ -34,8 +34,7 @@ export class BackendService {
       const stream = this.configPromiseClient.listConfigObjects(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
-        .on('status', () => observer.complete())
-        .on('end', () => console.log('end'));
+        .on('end', () => observer.complete());
 
       return () => stream.cancel();
     });
