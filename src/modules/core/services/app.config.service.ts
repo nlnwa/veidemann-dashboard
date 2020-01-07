@@ -3,7 +3,4 @@ import {AppConfig} from '../models/app-config.model';
 
 @Injectable()
 export class AppConfigService extends AppConfig {
-  constructor() {
-    super();
-  }
 }
