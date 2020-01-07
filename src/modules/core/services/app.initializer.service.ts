@@ -16,6 +16,9 @@ export class AppInitializerService {
               private controllerService: ControllerService) {
   }
 
+  /**
+   * NB! Preloading of dynamic configuration (initialize AppConfigService) is done in main.ts
+   */
   async init() {
     try {
       const issuer = await this.controllerService.getOpenIdConnectIssuer();
