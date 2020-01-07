@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanLoad, Route, RouterStateSnapshot, UrlSegment} from '@angular/router';
-import {AuthService} from './auth.service';
 import {Observable, of} from 'rxjs';
-import {Role} from '../../../commons/models/configs/rolemapping.model';
+
+import {AuthService} from './auth.service';
+import {Role} from '../../../commons/models';
 
 @Injectable()
 export class GuardService implements CanActivate, CanLoad {
@@ -27,6 +28,8 @@ export class GuardService implements CanActivate, CanLoad {
       case 'config':
       case 'activity':
       case 'status':
+        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR];
+      case 'logconfig':
         return [Role.READONLY, Role.CURATOR, Role.ADMIN];
       default:
         return [Role.ANY];
@@ -47,21 +50,14 @@ export class GuardService implements CanActivate, CanLoad {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const allowedRoles = GuardService.getAllowedRolesWhenActivating(route);
 
-    for (const role of this.authService.roles) {
-      if (allowedRoles.includes(role)) {
-        return of(true);
-      }
-    }
-    return of(false);
+    return this.authService.isAuthorized(allowedRoles) ? of(true) : of(false);
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
     const allowedRoles = GuardService.getAllowedRolesWhenLoading(route);
 
-    for (const role of this.authService.roles) {
-      if (allowedRoles.includes(role)) {
-        return of(true);
-      }
+    if (this.authService.isAuthorized(allowedRoles)) {
+      return of(true);
     }
     // store requested path
     this.requestedPath = segments.join('/');

@@ -1,0 +1,103 @@
+<form [formGroup]="form">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>link</mat-icon>
+      <mat-card-title>
+        <ng-container i18n="@@seedDetailsCardTitle">Seed</ng-container>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="!configObject.id">
+        <span i18n="@@seedDetailsCardSubtitle">Ny (ikke lagret)</span>
+      </mat-card-subtitle>
+      <span fxFlex></span>
+      <div (click)="disabled.disabled ? disabled.enable(): null">
+        <mat-slide-toggle class="disabled-toggle"
+                          color="warn"
+                          formControlName="disabled"
+                          i18n="@@seedDisabledToggleSwitch"
+                          [matTooltip]="disabled.disabled ?
+                            'Instillingen for valgte konfigurasjoner er ikke lik. Klikk her og sett ønsket verdi for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi'
+                            : null">
+          Deaktivert
+        </mat-slide-toggle>
+      </div>
+    </mat-card-header>
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <app-seed-meta formControlName="meta"
+                       [entityRef]="entityRef.value"
+                       (move)="move.emit($event)"></app-seed-meta>
+        <mat-form-field *ngIf="configObject.id">
+          <input matInput
+                 formControlName="id"
+                 placeholder="Id"
+                 readonly
+                 i18n-placeholder="@@seedFormIdPlaceholder">
+        </mat-form-field>
+
+        <mat-form-field formGroupName="entityRef">
+          <input matInput formControlName="id"
+                 placeholder="Entitetens Id"
+                 readonly
+                 i18n-placeholder="@@metaEntityIdInputPlaceholder">
+          <mat-error>
+            Referanse til entitet er påkrevd
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex fxLayout="column">
+        <mat-form-field>
+          <mat-select placeholder="CrawlJob" multiple formControlName="jobRefListId">
+            <mat-option *ngFor="let crawlJob of crawlJobs"
+                        [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field formGroupName="scope" *ngIf="configObject?.id">
+          <input matInput
+                 formControlName="surtPrefix"
+                 placeholder="Surt prefiks"
+                 i18n-placeholder="@@seedFormSurtPrefixPlaceholder">
+        </mat-form-field>
+
+        <mat-list *ngIf="configObject?.id">
+          <mat-list-item *ngFor="let id of jobRefListId.value">
+            <mat-icon matTooltip="CrawlJob">work</mat-icon>&nbsp;
+            <a class="shortcut-link"
+               [routerLink]="['/config/crawljobs']"
+               [queryParams]="{id: id}">{{ getCrawlJobName(id) }}</a>
+          </mat-list-item>
+        </mat-list>
+
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button
+              [color]="form.valid ? 'accent' : 'warn'"
+              *ngIf="showSave"
+              [disabled]="!canSave"
+              (click)="onSave()"
+              [matTooltip]="!form.valid ? 'Obs! Skjemaet validerer ikke.' : ''"
+              i18n="@@commonButtonSave">LAGRE
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">OPPDATER
+      </button>
+      <button mat-button
+              [disabled]="!canRevert"
+              (click)="onRevert()"
+              i18n="@@commonButtonRevert">TILBAKESTILL
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!showSave"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">SLETT
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

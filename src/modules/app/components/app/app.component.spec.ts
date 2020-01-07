@@ -5,9 +5,10 @@ import {DialogComponent, TimeComponent} from '..';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppInitializerService} from '../../../core/services/app.initializer.service';
 import {AuthService, GuardService} from '../../../core/services/auth';
-import {AppConfigService, ErrorService, SnackBarService} from '../../../core/services';
+import {ErrorService, SnackBarService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogRef} from '@angular/material';
+import {AppConfig} from '../../../core/models/app-config.model';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -33,7 +34,7 @@ describe('AppComponent', () => {
           }
         },
         {
-          provide: AppConfigService,
+          provide: AppConfig,
           useValue: {}
         },
         {

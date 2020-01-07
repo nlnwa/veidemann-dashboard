@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Bekreft sletting</h1>
+<div mat-dialog-content>
+  <p>Er du sikker på at du vil slette {{data.numberOfConfigs}} konfigurasjoner?</p>
+
+  <mat-form-field>
+    <input matInput
+           [(ngModel)]="numberOfConfigs"
+           placeholder="Antall konfigurasjoner">
+    <mat-hint>Bekreft antall som skal slettes</mat-hint>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button
+          [mat-dialog-close]="false">AVBRYT
+  </button>
+  <span fxFlex></span>
+  <button mat-raised-button
+          color="warn"
+          [disabled]="data.numberOfConfigs != numberOfConfigs"
+          [mat-dialog-close]="data.numberOfConfigs == numberOfConfigs">SLETT
+  </button>
+</div>

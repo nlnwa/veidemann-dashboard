@@ -1,15 +1,5 @@
-@import "../../../../styles/theme";
-
-.content-padding {
-  padding: 1em 1.5em 2em 1.3em;
-}
-
 .container {
   height: 100%;
-}
-
-.sidenav--icon__margin {
-  margin-right: 0.5em;
 }
 
 .title {
@@ -21,10 +11,10 @@
   margin-right: 1rem;
 }
 
-.mat-tooltip.tooltip {
-  white-space: pre-line;
-}
-
-.is-active {
-  background-color: $highlight;
+.module-loader {
+  position: absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

@@ -4,19 +4,13 @@ import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-time',
-  template: `
-    <style>
-      .time {
-        font-family: monospace;
-        font-size: 1rem;
-      }
-    </style>
-    <span class="time">{{time$ | async | date: 'long': 'UTC'}}</span>`,
+  template: `<span class="time">{{time$ | async | date: 'long': 'UTC'}}</span>`,
+  styleUrls: ['./time.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeComponent implements OnInit, OnDestroy {
   time$: Subject<Date> = new Subject();
-  interval: any;
+  interval: number;
 
   ngOnInit() {
     this.interval = setInterval(() => {

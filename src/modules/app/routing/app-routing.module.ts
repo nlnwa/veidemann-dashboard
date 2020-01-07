@@ -4,12 +4,8 @@ import {GuardService} from '../../core/services/auth';
 
 const routes: Routes = [
   {
-    path: 'activity',
-    loadChildren: () => import('../../event/event.module').then(m => m.EventModule),
-  },
-  {
     path: 'config',
-    loadChildren: () => import('../../configurations/configurations.module').then(m => m.ConfigurationsModule),
+    loadChildren: () => import('../../config/configurations.module').then(m => m.ConfigurationsModule),
     canLoad: [GuardService]
   },
   {
@@ -22,7 +18,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      preloadingStrategy: PreloadAllModules
+      preloadingStrategy: PreloadAllModules,
     }),
   ],
   exports: [

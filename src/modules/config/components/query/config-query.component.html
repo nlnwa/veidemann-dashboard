@@ -1,0 +1,87 @@
+<mat-form-field class="search-form">
+  <input matInput
+         #search
+         placeholder="Søk"
+         [(ngModel)]="term"
+         (keyup.enter)="onSearch(term)"
+         i18n-placeholder="@@searchSearchFieldPlaceholder">
+  <button mat-button mat-icon-button matSuffix *ngIf="term"
+          (click)="term = ''; onSearch(term);">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<form [formGroup]="form" [ngSwitch]="query?.kind" fxLayout="row" fxLayoutGap="16px">
+  <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+    <mat-form-field>
+      <mat-label>Schedule</mat-label>
+      <mat-select formControlName="scheduleId">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let option of options.crawlScheduleConfigs"
+                    [value]="option.id">{{option.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>CrawlConfig</mat-label>
+      <mat-select formControlName="crawlConfigId">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let option of options.crawlConfigs"
+                    [value]="option.id">{{option.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.SEED">
+    <mat-form-field>
+      <mat-select placeholder="CrawlJob" multiple formControlName="crawlJobIdList">
+        <mat-option *ngFor="let crawlJob of options.crawlJobs"
+                    [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+             formControlName="entityId"
+             placeholder="Entitetens ID"
+             i18n-placeholder="@@configIdPlaceholder">
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
+    <mat-form-field>
+      <mat-label>Collection</mat-label>
+      <mat-select formControlName="collectionId">
+        <mat-option value=""></mat-option>
+        <mat-option *ngFor="let option of options.collections"
+                    [value]="option.id">{{option.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>BrowserConfig</mat-label>
+      <mat-select formControlName="browserConfigId">
+        <mat-option value=""></mat-option>
+        <mat-option *ngFor="let option of options.browserConfigs"
+                    [value]="option.id">{{option.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Politeness</mat-label>
+      <mat-select formControlName="politenessId">
+        <mat-option value=""></mat-option>
+        <mat-option *ngFor="let option of options.politenessConfigs"
+                    [value]="option.id">{{option.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
+    <mat-form-field>
+      <mat-select placeholder="BrowserScript" multiple formControlName="scriptIdList">
+        <mat-option *ngFor="let browserScript of options.browserScripts"
+                    [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault></ng-container>
+</form>

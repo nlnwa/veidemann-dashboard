@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>business</mat-icon>
+    <mat-card-title><a [routerLink]="['/config', 'entity']" [queryParams]="{id: id}">{{name}}</a></mat-card-title>
+    <mat-card-subtitle>{{description}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-chip-list fxFlex [disabled]="true" fxLayout="row wrap" fxLayoutGap="8px">
+      <mat-chip *ngFor="let label of labels"
+                [selectable]="false"
+                [disabled]="true"
+                [removable]="false">
+        {{label.key + ':' + label.value}}
+      </mat-chip>
+
+    </mat-chip-list>
+  </mat-card-content>
+</mat-card>

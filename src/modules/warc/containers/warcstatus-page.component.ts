@@ -7,13 +7,13 @@ import {WarcStatusService} from '../services/warcstatus.service';
   template: `
     <div fxLayout="column" fxLayoutGap="8px">
       <div>
-        <app-toolbar>
-          <span i18n="@@warcstatusListHeader" class="toolbar--title">
+        <mat-toolbar>
+          <h1 i18n="@@warcstatusListHeader">
             <span style="margin-left: 0" *ngIf="numInvalid > 0">{{numInvalid}}</span> Ugyldige WARC-filer
-          </span>
+          </h1>
           <span class="fill-space"></span>
           <span style="color: rgba(0,0,0,0.3);">(Antall gyldige: {{numValid}})</span>
-        </app-toolbar>
+        </mat-toolbar>
         <app-warcstatus-list (rowClick)="onSelectWarcStatus($event)" (allErrors)="onAllErrors($event)"></app-warcstatus-list>
       </div>
       <app-warcstatus-summary *ngIf="!warcError" [allErrors]="allErrors"></app-warcstatus-summary>

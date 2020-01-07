@@ -1,144 +1,85 @@
-<div class="container mat-typography" fxLayout="column">
-  <!-- Toolbar -->
+<div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
   <mat-toolbar color="primary">
     <button mat-icon-button
-            *ngIf="name"
-            (click)="onToggleSidenav()"
+            [mat-menu-trigger-for]="menu"
+            *ngIf="isLoggedIn"
             class="header--button__margin">
       <mat-icon>menu</mat-icon>
     </button>
-    <a routerLink="/" class="title"><h1>Veidemann {{ version }}</h1></a>
-    <span fxFlex></span>
-    <app-time></app-time>
-    <span fxFlex></span>
-    <button mat-button mat-flat-button color="primary" (click)="onLogin()" *ngIf="!name">
-      <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@toolbarLogon">LOGG PÅ</span>
-    </button>
-    <button color="primary"
-            mat-flat-button
-            matTooltip="{{name}}"
-            (click)="onLogout()"
-            *ngIf="name">
-      <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@toolbarLogon">LOGG AV</span>
-    </button>
-
-    <button mat-icon-button [mat-menu-trigger-for]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
     <mat-menu #menu="matMenu">
       <a mat-menu-item
-         target="_blank"
-         [routerLink]="['/docs']"
-         [routerLinkActiveOptions]="{exact: true}"
-         [routerLinkActive]="['is-active']">
-        <mat-icon>help</mat-icon>
-        <span>Hjelp</span>
+         *ngIf="canConfigure"
+         [routerLink]="['/config']">
+        <mat-icon>settings</mat-icon>&nbsp;
+        <span i18n="@@navigationSidebarRolemapping">Konfigurasjon</span>
+      </a>
+
+      <a mat-menu-item
+         *ngIf="canAdministrate"
+         [routerLink]="['/validator']">
+        <mat-icon>storage</mat-icon>&nbsp;
+        <span i18n="@@navigationSidebarRolemapping">WARC</span>
+      </a>
+
+      <a mat-menu-item
+         [routerLink]="['/config/logconfig']">
+        <mat-icon>notes</mat-icon>&nbsp;
+        <span i18n="@@navigationSidebarLogconfig">Loggnivå</span>
       </a>
     </mat-menu>
 
+    <a routerLink="/" class="title"><h1>Veidemann {{ version }}</h1></a>
+
+    <span fxFlex></span>
+
+    <app-time></app-time>
+
+    <span fxFlex></span>
+
+    <a mat-button
+       mat-icon-button
+       title="Hjelp"
+       target="_blank"
+       [routerLink]="['/docs']"
+       [routerLinkActiveOptions]="{exact: true}"
+       [routerLinkActive]="['is-active']">
+      <mat-icon>help</mat-icon>
+    </a>
+
+    <button color="primary"
+            mat-button
+            mat-flat-button
+            (click)="onLogin()"
+            *ngIf="!isLoggedIn">
+      <mat-icon>account_box</mat-icon>&nbsp;
+      <span i18n="@@toolbarLogon">LOGG PÅ</span>
+    </button>
+
+    <button color="primary"
+            mat-button
+            mat-flat-button
+            matTooltip="{{name}}"
+            (click)="onLogout()"
+            *ngIf="isLoggedIn">
+      <mat-icon>account_box</mat-icon>&nbsp;
+      <span i18n="@@toolbarLogon">LOGG AV</span>
+    </button>
   </mat-toolbar>
 
-  <mat-drawer-container fxFlex>
-    <!-- Sidenav -->
-    <mat-drawer mode="side" [opened]="showSidenav">
-      <!-- Navigation -->
-      <mat-nav-list>
-        <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/validator']"
-           [routerLinkActiveOptions]="{ exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">info_outline</mat-icon>
-          <ng-container i18n="@@navigationSidebarRolemapping">WARC status</ng-container>
-        </a>
-        <a *ngIf="canConfigure" mat-list-item [routerLink]="['/activity']" [routerLinkActiveOptions]="{exact: true }"
-           [routerLinkActive]="['is-active']">
-          <mat-icon class="sidenav--icon__margin">update</mat-icon>
-          <span matBadge="{{eventCount$ | async}}" matBadgeColor="accent" matBadgeOverlap="false"
-                matTooltip="{{eventSummary$ | async}}" matTooltipClass="tooltip">Hendelser</span>
-        </a>
+  <div *ngIf="isModuleLoading$ | async" class="module-loader">
+    <h2>Laster modul...</h2>
+    <mat-spinner [strokeWidth]="2"></mat-spinner>
+  </div>
 
-        <ng-container *ngIf="canConfigure">
-          <mat-divider></mat-divider>
-          <h3 mat-subheader i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
-
-          <a mat-list-item [routerLink]="['/config/search']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">search</mat-icon>
-            <span i18n="@@navigationSidebarSearch">Entiteter/Seeds</span>
-          </a>
-
-          <a mat-list-item [routerLink]="['/config/entity']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">business</mat-icon>
-            <span i18n="@@navigationSidebarCollection">Entity</span>
-          </a>
-
-          <a mat-list-item [routerLink]="['/config/seed']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">link</mat-icon>
-            <span i18n="@@navigationSidebarCollection">Seed</span>
-          </a>
-
-          <a mat-list-item [routerLink]="['/config/collection']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">collections_bookmark</mat-icon>
-            <span i18n="@@navigationSidebarCollection">Collection</span>
-          </a>
-
-          <ng-container *ngIf="canViewCrawljobs">
-            <a mat-list-item [routerLink]="['/config/crawljobs']" [routerLinkActive]="['is-active']">
-              <mat-icon class="sidenav--icon__margin">work</mat-icon>
-              <span i18n="@@navigationSidebarCrawljobs">Crawljobs</span>
-            </a>
-          </ng-container>
-          <a mat-list-item [routerLink]="['/config/schedule']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">schedule</mat-icon>
-            <span i18n="@@navigationSidebarSchedule">Schedule</span>
-          </a>
-          <a mat-list-item [routerLink]="['/config/crawlconfig']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">settings</mat-icon>
-            <span i18n="@@navigationSidebarCrawlconfig">CrawlConfig</span>
-          </a>
-          <a mat-list-item [routerLink]="['/config/crawlhostgroupconfig']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">group_work</mat-icon>
-            <span i18n="@@navigationSidebarCrawlhostgroupconfig">CrawlHostGroup</span>
-          </a>
-          <a mat-list-item [routerLink]="['/config/browserconfig']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">web</mat-icon>
-            <span i18n="@@navigationSidebarBrowserconfig">BrowserConfig</span>
-          </a>
-          <a mat-list-item [routerLink]="['/config/browserscript']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">web_asset</mat-icon>
-            <span i18n="@@navigationSidebarBrowserscript">BrowserScript</span>
-          </a>
-          <a mat-list-item [routerLink]="['/config/politenessconfig']" [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">sentiment_very_satisfied</mat-icon>
-            <span i18n="@@navigationSidebarPolitenessconfig">Politeness</span>
-          </a>
-          <mat-divider></mat-divider>
-          <a mat-list-item [routerLink]="['/config/logconfig']"
-             [routerLinkActiveOptions]="{ exact: true }"
-             [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">receipt</mat-icon>
-            <span i18n="@@navigationSidebarLogconfig">Logging</span>
-          </a>
-          <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/config/rolemapping']"
-             [routerLinkActive]="['is-active']">
-            <mat-icon class="sidenav--icon__margin">people</mat-icon>
-            <span i18n="@@navigationSidebarRolemapping">Brukere</span>
-          </a>
-        </ng-container>
-      </mat-nav-list>
-    </mat-drawer>
-    <!-- Content -->
-    <mat-drawer-content>
-
-      <app-dialog></app-dialog>
-      <main class="content-padding">
-        <router-outlet></router-outlet>
-      </main>
-      <div fxFlexFill fxLayout="column" fxLayoutAlign="center center" *ngIf="!initialized">
-        <h1>Initialisering feilet</h1>
-        <p>{{ error }}</p>
-      </div>
-    </mat-drawer-content>
-
-  </mat-drawer-container>
+  <app-dialog></app-dialog>
+  <main fxFlex>
+    <router-outlet></router-outlet>
+  </main>
 </div>
+
+<ng-template #initFailed>
+  <div class="mat-typography" fxFlexFill fxLayout="column" fxLayoutAlign="center center" *ngIf="error">
+    <h1>Initialisering feilet</h1>
+    <p>{{ error.message }}</p>
+  </div>
+</ng-template>

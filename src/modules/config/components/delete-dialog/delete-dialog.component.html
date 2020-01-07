@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Bekreft sletting</h1>
+<div mat-dialog-content [ngSwitch]="configObject.kind">
+  <p>
+    <span>Er du sikker på at du vil slette </span>
+    <strong *ngSwitchCase="Kind.ROLEMAPPING">{{roleMapping}}</strong>
+    <span *ngSwitchDefault>"{{configObject.meta.name}}"</span>
+    ?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button
+          [mat-dialog-close]="false">AVBRYT
+  </button>
+  <span fxFlex></span>
+  <button mat-raised-button
+          color="warn"
+          [mat-dialog-close]="true">SLETT
+  </button>
+</div>

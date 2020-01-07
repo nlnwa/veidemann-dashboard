@@ -4,7 +4,7 @@ const basePath = '/veidemann';
 export const environment = {
   production: true,
   version: '',
-  config: basePath + '/assets/config/environment.json',
+  configUrl: basePath + '/assets/config/environment.json',
   grpcWebUrl: '/grpc-web',
   authConfig: {
 

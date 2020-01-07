@@ -12,22 +12,16 @@ import {
   AppConfigService,
   ApplicationErrorHandler,
   AuthService,
-  BackendService,
+  ConfigService,
   ErrorService,
   GuardService,
   SnackBarService,
-  TokenInterceptor
+  TokenInterceptor,
+  AppInitializerService,
+  ControllerService,
 } from './services';
-import {AppInitializerService} from './services/app.initializer.service';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
-
-export function appInitializerFactory(appInitializerService: AppInitializerService,
-                                      appConfigService: AppConfigService,
-                                      oAuthService: OAuthService,
-                                      authService: AuthService) {
-  return () => appInitializerService.init(appConfigService, oAuthService, authService);
-}
 
 @NgModule({
   imports: [
@@ -36,18 +30,18 @@ export function appInitializerFactory(appInitializerService: AppInitializerServi
   ],
   providers: [
     AppInitializerService,
-    BackendService,
-    AppConfigService,
+    ControllerService,
     AuthService,
+    OAuthService,
     GuardService,
-    AuthService,
     ErrorService,
+    ConfigService,
     SnackBarService,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializerFactory,
-      deps: [AppInitializerService, AppConfigService, OAuthService, AuthService],
+      useFactory: (appInitializerService: AppInitializerService) => () => appInitializerService.init(),
+      deps: [AppInitializerService, AppConfigService, OAuthService, ControllerService, AuthService],
       multi: true
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
