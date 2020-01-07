@@ -148,7 +148,6 @@ export class ConfigurationsComponent implements OnDestroy {
       distinctUntilChanged(),
       shareReplay(1));
 
-
     const id$: Observable<string> = routeParam$.pipe(
       map(({id}) => id),
       distinctUntilChanged());
@@ -160,7 +159,7 @@ export class ConfigurationsComponent implements OnDestroy {
     const entityId$: Observable<string> = routeParam$.pipe(
       map(({entityId}) => entityId),
       distinctUntilChanged(),
-      shareReplay(1));
+      shareReplay(1)); // to get entity to show on first load
 
     const scheduleId$ = routeParam$.pipe(
       map(({scheduleId}) => scheduleId),
@@ -215,30 +214,32 @@ export class ConfigurationsComponent implements OnDestroy {
       shareReplay(1),
     );
 
-    this.sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : '') as SortDirection));
+    const query$: Observable<Query> = combineLatest([
+      kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
+      entityId$, scheduleId$, crawlConfigId$, collectionId$,
+      browserConfigId$, politenessId$, crawlJobIdList$, scriptIdList$,
+      q$, sort$, pageIndex$, pageSize$, reload$
+    ]).pipe(
+      debounceTime<any>(0), // synchronize observables
+      map(([kind, entityId, scheduleId, crawlConfigId, collectionId,
+             browserConfigId, politenessId, crawlJobIdList, scriptIdList,
+             term, sort, pageIndex, pageSize]) => ({
+        kind, entityId, scheduleId, crawlConfigId, collectionId,
+        browserConfigId, politenessId, crawlJobIdList, scriptIdList, term,
+        sort, pageIndex, pageSize
+      })),
+      shareReplay(1),
+    );
 
-    this.sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : ''));
+    this.query$ = query$;
 
-    this.query$ = combineLatest([kind$, entityId$, scheduleId$, crawlConfigId$, collectionId$, browserConfigId$, politenessId$,
-      crawlJobIdList$, scriptIdList$, q$, sort$, pageIndex$, pageSize$, reload$])
-      .pipe(
-        map(([kind, entityId, scheduleId, crawlConfigId, collectionId, browserConfigId, politenessId, crawlJobIdList, scriptIdList,
-               term, sort, pageIndex, pageSize, _]) => ({
-          kind, entityId, scheduleId, crawlConfigId, collectionId, browserConfigId, politenessId, crawlJobIdList, scriptIdList, term, sort,
-          pageIndex, pageSize
-        })),
-        shareReplay(1)
-      );
-
-    this.query$.pipe(
+    query$.pipe(
       tap(_ => this.dataSource.clear()),
       switchMap(query => this.dataService.search(query)),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(configObject => this.dataSource.add(configObject));
 
-    const countQuery$ = this.query$.pipe(
+    const countQuery$ = query$.pipe(
       distinctUntilChanged((a: Query, b: Query) =>
         // only count when these query parameters change
         (a.kind === b.kind
@@ -260,9 +261,15 @@ export class ConfigurationsComponent implements OnDestroy {
         )
       ));
 
+    this.sortDirection$ = sort$.pipe(
+      map(sort => (sort ? sort.direction : '') as SortDirection));
+
+    this.sortActive$ = sort$.pipe(
+      map(sort => sort ? sort.active : ''));
+
     this.pageLength$ = combineLatest([countQuery$, reload$]).pipe(
-      map(([query, _]) => query),
-      mergeMap(query => this.dataService.count(query)),
+      map(([countQuery, _]) => countQuery),
+      mergeMap(countQuery => this.dataService.count(countQuery)),
       shareReplay(1),
     );
 
@@ -272,6 +279,9 @@ export class ConfigurationsComponent implements OnDestroy {
 
     this.kind$ = kind$.pipe(
       tap(kind => {
+        // make sure we empty dataSource because it is shared between
+        // rolemapping list
+        this.dataSource.clear();
         this.kind = kind;
         this.labelService.kind = kind;
         this.reset();
@@ -300,15 +310,25 @@ export class ConfigurationsComponent implements OnDestroy {
     ).subscribe(configObject => this.configObject.next(configObject));
 
     this.entity$ = entityId$.pipe(
-      switchMap(id =>
-        id ? this.dataService.get(new ConfigRef({id, kind: Kind.CRAWLENTITY})).pipe(catchError(_ => of(null))) : of(null)),
+      switchMap(id => id
+        ? this.dataService.get(new ConfigRef({id, kind: Kind.CRAWLENTITY}))
+          .pipe(catchError(_ => of(null)))
+        : of(null)),
       shareReplay(1),
     );
 
     // do not allow to create seed without entity reference
     this.showCreateButton$ = combineLatest([kind$, this.entity$]).pipe(
-      map(([kind, entity]) => kind !== Kind.SEED ? true : entity !== null)
-    );
+      map(([kind, entity]) => {
+        switch (kind) {
+          case Kind.SEED:
+            return entity !== null;
+          case Kind.UNDEFINED:
+            return false;
+          default:
+            return true;
+        }
+      }));
   }
 
   get loading$(): Observable<boolean> {
