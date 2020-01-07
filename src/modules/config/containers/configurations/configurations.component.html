@@ -1,7 +1,7 @@
 <mat-drawer-container class="container">
   <mat-drawer mode="side" [opened]="true">
     <!-- Navigation -->
-    <mat-action-list *ngIf="kind">
+    <mat-action-list>
       <button mat-list-item
               *ngIf="showCreateButton$ | async"
               title="Opprett ny konfigurasjon"
@@ -80,8 +80,6 @@
                             (selectAll)="onSelectAll()"
                             [dataSource]="dataSource">
       </app-rolemapping-list>
-
-      <ng-container *ngSwitchCase="Kind.UNDEFINED"></ng-container>
 
       <app-config-list *ngSwitchDefault
                        #baseList

@@ -1,6 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {BehaviorSubject} from 'rxjs';
 
 import {Kind} from '../../../commons/models';
 import {ConfigOptions} from '../../containers';

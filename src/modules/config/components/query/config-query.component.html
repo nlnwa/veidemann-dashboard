@@ -1,4 +1,4 @@
-<mat-form-field class="search-form">
+<mat-form-field class="search-form" *ngIf="query?.kind">
   <input matInput
          #search
          placeholder="Søk"
@@ -82,6 +82,4 @@
       </mat-select>
     </mat-form-field>
   </ng-container>
-
-  <ng-container *ngSwitchDefault></ng-container>
 </form>
