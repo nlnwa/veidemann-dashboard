@@ -1,62 +1,37 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {AppConfig} from '../../commons/models/app-config.model';
-import {environment} from '../../../environments/environment';
+
 import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
+import {ControllerService} from './controller.service';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
-import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
-import {ControllerPromiseClient} from '../../../api';
 
 @Injectable()
 export class AppInitializerService {
 
-  initialized = false;
   error: Error;
 
-  constructor(private http: HttpClient) {
+  constructor(private appConfig: AppConfigService,
+              private oAuthService: OAuthService,
+              private authService: AuthService,
+              private controllerService: ControllerService) {
   }
 
-  /**
-   *
-   * @param appConfigService Configuration store
-   * @param oauthService OIDC library service
-   * @param authService Role store
-   */
-  async init(appConfigService: AppConfigService,
-             oauthService: OAuthService,
-             authService: AuthService): Promise<any> {
+  async init() {
     try {
-      const appConfig: AppConfig = await this.getAppConfig(environment.config);
-
-      appConfigService.grpcWebUrl = appConfig.grpcWebUrl || environment.grpcWebUrl;
-
-      const controllerPromiseClient = new ControllerPromiseClient(appConfigService.grpcWebUrl, null, null);
-
-      const issuer = await controllerPromiseClient.getOpenIdConnectIssuer(new Empty())
-        .then(response => response.getOpenIdConnectIssuer());
+      const issuer = await this.controllerService.getOpenIdConnectIssuer();
 
       if (issuer) {
-        const authConfig = new AuthConfig(Object.assign({}, environment.authConfig, appConfig.authConfig, {issuer}));
-        oauthService.configure(authConfig);
+        this.appConfig.authConfig = new AuthConfig(Object.assign(this.appConfig.authConfig, {issuer}));
 
-        await oauthService.loadDiscoveryDocumentAndTryLogin();
-
-        if (!oauthService.hasValidIdToken()) {
-          oauthService.logOut(true);
+        this.oAuthService.configure(this.appConfig.authConfig);
+        await this.oAuthService.loadDiscoveryDocumentAndTryLogin();
+        if (!this.oAuthService.hasValidIdToken()) {
+          this.oAuthService.logOut(true);
         }
       }
-
-      authService.roles = await controllerPromiseClient.getRolesForActiveUser(new Empty(), authService.metadata)
-        .then(roleList => roleList.getRoleList());
-
-      this.initialized = true;
+      this.authService.roles = await this.controllerService.getRolesForActiveUser().toPromise();
     } catch (error) {
       this.error = error;
     }
-  }
-
-  private getAppConfig(configUrl: string): Promise<AppConfig> {
-    return this.http.get<AppConfig>(configUrl).toPromise();
   }
 }

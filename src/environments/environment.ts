@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   version: '',
-  config: '/veidemann/assets/config/environment.json',
+  configUrl: '/veidemann/assets/config/environment.json',
   grpcWebUrl: '/grpc-web',
   authConfig: {
 
@@ -14,6 +14,7 @@ export const environment = {
     issuer: '',
 
     // URL of the SPA to redirect the user to after login
+//     redirectUri: window.location.origin + '/veidemann',
     redirectUri: window.location.origin + '/veidemann',
 
     // The SPA's id. The SPA is registered with this id at the auth-server

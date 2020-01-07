@@ -1,0 +1,161 @@
+<form [formGroup]="form" fxFlex>
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>sentiment_neutral</mat-icon>
+      <mat-card-title>
+        <span i18n="@@politenessconfigDetailsHeader">Politenessconfig</span>
+      </mat-card-title>
+      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column">
+        <div fxLayout="row" fxLayoutGap="16px">
+          <app-labels fxFlex [removable]="form.enabled"
+                      formControlName="labelList"></app-labels>
+          <div>
+            <mat-button-toggle-group
+              name="shouldAddLabel"
+              [value]="shouldAddLabel"
+              (valueChange)="onToggleShouldAddLabels($event)">
+              <mat-button-toggle [value]="true">
+                <mat-icon>add</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle [value]="false">
+                <mat-icon>remove</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex fxLayout="column">
+        <div (click)="onEnableRobotsPolicy()">
+          <mat-form-field>
+            <mat-select placeholder="Velg policy"
+                        formControlName="robotsPolicy"
+                        i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder"
+                        [matTooltip]="robotsPolicy.disabled ?
+                        'Instilling er ikke lik for alle markerte konfigurasjoner.'
+                        + 'Klikk her og sett ønsket verdi for å overstyre alle,'
+                        + 'eller la stå for å beholde konfigurasjonens opprinnelige verdi'
+                        : null">
+              <mat-option *ngFor="let policy of robotsPolicies" [value]="policy">{{RobotsPolicy[policy]}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div fxlayout="row" fxLayoutGap="16px">
+          <app-selector placeholder="CrawlHostGroup Selector" fxFlex formControlName="crawlHostGroupSelectorList"
+                      [removable]="canEdit"></app-selector>
+          <div>
+            <mat-button-toggle-group
+              [value]="shouldAddSelector"
+              (valueChange)="onToggleShouldAddSelector($event)"
+              name="shouldAddSelector">
+              <mat-button-toggle [value]="true">
+                <mat-icon>add</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle [value]="false">
+                <mat-icon>remove</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+
+        <div *ngIf="robotsPolicy.value === 'CUSTOM_ROBOTS'" class="customRobotTxtInput">
+          <mat-form-field>
+            <textarea matInput
+                      formControlName="customRobots"
+                      placeholder="robots.txt">
+            </textarea>
+            <mat-error *ngIf="!customRobots.valid"
+                       i18n="@@politenessconfigFormValidityDurationRequiredError">
+              Må være et tall.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="minimumRobotsValidityDurationS"
+                 placeholder="Minimum robots validity (seconds)"
+                 i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
+          <mat-error *ngIf="!minRobotsValidDurationSec.valid"
+                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
+            Må være et tall.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="minTimeBetweenPageLoadMs"
+                 placeholder="Minimum time between page load (ms)"
+                 i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
+          <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
+                     i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
+            Må være et tall.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="maxTimeBetweenPageLoadMs"
+                 placeholder="Maximum time between page load (ms)"
+                 i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
+          <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
+                     i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+            Må være et tall
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="delayFactor"
+                 placeholder="Delay factor"
+                 i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
+          <mat-error *ngIf="!delayFactor.valid"
+                     i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+            Må være et tall
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="maxRetries"
+                 placeholder="Maximum retries"
+                 i18n-placeholder="@@mustBeNumberError">
+          <mat-error *ngIf="!maxRetries.valid"
+                     i18n="@@mustBeNumberError">
+            Må være et tall
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="retryDelaySeconds"
+                 placeholder="Retry delay (s)"
+                 i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
+          <mat-error *ngIf="!retryDelaySeconds.valid"
+                     i18n="@@mustBeNumberError">
+            Må være et tall
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="accent"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        OPPDATER
+      </button>
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!canRevert"
+              i18n="@@commonButtonRevert">
+        TILBAKESTILL
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

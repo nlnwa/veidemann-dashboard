@@ -1,0 +1,121 @@
+<div [formGroup]="form" fxLayout="column">
+
+  <mat-form-field>
+    <textarea matInput
+              formControlName="name"
+              placeholder="URL"
+              i18n="@@metaUrlInputPlaceholder"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="10"
+              #autosize="cdkTextareaAutosize">
+    </textarea>
+    <mat-error
+      *ngIf="name.hasError('required')"
+      i18n="@@metaUrlRequiredError">
+      Feltet må fylles ut
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('pattern')">
+      Inneholder en ugyldig formatert url
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('seedExistsOnEntity')">
+      URL med samme domene eksisterer allerede på samme entitet
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('seedExists')">
+      URL med samme domene eksisterer på annen entitet som en av url'ene i listen
+    </mat-error>
+
+   <mat-progress-bar matHint mode="indeterminate" *ngIf="this.name.pending"></mat-progress-bar>
+  </mat-form-field>
+
+  <mat-action-list *ngIf="name.hasError('seedExistsOnEntity')" dense>
+    <button mat-list-item
+            *ngIf="name.errors.seedExistsOnEntity?.length > 1"
+            (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
+      <mat-icon mat-list-icon>remove_circle</mat-icon>
+      <span>Fjern alle fra listen</span>
+    </button>
+
+    <button mat-list-item
+            *ngFor="let seed of name.errors.seedExistsOnEntity"
+            (click)="onRemoveExistingUrl(seed)"
+            matTooltip="Fjern url fra listen">
+      <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+      {{seed.meta.name}}
+    </button>
+
+
+  </mat-action-list>
+
+  <mat-list *ngIf="name.hasError('seedExists') && entityRef.id">
+    <mat-list-item *ngIf="name.errors.seedExists.length">
+      <button mat-stroked-button
+              (click)="onMoveSeedsToCurrentEntity(name.errors.seedExists)">
+        <mat-icon mat-list-icon>swap_vert</mat-icon>
+        <span>Flytt alle til denne entiteten</span>
+      </button>
+    </mat-list-item>
+    <mat-list-item *ngFor="let seed of name.errors.seedExists">
+      <button mat-icon-button
+              (click)="onMoveSeedToCurrentEntity(seed)"
+              matTooltip="Flytt seed til entitet med valgt referanse">
+        <mat-icon mat-list-icon>swap_horiz</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
+              matTooltip="Fjern url fra listen">
+        <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+      </button>
+
+      <a target="_blank"
+         matTooltip="Gå til entitet som url refererer til i et nytt vindu"
+         [routerLink]="['../search']"
+         [queryParams]="{id: seed.seed.entityRef.id}">
+        {{seed.meta.name}}
+      </a>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Beskrivelse"
+              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
+    </textarea>
+  </mat-form-field>
+
+  <app-labels [removable]="editable" formControlName="labelList"></app-labels>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="created.value">
+      <input matInput
+             formControlName="created"
+             placeholder="Opprettet"
+             i18n-placeholder="@@metaCreatedInputPlaceholder">
+    </mat-form-field>
+
+    <mat-form-field fxFlex *ngIf="createdBy.value">
+      <input matInput
+             formControlName="createdBy"
+             placeholder="Opprettet av"
+             i18n-placeholder="@@metaCreatedByInputPlaceholder">
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+    <mat-form-field fxFlex *ngIf="lastModified.value">
+      <input matInput
+             formControlName=lastModified
+             placeholder="Sist endret"
+             i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+    </mat-form-field>
+
+    <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
+      <input matInput
+             formControlName="lastModifiedBy"
+             placeholder="Sist endret av"
+             i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+    </mat-form-field>
+  </div>
+</div>

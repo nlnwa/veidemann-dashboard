@@ -1,0 +1,33 @@
+@import "src/styles/theme";
+
+.container {
+  height: 100%;
+}
+
+.empty {
+  height: 100%;
+  justify-content: space-around;
+}
+
+.empty-image {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -khtml-border-radius: 2px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 256px;
+}
+
+
+.sidenav--icon__margin {
+  margin-right: 0.2em;
+}
+
+.mat-tooltip.tooltip {
+  white-space: pre-line;
+}
+
+.is-active {
+  background-color: $highlight;
+}

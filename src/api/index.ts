@@ -1,8 +1,8 @@
 import {Activity} from './gen/eventhandler/v1/resources_pb';
 
 export {
-  CrawlHostGroupConfig as CrawlHostGroupConfigProto,
-  Collection as CollectionProto,
+  CrawlHostGroupConfig,
+  Collection,
   ConfigObject as ConfigObjectProto,
   BrowserConfig as BrowserConfigProto,
   BrowserScript as BrowserScriptProto,
@@ -13,16 +13,15 @@ export {
   CrawlLimitsConfig as CrawlLimitsConfigProto,
   CrawlScheduleConfig as CrawlScheduleConfigProto,
   CrawlScope as CrawlScopeProto,
-  ExtraConfig as ExtraConfigProto,
+  ExtraConfig,
   Kind as KindProto,
-  Label as LabelProto,
+  Label,
+  ApiKey as ApiKeyProto,
   Meta as MetaProto,
   PolitenessConfig as PolitenessConfigProto,
   Role as RoleProto,
   RoleMapping as RoleMappingProto,
   Seed as SeedProto,
-  RoleMapping as LegacyRoleMappingProto,
-  Role as LegacyRoleProto,
   LogLevels as LogLevelsProto,
 } from './gen/config/v1/resources_pb';
 
@@ -68,3 +67,13 @@ export {
 export {
   ControllerPromiseClient,
 } from './gen/controller/v1/controller_grpc_web_pb';
+
+
+export {
+  OpenIdConnectIssuerReply,
+  RoleList,
+  RunCrawlReply,
+  RunStatus,
+  CrawlerStatus,
+  RunCrawlRequest,
+} from './gen/controller/v1/controller_pb';

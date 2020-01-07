@@ -7,6 +7,7 @@ import {AppRoutingModule} from './routing/app-routing.module';
 import {CommonsModule} from '../commons/commons.module';
 import {CoreModule} from '../core/core.module';
 import {AppComponent, DialogComponent, ErrorDialogComponent, TimeComponent} from './components';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -14,17 +15,18 @@ import {AppComponent, DialogComponent, ErrorDialogComponent, TimeComponent} from
     AppComponent,
     ErrorDialogComponent,
     DialogComponent,
-    TimeComponent
+    TimeComponent,
   ],
   entryComponents: [ErrorDialogComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    CommonsModule,
-    CoreModule,
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        CommonsModule,
+        CoreModule,
+        MatProgressSpinnerModule,
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

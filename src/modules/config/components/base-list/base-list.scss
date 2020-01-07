@@ -1,0 +1,50 @@
+@import "src/styles/theme";
+
+table {
+  width: 100%;
+}
+
+.row-checked {
+  background-color: lighten($dark-focused, 50%);
+}
+
+.row-selected {
+  background-color: $dark-focused;
+}
+
+.mat-row.row-selected:hover {
+  background-color: $dark-focused;
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: lighten($dark-focused, 50%);
+  cursor: pointer;
+}
+
+.mat-row.no-interaction {
+  cursor: default;
+  background-color: inherit;
+}
+
+.checkbox-padding {
+  padding-right: 16px;
+}
+
+.action-cell {
+  text-align: right;
+}
+
+.actions {
+  display: inline-block;
+  opacity: 0;
+}
+
+.mat-row:hover .actions {
+  opacity: 100;
+}
+
+.mat-column-action {
+  white-space: nowrap;
+  width: 1%;
+}

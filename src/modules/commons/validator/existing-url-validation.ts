@@ -1,12 +1,12 @@
 import {AbstractControl, ValidationErrors} from '@angular/forms';
 import {from, Observable, of} from 'rxjs';
 import {catchError, filter, map, mergeMap, toArray} from 'rxjs/operators';
-import {ConfigObject, Kind} from '../models';
-import {BackendService} from '../../core/services';
+import {ConfigObject, ConfigRef, Kind} from '../models';
+import {ConfigService} from '../../core/services';
 import {ListRequest} from '../../../api';
-import {createListRequest} from '../../configurations/services/data/data.service';
-import {createSimilarDomainRegExpString, VALID_URL} from './patterns';
-import {SeedDataService} from '../../configurations/services/data';
+import {createSimilarDomainRegExpString} from './patterns';
+import {createListRequest} from '../../config/func/query';
+
 
 function seedWithMatchingUrl(url: string): ListRequest | null {
   const request = createListRequest(Kind.SEED);
@@ -24,52 +24,34 @@ export class SeedUrlValidator {
    * @returns An async validator that checks with a backend service if any of
    * the url's from the control already exists
    */
-  static createBackendValidator(backendService: BackendService) {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+  static createBackendValidator(configService: ConfigService) {
+    return (entityRef: ConfigRef) => (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!entityRef) {
+        return of({missingEntityRef: true});
+      }
+      // split input urls by whitespace
       const urls: string = control.value.split(/\s+/).filter(url => !!url);
       return from(urls).pipe(
         map(url => seedWithMatchingUrl(url)),
         filter(_ => !!_),
-        mergeMap(request => backendService.list(request)),
-        map(configObject => ConfigObject.fromProto(configObject)),
+        mergeMap(request => configService.list(request)),
         toArray(),
-        map((seeds: ConfigObject[]) => seeds.length > 0 ? {seedExists: seeds} : null),
+        map((seeds: ConfigObject[]) => {
+          if (seeds.length === 0) {
+            return null;
+          }
+          const seedsOnSameDomain = seeds.filter(seed => seed.seed.entityRef.id === entityRef.id);
+          const seedsOnOtherDomain = seeds.filter(seed => seed.seed.entityRef.id !== entityRef.id);
+          const validationErrors = Object.assign({},
+            seedsOnOtherDomain.length ? {seedExists: seedsOnOtherDomain} : {},
+            seedsOnSameDomain.length ? {seedExistsOnEntity: seedsOnSameDomain} : {});
+          return validationErrors;
+        }),
         catchError((error) => {
           console.error(error);
           return of(null);
         })
       );
-    };
-  }
-
-  /**
-   * @returns A validator that checks with the seedDataService (local) exists on same entity
-   */
-  static createValidator(seedDataService: SeedDataService) {
-    if (!seedDataService) {
-      return () => null;
-    }
-    return (control: AbstractControl): ValidationErrors | null => {
-      const urlsWithinSameEntity = seedDataService.data.map(configObject => configObject.meta.name);
-      const urls: string[] = control.value.split(/\s+/).filter(_ => !!_);
-
-      for (const url of urls) {
-        const match = url.match(VALID_URL);
-        if (!match) {
-          return {pattern: url};
-        }
-      }
-      const intersection = urls.filter(url => {
-        const similarUrlRegexpStr = createSimilarDomainRegExpString(url);
-        if (similarUrlRegexpStr === null) {
-          return false;
-        }
-        const similarUrlRegexp = new RegExp(similarUrlRegexpStr);
-        const similarUrlPredicate = (u) => (similarUrlRegexp.test(u));
-        return urlsWithinSameEntity.find(similarUrlPredicate);
-      });
-
-      return intersection.length ? {seedExistsOnEntity: intersection} : null;
     };
   }
 }

@@ -1,0 +1,211 @@
+<mat-drawer-container class="container">
+  <mat-drawer mode="side" [opened]="true">
+    <!-- Navigation -->
+    <mat-action-list *ngIf="kind">
+      <button mat-list-item
+              *ngIf="showCreateButton$ | async"
+              title="Opprett ny konfigurasjon"
+              (click)="onCreateConfig()">
+        <mat-icon mat-list-icon>add_circle</mat-icon>
+        Opprett ny
+      </button>
+    </mat-action-list>
+    <mat-nav-list>
+      <h3 mat-subheader i18n="@@navigationSidebarConfigHeader">Konfigurasjon</h3>
+
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLENTITY]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>business</mat-icon>
+        <span i18n="@@navigationSidebarCollection">Entity</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.SEED]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>link</mat-icon>
+        <span i18n="@@navigationSidebarCollection">Seed</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.COLLECTION]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+        <span i18n="@@navigationSidebarCollection">Collection</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLJOB]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>work</mat-icon>
+        <span i18n="@@navigationSidebarCrawljobs">Crawljobs</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLSCHEDULECONFIG]]"
+         [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>schedule</mat-icon>
+        <span i18n="@@navigationSidebarSchedule">Schedule</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLCONFIG]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+        <span i18n="@@navigationSidebarCrawlconfig">CrawlConfig</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLHOSTGROUPCONFIG]]"
+         [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>group_work</mat-icon>
+        <span i18n="@@navigationSidebarCrawlhostgroupconfig">CrawlHostGroup</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.BROWSERCONFIG]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>web</mat-icon>
+        <span i18n="@@navigationSidebarBrowserconfig">BrowserConfig</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.BROWSERSCRIPT]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>web_asset</mat-icon>
+        <span i18n="@@navigationSidebarBrowserscript">BrowserScript</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.POLITENESSCONFIG]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>sentiment_very_satisfied</mat-icon>
+        <span i18n="@@navigationSidebarPolitenessconfig">Politeness</span>
+      </a>
+      <a *ngIf="canAdministrate" mat-list-item [routerLink]="['/config', ConfigPath[Kind.ROLEMAPPING]]"
+         [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>people</mat-icon>
+        <span i18n="@@navigationSidebarRolemapping">Brukere</span>
+      </a>
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content class="content-padding" fxLayoutGap="16px" *ngIf="kind$ | async as kind">
+    <app-config-query [options]="options$ | async" [query]="query$ | async"
+                      (queryChange)="onQueryChange($event)"></app-config-query>
+
+    <app-entity-view *ngIf="entity$ | async as entity" [configObject]="entity"></app-entity-view>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+
+    <ng-container [ngSwitch]="kind">
+      <app-rolemapping-list *ngSwitchCase="Kind.ROLEMAPPING"
+                            #baseList
+                            [pageLength]="pageLength$ | async"
+                            [pageIndex]="pageIndex$ | async"
+                            [pageSize]="pageSize$ | async"
+                            (selectedChange)="onSelectedChange($event)"
+                            (selectAll)="onSelectAll()"
+                            [dataSource]="dataSource">
+      </app-rolemapping-list>
+
+      <ng-container *ngSwitchCase="Kind.UNDEFINED"></ng-container>
+
+      <app-config-list *ngSwitchDefault
+                       #baseList
+                       [pageLength]="pageLength$ | async"
+                       [pageIndex]="pageIndex$ | async"
+                       [pageSize]="pageSize$ | async"
+                       [sortDirection]="sortDirection$ | async"
+                       [sortActive]="sortActive$ | async"
+                       [multiSelect]="kind !== Kind.COLLECTION"
+                       (selectedChange)="onSelectedChange($event)"
+                       (selectAll)="onSelectAll()"
+                       (sort)="onSort($event)"
+                       (page)="onPage($event)"
+                       [dataSource]="dataSource">
+
+        <button mat-icon-button
+                *ngIf="!isAllSelected"
+                title="Slett valgte konfigurasjoner"
+                (click)="onDeleteSelectedConfigs()">
+          <mat-icon>delete</mat-icon>
+        </button>
+
+        <ng-container *ngIf="kind === Kind.COLLECTION">
+          <button *appAction="let row" mat-icon-button
+                  title="Høstekonfigurasjoner med referanse til samling"
+                  (click)="onFilterByCollectionRef(row)">
+            <mat-icon>settings_system_daydream</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.CRAWLENTITY">
+          <button *appAction="let row" mat-icon-button
+                  title="Gå til seedliste"
+                  (click)="onListSeed(row)">
+            <mat-icon>link</mat-icon>
+          </button>
+          <button *appAction="let row" mat-icon-button
+                  title="Opprett seed med referanse til entitet"
+                  (click)="onCreateSeedFromEntity(row)">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.SEED">
+          <button *appAction="let row" mat-icon-button
+                  title="Filtrer på seeds med samme entitet"
+                  (click)="onFilterByEntityRef(row)">
+            <mat-icon>business</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
+          <button *appAction="let row" mat-icon-button
+                  title="Høstejobber med referanse til schedule"
+                  (click)="onFilterByScheduleRef(row)">
+            <mat-icon>work</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.CRAWLCONFIG">
+          <button *appAction="let row" mat-icon-button
+                  title="Høstejobber med referanse til høstekonfigurasjon"
+                  (click)="onFilterByCrawlConfigRef(row)">
+            <mat-icon>work</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.BROWSERCONFIG">
+          <button *appAction="let row" mat-icon-button
+                  title="Høstekonfigurasjoner med referanse til nettleserkonfigurasjon"
+                  (click)="onFilterByBrowserConfigRef(row)">
+            <mat-icon>settings_system_daydream</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.POLITENESSCONFIG">
+          <button *appAction="let row" mat-icon-button
+                  title="Høstekonfigurasjoner med referanse til nettleserkonfigurasjon"
+                  (click)="onFilterByPolitenessConfigRef(row)">
+            <mat-icon>settings_system_daydream</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.BROWSERSCRIPT">
+          <button *appAction="let row" mat-icon-button
+                  title="Nettleserkonfigurasjoner med referanse til skript"
+                  (click)="onFilterByBrowserScriptRef(row)">
+            <mat-icon>web</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="kind === Kind.CRAWLJOB">
+          <button *appAction="let row" mat-icon-button
+                  title="Seeds med referanse til høstejobb"
+                  (click)="onFilterByCrawlJobRef(row)">
+            <mat-icon>link</mat-icon>
+          </button>
+        </ng-container>
+
+        <button *appAction="let row" mat-icon-button
+                title="Klon"
+                (click)="onClone(row)">
+          <mat-icon>file_copy</mat-icon>
+        </button>
+      </app-config-list>
+    </ng-container>
+
+    <ng-container *ngIf="configObject$ | async as configObject">
+      <app-detail *ngIf="isSingleMode"
+                  [configObject]="configObject"
+                  [options]="options$ | async"
+                  (save)="onSaveConfig($event)"
+                  (update)="onUpdateConfig($event)"
+                  (delete)="onDeleteConfig($event)"
+                  (move)="onMoveSeed($event)"
+                  (saveMultipleSeeds)="onSaveMultipleSeeds($event)">
+      </app-detail>
+
+      <app-detail-multi *ngIf="!isSingleMode"
+                        (update)="onUpdateMulti($event)"
+                        [configObject]="configObject"
+                        [options]="options$ | async">
+      </app-detail-multi>
+    </ng-container>
+
+  </mat-drawer-content>
+</mat-drawer-container>

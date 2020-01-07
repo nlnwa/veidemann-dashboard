@@ -43,6 +43,8 @@ export const NO_COLON = /^[^:]*$/;
 
 export const VALID_URL = /^https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$/;
 
+export const MULTI_VALID_URL = /\S*(https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$)+\S*/;
+
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
 // see https://stackoverflow.com/a/6969486 for explanation

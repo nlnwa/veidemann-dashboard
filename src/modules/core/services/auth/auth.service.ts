@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
+import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {Role} from '../../../commons/models/configs/rolemapping.model';
+import {Role} from '../../../commons/models';
 
 
 @Injectable()
 export class AuthService {
 
-  roles: Role[] = [Role.ANY];
+  roles: Role[];
 
   constructor(private oauthService: OAuthService) {
+    this.roles = [Role.ANY];
   }
 
   get groups(): string {
@@ -20,7 +22,7 @@ export class AuthService {
   get name(): string {
     const claims = this.oauthService.getIdentityClaims();
     // @ts-ignore
-    return claims ? claims.name : this.isAdmin() ? 'No authorization' : '';
+    return claims ? claims.name : '';
   }
 
   get email(): string {
@@ -29,19 +31,33 @@ export class AuthService {
     return claims ? claims.email : '';
   }
 
-  get idToken(): string {
-    return this.oauthService.getIdToken();
+  get isLoggedIn(): boolean {
+    return this.roles.some(role => role !== Role.ANY);
+  }
+
+  get requestPath(): string {
+    return this.oauthService.state;
   }
 
   /**
    * @returns authorization header for API calls
    */
-  get metadata(): { authorization: string } {
-    return {authorization: 'Bearer ' + this.idToken};
+  get metadata(): Metadata {
+    const idToken = this.oauthService.getIdToken();
+    if (idToken) {
+      return {authorization: 'Bearer ' + idToken};
+    } else {
+      return null;
+    }
   }
 
-  get requestedPath(): string {
-    return this.oauthService.state;
+  isAuthorized(roles: Role[]): boolean {
+    for (const role of this.roles) {
+      if (roles.includes(role)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   isAdmin(): boolean {
