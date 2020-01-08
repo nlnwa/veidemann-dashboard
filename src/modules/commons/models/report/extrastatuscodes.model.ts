@@ -8,7 +8,7 @@ export enum ExtraStatusCodes {
    * SUCCESSFUL_DNS (1)
    * Successful DNS lookup
    */
-  SUCCESSFUL_DNS1 = 1,
+  SUCCESSFUL_DNS = 1,
   /**
    * NEVER_TRIED (0)
    * Fetch never tried (perhaps protocol unsupported or illegal URI)

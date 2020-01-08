@@ -1,8 +1,10 @@
-import {CrawlExecutionStatusProto, ErrorProto} from '../../../../api';
+import {CrawlExecutionStatusProto} from '../../../../api';
 import {fromTimestampProto, toTimestampProto} from '../../func';
-import {ExtraStatusCodes} from '../extrastatuscodes.model';
+import {ExtraStatusCodes} from './extrastatuscodes.model';
+import {ApiError} from './api-error.model';
+import {CrawlScope} from '../config/crawlscope.model';
 
-export enum State {
+export enum CrawlExecutionState {
   UNDEFINED = 0,
   CREATED = 1,
   FETCHING = 2,
@@ -15,47 +17,9 @@ export enum State {
   DIED = 9,
 }
 
-export class CrawlScope {
-  surtPrefix: string;
-
-  constructor({
-                surtPrefix = ''
-              }: Partial<CrawlScope> = {}) {
-    this.surtPrefix = surtPrefix;
-  }
-}
-
-export class Error {
-  code: string;
-  msg: string;
-  detail: string;
-
-  constructor({
-                code = '',
-                msg = '',
-                detail = ''
-              }: Partial<Error> = {}) {
-    this.code = code;
-    this.msg = msg;
-    this.detail = detail;
-  }
-
-  static fromProto(proto: ErrorProto): Error {
-    if (proto) {
-      return new Error({
-        code: ExtraStatusCodes[proto.getCode()],
-        msg: proto.getMsg(),
-        detail: proto.getDetail()
-      });
-    } else {
-      return null;
-    }
-  }
-}
-
 export class CrawlExecutionStatus {
   id: string;
-  state: string;
+  state: CrawlExecutionState;
   jobId: string;
   seedId: string;
   scope: CrawlScope;
@@ -72,11 +36,11 @@ export class CrawlExecutionStatus {
   createdTime: string;
   currentUriIdList: Array<string>;
   jobExecutionId: string;
-  error: Error;
+  error: ApiError;
 
   constructor({
                 id = '',
-                state = '',
+                state = CrawlExecutionState.UNDEFINED,
                 jobId = '',
                 seedId = '',
                 scope = new CrawlScope(),
@@ -93,7 +57,7 @@ export class CrawlExecutionStatus {
                 createdTime = '',
                 currentUriIdList = [],
                 jobExecutionId = '',
-                error = new Error()
+                error = new ApiError()
               }: Partial<CrawlExecutionStatus> = {}) {
     this.id = id;
     this.jobId = jobId;
@@ -118,13 +82,13 @@ export class CrawlExecutionStatus {
 
   static fromProto(proto: CrawlExecutionStatusProto): CrawlExecutionStatus {
     const extraStatusCodes = ExtraStatusCodes;
-    const state = State;
+    const state = CrawlExecutionState;
 
     return new CrawlExecutionStatus({
       id: proto.getId(),
       jobId: proto.getJobId(),
       seedId: proto.getSeedId(),
-      state: State[proto.getState()],
+      state: CrawlExecutionState[CrawlExecutionState[proto.getState()]],
       startTime: fromTimestampProto(proto.getStartTime()),
       endTime: fromTimestampProto(proto.getEndTime()),
       documentsCrawled: proto.getDocumentsCrawled(),
@@ -138,7 +102,7 @@ export class CrawlExecutionStatus {
       createdTime: fromTimestampProto(proto.getCreatedTime()),
       currentUriIdList: proto.getCurrentUriIdList(),
       jobExecutionId: proto.getJobExecutionId(),
-      error: Error.fromProto(proto.getError())
+      error: ApiError.fromProto(proto.getError())
     });
   }
 
@@ -147,7 +111,7 @@ export class CrawlExecutionStatus {
     proto.setId(crawlExecutionStatus.id);
     proto.setJobId(crawlExecutionStatus.jobId);
     proto.setSeedId(crawlExecutionStatus.seedId);
-    proto.setState(State[crawlExecutionStatus.state]);
+    proto.setState(crawlExecutionStatus.state.valueOf());
     proto.setStartTime(toTimestampProto(crawlExecutionStatus.startTime));
     proto.setEndTime(toTimestampProto(crawlExecutionStatus.endTime));
     proto.setDocumentsCrawled(crawlExecutionStatus.documentsCrawled);

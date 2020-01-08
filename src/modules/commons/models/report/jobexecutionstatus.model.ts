@@ -1,8 +1,9 @@
-import {ErrorProto, JobExecutionStatusProto} from '../../../../api';
+import {JobExecutionStatusProto} from '../../../../api';
 import {fromTimestampProto} from '../../func';
-import {ExtraStatusCodes} from '../extrastatuscodes.model';
+import {ExtraStatusCodes} from './extrastatuscodes.model';
+import {ApiError} from './api-error.model';
 
-export enum State {
+export enum JobExecutionState {
   UNDEFINED = 0,
   CREATED = 1,
   RUNNING = 2,
@@ -12,37 +13,10 @@ export enum State {
   DIED = 6,
 }
 
-export class Error {
-  code: string;
-  msg: string;
-  detail: string;
-
-  constructor({
-                code = '',
-                msg = '',
-                detail = ''
-              }: Partial<Error> = {}) {
-    this.code = code;
-    this.msg = msg;
-    this.detail = detail;
-  }
-
-  static fromProto(proto: ErrorProto): Error {
-    if (!proto) {
-      return null;
-    }
-    return new Error({
-      code: ExtraStatusCodes[proto.getCode()],
-      msg: proto.getMsg(),
-      detail: proto.getDetail()
-    });
-  }
-}
-
 export class JobExecutionStatus {
   id: string;
   jobId: string;
-  state: State;
+  state: JobExecutionState;
   executionsStateMap: Map<string, number>;
   startTime: string;
   endTime: string;
@@ -53,12 +27,12 @@ export class JobExecutionStatus {
   documentsOutOfScope: number;
   documentsRetried: number;
   documentsDenied: number;
-  error: Error;
+  error: ApiError;
 
   constructor({
                 id = '',
                 jobId = '',
-                state = State.UNDEFINED,
+                state = JobExecutionState.UNDEFINED,
                 executionsStateMap = new Map(),
                 startTime = '',
                 endTime = '',
@@ -69,7 +43,7 @@ export class JobExecutionStatus {
                 documentsOutOfScope = 0,
                 documentsRetried = 0,
                 documentsDenied = 0,
-                error = new Error()
+                error = new ApiError()
               }: Partial<JobExecutionStatus> = {}) {
     this.id = id;
     this.jobId = jobId;
@@ -92,7 +66,7 @@ export class JobExecutionStatus {
     return new JobExecutionStatus({
       id: proto.getId(),
       jobId: proto.getJobId(),
-      state: proto.getState(),
+      state: JobExecutionState[JobExecutionState[proto.getState()]],
       executionsStateMap: new Map(proto.getExecutionsStateMap().toArray()),
       startTime: fromTimestampProto(proto.getStartTime()),
       endTime: fromTimestampProto(proto.getEndTime()),
@@ -103,7 +77,7 @@ export class JobExecutionStatus {
       documentsOutOfScope: proto.getDocumentsOutOfScope(),
       documentsRetried: proto.getDocumentsRetried(),
       documentsDenied: proto.getDocumentsDenied(),
-      error: Error.fromProto(proto.getError())
+      error: ApiError.fromProto(proto.getError())
     });
   }
 
@@ -111,7 +85,7 @@ export class JobExecutionStatus {
     const proto = new JobExecutionStatusProto();
     proto.setId(jobExecutionStatus.id);
     proto.setJobId(jobExecutionStatus.jobId);
-    proto.setState(jobExecutionStatus.state);
+    proto.setState(jobExecutionStatus.state.valueOf());
     proto.setDocumentsCrawled(jobExecutionStatus.documentsCrawled);
     proto.setBytesCrawled(jobExecutionStatus.bytesCrawled);
     proto.setUrisCrawled(jobExecutionStatus.urisCrawled);
