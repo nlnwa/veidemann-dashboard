@@ -23,6 +23,9 @@ export class ConfigObjectDataSource implements DataSource<ConfigObject> {
    * If configObject with same id already exists it gets replaced.
    */
   add(configObject: ConfigObject) {
+    if (!configObject) {
+      return;
+    }
     const found = this.data.value.find(c => c.id === configObject.id);
     if (found) {
       this.replace(configObject);
@@ -34,7 +37,7 @@ export class ConfigObjectDataSource implements DataSource<ConfigObject> {
   /**
    * Replace a configObject in the internal store
    */
-  replace(configObject: ConfigObject) {
+  private replace(configObject: ConfigObject) {
     const index = this.data.value.findIndex(c => c.id === configObject.id);
     if (index !== -1) {
       this.data.value[index] = configObject;

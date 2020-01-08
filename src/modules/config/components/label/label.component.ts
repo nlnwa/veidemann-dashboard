@@ -4,7 +4,7 @@ import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../../../commons/validator/patterns';
 import {Label} from '../../../commons/models';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material';
 import {LabelService} from '../../services/label.service';
 
@@ -23,8 +23,7 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
   @Input()
   placeholder = 'Label';
 
-  protected keys: Subject<string[]>;
-  key$: Observable<string[]>;
+  private fetchLabelKeys: Subject<void>;
 
   control = new FormControl();
 
@@ -57,10 +56,7 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
               protected cdr: ChangeDetectorRef,
               protected labelService: LabelService) {
     this.createForm();
-    this.keys = new Subject();
-
-
-    this.key$ = this.keys.asObservable();
+    this.fetchLabelKeys = new Subject();
   }
 
   get showUpdate(): boolean {
@@ -80,25 +76,21 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
   }
 
   ngOnInit(): void {
-    // this.fetchLabelKeys();
-    this.filteredKey$ = combineLatest([
-      this.control.valueChanges.pipe(
-        startWith(''),
-        map(value => value || '')
-      ),
-      this.labelService.getLabelKeys()
-    ])
+    const value$ = this.control.valueChanges.pipe(
+      startWith(''),
+      map(value => value || '')
+    );
+    const key$ = this.fetchLabelKeys.pipe(
+      startWith(''),
+      switchMap(() => this.labelService.getLabelKeys())
+    );
+    this.filteredKey$ = combineLatest([value$, key$])
       .pipe(
         map(([value, keys]) => {
           const filterValue = value.toLowerCase();
           return keys.filter(key => key.toLowerCase().startsWith(filterValue));
         })
       );
-  }
-
-  fetchLabelKeys() {
-    this.labelService.getLabelKeys()
-      .subscribe(keys => this.keys.next(keys));
   }
 
   onAutocompleteOptionSelected(event) {
@@ -108,10 +100,10 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
 
   // implement ControlValueAccessor
   writeValue(labels: Label[]): void {
+    this.fetchLabelKeys.next();
     if (labels === null) {
       this.labels = [];
     } else {
-      // this.fetchLabelKeys();
       this.labels = labels.map(label => new Label({key: label.key, value: label.value}));
     }
     this.reset();
@@ -157,6 +149,9 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
 
     this.save(event.value);
 
+    this.onChange(this.labels);
+    this.reset();
+
     this.chipInputControl.nativeElement.value = '';
   }
 
@@ -184,9 +179,6 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
     }
 
     this.labels.push(new Label({key, value}));
-
-    this.onChange(this.labels);
-    this.reset();
   }
 
   onUpdateLabel(key: string, value: string): void {

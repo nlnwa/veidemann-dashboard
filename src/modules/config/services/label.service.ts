@@ -13,7 +13,7 @@ export class LabelService {
   // tslint:disable-next-line:variable-name
   private _kind: Kind;
 
-  constructor(private backendService: ConfigService) {
+  constructor(private configService: ConfigService) {
   }
 
   get kind(): Kind {
@@ -30,7 +30,6 @@ export class LabelService {
     }
     const request = new GetLabelKeysRequest();
     request.setKind(this._kind.valueOf());
-    return this.backendService.getLabelKeys(request)
-      .pipe(map((response: LabelKeysResponse) => response.getKeyList()));
+    return this.configService.getLabelKeys(request);
   }
 }

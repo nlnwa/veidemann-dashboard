@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, Subject} from 'rxjs';
-import {count, finalize, mergeMap} from 'rxjs/operators';
+import {from, Observable, of, Subject} from 'rxjs';
+import {catchError, count, finalize, mergeMap} from 'rxjs/operators';
 
 import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
 import {BrowserConfig, ConfigObject, ConfigRef, CrawlConfig, CrawlJob, Kind, Label, RoleMapping, Seed} from '../../commons/models';
 import {createListRequest, labelQuery, nameQuery, pageListRequest, Query, withQueryTemplate, withSort} from '../func/query';
-import {ConfigService} from '../../core/services';
+import {ConfigService, ErrorService} from '../../core/services';
 
 
 @Injectable()
@@ -17,39 +17,40 @@ export class DataService {
   private loading: Subject<boolean>;
   loading$: Observable<boolean>;
 
-  constructor(private backendService: ConfigService) {
+  constructor(private configService: ConfigService,
+              private errorService: ErrorService) {
     this.loading = new Subject<boolean>();
     this.loading$ = this.loading.asObservable();
   }
 
   get(configRef: ConfigRef): Observable<ConfigObject> {
-    return this.load(this.backendService.get(configRef));
+    return this.load(this.configService.get(configRef));
   }
 
   search(query: Query): Observable<ConfigObject> {
     const listRequest = this.getListRequest(query);
     this.effectiveListRequest = listRequest;
 
-    return this.load(this.backendService.list(listRequest));
+    return this.load(this.configService.list(listRequest));
   }
 
   count(query: Query): Observable<number> {
     const listRequest = this.getListRequest(query);
-    return this.backendService.count(listRequest);
+    return this.configService.count(listRequest);
   }
 
   save(configObject: ConfigObject): Observable<ConfigObject> {
-    return this.load(this.backendService.save(configObject));
+    return this.load(this.configService.save(configObject));
   }
 
   saveMultiple(configObjects: ConfigObject[]): Observable<number> {
     return this.load(from(configObjects).pipe(
-      mergeMap(configObject => this.backendService.save(configObject)),
+      mergeMap(configObject => this.configService.save(configObject)),
       count()));
   }
 
   update(configObject: ConfigObject): Observable<ConfigObject> {
-    return this.load(this.backendService.save(configObject));
+    return this.load(this.configService.save(configObject));
   }
 
   updateWithTemplate(updateTemplate: ConfigObject, paths: string[], ids: string[]): Observable<number> {
@@ -74,16 +75,17 @@ export class DataService {
     updateRequest.setUpdateTemplate(ConfigObject.toProto(updateTemplate));
     updateRequest.setUpdateMask(fieldMask);
 
-    return this.load(this.backendService.update(updateRequest));
+    return this.load(this.configService.update(updateRequest));
   }
 
   delete(configObject: ConfigObject): Observable<boolean> {
-    return this.load(this.backendService.delete(configObject));
+    return this.load(this.configService.delete(configObject));
   }
 
-  deleteMultiple(configObjects: ConfigObject[]): Observable<boolean> {
+  deleteMultiple(configObjects: ConfigObject[]): Observable<number> {
     return this.load(from(configObjects).pipe(
-      mergeMap((configObject) => this.backendService.delete(configObject))
+      mergeMap((configObject) => this.configService.delete(configObject)),
+      count(_ => _)
     ));
   }
 

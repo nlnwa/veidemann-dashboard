@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Label} from '../../../commons/models';
 import {LabelService} from '../../services/label.service';
@@ -12,12 +12,16 @@ import {LabelComponent} from '../label/label.component';
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: SelectorComponent, multi: true}],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectorComponent extends LabelComponent {
+export class SelectorComponent extends LabelComponent implements OnInit {
 
   constructor(protected fb: FormBuilder,
               protected cdr: ChangeDetectorRef,
               protected labelService: LabelService) {
     super(fb, cdr, labelService);
+  }
+
+  ngOnInit(): void {
+    // prevent fetching label by not calling super();
   }
 
   protected save(value: string): void {
@@ -42,9 +46,6 @@ export class SelectorComponent extends LabelComponent {
     }
 
     this.labels.push(new Label({key, value}));
-
-    this.onChange(this.labels);
-    this.reset();
   }
 
   protected createForm(): void {

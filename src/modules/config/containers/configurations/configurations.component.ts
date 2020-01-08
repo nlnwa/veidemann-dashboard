@@ -4,8 +4,6 @@ import {MatDialog} from '@angular/material/dialog';
 
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {
-  catchError,
-  count,
   debounceTime,
   distinctUntilChanged,
   filter,
@@ -312,7 +310,6 @@ export class ConfigurationsComponent implements OnDestroy {
     this.entity$ = entityId$.pipe(
       switchMap(id => id
         ? this.dataService.get(new ConfigRef({id, kind: Kind.CRAWLENTITY}))
-          .pipe(catchError(_ => of(null)))
         : of(null)),
       shareReplay(1),
     );
@@ -374,7 +371,7 @@ export class ConfigurationsComponent implements OnDestroy {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParamsHandling: 'merge',
-      queryParams: {sort: sort.active ? `${sort.active}:${sort.direction}` : null}
+      queryParams: {sort: sort.active && sort.direction ? `${sort.active}:${sort.direction}` : null}
     });
   }
 
@@ -547,10 +544,6 @@ export class ConfigurationsComponent implements OnDestroy {
       .pipe(
         filter(result => !!result),
         switchMap(() => this.dataService.delete(configObject)),
-        catchError((err) => {
-          this.errorService.delete(err, configObject);
-          return of(false);
-        }),
         filter(deleted => !!deleted)
       )
       .subscribe(() => {
@@ -558,8 +551,7 @@ export class ConfigurationsComponent implements OnDestroy {
           relativeTo: this.route,
           queryParamsHandling: 'merge',
           queryParams: {id: null},
-        })
-          .catch(error => this.errorService.dispatch(error));
+        }).catch(error => this.errorService.dispatch(error));
         this.reload.next();
         this.snackBarService.openSnackBar('Slettet');
       });
@@ -579,14 +571,7 @@ export class ConfigurationsComponent implements OnDestroy {
     dialogRef.afterClosed()
       .pipe(
         filter(_ => _),
-        switchMap(() => this.dataService.deleteMultiple(configObjects)
-          .pipe(
-            catchError(err => {
-              this.errorService.dispatch(err);
-              return of(false);
-            }),
-            count(_ => _))
-        ),
+        switchMap(() => this.dataService.deleteMultiple(configObjects))
       )
       .subscribe(numDeleted => {
         if (configObjects.length !== numDeleted) {
