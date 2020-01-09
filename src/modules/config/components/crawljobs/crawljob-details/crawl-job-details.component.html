@@ -15,88 +15,92 @@
         Deaktivert
       </mat-slide-toggle>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
-      <div fxFlex fxLayout="column">
-        <app-meta formControlName="meta"></app-meta>
+    <mat-card-content fxLayout="column">
+      <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
+        <div fxFlex fxLayout="column">
+          <app-meta formControlName="meta"></app-meta>
 
-        <mat-form-field *ngIf="!showSave">
-          <input matInput
-                 readonly
-                 formControlName="id"
-                 placeholder="Id"
-                 i18n-placeholder="@@configIdPlaceholder">
-        </mat-form-field>
+          <mat-form-field *ngIf="!showSave">
+            <input matInput
+                   readonly
+                   formControlName="id"
+                   placeholder="Id"
+                   i18n-placeholder="@@configIdPlaceholder">
+          </mat-form-field>
+        </div>
+        <div fxFlex fxLayout="column">
+          <ng-container formGroupName="limits">
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
+                     matInput formControlName="depth" type="text" placeholder="Dybde">
+              <mat-error i18n="@@crawljobFormDepthRequiredError"
+                         *ngIf="!depth.valid">
+                Ikke en gyldig dybde
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
+                     matInput formControlName="maxDurationS" type="text" placeholder="Maks tid">
+              <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
+                         *ngIf="!maxDurationSeconds.valid">
+                Ikke en gyldig maks tid.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
+                     matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
+              <mat-error i18n="@@crawljobFormMaxByteRequiredError"
+                         *ngIf="!maxBytes.valid">
+                ikke en gyldig maks byte.
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+
+          <ng-container formGroupName="scheduleRef">
+            <mat-form-field>
+              <mat-select placeholder="Schedule" formControlName="id">
+                <mat-option [value]="">None</mat-option>
+                <mat-option *ngFor="let option of crawlScheduleConfigs"
+                            [value]="option.id">{{option.meta.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <input type="hidden" formControlName="kind">
+          </ng-container>
+
+          <ng-container formGroupName="crawlConfigRef">
+            <mat-form-field>
+              <mat-select placeholder="CrawlConfig" formControlName="id" required>
+                <mat-option *ngFor="let option of crawlConfigs"
+                            [value]="option.id">{{option.meta.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="crawlConfigRef.invalid">CrawlConfig er påkrevd</mat-error>
+            </mat-form-field>
+            <input type="hidden" formControlName="kind">
+          </ng-container>
+
+          <mat-list *ngIf="showShortcuts">
+            <mat-list-item *ngIf="scheduleRef?.value?.id">
+              <mat-icon matTooltip="CrawlScheduleConfig">schedule</mat-icon>&nbsp;
+              <a class="shortcut-link"
+                 [routerLink]="['../schedule']"
+                 [queryParams]="{id: scheduleRef.value.id}">
+                {{ getCrawlScheduleName(scheduleRef.value.id)}}
+              </a>
+            </mat-list-item>
+            <mat-list-item *ngIf="crawlConfigRef?.value.id">
+              <mat-icon matTooltip="CrawlConfig">settings</mat-icon>&nbsp;
+              <a class="shortcut-link"
+                 [routerLink]="['../crawlconfig']"
+                 [queryParams]="{id: crawlConfigRef.value.id}">
+                {{ getCrawlConfigName(crawlConfigRef.value.id)}}
+              </a>
+            </mat-list-item>
+          </mat-list>
+        </div>
       </div>
-      <div fxFlex fxLayout="column">
-
-        <ng-container formGroupName="limits">
-          <mat-form-field>
-            <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                   matInput formControlName="depth" type="text" placeholder="Dybde">
-            <mat-error i18n="@@crawljobFormDepthRequiredError"
-                       *ngIf="!depth.valid">
-              Ikke en gyldig dybde
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                   matInput formControlName="maxDurationS" type="text" placeholder="Maks tid">
-            <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
-                       *ngIf="!maxDurationSeconds.valid">
-              Ikke en gyldig maks tid.
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                   matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
-            <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                       *ngIf="!maxBytes.valid">
-              ikke en gyldig maks byte.
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container formGroupName="scheduleRef">
-          <mat-form-field>
-            <mat-select placeholder="Schedule" formControlName="id">
-              <mat-option [value]="">None</mat-option>
-              <mat-option *ngFor="let option of crawlScheduleConfigs"
-                          [value]="option.id">{{option.meta.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <input type="hidden" formControlName="kind">
-        </ng-container>
-
-        <ng-container formGroupName="crawlConfigRef">
-          <mat-form-field>
-            <mat-select placeholder="CrawlConfig" formControlName="id" required>
-              <mat-option *ngFor="let option of crawlConfigs"
-                          [value]="option.id">{{option.meta.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="crawlConfigRef.invalid">CrawlConfig er påkrevd</mat-error>
-          </mat-form-field>
-          <input type="hidden" formControlName="kind">
-        </ng-container>
-
-        <mat-list *ngIf="showShortcuts">
-          <mat-list-item *ngIf="scheduleRef?.value?.id">
-            <mat-icon matTooltip="CrawlScheduleConfig">schedule</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['../schedule']"
-               [queryParams]="{id: scheduleRef.value.id}">
-              {{ getCrawlScheduleName(scheduleRef.value.id)}}
-            </a>
-          </mat-list-item>
-          <mat-list-item *ngIf="crawlConfigRef?.value.id">
-            <mat-icon matTooltip="CrawlConfig">settings</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['../crawlconfig']"
-               [queryParams]="{id: crawlConfigRef.value.id}">
-              {{ getCrawlConfigName(crawlConfigRef.value.id)}}
-            </a>
-          </mat-list-item>
-        </mat-list>
+      <div fxFlex>
+        <ng-content></ng-content>
       </div>
     </mat-card-content>
 
