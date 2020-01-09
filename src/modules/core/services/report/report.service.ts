@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
+import {Observable, Observer, of} from 'rxjs';
+import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
+
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
-import {Observable, Observer} from 'rxjs';
+import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
   CrawlExecutionStatusProto,
@@ -10,70 +13,89 @@ import {
   JobExecutionStatusProto,
   ReportPromiseClient
 } from '../../../../api';
-import {JobExecutionStatus} from '../../../commons/models/status/status.model';
-import {CrawlExecutionStatus} from '../../../commons/models/status/crawlExecutionStatus.model';
+import {CrawlExecutionStatus, JobExecutionStatus} from '../../../commons/models';
 
 
 @Injectable()
 export class ReportService {
 
-  reportClient: ReportPromiseClient;
+  private reportClient: ReportPromiseClient;
 
-  constructor(protected authService: AuthService, private appConfigService: AppConfigService) {
+  constructor(private authService: AuthService,
+              private appConfigService: AppConfigService,
+              private errorService: ErrorService) {
     this.reportClient = new ReportPromiseClient(appConfigService.grpcWebUrl, null, null);
   }
 
-  listJobExecutions(listRequest: JobExecutionsListRequest): Observable<JobExecutionStatusProto> {
+  listJobExecutions(listRequest: JobExecutionsListRequest): Observable<JobExecutionStatus> {
     const metadata = this.authService.metadata;
     return new Observable((observer: Observer<JobExecutionStatusProto>) => {
       const stream = this.reportClient.listJobExecutions(listRequest, metadata)
-        .on('data', data => {
-          observer.next(data);
-        })
-        .on('error', error =>  {
-          observer.error(error);
-        })
-        .on('end', () => {
-          observer.complete();
-        });
-
-      return () => stream.cancel();
-    });
-  }
-
-  listCrawlExecutions(listRequest: CrawlExecutionsListRequest): Observable<CrawlExecutionStatusProto> {
-    const metadata = this.authService.metadata;
-    return new Observable( (observer: Observer<CrawlExecutionStatusProto>) => {
-      const stream = this.reportClient.listExecutions(listRequest, metadata)
-        .on('data', data => {
-          observer.next(data);
-        })
+        .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
-    });
+    }).pipe(
+      map(JobExecutionStatus.fromProto),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return of(null);
+      })
+    );
   }
 
+  listCrawlExecutions(listRequest: CrawlExecutionsListRequest): Observable<CrawlExecutionStatus> {
+    const metadata = this.authService.metadata;
+    return new Observable((observer: Observer<CrawlExecutionStatusProto>) => {
+      const stream = this.reportClient.listExecutions(listRequest, metadata)
+        .on('data', data => observer.next(data))
+        .on('error', error => observer.error(error))
+        .on('end', () => observer.complete());
+      return () => stream.cancel();
+    }).pipe(
+      map(CrawlExecutionStatus.fromProto),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return of(null);
+      })
+    );
+  }
 
-  getJobStatus(id: string) {
+  getLastJobStatus(jobId: string): Observable<JobExecutionStatus> {
+    const request = new JobExecutionsListRequest();
+
+    const template = new JobExecutionStatus();
+    const mask = new FieldMask();
+
+    mask.addPaths('jobId');
+    template.jobId = jobId;
+    request.setQueryMask(mask);
+    request.setQueryTemplate(JobExecutionStatus.toProto(template));
+
+    request.setOrderDescending(true);
+    request.setPageSize(1);
+    return this.listJobExecutions(request).pipe(defaultIfEmpty(null));
+  }
+
+  getJobStatus(jobId: string): Observable<JobExecutionStatus> {
     const request = new JobExecutionsListRequest();
     const template = new JobExecutionStatus();
     const mask = new FieldMask();
 
-    mask.setPathsList(['jobId']);
-    template.jobId = id;
+    mask.addPaths('jobId');
+    template.jobId = jobId;
     request.setQueryMask(mask);
     request.setQueryTemplate(JobExecutionStatus.toProto(template));
     return this.listJobExecutions(request);
   }
 
-  getSeedStatus(id: string) {
+  getSeedStatus(seedId: string): Observable<CrawlExecutionStatus> {
     const request = new CrawlExecutionsListRequest();
     const template = new CrawlExecutionStatus();
     const mask = new FieldMask();
 
-    mask.setPathsList(['seedId']);
-    template.seedId = id;
+    mask.addPaths('seedId');
+    template.seedId = seedId;
     request.setQueryMask(mask);
     request.setQueryTemplate(CrawlExecutionStatus.toProto(template));
     return this.listCrawlExecutions(request);
