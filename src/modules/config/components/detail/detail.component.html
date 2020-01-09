@@ -15,6 +15,7 @@
                         (update)="onUpdateConfig($event)"
                         (save)="onSaveConfig($event)"
                         (delete)="onDeleteConfig($event)">
+    <ng-content select="app-job-status"></ng-content>
   </app-crawljob-details>
 
   <app-crawlconfig-details *ngSwitchCase="Kind.CRAWLCONFIG"
