@@ -110,14 +110,11 @@ export class ConfigurationsComponent implements OnDestroy {
       shareReplay(1),
     );
 
+    // for reloading the current query (on save, delete, etc.)
     this.reload = new Subject();
-    const reload$ = this.reload.pipe(
-      startWith(false),
-      shareReplay(1)
-    );
 
     this.configObject = new Subject();
-    this.configObject$ = this.configObject.pipe(share());
+    this.configObject$ = this.configObject.asObservable();
 
     const routeParam$ = combineLatest([route.queryParamMap, route.paramMap]).pipe(
       debounceTime(0), // synchronize queryParamMap and paramMap observables
@@ -212,6 +209,11 @@ export class ConfigurationsComponent implements OnDestroy {
       shareReplay(1),
     );
 
+    const reload$ = this.reload.pipe(
+      startWith(false),
+      shareReplay(1)
+    );
+
     const query$: Observable<Query> = combineLatest([
       kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
       entityId$, scheduleId$, crawlConfigId$, collectionId$,
@@ -265,6 +267,7 @@ export class ConfigurationsComponent implements OnDestroy {
     this.sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
 
+    // count configObjects when query change or on reload
     this.pageLength$ = combineLatest([countQuery$, reload$]).pipe(
       map(([countQuery, _]) => countQuery),
       mergeMap(countQuery => this.dataService.count(countQuery)),
@@ -492,7 +495,6 @@ export class ConfigurationsComponent implements OnDestroy {
       relativeTo: this.route
     })
       .catch(error => this.errorService.dispatch(error));
-
   }
 
   onSaveConfig(configObject: ConfigObject) {
