@@ -172,6 +172,10 @@
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.CRAWLJOB">
+          <ng-container *appExtra="let row">
+            <span>{{row | getJobStatus | jobState | async}}</span>
+          </ng-container>
+
           <button *appAction="let row" mat-icon-button
                   title="Seeds med referanse til høstejobb"
                   (click)="onFilterByCrawlJobRef(row)">
@@ -196,6 +200,8 @@
                   (delete)="onDeleteConfig($event)"
                   (move)="onMoveSeed($event)"
                   (saveMultipleSeeds)="onSaveMultipleSeeds($event)">
+        <app-job-status *ngIf="kind === Kind.CRAWLJOB"
+                        [jobExecutionStatus]="configObject | getJobStatus | async"></app-job-status>
       </app-detail>
 
       <app-detail-multi *ngIf="!isSingleMode"
@@ -203,6 +209,7 @@
                         [configObject]="configObject"
                         [options]="options$ | async">
       </app-detail-multi>
+
     </ng-container>
 
   </mat-drawer-content>

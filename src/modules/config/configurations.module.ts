@@ -42,7 +42,10 @@ import {
   SeedMetaComponent,
   SelectorComponent
 } from './components';
-import {ActionDirective, DetailDirective} from './directives';
+import {ActionDirective, DetailDirective, ExtraDirective} from './directives';
+import { JobStatusComponent } from './components/job-status/job-status.component';
+import {JobStatePipe} from './pipe/jobstate.pipe';
+import {JobStatusPipe} from './pipe/jobstatus.pipe';
 
 
 @NgModule({
@@ -84,7 +87,11 @@ import {ActionDirective, DetailDirective} from './directives';
     SeedDetailComponent,
     SeedDetailMultiComponent,
     ActionDirective,
+    ExtraDirective,
     EntityViewComponent,
+    JobStatusComponent,
+    JobStatePipe,
+    JobStatusPipe,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,

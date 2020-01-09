@@ -1,4 +1,5 @@
 import {Activity} from './gen/eventhandler/v1/resources_pb';
+import {StatusDetail} from './gen/report/v1/resources_pb';
 
 export {
   CrawlHostGroupConfig,
@@ -68,7 +69,6 @@ export {
   ControllerPromiseClient,
 } from './gen/controller/v1/controller_grpc_web_pb';
 
-
 export {
   OpenIdConnectIssuerReply,
   RoleList,
@@ -77,3 +77,21 @@ export {
   CrawlerStatus,
   RunCrawlRequest,
 } from './gen/controller/v1/controller_pb';
+
+export {
+  ReportPromiseClient
+} from './gen/report/v1/report_grpc_web_pb';
+
+export {
+  JobExecutionsListRequest,
+  CrawlExecutionsListRequest
+} from './gen/report/v1/report_pb';
+
+export {
+  JobExecutionStatus as JobExecutionStatusProto,
+  CrawlExecutionStatus as CrawlExecutionStatusProto
+} from './gen/frontier/v1/resources_pb';
+
+export {
+  Error as ErrorProto
+} from './gen/commons/v1/resources_pb';

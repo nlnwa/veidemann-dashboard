@@ -32,7 +32,7 @@ tools:
 
 build: veidemann-api
 	@rm -rf ${OUT}; mkdir -p ${OUT}
-	@find veidemann-api/protobuf/{config,commons,controller,eventhandler,frontier} -name *.proto -exec ${PROTOC} \
+	@find veidemann-api/protobuf/{config,commons,controller,eventhandler,frontier,report} -name *.proto -exec ${PROTOC} \
 	  -Iveidemann-api/protobuf \
 	  -Itools/include \
 	  --plugin=protoc-gen-grpc-web=${PROTOC_GEN_GRPC_WEB} \

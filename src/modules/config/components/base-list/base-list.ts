@@ -5,6 +5,7 @@ import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sor
 import {ActionDirective} from '../../directives/action/action.directive';
 import {first, map, shareReplay} from 'rxjs/operators';
 import {combineLatest, Observable} from 'rxjs';
+import {ExtraDirective} from '../../directives';
 
 export interface ListItem {
   id: string;
@@ -31,7 +32,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   sortActive: 'name';
 
   @Input()
-  displayedColumns: string[] = ['select', 'name', 'description', 'action'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'extra', 'action'];
 
   @Input()
   multiSelect = true;
@@ -54,6 +55,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   @ViewChild(MatSort, {static: true}) matSort: MatSort;
 
   @ContentChildren(ActionDirective, {read: TemplateRef}) actionButtonTemplates;
+  @ContentChildren(ExtraDirective, {read: TemplateRef}) extraTemplates;
 
   // selection
   selection = new SelectionModel<T>(true, []);

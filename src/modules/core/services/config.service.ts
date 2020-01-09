@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {from, Observable, Observer, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {ConfigPromiseClient, GetLabelKeysRequest, LabelKeysResponse, ListRequest, UpdateRequest} from '../../../api';
+import {ConfigObjectProto, ConfigPromiseClient, GetLabelKeysRequest, LabelKeysResponse, ListRequest, UpdateRequest} from '../../../api';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
 import {ConfigObject, ConfigRef} from '../../commons/models/config';
@@ -27,13 +27,14 @@ export class ConfigService {
   }
 
   list(listRequest: ListRequest): Observable<ConfigObject> {
-    return new Observable((observer: Observer<ConfigObject>) => {
+    return new Observable((observer: Observer<ConfigObjectProto>) => {
       const stream = this.configPromiseClient.listConfigObjects(listRequest, this.authService.metadata)
-        .on('data', (data) => observer.next(ConfigObject.fromProto(data)))
+        .on('data', (data) => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
+      map(ConfigObject.fromProto),
       catchConfigError(this.errorService, null)
     );
   }

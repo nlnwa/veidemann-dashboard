@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of, Subject} from 'rxjs';
-import {catchError, count, finalize, mergeMap} from 'rxjs/operators';
+import {from, Observable, Subject} from 'rxjs';
+import {count, distinctUntilChanged, finalize, map, mergeMap, scan} from 'rxjs/operators';
 
 import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
 import {BrowserConfig, ConfigObject, ConfigRef, CrawlConfig, CrawlJob, Kind, Label, RoleMapping, Seed} from '../../commons/models';
 import {createListRequest, labelQuery, nameQuery, pageListRequest, Query, withQueryTemplate, withSort} from '../func/query';
-import {ConfigService, ErrorService} from '../../core/services';
+import {ConfigService} from '../../core/services';
 
 
 @Injectable()
@@ -17,10 +17,14 @@ export class DataService {
   private loading: Subject<boolean>;
   loading$: Observable<boolean>;
 
-  constructor(private configService: ConfigService,
-              private errorService: ErrorService) {
+  constructor(private configService: ConfigService) {
     this.loading = new Subject<boolean>();
-    this.loading$ = this.loading.asObservable();
+    this.loading$ = this.loading.pipe(
+      map(isLoading => isLoading ? 1 : -1),
+      scan((acc, curr) => acc + curr, 0),
+      map(sem => sem > 0),
+      distinctUntilChanged()
+    );
   }
 
   get(configRef: ConfigRef): Observable<ConfigObject> {
@@ -202,24 +206,24 @@ export class DataService {
     if (query.term !== null && query.kind !== Kind.ROLEMAPPING) {
       const tokens = query.term.split(/\s+/);
 
-      // Search prefix:
+      // Search defaults to match on meta.name but can be modified with search prefixes:
+      //
       // "label:" label query see https://github.com/nlnwa/veidemann-api/blob/master/protobuf/config/v1/config.proto for further syntax
       // "name:"  name query (match on meta.name)
-      // "ab:cd"  label query (because it contains ':')
       //
       // E.g.:
       // label:a:b  - search for label "a:b"
-      // a:b        - search for label "a:b"
-      // name:hello - search for name "hello"
+      // a:b        - search for label "a:b" because it contains :
+      // name:hello:babe - search for name "hello:babe"
       tokens.forEach(token => {
         if (token.startsWith('label:')) {
           const labelSelector = token.substring(token.indexOf(':') + 1);
           listRequest = labelQuery(listRequest, labelSelector);
-        } else if (token.includes(':')) {
-          listRequest = labelQuery(listRequest, token);
         } else if (token.startsWith('name:')) {
           const name = token.substring(token.indexOf(':') + 1);
           listRequest = nameQuery(listRequest, name);
+        } else if (token.includes(':')) {
+          listRequest = labelQuery(listRequest, token);
         } else {
           listRequest = nameQuery(listRequest, token);
         }

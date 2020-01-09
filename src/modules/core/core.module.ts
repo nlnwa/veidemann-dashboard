@@ -20,6 +20,7 @@ import {
   AppInitializerService,
   ControllerService,
 } from './services';
+import {ReportService} from './services/report/report.service';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
@@ -36,6 +37,7 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
     GuardService,
     ErrorService,
     ConfigService,
+    ReportService,
     SnackBarService,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
