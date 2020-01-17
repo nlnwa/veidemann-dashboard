@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, Kind, Label, PolitenessConfig} from '../../../../commons/models';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {ConfigObject, Kind, Label, PolitenessConfig} from '../../../../../shared/models';
 import {PolitenessConfigDetailsComponent} from '../politenessconfig-details/politenessconfig-details.component';
-import {RobotsPolicy} from '../../../../commons/models/config/politenessconfig.model';
+import {RobotsPolicy} from '../../../../../shared/models/config/politenessconfig.model';
 
 @Component({
   selector: 'app-politenessconfig-details-multi',

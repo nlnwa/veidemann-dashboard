@@ -13,7 +13,7 @@ import {
   Validators
 } from '@angular/forms';
 import {Subject} from 'rxjs';
-import {Meta} from '../../../commons/models';
+import {Meta} from '../../../../shared/models';
 import {takeUntil} from 'rxjs/operators';
 
 

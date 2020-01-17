@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, Kind, Meta} from '../../../../commons/models';
+import {ConfigObject, Kind, Meta} from '../../../../../shared/models';
 
 @Component({
   selector: 'app-entity-details',

@@ -1,14 +1,14 @@
 import {TestBed} from '@angular/core/testing';
 
 import {LabelService} from './label.service';
-import {ConfigService} from '../../core/services';
+import {ConfigApiService} from '../../core/services';
 
 describe('LabelService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       LabelService,
       {
-        provide: ConfigService,
+        provide: ConfigApiService,
         useValue: {}
       }
     ]

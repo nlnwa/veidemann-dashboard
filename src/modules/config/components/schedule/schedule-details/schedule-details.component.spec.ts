@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
 import {SimpleChange} from '@angular/core';
 import {FormGroup} from '@angular/forms';
-import {ConfigObject, Kind, Label} from '../../../../commons/models';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';

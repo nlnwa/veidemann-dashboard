@@ -1,0 +1,70 @@
+<form [formGroup]="form" fxLayout="row wrap" fxLayoutGap="16px">
+  <mat-form-field>
+    <mat-select placeholder="State" multiple formControlName="stateList">
+      <mat-option *ngFor="let state of crawlExecutionStates"
+                  [value]="state.toString(10)">{{CrawlExecutionState[state]}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="CrawlJob" formControlName="jobId">
+      <mat-option [value]=""></mat-option>
+      <mat-option *ngFor="let job of crawlJobOptions"
+                  [value]="job.id">{{job.meta.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="seedId"
+           placeholder="Seed ID"
+           i18n-placeholder="@@seedIdPlaceholder">
+  </mat-form-field>
+
+  <mat-checkbox labelPosition="after" formControlName="hasError">
+    Feilede
+  </mat-checkbox>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
+           placeholder="Fra">
+    <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo" placeholder="Til">
+    <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeToDatePicker></mat-datepicker>
+  </mat-form-field>
+</form>
+
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-crawl-execution-status-list fxFlex
+                                   #list
+                                   [pageLength]="pageLength$ | async"
+                                   [pageIndex]="pageIndex$ | async"
+                                   [pageSize]="pageSize$ | async"
+                                   [sortDirection]="sortDirection$ | async"
+                                   [sortActive]="sortActive$ | async"
+                                   (selectedChange)="onSelectedChange($event)"
+                                   (sort)="onSort($event)"
+                                   (page)="onPage($event)"
+                                   [dataSource]="dataSource">
+    <a *appAction="let row" mat-icon-button
+       title="Gå til seed"
+       [routerLink]="['/config', 'seed']"
+       [queryParams]="{id: row.seedId}">
+      <mat-icon>link</mat-icon>
+    </a>
+    <a *appAction="let row" mat-icon-button
+       title="Gå til jobb"
+       [routerLink]="['/config', 'crawljobs']"
+       [queryParams]="{id: row.jobId}">
+      <mat-icon>work</mat-icon>
+    </a>
+  </app-crawl-execution-status-list>
+
+  <app-crawl-execution-status fxFlex *ngIf="crawlExecutionStatus$ | async as crawlExecutionStatus"
+                              [crawlExecutionStatus]="crawlExecutionStatus"></app-crawl-execution-status>
+</div>

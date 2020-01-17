@@ -6,25 +6,33 @@
             class="header--button__margin">
       <mat-icon>menu</mat-icon>
     </button>
+
     <mat-menu #menu="matMenu">
       <a mat-menu-item
          *ngIf="canConfigure"
          [routerLink]="['/config']">
-        <mat-icon>settings</mat-icon>&nbsp;
-        <span i18n="@@navigationSidebarRolemapping">Konfigurasjon</span>
+        <mat-icon>settings</mat-icon>
+        <span i18n="@@mainMenuConfiguration">Konfigurasjon</span>
+      </a>
+
+      <a mat-menu-item
+         *ngIf="canConfigure"
+         [routerLink]="['/report']">
+        <mat-icon>report</mat-icon>
+        <span i18n="@@mainMenuEntryReport">Rapport</span>
       </a>
 
       <a mat-menu-item
          *ngIf="canAdministrate"
          [routerLink]="['/validator']">
-        <mat-icon>storage</mat-icon>&nbsp;
-        <span i18n="@@navigationSidebarRolemapping">WARC</span>
+        <mat-icon>storage</mat-icon>
+        <span i18n="@@mainMenuWarc">WARC</span>
       </a>
 
       <a mat-menu-item
          [routerLink]="['/config/logconfig']">
-        <mat-icon>notes</mat-icon>&nbsp;
-        <span i18n="@@navigationSidebarLogconfig">Loggnivå</span>
+        <mat-icon>notes</mat-icon>
+        <span i18n="@@mainMenuLogConfiguration">Loggnivå</span>
       </a>
     </mat-menu>
 

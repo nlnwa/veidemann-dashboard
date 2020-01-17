@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input
 import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {NO_COLON} from '../../../commons/validator/patterns';
-import {Label} from '../../../commons/models';
+import {NO_COLON} from '../../../../shared/validation/patterns';
+import {Label} from '../../../../shared/models';
 import {map, startWith, switchMap} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material';
 import {LabelService} from '../../services/label.service';

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {LogLevels} from '../../commons/models';
+import {from, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
-import {fromPromise} from 'rxjs/internal-compatibility';
-import {ConfigPromiseClient} from '../../../api';
 import {OAuthService} from 'angular-oauth2-oidc';
+
+import {LogLevels} from '../../../shared/models';
+import {ConfigPromiseClient} from '../../../api';
 import {AppConfigService} from '../../core/services';
 
 @Injectable()
@@ -30,14 +30,16 @@ export class LogService {
   }
 
   getLogConfig(): Observable<LogLevels> {
-    return fromPromise(this.configPromiseClient.getLogConfig(new Empty(), this.metadata)).pipe(
-      map(_ => LogLevels.fromProto(_))
-    );
+    return from(this.configPromiseClient.getLogConfig(new Empty(), this.metadata))
+      .pipe(
+        map(LogLevels.fromProto)
+      );
   }
 
   saveLogConfig(logLevels: LogLevels): Observable<LogLevels> {
-    return fromPromise(this.configPromiseClient.saveLogConfig(LogLevels.toProto(logLevels), this.metadata)).pipe(
-      map(_ => LogLevels.fromProto(_))
-    );
+    return from(this.configPromiseClient.saveLogConfig(LogLevels.toProto(logLevels), this.metadata))
+      .pipe(
+        map(LogLevels.fromProto)
+      );
   }
 }

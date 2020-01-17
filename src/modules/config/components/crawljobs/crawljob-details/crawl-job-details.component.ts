@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../commons/models';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shared/models';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -97,16 +97,6 @@ export class CrawlJobDetailsComponent implements OnChanges {
         this.updateForm();
       }
     }
-  }
-
-  getCrawlScheduleName(id): string {
-    const found = this.crawlScheduleConfigs.find(crawlSchedule => crawlSchedule.id === id);
-    return found ? found.meta.name : 'crawlSchedule';
-  }
-
-  getCrawlConfigName(id): string {
-    const found = this.crawlConfigs.find(crawlConfig => crawlConfig.id === id);
-    return found ? found.meta.name : 'crawlConfig';
   }
 
   onSave() {

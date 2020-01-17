@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../commons/models';
+import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material';
 

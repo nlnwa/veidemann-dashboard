@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SnackBarService} from '../../../core/services';
 import {AuthService} from '../../../core/services/auth';
-import {LogLevel, LogLevels} from '../../../commons/models';
+import {Level, LogLevel, LogLevels} from '../../../../shared/models';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
@@ -17,10 +17,11 @@ import {LogService} from '../../services';
   providers: [LogService]
 })
 export class LoglevelComponent implements OnInit, OnDestroy {
+  readonly Level = Level;
+  readonly levelOptions: Level[];
 
   form: FormGroup;
   logLevels: LogLevels = new LogLevels();
-  levelOptions: string[];
   addOrRemoved = false;
 
   private ngUnsubscribe = new Subject();
@@ -32,6 +33,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
               private cdr: ChangeDetectorRef,
               private route: ActivatedRoute) {
     this.createForm();
+    this.levelOptions = route.snapshot.data.levels;
   }
 
   get canSave(): boolean {
@@ -51,7 +53,6 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.levelOptions = this.route.snapshot.data.levels;
     this.getLogLevels();
   }
 
@@ -109,7 +110,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
     return new LogLevels(this.form.value);
   }
 
-  private createLogLevel(logLevel: LogLevel = new LogLevel()): FormGroup {
+  private createLogLevel(logLevel: LogLevel = new LogLevel({level: Level.INFO})): FormGroup {
     return this.fb.group({
       logger: [logLevel.logger, [Validators.required, Validators.minLength(1)]],
       level: [logLevel.level, [Validators.required, Validators.minLength(1)]]

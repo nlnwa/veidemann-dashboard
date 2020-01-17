@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, ConfigRef, CrawlConfig, Kind, Meta} from '../../../../commons/models';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {ConfigObject, ConfigRef, CrawlConfig, Kind, Meta} from '../../../../../shared/models';
 import {AuthService} from '../../../../core/services/auth';
 
 @Component({
@@ -92,21 +92,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
     return (this.politenessRefId && this.politenessRefId.value)
       || (this.browserConfigRefId && this.browserConfigRefId.value)
       || (this.collectionRefId && this.collectionRefId.value);
-  }
-
-  getPolitenessConfigName(id) {
-    const found = this.politenessConfigs.find(politenessConfig => politenessConfig.id === id);
-    return found ? found.meta.name : 'politenessConfig';
-  }
-
-  getCollectionName(id) {
-    const found = this.collections.find(collection => collection.id === id);
-    return found ? found.meta.name : 'collection';
-  }
-
-  getBrowserConfigName(id) {
-    const found = this.browserConfigs.find(browserConfig => browserConfig.id === id);
-    return found ? found.meta.name : 'browserConfig';
   }
 
   ngOnChanges(changes: SimpleChanges) {

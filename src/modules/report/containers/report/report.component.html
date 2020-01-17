@@ -1,0 +1,21 @@
+<mat-drawer-container class="container">
+  <mat-drawer mode="side" [opened]="true">
+    <mat-nav-list>
+      <h3 mat-subheader i18n="@@reportNavigationReportHeader">Rapport</h3>
+
+      <a mat-list-item [routerLink]="['/report', 'jobexecution']" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>hdr_strong</mat-icon>
+        <span i18n="@@reportNavigationLinkJobExecution">CrawlJob</span>
+      </a>
+
+      <a mat-list-item [routerLink]="['/report', 'crawlexecution']" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>hdr_weak</mat-icon>
+        <span i18n="@@reportNavigationLinkCrawlExecution">CrawlExecution</span>
+      </a>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <mat-drawer-content class="content-padding">
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -3,7 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind, Meta} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, Meta} from '../../../../../shared/models';
 import {Subject} from 'rxjs';
 import {Parcel} from '../../seed-meta/seed-meta.component';
 

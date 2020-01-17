@@ -12,15 +12,17 @@ import {
   AppConfigService,
   ApplicationErrorHandler,
   AuthService,
-  ConfigService,
+  ConfigApiService,
   ErrorService,
   GuardService,
   SnackBarService,
   TokenInterceptor,
   AppInitializerService,
-  ControllerService,
+  ControllerApiService,
+  ReportApiService,
 } from './services';
-import {ReportService} from './services/report/report.service';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
@@ -31,24 +33,28 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
   ],
   providers: [
     AppInitializerService,
-    ControllerService,
+    ControllerApiService,
     AuthService,
     OAuthService,
     GuardService,
     ErrorService,
-    ConfigService,
-    ReportService,
+    ConfigApiService,
+    ReportApiService,
     SnackBarService,
+    ApplicationErrorHandler,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
       provide: APP_INITIALIZER,
       useFactory: (appInitializerService: AppInitializerService) => () => appInitializerService.init(),
-      deps: [AppInitializerService, AppConfigService, OAuthService, ControllerService, AuthService],
+      deps: [AppInitializerService, AppConfigService, OAuthService, ControllerApiService, AuthService],
       multi: true
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: ErrorHandler, useClass: ApplicationErrorHandler},
-    {provide: LOCALE_ID, useValue: 'nb'}
+    {provide: LOCALE_ID, useValue: 'nb'},
+    {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ]
 })
 export class CoreModule {

@@ -1,0 +1,116 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{CrawlExecutionState[crawlExecutionStatus.state]}}</mat-panel-title>
+    <mat-panel-description>Status</mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div fxLayout="column">
+    <div fxFlex>
+      <table class="mat-table table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Start</th>
+          <th class="mat-header-cell">Slutt</th>
+
+          <th class="mat-header-cell">Opprettet</th>
+          <th class="mat-header-cell">Sist endret</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{crawlExecutionStatus.startTime | date : 'long'}}</td>
+          <td class="mat-cell">{{crawlExecutionStatus.endTime | date : 'long'}}</td>
+          <td class="mat-cell">{{crawlExecutionStatus.createdTime | date : 'long'}}</td>
+          <td class="mat-cell">{{crawlExecutionStatus.lastChangeTime | date : 'long'}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="16px">
+      <div fxFlex>
+        <table class="mat-table">
+          <thead>
+          <tr class="mat-header-row">
+            <th class="mat-header-cell">Statistikk</th>
+            <th class="mat-header-cell"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="mat-row">
+            <td class="mat-cell">URIs crawled</td>
+            <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Bytes crawled</td>
+            <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Documents crawled</td>
+            <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Documents denied</td>
+            <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Documents failed</td>
+            <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Documents out of scope</td>
+            <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
+          </tr>
+          <tr class="mat-row">
+            <td class="mat-cell">Documents retried</td>
+            <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <mat-list fxFlex *ngIf="crawlExecutionStatus.currentUriIdList.length">
+      <h3 matSubheader>Current URIs</h3>
+      <mat-list-item>https://www.http.url.no/path</mat-list-item>
+      <mat-list-item *ngFor="let uri of crawlExecutionStatus.currentUriIdList">{{uri}}</mat-list-item>
+    </mat-list>
+    <mat-list fxFlex *ngIf="crawlExecutionStatus.error as error">
+      <h3 matSubheader>Error</h3>
+      <mat-list-item>{{error.code}}</mat-list-item>
+      <mat-list-item>{{error.msg}}</mat-list-item>
+      <mat-list-item>{{error.detail}}</mat-list-item>
+    </mat-list>
+    <div fxFlex>
+      <table class="mat-table table" style="margin-bottom: 1rem;">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Id</th>
+          <th class="mat-header-cell">Seed Id</th>
+          <th class="mat-header-cell">Job Id</th>
+          <th class="mat-header-cell">Job Execution Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'crawlexecution']"
+               [queryParams]="{id: crawlExecutionStatus.jobExecutionId}">{{crawlExecutionStatus.id}}</a>
+          </td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'crawlexecution']"
+               [queryParams]="{seedId: crawlExecutionStatus.seedId}">{{crawlExecutionStatus.seedId}}</a>
+          </td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'jobexecution']"
+               [queryParams]="{jobId: crawlExecutionStatus.jobId}">{{crawlExecutionStatus.jobId}}</a>
+          </td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'jobexecution']"
+               [queryParams]="{id: crawlExecutionStatus.jobExecutionId}">{{crawlExecutionStatus.jobExecutionId}}</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mat-expansion-panel>

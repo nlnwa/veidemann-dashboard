@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, CanLoad, Route, RouterStateSnapshot
 import {Observable, of} from 'rxjs';
 
 import {AuthService} from './auth.service';
-import {Role} from '../../../commons/models';
+import {Role} from '../../../../shared/models';
 
 @Injectable()
 export class GuardService implements CanActivate, CanLoad {

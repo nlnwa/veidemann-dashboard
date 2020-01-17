@@ -1,23 +1,12 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Level} from '../../commons/models';
+import {Level, levels} from '../../../shared/models';
 
 @Injectable()
-export class LogResolver implements Resolve<string[]> {
+export class LogResolver implements Resolve<Level[]> {
 
-  private readonly levels: string[];
-
-  constructor() {
-    this.levels = [];
-    for (const level in Level) {
-      if (isNaN(parseInt(level, 10)) && Level.hasOwnProperty(level)) {
-        this.levels.push(level);
-      }
-    }
-  }
-
-  resolve(route: ActivatedRouteSnapshot): Observable<string[]> | Promise<string[]> | string[] {
-    return this.levels;
+  resolve(route: ActivatedRouteSnapshot): Observable<Level[]> | Promise<Level[]> | Level[] {
+    return levels;
   }
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
-import {ControllerService} from './controller.service';
+import {ControllerApiService} from './api/controller-api.service';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
 
@@ -13,7 +13,7 @@ export class AppInitializerService {
   constructor(private appConfig: AppConfigService,
               private oAuthService: OAuthService,
               private authService: AuthService,
-              private controllerService: ControllerService) {
+              private controllerService: ControllerApiService) {
   }
 
   /**
@@ -32,7 +32,7 @@ export class AppInitializerService {
           this.oAuthService.logOut(true);
         }
       }
-      this.authService.roles = await this.controllerService.getRolesForActiveUser().toPromise();
+      this.authService.roles = await this.controllerService.getRolesForActiveUser();
     } catch (error) {
       this.error = error;
     }

@@ -2,12 +2,12 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-details.component';
 import {FormGroup} from '@angular/forms';
 import {SimpleChange} from '@angular/core';
-import {ConfigObject, Kind, Label} from '../../../../commons/models';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
-import {IpRange} from '../../../../commons/models/config/ip-range.model';
+import {IpRange} from '../../../../../shared/models/config/ip-range.model';
 import {LabelService} from '../../../services/label.service';
 import {of} from 'rxjs';
 

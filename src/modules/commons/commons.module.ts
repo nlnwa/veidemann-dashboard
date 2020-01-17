@@ -5,9 +5,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {MaterialModule} from './material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {ActionDirective, ExtraDirective} from './directives';
 
 
 @NgModule({
+  declarations: [
+    ActionDirective,
+    ExtraDirective,
+  ],
   imports: [
     MaterialModule,
     CommonModule,
@@ -24,6 +29,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
+    ActionDirective,
+    ExtraDirective,
   ],
   providers: [DatePipe],
 })

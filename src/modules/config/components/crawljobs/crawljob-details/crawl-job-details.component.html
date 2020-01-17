@@ -79,24 +79,6 @@
             <input type="hidden" formControlName="kind">
           </ng-container>
 
-          <mat-list *ngIf="showShortcuts">
-            <mat-list-item *ngIf="scheduleRef?.value?.id">
-              <mat-icon matTooltip="CrawlScheduleConfig">schedule</mat-icon>&nbsp;
-              <a class="shortcut-link"
-                 [routerLink]="['../schedule']"
-                 [queryParams]="{id: scheduleRef.value.id}">
-                {{ getCrawlScheduleName(scheduleRef.value.id)}}
-              </a>
-            </mat-list-item>
-            <mat-list-item *ngIf="crawlConfigRef?.value.id">
-              <mat-icon matTooltip="CrawlConfig">settings</mat-icon>&nbsp;
-              <a class="shortcut-link"
-                 [routerLink]="['../crawlconfig']"
-                 [queryParams]="{id: crawlConfigRef.value.id}">
-                {{ getCrawlConfigName(crawlConfigRef.value.id)}}
-              </a>
-            </mat-list-item>
-          </mat-list>
         </div>
       </div>
       <div fxFlex>

@@ -12,7 +12,7 @@ import {
   VALID_CRON_HOUR_PATTERN,
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
-} from '../../../../commons';
+} from '../../../../../shared';
 import {AuthService} from '../../../../core/services/auth';
 
 

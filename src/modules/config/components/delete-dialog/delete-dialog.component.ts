@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {ConfigObject, Kind} from '../../../commons/models/config';
+import {ConfigObject, Kind} from '../../../../shared/models/config';
 
 @Component({
   selector: 'app-delete-dialog',

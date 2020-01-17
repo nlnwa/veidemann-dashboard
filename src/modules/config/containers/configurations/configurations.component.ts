@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
 import {combineLatest, Observable, of, Subject} from 'rxjs';
@@ -18,15 +18,17 @@ import {
 } from 'rxjs/operators';
 
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
-import {ConfigObject, ConfigRef, Kind, RobotsPolicy, Role, RotationPolicy, Seed, SubCollectionType} from '../../../commons/models';
+import {ConfigObject, ConfigRef, Kind, RobotsPolicy, Role, RotationPolicy, Seed, SubCollectionType} from '../../../../shared/models';
 import {ConfigListComponent, DeleteDialogComponent, DeleteMultiDialogComponent, Parcel} from '../../components';
-import {ReferrerError} from '../../../commons';
-import {DataService, LabelService} from '../../services';
-import {Query, Sort} from '../../func/query';
+import {ReferrerError} from '../../../../shared';
+import {ConfigService, LabelService} from '../../services';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ConfigPath} from '../../func';
-import {ConfigObjectDataSource} from '../../services/config.datasource';
 import {SortDirection} from '@angular/material/sort';
+import {ListDataSource} from '../../../../shared/models/list-datasource';
+import {Sort} from '../../../commons/services/query.service';
+import {ConfigQuery} from '../../../core/services/config.service';
+import {distinctUntilArrayChanged} from '../../../../shared/func/rxjs';
 
 export interface ConfigOptions {
   rotationPolicies?: RotationPolicy[];
@@ -42,15 +44,12 @@ export interface ConfigOptions {
   roles?: Role[];
 }
 
-const distinctUntilStringArrayChanged = distinctUntilChanged<string[]>((as, bs) =>
-  as.length === bs.length ? as.every(a => bs.some(b => a === b)) : false);
-
 @Component({
   selector: 'app-configurations',
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DataService, LabelService]
+  providers: [ConfigService, LabelService]
 })
 export class ConfigurationsComponent implements OnDestroy {
   readonly ConfigPath = ConfigPath;
@@ -76,7 +75,7 @@ export class ConfigurationsComponent implements OnDestroy {
   kind: Kind;
   kind$: Observable<Kind>;
 
-  query$: Observable<Query>;
+  query$: Observable<ConfigQuery>;
 
   private reload: Subject<void>;
 
@@ -89,17 +88,17 @@ export class ConfigurationsComponent implements OnDestroy {
   @ViewChild('baseList', {static: false}) list: ConfigListComponent;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  dataSource: ConfigObjectDataSource;
+  dataSource: ListDataSource<ConfigObject>;
 
   constructor(private authService: AuthService,
-              private dataService: DataService,
+              private dataService: ConfigService,
               private snackBarService: SnackBarService,
               private errorService: ErrorService,
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
               private labelService: LabelService) {
-    this.dataSource = new ConfigObjectDataSource();
+    this.dataSource = new ListDataSource<ConfigObject>();
 
     this.options$ = this.route.data.pipe(
       map(data => data.options),
@@ -178,11 +177,11 @@ export class ConfigurationsComponent implements OnDestroy {
 
     const crawlJobIdList$ = routeParam$.pipe(
       map(({crawlJobIds}) => crawlJobIds),
-      distinctUntilStringArrayChanged);
+      distinctUntilArrayChanged);
 
     const scriptIdList$ = routeParam$.pipe(
       map(({scriptIds}) => scriptIds),
-      distinctUntilStringArrayChanged);
+      distinctUntilArrayChanged);
 
     const sort$: Observable<Sort> = routeParam$.pipe(
       map(({sort}) => {
@@ -214,7 +213,7 @@ export class ConfigurationsComponent implements OnDestroy {
       shareReplay(1)
     );
 
-    const query$: Observable<Query> = combineLatest([
+    const query$: Observable<ConfigQuery> = combineLatest([
       kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
       entityId$, scheduleId$, crawlConfigId$, collectionId$,
       browserConfigId$, politenessId$, crawlJobIdList$, scriptIdList$,
@@ -240,7 +239,7 @@ export class ConfigurationsComponent implements OnDestroy {
     ).subscribe(configObject => this.dataSource.add(configObject));
 
     const countQuery$ = query$.pipe(
-      distinctUntilChanged((a: Query, b: Query) =>
+      distinctUntilChanged((a: ConfigQuery, b: ConfigQuery) =>
         // only count when these query parameters change
         (a.kind === b.kind
           && a.term === b.term
@@ -348,7 +347,11 @@ export class ConfigurationsComponent implements OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onQueryChange(value: Partial<Query>): any {
+  getJobRefListQueryParams(configObject: ConfigObject): Params {
+    return {crawl_job_id: configObject.seed.jobRefList.map(jobRef => jobRef.id)};
+  }
+
+  onQueryChange(value: Partial<ConfigQuery>): any {
     this.reset();
 
     const queryParams = {

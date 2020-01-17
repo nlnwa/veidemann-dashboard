@@ -1,27 +1,18 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {ConfigObject, Kind, RobotsPolicy, Role, RotationPolicy, SubCollectionType} from '../../commons/models';
-import {map, tap, toArray} from 'rxjs/operators';
-import {ConfigService} from '../../core/services';
+import {Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes} from '../../../shared/models';
+import {map, toArray} from 'rxjs/operators';
+import {ConfigApiService} from '../../core/services';
 import {combineLatest, Observable, of} from 'rxjs';
 import {ConfigOptions} from '../containers';
-import {createListRequest} from '../func/query';
 import {ConfigPath} from '../func';
+import {createListRequest} from '../func/query';
 
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-const robotsPolicies = Object.keys(RobotsPolicy).filter(p => !isNumeric(p)).map(key => RobotsPolicy[key]);
-const rotationPolicies = Object.keys(RotationPolicy).filter(p => !isNumeric(p)).map(key => RotationPolicy[key]);
-const subCollectionTypes = Object.keys(SubCollectionType).filter(p => !isNumeric(p)).map(key => SubCollectionType[key]);
-const roles = Object.keys(Role).filter(p => !isNumeric(p)).map(key => Role[key]);
 
 @Injectable()
 export class OptionsResolver implements Resolve<ConfigOptions> {
 
-
-  constructor(private backendService: ConfigService) {
+  constructor(private backendService: ConfigApiService) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ConfigOptions> | Promise<ConfigOptions> | ConfigOptions {

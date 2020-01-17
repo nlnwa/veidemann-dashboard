@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../commons/models';
+import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../../shared/models';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 
 
 @Component({

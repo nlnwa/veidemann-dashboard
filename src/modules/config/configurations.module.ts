@@ -1,6 +1,4 @@
 import {NgModule} from '@angular/core';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 import {CommonsModule} from '../commons/commons.module';
 import {LogResolver, OptionsResolver} from './services';
@@ -42,10 +40,14 @@ import {
   SeedMetaComponent,
   SelectorComponent
 } from './components';
-import {ActionDirective, DetailDirective, ExtraDirective} from './directives';
-import { JobStatusComponent } from './components/job-status/job-status.component';
-import {JobStatePipe} from './pipe/jobstate.pipe';
-import {JobStatusPipe} from './pipe/jobstatus.pipe';
+import {JobStatusComponent} from './components/job-execution-status/job-status.component';
+import {JobExecutionStatePipe} from './pipe/job-execution-state.pipe';
+import {JobExecutionStatusPipe} from './pipe/job-execution-status.pipe';
+import {CrawlExecutionStatusComponent} from './components/crawl-execution-status/crawl-execution-status.component';
+import {CrawlExecutionStatusPipe} from './pipe/crawl-execution-status.pipe';
+import {CrawlConfigNamePipe} from './pipe/crawl-config-name.pipe';
+import {CrawlScheduleNamePipe} from './pipe/crawl-schedule-name.pipe';
+import {CollectionNamePipe} from './pipe/collection.name.pipe';
 
 
 @NgModule({
@@ -70,7 +72,6 @@ import {JobStatusPipe} from './pipe/jobstatus.pipe';
     RoleMappingListComponent,
     RoleMappingDetailsComponent,
     RoleMappingDetailsMultiComponent,
-    DetailDirective,
     CollectionDetailsComponent,
     DeleteDialogComponent,
     DeleteMultiDialogComponent,
@@ -86,12 +87,15 @@ import {JobStatusPipe} from './pipe/jobstatus.pipe';
     EntityDetailsMultiComponent,
     SeedDetailComponent,
     SeedDetailMultiComponent,
-    ActionDirective,
-    ExtraDirective,
     EntityViewComponent,
     JobStatusComponent,
-    JobStatePipe,
-    JobStatusPipe,
+    JobExecutionStatePipe,
+    JobExecutionStatusPipe,
+    CrawlExecutionStatusPipe,
+    CrawlConfigNamePipe,
+    CrawlScheduleNamePipe,
+    CollectionNamePipe,
+    CrawlExecutionStatusComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
@@ -104,9 +108,6 @@ import {JobStatusPipe} from './pipe/jobstatus.pipe';
   providers: [
     OptionsResolver,
     LogResolver,
-    {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ]
 })
 export class ConfigurationsModule {
