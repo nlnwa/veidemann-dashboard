@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
 import {SimpleChange} from '@angular/core';
-import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../../commons/models';
+import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../../../shared/models';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';

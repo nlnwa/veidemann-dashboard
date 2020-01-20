@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {GetLabelKeysRequest, LabelKeysResponse} from '../../../api';
 import {map} from 'rxjs/operators';
-import {ConfigService} from '../../core/services';
-import {Kind} from '../../commons/models';
+import {ConfigApiService} from '../../core/services';
+import {Kind} from '../../../shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class LabelService {
   // tslint:disable-next-line:variable-name
   private _kind: Kind;
 
-  constructor(private configService: ConfigService) {
+  constructor(private configService: ConfigApiService) {
   }
 
   get kind(): Kind {

@@ -4,7 +4,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {StatusCode} from 'grpc-web';
 
 import {ErrorService} from './error.service';
-import {ReferrerError} from '../../commons/error';
+import {ReferrerError} from '../../../shared/error';
+import {ConfigObject} from '../../../shared/models/config';
 
 @Injectable()
 export class ApplicationErrorHandler extends ErrorHandler {
@@ -14,6 +15,7 @@ export class ApplicationErrorHandler extends ErrorHandler {
   }
 
   handleError(error: any): void {
+    console.warn('error handler', error);
     if (error.code) {
       this.handleGrpcError(error);
       return;
@@ -39,6 +41,19 @@ export class ApplicationErrorHandler extends ErrorHandler {
       case StatusCode.UNAUTHENTICATED:
         console.error('UNAUTHENTICATED', error.message);
         break;
+      default:
+        console.error('gRPC code:', error.code, 'message:', error.message);
+        break;
+    }
+  }
+
+  handleDeleteError(error: Error, configObject: ConfigObject): void {
+    if (error.message) {
+      const errorString = error.message.split(':')[1];
+      const deleteError = /(?=.*delete)(?=.*there are)/gm;
+      if (deleteError.test(errorString)) {
+        this.errorService.dispatch(new ReferrerError({errorString, configObject}));
+      }
     }
   }
 }

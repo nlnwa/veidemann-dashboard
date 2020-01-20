@@ -8,15 +8,20 @@
                           (delete)="onDeleteConfig($event)">
   </app-collection-details>
 
-  <app-crawljob-details *ngSwitchCase="Kind.CRAWLJOB"
-                        [configObject]="configObject"
-                        [crawlConfigs]="options.crawlConfigs"
-                        [crawlScheduleConfigs]="options.crawlScheduleConfigs"
-                        (update)="onUpdateConfig($event)"
-                        (save)="onSaveConfig($event)"
-                        (delete)="onDeleteConfig($event)">
-    <ng-content select="app-job-status"></ng-content>
-  </app-crawljob-details>
+  <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+    <div class="list-container__margin">
+      <app-config-job-execution-status *ngIf="configObject | getJobStatus | async as jobExecutionStatus"
+                                       [jobExecutionStatus]="jobExecutionStatus"></app-config-job-execution-status>
+    </div>
+    <app-crawljob-details
+      [configObject]="configObject"
+      [crawlConfigs]="options.crawlConfigs"
+      [crawlScheduleConfigs]="options.crawlScheduleConfigs"
+      (update)="onUpdateConfig($event)"
+      (save)="onSaveConfig($event)"
+      (delete)="onDeleteConfig($event)">
+    </app-crawljob-details>
+  </ng-container>
 
   <app-crawlconfig-details *ngSwitchCase="Kind.CRAWLCONFIG"
                            [configObject]="configObject"
@@ -65,15 +70,21 @@
                                     (delete)="onDeleteConfig($event)">
   </app-crawlhostgroupconfig-details>
 
-  <app-seed-details *ngSwitchCase="Kind.SEED"
-                    [configObject]="configObject"
-                    [crawlJobs]="options.crawlJobs"
-                    (update)="onUpdateConfig($event)"
-                    (save)="onSaveConfig($event)"
-                    (delete)="onDeleteConfig($event)"
-                    (move)="onMoveSeed($event)"
-                    (saveMultiple)="onSaveMultipleSeeds($event)">
-  </app-seed-details>
+  <ng-container *ngSwitchCase="Kind.SEED">
+    <div class="list-container__margin">
+      <app-config-crawl-execution-status *ngIf="(configObject | getCrawlExecutionStatus | async) as crawlExecutionStatus"
+                                         [crawlExecutionStatus]="crawlExecutionStatus"></app-config-crawl-execution-status>
+    </div>
+    <app-seed-details
+      [configObject]="configObject"
+      [crawlJobs]="options.crawlJobs"
+      (update)="onUpdateConfig($event)"
+      (save)="onSaveConfig($event)"
+      (delete)="onDeleteConfig($event)"
+      (move)="onMoveSeed($event)"
+      (saveMultiple)="onSaveMultipleSeeds($event)">
+    </app-seed-details>
+  </ng-container>
 
   <app-entity-details *ngSwitchCase="Kind.CRAWLENTITY"
                       [configObject]="configObject"

@@ -6,7 +6,7 @@ import {MaterialModule} from '../../../commons/material.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {LabelsComponent} from '../../../commons/components';
 import {DatePipe} from '@angular/common';
-import {ConfigService} from '../../../core/services';
+import {ConfigApiService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {LabelService} from '../../services/label.service';
@@ -30,7 +30,7 @@ describe('SeedMetaComponent', () => {
       providers: [
         DatePipe,
         {
-          provide: ConfigService,
+          provide: ConfigApiService,
           useValue: {}
         },
         {

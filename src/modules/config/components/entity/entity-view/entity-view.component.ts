@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ConfigObject, Label} from '../../../../commons/models';
+import {ConfigObject, Label} from '../../../../../shared/models';
 
 @Component({
   selector: 'app-entity-view',

@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
+
+import {Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
 import {AppInitializerService, SnackBarService} from '../../../core/services/';
-import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 import {AuthService, GuardService} from '../../../core/services/auth';
-import {Observable, of} from 'rxjs';
-import {filter, map, tap, throttle} from 'rxjs/operators';
 
 
 @Component({

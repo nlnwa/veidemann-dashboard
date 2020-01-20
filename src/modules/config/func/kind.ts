@@ -1,4 +1,4 @@
-import {Kind} from '../../commons/models';
+import {Kind} from '../../../shared/models';
 
 export enum ConfigPath {
   'crawljobs' = Kind.CRAWLJOB,

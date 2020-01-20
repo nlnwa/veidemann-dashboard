@@ -1,4 +1,4 @@
-<form [formGroup]="form" fxFlex>
+<form [formGroup]="form">
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>settings_system_daydream</mat-icon>
@@ -80,35 +80,6 @@
             Ta skjermbilde
           </mat-checkbox>
         </ng-container>
-
-        <mat-list class="shortcut--list" *ngIf="showShortcuts">
-          <mat-list-item *ngIf="collectionRefId.value">
-            <mat-icon matTooltip="Collection">collections_bookmark</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['/config/collection']"
-               [queryParams]="{id: collectionRefId.value}">
-              {{ getCollectionName(collectionRefId.value) }}
-            </a>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="browserConfigRefId.value">
-            <mat-icon matTooltip="BrowserConfig">web</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['/config/browserconfig']"
-               [queryParams]="{id: browserConfigRefId.value}">
-              {{ getBrowserConfigName(browserConfigRefId.value) }}
-            </a>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="politenessRefId.value">
-            <mat-icon matTooltip="PolitenessConfig">sentiment_very_satisfied</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['/config/politenessconfig']"
-               [queryParams]="{id: politenessRefId.value}">
-              {{ getPolitenessConfigName(politenessRefId.value) }}
-            </a>
-          </mat-list-item>
-        </mat-list>
       </div>
     </mat-card-content>
     <mat-card-actions *ngIf="canEdit">

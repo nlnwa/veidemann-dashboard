@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Label} from '../../../commons/models';
+import {Label} from '../../../../shared/models';
 import {LabelService} from '../../services/label.service';
 import {LabelComponent} from '../label/label.component';
 

@@ -1,0 +1,75 @@
+<mat-expansion-panel *ngIf="jobExecutionStatus">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{JobExecutionState[jobExecutionStatus.state]}}</mat-panel-title>
+    <mat-panel-description>Status</mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div fxLayout="column">
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Start</th>
+          <th class="mat-header-cell">Slutt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{jobExecutionStatus.startTime | date : 'long'}}</td>
+          <td class="mat-cell">{{jobExecutionStatus.endTime | date : 'long'}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+    <div class="grid">
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Statistikk</th>
+          <th class="mat-header-cell"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">URIs crawled</td>
+          <td class="mat-cell">{{jobExecutionStatus.urisCrawled}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents crawled</td>
+          <td class="mat-cell">{{jobExecutionStatus.documentsCrawled}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents denied</td>
+          <td class="mat-cell">{{jobExecutionStatus.documentsDenied}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents failed</td>
+          <td class="mat-cell">{{jobExecutionStatus.documentsFailed}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents out of scope</td>
+          <td class="mat-cell">{{jobExecutionStatus.documentsOutOfScope}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents retried</td>
+          <td class="mat-cell">{{jobExecutionStatus.documentsRetried}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table mat-table [dataSource]="getExecMap(jobExecutionStatus.executionsStateMap)">
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef>State</th>
+          <td mat-cell *matCellDef="let execution">{{execution.key}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="count">
+          <th mat-header-cell *matHeaderCellDef>Antall</th>
+          <td mat-cell *matCellDef="let execution">{{execution.value}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</mat-expansion-panel>

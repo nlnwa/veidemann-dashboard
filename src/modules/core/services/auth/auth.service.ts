@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {Role} from '../../../commons/models';
+import {Role} from '../../../../shared/models';
 
 
 @Injectable()

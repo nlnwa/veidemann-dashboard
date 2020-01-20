@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../commons/validator/patterns';
-import {ConfigObject, ConfigRef, Kind, Label} from '../../../../commons/models';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models';
 import {BrowserConfigDetailsComponent} from '../browserconfig-details/browserconfig-details.component';
 
 

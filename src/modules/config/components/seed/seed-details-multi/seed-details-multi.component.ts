@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, ConfigRef, Kind} from '../../../../commons/models';
+import {ConfigObject, ConfigRef, Kind} from '../../../../../shared/models';
 import {SeedDetailComponent} from '../seed-details/seed-details.component';
 
 

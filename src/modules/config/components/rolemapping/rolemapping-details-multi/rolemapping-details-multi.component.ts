@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {ConfigObject, Kind} from '../../../../commons/models';
+import {ConfigObject, Kind} from '../../../../../shared/models';
 import {RoleMappingDetailsComponent} from '../rolemapping-details/rolemapping-details.component';
-import {CustomValidators} from '../../../../commons/validator';
+import {CustomValidators} from '../../../../../shared/validation';
 
 
 @Component({

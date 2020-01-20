@@ -18,15 +18,15 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     TimeComponent,
   ],
   entryComponents: [ErrorDialogComponent],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        CommonsModule,
-        CoreModule,
-        MatProgressSpinnerModule,
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    CommonsModule,
+    CoreModule,
+    MatProgressSpinnerModule,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

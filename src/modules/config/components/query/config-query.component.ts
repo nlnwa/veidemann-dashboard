@@ -1,9 +1,10 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
-import {Kind} from '../../../commons/models';
+import {Kind} from '../../../../shared/models';
 import {ConfigOptions} from '../../containers';
-import {Query} from '../../func/query';
+import {ConfigQuery} from '../../../core/services/config.service';
+
 
 @Component({
   selector: 'app-config-query',
@@ -20,16 +21,16 @@ export class ConfigQueryComponent implements OnChanges, AfterViewInit {
   private _term: string;
 
   @Input()
-  query: Partial<Query>;
+  query: Partial<ConfigQuery>;
 
   @Output()
-  queryChange: EventEmitter<Partial<Query>>;
+  queryChange: EventEmitter<Partial<ConfigQuery>>;
 
   @Input()
   options: ConfigOptions;
 
   constructor(private fb: FormBuilder) {
-    this.queryChange = new EventEmitter<Partial<Query>>();
+    this.queryChange = new EventEmitter<Partial<ConfigQuery>>();
     this.createForm();
   }
 
@@ -57,7 +58,7 @@ export class ConfigQueryComponent implements OnChanges, AfterViewInit {
     });
   }
 
-  onQuery(value: Query) {
+  onQuery(value: ConfigQuery) {
     this.queryChange.emit(value);
   }
 

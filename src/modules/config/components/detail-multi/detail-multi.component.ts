@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {ConfigObject, Kind} from '../../../commons/models';
+import {ConfigObject, Kind} from '../../../../shared/models';
 import {ConfigOptions} from '../../containers';
 
 @Component({

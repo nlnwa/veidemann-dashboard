@@ -10,7 +10,7 @@ export * from './politenessconfig';
 export * from './rolemapping';
 export * from './schedule';
 export * from './query/config-query.component';
-export {BaseListComponent} from './base-list/base-list';
+export {BaseListComponent} from '../../commons/components/base-list/base-list';
 export {MetaComponent} from './/meta/meta.component';
 export {LabelComponent} from './label/label.component';
 export {EntityDetailsComponent} from './entity/entity-details/entity-details.component';

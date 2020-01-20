@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from '../../../../commons/validator';
-import {ConfigObject, Kind, Meta, Role, RoleMapping} from '../../../../commons/models';
+import {CustomValidators} from '../../../../../shared/validation';
+import {ConfigObject, Kind, Meta, Role, RoleMapping} from '../../../../../shared/models';
 
 
 @Component({

@@ -10,14 +10,14 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import {SeedUrlValidator} from '../../../commons/validator/existing-url-validation';
+import {SeedUrlValidator} from '../../../../shared/validation/existing-url-validation';
 import {MetaComponent} from '../meta/meta.component';
-import {ConfigService} from '../../../core/services';
+import {ConfigApiService} from '../../../core/services';
 import {Observable, of} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
-import {MULTI_VALID_URL, VALID_URL} from '../../../commons/validator/patterns';
-import {ConfigObject, ConfigRef, Meta} from '../../../commons/models';
-import {DataService} from '../../services';
+import {MULTI_VALID_URL, VALID_URL} from '../../../../shared/validation/patterns';
+import {ConfigObject, ConfigRef, Meta} from '../../../../shared/models';
+import {ConfigService} from '../../services';
 
 export interface Parcel {
   seed: ConfigObject | ConfigObject[];
@@ -47,8 +47,8 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   constructor(protected fb: FormBuilder,
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef,
-              private configService: ConfigService,
-              @Optional() private dataService: DataService) {
+              private configService: ConfigApiService,
+              @Optional() private dataService: ConfigService) {
     super(fb, datePipe);
     this.asyncUrlValidator = SeedUrlValidator.createBackendValidator(this.configService);
   }

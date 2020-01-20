@@ -2,12 +2,13 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
-import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../commons/models';
-import {IpRange} from '../../../../commons/models/config/ip-range.model';
+import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../../shared/models';
+import {IpRange} from '../../../../../shared/models/config/ip-range.model';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
+  styleUrls: ['./crawlhostgroupconfig-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {

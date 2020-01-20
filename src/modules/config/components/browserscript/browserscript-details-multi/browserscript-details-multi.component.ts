@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, Kind} from '../../../../commons/models';
+import {ConfigObject, Kind} from '../../../../../shared/models';
 import {BrowserScriptDetailsComponent} from '../browserscript-details/browserscript-details.component';
 
 @Component({

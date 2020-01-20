@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnChanges} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {ConfigObject, Kind} from '../../../../commons/models';
+import {ConfigObject, Kind} from '../../../../../shared/models';
 import {EntityDetailsComponent} from '../entity-details/entity-details.component';
 
 @Component({
