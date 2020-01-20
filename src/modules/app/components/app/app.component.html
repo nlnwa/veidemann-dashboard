@@ -1,5 +1,5 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
-  <mat-toolbar color="primary">
+  <mat-toolbar class="main-toolbar" color="primary">
     <button mat-icon-button
             [mat-menu-trigger-for]="menu"
             *ngIf="isLoggedIn"
