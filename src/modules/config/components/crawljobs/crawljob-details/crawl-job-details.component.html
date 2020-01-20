@@ -1,4 +1,4 @@
-<form [formGroup]="form" fxFlex>
+<form [formGroup]="form">
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>work</mat-icon>
@@ -15,8 +15,9 @@
         Deaktivert
       </mat-slide-toggle>
     </mat-card-header>
-    <mat-card-content fxLayout="column">
-      <div fxFlex fxLayout="row wrap" fxLayoutGap="24px">
+
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="24px">
         <div fxFlex fxLayout="column">
           <app-meta formControlName="meta"></app-meta>
 
@@ -80,9 +81,6 @@
           </ng-container>
 
         </div>
-      </div>
-      <div fxFlex>
-        <ng-content></ng-content>
       </div>
     </mat-card-content>
 

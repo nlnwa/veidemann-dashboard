@@ -8,6 +8,7 @@ import {IpRange} from '../../../../../shared/models/config/ip-range.model';
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
   templateUrl: './crawlhostgroupconfig-details.component.html',
+  styleUrls: ['./crawlhostgroupconfig-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {

@@ -27,47 +27,45 @@
       </table>
     </div>
 
-    <div fxLayout="row wrap" fxLayoutGap="16px">
-      <div fxFlex>
-        <table class="mat-table">
-          <thead>
-          <tr class="mat-header-row">
-            <th class="mat-header-cell">Statistikk</th>
-            <th class="mat-header-cell"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr class="mat-row">
-            <td class="mat-cell">URIs crawled</td>
-            <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Bytes crawled</td>
-            <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Documents crawled</td>
-            <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Documents denied</td>
-            <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Documents failed</td>
-            <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Documents out of scope</td>
-            <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell">Documents retried</td>
-            <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+    <div fxFlex>
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Statistikk</th>
+          <th class="mat-header-cell"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">URIs crawled</td>
+          <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Bytes crawled</td>
+          <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents crawled</td>
+          <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents denied</td>
+          <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents failed</td>
+          <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents out of scope</td>
+          <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell">Documents retried</td>
+          <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
     <mat-list fxFlex *ngIf="crawlExecutionStatus.currentUriIdList.length">
       <h3 matSubheader>Current URIs</h3>
@@ -94,7 +92,7 @@
         <tr class="mat-row">
           <td class="mat-cell">
             <a [routerLink]="['/report', 'crawlexecution']"
-               [queryParams]="{id: crawlExecutionStatus.jobExecutionId}">{{crawlExecutionStatus.id}}</a>
+               [queryParams]="{id: crawlExecutionStatus.id}">{{crawlExecutionStatus.id}}</a>
           </td>
           <td class="mat-cell">
             <a [routerLink]="['/report', 'crawlexecution']"

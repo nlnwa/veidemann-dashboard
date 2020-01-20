@@ -1,26 +1,26 @@
-<mat-expansion-panel *ngIf="jobExecutionStatus; else nada">
+<mat-expansion-panel *ngIf="jobExecutionStatus">
   <mat-expansion-panel-header>
     <mat-panel-title>{{JobExecutionState[jobExecutionStatus.state]}}</mat-panel-title>
     <mat-panel-description>Status</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <table class="mat-table" style="margin-bottom: 1rem;">
-    <thead>
-    <tr class="mat-header-row">
-      <th class="mat-header-cell">Start</th>
-      <th class="mat-header-cell">Slutt</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class="mat-row">
-      <td class="mat-cell">{{jobExecutionStatus.startTime | date : 'long'}}</td>
-      <td class="mat-cell">{{jobExecutionStatus.endTime | date : 'long'}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div fxLayout="column">
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Start</th>
+          <th class="mat-header-cell">Slutt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{jobExecutionStatus.startTime | date : 'long'}}</td>
+          <td class="mat-cell">{{jobExecutionStatus.endTime | date : 'long'}}</td>
+        </tr>
+        </tbody>
+      </table>
 
-  <div fxLayout="row wrap" fxLayoutGap="16px">
-    <div fxFlex>
+    <div class="grid">
       <table class="mat-table">
         <thead>
         <tr class="mat-header-row">
@@ -55,8 +55,7 @@
         </tr>
         </tbody>
       </table>
-    </div>
-    <div fxFlex>
+
       <table mat-table [dataSource]="getExecMap(jobExecutionStatus.executionsStateMap)">
         <ng-container matColumnDef="state">
           <th mat-header-cell *matHeaderCellDef>State</th>
@@ -74,7 +73,3 @@
     </div>
   </div>
 </mat-expansion-panel>
-
-<ng-template #nada>
-  <p>Jobben har aldri vært kjørt</p>
-</ng-template>
