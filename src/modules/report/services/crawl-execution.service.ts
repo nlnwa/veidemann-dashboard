@@ -54,6 +54,9 @@ export class CrawlExecutionService extends QueryService {
     const queryTemplate = new CrawlExecutionStatus();
     const fieldMask = new FieldMask();
 
+    listRequest.setOffset(query.pageIndex);
+    listRequest.setPageSize(query.pageSize);
+
     if (query.jobId) {
       queryTemplate.jobId = query.jobId;
       fieldMask.addPaths('jobId');
@@ -67,11 +70,6 @@ export class CrawlExecutionService extends QueryService {
     if (fieldMask.getPathsList().length > 0) {
       listRequest.setQueryTemplate(CrawlExecutionStatus.toProto(queryTemplate));
       listRequest.setQueryMask(fieldMask);
-    }
-
-    if (query.pageIndex && query.pageSize) {
-      listRequest.setOffset(query.pageIndex);
-      listRequest.setPageSize(query.pageSize);
     }
 
     if (query.hasError) {

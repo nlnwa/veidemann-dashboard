@@ -3,7 +3,17 @@ import {from, Observable} from 'rxjs';
 import {count, mergeMap} from 'rxjs/operators';
 
 import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
-import {BrowserConfig, ConfigObject, ConfigRef, CrawlConfig, CrawlJob, Kind, Label, RoleMapping, Seed} from '../../../shared/models';
+import {
+  BrowserConfig,
+  ConfigObject,
+  ConfigRef,
+  CrawlConfig,
+  CrawlJob,
+  Kind,
+  Label,
+  RoleMapping,
+  Seed
+} from '../../../shared/models';
 import {QueryService, Sort} from '../../commons/services/query.service';
 import {ConfigApiService} from './index';
 
@@ -126,10 +136,8 @@ export class ConfigService extends QueryService {
     const listRequest = new ListRequest();
     listRequest.setKind(query.kind.valueOf());
 
-    if (query.pageSize || query.pageIndex) {
-      listRequest.setOffset(query.pageIndex * query.pageSize);
-      listRequest.setPageSize(query.pageSize);
-    }
+    listRequest.setOffset(query.pageIndex * query.pageSize);
+    listRequest.setPageSize(query.pageSize);
 
     const queryTemplate = new ConfigObject();
     const fieldMask = new FieldMask();
@@ -156,11 +164,17 @@ export class ConfigService extends QueryService {
         }
         if (query.browserConfigId) {
           fieldMask.addPaths('crawlConfig.browserConfigRef');
-          queryTemplate.crawlConfig.browserConfigRef = new ConfigRef({id: query.browserConfigId, kind: Kind.BROWSERCONFIG});
+          queryTemplate.crawlConfig.browserConfigRef = new ConfigRef({
+            id: query.browserConfigId,
+            kind: Kind.BROWSERCONFIG
+          });
         }
         if (query.politenessId) {
           fieldMask.addPaths('crawlConfig.politenessRef');
-          queryTemplate.crawlConfig.politenessRef = new ConfigRef({id: query.politenessId, kind: Kind.POLITENESSCONFIG});
+          queryTemplate.crawlConfig.politenessRef = new ConfigRef({
+            id: query.politenessId,
+            kind: Kind.POLITENESSCONFIG
+          });
         }
         break;
       case Kind.BROWSERCONFIG:
@@ -168,7 +182,10 @@ export class ConfigService extends QueryService {
 
         if (query.scriptIdList.length) {
           fieldMask.addPaths('browserConfig.scriptRef');
-          queryTemplate.browserConfig.scriptRefList = query.scriptIdList.map(id => new ConfigRef({id, kind: Kind.BROWSERSCRIPT}));
+          queryTemplate.browserConfig.scriptRefList = query.scriptIdList.map(id => new ConfigRef({
+            id,
+            kind: Kind.BROWSERSCRIPT
+          }));
         }
         break;
       case Kind.SEED:
