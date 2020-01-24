@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="no" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.62.2" />
+    <meta name="description" content="Dokumentasjon for veidemann dashboard ">
+
+
+    <link rel="icon" href="/veidemann/docs/images/favicon.png" type="image/png">
+
+    <title>Crawlhostgroupconfig :: Dokumentasjon for Veidemann dashboard</title>
+
+    
+    <link href="/veidemann/docs/css/nucleus.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/fontawesome-all.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/hybrid.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/featherlight.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/perfect-scrollbar.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/auto-complete.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/atom-one-dark-reasonable.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/theme.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/hugo-theme.css?1579100658" rel="stylesheet">
+    
+      <link href="/veidemann/docs/css/theme-veidemann-dashboard-documentation.css?1579100658" rel="stylesheet">
+    
+
+    <script src="/veidemann/docs/js/jquery-3.3.1.min.js?1579100658"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/veidemann/docs/configurations/crawlhostgroupconfig/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <h3>Veidemann Dashboard</h3>
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/veidemann/docs/js/lunr.min.js?1579100658"></script>
+<script type="text/javascript" src="/veidemann/docs/js/auto-complete.js?1579100658"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/veidemann\/docs\/";
+    
+</script>
+<script type="text/javascript" src="/veidemann/docs/js/search.js?1579100658"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/sitestructure/" title="Nettsidens struktur" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/sitestructure/">
+          <i class='fa fa-list-alt'></i>Nettsidens struktur
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/" title="Core" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/">
+          <i class='fa fa-cogs'></i>Core
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/activity/" title="Aktivitet" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/activity/">
+          Aktivitet
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/statistics/" title="Statistikk" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/statistics/">
+          Statistikk
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/" title="Konfigurasjoner" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/">
+          <i class='fa fa-cog'></i>Konfigurasjoner
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/entities-and-seeds/" title="Entiter og seeds" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/entities-and-seeds/">
+          Entiter og seeds
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/collection/" title="Collection" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/collection/">
+          Collection
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawljob/" title="Crawljob" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawljob/">
+          Crawljob
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/schedule/" title="Schedule" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/schedule/">
+          Schedule
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawlconfig/" title="Crawlconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawlconfig/">
+          Crawlconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawlhostgroupconfig/" title="Crawlhostgroupconfig" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawlhostgroupconfig/">
+          Crawlhostgroupconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/browserconfig/" title="Browserconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/browserconfig/">
+          Browserconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/browserscript/" title="Browserscript" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/browserscript/">
+          Browserscript
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/politenessconfig/" title="Politenessconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/politenessconfig/">
+          Politenessconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/logging/" title="Logging" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/logging/">
+          Logging
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/users/" title="Brukere" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/users/">
+          Brukere
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/warcstatus/" title="WARC status" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/warcstatus/">
+          WARC status
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3></h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://github.com/nlnwa/veidemann-dashboard-documentation"><i class='fab fa-github'>&nbsp;&nbsp;</i> Documentation repo</a>
+              </li>
+          
+              <li> 
+                  <a class="padding" href="https://github.com/nlnwa/veidemann-dashboard"><i class='fab fa-github'>&nbsp;&nbsp;</i> Veidemann dashboard repo</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="no" value="/veidemann/docs/configurations/crawlhostgroupconfig/" selected>Norsk</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en" value="/veidemann/docs/en/configurations/crawlhostgroupconfig/">English</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/veidemann/docs/'>Veidemann dashboard dokumentasjon</a> > <a href='/veidemann/docs/configurations/'>Konfigurasjoner</a> > Crawlhostgroupconfig
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Crawlhostgroupconfig
+            </h1>
+          
+
+        
+
+
+
+
+	
+<div class="notices info" ><p>Brukes av <a href="../politenessconfig">politenessconfig</a></p>
+</div>
+
+<p>En crawlhostgroupconfig brukes til å angi et utvalg av IP-addresser.
+Dette blir brukt av politenessconfig til å bestemme en felles regel for sider som ligger på disse IP-addressene.</p>
+<h4 id="ip-range">IP-range</h4>
+<hr>
+<p>I tillegg til <a href="../#veidemann-meta">metadata</a>, kan en crawlhostgroupconfig inneholde en eller flere IP-range.</p>
+<p>IP-addressene kan enten være en IPv4 eller IPv6 addresse, men både til og fra addresse må være av samme IP-versjon.
+I tillegg må verdien før første punktum (IPv4) eller kolon (IPv6), i hver av dem være lik for IP-rangen skal ses som gyldig.</p>
+<p><img src="/veidemann/docs/img/crawlhostgroupconfig/veidemann_dashboard_crawlhostgroupconfig_overview.png" alt="crawlhostgroupconfig overview"></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/veidemann/docs/configurations/crawlconfig/" title="Crawlconfig"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/veidemann/docs/configurations/browserconfig/" title="Browserconfig" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/veidemann/docs/js/clipboard.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/perfect-scrollbar.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/perfect-scrollbar.jquery.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/jquery.sticky.js?1579100658"></script>
+    <script src="/veidemann/docs/js/featherlight.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/highlight.pack.js?1579100658"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/veidemann/docs/js/modernizr.custom-3.6.0.js?1579100658"></script>
+    <script src="/veidemann/docs/js/learn.js?1579100658"></script>
+    <script src="/veidemann/docs/js/hugo-learn.js?1579100658"></script>
+
+    <link href="/veidemann/docs/mermaid/mermaid.css?1579100658" rel="stylesheet" />
+    <script src="/veidemann/docs/mermaid/mermaid.js?1579100658"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>

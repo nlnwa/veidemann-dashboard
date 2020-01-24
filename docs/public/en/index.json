@@ -1,0 +1,141 @@
+[
+{
+	"uri": "/veidemann/docs/en/configurations/entities-and-seeds/",
+	"title": "Entities and seeds",
+	"tags": [],
+	"description": "",
+	"content": "From entities and seeds a user can add and administrate web pages to harvest.\nSearch  The search bar on the page could be used to find an entity/seed with a matching name or label. The icons shown in the list, will show where the match was found.\n   Icon Hit      Entity    Seed    Label    Entity  An entity in Veidemann is typically the owner of a web page, and consists of metadata and one or more seeds.\nSeed  A seed describes a web page that Veidemann should harvest, and must have a connecting entity. It consist of metadata, but in this implementation the name field is exchanged with URL. In addition, a seed consists of the field:\n  Entity ID: The ID of the connected entity. The field is automatically generated when creating a new seed.\n  On/Off: Decides if the seed should be harvested or not.\n  Surt prefix: Automatically generated based of the URL.\n  Job: Defines what crawljob should be used to harvest the seed.\n  "
+},
+{
+	"uri": "/veidemann/docs/en/",
+	"title": "Veidemann dashboard documentation",
+	"tags": [],
+	"description": "",
+	"content": "Veidemann dashboard documentation This is the documentation for Veidemann dashboard, the GUI of Veidemann.\nThe documentation is devided into three parts.\nSite structure  Contains an introduction to the layout of Veidemann dashboard and which parts it consists of.\nCore  Describes the core functionality of Veidemann dashboard.\nKonfigurasjoner  Explains the different configurations in Veidemann dashboard, and how these can be used.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/collection/",
+	"title": "Collection",
+	"tags": [],
+	"description": "",
+	"content": " Collection is used by crawlconfig\n Collection contains settings for\u0026hellip;\nBrowserconfig contains settings for the web browser used by the crawler. In addition to the fields described below, does a collection contain fields formetadata.\n   Felt Betydning     Komprimer Should the file be compressed.   Deduplisering policy What deduplication policy should be used.   Filrotasjon policy What file rotation policy should be used.   Filstørrelse File size of the WARC files.   Subcollection Sub collection for the collection.    Compress  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque risus, congue pharetra viverra at, vehicula ac lorem. Praesent sollicitudin semper metus vestibulum commodo. Proin sit amet fringilla tellus. Aliquam erat volutpat. Integer tincidunt elementum ipsum ut feugiat. Nam suscipit, tortor sed sollicitudin vulputate, odio sem rutrum ex, vel hendrerit arcu dui eget est. Maecenas sit amet accumsan lacus. Nam et lobortis massa.\nDeduplisering policy  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque risus, congue pharetra viverra at, vehicula ac lorem. Praesent sollicitudin semper metus vestibulum commodo. Proin sit amet fringilla tellus. Aliquam erat volutpat. Integer tincidunt elementum ipsum ut feugiat. Nam suscipit, tortor sed sollicitudin vulputate, odio sem rutrum ex, vel hendrerit arcu dui eget est. Maecenas sit amet accumsan lacus. Nam et lobortis massa.\nFilrotasjon policy  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque risus, congue pharetra viverra at, vehicula ac lorem. Praesent sollicitudin semper metus vestibulum commodo. Proin sit amet fringilla tellus. Aliquam erat volutpat. Integer tincidunt elementum ipsum ut feugiat. Nam suscipit, tortor sed sollicitudin vulputate, odio sem rutrum ex, vel hendrerit arcu dui eget est. Maecenas sit amet accumsan lacus. Nam et lobortis massa.\nFilstørrelse  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque risus, congue pharetra viverra at, vehicula ac lorem. Praesent sollicitudin semper metus vestibulum commodo. Proin sit amet fringilla tellus. Aliquam erat volutpat. Integer tincidunt elementum ipsum ut feugiat. Nam suscipit, tortor sed sollicitudin vulputate, odio sem rutrum ex, vel hendrerit arcu dui eget est. Maecenas sit amet accumsan lacus. Nam et lobortis massa.\nSubcollection  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque risus, congue pharetra viverra at, vehicula ac lorem. Praesent sollicitudin semper metus vestibulum commodo. Proin sit amet fringilla tellus. Aliquam erat volutpat. Integer tincidunt elementum ipsum ut feugiat. Nam suscipit, tortor sed sollicitudin vulputate, odio sem rutrum ex, vel hendrerit arcu dui eget est. Maecenas sit amet accumsan lacus. Nam et lobortis massa.\n"
+},
+{
+	"uri": "/veidemann/docs/en/sitestructure/",
+	"title": "Site structure",
+	"tags": [],
+	"description": "",
+	"content": "The image below shows the site served when visiting https://nettarkivet.nb.no/veidemann.\nThe user interface is devided into three sections:\n   Section Function     1. Toolbar The toolbar contains shortcuts to the menu and login   1.1. Login Login to Veidemann dashboard   2. Menu MMenu containing shortcuts to the different pages of Veidemann dashboard   3. View Page content is shown here    Toolbar  Pressing the button to the left in the toolbar will show/hide the menu.\nBy pressing the text Veidemann, the user will be redirected to the home page.\nThe clock in the middle shows the time in UTC, which is the timezone used throughout the system.\nThe button in the far right is used to login or logout a user.\nLogin  A user must have been given access to the site by an administrator.\nWhen access is granted, a user can login by pressing login.\nThe user is then given two ways to login.\nLog in with Email: *Users registered by e-mail can use this method.\nLog in with Pilt: Users with a Pilt account can use this option.\nMenu  From the menu a user is able to navigate to the different part of the site. What pages a user can access, depends on the assigned role of the given account.\nThe menu is devided into two parts. One part contains core functionality of the system, while the other is used for configurations. The menu can be hidden to create a bigger view by pressing the button in the left corner. View  The content of the different pages are shown here.\n"
+},
+{
+	"uri": "/veidemann/docs/en/core/",
+	"title": "Core",
+	"tags": [],
+	"description": "",
+	"content": "Site is under construction\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/crawljob/",
+	"title": "Crawljob",
+	"tags": [],
+	"description": "",
+	"content": " Used by seeds\n Crawljob is used for define a job for harvesting. In addition to the parameters shown in the table below, the configuration also contains metadata.\n   Field Function     Deactivated Stop the job from running   Depth The depth to crawl   Max time How long the job should run   Max bytes Maximum amount of data to download   Schedule The schedule to use   Crawlconfig The crawlconfig to use    Deactivated  The switch is used to deativate the crawljob. With the switch set in the on position, the job will never run.\nDepth  The depth decides how many levels of a web page to crawl. For example will a depth of the 3 mean that the crawler can visit 3 URL's way from the start page.\nMax time  The maximum time in seconds that the job is allowed to run. The job will then run from the start time given in the schedule, until it reaches it's max time.\nMax bytes  The maximum amount of data, given in bytes, that crawler can download. If exceeded the job should be stopped.\nSchedule  Set the time for when the job should be run by defining a schedule.\nThe field is not required, but if the crawljob is missing a schedule the job will never run and must be started manually.\nCrawlconfig  Choose what settings the crawljob should use be setting a crawlconfig. The crawlconfig includes settings for the web browser used for harvesting and politeness settings.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/",
+	"title": "Configurations",
+	"tags": [],
+	"description": "",
+	"content": "From Veidemann dashboard users can set numerous different configurations to control the harvesting of web pages.\nThis part of the documentation will focus on giving an insight to the different configurations and the settings they consists of.\nAll available configurations are shown in the table below, with a short description of their use case.\nA more in-depth description can be found be navigating to the page for the specific configuration.\nConfigurations     Config Description     Entities/Seeds Administrate and configure web pages to harvest.   Crawljobs Define jobs used for harvesting.   Schedule Create time-based job schedules used by crawljobs.   Crawlconfig Settings for the crawler. Crawlconfig is used by crawljobs.   Crawlhostgroup Create collections of IP-addresses. For use with politenessconfig.   Browserconfig Settings for the browser used for harvesting.   Browserscript Create scripts to be used be the harvesting browser.   Politeness Politeness settings for the crawler.   Logging Administrate logs in Veidemann.   Users Administrate users af Veidemann dashboard.   WARC status Validation status of harvested material.    Use of the configuration pages  Most of the configuration pages have the same layout, and consists of two parts:\n List of all available configurations. Details for a selected configuration.  Create a new config A new configuration of a given type is created by pressing the add button in the upper right corner. An empty form will be shown to enter the values. When the required fields are filled with correct values, a save button will become available. If a field contains invalid values, an error message will be shown below the field.\nIf more than one config is selected, it's not possible to create new configurations. Remove the selections to start creating a new configuration.\n Tilgjengelige konfigurasjoner The list on the top shows available configurations of a given type. By clicking a config in the list, the details of the configuration will be shown below. You will then be able to edit or delete the configuration. Unsaved changes can be reverted to initial values by pressing the revrt button.\nUpdate multiple configurations  Several of the configurations have support for multiple update. Veidemann dashboard have two different methods of updating multiple configs at once:\n Update a selection Update all available configs.  Update selection If more than one config is selected it's possible to edit the fields for all, except meta. If a field contains data, it means that the shown value is common for all selected configurations. If a field is updated, the new value will be set for all the selected configs. If a field remains empty, all configurations will keep their original values.\nFields with on/off values (true/false), will be deactivated if the value is not common for all the selected. To set a common value for all, the field most be activated by clicking on it, and the set to the desired value.\n Update all available configurations When selecting all configurations on a page, you will be given the choice of selecting all available configs. In this case there will be no comparing for common values. If a field remains empty when updating all available, the configurations will keep the orignal value of this field.\nMeta  Common to most of the configurations in Veidemann is that they have associated metadata describing basic information about the configuration.\nThe content in meta can be found in the table below.\n   Field Function     Name Name of the config.   Description Descripton of the config.   Label Labels for grouping, search etc.   Created Creation timestamp   Created by Name of user that created the config   Last modified Last modified timestamp   Last modified by Name of user that last modified the config.   Id Unique number for identifying the config.    Name  Contains a custom name for identifying the config. The field is required and must consist of at least two characters.\nDescription  Contians a custom description for the configuration. Use this field to give more info about the config. The field is not required.\nLabel  A label consist of a key-value-pair on the form: key:value, and is created by clicking on the line a enter the desired value in before mentioned form and press enter.\nExisting labels can be edited or deleted. By clicking on a label you will also be able to edit key and/or value. Created  Contains a timestamp in UTC for when the config was created. The field is automatically generated when a new config is saved.\nCreated by  Contains the name or e-mail of the user responsible for creating the config. The field is automatically generated when a new config is saved.\nLast modified  Contains a timestamp of when the config was updated last. The field is automatically updated when a config is updated.\nLast modified by  Contains name or e-mail of the user responsible for the latest update og the config. The field is automatically updated when a config is updated.\nId  Contains an unique ID for the configuration. The field is automatically created when a configuration is created.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/schedule/",
+	"title": "Schedule",
+	"tags": [],
+	"description": "",
+	"content": " Used by crawljob\n Schedule defines a time for scheduled job, and is used in Veidemann to determine when different harves jobs are to be run. A schedule consists of metadata and the values in the table below.\n   Field Function     Minute Minute part of the cron expression   Hour Hour part of the cron expression   Dom Day of the month part of the cron expression   Month Month part of the cron expression   Dow Day of week part of the cron expression   Valid from Defines a starting date for when the schedule should be valid   Valid to Defines an end date for when the schedule should be valid    Cron  Schedule defines a cron expression that decides when a crawljob should be run.\nThe expression consists of the following parts:\nA job will start when all parts of the expression are true. In addtion to a numeric value, the field support more characters to further specify the expression:\n Star wildcard (*): Indicates every, and can be used in any of the fields    Comma (,): Each field can contain two or more comma separated values.\n  Slash (/): The slash character can be used to identify step values within a range. It can be used both in the form */c and a-b/c. The subpattern is matched every c values of the range 0,maxvalue or a-b.\n  Minute  During which minutes of the hour should the job been launched? The values range is from 0 to 59.\nExample:\n Hour  During which hours of the day should the job been launched? The values range is from 0 to 23.\nExample:\n Day of month  During which days of the month should the job been launched? The values range is from 1 to 31.\nExample:\n Month  During which months of the year should the job been launched? The values range is from 1 (January) to 12 (December), otherwise this sub-pattern allows the aliases \u0026ldquo;jan\u0026rdquo;, \u0026ldquo;feb\u0026rdquo;, \u0026ldquo;mar\u0026rdquo;, \u0026ldquo;apr\u0026rdquo;, \u0026ldquo;may\u0026rdquo;, \u0026ldquo;jun\u0026rdquo;, \u0026ldquo;jul\u0026rdquo;, \u0026ldquo;aug\u0026rdquo;, \u0026ldquo;sep\u0026rdquo;, \u0026ldquo;oct\u0026rdquo;, \u0026ldquo;nov\u0026rdquo; and \u0026ldquo;dec\u0026rdquo;.\nExample:\n Day of week  During which days of the week should the task been launched? The values range is from 0 (Sunday) to 6 (Saturday), otherwise this sub-pattern allows the aliases \u0026ldquo;sun\u0026rdquo;, \u0026ldquo;mon\u0026rdquo;, \u0026ldquo;tue\u0026rdquo;, \u0026ldquo;wed\u0026rdquo;, \u0026ldquo;thu\u0026rdquo;, \u0026ldquo;fri\u0026rdquo; and \u0026ldquo;sat\u0026rdquo;.\nExample:\n Valid from/to  The fields valid from an to are used to specify a period where the schedule config should be valid.\nThe fields are not required, and if not set the config will always be valid. If a crawljob contains a schedule that is no longer valid, the crawljob will never run.\nAll dates are given in UTC The fields can either be set by entering the date on the form dd.mm.yyyy or by picking a date from the calendar by clicking .\nValid from will then be the beginningof the selected date from 00:00:00, while valid to will the end of the selected date until 23:59:59.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/crawlconfig/",
+	"title": "Crawlconfig",
+	"tags": [],
+	"description": "",
+	"content": " Crawlconfig is used by crawljob\n Crawlconfig contains settings for how content should be crawled. Here you can set which configuration should be used for the web browser during harvesting, and which politeness settings should be used.\nIn addition to the settings discussed on this page, the configuration also contain metadata.\n   Field Function     Browserconfig Which browserconfig to use.   Politenessconfig Which politenessconfig to use.   DNS TTL Not implemented.   Priority weight Priority of the job.   Extract text Should text from the harvested material be extracted.   Create snapshot Create a snapshot of the home page.   Depth first Not implemented.    Browserconfig  Defines what browserconfig the config should use. Browserconfig consists of setting for the web browser used for harvesting.\nPolitenessconfig  Defines what politenessconfig the config should use. Politenessconfig consists of settings that determines how much load the harvester should expose the pages it visits.\nDNS TTL  Not implemented.\nPriority weight  The weighting between jobs when two jobs compete on fetching resources from the same hosts. The job will be randomly choosed, but weighted such that if that two jobs with weight 1.0 and one job with weight 2.0 compete, then the two first jobs will each have 25% probability of beeing choosed and the the third job will have 50% probability of beeing choosed.\nExtract text  Decides if the text on harvested pages should be extracted and put in the database. The text could then be used make content searchable or language processing.\nCreate snapshot  Determines wheter a snapshot is taken of the home page of the harvested site.\nDepth first  Not implemented.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/crawlhostgroupconfig/",
+	"title": "Crawlhostgroupconfig",
+	"tags": [],
+	"description": "",
+	"content": " Used by politenessconfig\n A crawlhostgroupconfig is used to specify a collection of IP addresses. The crawlhostgroupconfig could then be used by a politenessconfig to determine rules for sites hosted on these IPs.\nIP-range  In addition to metadata, a crawlhostgroupconfig could contain on or more IP-ranges.\nThe IP addresses could either be IPv4 or IPv6 addresse, but both the from and to address has to be of the same IP version. The first part of the address (before the first . in IPv4 and the first : in IPv\u0026amp;) in each of them should also be the same to be considered as a valid range.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/browserconfig/",
+	"title": "Browserconfig",
+	"tags": [],
+	"description": "",
+	"content": " Browserconfig is used by crawlconfig\n Browserconfig contains settings for the web browser used by the crawler. In addition to the fields described below, does a browserconfig contain fields for metadata.\n   Field Function     User agent Identifies the harvester.   Window width Browser window width.   Window height Browser window height.   Pageload timeout in ms How long the harvester should wait for a page to load before giving up.   Sleep after pageload ms How long the harvester should sleep after a page is loaded.   Browser script What browserscript the web browser should use.   Script selector Select browserscript by label.    User agent  When the harvester visits a web page, it sends information about what browser it is and on what platform it's running on. The user agent is the browsers way of identifying itself, and can be used by website to show custom pages for different browsers.\nDefault user agent for Veidemann is: nlnbot/1.0\nWindow width  Sets the width of the browser window. Assures that the content on the page is shown correctly, and is also used to determine the size of the snapshot.\nWindow height  Sets the height of the browser window. Assures that the content on the page is shown correctly, and is also used to determine the size of the snapshot.\nPageload timeout  Determines how long the harvester should try to load a web page before giving up and continue with the next one.\nSleep after pageload  Determines how long the harvester should sleep after a page is loaded. This is used to assure that the browser has enough time to load the entire page.\nBrowserscript  Assign one or more browserscript for the browser to use while harvesting.\nScript selector  Select scripts by label A string representing a label query. The query matches if at least one label matches the query. If there are multiple queries, then each query must match at least one label. Label quries are case insensitive. The basic format is key:valuewhere both key and value must match.\nIf value ends with *then the key must match and value must match up until the *If value is empty, all labels matching the key will match.\nIf key is empty, then the matching is done on the value for all keys.\nIf key is empty, then the :might be ommitted.\n  "
+},
+{
+	"uri": "/veidemann/docs/en/configurations/browserscript/",
+	"title": "Browserscript",
+	"tags": [],
+	"description": "",
+	"content": " Browserscript is used by browserconfig\n A browserscript consists of metadata and a script.\nBrowserscript can be used by browserconfig to add a script to the browser used while crawling.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/politenessconfig/",
+	"title": "Politenessconfig",
+	"tags": [],
+	"description": "",
+	"content": " Used by crawlconfig\n Politenessconfig contains settings that determines how much pressure the crawler should expose the websites it visits. In addition to limit the crawler from overloading a website, it also set policies for how the crawler shall follow\nrobots.txt. Apart from the fields described below, a politenessconfig also consists of metadata.\n   Field Function     Policy What policy should be used   Crawlhostgroup selector Use crawlhostgroupconfigs that matches the selector   Minimum robots validity How much time should pass before fetching a sites robots.txt again.   Minimum time between page load Minimum time before the next page should be fetched.   Maximum time between page load Maximum time before next page should be fetched   Delay factor Factor to determine how long to wait before next page is fetched.   Maximum retries Maximum amount of retries for fetching a page   Retry delay How many seconds to wait before trying to fetch a page again.    Policy  Determines if the crawler should follow the rules given in a sites robots.txt. The available policies are:\n  OBEY_ROBOTS:\nFollow the rules given in the robots.txt.\n  IGNORE_ROBOTS:\nIgnore the rules given in the robots.txt.\n  CUSTOM_ROBOTS:\nCreate a custom robots.txt for the crawler to use instead of the one created for the site.\n  Crawlhostgroup selector  Select crawl host groups by label A string representing a label query. The query matches if at least one label matches the query. If there are multiple queries, then each query must match at least one label. Label quries are case insensitive. The basic format is key:valuewhere both key and value must match.\nIf value ends with *then the key must match and value must match up until the *. If value is empty, all labels matching the key will match. If key is empty, then the matching is done on the value for all keys. If key is empty, then the :might be ommitted.\nMinimum robots validity  The minimum amount of time the harvester should wait before fetching a websites robots.txt again.\nMinimum time between page load  The minimum amount of time, given in milliseconds, the harvester should wait before continuing with the next URI.\nMaximum time between page load  The maximum amount of time, given in milliseconds, the harvester should waith before continuing with the next URI.\nDelay factor  The fetch time of the URI is multiplied with this value to get the delay time before fetching the next URI. If minimum time between page_load and/or maximum time between page load are set, then those values are used as the upper/lower limits for delay. If delay factor is unset or zero, then a delay facor of one is assumed. If delay factor is negative, a delay factor of zero is assumed.\nMaximum retries  The maximum amount of retries the harvester should use on trying to fetch a URI before giving up.\nRetry delay  How many seconds the harvester should before trying to fetch a URI again.\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/logging/",
+	"title": "Logging",
+	"tags": [],
+	"description": "",
+	"content": "missing translation\n"
+},
+{
+	"uri": "/veidemann/docs/en/configurations/users/",
+	"title": "Users",
+	"tags": [],
+	"description": "",
+	"content": "From the user page you can administrate users of Veidemann dashboard. A user with admin rights cant create new users or manage existing users of the system.\nA user is identified with one of two types:\n E-mail Group  A user must also be assigned one or more roles. The role given to the user will determine which pages the user can access, and what actions the user is able to perform in Veidemann dashboard.\nThe available roles in Veidemann are:\n  Any: The role given to users that is not logged in.\n  Any user: A registered user, but cannot enter configuration pages.\n  Readonly: User with readonly rights. Can access most of the pages, but is not able to create or edit configurations.\n  Curator: Can access to most of the system, but is lacking the right to create/update some of the configurations.\n  Admin: Can access to everything.\n  "
+},
+{
+	"uri": "/veidemann/docs/en/configurations/warcstatus/",
+	"title": "WARC status",
+	"tags": [],
+	"description": "",
+	"content": "This page contains information about the validation step for harvested material. The page focuses on showing invalid WARC files, but also the number of valid WARC files could be found in the upper right corner.\nWARC files in Veidemann gets validated by the use of a WARC module in the JHOVE software framework. When a file is validated, a report of the validation is generated by JHOVE. If the report show that the WARC file is invalid, the filename of the report whil be listed on the page.\nBy clicking on a item in the list, a detailed view with information of the invalid file is shown. All of the values shown in this view is collected from the report generated by JHOVE.\n   Field Function     Filname Filename of the report containing errors   Status Status of the report   Created Creation timestamp   Messages Error messages in the report   Non-compliant WARC ID ID's of non-compliant WARC records    Filname  The filename of the report for an invalid WARC file. Since the report gets it name from the WARC file, the WARC file containing errors will have the same name.\nStatus  If the status of the report is any thing other that well-formed and valid, the file is listed as invalid. The status from the report is shown here.\nCreated  Timestamp from when the validator recognized the WARC file as invalid, and added it to the list in the database of invalid WARC files.\nMessages  The errors registered by JHOVE will be shown here. When a WARC file is invalid, JHOVE will add messages to the report with the errors it have found.\nNon-compliant WARC ID  The ID of non-compliant WARC records in the WARC file are shown here.\n"
+},
+{
+	"uri": "/veidemann/docs/en/core/activity/",
+	"title": "Activity",
+	"tags": [],
+	"description": "",
+	"content": "Site is under construction\n"
+},
+{
+	"uri": "/veidemann/docs/en/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/veidemann/docs/en/core/statistics/",
+	"title": "Statistics",
+	"tags": [],
+	"description": "",
+	"content": "Site is under construction\n"
+},
+{
+	"uri": "/veidemann/docs/en/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

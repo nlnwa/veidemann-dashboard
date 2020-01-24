@@ -1,0 +1,44 @@
+
+DefaultContentLanguage ="no"
+baseURL = "/veidemann/docs/"
+title = "Veidemann dashboard documentation"
+author = "Nettarkivet"
+theme = "hugo-theme-learn"
+
+
+[params]
+  description = "Dokumentasjon for veidemann dashboard "
+  themeVariant = "veidemann-dashboard-documentation"
+  menushortcutsnewtab = true
+
+[blackfriday]
+  hrefTargetBlank = true
+
+[outputs]
+  home = [ "HTML", "RSS", "JSON"]
+
+[Languages]
+[Languages.no]
+   title = "Dokumentasjon for Veidemann dashboard"
+   weight = 1
+   languageName = "Norsk"
+   languageCode = "nb-no"
+   contentDir = "content/norwegian"
+
+[Languages.en]
+   title = "Documentation for Veidemann dashboard"
+   weight = 2
+   languageName = "English"
+   languageCode = "en-us"
+   contentDir = "content/english"
+
+[[menu.shortcuts]]
+    name = "<i class='fab fa-github'>&nbsp;&nbsp;</i> Documentation repo"
+    identifier = "ds"
+    url = "https://github.com/nlnwa/veidemann-dashboard-documentation"
+    weight = 10
+
+[[menu.shortcuts]]
+    name = "<i class='fab fa-github'>&nbsp;&nbsp;</i> Veidemann dashboard repo"
+    url = "https://github.com/nlnwa/veidemann-dashboard"
+    weight = 30

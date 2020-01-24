@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="no" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.62.2" />
+    <meta name="description" content="Dokumentasjon for veidemann dashboard ">
+
+
+    <link rel="icon" href="/veidemann/docs/images/favicon.png" type="image/png">
+
+    <title>WARC status :: Dokumentasjon for Veidemann dashboard</title>
+
+    
+    <link href="/veidemann/docs/css/nucleus.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/fontawesome-all.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/hybrid.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/featherlight.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/perfect-scrollbar.min.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/auto-complete.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/atom-one-dark-reasonable.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/theme.css?1579100658" rel="stylesheet">
+    <link href="/veidemann/docs/css/hugo-theme.css?1579100658" rel="stylesheet">
+    
+      <link href="/veidemann/docs/css/theme-veidemann-dashboard-documentation.css?1579100658" rel="stylesheet">
+    
+
+    <script src="/veidemann/docs/js/jquery-3.3.1.min.js?1579100658"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/veidemann/docs/configurations/warcstatus/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <h3>Veidemann Dashboard</h3>
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/veidemann/docs/js/lunr.min.js?1579100658"></script>
+<script type="text/javascript" src="/veidemann/docs/js/auto-complete.js?1579100658"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/veidemann\/docs\/";
+    
+</script>
+<script type="text/javascript" src="/veidemann/docs/js/search.js?1579100658"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/sitestructure/" title="Nettsidens struktur" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/sitestructure/">
+          <i class='fa fa-list-alt'></i>Nettsidens struktur
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/" title="Core" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/">
+          <i class='fa fa-cogs'></i>Core
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/activity/" title="Aktivitet" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/activity/">
+          Aktivitet
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/core/statistics/" title="Statistikk" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/core/statistics/">
+          Statistikk
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/" title="Konfigurasjoner" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/">
+          <i class='fa fa-cog'></i>Konfigurasjoner
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/entities-and-seeds/" title="Entiter og seeds" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/entities-and-seeds/">
+          Entiter og seeds
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/collection/" title="Collection" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/collection/">
+          Collection
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawljob/" title="Crawljob" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawljob/">
+          Crawljob
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/schedule/" title="Schedule" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/schedule/">
+          Schedule
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawlconfig/" title="Crawlconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawlconfig/">
+          Crawlconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/crawlhostgroupconfig/" title="Crawlhostgroupconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/crawlhostgroupconfig/">
+          Crawlhostgroupconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/browserconfig/" title="Browserconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/browserconfig/">
+          Browserconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/browserscript/" title="Browserscript" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/browserscript/">
+          Browserscript
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/politenessconfig/" title="Politenessconfig" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/politenessconfig/">
+          Politenessconfig
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/logging/" title="Logging" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/logging/">
+          Logging
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/users/" title="Brukere" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/veidemann/docs/configurations/users/">
+          Brukere
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/veidemann/docs/configurations/warcstatus/" title="WARC status" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/veidemann/docs/configurations/warcstatus/">
+          WARC status
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3></h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://github.com/nlnwa/veidemann-dashboard-documentation"><i class='fab fa-github'>&nbsp;&nbsp;</i> Documentation repo</a>
+              </li>
+          
+              <li> 
+                  <a class="padding" href="https://github.com/nlnwa/veidemann-dashboard"><i class='fab fa-github'>&nbsp;&nbsp;</i> Veidemann dashboard repo</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="no" value="/veidemann/docs/configurations/warcstatus/" selected>Norsk</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="en" value="/veidemann/docs/en/configurations/warcstatus/">English</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/veidemann/docs/'>Veidemann dashboard dokumentasjon</a> > <a href='/veidemann/docs/configurations/'>Konfigurasjoner</a> > WARC status
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              WARC status
+            </h1>
+          
+
+        
+
+
+
+
+	<p>Siden inneholder status for valideringen av WARC-filene med det innhøstede materialet. Siden fokuserer på å vise frem
+WARC-filer som ikke er godkjent, men det kan også leses hvor mange filer som er blitt validert til å være gyldig.</p>
+<p>WARC-filer i Veidemann blir validert med en WARC-modul til biblioteket JHOVE. Ved validering genereres det en rapport
+som viser status for valideringen. Dersom rapporten viser at WARC-filen ikke er gyldig, vil filnavnet til rapporten med
+feil vises i tabellen.</p>
+<p>Ved å klikke på et element i listen, hentes detaljert informasjon om feilen som er blitt registrert. Alle data som vises
+her er hentet ut fra rapporten som ble generert av JHOVE.</p>
+<p><img src="/veidemann/docs/img/warcstatus/veidemann_dashboard_warcstatus_overview.png" alt="warc status overview"></p>
+<table>
+<thead>
+<tr>
+<th>Felt</th>
+<th>Betydning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#warcstatus-filename">Filnavn</a></td>
+<td>Filnavnet til rapporten med feil</td>
+</tr>
+<tr>
+<td><a href="#warcstatus-status">Status</a></td>
+<td>Status fra rapporten</td>
+</tr>
+<tr>
+<td><a href="#warcstatus-created">Opprettet</a></td>
+<td>Tidspunkt for når rapporten ble registrert</td>
+</tr>
+<tr>
+<td><a href="#warcstatus-messages">Beskjeder</a></td>
+<td>Feilmeldinge som er nevnt i rapporten</td>
+</tr>
+<tr>
+<td><a href="#warcstatus-noncompliant">Ikke-kompatibel WARC ID</a></td>
+<td>ID for poster i WARC-filen som inneholder feil</td>
+</tr>
+</tbody>
+</table>
+<h4 id="warcstatus-filename">Filnavn</h4>
+<hr>
+<p>Filnavnet til rapporten som ikke er godkjent. Siden rapporten får navnet sitt fra WARC-filen den har validert, vil dette
+si at WARC-filen med samme navn inneholder feil.</p>
+<h4 id="warcstatus-status">Status</h4>
+<hr>
+<p>Om statusen til en rapport er noe annet enn *well-formed and valid&rdquo;, havner filen i listen over feil. Statusen blir
+hentet ut av rapporten og vist her.</p>
+<h4 id="warcstatus-created">Opprettet</h4>
+<hr>
+<p>Tidspunktet der validatoren registrerte at rapporten ikke var godkjent og ble oppført i databasen over filer med feil.</p>
+<h4 id="warcstatus-messages">Beskjeder</h4>
+<hr>
+<p>Når WARC-filen ikke er godkjent, vil Jhove legge til feilmeldinger i rapporten over feil den har funnet med feilen.</p>
+<h4 id="warcstatus-noncompliant">Ikke-kompatibel WARC ID</h4>
+<hr>
+<p>Her vises IDen til oppføringer i WARC-filen som inneholder feil.</p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/veidemann/docs/configurations/users/" title="Brukere"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/veidemann/docs/configurations/entities-and-seeds/" title="Entiter og seeds" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/veidemann/docs/js/clipboard.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/perfect-scrollbar.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/perfect-scrollbar.jquery.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/jquery.sticky.js?1579100658"></script>
+    <script src="/veidemann/docs/js/featherlight.min.js?1579100658"></script>
+    <script src="/veidemann/docs/js/highlight.pack.js?1579100658"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/veidemann/docs/js/modernizr.custom-3.6.0.js?1579100658"></script>
+    <script src="/veidemann/docs/js/learn.js?1579100658"></script>
+    <script src="/veidemann/docs/js/hugo-learn.js?1579100658"></script>
+
+    <link href="/veidemann/docs/mermaid/mermaid.css?1579100658" rel="stylesheet" />
+    <script src="/veidemann/docs/mermaid/mermaid.js?1579100658"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>
