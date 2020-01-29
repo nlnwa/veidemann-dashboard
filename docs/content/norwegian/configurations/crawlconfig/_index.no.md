@@ -26,6 +26,13 @@ Felt                                             | Betydning
 [Dybde først](#crawlconfig-depth-first)          | Ikke implementert.
 
 
+Ikon                                                                                                | Snarvei
+----------------------------------------------------------------------------------------------------|-------------------------------------------------------
+![show_collection](/veidemann/docs/img/icons/veidemann_dashboard_icon_collection.png)               | Gå til collection som er brukt i konfigurasjonen
+![show_browserconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_browserconfig.png)         | Gå til browserconfig som er brukt i konfigurasjonen
+![show_politeness](/veidemann/docs/img/icons/veidemann_dashboard_icon_politeness.png)               | Gå til politeness som er brukt i konfigurasjonen
+![show_crawljobs_with_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawljob.png) | Vis crawljobs som bruker crawlconfigen
+![clone_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)           | Lag en klone av crawlconfig
 
 #### Browserconfig {#crawlconfig-browserconfig}
 -----------------------------------------------  
