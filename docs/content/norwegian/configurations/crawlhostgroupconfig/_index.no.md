@@ -9,6 +9,9 @@ Brukes av [politenessconfig](../politenessconfig)
 En crawlhostgroupconfig brukes til å angi et utvalg av IP-addresser.
 Dette blir brukt av politenessconfig til å bestemme en felles regel for sider som ligger på disse IP-addressene.  
 
+Ikon                                                                                         | Snarvei
+---------------------------------------------------------------------------------------------|------------------
+![clone_crawlhostgroup](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av konfigurasjonen
 #### IP-range
 -------------
 

@@ -8,12 +8,13 @@ tilknyttede [seeds](../seed).
 
 ![Entities list](/veidemann/docs/img/entity/veidemann_dashboard_entity_list.png)
 
+#### Snarveier i liste over entiteter  
 
-Ikon                                                                                             | Snarvei 
--------------------------------------------------------------------------------------------------|--------------------------------------------
-![list_seeds icon](/veidemann/docs/img/entity/veidemann_dashboard_entity_list_seeds_icon.png)    | Vis liste over seeds tilknyttet entiteten
-![create_seed icon](/veidemann/docs/img/entity/veidemann_dashboard_entity_list_add_seed_icon.png)| Opprett en ny seed tilknyttet entiteten
-![clone_entity icon](/veidemann/docs/img/entity/veidemann_dashboard_entity_list_clone_icon.png)  | Lag en klone av entiteten
+Ikon                                                                                      | Snarvei 
+------------------------------------------------------------------------------------------|--------------------------------------------
+![list_seeds icon](/veidemann/docs/img/icons/veidemann_dashboard_icon_list_seeds.png)     | Vis liste over seeds tilknyttet entiteten
+![create_seed icon](/veidemann/docs/img/icons/veidemann_dashboard_icon_add_seed.png)      | Opprett en ny seed tilknyttet entiteten
+![clone_entity icon](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av entiteten
 
 
 #### Liste over seeds tilknyttet entitet {#entity-list-seeds}
@@ -38,5 +39,5 @@ Ettersom seeds for en entitet ofte har lik konfigurasjon, er det mulig å oppret
 Legg inn en URL og skill den fra den neste i listen med mellomrom eller linjeskift. Alle URL-ene blir da validert og
 sjekket om de eksisterer fra før.
 
-![Entity_create_seed](/veidemann/docs/img/entity/veidemann_dashboard_entity_create_seed.png)
-![Entity_create_seed](/veidemann/docs/img/entity/veidemann_dashboard_entity_create_seeds.png)
+![Entity_create_seed](/veidemann/docs/img/entity/veidemann_dashboard_entity_add_seed.png)
+![Entity_create_seeds](/veidemann/docs/img/entity/veidemann_dashboard_entity_create_seeds.png)

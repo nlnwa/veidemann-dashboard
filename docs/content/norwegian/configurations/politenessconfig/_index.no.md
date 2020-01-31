@@ -25,7 +25,12 @@ Felt                                                                | Betydning
 [Maximum retries](#config-max-retries)                              | Maks antall forsøk på å hente en side.
 [Retry delay](#config-retry-delay)                                  | Hvor mange sekund skal man vente før siden lastes på nytt.
 
+Ikon                                                                                     | Snarvei
+-----------------------------------------------------------------------------------------|---------------------------------------------
+![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)  | Vis crawlconfigs som bruker konfigurasjonen
+![clone_politeness](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av konfigurasjonen  
 
+ 
 #### Policy {#config-policy}
 ----------------------------  
 
@@ -46,7 +51,7 @@ Valgene man har her er:
 
 Velger crawlhostgroupconfig med en gitt label.  
 Dersom selector blir satt vil det letes etter en crawlhostgroupconfig som har en label som matcher.
-Vi har en match dersom minst selectoren matcher minst en label. Om det er angitt flere selectorer, må hver selector
+Vi har en match dersom selectoren matcher minst en label. Om det er angitt flere selectorer, må hver selector
 minst matche en label.  
 
 Søket med selector skiller mellom små og store bokstaver. Standardformatet er **nøkkel:verdi**, 

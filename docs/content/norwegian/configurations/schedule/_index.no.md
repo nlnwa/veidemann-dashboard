@@ -27,7 +27,10 @@ Felt                               | Betydning
 [Gyldig til](#schedule-valid-to)   | Sluttdato schedule skal være gyldig til
 
 
-
+Ikon                                                                                   | Snarvei
+---------------------------------------------------------------------------------------|-----------------------------------------
+![show_crawljobs](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawljob.png)     | Vis crawljobs som bruker denne schedulen
+![clone_schedule](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av schedule
 
 ### CRON-uttrykk
 --------

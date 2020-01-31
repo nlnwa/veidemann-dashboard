@@ -50,7 +50,7 @@ LABEL maintainer="nettarkivet@nb.no"
 ARG DEPLOY_URL=/veidemann
 
 COPY --from=app /usr/src/app/dist/ /usr/share/nginx/html${DEPLOY_URL}
-COPY --from=documentation /usr/share/site/out /usr/share/nginx/html${DEPLOY_URL}/docs
+COPY --from=documentation /usr/share/site/out /usr/share/nginx/html${DEPLOY_URL}/docs/
 
 COPY nginx/default.conf /etc/nginx/conf.d/
 

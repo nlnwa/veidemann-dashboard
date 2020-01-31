@@ -21,7 +21,11 @@ Felt                                                  | Betydning
 [Filrotasjon policy](#collection-file-rotation-policy)| Hvilken policy for filrotasjon skal benyttes.
 [Filstørrelse](#collection-filesize)                  | Hvor stor skal WARC filene være.
 [Subcollection](#collection-subcollection)            | Skal collection inneholde en subcollection. 
-                                               
+
+Ikon                                                                                     | Snarvei
+-----------------------------------------------------------------------------------------|---------
+![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)  | Vis crawlconfiger som bruker denne collectionen
+![clone_collection](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av collection                                 
                                                
 #### Komprimer {#collection-compress}
 -------------------------------------

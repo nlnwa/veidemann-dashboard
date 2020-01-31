@@ -26,6 +26,12 @@ nedenfor, har browserconfig  felter for [metadata](../#veidemann-meta).
 [Script selector](#browserconfig-scriptselector)               | Sette browserscript med label.  
 
 
+Ikon                                                                                        | Snarvei
+--------------------------------------------------------------------------------------------|-----------------------------------------------------
+![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)     | Vis crawlconfiger som bruker denne konfigurasjonen
+![clone_browserconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av konfigurasjonen
+  
+    
 #### Brukeragent {#browserconfig-useragent}
 -------------------------------------------
 
