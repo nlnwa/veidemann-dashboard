@@ -25,6 +25,12 @@ Felt                                                                | Betydning
 [Maximum retries](#config-max-retries)                              | Maks antall forsøk på å hente en side.
 [Retry delay](#config-retry-delay)                                  | Hvor mange sekund skal man vente før siden lastes på nytt.
 
+
+#### Listen over tilgjengelige politeness
+-----------------------------------------
+
+##### Snarveier
+----------------
 Ikon                                                                                     | Snarvei
 -----------------------------------------------------------------------------------------|---------------------------------------------
 ![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)  | Vis crawlconfigs som bruker konfigurasjonen
