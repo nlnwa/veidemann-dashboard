@@ -22,6 +22,12 @@ Felt                                                  | Betydning
 [Filstørrelse](#collection-filesize)                  | Hvor stor skal WARC filene være.
 [Subcollection](#collection-subcollection)            | Skal collection inneholde en subcollection. 
 
+
+#### Listen over tilgjengelige collections
+------------------------------------------
+
+##### Snarveier
+---------------
 Ikon                                                                                     | Snarvei
 -----------------------------------------------------------------------------------------|---------
 ![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)  | Vis crawlconfiger som bruker denne collectionen

@@ -1,10 +1,10 @@
 ---
-title: "Crawljob"
+title: "Crawljobs"
 weight: 4
 ---
 
 {{% notice info %}}
-Benyttes av [seeds](../entities-and-seeds#seed)
+Benyttes av [seeds](../seed)
 {{% /notice %}}
 
 
@@ -24,14 +24,28 @@ Felt                                | Betydning
 [Crawlconfig](#crawljob-crawlconfig)| Hvilken [crawlconfig](../crawlconfig) skal benyttes    
 
   
-#### Listen over tilgjengelige konfigurasjoner
+#### Listen over tilgjengelige crawljobs
 -----------------------------------------------------------------
+##### Snarveier
+----------------
+Listen inneholder også snarveier som vist i tabellen under.  
+ 
+Ikon                                                                                           |Snarvei
+-----------------------------------------------------------------------------------------------|--------------------------------------------------------------
+![show_jobexecutions](/veidemann/docs/img/icons/veidemann_dashboard_icon_report_crawljob.png)  | Gå til jobexecution for jobb
+![show_schedule](/veidemann/docs/img/icons/veidemann_dashboard_icon_schedule.png)              | Gå til schedule som er brukt for konfigurasjonen
+![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)        | Gå til crawlconfig som er brukt for konfigurasjonen
+![show_seeds_with_crawljob](/veidemann/docs/img/icons/veidemann_dashboard_icon_list_seeds.png) | Vis seeds med samme crawljob som er brukt i konfigurasjonen
+![clone_config](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)           | Lag en clone av crawljob 
+
 ##### Søk, filtrering og sortering
+----------------------------------
 Listen over konfigurasjoner kan søkes i og sorteres på samme måte som beskrevet [her](../#config-search-filter-sort).
 I tillegg kan listen filtreres til å kun vise jobber som bruker en bestemt schedule og/eller crawlconfig.
 Ved å trykke på et av feltene, hentes en liste over tilgjengelige konfigurasjoner av denne typen. 
 
 ##### Status 
+------------
 Fra listen kan man lese den siste statusen for jobben. En jobb kan ha en av følgende statuser:  
 
 Status         | Betydning
@@ -45,19 +59,6 @@ DIED           | Ikke i bruk
 
 En mer detaljert beskrivelse av siste status for jobben, kan leses ved å se på [jobbstatus](#crawljob-jobexecutionstatus)
 for den aktuelle konfigurasjonen. 
-
-##### Snarveier
-  
-Listen inneholder også snarveier som vist i tabellen under.  
- 
-Ikon                                                                                           |Snarvei
------------------------------------------------------------------------------------------------|--------------------------------------------------------------
-![show_jobexecutions](/veidemann/docs/img/icons/veidemann_dashboard_icon_report_crawljob.png)  | Gå til jobexecution for jobb
-![show_schedule](/veidemann/docs/img/icons/veidemann_dashboard_icon_schedule.png)              | Gå til schedule som er brukt for konfigurasjonen
-![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)        | Gå til crawlconfig som er brukt for konfigurasjonen
-![show_seeds_with_crawljob](/veidemann/docs/img/icons/veidemann_dashboard_icon_list_seeds.png) | Vis seeds med samme crawljob som er brukt i konfigurasjonen
-![clone_config](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)           | Lag en clone av crawljob 
-
 
 #### Deaktivert {#crawljob-disabled}
 --------------------------------------

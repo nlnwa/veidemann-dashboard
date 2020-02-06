@@ -1,15 +1,18 @@
 ---
-title: "Entiter"
+title: "Entity"
 weight: 1
 ---
 
 En entiet i Veidemann er typisk en eier av et nettsted, og består av [metadata](../#veidemann-meta) og en eller flere 
 tilknyttede [seeds](../seed).
 
-![Entities list](/veidemann/docs/img/entity/veidemann_dashboard_entity_list.png)
+![Entities list](/veidemann/docs/img/entity/veidemann_dashboard_entity_overview.png)
 
-#### Snarveier i liste over entiteter  
+#### Listen over  tilgjengelige entiteter  
+------------------------------------------
 
+##### Snarveier
+----------------
 Ikon                                                                                      | Snarvei 
 ------------------------------------------------------------------------------------------|--------------------------------------------
 ![list_seeds icon](/veidemann/docs/img/icons/veidemann_dashboard_icon_list_seeds.png)     | Vis liste over seeds tilknyttet entiteten
@@ -17,15 +20,17 @@ Ikon                                                                            
 ![clone_entity icon](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av entiteten
 
 
-#### Liste over seeds tilknyttet entitet {#entity-list-seeds}
+##### Liste over seeds tilknyttet entitet {#entity-list-seeds}
 ----------------------------------------
 Fra snarveien i listen, kan man se alle seeds som er tilkoblet denne entiten.
+Ved å trykke på snarveien, blir man tatt til [seed](../seed), hvor entitet-ID filteret blir satt og listen viser 
+seeds tilknyttet entiteten. 
 
 ![Entity_seed_list_shortcut](/veidemann/docs/img/entity/veidemann_dashboard_entity_list_seeds_shortcut.png)
 ![Entity_seed_list](/veidemann/docs/img/entity/veidemann_dashboard_entity_list_seeds.png)
 
 
-#### Opprette ny seed {#entity-add-seed}
+##### Opprette ny seed {#entity-add-seed}
 ---------------------
 Siden en seed må ha en referanse til en entitet, er starten for å legge til en ny seed gjort fra denne siden.
 Start med å finne entiteten i listen over tilgjengelige entiteter som du vil koble den nye seeden til.

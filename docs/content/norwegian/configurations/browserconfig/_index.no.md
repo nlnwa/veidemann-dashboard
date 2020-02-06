@@ -1,5 +1,5 @@
 ---
-title: "Browserconfig"
+title: "BrowserConfig"
 weight: 8
 ---
 
@@ -25,12 +25,21 @@ nedenfor, har browserconfig  felter for [metadata](../#veidemann-meta).
 [Browser script](#browserconfig-browserscript)                 | Hvilke [browserscript](../browserscript) skal nettleseren kjøre.
 [Script selector](#browserconfig-scriptselector)               | Sette browserscript med label.  
 
+#### Listen over tilgjengelige  browserconfigs
+----------------------------------------------
 
+##### Snarveier
+----------------
 Ikon                                                                                        | Snarvei
 --------------------------------------------------------------------------------------------|-----------------------------------------------------
 ![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)     | Vis crawlconfiger som bruker denne konfigurasjonen
 ![clone_browserconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av konfigurasjonen
   
+##### Søk, sortering og filtrering
+----------------------------------
+Listen over konfigurasjoner kan søkes i og sorteres på samme måte som beskrevet [her](../#config-search-filter-sort).  
+I tillegg kan listen filtreres til å kun vise browserconfigs som bruker et bestemt browserscript.
+Ved å trykke på et av feltene, hentes en liste over tilgjengelige konfigurasjoner av denne typen. 
     
 #### Brukeragent {#browserconfig-useragent}
 -------------------------------------------

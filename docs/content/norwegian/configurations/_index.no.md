@@ -16,18 +16,17 @@ For en mer utfyllende beskrivelse av deres funksjon, gå til siden for den aktue
 
 Konfigurasjon                          | Beskrivelse
 ---------------------------------------|--------------------------------------------------------------------------------
-[Entiter/Seeds](entities-and-seeds)    | Websider som skal høstes og konfigurering av disse 
 [Entity](entity)                       | Eier av nettstedet
 [Seed](seed)                           | Nettstedet som skal høstes
 [Collection](collection)               | Brukes av crawlconfig til å angi en samling.
 [Crawljobs](crawljob)                  | Definerte jobber for innhøsting av websider.
-[Schedule](schedule)                   | Setter tidspunkt for planlagte høstinger som brukes av crawljob.
-[Crawlconfig](crawlconfig)             | Sett med innstillinger for høsteren som brukes av crawljob.
-[Crawlhostgroup](crawlhostgroupconfig) | Opprett samlinger med IP-addresser som kan brukes av politeness. 
+[Schedule](schedule)                   | Setter tidspunkt for start av høstejobber, brukes av crawljob.
+[Crawlconfig](crawlconfig)             | Sett med innstillinger for høsteren, brukes av crawljob.
+[Crawlhostgroup](crawlhostgroupconfig) | Opprett samlinger med IP-addresser, brukes av politeness. 
 [Browserconfig](browserconfig)         | Innstillinger for nettleseren som brukes til høstingen. 
 [Browserscript](browserscript)         | Scripts tilgjengelig for nettleseren brukt til høstingen.
 [Politeness](politenessconfig)         | Høffligheten til høsteren
-[Brukere](users)                       | Administrasjom av brukere i systemet
+[Brukere](users)                       | Administrasjon av brukere i systemet
 
 
 

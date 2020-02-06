@@ -1,5 +1,5 @@
 ---
-title: "Browserscript"
+title: "BrowserScript"
 weight: 9
 ---
 
@@ -13,6 +13,11 @@ bruker.
 
 ![browserscript overview](/veidemann/docs/img/browserscript/veidemann_dashboard_browserscript_overview.png)
 
+#### Listen over tilgjengelige browserscripts
+----------------------------------------------
+
+##### Snarveier
+---------------
 Ikon                                                                                        | Snarvei
 --------------------------------------------------------------------------------------------|------------------------------------------------------------
 ![show_browserconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_browserconfig.png) | Vis browserconfigs som bruker scriptet

@@ -1,5 +1,5 @@
 ---
-title: "Crawlconfig"
+title: "CrawlConfig"
 weight: 6
 ---
 
@@ -25,6 +25,11 @@ Felt                                             | Betydning
 [Lag snapshot](#crawlconfig-create-snapshot)     | Skal det lages snapshot av forsiden til siden. 
 [Dybde først](#crawlconfig-depth-first)          | Ikke implementert.
 
+#### Listen over tilgjengelige crawlconfigs
+--------------------------------------------
+
+##### Snarveier
+---------------
 
 Ikon                                                                                                | Snarvei
 ----------------------------------------------------------------------------------------------------|-------------------------------------------------------
@@ -33,6 +38,12 @@ Ikon                                                                            
 ![show_politeness](/veidemann/docs/img/icons/veidemann_dashboard_icon_politeness.png)               | Gå til politeness som er brukt i konfigurasjonen
 ![show_crawljobs_with_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawljob.png) | Vis crawljobs som bruker crawlconfigen
 ![clone_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)           | Lag en klone av crawlconfig
+
+##### Søk, sortering og filtrering
+----------------------------------
+Listen over konfigurasjoner kan søkes i og sorteres på samme måte som beskrevet [her](../#config-search-filter-sort).
+I tillegg kan listen filtreres til å kun vise crawlconfigs som bruker en bestemt collection, browserconfig eller politeness.
+Ved å trykke på et av feltene, hentes en liste over tilgjengelige konfigurasjoner av denne typen. 
 
 #### Browserconfig {#crawlconfig-browserconfig}
 -----------------------------------------------  

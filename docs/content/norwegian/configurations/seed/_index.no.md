@@ -1,5 +1,5 @@
 ---
-title: "Seeds"
+title: "Seed"
 weight: 2
 ---
 
@@ -11,7 +11,7 @@ Felt           | Betydning
 ---------------|------------------------------------------------------------------------------
 Entitens ID    | Id for entiteten seeden er tilknyttet
 Deaktiver      | Bestemmer om seeden skal høstes eller ikke
-Surt prefiks   | Feltet blir automatisk generert av URL
+Surt prefiks   | Feltet blir automatisk generert av URL {#seed-surtPrefix}
 Jobb           | Bestemmer hvilken [crawljob](../crawljob) som skal brukes til å høste seeden.  
   
 ![seeds overview](/veidemann/docs/img/seed/veidemann_dashboard_seed_overview.png)  
@@ -59,8 +59,8 @@ Siden en seed må være tilknyttet en entitet, må en seed opprettes fra en enti
 Når det skrives i URL-feltet, vil innholdet i feltet bli validert.
 Dersom det blir lagt til en URL som ikker er gyldig, vil en feilmelding vises under feltet.
 En URL blir her regnet som gyldig så lenge den inneholder:
-- Skjema: http / https etterfulgt av ://
-- Host: hostnavn bestående av minimum 2 delere. Eks. **nb.no** eller **www.nb.no**
+- Skjema: http/https etterfulgt av ://
+- Host: hostnavn bestående av minimum 2 delere. Eks. **nb.no** eller **www\.nb.no**
 
 ##### Flytte eksisterende seed
 En annen del av valideringen er at det sjekkes om en seed med samme URL finnes fra før.
@@ -76,8 +76,6 @@ Om en match finnes vises også dette i listen.
 Om man mener at seeden hører til under entiteten man jobber med, kan denne flyttes ved å trykke på pilen.
 Er det mange i listen kan knappen øverst benyttes for å flytte alle.
 En seed som er flyttet fra en annen entitet vil få en label med ID-en til entiteten den er flyttet fra.
-![seed_exists_for_entity](/veidemann/docs/img/seed/veidemann_dashboard_seed_remove_duplicates.png)
-
 
 ![move_seeds](/veidemann/docs/img/seed/veidemann_dashboard_seed_move.png)
 

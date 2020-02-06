@@ -26,14 +26,19 @@ Felt                               | Betydning
 [Gyldig fra](#schedule-valid-from) | Startdato schedule skal være gyldig fra
 [Gyldig til](#schedule-valid-to)   | Sluttdato schedule skal være gyldig til
 
+#### Listen over tilgjengelige schedules
+----------------------------------------
+
+##### Snarvier
+--------------
 
 Ikon                                                                                   | Snarvei
 ---------------------------------------------------------------------------------------|-----------------------------------------
 ![show_crawljobs](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawljob.png)     | Vis crawljobs som bruker denne schedulen
 ![clone_schedule](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png) | Lag en klone av schedule
 
-### CRON-uttrykk
---------
+#### CRON-uttrykk
+-----------------
 
 Schedules definerer et cron-uttrykk som bestemmer når en høstejobb skal kjøres.
 Uttrykket inneholder følgende deler:
@@ -174,7 +179,7 @@ Dette mønsteret vil få en jobb til å kjøre klokken 11:59 på mandag, tirsdag
 Samme som over.
 </pre>
 
-### Gyldig fra/til
+#### Gyldig fra/til
 ------------------
 
 Feltene gyldig fra og til benyttes til å spesfiere et tidsrom hvor schedule konfigurasjonen er gyldig. 

@@ -69,10 +69,10 @@ Statistikk             | Beskrivelse
 -----------------------|-------------------------------
 URIs crawled           | Antall URI-er som er blitt høstet
 Documents crawled      | Antall dokumenter som er blitt høstet
-Documents denied       | 
-Documents failed       |
-Documents out of scope |
-Documents retried      | 
+Documents denied       | Antall dokumenter som ble nektet adgang til å høstes (betalingsmur, robots.txt etc.)
+Documents failed       | Antall dokumenter som feilet under høsting
+Documents out of scope | Antall dokumenter som ble funnet utenfor omfanget til seeden (bestemt av [surt prefix](../../configurations/seed/#seed-surtPrefix)
+Documents retried      | Antall dokumenter som ble forsøkt lastet flere ganger for å høstes
 
 
 ##### Status {#jobexecution-state}
