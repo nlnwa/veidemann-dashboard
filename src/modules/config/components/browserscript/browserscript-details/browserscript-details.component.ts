@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material';
+import {MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

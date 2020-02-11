@@ -7,7 +7,7 @@ import {of} from 'rxjs';
 
 @NgModule()
 export class CoreTestingModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CoreTestingModule> {
     return {
       ngModule: CoreTestingModule,
       providers: [

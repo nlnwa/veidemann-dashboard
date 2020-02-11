@@ -1,5 +1,5 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
-import {ContentChildren, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewChild} from '@angular/core';
+import { ContentChildren, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewChild, Directive } from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sort';
 import {first, map, shareReplay} from 'rxjs/operators';
@@ -10,6 +10,7 @@ export interface ListItem {
   id: string;
 }
 
+@Directive()
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
 
   @Input()
