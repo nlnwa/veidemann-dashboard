@@ -1,5 +1,5 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
-import { ContentChildren, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewChild, Directive } from '@angular/core';
+import {ContentChildren, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewChild, Directive} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sort';
 import {first, map, shareReplay} from 'rxjs/operators';
@@ -11,6 +11,7 @@ export interface ListItem {
 }
 
 @Directive()
+// tslint:disable-next-line:directive-class-suffix
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
 
   @Input()
@@ -54,8 +55,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   @ViewChild(MatSort, {static: true}) matSort: MatSort;
 
-  @ContentChildren(ActionDirective, {read: TemplateRef}) actionButtonTemplates;
-  @ContentChildren(ExtraDirective, {read: TemplateRef}) extraTemplates;
+  @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
+  @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
 
   // selection
   selection = new SelectionModel<T>(true, []);
