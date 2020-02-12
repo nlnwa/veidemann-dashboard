@@ -85,7 +85,7 @@ export class ConfigurationsComponent implements OnDestroy {
 
   showCreateButton$: Observable<boolean>;
 
-  @ViewChild('baseList', {static: false}) list: ConfigListComponent;
+  @ViewChild('baseList') list: ConfigListComponent;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: ListDataSource<ConfigObject>;

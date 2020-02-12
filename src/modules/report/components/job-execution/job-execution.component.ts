@@ -50,7 +50,7 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
 
   dataSource: ListDataSource<JobExecutionStatus>;
 
-  @ViewChild('list', {static: false}) list: ConfigListComponent;
+  @ViewChild('list') list: ConfigListComponent;
 
   private ngUnsubscribe = new Subject();
 

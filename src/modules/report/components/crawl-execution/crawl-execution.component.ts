@@ -53,7 +53,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
 
   dataSource: ListDataSource<CrawlExecutionStatus>;
 
-  @ViewChild('list', {static: false}) list: ConfigListComponent;
+  @ViewChild('list') list: ConfigListComponent;
 
   private ngUnsubscribe = new Subject();
 
