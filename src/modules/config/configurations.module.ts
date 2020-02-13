@@ -48,7 +48,8 @@ import {CrawlExecutionStatusPipe} from './pipe/crawl-execution-status.pipe';
 import {CrawlConfigNamePipe} from './pipe/crawl-config-name.pipe';
 import {CrawlScheduleNamePipe} from './pipe/crawl-schedule-name.pipe';
 import {CollectionNamePipe} from './pipe/collection.name.pipe';
-
+import {BrowserConfigNamePipe} from './pipe/browser-config-name.pipe';
+import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,8 @@ import {CollectionNamePipe} from './pipe/collection.name.pipe';
     CrawlScheduleNamePipe,
     CollectionNamePipe,
     CrawlExecutionStatusComponent,
+    BrowserConfigNamePipe,
+    PolitenessConfigNamePipe,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
