@@ -4,9 +4,8 @@
     <mat-action-list>
       <button mat-list-item
               *ngIf="showCreateButton$ | async"
-              title="Opprett ny konfigurasjon"
               (click)="onCreateConfig()">
-        <mat-icon mat-list-icon>add_circle</mat-icon>
+        <mat-icon mat-list-icon matTooltip="Opprett ny konfigurasjon">add_circle</mat-icon>
         Opprett ny
       </button>
     </mat-action-list>
@@ -97,29 +96,25 @@
 
         <button mat-icon-button
                 *ngIf="!isAllSelected"
-                title="Slett valgte konfigurasjoner"
                 (click)="onDeleteSelectedConfigs()">
-          <mat-icon>delete</mat-icon>
+          <mat-icon matTooltip="Slett valgte konfigurasjoner">delete</mat-icon>
         </button>
 
         <ng-container *ngIf="kind === Kind.COLLECTION">
           <button *appAction="let row" mat-icon-button
-                  title="Høstekonfigurasjoner med referanse til samling"
                   (click)="onFilterByCollectionRef(row)">
-            <mat-icon>settings_system_daydream</mat-icon>
+            <mat-icon matTooltip="Vis høstekonfigurasjoner med referanse til samling">settings_system_daydream</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.CRAWLENTITY">
           <button *appAction="let row" mat-icon-button
-                  title="Gå til seedliste"
                   (click)="onListSeed(row)">
-            <mat-icon>link</mat-icon>
+            <mat-icon matTooltip="Gå til seedliste">link</mat-icon>
           </button>
           <button *appAction="let row" mat-icon-button
-                  title="Opprett seed med referanse til entitet"
                   (click)="onCreateSeedFromEntity(row)">
-            <mat-icon>add_circle</mat-icon>
+            <mat-icon matTooltip="Opprett seed med referanse til entitet">add_circle</mat-icon>
           </button>
         </ng-container>
 
@@ -127,31 +122,28 @@
           <a *appAction="let row"
              mat-icon-button class="shortcut-link"
              [routerLink]="['/report/crawlexecution']"
-             [queryParams]="{seed_id: row.id}"
-             title="Gå til crawlexecutions for seed">
-            <mat-icon>hdr_weak</mat-icon>
+             [queryParams]="{seed_id: row.id}">
+            <mat-icon matTooltip="Gå til crawlexecutions for seed">hdr_weak</mat-icon>
           </a>
           <ng-container *appAction="let row">
             <ng-container *ngIf="row.seed?.jobRefList?.length">
               <a mat-icon-button class="shortcut-link"
                  [routerLink]="['../seed']"
                  [queryParams]="getJobRefListQueryParams(row)">
-                <mat-icon>work</mat-icon>
+                <mat-icon matTooltip="Filtrer på seeds med samme høstejobb">work</mat-icon>
               </a>
             </ng-container>
           </ng-container>
           <button *appAction="let row" mat-icon-button
-                  title="Filtrer på seeds med samme entitet"
                   (click)="onFilterByEntityRef(row)">
-            <mat-icon>business</mat-icon>
+            <mat-icon matTooltip="Filtrer på seeds med samme entitet">business</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
           <button *appAction="let row" mat-icon-button
-                  title="Høstejobber med referanse til schedule"
                   (click)="onFilterByScheduleRef(row)">
-            <mat-icon>work</mat-icon>
+            <mat-icon matTooltip="Vis høstejobber med referanse til schedule">work</mat-icon>
           </button>
         </ng-container>
 
@@ -159,10 +151,10 @@
           <ng-container *appAction="let row">
             <ng-container *ngIf="row.crawlConfig?.collectionRef?.id">
               <a mat-icon-button class="shortcut-link"
-                 [title]="row | getCollectionName | async"
                  [routerLink]="['../collection']"
                  [queryParams]="{id: row.crawlConfig.collectionRef?.id}">
-                <mat-icon>collections_bookmark</mat-icon>
+                <mat-icon matTooltip="Gå til samlingen: {{row | getCollectionName | async}} ">collections_bookmark
+                </mat-icon>
               </a>
             </ng-container>
           </ng-container>
@@ -171,7 +163,8 @@
               <a mat-icon-button class="shortcut-link"
                  [routerLink]="['../browserconfig']"
                  [queryParams]="{id: row.crawlConfig.browserConfigRef?.id}">
-                <mat-icon>web</mat-icon>
+                <mat-icon matTooltip="Gå til nettleserkonfigurasjonen: {{row | getBrowserConfigName | async}}">web
+                </mat-icon>
               </a>
             </ng-container>
           </ng-container>
@@ -180,37 +173,38 @@
               <a mat-icon-button class="shortcut-link"
                  [routerLink]="['../politenessconfig']"
                  [queryParams]="{id: row.crawlConfig.politenessRef?.id}">
-                <mat-icon>sentiment_very_satisfied</mat-icon>
+                <mat-icon matTooltip="Gå til høflighetskonfigurasjonen: {{row | getPolitenessConfigName | async}}">
+                  sentiment_very_satisfied
+                </mat-icon>
               </a>
             </ng-container>
           </ng-container>
           <button *appAction="let row" mat-icon-button
                   (click)="onFilterByCrawlConfigRef(row)">
-            <mat-icon matTooltip="Filtrer høstejobber med referanse til høstekonfigurasjon">work</mat-icon>
+            <mat-icon matTooltip="Vis høstejobber med referanse til høstekonfigurasjon">work</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.BROWSERCONFIG">
           <button *appAction="let row" mat-icon-button
-                  title="Høstekonfigurasjoner med referanse til nettleserkonfigurasjon"
                   (click)="onFilterByBrowserConfigRef(row)">
-            <mat-icon>settings_system_daydream</mat-icon>
+            <mat-icon matTooltip="Vis høstekonfigurasjoner med referanse til nettleserkonfigurasjon">
+              settings_system_daydream</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.POLITENESSCONFIG">
-          <button *appAction="let row" mat-icon-button
-                  title="Høstekonfigurasjoner med referanse til nettleserkonfigurasjon"
+          <button *appAction="let row" mat-icon-buttonq
                   (click)="onFilterByPolitenessConfigRef(row)">
-            <mat-icon>settings_system_daydream</mat-icon>
+            <mat-icon matTooltip="Vis høstekonfigurasjoner med referanse til nettleserkonfigurasjon">
+              settings_system_daydream</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.BROWSERSCRIPT">
           <button *appAction="let row" mat-icon-button
-                  title="Nettleserkonfigurasjoner med referanse til skript"
                   (click)="onFilterByBrowserScriptRef(row)">
-            <mat-icon>web</mat-icon>
+            <mat-icon matTooltip="Vis nettleserkonfigurasjoner med referanse til skript">web</mat-icon>
           </button>
         </ng-container>
 
@@ -219,34 +213,32 @@
           <a *appAction="let row"
              mat-icon-button class="shortcut-link"
              [routerLink]="['/report/jobexecution']"
-             [queryParams]="{job_id: row.id}"
-             title="Gå til jobexecutions for jobb">
-            <mat-icon>hdr_strong</mat-icon>
+             [queryParams]="{job_id: row.id}">
+            <mat-icon matTooltip="Gå til jobexecutions for jobb">hdr_strong</mat-icon>
           </a>
           <ng-container *appAction="let row">
             <ng-container *ngIf="row.crawlJob?.scheduleRef.id">
               <a mat-icon-button class="shortcut-link"
-                 [title]="row | getCrawlScheduleName | async"
                  [routerLink]="['../schedule']"
                  [queryParams]="{id: row.crawlJob.scheduleRef?.id}">
-                <mat-icon>schedule</mat-icon>
+                <mat-icon matTooltip="Gå til schedule: {{row | getCrawlScheduleName | async}}">schedule</mat-icon>
               </a>
             </ng-container>
           </ng-container>
           <ng-container *appAction="let row">
             <ng-container *ngIf="row.crawlJob?.crawlConfigRef?.id">
               <a mat-icon-button class="shortcut-link"
-                 [title]="row | getCrawlConfigName | async"
                  [routerLink]="['../crawlconfig']"
                  [queryParams]="{id: row.crawlJob.crawlConfigRef?.id}">
-                <mat-icon>settings_system_daydream</mat-icon>
+                <mat-icon
+                  matTooltip="Gå til høstekonfigurasjonen: {{row | getCrawlConfigName | async}}">
+                  settings_system_daydream</mat-icon>
               </a>
             </ng-container>
           </ng-container>
           <button *appAction="let row" mat-icon-button
-                  title="Seeds med referanse til høstejobb"
                   (click)="onFilterByCrawlJobRef(row)">
-            <mat-icon>link</mat-icon>
+            <mat-icon matTooltip="Vis seeds med referanse til høstejobb">link</mat-icon>
           </button>
         </ng-container>
 
