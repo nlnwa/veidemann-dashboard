@@ -41,10 +41,9 @@
                                  (page)="onPage($event)"
                                  [dataSource]="dataSource">
     <a *appAction="let row" mat-icon-button
-       title="Gå til jobb"
        [routerLink]="['/config', 'crawljobs']"
        [queryParams]="{id: row.jobId}">
-      <mat-icon>work</mat-icon>
+      <mat-icon matTooltip="Gå til jobb">work</mat-icon>
     </a>
   </app-job-execution-status-list>
 
