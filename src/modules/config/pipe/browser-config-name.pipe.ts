@@ -12,7 +12,6 @@ export class BrowserConfigNamePipe implements PipeTransform {
   }
 
   transform(configObject: ConfigObject): Observable<string> {
-    console.log('browserconfigName: ', configObject);
     return this.route.data.pipe(
       first(),
       map(data => {
