@@ -89,7 +89,7 @@ export class ReportApiService {
     request.setQueryMask(mask);
     request.setQueryTemplate(CrawlExecutionStatus.toProto(template));
 
-    request.setOrderByPath('createdTime');
+    request.setOrderByPath('startTime');
     request.setOrderDescending(true);
     request.setPageSize(1);
     return this.listCrawlExecutions(request).pipe(defaultIfEmpty(null));
