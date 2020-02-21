@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, Kind, Label, Meta, PolitenessConfig, RobotsPolicy} from '../../../../../shared/models';
+import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {ConfigObject, Kind, Label, Meta, PolitenessConfig, RobotsPolicy} from '.
 
 export class PolitenessConfigDetailsComponent implements OnChanges {
   readonly RobotsPolicy = RobotsPolicy;
+  readonly UnitOfTime = UnitOfTime;
 
   @Input()
   configObject: ConfigObject;

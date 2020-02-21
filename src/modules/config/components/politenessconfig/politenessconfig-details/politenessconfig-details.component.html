@@ -46,38 +46,35 @@
         <app-selector placeholder="CrawlHostGroup Selector" formControlName="crawlHostGroupSelectorList"
                       [removable]="canEdit"></app-selector>
 
-        <mat-form-field>
-          <input matInput
-                 formControlName="minimumRobotsValidityDurationS"
-                 placeholder="Minimum robots validity (seconds)"
-                 i18n-placeholder="@@politenessconfigFormMinRobotsValidDurationPlaceholder">
-          <mat-error *ngIf="!minRobotsValidDurationSec.valid"
-                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
-            Må være et tall.
-          </mat-error>
-        </mat-form-field>
+        <mat-label i18n="@@politenessconfigFormMinRobotsValidDurationLabel">Minimum robots validity</mat-label>
+        <app-duration-picker formControlName="minimumRobotsValidityDurationS"
+                             [unit]="UnitOfTime.SECOND"
+                             [durationGranularity]="'d:h:m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!minRobotsValidDurationSec.valid"
+                   i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
+          Må være et tall.
+        </mat-error>
 
-        <mat-form-field>
-          <input matInput
-                 formControlName="minTimeBetweenPageLoadMs"
-                 placeholder="Minimum time between page load (ms)"
-                 i18n-placeholder="@@politenessconfigFormMinTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
-                     i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
-            Må være et tall.
-          </mat-error>
-        </mat-form-field>
+        <mat-label>Minimum time between page load</mat-label>
+        <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
+                   i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
+          Må være et tall.
+        </mat-error>
 
-        <mat-form-field>
-          <input matInput
-                 formControlName="maxTimeBetweenPageLoadMs"
-                 placeholder="Maximum time between page load (ms)"
-                 i18n-placeholder="@@politenessconfigFormMaxTimeBetweenPageLoadPlaceholder">
-          <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
-                     i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
-            Må være et tall
-          </mat-error>
-        </mat-form-field>
+        <mat-label>Maximum time between page load</mat-label>
+        <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
+                   i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+          Må være et tall
+        </mat-error>
 
         <mat-form-field>
           <input matInput
@@ -90,7 +87,6 @@
           </mat-error>
         </mat-form-field>
 
-
         <mat-form-field>
           <input matInput
                  formControlName="maxRetries"
@@ -102,18 +98,18 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput
-                 formControlName="retryDelaySeconds"
-                 placeholder="Retry delay (s)"
-                 i18n-placeholder="@@politenessconfigFormRetryDelaySecondsPlaceholder">
-          <mat-error *ngIf="!retryDelaySeconds.valid"
-                     i18n="@@mustBeNumberError">
-            Må være et tall
-          </mat-error>
-        </mat-form-field>
+        <mat-label>Retry delay</mat-label>
+        <app-duration-picker formControlName="retryDelaySeconds"
+                             [unit]="UnitOfTime.SECOND"
+                             [durationGranularity]="'m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!retryDelaySeconds.valid"
+                   i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
+          Må være et tall
+        </mat-error>
       </div>
     </mat-card-content>
+
 
     <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button color="accent"
