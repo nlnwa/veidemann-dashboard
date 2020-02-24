@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -32,7 +32,7 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../shared/validation/patterns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DurationPickerComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+export class DurationPickerComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy {
   @Input() unit: UnitOfTime;
   @Input() durationGranularity: string;
 
@@ -88,6 +88,11 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
     this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((duration) => {
       this.onChange(this.durationToTime(duration));
     });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   writeValue(time: number): void {
