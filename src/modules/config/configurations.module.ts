@@ -38,7 +38,8 @@ import {
   SeedDetailComponent,
   SeedDetailMultiComponent,
   SeedMetaComponent,
-  SelectorComponent
+  SelectorComponent,
+  DurationPickerComponent
 } from './components';
 import {JobStatusComponent} from './components/job-execution-status/job-status.component';
 import {JobExecutionStatePipe} from './pipe/job-execution-state.pipe';
@@ -97,6 +98,7 @@ import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
     CrawlScheduleNamePipe,
     CollectionNamePipe,
     CrawlExecutionStatusComponent,
+    DurationPickerComponent,
     BrowserConfigNamePipe,
     PolitenessConfigNamePipe,
   ],

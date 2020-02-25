@@ -39,10 +39,10 @@ $ yarn
 # start development server
 $ yarn start \
 --ssl \
---ssl-cert 'path/to/charts/minikube/certs/veidemann.local/cert.pem' \
---ssl-key 'path/to/charts/minikube/certs/veidemann.local/key.pem'
+--ssl-cert 'path/to/veidemann-deploy/dev/bases/certs/veidemann-local_cert.pem' \
+--ssl-key 'path/to/veidemann-deploy/dev/bases/certs/veidemann-local_key.pem'
 
-# import path/to/charts/minikube/certs/minica.pem to your browser of choice and visit https://localhost:4200/veidemann
+# import 'path/to/veidemann-deploy/dev/bases/certs/veidemann-local_key.pem' to your browser of choice and visit https://localhost:4200/veidemann
 ```
   
 ## License
