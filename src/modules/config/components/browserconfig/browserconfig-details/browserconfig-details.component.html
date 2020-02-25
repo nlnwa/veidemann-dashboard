@@ -51,23 +51,26 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput formControlName="pageLoadTimeoutMs" placeholder="Page load timeout in ms"
-                 i18n-placeholder="@@browserconfigFormPageLoadTimeoutPlaceholder">
-          <mat-error *ngIf="!pageLoadTimeoutMs.valid"
-                     i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
-            Må være et tall.
-          </mat-error>
-        </mat-form-field>
+        <mat-label i18n="@@browserconfigFormPageLoadTimeoutLabel">Page load timeout</mat-label>
+        <app-duration-picker formControlName="pageLoadTimeoutMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s'">
 
-        <mat-form-field>
-          <input matInput formControlName="maxInactivityTimeMs" placeholder="Max inactivity time ms"
-                 i18n-placeholder="@@browserconfigFormSleepAfterPageLoadPlaceholder">
-          <mat-error *ngIf="!maxInactivityTimeMs.valid"
-                     i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
-            Må være et tall.
-          </mat-error>
-        </mat-form-field>
+        </app-duration-picker>
+        <mat-error *ngIf="!pageLoadTimeoutMs.valid"
+                   i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
+          Må være et tall.
+        </mat-error>
+
+        <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
+        <app-duration-picker formControlName="maxInactivityTimeMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!maxInactivityTimeMs.valid"
+                   i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
+          Må være et tall.
+        </mat-error>
 
         <mat-form-field>
           <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList">
