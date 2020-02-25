@@ -48,14 +48,8 @@
                 Ikke en gyldig maks tid.
               </mat-error>
             </mat-form-field>
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                     matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
-              <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                         *ngIf="!maxBytes.valid">
-                ikke en gyldig maks byte.
-              </mat-error>
-            </mat-form-field>
+            <app-filesize-input [placeholder]="'Maks størrels'" formControlName="maxBytes"></app-filesize-input>
+            <mat-error *ngIf="!maxBytes.valid">{{maxBytes.errors.invalidForm.message}}</mat-error>
           </ng-container>
 
           <ng-container formGroupName="scheduleRef">
