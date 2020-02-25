@@ -51,6 +51,7 @@ import {CrawlScheduleNamePipe} from './pipe/crawl-schedule-name.pipe';
 import {CollectionNamePipe} from './pipe/collection.name.pipe';
 import {BrowserConfigNamePipe} from './pipe/browser-config-name.pipe';
 import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
+import {FilesizeInputComponent} from './components/filesize-input/filesize-input.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
     DurationPickerComponent,
     BrowserConfigNamePipe,
     PolitenessConfigNamePipe,
+    FilesizeInputComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
