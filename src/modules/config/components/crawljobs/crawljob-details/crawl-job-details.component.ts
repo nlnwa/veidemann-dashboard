@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shared/models';
+import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -11,6 +12,7 @@ import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shar
 })
 export class CrawlJobDetailsComponent implements OnChanges {
   readonly Kind = Kind;
+  readonly UnitOfTime = UnitOfTime;
 
   @Input()
   configObject: ConfigObject;
