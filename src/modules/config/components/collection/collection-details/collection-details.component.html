@@ -1,4 +1,3 @@
-
 <form [formGroup]="form">
   <mat-card>
     <mat-card-header>
@@ -41,16 +40,12 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput
-                 formControlName="fileSize"
-                 placeholder="Filstørrelse"
-                 i18n-placeholder="@@collectionFormFilesizePlaceholder">
-          <mat-error *ngIf="!fileSize.valid"
-                     i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
-            Må være et tall.
-          </mat-error>
-        </mat-form-field>
+        <app-filesize-input [placeholder]="'Filstørrelse'" formControlName="fileSize">
+        </app-filesize-input>
+        <mat-error *ngIf="!fileSize.valid"
+          i18n="@@collectionFileSizeInvalidError">
+          {{fileSize.errors.invalidForm.message}}
+        </mat-error>
 
         <mat-checkbox formControlName="compress"
                       labelPosition="after"
