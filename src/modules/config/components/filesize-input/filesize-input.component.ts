@@ -1,8 +1,18 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy} from '@angular/core';
-import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {FILESIZE_PATTERN} from '../../../../shared/validation/patterns';
+import {FILESIZE_PATTERN} from '../../../../shared/validation';
+
 
 const incrementBases = {
   2: [
@@ -57,6 +67,9 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
   onChange: (filesize: number) => void;
   onTouched: (filesize: number) => void;
 
+  get fileSize(): AbstractControl {
+    return this.form.get('fileSize');
+  }
 
 
   ngAfterViewInit(): void {
@@ -125,7 +138,7 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
     };
 
     if (!this.validAmount(amount) || !this.parsableUnit(unit)) {
-      this.form.setErrors({invalidForm: {valid: false, message: 'Can\'t interpret ' + size || 'a blank string'}});
+      this.fileSize.setErrors({invalidSize: {valid: false, size}});
     }
 
     if (unit === '') return Math.round(Number(amount));
@@ -135,7 +148,7 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
         return Math.round(amount * Number(increment[1]));
       }
     }
-    this.form.setErrors({invalidForm: {valid: false, message: unit + ' doesn\'t appear to be a valid unit'}});
+    this.fileSize.setErrors({invalidUnit: {valid: false, unit}});
   }
 
   validate(ctrl): ValidationErrors | null {
