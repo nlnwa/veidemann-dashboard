@@ -4,9 +4,9 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>business</mat-icon>
       <mat-card-title>
-        <ng-container i18n="@@entityDetailsCardTitle">Entitet</ng-container>
+        <ng-container i18n="@@entityDetailsCardTitle">Entity</ng-container>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="@@commonMassUpdateCardSubtitle">Mass update</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -35,12 +35,12 @@
       <button mat-raised-button color="accent"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
-              i18n="@@commonButtonSave">OPPDATER
+              i18n="@@commonButtonSave">UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">TILBAKESTILL
+              i18n="@@commonButtonRevert">REVERT
       </button>
     </mat-card-actions>
   </mat-card>
