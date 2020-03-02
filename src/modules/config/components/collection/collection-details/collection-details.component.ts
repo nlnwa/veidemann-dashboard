@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../../shared/models';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 
 
 @Component({
@@ -110,7 +109,7 @@ export class CollectionDetailsComponent implements OnChanges {
       collectionDedupPolicy: '',
       fileRotationPolicy: '',
       compress: '',
-      fileSize: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      fileSize: '',
       subCollectionsList: this.fb.array([]),
       meta: new Meta()
     });
@@ -127,7 +126,7 @@ export class CollectionDetailsComponent implements OnChanges {
       collectionDedupPolicy: this.configObject.collection.collectionDedupPolicy || RotationPolicy.NONE,
       fileRotationPolicy: this.configObject.collection.fileRotationPolicy || RotationPolicy.NONE,
       compress: this.configObject.collection.compress,
-      fileSize: this.configObject.collection.fileSize || '',
+      fileSize: this.configObject.collection.fileSize || 0,
     });
     this.form.setControl('subCollectionsList', subCollectionsFGArray);
     this.form.markAsPristine();
@@ -150,7 +149,7 @@ export class CollectionDetailsComponent implements OnChanges {
     collection.collectionDedupPolicy = formModel.collectionDedupPolicy;
     collection.fileRotationPolicy = formModel.fileRotationPolicy;
     collection.compress = formModel.compress;
-    collection.fileSize = parseInt(formModel.fileSize, 10) || 0;
+    collection.fileSize = formModel.fileSize || 0;
     collection.subCollectionsList = formModel.subCollectionsList.map(sub => new SubCollection(sub));
 
     configObject.meta = formModel.meta;
