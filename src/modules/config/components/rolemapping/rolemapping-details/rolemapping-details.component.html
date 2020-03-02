@@ -3,35 +3,38 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>person</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@roleMappingHeader">Rolemapping</span>
+        <span *ngIf="configObject" i18n="@@roleMappingDetailsCardTitle">Rolemapping</span>
       </mat-card-title>
       <mat-card-subtitle>
         <span *ngIf="!configObject.id"
-              i18n="@@roleMappingNewroleMappingHeader">Ny (ikke lagret)</span>
+              i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div fxLayout="row wrap" fxLayoutGap="24px">
         <mat-form-field>
-          <mat-select placeholder="Velg en type" [(value)]="selectedType">
-            <mat-option value="email">E-post</mat-option>
-            <mat-option value="group">Gruppe</mat-option>
+          <mat-select placeholder="Velg en type" [(value)]="selectedType"
+                      i18n-placeholder="@@roleMappingDetailsTypeDropdownPlaceholder">
+            <mat-option value="email" i18n="@@roleMappingDetailsTypeOptionEmail">Email</mat-option>
+            <mat-option value="group" i18n="@@roleMappingDetailsTypeOptionGroup">Group</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex *ngIf="selectedType === 'email'">
-          <input matInput formControlName="email" placeholder="Epost"
-                 i18n-placeholder="@@emailInputPlaceholder">
+          <input matInput formControlName="email" placeholder="Email"
+                 i18n-placeholder="@@roleMappingDetailsEmailInputPlaceholder">
         </mat-form-field>
         <mat-form-field fxFlex *ngIf="selectedType === 'group'">
-          <input matInput formControlName="group" placeholder="Gruppe"
-                 i18n-placeholder="@@groupInputPlaceholder">
+          <input matInput formControlName="group" placeholder="Group"
+                 i18n-placeholder="@@roleMappingDetailsGroupInputPlaceholder">
         </mat-form-field>
         <mat-form-field fxFlex>
-          <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
-                      i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+          <mat-select placeholder="Choose role" formControlName="roleList" multiple
+                      i18n-placeholder="@@rolemappingDetailsRoleDropdownPlaceholder">
             <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
           </mat-select>
-          <mat-error *ngIf="! roleList.valid">En rolle for brukeren er påkrevd.</mat-error>
+          <mat-error *ngIf="! roleList.valid" i18n="@@roleMappingDetailsRoleRequiredError">
+            A user must be assigned at least one role.
+          </mat-error>
         </mat-form-field>
       </div>
     </mat-card-content>
@@ -42,27 +45,27 @@
               [disabled]="!canSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>
