@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shared/models';
+import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
 @Component({
   selector: 'app-crawljob-details',
@@ -11,6 +12,7 @@ import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shar
 })
 export class CrawlJobDetailsComponent implements OnChanges {
   readonly Kind = Kind;
+  readonly UnitOfTime = UnitOfTime;
 
   @Input()
   configObject: ConfigObject;
@@ -130,7 +132,7 @@ export class CrawlJobDetailsComponent implements OnChanges {
       limits: this.fb.group({
         depth: ['', [Validators.min(0)]],
         maxDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-        maxBytes: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+        maxBytes: '',
       }),
       meta: new Meta(),
     });
@@ -145,7 +147,7 @@ export class CrawlJobDetailsComponent implements OnChanges {
       limits: {
         depth: this.configObject.crawlJob.limits.depth || '',
         maxDurationS: this.configObject.crawlJob.limits.maxDurationS || '',
-        maxBytes: this.configObject.crawlJob.limits.maxBytes || '',
+        maxBytes: this.configObject.crawlJob.limits.maxBytes || 0,
       },
       meta: this.configObject.meta,
     });
@@ -171,7 +173,7 @@ export class CrawlJobDetailsComponent implements OnChanges {
     crawlJob.scheduleRef = formModel.scheduleRef.id ?  new ConfigRef({id: formModel.scheduleRef.id, kind: Kind.CRAWLSCHEDULECONFIG}) : null;
     crawlJob.limits.depth = parseInt(formModel.limits.depth, 10);
     crawlJob.limits.maxDurationS = parseInt(formModel.limits.maxDurationS, 10);
-    crawlJob.limits.maxBytes = parseInt(formModel.limits.maxBytes, 10);
+    crawlJob.limits.maxBytes = formModel.limits.maxBytes || 0;
 
     configObject.crawlJob = crawlJob;
 

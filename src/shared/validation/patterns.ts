@@ -47,6 +47,11 @@ export const MULTI_VALID_URL = /\S*(https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$
 
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
+export const FILESIZE_PATTERN = [
+  /^[0-9]*\.?[0-9]+\s*/,
+  /(b|bit|bits|B|Byte|Bytes|bytes|Kb|k|K|kb|KB|KiB|Ki|ki|Mb|m|M|mb|MB|MiB|Mi|mi|Gb|g|G|gb|GB|GiB|Gi|gi|Tb|t|T|tb|TB|TiB|Ti|ti|)\s*$/
+].map(r => r.source).join('');
+
 // see https://stackoverflow.com/a/6969486 for explanation
 export const escapeStringForUseInRegexp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
