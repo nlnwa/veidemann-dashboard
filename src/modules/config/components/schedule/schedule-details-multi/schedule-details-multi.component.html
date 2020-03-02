@@ -3,9 +3,9 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>schedule</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@scheduleDetailsHeader">Schedule</span>
+        <span *ngIf="configObject" i18n="@@scheduleDetailsCardTitle">Schedule</span>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="@@commonMassUpdateCardSubtitle">Mass update</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
@@ -30,31 +30,38 @@
       <div fxFlex fxLayout="column wrap">
         <div fxLayout="row" fxLayoutGap="24px">
           <div (click)="validFrom.disabled ? validFrom.enable() : null"
+               i18n-matTooltip ="@@scheduleMassUpdateValidFromDisabledTooltip"
                [matTooltip]="validFrom.disabled ?
-                        'Verdien for dette feltet er ulik for markerte konfigurasjoner. Klikk og sett ønsket verdi' +
-                         ' for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi.'
+                        ' The value for this field is not equal for all the selected configs.'
+                        + 'Click the field and set desired state to override all, '
+                        + 'or leave untouched to keep the configurations original value.'
                         : null">
             <mat-form-field>
               <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                     placeholder="Gyldig fra">
+                     i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
+                     placeholder="Valid from">
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validFromDatepicker></mat-datepicker>
             </mat-form-field>
           </div>
           <div (click)="validTo.disabled ? validTo.enable() : null"
+               i18n-matTooltip ="@@scheduleMassUpdateValidToDisabledTooltip"
                [matTooltip]="validFrom.disabled ?
-                        'Verdien for dette feltet er ulik for markerte konfigurasjoner. Klikk og sett ønsket verdi ' +
-                         'for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi.'
+                        ' The value for this field is not equal for all the selected configs.'
+                        + 'Click the field and set desired state to override all, '
+                        + 'or leave untouched to keep the configurations original value.'
                         : null">
             <mat-form-field>
               <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
-                     placeholder="Gyldig til">
+                     i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
+                     placeholder="Valid to">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validToDatepicker></mat-datepicker>
             </mat-form-field>
           </div>
           <button mat-icon-button (click)="onRemoveValidFromTo()"
-                  [matTooltip]="'Fjern gyldig fra / gyldig til for alle markerte konfigurasjoner'">
+                  [matTooltip]="'Remove valid from / valid to for all the selected configurations'"
+                  i18n-matTooltip="@@scheduleMassUpdateRemoveValidFromToButtonTooltip">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -66,20 +73,20 @@
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               [disabled]="!canRevert"
               (click)="onRevert()"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!allSelected"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>
