@@ -3,11 +3,11 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>collections_bookmark</mat-icon>
       <mat-card-title>
-        <span i18n="@@collectionDetailsHeader">Samling</span>
+        <span i18n="@@collectionDetailsCardTitle">Collection</span>
       </mat-card-title>
       <mat-card-subtitle>
         <span *ngIf="!configObject?.id"
-              i18n="@@collectionNewCollectionHeader">Ny (ikke lagret)</span>
+              i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -25,7 +25,7 @@
 
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <mat-select placeholder="Deduplisering policy"
+          <mat-select placeholder="Deduplication policy"
                       formControlName="collectionDedupPolicy"
                       i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder">
             <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
@@ -33,32 +33,32 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="Filrotasjon policy"
+          <mat-select placeholder="File rotation policy"
                       formControlName="fileRotationPolicy"
                       i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder">
             <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <app-filesize-input [placeholder]="'Filstørrelse'" formControlName="fileSize">
+        <app-filesize-input [placeholder]="'File size'" formControlName="fileSize">
         </app-filesize-input>
 
         <mat-checkbox formControlName="compress"
                       labelPosition="after"
                       i18n="@@collectionFormCompressLabel"
                       color="accent">
-          Komprimer
+          Compress
         </mat-checkbox>
 
         <fieldset class="mat-elevation-z1" formArrayName="subCollectionsList">
-          <legend mat-card-subtitle i18n="@@collectionFromSubCollectionToolbarTitle">Delsamlinger</legend>
+          <legend mat-card-subtitle i18n="@@collectionFormSubCollectionTitle">Subcollections</legend>
 
           <div *ngFor="let subCollectionsList of subCollectionControlArray.controls; let i=index"
                [formGroupName]="i"
                fxLayout="row"
                fxLayoutGap="16px">
             <mat-form-field fxFlex>
-              <input matInput formControlName="name" placeholder="Navn"
+              <input matInput formControlName="name" placeholder="Name"
                      i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
             </mat-form-field>
             <mat-form-field>
@@ -74,13 +74,13 @@
                     (click)="onRemoveSubCollection(i)"
                     *ngIf="canEdit">
               <mat-icon>remove_circle</mat-icon>&nbsp;
-              <span>FJERN</span>
+              <span i18n="@@collectionFormRemoveSubcollectionButton">REMOVE</span>
             </button>
           </div>
 
           <button mat-stroked-button (click)="onAddSubCollection()" *ngIf="canEdit">
             <mat-icon>add_circle</mat-icon>&nbsp;
-            <span>LEGG TIL DELSAMLING</span>
+            <span i18n="@@collectionFormAddSubcollectionButton">ADD SUBCOLLECTION</span>
           </button>
         </fieldset>
 
@@ -93,27 +93,27 @@
               [disabled]="!canSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>
