@@ -1,0 +1,15 @@
+<form [formGroup]="form">
+  <mat-form-field>
+    <input matInput placeholder={{this.placeholder}} formControlName="fileSize">
+  </mat-form-field>
+  <mat-error *ngIf="fileSize.hasError('pattern')" i18n="@@fileSizeInputInvalidPatternError">
+    Field doesn't contain a valid file size
+  </mat-error>
+  <mat-error *ngIf="fileSize.hasError('invalidUnit')" i18n="@@fileSizeInputInvalidUnitError">
+    {{fileSize.errors.invalidUnit.unit}} doesn't appear to be a valid unit
+  </mat-error>
+  <mat-error *ngIf="fileSize.hasError('invalidSize')" i18n="@@fileSizeInputInvalidSizeError">
+    Can't interpret {{fileSize.errors.invalidSize.size}}
+  </mat-error>
+</form>
+

@@ -3,9 +3,9 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>group_work</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
+        <span *ngIf="configObject" i18n="@@crawlhostgroupconfigDetailsCardTitle">Crawlhostgroupconfig</span>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="@@commonMassUpdateCardSubtitle">Masse update</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div fxFlex fxLayout="column">
@@ -34,13 +34,13 @@
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
     </mat-card-actions>
   </mat-card>

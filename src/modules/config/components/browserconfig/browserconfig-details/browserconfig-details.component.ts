@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {BrowserConfig, ConfigObject, ConfigRef, Kind, Label, Meta} from '../../../../../shared/models';
+import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
 
 @Component({
@@ -12,6 +13,7 @@ import {BrowserConfig, ConfigObject, ConfigRef, Kind, Label, Meta} from '../../.
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
   readonly Kind = Kind;
+  readonly UnitOfTime = UnitOfTime;
 
   @Input()
   configObject: ConfigObject;

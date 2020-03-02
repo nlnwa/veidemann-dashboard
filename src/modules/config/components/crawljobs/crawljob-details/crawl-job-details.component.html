@@ -40,22 +40,17 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                     matInput formControlName="maxDurationS" type="text" placeholder="Maks tid">
-              <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
-                         *ngIf="!maxDurationSeconds.valid">
-                Ikke en gyldig maks tid.
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                     matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
-              <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                         *ngIf="!maxBytes.valid">
-                ikke en gyldig maks byte.
-              </mat-error>
-            </mat-form-field>
+            <mat-label i18n="@@crawljobFormMaxDurationLabel">Maks varighet</mat-label>
+            <app-duration-picker formControlName="maxDurationS"
+                                 [unit]="UnitOfTime.SECOND"
+                                 [durationGranularity]="'d:h:m:s'">
+            </app-duration-picker>
+            <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
+                       *ngIf="!maxDurationSeconds.valid">
+              Ikke en gyldig maks tid.
+            </mat-error>
+            <app-filesize-input [placeholder]="'Maks størrels'" formControlName="maxBytes"></app-filesize-input>
+            <mat-error *ngIf="!maxBytes.valid">{{maxBytes.errors.invalidForm.message}}</mat-error>
           </ng-container>
 
           <ng-container formGroupName="scheduleRef">
