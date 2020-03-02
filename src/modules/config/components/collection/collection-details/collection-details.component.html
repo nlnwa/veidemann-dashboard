@@ -42,10 +42,6 @@
 
         <app-filesize-input [placeholder]="'Filstørrelse'" formControlName="fileSize">
         </app-filesize-input>
-        <mat-error *ngIf="!fileSize.valid"
-          i18n="@@collectionFileSizeInvalidError">
-          {{fileSize.errors.invalidForm.message}}
-        </mat-error>
 
         <mat-checkbox formControlName="compress"
                       labelPosition="after"
