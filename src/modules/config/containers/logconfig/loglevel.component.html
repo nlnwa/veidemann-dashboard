@@ -2,7 +2,7 @@
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>notes</mat-icon>
-      <mat-card-title>Loggnivå</mat-card-title>
+      <mat-card-title i18n="@@logconfigDetailsCardTitle">Log level</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <ng-container formArrayName="logLevelList" *ngFor="let logLevelItem of logLevelList.controls; let i=index">
@@ -10,18 +10,22 @@
           <mat-form-field fxFlex="2 1 100%">
             <input matInput formControlName="logger" placeholder="Logger"
                    i18n-placeholder="@@logconfigFormLoggerPlaceholder">
-            <mat-error *ngIf="!logLevelItem.get('logger').valid">Feltet kan ikke være tomt</mat-error>
+            <mat-error *ngIf="!logLevelItem.get('logger').valid" i18n="@@logconfigLoggerRequiredError">
+              Field can't be empty
+            </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex>
-            <mat-select formControlName="level" placeholder="Nivå"
+            <mat-select formControlName="level" placeholder="Level"
                         i18n-placeholder="@@logconfigFormLevelPlaceholder">
               <mat-option *ngFor="let level of levelOptions" [value]="level">{{Level[level]}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="!logLevelItem.get('level').valid">Feltet er påkrevd</mat-error>
+            <mat-error *ngIf="!logLevelItem.get('level').valid" i18n="@@logconfigLevelRequiredError">
+              Field is required
+            </mat-error>
           </mat-form-field>
 
           <button mat-button (click)="onDelete(i)" *ngIf="canEdit">
-            <span>FJERN</span>
+            <span i18n="@@logconfigRemoveLogconfigButton">REMOVE</span>
           </button>
         </div>
       </ng-container>
@@ -32,17 +36,18 @@
       <button mat-raised-button color="accent"
               [disabled]="!canSave"
               (click)="onSave()"
-              i18n="@@commonButtonSave">LAGRE
+              i18n="@@commonButtonSave">SAVE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">TILBAKESTILL
+              i18n="@@commonButtonRevert">REVERT
       </button>
       <span fxFlex></span>
       <button mat-flat-button
+              i18n="@@logconfigAddLogconfigButton"
               color="primary"
-              (click)="onAdd()">LEGG TIL
+              (click)="onAdd()">ADD
       </button>
     </mat-card-actions>
   </mat-card>
