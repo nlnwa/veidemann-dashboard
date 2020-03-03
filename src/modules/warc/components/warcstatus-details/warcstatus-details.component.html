@@ -1,17 +1,17 @@
 <mat-card *ngIf="warcError">
   <mat-card-title>
-    <span i18n="@@warcErrorDetailsHeader">Feilmeldinger</span>
+    <span i18n="@@warcStatusDetailsCardTitle">Error messages</span>
   </mat-card-title>
-  <mat-card-subtitle>
-    <span>Rapport fra Jhove</span>
+  <mat-card-subtitle i18n="@@warcStatusDetailsCardSubtitle">
+    <span>Report from Jhove</span>
   </mat-card-subtitle>
 
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="15px">
       <mat-form-field>
         <input matInput
-               placeholder="Filnavn"
-               i18n-placeholder="@@warcErrorFilenamePlaceholder"
+               placeholder="Filename"
+               i18n-placeholder="@@warcStatusFormFilenamePlaceholder"
                [(ngModel)]="warcError.filename"
                disabled>
       </mat-form-field>
@@ -19,21 +19,21 @@
       <mat-form-field>
         <input matInput
                placeholder="Status"
-               i18n-placeholder="@@warcErrorStatusPlaceholder"
+               i18n-placeholder="@@warcStatusFormStatusPlaceholder"
                [(ngModel)]="warcError.status"
                disabled>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput
-               placeholder="Opprettet"
-               i18n-placeholder="@@warcErrorTimestampPlaceholder"
+               placeholder="Created"
+               i18n-placeholder="@@warcStatusFormTimestampPlaceholder"
                [(ngModel)]="timestamp"
                disabled>
       </mat-form-field>
 
       <mat-toolbar>
-        <span i18n="@@warcErrorMessagesToolbarText">Beskjeder</span>
+        <span i18n="@@warcStatusMessagesToolbarText">Messages</span>
         <span class="fill-space"></span>
       </mat-toolbar>
 
@@ -46,12 +46,12 @@
             </mat-expansion-panel-header>
             <mat-table [dataSource]="error.subMessages">
               <ng-container matColumnDef="subMessage">
-                <mat-header-cell *matHeaderCellDef> Feilmelding</mat-header-cell>
+                <mat-header-cell i18n="@@warcStatusSubMessageErrorHeaderCell" *matHeaderCellDef>Error</mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.message}}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="subMessageCount">
-                <mat-header-cell *matHeaderCellDef> Antall</mat-header-cell>
+                <mat-header-cell i18n="@@warcStatusSubMessageCountHeaderCell"*matHeaderCellDef>Count</mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.count}}</mat-cell>
               </ng-container>
 
@@ -64,14 +64,16 @@
       <mat-accordion>
         <mat-expansion-panel fxFlex>
           <mat-expansion-panel-header>
-            <mat-panel-title>Alle feil ({{totalErrors(errors)}})</mat-panel-title>
+            <mat-panel-title i18n="@@warcStatusTotalErrorsPanelTitle">
+              All errors ({{totalErrors(errors)}})
+            </mat-panel-title>
             <mat-panel-description></mat-panel-description>
           </mat-expansion-panel-header>
           <mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="text">
               <mat-header-cell *matHeaderCellDef
                                class="validator-message-table__text-column"
-                               i18n="@@warcErrorTextHeaderCell">Tekst
+                               i18n="@@warcStatusTotalErrosTextHeaderCell">Text
               </mat-header-cell>
               <mat-cell *matCellDef="let row"
                         class="validator-message-table__text-column">{{row.text}}
@@ -81,7 +83,7 @@
             <ng-container matColumnDef="severity">
               <mat-header-cell *matHeaderCellDef
                                class="validator-message-table__severity-column"
-                               i18n="@@warcErrorSeverityHeaderCell">Alvorlighetsgrad
+                               i18n="@@warcStatusTotalErrorsSeverityHeaderCell">Severity
               </mat-header-cell>
               <mat-cell *matCellDef="let row"
                         class="validator-message-table__severity-column">{{row.severity}}
@@ -89,8 +91,8 @@
             </ng-container>
 
             <ng-container matColumnDef="subMessage">
-              <mat-header-cell *matHeaderCellDef
-                               i18n="@@warcErrorSubMessageHeaderCell">Info
+              <mat-header-cell i18n="@@warcStatusTotalErrorsSubMessageHeaderCell" *matHeaderCellDef>
+                Info
               </mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.subMessage}}</mat-cell>
             </ng-container>
@@ -101,7 +103,7 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-toolbar>
-        <span i18n="@@@@warcErrorNonCompliantWarcIdToolbarText">Ikke-kompatibel WARC ID</span>
+        <span i18n="@@@@warcStatusNonCompliantWarcIdToolbarText">Non-compliant WARC ID</span>
         <span class="fill-space"></span>
       </mat-toolbar>
       <ul>
