@@ -5,37 +5,44 @@
          [matSortDirection]="sortDirection"
          (matSortChange)="onSortChange($event)">
     <ng-container matColumnDef="jobId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Jobb</th>
+      <th i18n="@@crawlExecutionReportListCrawljobHeaderCell"
+          mat-header-cell *matHeaderCellDef mat-sort-header >Job</th>
       <td mat-cell *matCellDef="let row">{{row.jobId | getJobNamePipe | async }}</td>
     </ng-container>
 
     <ng-container matColumnDef="seedId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Seed</th>
+      <th i18n="@@crawlExecutionReportListSeedHeaderCell"
+          mat-header-cell *matHeaderCellDef mat-sort-header>Seed</th>
       <td mat-cell *matCellDef="let row">{{row.seedId | getSeedNamePipe | async }}</td>
     </ng-container>
 
     <ng-container matColumnDef="state">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <th i18n="@@crawlExecutionReportListStateHeaderCell"
+          mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
       <td mat-cell *matCellDef="let row">{{CrawlExecutionState[row.state]}}</td>
     </ng-container>
 
     <ng-container matColumnDef="createdTime">
-      <th mat-header-cell *matHeaderCellDef>Opprettet</th>
+      <th i18n="@@crawlExecutionReportListCreatedTimeHeaderCell"
+          mat-header-cell *matHeaderCellDef>Created</th>
       <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="startTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Startet</th>
+      <th i18n="@@crawlExecutionReportListStartTimeHeaderCell"
+          mat-header-cell *matHeaderCellDef mat-sort-header>Started</th>
       <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="lastChangeTime">
-      <th mat-header-cell *matHeaderCellDef>Sist endret</th>
+      <th i18n="@@crawlExecutionReportListLastChangeTimeHeaderCell"
+          mat-header-cell *matHeaderCellDef>Last changed</th>
       <td mat-cell *matCellDef="let row">{{row.lastChangeTime | date : 'short' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="endTime">
-      <th mat-header-cell *matHeaderCellDef>Avsluttet</th>
+      <th i18n="@@crawlExecutionReportListEndTimeHeaderCell"
+          mat-header-cell *matHeaderCellDef>Ended</th>
       <td mat-cell *matCellDef="let row">{{row.endTime | date : 'short' }}</td>
     </ng-container>
 

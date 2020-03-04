@@ -1,13 +1,15 @@
 <form [formGroup]="form" fxLayout="row wrap" fxLayoutGap="16px">
   <mat-form-field>
-    <mat-select placeholder="State" multiple formControlName="stateList">
+    <mat-select placeholder="State" multiple formControlName="stateList"
+                i18n-placeholder="@@crawlExecutionReportFilterStatePlaceholder">
       <mat-option *ngFor="let state of crawlExecutionStates"
                   [value]="state.toString(10)">{{CrawlExecutionState[state]}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select placeholder="CrawlJob" formControlName="jobId">
+    <mat-select placeholder="CrawlJob" formControlName="jobId"
+                i18n-placeholder="@@crawlExecutionReportFilterCrawlJobPlaceholder">
       <mat-option [value]=""></mat-option>
       <mat-option *ngFor="let job of crawlJobOptions"
                   [value]="job.id">{{job.meta.name}}</mat-option>
@@ -18,22 +20,24 @@
     <input matInput
            formControlName="seedId"
            placeholder="Seed ID"
-           i18n-placeholder="@@seedIdPlaceholder">
+           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
   </mat-form-field>
 
-  <mat-checkbox labelPosition="after" formControlName="hasError">
-    Feilede
+  <mat-checkbox labelPosition="after" formControlName="hasError"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Failed
   </mat-checkbox>
 
   <mat-form-field>
     <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
-           placeholder="Fra">
+           placeholder="From" i18n-placeholder="@@crawlExecutionReportFilterStartTimeFromPlaceholder">
     <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo" placeholder="Til">
+    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo"
+           placeholder="To" i18n-placeholder="@@crawlExecutionReportFilterStartTimeToPlaceholder">
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #startTimeToDatePicker></mat-datepicker>
   </mat-form-field>
@@ -54,12 +58,14 @@
     <a *appAction="let row" mat-icon-button
        [routerLink]="['/config', 'seed']"
        [queryParams]="{id: row.seedId}">
-      <mat-icon matTooltip="Gå til seed">link</mat-icon>
+      <mat-icon matTooltip="Go to seed"
+                i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">link</mat-icon>
     </a>
     <a *appAction="let row" mat-icon-button
        [routerLink]="['/config', 'crawljobs']"
        [queryParams]="{id: row.jobId}">
-      <mat-icon matTooltip="Gå til jobb">work</mat-icon>
+      <mat-icon matTooltip="Go to crawljob"
+                i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">work</mat-icon>
     </a>
   </app-crawl-execution-status-list>
 
