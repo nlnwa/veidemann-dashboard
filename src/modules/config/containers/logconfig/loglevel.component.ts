@@ -67,7 +67,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
         this.logLevels = logLevels;
         this.addOrRemoved = false;
         this.updateForm();
-        this.snackBarService.openSnackBar('Lagret');
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.saved:Saved`);
       });
   }
 
@@ -84,7 +84,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   onRevert() {
     this.updateForm();
     this.addOrRemoved = false;
-    this.snackBarService.openSnackBar('Tilbakestilt');
+    this.snackBarService.openSnackBar($localize`:@snackBarMessage.reverted:Reverted`);
   }
 
   private createForm() {
