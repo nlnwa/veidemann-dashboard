@@ -3,19 +3,21 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>work</mat-icon>
       <mat-card-title>
-        <ng-container i18n="@@crawljobDetailsHeader">Høstejobb</ng-container>
+        <ng-container i18n="@@crawljobDetailsCardTitle">Crawljob</ng-container>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="@@commonMassUpdateCardSubtitle">Mass update</mat-card-subtitle>
       <span fxFlex></span>
       <div (click)="disabled.disabled ? disabled.enable() : null">
         <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
                           formControlName="disabled"
-                          i18n-matTooltip="@@crawlconfigFormDisabledDisabledExplaination"
+                          i18n-matTooltip="@@crawljobFormDisabledDisabledExplanation"
                           color="accent"
                           [matTooltip]="disabled.disabled ?
-                        'Innstillingen for dette feltet er ulik for markerte konfigurasjoner. Klikk og sett ønsket verdi for å overstyre alle, eller la stå for å beholde konfigurasjonenes opprinnelige verdi.'
+                          'Setting is not equal for all selected configurations.'
+                         +'Click here and set desired state to override all, '
+                         + 'or leave untouched to keep the configurations original value.'
                         : null">
-          Deaktivert
+          Deactivated
         </mat-slide-toggle>
       </div>
     </mat-card-header>
@@ -44,34 +46,28 @@
         <ng-container formGroupName="limits">
           <mat-form-field>
             <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                   matInput formControlName="depth" type="text" placeholder="Dybde">
+                   matInput formControlName="depth" type="text" placeholder="Depth">
             <mat-error i18n="@@crawljobFormDepthRequiredError"
                        *ngIf="!depth.valid">
-              Ikke en gyldig dybde
+              Invalid depth
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field>
-            <input i18n-placeholder="@@crawljobFormMaxDurationPlaceholder"
-                   matInput formControlName="maxDurationS" type="text" placeholder="Maks tid">
-            <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
-                       *ngIf="!maxDurationSeconds.valid">
-              Ikke en gyldig maks tid.
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input i18n-placeholder="@@crawljobFormMaxBytePlaceholder"
-                   matInput formControlName="maxBytes" type="text" placeholder="Maks bytes">
-            <mat-error i18n="@@crawljobFormMaxByteRequiredError"
-                       *ngIf="!maxBytes.valid">
-              ikke en gyldig maks byte.
-            </mat-error>
-          </mat-form-field>
+          <app-duration-picker formControlName="maxDurationS"
+                               [unit]="UnitOfTime.SECOND"
+                               [durationGranularity]="'d:h:m:s'">
+          </app-duration-picker>
+          <mat-error i18n="@@crawljobFormMaxDurationRequiredError"
+                     *ngIf="!maxDurationSeconds.valid">
+            Invalid max duration.
+          </mat-error>
+          <app-filesize-input [placeholder]="'Max size'" formControlName="maxBytes"></app-filesize-input>
         </ng-container>
 
         <ng-container formGroupName="scheduleRef">
           <mat-form-field>
-            <mat-select placeholder="Schedule" formControlName="id">
+            <mat-select placeholder="Schedule" formControlName="id"
+                        i18n-placeholder="@@crawljobDetailsFormScheduleDropdownPlaceholder">
               <mat-option [value]="">None</mat-option>
               <mat-option *ngFor="let option of crawlScheduleConfigs"
                           [value]="option.id">{{option.meta.name}}</mat-option>
@@ -82,11 +78,14 @@
 
         <ng-container formGroupName="crawlConfigRef">
           <mat-form-field>
-            <mat-select placeholder="CrawlConfig" formControlName="id">
+            <mat-select placeholder="CrawlConfig" formControlName="id"
+                        i18n-placeholder="@@crawljobDetailsFormCrawlconfigDropdownPlaceholder">
               <mat-option *ngFor="let option of crawlConfigs"
                           [value]="option.id">{{option.meta.name}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="crawlConfigRef.invalid">CrawlConfig er påkrevd</mat-error>
+            <mat-error *ngIf="crawlConfigRef.invalid" i18n="@@crawljobCrawlconfigRequiredError">
+              A CrawlConfig is required
+            </mat-error>
           </mat-form-field>
           <input type="hidden" formControlName="kind">
         </ng-container>
@@ -97,12 +96,12 @@
       <button mat-raised-button color="accent"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
-              i18n="@@commonButtonSave">OPPDATER
+              i18n="@@commonButtonSave">UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">TILBAKESTILL
+              i18n="@@commonButtonRevert">REVERT
       </button>
     </mat-card-actions>
   </mat-card>
