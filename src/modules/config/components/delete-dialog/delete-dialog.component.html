@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Bekreft sletting</h1>
+<h1 mat-dialog-title i18n="@@deleteDialogTitle">Delete confirmation</h1>
 <div mat-dialog-content [ngSwitch]="configObject.kind">
   <p>
-    <span>Er du sikker på at du vil slette </span>
+    <span i18n="@@deleteDialogConfirmationText">Are you sure you want to delete </span>
     <strong *ngSwitchCase="Kind.ROLEMAPPING">{{roleMapping}}</strong>
     <span *ngSwitchDefault>"{{configObject.meta.name}}"</span>
     ?
@@ -10,11 +10,13 @@
 
 <div mat-dialog-actions>
   <button mat-button
-          [mat-dialog-close]="false">AVBRYT
+          i18n="@@commonButtonCancel"
+          [mat-dialog-close]="false">CANCEL
   </button>
   <span fxFlex></span>
   <button mat-raised-button
           color="warn"
-          [mat-dialog-close]="true">SLETT
+          i18n="@@commonButtonDelete"
+          [mat-dialog-close]="true">DELETE
   </button>
 </div>
