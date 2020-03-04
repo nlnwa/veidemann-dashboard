@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
-import {ConfigObject, Kind, Label, PolitenessConfig} from '../../../../../shared/models';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models';
 import {PolitenessConfigDetailsComponent} from '../politenessconfig-details/politenessconfig-details.component';
 import {RobotsPolicy} from '../../../../../shared/models/config/politenessconfig.model';
 
@@ -113,13 +113,8 @@ export class PolitenessConfigDetailsMultiComponent extends PolitenessConfigDetai
 
     const formModel = this.form.value;
 
-    const politenessConfig = new PolitenessConfig();
-
-    const updateTemplate = new ConfigObject({
-      kind: Kind.POLITENESSCONFIG,
-      politenessConfig
-    });
-
+    const updateTemplate = new ConfigObject({kind: Kind.POLITENESSCONFIG});
+    const politenessConfig = updateTemplate.politenessConfig;
 
     if (this.labelList.value.length && this.shouldAddLabel !== undefined) {
       updateTemplate.meta.labelList = formModel.labelList;
@@ -179,7 +174,7 @@ export class PolitenessConfigDetailsMultiComponent extends PolitenessConfigDetai
     }
 
     if (this.crawlHostGroupSelectorList.value.length && this.shouldAddSelector !== undefined) {
-      politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList;
+      politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);
       if (this.shouldAddSelector) {
         pathList.push('politenessConfig.crawlHostGroupSelector+');
       } else {

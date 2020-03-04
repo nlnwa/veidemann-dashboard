@@ -3,11 +3,11 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>sentiment_neutral</mat-icon>
       <mat-card-title>
-        <span i18n="@@politenessconfigDetailsHeader">Politenessconfig</span>
+        <span i18n="@@politenessconfigDetailsCardTitle">Politenessconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
         <span *ngIf="!configObject?.id"
-              i18n="@@politenessconfigNewPolitenessConfigHeader">Ny (ikke lagret)</span>
+              i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
@@ -24,7 +24,7 @@
 
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <mat-select placeholder="Velg policy"
+          <mat-select placeholder="Choose policy"
                       formControlName="robotsPolicy"
                       i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
             <mat-option *ngFor="let policy of robotsPolicies" [value]="policy">{{RobotsPolicy[policy]}}</mat-option>
@@ -34,17 +34,15 @@
         <mat-form-field *ngIf="robotsPolicy.value === RobotsPolicy.CUSTOM_ROBOTS">
             <textarea matInput
                       formControlName="customRobots"
-                      placeholder="robots.txt">
+                      placeholder="robots.txt"
+                      i18n-placeholder="politenessconfigFormCustomRobotsPolicyInputPlaceholder">
             </textarea>
-          <mat-error *ngIf="!customRobots.valid"
-                     i18n="@@politenessconfigFormValidityDurationRequiredError">
-            Må være et tall.
-          </mat-error>
         </mat-form-field>
 
         <!--CrawlHostGroup Selector -->
         <app-selector placeholder="CrawlHostGroup Selector" formControlName="crawlHostGroupSelectorList"
-                      [removable]="canEdit"></app-selector>
+                      [removable]="canEdit" i18n-placeholder="@@politenessconfigFormCrawlhostgroupSelectorPlaceholder">
+        </app-selector>
 
         <mat-label i18n="@@politenessconfigFormMinRobotsValidDurationLabel">Minimum robots validity</mat-label>
         <app-duration-picker formControlName="minimumRobotsValidityDurationS"
@@ -52,28 +50,28 @@
                              [durationGranularity]="'d:h:m:s'">
         </app-duration-picker>
         <mat-error *ngIf="!minRobotsValidDurationSec.valid"
-                   i18n="@@politenessconfigFormMinRobotsValidDurationRequiredError">
-          Må være et tall.
+                   i18n="@@politenessconfigFormMinRobotsValidDurationValidationError">
+          Must be a number.
         </mat-error>
 
-        <mat-label>Minimum time between page load</mat-label>
+        <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
         <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
                              [durationGranularity]="'m:s'">
         </app-duration-picker>
         <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
-                   i18n="@@politenessconfigFormMinTimeBetweenPageloadRequiredError">
-          Må være et tall.
+                   i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
+          Must be a number.
         </mat-error>
 
-        <mat-label>Maximum time between page load</mat-label>
+        <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
         <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
                              [durationGranularity]="'m:s'">
         </app-duration-picker>
         <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
-                   i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
-          Må være et tall
+                   i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
+          Must be a number.
         </mat-error>
 
         <mat-form-field>
@@ -82,8 +80,8 @@
                  placeholder="Delay factor"
                  i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
           <mat-error *ngIf="!delayFactor.valid"
-                     i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
-            Må være et tall
+                     i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
+            Must be a number.
           </mat-error>
         </mat-form-field>
 
@@ -91,21 +89,21 @@
           <input matInput
                  formControlName="maxRetries"
                  placeholder="Maximum retries"
-                 i18n-placeholder="@@mustBeNumberError">
+                 i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
           <mat-error *ngIf="!maxRetries.valid"
-                     i18n="@@mustBeNumberError">
-            Må være et tall
+                     i18n="@@politenessconfigFormMaxRetriesValidationError">
+            Must be a number.
           </mat-error>
         </mat-form-field>
 
-        <mat-label>Retry delay</mat-label>
+        <mat-label i18n="politenessconfigFormRetryDelayLabel">Retry delay</mat-label>
         <app-duration-picker formControlName="retryDelaySeconds"
                              [unit]="UnitOfTime.SECOND"
                              [durationGranularity]="'m:s'">
         </app-duration-picker>
         <mat-error *ngIf="!retryDelaySeconds.valid"
-                   i18n="@@politenessconfigFormMaxTimeBetweenPageloadRequiredError">
-          Må være et tall
+                   i18n="@@politenessconfigFormRetryDelayValidationError">
+          Must be a number.
         </mat-error>
       </div>
     </mat-card-content>
@@ -117,27 +115,27 @@
               *ngIf="showSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>
