@@ -1,7 +1,8 @@
 <mat-form-field class="search-form" *ngIf="query?.kind">
   <input matInput
          #search
-         placeholder="Søk"
+         placeholder="Search"
+         i18n-placeholder="@@configQuerySearchInputPlaceholder"
          [(ngModel)]="term"
          (keyup.enter)="onSearch(term)"
          i18n-placeholder="@@searchSearchFieldPlaceholder">
@@ -14,7 +15,7 @@
 <form [formGroup]="form" [ngSwitch]="query?.kind" fxLayout="row" fxLayoutGap="16px">
   <ng-container *ngSwitchCase="Kind.CRAWLJOB">
     <mat-form-field>
-      <mat-label>Schedule</mat-label>
+      <mat-label i18n="@@configQueryScheduleDropdownLabel">Schedule</mat-label>
       <mat-select formControlName="scheduleId">
         <mat-option [value]=""></mat-option>
         <mat-option *ngFor="let option of options.crawlScheduleConfigs"
@@ -22,7 +23,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>CrawlConfig</mat-label>
+      <mat-label i18n="@@configQueryCrawlConfigDropdownLabel">CrawlConfig</mat-label>
       <mat-select formControlName="crawlConfigId">
         <mat-option [value]=""></mat-option>
         <mat-option *ngFor="let option of options.crawlConfigs"
@@ -33,7 +34,8 @@
 
   <ng-container *ngSwitchCase="Kind.SEED">
     <mat-form-field>
-      <mat-select placeholder="CrawlJob" multiple formControlName="crawlJobIdList">
+      <mat-select placeholder="CrawlJob" multiple formControlName="crawlJobIdList"
+                  i18n-placeholder="@@configQueryCrawlJobDropdownPlaceholder">
         <mat-option *ngFor="let crawlJob of options.crawlJobs"
                     [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
       </mat-select>
@@ -42,14 +44,14 @@
     <mat-form-field>
       <input matInput
              formControlName="entityId"
-             placeholder="Entitetens ID"
-             i18n-placeholder="@@configIdPlaceholder">
+             placeholder="Entity ID"
+             i18n-placeholder="@@configQueryEntityIdInputPlaceholder">
     </mat-form-field>
   </ng-container>
 
   <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
     <mat-form-field>
-      <mat-label>Collection</mat-label>
+      <mat-label i18n="@@configQueryCollectionDropdownLabel">Collection</mat-label>
       <mat-select formControlName="collectionId">
         <mat-option value=""></mat-option>
         <mat-option *ngFor="let option of options.collections"
@@ -57,7 +59,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>BrowserConfig</mat-label>
+      <mat-label i18n="@@configQueryBrowserConfigDropdownLabel">BrowserConfig</mat-label>
       <mat-select formControlName="browserConfigId">
         <mat-option value=""></mat-option>
         <mat-option *ngFor="let option of options.browserConfigs"
@@ -65,7 +67,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Politeness</mat-label>
+      <mat-label i18n="@@configQueryPolitenessDropdownLabel">Politeness</mat-label>
       <mat-select formControlName="politenessId">
         <mat-option value=""></mat-option>
         <mat-option *ngFor="let option of options.politenessConfigs"
@@ -76,7 +78,8 @@
 
   <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
     <mat-form-field>
-      <mat-select placeholder="BrowserScript" multiple formControlName="scriptIdList">
+      <mat-select placeholder="BrowserScript" multiple formControlName="scriptIdList"
+                  i18n-placeholder="@@configQueryBrowserScriptDropdownPlaceholder">
         <mat-option *ngFor="let browserScript of options.browserScripts"
                     [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
       </mat-select>
