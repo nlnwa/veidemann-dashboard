@@ -1,19 +1,19 @@
 <form [formGroup]="form">
   <div fxLayout="row" fxLayoutGap="24px">
   <mat-form-field *ngIf="showDays" class="duration">
-    <mat-label>Dager</mat-label>
+    <mat-label i18n="@@durationPickerDaysLabel">Days</mat-label>
     <input type="number" matInput formControlName="days" min="0">
   </mat-form-field>
   <mat-form-field *ngIf="showHours" class="duration">
-    <mat-label>Timer</mat-label>
+    <mat-label i18n="@@durationPickerHoursLabel">Hours</mat-label>
     <input type="number" matInput formControlName="hours" min="0">
   </mat-form-field>
   <mat-form-field *ngIf="showMinutes" class="duration">
-    <mat-label>Minutter</mat-label>
+    <mat-label i18n="@@durationPickerMinutesLabel">Minutes</mat-label>
     <input type="number" matInput formControlName="minutes" min="0">
   </mat-form-field>
   <mat-form-field *ngIf="showSeconds" class="duration">
-    <mat-label>Sekunder</mat-label>
+    <mat-label i18n="@@durationPickerSecondsLabel">Seconds</mat-label>
     <input type="number" matInput formControlName="seconds" min="0">
   </mat-form-field>
   </div>
