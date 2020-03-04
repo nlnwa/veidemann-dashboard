@@ -1,7 +1,7 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header>
     <mat-panel-title>{{CrawlExecutionState[crawlExecutionStatus.state]}}</mat-panel-title>
-    <mat-panel-description>Status</mat-panel-description>
+    <mat-panel-description i18n="@@crawlExecutionStatusPanelDescription">State</mat-panel-description>
   </mat-expansion-panel-header>
 
   <div fxLayout="column">
@@ -9,11 +9,11 @@
       <table class="mat-table table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Start</th>
-          <th class="mat-header-cell">Slutt</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusStartHeaderCell">Start</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusEndHeaderCell">End</th>
 
-          <th class="mat-header-cell">Opprettet</th>
-          <th class="mat-header-cell">Sist endret</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusCreatedHeaderCell">Created</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusLastModifiedHeaderCell">Last modified</th>
         </tr>
         </thead>
         <tbody>
@@ -31,49 +31,49 @@
       <table class="mat-table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Statistikk</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusStatisticsHeaderCell">Statistics</th>
           <th class="mat-header-cell"></th>
         </tr>
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell">URIs crawled</td>
+          <td class="mat-cell"i18n="@@crawlExecutionStatusStatisticsUrisCrawledHeaderCell">URIs crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Bytes crawled</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsBytesCrawledHeaderCell">Bytes crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents crawled</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsDocumentsCrawledHeaderCell">Documents crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents denied</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsDocumentsDeniedHeaderCell">Documents denied</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents failed</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsDocumentsFailedHeaderCell">Documents failed</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents out of scope</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsOutOfScopeHeaderCell">Documents out of scope</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents retried</td>
+          <td class="mat-cell" i18n="@@crawlExecutionStatusStatisticsDocumentsRetriedHeaderCell">Documents retried</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
         </tr>
         </tbody>
       </table>
     </div>
     <mat-list fxFlex *ngIf="crawlExecutionStatus.currentUriIdList.length">
-      <h3 matSubheader>Current URIs</h3>
+      <h3 matSubheader i18n="@@crawlExecutionStatusCurrentUrisHeader">Current URIs</h3>
       <mat-list-item>https://www.http.url.no/path</mat-list-item>
       <mat-list-item *ngFor="let uri of crawlExecutionStatus.currentUriIdList">{{uri}}</mat-list-item>
     </mat-list>
     <mat-list fxFlex *ngIf="crawlExecutionStatus.error as error">
-      <h3 matSubheader>Error</h3>
+      <h3 matSubheader i18n="@@crawlExecutionStatusErrorHeader">Error</h3>
       <mat-list-item>{{error.code}}</mat-list-item>
       <mat-list-item>{{error.msg}}</mat-list-item>
       <mat-list-item>{{error.detail}}</mat-list-item>
@@ -82,10 +82,10 @@
       <table class="mat-table table" style="margin-bottom: 1rem;">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Id</th>
-          <th class="mat-header-cell">Seed Id</th>
-          <th class="mat-header-cell">Job Id</th>
-          <th class="mat-header-cell">Job Execution Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusIdHeaderCell">Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusSeedIdHeaderCell">Seed Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusCrawljobIdHeaderCell">Job Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionStatusJobExecutionIdHeaderCell">Job Execution Id</th>
         </tr>
         </thead>
         <tbody>
