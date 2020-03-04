@@ -3,12 +3,12 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>web</mat-icon>
       <mat-card-title>
-        <span i18n="@@browserconfigDetailsHeader">BrowserConfig</span>
+        <span i18n="@@browserconfigDetailsCardTitle">BrowserConfig</span>
       </mat-card-title>
       <mat-card-subtitle>
         <span *ngIf="!configObject?.id"
-              i18n="@@browserconfigNewConfigHeader">
-        Ny (ikke lagret)</span>
+              i18n="@@commonConfigDetailsCardSubtitle">
+        New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -25,29 +25,29 @@
       </div>
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <input matInput formControlName="userAgent" placeholder="Brukeragent"
+          <input matInput formControlName="userAgent" placeholder="User agent"
                  i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
           <mat-error *ngIf="!userAgent.valid"
                      i18n="@@browserconfigFormUserAgentRequiredError">
-            Må ha en lengde på minst ett tegn.
+            Must contain at least 1 character.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="windowWidth" placeholder="Vindusbredde"
+          <input matInput formControlName="windowWidth" placeholder="Window width"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
           <mat-error *ngIf="!windowWidth.valid"
                      i18n="@@browserconfigFormWindowWidthRequiredError">
-            Må være et tall.
+            Must be a number.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput formControlName="windowHeight" placeholder="Vindushøyde"
+          <input matInput formControlName="windowHeight" placeholder="Window height"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
           <mat-error *ngIf="!windowHeight.valid"
                      i18n="@@browserconfigFormWindowHeightRequiredError">
-            Må være et tall.
+            Must be a number.
           </mat-error>
         </mat-form-field>
 
@@ -59,7 +59,7 @@
         </app-duration-picker>
         <mat-error *ngIf="!pageLoadTimeoutMs.valid"
                    i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
-          Må være et tall.
+          Must be a number.
         </mat-error>
 
         <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
@@ -69,21 +69,25 @@
         </app-duration-picker>
         <mat-error *ngIf="!maxInactivityTimeMs.valid"
                    i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
-          Må være et tall.
+          Must be a number.
         </mat-error>
 
         <mat-form-field>
-          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList">
+          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
+                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
             <mat-option *ngFor="let browserScript of browserScripts"
                         [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <app-selector placeholder="Script selector" formControlName="scriptSelectorList" [removable]="canEdit"></app-selector>
+        <app-selector placeholder="Script selector" formControlName="scriptSelectorList" [removable]="canEdit"
+                      i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        </app-selector>
 
         <mat-list *ngIf="showShortcuts">
           <mat-list-item *ngFor="let id of scriptRefIdList.value">
-            <mat-icon matTooltip="BrowserScript">web_asset</mat-icon>&nbsp;
+            <mat-icon matTooltip="BrowserScript"
+                      i18n-matTooltip="@@browserconfigBrowserscriptShortcutTooltip">web_asset</mat-icon>&nbsp;
             <a class="shortcut-link"
                [routerLink]="['/config/browserscript']"
                [queryParams]="{id: id}">{{ getScriptName(id) }}</a>
@@ -98,27 +102,27 @@
               *ngIf="showSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>
