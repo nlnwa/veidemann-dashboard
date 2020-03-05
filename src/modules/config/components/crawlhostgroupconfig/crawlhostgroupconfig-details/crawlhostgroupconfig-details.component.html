@@ -30,7 +30,7 @@
               <mat-form-field fxFlex>
                 <input matInput formControlName="ipFrom" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-                <mat-hint>Fra</mat-hint>
+                <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
                 <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
                   A valid IP address is required.
@@ -40,7 +40,7 @@
               <mat-form-field fxFlex>
                 <input matInput formControlName="ipTo" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-                <mat-hint>Til</mat-hint>
+                <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
                 <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
                   A valid IP address is required.
