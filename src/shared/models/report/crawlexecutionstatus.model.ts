@@ -92,6 +92,7 @@ export class CrawlExecutionStatus {
       jobId: proto.getJobId(),
       seedId: proto.getSeedId(),
       state: CrawlExecutionState[CrawlExecutionState[proto.getState()]],
+      scope: CrawlScope.fromProto(proto.getScope()),
       startTime: fromTimestampProto(proto.getStartTime()),
       endTime: fromTimestampProto(proto.getEndTime()),
       documentsCrawled: proto.getDocumentsCrawled(),
