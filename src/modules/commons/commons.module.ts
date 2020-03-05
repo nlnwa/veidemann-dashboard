@@ -6,6 +6,7 @@ import {RouterModule} from '@angular/router';
 import {MaterialModule} from './material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ActionDirective, ExtraDirective} from './directives';
+import {NgxFilesizeModule} from 'ngx-filesize';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {ActionDirective, ExtraDirective} from './directives';
     ReactiveFormsModule,
     RouterModule,
     DragDropModule,
+    NgxFilesizeModule,
   ],
   exports: [
     CommonModule,
@@ -31,6 +33,7 @@ import {ActionDirective, ExtraDirective} from './directives';
     DragDropModule,
     ActionDirective,
     ExtraDirective,
+    NgxFilesizeModule,
   ],
   providers: [DatePipe],
 })
