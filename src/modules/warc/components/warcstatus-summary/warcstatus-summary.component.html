@@ -1,9 +1,9 @@
 <mat-card *ngIf="allErrors">
   <mat-card-title>
-    <span>Oppsummering</span>
+    <span i18n="@@warcStatusSummaryCardTitle">Summary</span>
   </mat-card-title>
   <mat-card-subtitle>
-    <span>Feil oppdaget i WARC-filene</span>
+    <span i18n="@@warcStatusSummaryCardSubtitle"> Errors discovered in the WARC files</span>
   </mat-card-subtitle>
   <mat-card-content>
     <ng-container *ngFor="let error of this.errors">
@@ -15,12 +15,14 @@
           </mat-expansion-panel-header>
           <mat-table [dataSource]="error.subMessages">
             <ng-container matColumnDef="subMessage">
-              <mat-header-cell *matHeaderCellDef> Feilmelding</mat-header-cell>
+              <mat-header-cell i18n="@@warcStatusSummaryErrorHeaderCell" *matHeaderCellDef>
+                Error
+              </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.message}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="subMessageCount">
-              <mat-header-cell *matHeaderCellDef> Antall</mat-header-cell>
+              <mat-header-cell i18n="@@warcStatusSummaryCountHeaderCell" *matHeaderCellDef> Count</mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.count}}</mat-cell>
             </ng-container>
 
