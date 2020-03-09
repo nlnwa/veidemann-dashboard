@@ -36,6 +36,7 @@
     "ip-address": "^6.2.0",
     "moment": "^2.24.0",
     "nano-editor": "^1.2.4",
+    "ngx-filesize": "^2.0.2",
     "prismjs": "^1.19.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
