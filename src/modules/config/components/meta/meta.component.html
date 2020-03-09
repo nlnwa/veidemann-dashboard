@@ -1,17 +1,17 @@
 <div [formGroup]="form" fxLayout="column">
 
   <mat-form-field [hideRequiredMarker]="nameInput.value.length >= 2">
-    <input matInput #nameInput formControlName="name" placeholder="Navn"
+    <input matInput #nameInput formControlName="name" placeholder="Name"
            i18n-placeholder="@@metaNameInputPlaceholder" required>
-    <mat-hint *ngIf="nameInput.value.length < 2">Minimum 2 tegn</mat-hint>
+    <mat-hint i18n="@@metaNameInputLengthHinht" *ngIf="nameInput.value.length < 2">Minimum 2 characters</mat-hint>
     <mat-error
       i18n="@@metaNameRequiredError">
-      Navn er påkrevd
+      Name is required
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Beskrivelse"
+    <textarea matInput formControlName="description" placeholder="Description"
               i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
     </textarea>
   </mat-form-field>
@@ -23,14 +23,14 @@
       <mat-form-field fxFlex *ngIf="created.value">
         <input matInput
                formControlName="created"
-               placeholder="Opprettet"
+               placeholder="Created"
                i18n-placeholder="@@metaCreatedInputPlaceholder">
       </mat-form-field>
 
       <mat-form-field fxFlex *ngIf="createdBy.value">
         <input matInput
                formControlName="createdBy"
-               placeholder="Opprettet av"
+               placeholder="Created by"
                i18n-placeholder="@@metaCreatedByInputPlaceholder">
       </mat-form-field>
     </div>
@@ -39,14 +39,14 @@
       <mat-form-field fxFlex *ngIf="lastModified.value">
         <input matInput
                formControlName=lastModified
-               placeholder="Sist endret"
+               placeholder="Last modified"
                i18n-placeholder="@@metaLastModifiedInputPlaceholder">
       </mat-form-field>
 
       <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
         <input matInput
                formControlName="lastModifiedBy"
-               placeholder="Sist endret av"
+               placeholder="Last modified by"
                i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
       </mat-form-field>
     </div>

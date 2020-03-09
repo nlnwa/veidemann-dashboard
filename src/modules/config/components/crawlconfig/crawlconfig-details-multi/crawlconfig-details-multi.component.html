@@ -3,9 +3,9 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>settings_system_daydream</mat-icon>
       <mat-card-title>
-        <span i18n="@@crawlconfigDetailsHeader">Crawlconfig</span>
+        <span i18n="@@crawlconfigDetailsCardTile">Crawlconfig</span>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="@@commonMassUpdateCardSubtitle">Mass update</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex>
@@ -30,21 +30,24 @@
 
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <mat-select placeholder="Collection" formControlName="collectionRefId">
+          <mat-select placeholder="Collection" formControlName="collectionRefId"
+                      i18n-placeholder="@@crawlconfigFormCollectionDropdownPlaceholder">
             <mat-option *ngFor="let option of collections"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="BrowserConfig" formControlName="browserConfigRefId">
+          <mat-select placeholder="BrowserConfig" formControlName="browserConfigRefId"
+                      i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
             <mat-option *ngFor="let option of browserConfigs"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="PolitenessConfig" formControlName="politenessRefId">
+          <mat-select placeholder="PolitenessConfig" formControlName="politenessRefId"
+                      i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
             <mat-option *ngFor="let option of politenessConfigs"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
@@ -53,30 +56,34 @@
         <mat-form-field>
           <input matInput
                  formControlName="minimumDnsTtlS"
-                 placeholder="DNS TTL">
+                 placeholder="DNS TTL"
+                 i18n-placeholder="@@crawlconfigFormMinimumDnsTtlInputPlaceholder">
           <mat-error *ngIf="!minDnsTtlSeconds.valid"
-                     i18n="@@crawlconfigFormMinDNSTTLRequiredError">
-            Må være et tall eller tom.
+                     i18n="@@crawlconfigFormMinDNSTTLValidationError">
+            Must be a number or empty
           </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput
                  formControlName="priorityWeight"
-                 placeholder="Prioritet vekting">
-          <mat-error *ngIf="!priorityWeight.valid">
-            Må være et tall eller tom
+                 placeholder="Priority weight"
+                 i18n-placeholder="@@crawlconfigFormPriorityWeightInputPlaceholder">
+          <mat-error *ngIf="!priorityWeight.valid" i18n="@@crawlconfigFormPriorityWeightValidationError">
+            Must be a number or empty
           </mat-error>
         </mat-form-field>
         <div formGroupName="extra" (click)="extractText.disabled ? extractText.enable() : null">
           <mat-checkbox formControlName="extractText"
                         labelPosition="after"
                         i18n="@@crawlconfigFormExtractTextLabel"
-                        i18n-matTooltip="@@crawlconfigFormDisabledExtractTextExplaination"
+                        i18n-matTooltip="@@crawlconfigFormDisabledExtractTextExplanation"
                         color="accent"
                         [matTooltip]="extractText.disabled ?
-                        'Instilling er ikke lik for alle markerte konfigurasjoner. Klikk for å aktivere.' : null"
+                        'Setting is not equal for all selected configurations.'
+                         +'Click here and set desired state to override all, '
+                         + 'or leave untouched to keep the configurations original value.' : null"
           >
-            Ekstraher tekst
+            Extract text
           </mat-checkbox>
         </div>
 
@@ -84,11 +91,13 @@
           <mat-checkbox formControlName="createScreenshot"
                         labelPosition="after"
                         i18n="@@crawlconfigFormCreateScreenshotLabel"
-                        i18n-matTooltip="@@crawlconfigFormDisabledCreateScreenshotExplaination"
+                        i18n-matTooltip="@@crawlconfigFormDisabledCreateScreenshotExplanation"
                         color="accent"
                         [matTooltip]="createScreenshot.disabled ?
-                        'Instilling er ikke lik for alle markerte konfigurasjoner. Klikk for å aktivere.' : null">
-            Ta skjermbilde
+                        'Setting is not equal for all selected configurations.'
+                         +'Click here and set desired state to override all, '
+                         + 'or leave untouched to keep the configurations original value.' : null">
+            Create screenshot
           </mat-checkbox>
         </div>
       </div>
@@ -99,13 +108,13 @@
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!form.dirty"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
     </mat-card-actions>
   </mat-card>

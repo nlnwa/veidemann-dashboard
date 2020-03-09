@@ -17,17 +17,17 @@
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <th i18n="@@roleMappingListEmailHeaderCell" mat-header-cell *matHeaderCellDef>Email</th>
       <td mat-cell *matCellDef="let row">{{row.roleMapping.email}}</td>
     </ng-container>
 
     <ng-container matColumnDef="group">
-      <th mat-header-cell *matHeaderCellDef>Gruppe</th>
+      <th i18n="@@roleMappingListGroupHeaderCell"mat-header-cell *matHeaderCellDef>Group</th>
       <td mat-cell *matCellDef="let row">{{row.roleMapping.group}}</td>
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef>Rolle(r)</th>
+      <th i18n="@@roleMappingListRoleHeaderCell"mat-header-cell *matHeaderCellDef>Role(s)</th>
       <td mat-cell *matCellDef="let row">{{getRoles(row.roleMapping.roleList)}}</td>
     </ng-container>
 

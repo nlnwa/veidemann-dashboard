@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>hdr_weak</mat-icon>
-    <mat-card-title>CrawlExecution</mat-card-title>
+    <mat-card-title i18n="@@crawlExecutionReportStatusCardTitle">CrawlExecution</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -9,10 +9,10 @@
       <table class="mat-table table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Seed</th>
-          <th class="mat-header-cell">Jobb</th>
-          <th class="mat-header-cell">Status</th>
-          <th class="mat-header-cell">Surt prefiks</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedHeaderCell">Seed</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusCrawljobHeaderCell">Job</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStateHeaderCell">State</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSurtPrefixHeaderCell">Surt prefiks</th>
         </tr>
         </thead>
         <tbody>
@@ -28,10 +28,10 @@
       <table class="mat-table table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Opprettet</th>
-          <th class="mat-header-cell">Startet</th>
-          <th class="mat-header-cell">Avsluttet</th>
-          <th class="mat-header-cell">Sist endret</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusCreatedHeaderCell">Created</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStartTimeHeaderCell">Started</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusEndTimeHeaderCell">Ended</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusLastChangedHeaderCell">Last changed</th>
         </tr>
         </thead>
         <tbody>
@@ -46,35 +46,35 @@
 
       <table class="mat-table">
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Statistikk</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStatisticsHeaderCell">Statistics</th>
           <th class="mat-header-cell"></th>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">URIs crawled</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsUrisCrawled">URIs crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Bytes crawled</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsBytesCrawled">Bytes crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled | filesize}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents crawled</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsCrawled">Documents crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents denied</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsDenied">Documents denied</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents failed</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsFailed">Documents failed</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents out of scope</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsOutOfScope">Documents out of scope</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
         </tr>
         <tr class="mat-row">
-          <td class="mat-cell">Documents retried</td>
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsRetried">Documents retried</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
         </tr>
       </table>
@@ -95,10 +95,10 @@
       <table class="mat-table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Id</th>
-          <th class="mat-header-cell">Seed Id</th>
-          <th class="mat-header-cell">Job Id</th>
-          <th class="mat-header-cell">Job Execution Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedIdHeaderCell">Seed Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Job Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</th>
         </tr>
         </thead>
         <tbody>

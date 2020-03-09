@@ -12,14 +12,14 @@
          *ngIf="canConfigure"
          [routerLink]="['/config']">
         <mat-icon>settings</mat-icon>
-        <span i18n="@@mainMenuConfiguration">Konfigurasjon</span>
+        <span i18n="@@mainMenuConfiguration">Configuration</span>
       </a>
 
       <a mat-menu-item
          *ngIf="canConfigure"
          [routerLink]="['/report']">
         <mat-icon>report</mat-icon>
-        <span i18n="@@mainMenuEntryReport">Rapport</span>
+        <span i18n="@@mainMenuReport">Report</span>
       </a>
 
       <a mat-menu-item
@@ -32,7 +32,7 @@
       <a mat-menu-item
          [routerLink]="['/config/logconfig']">
         <mat-icon>notes</mat-icon>
-        <span i18n="@@mainMenuLogConfiguration">Loggnivå</span>
+        <span i18n="@@mainMenuLogConfiguration">Log level</span>
       </a>
     </mat-menu>
 
@@ -46,7 +46,8 @@
 
     <a mat-button
        mat-icon-button
-       title="Hjelp"
+       matTooltip="Help"
+       i18n-matTooltip="@@mainToolbarHelpButtonTooltip"
        target="_blank"
        [routerLink]="['/docs']"
        [routerLinkActiveOptions]="{exact: true}"
@@ -60,7 +61,7 @@
             (click)="onLogin()"
             *ngIf="!isLoggedIn">
       <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@toolbarLogon">LOGG PÅ</span>
+      <span i18n="@@mainToolbarLoginButton">LOGIN</span>
     </button>
 
     <button color="primary"
@@ -70,12 +71,12 @@
             (click)="onLogout()"
             *ngIf="isLoggedIn">
       <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@toolbarLogon">LOGG AV</span>
+      <span i18n="@@mainToolbarLogoutButton">LOGOUT</span>
     </button>
   </mat-toolbar>
 
   <div *ngIf="isModuleLoading$ | async" class="module-loader">
-    <h2>Laster modul...</h2>
+    <h2 i18n="@@appModuleLoadingText">Loading module...</h2>
     <mat-spinner [strokeWidth]="2"></mat-spinner>
   </div>
 
@@ -87,7 +88,7 @@
 
 <ng-template #initFailed>
   <div class="mat-typography" fxFlexFill fxLayout="column" fxLayoutAlign="center center" *ngIf="error">
-    <h1>Initialisering feilet</h1>
+    <h1 i18n="@@appModuleInitFailedMessage">Initialization failed</h1>
     <p>{{ error.message }}</p>
   </div>
 </ng-template>
