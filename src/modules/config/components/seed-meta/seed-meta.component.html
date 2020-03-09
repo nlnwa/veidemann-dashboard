@@ -4,7 +4,7 @@
     <textarea matInput
               formControlName="name"
               placeholder="URL"
-              i18n="@@metaUrlInputPlaceholder"
+              i18n="@@seedMetaUrlInputPlaceholder"
               cdkTextareaAutosize
               cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="10"
@@ -12,20 +12,20 @@
     </textarea>
     <mat-error
       *ngIf="name.hasError('required')"
-      i18n="@@metaUrlRequiredError">
-      Feltet må fylles ut
+      i18n="@@seedMetaUrlRequiredError">
+      The field is required
     </mat-error>
 
-    <mat-error *ngIf="name.hasError('pattern')">
-      Inneholder en ugyldig formatert url
+    <mat-error *ngIf="name.hasError('pattern')" i18n="@@seedMetaUrlPatternError">
+      Contains an invalid formatted URL
     </mat-error>
 
-    <mat-error *ngIf="name.hasError('seedExistsOnEntity')">
-      URL med samme domene eksisterer allerede på samme entitet
+    <mat-error *ngIf="name.hasError('seedExistsOnEntity')" i18n="@@seedMetaUrlAlreadyExistOnEntityError">
+      URL with the same domain already exists for this entity
     </mat-error>
 
-    <mat-error *ngIf="name.hasError('seedExists')">
-      URL med samme domene eksisterer på annen entitet som en av url'ene i listen
+    <mat-error *ngIf="name.hasError('seedExists')" i18n="@@seedMetaUrlAlreadyExistsError">
+      URL with the same domain already exists for another entity
     </mat-error>
 
    <mat-progress-bar matHint mode="indeterminate" *ngIf="this.name.pending"></mat-progress-bar>
@@ -36,13 +36,13 @@
             *ngIf="name.errors.seedExistsOnEntity?.length > 1"
             (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
       <mat-icon mat-list-icon>remove_circle</mat-icon>
-      <span>Fjern alle fra listen</span>
+      <span i18n="@@seedMetaRemoveAlreadyExistingSeedsButton">Remove all from list</span>
     </button>
 
     <button mat-list-item
             *ngFor="let seed of name.errors.seedExistsOnEntity"
             (click)="onRemoveExistingUrl(seed)"
-            matTooltip="Fjern url fra listen">
+            matTooltip="Remove url from list" i18n-matTooltip="@@seedMetaRemoveSeedFromListTooltip">
       <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
       {{seed.meta.name}}
     </button>
@@ -55,23 +55,26 @@
       <button mat-stroked-button
               (click)="onMoveSeedsToCurrentEntity(name.errors.seedExists)">
         <mat-icon mat-list-icon>swap_vert</mat-icon>
-        <span>Flytt alle til denne entiteten</span>
+        <span i18n="@@seedMetaMoveAllExistingSeedsToEntityButton">Move all to this entity</span>
       </button>
     </mat-list-item>
     <mat-list-item *ngFor="let seed of name.errors.seedExists">
       <button mat-icon-button
               (click)="onMoveSeedToCurrentEntity(seed)"
-              matTooltip="Flytt seed til entitet med valgt referanse">
+              matTooltip="Move seed to this entity"
+              i18n-matTooltip="@@seedMetaMoveExistingSeedToEntityButtonTooltip">
         <mat-icon mat-list-icon>swap_horiz</mat-icon>
       </button>
 
       <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
-              matTooltip="Fjern url fra listen">
+              matTooltip="Remove URL from the list"
+              i18n-matTooltip="@@seedMetaRemoveExistingSeedFromTheListButtonTooltip">
         <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
       </button>
 
       <a target="_blank"
-         matTooltip="Gå til entitet som url refererer til i et nytt vindu"
+         matTooltip="Go to entity with existing seed in a new tab"
+         i18n-matTooltip="@@seedMetaGoToEntityWithExistingSeedButtonTooltip"
          [routerLink]="['../search']"
          [queryParams]="{id: seed.seed.entityRef.id}">
         {{seed.meta.name}}
@@ -80,7 +83,7 @@
   </mat-list>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Beskrivelse"
+    <textarea matInput formControlName="description" placeholder="Description"
               i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
     </textarea>
   </mat-form-field>
@@ -91,14 +94,14 @@
     <mat-form-field fxFlex *ngIf="created.value">
       <input matInput
              formControlName="created"
-             placeholder="Opprettet"
+             placeholder="Created"
              i18n-placeholder="@@metaCreatedInputPlaceholder">
     </mat-form-field>
 
     <mat-form-field fxFlex *ngIf="createdBy.value">
       <input matInput
              formControlName="createdBy"
-             placeholder="Opprettet av"
+             placeholder="Created by"
              i18n-placeholder="@@metaCreatedByInputPlaceholder">
     </mat-form-field>
   </div>
@@ -107,14 +110,14 @@
     <mat-form-field fxFlex *ngIf="lastModified.value">
       <input matInput
              formControlName=lastModified
-             placeholder="Sist endret"
+             placeholder="Last modified"
              i18n-placeholder="@@metaLastModifiedInputPlaceholder">
     </mat-form-field>
 
     <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
       <input matInput
              formControlName="lastModifiedBy"
-             placeholder="Sist endret av"
+             placeholder="Last modified by"
              i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
     </mat-form-field>
   </div>

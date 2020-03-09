@@ -3,10 +3,10 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>schedule</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@scheduleDetailsHeader">Schedule</span>
+        <span *ngIf="configObject" i18n="@@scheduleDetailsCardTitle">Schedule</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!configObject.id" i18n="@@newScheduleHeader">Ny (ikke lagret)</span>
+        <span *ngIf="!configObject.id" i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
@@ -23,7 +23,7 @@
 
       <div fxFlex fxLayout="column" fxLayoutAlign="space-evenly">
         <div formGroupName="cronExpression" class="cron-expression">
-          <h3 mat-subheader i18n="@@scheduleFormCronExpressionHeader">CRON-uttrykk</h3>
+          <h3 mat-subheader i18n="@@scheduleFormCronExpressionHeader">CRON expression</h3>
           <div fxLayout="rolw wrap" fxLayoutGap="24px">
             <mat-form-field>
               <input matInput formControlName="minute"
@@ -58,22 +58,23 @@
           </div>
           <mat-error *ngIf="form.dirty && !form.disabled && !cronExpression.valid"
                      i18n="@@scheduleFormCronExpressionRequiredError">
-            CRON-uttrykk er påkrevd
+            CRON expression required
           </mat-error>
         </div>
 
         <div>
-          <h3 mat-subheader>Tidsavgrensning</h3>
+          <h3 mat-subheader i18n="@@scheduleDetailsValidFromToHeader">Time limit</h3>
           <div fxLayout="row wrap" fxLayoutGap="24px">
             <mat-form-field>
               <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                     placeholder="Gyldig fra">
+                     placeholder="Valid from" i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder">
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validFromDatepicker></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field>
-              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo" placeholder="Gyldig til">
+              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
+                     placeholder="Valid to" i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validToDatepicker></mat-datepicker>
             </mat-form-field>
@@ -88,27 +89,27 @@
               *ngIf="showSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               [disabled]="!canRevert"
               (click)="onRevert()"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>

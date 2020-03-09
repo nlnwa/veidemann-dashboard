@@ -1,13 +1,12 @@
-
 <form [formGroup]="form" fxFlex>
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>group_work</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@crawlhostgroupconfigDetailsHeader">Crawlhostgroupconfig</span>
+        <span *ngIf="configObject" i18n="@@crawlhostgroupconfigDetailsCardTitle">Crawlhostgroupconfig</span>
       </mat-card-title>
       <mat-card-subtitle>
-        <span *ngIf="!configObject.id" i18n="@@crawlhostgroupconfigNewConfigHeader">Ny (ikke lagret)</span>
+        <span *ngIf="!configObject.id" i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
@@ -23,28 +22,28 @@
       </div>
       <div fxFlex>
         <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
-          <legend mat-card-subtitle>IP-område</legend>
+          <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
           <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">
             <div [formGroupName]="i"
                  fxLayout="row"
                  fxlayoutgap="16px">
               <mat-form-field fxFlex>
-                <input matInput formControlName="ipFrom" placeholder="IP-adresse"
+                <input matInput formControlName="ipFrom" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-                <mat-hint>Fra</mat-hint>
+                <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
                 <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
-                  En gyldig IP-addresse er påkrevd.
+                  A valid IP address is required.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex>
-                <input matInput formControlName="ipTo" placeholder="IP-adresse"
+                <input matInput formControlName="ipTo" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-                <mat-hint>Til</mat-hint>
+                <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
                 <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
-                  En gyldig IP-addresse er påkrevd.
+                  A valid IP address is required.
                 </mat-error>
               </mat-form-field>
 
@@ -52,19 +51,19 @@
                       (click)="onRemoveIpRange(i)"
                       *ngIf="canEdit">
                 <mat-icon>remove_circle</mat-icon>
-                <span>FJERN</span>
+                <span>REMOVE</span>
               </button>
             </div>
 
             <mat-error *ngIf="!isValidIpRange(ipFromControl(i).value, ipToControl(i).value)"
                        i18n="@@crawlhostgroupconfigFormValidIpRangeError">
-              IP-området er ikke gyldig
+              The IP range is not valid
             </mat-error>
           </div>
 
           <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button">
             <mat-icon>add_circle</mat-icon>
-            <span>LEGG TIL IP-OMRÅDE</span>
+            <span i18n="@@crawlhostgroupconfigFormAddIpRangeButton">ADD IP RANGE</span>
           </button>
         </fieldset>
       </div>
@@ -76,7 +75,7 @@
               [disabled]="!canSave"
               (click)="onSave()"
               i18n="@@commonButtonSave">
-        LAGRE
+        SAVE
       </button>
 
       <button mat-raised-button color="accent"
@@ -84,14 +83,14 @@
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
 
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
 
       <span fxFlex></span>
@@ -100,7 +99,7 @@
               *ngIf="!showSave"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
-        SLETT
+        DELETE
       </button>
     </mat-card-actions>
   </mat-card>

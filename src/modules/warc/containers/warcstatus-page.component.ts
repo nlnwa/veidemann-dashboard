@@ -9,10 +9,10 @@ import {WarcStatusService} from '../services/warcstatus.service';
       <div>
         <mat-toolbar>
           <h1 i18n="@@warcstatusListHeader">
-            <span style="margin-left: 0" *ngIf="numInvalid > 0">{{numInvalid}}</span> Ugyldige WARC-filer
+            <span style="margin-left: 0" *ngIf="numInvalid > 0">{{numInvalid}}</span> Invalid WARC files
           </h1>
           <span class="fill-space"></span>
-          <span style="color: rgba(0,0,0,0.3);">(Antall gyldige: {{numValid}})</span>
+          <span i18n= "@@warcStatusListHeaderValidFilesCounter" style="color: rgba(0,0,0,0.3);">(Valid files: {{numValid}})</span>
         </mat-toolbar>
         <app-warcstatus-list (rowClick)="onSelectWarcStatus($event)" (allErrors)="onAllErrors($event)"></app-warcstatus-list>
       </div>

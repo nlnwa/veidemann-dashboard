@@ -83,6 +83,6 @@ export class AppComponent implements OnInit {
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/'], {relativeTo: this.route.root})
-      .then(() => this.snackBarService.openSnackBar('Logget ut.'));
+      .then(() => this.snackBarService.openSnackBar($localize`:@snackBarMessage.loggedOut:You are now logged out`));
   }
 }

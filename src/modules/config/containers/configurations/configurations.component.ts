@@ -513,7 +513,7 @@ export class ConfigurationsComponent implements OnDestroy {
           relativeTo: this.route,
         })
           .catch(error => this.errorService.dispatch(error));
-        this.snackBarService.openSnackBar('Lagret');
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.saved:Saved`);
       });
   }
 
@@ -523,7 +523,7 @@ export class ConfigurationsComponent implements OnDestroy {
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
         this.reload.next();
-        this.snackBarService.openSnackBar('Oppdatert');
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
       });
   }
 
@@ -534,7 +534,8 @@ export class ConfigurationsComponent implements OnDestroy {
       .subscribe(updatedConfigs => {
         this.reset();
         this.reload.next();
-        this.snackBarService.openSnackBar(updatedConfigs + ' konfigurasjoner oppdatert');
+        this.snackBarService.openSnackBar(
+          updatedConfigs + $localize`:@snackBarMessage.multipleUpdated: configurations updated`);
       });
   }
 
@@ -558,7 +559,7 @@ export class ConfigurationsComponent implements OnDestroy {
           queryParams: {id: null},
         }).catch(error => this.errorService.dispatch(error));
         this.reload.next();
-        this.snackBarService.openSnackBar('Slettet');
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
       });
   }
 
@@ -582,7 +583,8 @@ export class ConfigurationsComponent implements OnDestroy {
         if (configObjects.length !== numDeleted) {
           this.errorService.dispatch(new ReferrerError({numConfigs: configObjects.length, numDeleted}));
         } else {
-          this.snackBarService.openSnackBar(numDeleted + ' konfigurasjoner slettet');
+          this.snackBarService.openSnackBar(
+            numDeleted + $localize`:@snackBarMessage.multipleDeleted: configurations deleted`);
         }
         this.reset();
         this.reload.next();
@@ -595,7 +597,7 @@ export class ConfigurationsComponent implements OnDestroy {
       : this.dataService.move(parcel.seed, parcel.entityRef))
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(moved => {
-        this.snackBarService.openSnackBar(moved + ' konfigurasjoner flyttet');
+        this.snackBarService.openSnackBar(moved + $localize`:@snackBarMessage.multipleMoved: configurations moved`);
         this.reload.next();
       });
   }
@@ -604,7 +606,7 @@ export class ConfigurationsComponent implements OnDestroy {
     this.dataService.saveMultiple(configObjects)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(saved => {
-        this.snackBarService.openSnackBar(saved + ' konfigurasjoner lagret');
+        this.snackBarService.openSnackBar(saved + $localize`:@snackBarMessage.multipleSaved: configurations saved`);
         this.configObject.next(null);
         this.reload.next();
       });

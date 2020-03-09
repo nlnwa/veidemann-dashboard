@@ -3,18 +3,20 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>person</mat-icon>
       <mat-card-title>
-        <span *ngIf="configObject" i18n="@@roleMappingHeader">Rolemapping</span>
+        <span *ngIf="configObject" i18n="@@roleMappingDetailsCardTitle">Rolemapping</span>
       </mat-card-title>
-      <mat-card-subtitle>Masseoppdatering</mat-card-subtitle>
+      <mat-card-subtitle i18n="commonMassUpdateCardSubtitle">Mass update</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <mat-form-field>
-        <mat-select placeholder="Velg rolle" formControlName="roleList" multiple
-                    i18n-placeholder="@@rolemappingRoleMultiselectHeader">
+        <mat-select placeholder="Choose role" formControlName="roleList" multiple
+                    i18n-placeholder="@@rolemappingFormRoleDropdownPlaceholder">
           <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
         </mat-select>
-        <mat-error *ngIf="!roleList.valid">En rolle er påkrevd.</mat-error>
+        <mat-error *ngIf="!roleList.valid" i18n="@@roleMappingDetailsRoleRequiredError">
+          A user must be assigned at least one role.
+        </mat-error>
       </mat-form-field>
     </mat-card-content>
 
@@ -23,13 +25,13 @@
               [disabled]="!canUpdate"
               (click)="onUpdate()"
               i18n="@@commonButtonSave">
-        OPPDATER
+        UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
               i18n="@@commonButtonRevert">
-        TILBAKESTILL
+        REVERT
       </button>
     </mat-card-actions>
   </mat-card>

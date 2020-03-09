@@ -3,11 +3,11 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>business</mat-icon>
       <mat-card-title>
-        <ng-container i18n="@@entityDetailsCardTitle">Entitet</ng-container>
+        <ng-container i18n="@@entityDetailsCardTitle">Entity</ng-container>
       </mat-card-title>
       <mat-card-subtitle>
         <ng-container *ngIf="showSave"
-                      i18n="@@entityDetailsCardSubtitle">Ny (ikke lagret)
+                      i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)
         </ng-container>
 
       </mat-card-subtitle>
@@ -28,24 +28,24 @@
               *ngIf="showSave"
               [disabled]="!canSave"
               (click)="onSave()"
-              i18n="@@commonButtonSave">LAGRE
+              i18n="@@commonButtonSave">SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
-              i18n="@@commonButtonSave">OPPDATER
+              i18n="@@commonButtonUpdate">UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">TILBAKESTILL
+              i18n="@@commonButtonRevert">REVERT
       </button>
       <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave"
               (click)="onDelete()"
-              i18n="@@commonButtonDelete">SLETT
+              i18n="@@commonButtonDelete">DELETE
       </button>
     </mat-card-actions>
   </mat-card>
