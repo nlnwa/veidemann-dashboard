@@ -1,12 +1,15 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 
-import {Observable} from 'rxjs';
-import {filter, map} from 'rxjs/operators';
+import {merge, Observable, Subject, timer} from 'rxjs';
+import {filter, map, mergeMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppInitializerService, SnackBarService} from '../../../core/services/';
+import {AppInitializerService, ControllerApiService, SnackBarService} from '../../../core/services/';
 import {AuthService, GuardService} from '../../../core/services/auth';
+import {RunStatus} from '../../../../shared/models/controller';
+import {MatDialog} from '@angular/material/dialog';
+import {CrawlerStatusDialogComponent} from '../crawlerstatus-dialog/crawlerstatus-dialog.component';
 
 
 @Component({
@@ -20,12 +23,17 @@ export class AppComponent implements OnInit {
   isModuleLoading$: Observable<boolean>;
   private moduleLoadSemaphore = 0;
 
+  updateRunStatus: Subject<void> = new Subject();
+  runStatus$: Observable<RunStatus>;
+
   constructor(private appInitializer: AppInitializerService,
               private authService: AuthService,
+              private controllerApiService: ControllerApiService,
               private router: Router,
               private route: ActivatedRoute,
               private guardService: GuardService,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private crawlerStatusDialog: MatDialog) {
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
       map((event: RouterEvent) => {
@@ -50,6 +58,9 @@ export class AppComponent implements OnInit {
         this.authService.login(this.guardService.requestedPath);
       });
     }
+    this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
+      mergeMap(() => this.controllerApiService.getRunStatus())
+    );
   }
 
   get error(): Error {
@@ -84,5 +95,22 @@ export class AppComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/'], {relativeTo: this.route.root})
       .then(() => this.snackBarService.openSnackBar($localize`:@snackBarMessage.loggedOut:You are now logged out`));
+  }
+
+  onChangeRunStatus(shouldPause: boolean) {
+    this.crawlerStatusDialog.open(CrawlerStatusDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {shouldPause}
+    }).afterClosed().subscribe(changeStatus => {
+      if (changeStatus) {
+        if (shouldPause) {
+          this.controllerApiService.pauseCrawler();
+        } else {
+          this.controllerApiService.unpauseCrawler();
+        }
+        this.updateRunStatus.next();
+      }
+    });
   }
 }

@@ -35,4 +35,12 @@ export class ControllerApiService {
     return from(this.controllerPromiseClient.status(new Empty()))
       .pipe(map(status => status.getRunstatus()));
   }
+
+  pauseCrawler(): void {
+    this.controllerPromiseClient.pauseCrawler(new Empty());
+  }
+
+  unpauseCrawler(): void {
+    this.controllerPromiseClient.unPauseCrawler(new Empty());
+  }
 }

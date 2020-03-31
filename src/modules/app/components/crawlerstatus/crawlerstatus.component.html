@@ -1,0 +1,20 @@
+<button mat-button mat-flat-button matTooltip="Pause crawler"
+        *ngIf="runStatus === RunStatus.RUNNING"
+        color="primary"
+        i18n-matTooltip="@@crawlerStatusPauseCrawlerButtonTooltip" (click)="onPauseCrawler(true)">
+  <mat-icon>pause</mat-icon>
+  <span i18n="@@crawlerStatusRunningTitle">CRAWLER IS RUNNING</span>
+</button>
+
+<div class="mat-button mat-flat-button" *ngIf="runStatus === RunStatus.PAUSE_REQUESTED"
+     i18n="@@crawlerStatusPauseRequestedTitle">
+  CRAWLER IS PAUSING
+</div>
+
+<button mat-button mat-flat-button matTooltip="Unpause crawler"
+        *ngIf="runStatus === RunStatus.PAUSED"
+        color="warn"
+        i18n-matTooltip="@@crawlerStatusUnpauseCrawlerButtonTooltip" (click)="onPauseCrawler(false)">
+  <mat-icon>play_arrow</mat-icon>
+  <span i18n="@@crawlerStatusPausedTitle">CRAWLER IS PAUSED</span>
+</button>
