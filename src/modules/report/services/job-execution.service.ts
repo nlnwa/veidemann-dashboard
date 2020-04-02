@@ -53,7 +53,7 @@ export class JobExecutionService extends QueryService {
     const queryTemplate = new JobExecutionStatus();
     const fieldMask = new FieldMask();
 
-    listRequest.setOffset(query.pageIndex);
+    listRequest.setOffset(query.pageIndex * query.pageSize);
     listRequest.setPageSize(query.pageSize);
 
     if (query.jobId) {
