@@ -36,6 +36,9 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
+  @Output()
+  runCrawl = new EventEmitter<ConfigObject>();
+
   form: FormGroup;
 
   ngUnsubscribe = new Subject<void>();
@@ -141,6 +144,9 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     this.entityIdReadonly = false;
   }
 
+  onRunCrawl(): void {
+    this.runCrawl.emit(this.configObject);
+  }
 
   protected createForm() {
     this.form = this.fb.group({

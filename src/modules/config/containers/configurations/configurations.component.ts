@@ -17,7 +17,6 @@ import {
   tap
 } from 'rxjs/operators';
 
-import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {
   BrowserScriptType,
   ConfigObject,
@@ -29,6 +28,7 @@ import {
   Seed,
   SubCollectionType
 } from '../../../../shared/models';
+import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
 import {ConfigListComponent, DeleteDialogComponent, DeleteMultiDialogComponent, Parcel} from '../../components';
 import {ReferrerError} from '../../../../shared';
 import {ConfigService, LabelService} from '../../services';
@@ -39,6 +39,9 @@ import {ListDataSource} from '../../../../shared/models/list-datasource';
 import {Sort} from '../../../commons/services/query.service';
 import {ConfigQuery} from '../../../core/services/config.service';
 import {distinctUntilArrayChanged} from '../../../../shared/func/rxjs';
+import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';
+import {RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
+import {RunningCrawlDialogComponent} from '../../components/running-crawl-dialog/running-crawl-dialog.component';
 
 export interface ConfigOptions {
   rotationPolicies?: RotationPolicy[];
@@ -108,7 +111,8 @@ export class ConfigurationsComponent implements OnDestroy {
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
-              private labelService: LabelService) {
+              private labelService: LabelService,
+              private controllerApiService: ControllerApiService) {
     this.dataSource = new ListDataSource<ConfigObject>();
 
     this.options$ = this.route.data.pipe(
@@ -626,6 +630,26 @@ export class ConfigurationsComponent implements OnDestroy {
         this.snackBarService.openSnackBar(moved + $localize`:@snackBarMessage.multipleMoved: configurations moved`);
         this.reload.next();
       });
+  }
+
+  onRunCrawl(configObject: ConfigObject) {
+    const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {configObject, jobRefId: null}
+    });
+    dialogRef.afterClosed()
+      .subscribe(runCrawlRequest => {
+        if (runCrawlRequest) {
+          this.controllerApiService.runCrawl(runCrawlRequest).subscribe(runCrawlReply => {
+            const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
+              disableClose: false,
+              autoFocus: true,
+              data: {runCrawlRequest, runCrawlReply, configObject}
+            })
+          })
+        }
+      })
   }
 
   onSaveMultipleSeeds(configObjects: ConfigObject[]) {

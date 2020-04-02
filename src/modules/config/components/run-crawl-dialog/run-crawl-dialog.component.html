@@ -1,0 +1,37 @@
+<h1 mat-dialog-title i18n="@@runCrawlDialogTitle">Run crawl</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="kind === Kind.CRAWLJOB">
+    <span i18n="@@runCrawlDialogRunConfirmationText">
+      Are you sure you want to start the crawljob: <strong>{{configObject.meta.name}}</strong>?
+    </span>
+  </ng-container>
+  <ng-container *ngIf="kind === Kind.SEED">
+      <span i18n="@@runCrawlDialogRunSeedCrawlConfirmationText">
+        Are you sure you want to start crawling:<strong>{{configObject.meta.name}}</strong>?
+      </span>
+    <p i18n="@@runCrawlDialogRunSeedSelectCrawljobText">
+      Select a crawljob to harvest the seed:
+    </p>
+
+      <mat-form-field>
+        <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
+                    [(ngModel)]="jobRefId">
+          <mat-option *ngFor="let crawlJob of crawlJobs"
+                      [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button
+          i18n="@@commonButtonCancel"
+          [mat-dialog-close]="false">CANCEL
+  </button>
+  <button *ngIf="kind === Kind.CRAWLJOB || kind === Kind.SEED && jobRefId"
+          mat-raised-button
+          color="primary"
+          i18n="@@commonButtonRun"
+          (click)="onRunCrawl()">RUN
+  </button>
+</div>

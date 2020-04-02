@@ -53,6 +53,8 @@ import {CollectionNamePipe} from './pipe/collection.name.pipe';
 import {BrowserConfigNamePipe} from './pipe/browser-config-name.pipe';
 import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
 import {FilesizeInputComponent} from './components/filesize-input/filesize-input.component';
+import { RunCrawlDialogComponent } from './components/run-crawl-dialog/run-crawl-dialog.component';
+import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/running-crawl-dialog.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +107,8 @@ import {FilesizeInputComponent} from './components/filesize-input/filesize-input
     PolitenessConfigNamePipe,
     FilesizeInputComponent,
     AnnotationComponent,
+    RunCrawlDialogComponent,
+    RunningCrawlDialogComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,

@@ -5,6 +5,7 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns'
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shared/models';
 import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
+
 @Component({
   selector: 'app-crawljob-details',
   templateUrl: './crawl-job-details.component.html',
@@ -32,6 +33,9 @@ export class CrawlJobDetailsComponent implements OnChanges {
   // noinspection ReservedWordAsName
   @Output()
   delete = new EventEmitter<ConfigObject>();
+
+  @Output()
+  runCrawl = new EventEmitter<ConfigObject>();
 
   form: FormGroup;
 
@@ -117,6 +121,10 @@ export class CrawlJobDetailsComponent implements OnChanges {
     this.updateForm();
   }
 
+  onRunCrawlJob() {
+  this.runCrawl.emit(this.configObject);
+  }
+
   protected createForm() {
     this.form = this.fb.group({
       id: '',
@@ -170,7 +178,7 @@ export class CrawlJobDetailsComponent implements OnChanges {
     const crawlJob = new CrawlJob();
     crawlJob.disabled = formModel.disabled;
     crawlJob.crawlConfigRef = formModel.crawlConfigRef.id ? new ConfigRef({id: formModel.crawlConfigRef.id, kind: Kind.CRAWLCONFIG}) : null;
-    crawlJob.scheduleRef = formModel.scheduleRef.id ?  new ConfigRef({id: formModel.scheduleRef.id, kind: Kind.CRAWLSCHEDULECONFIG}) : null;
+    crawlJob.scheduleRef = formModel.scheduleRef.id ? new ConfigRef({id: formModel.scheduleRef.id, kind: Kind.CRAWLSCHEDULECONFIG}) : null;
     crawlJob.limits.depth = parseInt(formModel.limits.depth, 10);
     crawlJob.limits.maxDurationS = parseInt(formModel.limits.maxDurationS, 10);
     crawlJob.limits.maxBytes = formModel.limits.maxBytes || 0;

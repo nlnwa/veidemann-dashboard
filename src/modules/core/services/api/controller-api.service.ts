@@ -9,6 +9,7 @@ import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {RunStatus} from '../../../../shared/models/controller';
 import {Role} from '../../../../shared/models/config';
+import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 
 
 @Injectable()
@@ -42,5 +43,10 @@ export class ControllerApiService {
 
   unpauseCrawler(): void {
     this.controllerPromiseClient.unPauseCrawler(new Empty(), this.authService.metadata);
+  }
+
+  runCrawl(request: RunCrawlRequest): Observable<RunCrawlReply> {
+    return from(this.controllerPromiseClient.runCrawl(RunCrawlRequest.toProto(request)))
+      .pipe(map(runCrawlReply => RunCrawlReply.fromProto(runCrawlReply)))
   }
 }

@@ -3,7 +3,14 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>work</mat-icon>
       <mat-card-title>
-        <ng-container i18n="@@crawljobDetailsCardTitle">Crawljob</ng-container>
+        <ng-container i18n="@@crawljobDetailsCardTitle">Crawljob
+          <button *ngIf="!showSave" mat-icon-button
+                  matTooltip="Run crawljob"
+                  i18n-matTooltip="@@crawlJobDetailsRunCrawljobButtonTooltip"
+                  (click)="onRunCrawlJob()" >
+          <mat-icon>play_arrow</mat-icon>
+          </button>
+        </ng-container>
       </mat-card-title>
       <mat-card-subtitle>
         <ng-container *ngIf="showSave" i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</ng-container>

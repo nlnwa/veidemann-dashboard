@@ -160,6 +160,10 @@
             <mat-icon matTooltip="Show seeds with the same entity"
                       i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">business</mat-icon>
           </button>
+          <button *appAction="let row" mat-icon-button
+                  (click)="onRunCrawl(row)">
+            <mat-icon matTooltip="Start crawling seed: {{row.meta.name}}">play_arrow</mat-icon>
+          </button>
         </ng-container>
 
         <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
@@ -277,6 +281,11 @@
             <mat-icon matTooltip="Show seeds with reference to the crawljob"
                       i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">link</mat-icon>
           </button>
+          <button *appAction="let row" mat-icon-button
+                  (click)="onRunCrawl(row)">
+            <mat-icon matTooltip="Run crawljob: {{row.meta.name}}">play_arrow</mat-icon>
+          </button>
+
         </ng-container>
 
         <button *appAction="let row" mat-icon-button
@@ -296,7 +305,8 @@
                   (update)="onUpdateConfig($event)"
                   (delete)="onDeleteConfig($event)"
                   (move)="onMoveSeed($event)"
-                  (saveMultipleSeeds)="onSaveMultipleSeeds($event)">
+                  (saveMultipleSeeds)="onSaveMultipleSeeds($event)"
+                  (runCrawl)="onRunCrawl($event)">
       </app-detail>
 
       <app-detail-multi *ngIf="!isSingleMode"
