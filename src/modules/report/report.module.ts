@@ -14,6 +14,11 @@ import {CrawlExecutionStatusComponent} from './components/crawl-execution-status
 import {CrawlExecutionStatusListComponent} from './components/crawl-execution-status-list/crawl-execution-status-list.component';
 import {SeedNamePipe} from './pipe/seed-name.pipe';
 import {CrawlExecutionComponent} from './components/crawl-execution/crawl-execution.component';
+import {PageLogListComponent} from './components/pagelog-list/pagelog-list.component';
+import {PageLogComponent} from './components/pagelog/pagelog.component';
+import {PageLogService} from './services/pagelog.service';
+import { PageLogStatusComponent } from './components//pagelog-status/pagelog-status.component';
+import { ResourceComponent } from './components/resource/resource.component';
 
 
 @NgModule({
@@ -26,7 +31,11 @@ import {CrawlExecutionComponent} from './components/crawl-execution/crawl-execut
     SeedNamePipe,
     CrawlExecutionStatusComponent,
     CrawlExecutionStatusListComponent,
-    CrawlExecutionComponent
+    CrawlExecutionComponent,
+    PageLogListComponent,
+    PageLogComponent,
+    PageLogStatusComponent,
+    ResourceComponent
   ],
   imports: [
     CommonsModule,
@@ -36,7 +45,8 @@ import {CrawlExecutionComponent} from './components/crawl-execution/crawl-execut
     JobExecutionService,
     CrawlExecutionService,
     OptionsResolver,
-    ConfigService
+    ConfigService,
+    PageLogService
   ]
 })
 export class ReportModule {

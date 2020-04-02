@@ -26,6 +26,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatTreeModule} from '@angular/material/tree';
 
 const modules = [
   MatButtonModule,
@@ -55,6 +56,7 @@ const modules = [
   MatBadgeModule,
   MatDividerModule,
   MatAutocompleteModule,
+  MatTreeModule
 ];
 
 @NgModule({
