@@ -145,11 +145,11 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
     const searchComplete = new Subject<void>();
 
     this.pageLength$ = searchComplete.pipe(
-      withLatestFrom(pageSize$),
-      map(([_, pageSize]) =>
+      withLatestFrom(pageSize$, pageIndex$),
+      map(([_, pageSize, pageIndex]) =>
         // we don't know real count of search so if length of data modulus pageSize is zero
         // we must add 1 to allow paginator to go to next page
-        this.dataSource.length % pageSize === 0 ? this.dataSource.length + 1 : this.dataSource.length));
+        this.dataSource.length % pageSize === 0 ? ((pageIndex + 1) * this.dataSource.length) + 1 : this.dataSource.length));
 
     this.pageSize$ = pageSize$;
 
