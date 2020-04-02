@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
+import {from, Observable, Observer, of} from 'rxjs';
+import {catchError, defaultIfEmpty, first, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
@@ -11,9 +11,12 @@ import {
   FieldMask,
   JobExecutionsListRequest,
   JobExecutionStatusProto,
+  PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models';
+import {PageLogListRequest} from '../../../../api/gen/report/v1/report_pb';
+import {PageLog} from '../../../../shared/models/report';
 
 
 @Injectable()
@@ -22,7 +25,7 @@ export class ReportApiService {
   private reportClient: ReportPromiseClient;
 
   constructor(private authService: AuthService,
-              private appConfigService: AppConfigService,
+              appConfigService: AppConfigService,
               private errorService: ErrorService) {
     this.reportClient = new ReportPromiseClient(appConfigService.grpcWebUrl, null, null);
   }
@@ -57,6 +60,36 @@ export class ReportApiService {
       catchError(error => {
         this.errorService.dispatch(error);
         return of(null);
+      })
+    );
+  }
+
+  countPageLogs(listRequest: PageLogListRequest): Observable<number> {
+    const metadata = this.authService.metadata;
+    return from(this.reportClient.countPageLogs(listRequest, metadata))
+      .pipe(
+        map(listCountResponse => listCountResponse.getCount()),
+        first(),
+        catchError(error => {
+          this.errorService.dispatch(error);
+          return of(0)
+        })
+      );
+  }
+
+  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
+    const metadata = this.authService.metadata;
+    return new Observable((observer: Observer<PageLogProto>) => {
+      const stream = this.reportClient.listPageLogs(listRequest, metadata)
+        .on('data', data => observer.next(data))
+        .on('error', error => observer.error(error))
+        .on('end', () => observer.complete());
+      return () => stream.cancel();
+    }).pipe(
+      map(PageLog.fromProto),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return of(null)
       })
     );
   }
