@@ -67,6 +67,12 @@
       <mat-icon matTooltip="Go to crawljob"
                 i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">work</mat-icon>
     </a>
+    <a *appAction="let row" mat-icon-button
+       [routerLink]="['/report', 'pagelog']"
+       [queryParams]="{execution_id: row.id}">
+      <mat-icon matTooltip="Go to pagelog"
+                i18n-matTooltip="@@crawlExecutionReportListGoToPagelogShortcutTooltip">art_track</mat-icon>
+    </a>
   </app-crawl-execution-status-list>
 
   <app-crawl-execution-status fxFlex *ngIf="crawlExecutionStatus$ | async as crawlExecutionStatus"
