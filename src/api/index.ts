@@ -89,7 +89,8 @@ export {
 
 export {
   JobExecutionStatus as JobExecutionStatusProto,
-  CrawlExecutionStatus as CrawlExecutionStatusProto
+  CrawlExecutionStatus as CrawlExecutionStatusProto,
+  PageLog as PageLogProto,
 } from './gen/frontier/v1/resources_pb';
 
 export {
