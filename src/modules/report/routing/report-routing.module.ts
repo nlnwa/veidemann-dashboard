@@ -5,8 +5,8 @@ import {GuardService} from '../../core/services/auth';
 import {ReportComponent} from '../containers/report/report.component';
 import {JobExecutionComponent} from '../components/job-execution/job-execution.component';
 import {CrawlExecutionComponent} from '../components/crawl-execution/crawl-execution.component';
-import {LogResolver} from '../../config/services';
 import {OptionsResolver} from '../services/options.resolver.service';
+import {PageLogComponent} from '../components/pagelog/pagelog.component';
 
 const routes: Routes = [
   {
@@ -27,6 +27,13 @@ const routes: Routes = [
         resolve: {
           options: OptionsResolver
         },
+      },
+      {
+        path: 'pagelog',
+        component: PageLogComponent,
+        resolve: {
+          options: OptionsResolver
+        } ,
       },
     ]
   },

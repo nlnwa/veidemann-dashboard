@@ -84,12 +84,15 @@ export {
 
 export {
   JobExecutionsListRequest,
-  CrawlExecutionsListRequest
+  CrawlExecutionsListRequest,
+  ExecuteDbQueryRequest,
+  ExecuteDbQueryReply,
 } from './gen/report/v1/report_pb';
 
 export {
   JobExecutionStatus as JobExecutionStatusProto,
-  CrawlExecutionStatus as CrawlExecutionStatusProto
+  CrawlExecutionStatus as CrawlExecutionStatusProto,
+  PageLog as PageLogProto,
 } from './gen/frontier/v1/resources_pb';
 
 export {

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {SortDirection} from '@angular/material/sort';
@@ -32,7 +32,8 @@ import {ConfigObject} from '../../../../shared/models/config';
 @Component({
   selector: 'app-crawl-execution',
   templateUrl: './crawl-execution.component.html',
-  styleUrls: ['./crawl-execution.component.css']
+  styleUrls: ['./crawl-execution.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly CrawlExecutionState = CrawlExecutionState;
@@ -159,11 +160,11 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
     const searchComplete = new Subject<void>();
 
     this.pageLength$ = searchComplete.pipe(
-      withLatestFrom(pageSize$),
-      map(([_, pageSize]) =>
+      withLatestFrom(pageSize$, pageIndex$),
+      map(([_, pageSize, pageIndex]) =>
         // we don't know real count of search so if length of data modulus pageSize is zero
         // we must add 1 to allow paginator to go to next page
-        this.dataSource.length % pageSize === 0 ? this.dataSource.length + 1 : this.dataSource.length));
+        this.dataSource.length % pageSize === 0 ? ((pageIndex + 1)  * pageSize) + 1 : this.dataSource.length));
 
     this.pageSize$ = pageSize$;
 

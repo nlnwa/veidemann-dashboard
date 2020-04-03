@@ -54,7 +54,7 @@ export class CrawlExecutionService extends QueryService {
     const queryTemplate = new CrawlExecutionStatus();
     const fieldMask = new FieldMask();
 
-    listRequest.setOffset(query.pageIndex);
+    listRequest.setOffset(query.pageIndex * query.pageSize);
     listRequest.setPageSize(query.pageSize);
 
     if (query.jobId) {

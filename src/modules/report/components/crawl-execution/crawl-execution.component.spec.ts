@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CrawlExecutionComponent } from './crawl-execution.component';
+import {CrawlExecutionComponent} from './crawl-execution.component';
 
 describe('CrawlExecutionComponent', () => {
   let component: CrawlExecutionComponent;

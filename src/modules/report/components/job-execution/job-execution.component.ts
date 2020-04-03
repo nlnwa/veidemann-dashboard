@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,7 +29,8 @@ import {ConfigObject} from '../../../../shared/models/config';
 @Component({
   selector: 'app-job-execution',
   templateUrl: './job-execution.component.html',
-  styleUrls: ['./job-execution.component.css']
+  styleUrls: ['./job-execution.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobExecutionComponent implements AfterViewInit, OnDestroy {
   readonly jobExecutionStates = jobExecutionStates;
@@ -145,11 +146,11 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
     const searchComplete = new Subject<void>();
 
     this.pageLength$ = searchComplete.pipe(
-      withLatestFrom(pageSize$),
-      map(([_, pageSize]) =>
+      withLatestFrom(pageSize$, pageIndex$),
+      map(([_, pageSize, pageIndex]) =>
         // we don't know real count of search so if length of data modulus pageSize is zero
         // we must add 1 to allow paginator to go to next page
-        this.dataSource.length % pageSize === 0 ? this.dataSource.length + 1 : this.dataSource.length));
+        this.dataSource.length % pageSize === 0 ? ((pageIndex + 1) * this.dataSource.length) + 1 : this.dataSource.length));
 
     this.pageSize$ = pageSize$;
 

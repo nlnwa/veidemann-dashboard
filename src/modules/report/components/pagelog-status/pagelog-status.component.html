@@ -1,0 +1,93 @@
+<mat-card *ngIf="pageLog">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>art_track</mat-icon>
+    <mat-card-title i18n="@@pageLogReportStatusCardTitle">Pagelog</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutGap="16px">
+
+      <table class="mat-table table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusUriHeaderCell">URI</th>
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusReferrerHeaderCell">Referrer</th>
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusCollectionFinalNameHeaderCell">Collection name</th>
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusMethodHeaderCell">Method</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{pageLog.uri}}</td>
+          <td class="mat-cell">{{pageLog.referrer}}</td>
+          <td class="mat-cell">{{pageLog.collectionFinalName}}</td>
+          <td class="mat-cell">{{pageLog.method}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Resources
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-resource [resources]="pageLog.resourceList"></app-resource>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Outlinks
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <!-- This is the tree node template for leaf nodes -->
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+              <!-- use a disabled button to provide padding for tree leaf -->
+              <button mat-icon-button disabled></button>
+              <a target="_blank" href="{{node.url}}">{{node.name}}</a>
+            </mat-tree-node>
+            <!-- This is the tree node template for expandable nodes -->
+            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+              <button mat-icon-button matTreeNodeToggle
+                      [attr.aria-label]="'toggle ' + node.name">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+              <a target="_blank" href="{{node.url}}">{{node.name}}</a>
+            </mat-tree-node>
+          </mat-tree>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusWarcIdHeaderCell">WARC id</th>
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusJobExecutionIdHeaderCell">Job execution id</th>
+          <th class="mat-header-cell" i18n="@@pageLogReportStatusCrawlExecutionIdHeaderCell">Crawl execution id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{pageLog.warcId}}</td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'jobexecution']"
+               [queryParams]="{id: pageLog.jobExecutionId}">{{pageLog.jobExecutionId}}</a>
+          </td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'crawlexecution']"
+               [queryParams]="{id: pageLog.executionId}">{{pageLog.executionId}}</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
+

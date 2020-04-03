@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ConfigObject, RobotsPolicy, Role, RotationPolicy, SubCollectionType} from '../../../../shared/models/config';
+import {ConfigObject} from '../../../../shared/models/config';
 
 export interface ConfigOptions {
   crawlJobs?: ConfigObject[];

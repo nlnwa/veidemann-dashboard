@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {JobExecutionComponent} from './job-execution.component';
+import {PagelogStatusComponent} from './pagelog-status.component';
 
-describe('JobExecutionComponent', () => {
-  let component: JobExecutionComponent;
-  let fixture: ComponentFixture<JobExecutionComponent>;
+describe('PagelogStatusComponent', () => {
+  let component: PagelogStatusComponent;
+  let fixture: ComponentFixture<PagelogStatusComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ JobExecutionComponent ]
+      declarations: [ PagelogStatusComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(JobExecutionComponent);
+    fixture = TestBed.createComponent(PagelogStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
