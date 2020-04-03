@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,7 +29,8 @@ import {ConfigObject} from '../../../../shared/models/config';
 @Component({
   selector: 'app-job-execution',
   templateUrl: './job-execution.component.html',
-  styleUrls: ['./job-execution.component.css']
+  styleUrls: ['./job-execution.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobExecutionComponent implements AfterViewInit, OnDestroy {
   readonly jobExecutionStates = jobExecutionStates;

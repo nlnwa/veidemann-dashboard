@@ -17,8 +17,8 @@ import {CrawlExecutionComponent} from './components/crawl-execution/crawl-execut
 import {PageLogListComponent} from './components/pagelog-list/pagelog-list.component';
 import {PageLogComponent} from './components/pagelog/pagelog.component';
 import {PageLogService} from './services/pagelog.service';
-import { PageLogStatusComponent } from './components//pagelog-status/pagelog-status.component';
-import { ResourceComponent } from './components/resource/resource.component';
+import {PageLogStatusComponent} from './components//pagelog-status/pagelog-status.component';
+import {ResourceComponent} from './components/resource/resource.component';
 
 
 @NgModule({

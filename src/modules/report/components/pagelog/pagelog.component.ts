@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {PageLog} from '../../../../shared/models/report/pagelog.model';
@@ -29,7 +29,7 @@ import {PageEvent} from '@angular/material/paginator';
   templateUrl: './pagelog.component.html',
   styleUrls: ['./pagelog.component.css']
 })
-export class PageLogComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageLogComponent implements OnDestroy, AfterViewInit {
 
   // query form
   form: FormGroup;
@@ -212,9 +212,6 @@ export class PageLogComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  ngOnInit(): void {
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {

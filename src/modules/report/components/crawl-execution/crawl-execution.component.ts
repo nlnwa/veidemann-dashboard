@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {SortDirection} from '@angular/material/sort';
@@ -32,7 +32,8 @@ import {ConfigObject} from '../../../../shared/models/config';
 @Component({
   selector: 'app-crawl-execution',
   templateUrl: './crawl-execution.component.html',
-  styleUrls: ['./crawl-execution.component.css']
+  styleUrls: ['./crawl-execution.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly CrawlExecutionState = CrawlExecutionState;

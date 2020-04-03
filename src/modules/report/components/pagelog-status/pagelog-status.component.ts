@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {PageLog} from '../../../../shared/models/report';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -20,9 +20,10 @@ interface UriFlatNode {
 @Component({
   selector: 'app-pagelog-status',
   templateUrl: './pagelog-status.component.html',
-  styleUrls: ['./pagelog-status.component.css']
+  styleUrls: ['./pagelog-status.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageLogStatusComponent implements OnInit {
+export class PageLogStatusComponent implements OnChanges {
 
   treeControl = new FlatTreeControl<UriFlatNode>(
     node => node.level, node => node.expandable);
@@ -48,11 +49,9 @@ export class PageLogStatusComponent implements OnInit {
 
   hasChild = (_: number, node: UriFlatNode) => node.expandable;
 
-  ngOnInit(): void {
-    if (this.pageLog !== undefined) {
-      if (this.pageLog.outlinkList) {
-        this.dataSource.data = this.groupOutlinks(this.pageLog.outlinkList);
-      }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.pageLog && this.pageLog && this.pageLog.outlinkList) {
+      this.dataSource.data = this.groupOutlinks(this.pageLog.outlinkList);
     }
   }
 
@@ -63,7 +62,7 @@ export class PageLogStatusComponent implements OnInit {
       try {
         const url = new URL(outlink);
         const path = [url.protocol + '//' + url.host].concat(url.pathname.split('/').filter(_ => !!_));
-        path.reduce((r, name, i, a) => {
+        path.reduce((r, name, i) => {
           if (!r[name]) {
             r[name] = {result: []};
             r.result.push({name, url: new URL(path.slice(0, i + 1).join('/')), children: r[name].result})

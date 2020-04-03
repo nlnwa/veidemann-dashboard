@@ -3,3 +3,4 @@ export {CrawlExecutionState, CrawlExecutionStatus, crawlExecutionStates} from '.
 export {JobExecutionState, JobExecutionStatus, jobExecutionStates} from './jobexecutionstatus.model';
 export {ExtraStatusCodes} from './extrastatuscodes.model';
 export {PageLog} from './pagelog.model';
+export {Resource} from './resource.model';
