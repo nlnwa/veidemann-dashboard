@@ -6,7 +6,14 @@ import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './routing/app-routing.module';
 import {CommonsModule} from '../commons/commons.module';
 import {CoreModule} from '../core/core.module';
-import {AppComponent, DialogComponent, ErrorDialogComponent, TimeComponent} from './components';
+import {
+  AppComponent,
+  CrawlerStatusComponent,
+  CrawlerStatusDialogComponent,
+  DialogComponent,
+  ErrorDialogComponent,
+  TimeComponent
+} from './components';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
@@ -16,8 +23,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ErrorDialogComponent,
     DialogComponent,
     TimeComponent,
+    CrawlerStatusDialogComponent,
+    CrawlerStatusComponent,
   ],
-  entryComponents: [ErrorDialogComponent],
+  entryComponents: [ErrorDialogComponent, CrawlerStatusDialogComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
