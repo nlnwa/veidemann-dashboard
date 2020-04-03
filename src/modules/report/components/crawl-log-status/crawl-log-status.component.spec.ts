@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CrawlLogStatusComponent } from './crawl-log-status.component';
+import {CrawlLogStatusComponent} from './crawl-log-status.component';
 
 describe('CrawlLogStatusComponent', () => {
   let component: CrawlLogStatusComponent;
