@@ -14,7 +14,7 @@ export class CrawlLogListComponent extends BaseListComponent<CrawlLog> {
   multiSelect = false;
 
   @Input()
-  sortActive = 'timestamp'
+  sortActive = 'timestamp';
 
   displayedColumns: string[] = ['requestedUri', 'timestamp', 'statusCode',  'discoveryPath', 'contentType', 'extra', 'action'];
 

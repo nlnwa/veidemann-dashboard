@@ -8,7 +8,7 @@ import {CrawlLog, ExtraStatusCodes} from '../../../../shared/models/report';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlLogStatusComponent implements OnInit {
-  readonly ExtraStatusCodes = ExtraStatusCodes
+  readonly ExtraStatusCodes = ExtraStatusCodes;
 
   @Input()
   crawlLog: CrawlLog;
