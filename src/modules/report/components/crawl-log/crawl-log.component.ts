@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
-import {PageLog} from '../../../../shared/models/report/pagelog.model';
+import {SortDirection} from '@angular/material/sort';
+import {CrawlLog} from '../../../../shared/models/report/crawllog.model';
 import {ListDataSource} from '../../../../shared/models/list-datasource';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
+import {CrawlLogQuery, CrawlLogService} from '../../services/crawl-log.service';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -18,18 +19,18 @@ import {
   withLatestFrom
 } from 'rxjs/operators';
 import {ListItem} from '../../../commons/components/base-list/base-list';
-import {AppConfigService, ErrorService} from '../../../core/services';
-import {SortDirection} from '@angular/material/sort';
 import {Sort} from '../../../commons/services/query.service';
 import {PageEvent} from '@angular/material/paginator';
-import {PageLogListComponent} from '../pagelog-list/pagelog-list.component';
+import {AppConfigService, ErrorService} from '../../../core/services';
+import {CrawlLogListComponent} from '../crawl-log-list/crawl-log-list.component';
 
 @Component({
-  selector: 'app-pagelog',
-  templateUrl: './pagelog.component.html',
-  styleUrls: ['./pagelog.component.css']
+  selector: 'app-crawl-log',
+  templateUrl: './crawl-log.component.html',
+  styleUrls: ['./crawl-log.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageLogComponent implements OnDestroy, AfterViewInit {
+export class CrawlLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // query form
   form: FormGroup;
@@ -40,61 +41,57 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
   sortDirection$: Observable<SortDirection>;
   sortActive$: Observable<string>;
 
-  pageLog: Subject<PageLog>;
-  pageLog$: Observable<PageLog>;
+  crawlLog: Subject<CrawlLog>;
+  crawlLog$: Observable<CrawlLog>;
 
-  dataSource: ListDataSource<PageLog>;
+  dataSource: ListDataSource<CrawlLog>;
 
-  @ViewChild('list') list: PageLogListComponent;
+  @ViewChild('list') list: CrawlLogListComponent;
 
   private ngUnsubscribe = new Subject();
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
-              private pageLogService: PageLogService,
+              private crawlLogService: CrawlLogService,
               private errorService: ErrorService,
               public appConfigService: AppConfigService) {
     this.createQueryForm();
 
-    this.pageLog = new Subject<PageLog>();
-    this.pageLog$ = this.pageLog.asObservable();
+    this.crawlLog = new Subject<CrawlLog>();
+    this.crawlLog$ = this.crawlLog.asObservable();
 
-    this.dataSource = new ListDataSource<PageLog>();
+    this.dataSource = new ListDataSource<CrawlLog>();
 
     const routeParam$ = route.queryParamMap.pipe(
-      debounceTime(0), // synchronize
+      debounceTime(0),
       map(queryParaMap => ({
-        warcId: queryParaMap.get('warc_id'),
-        uri: queryParaMap.get('uri'),
-        executionId: queryParaMap.get('execution_id'),
-        jobExecutionId: queryParaMap.get('job_execution_id'),
-        sort: queryParaMap.get('sort'),
-        pageSize: queryParaMap.get('s'),
-        pageIndex: queryParaMap.get('p'),
-        watch: queryParaMap.get('watch'),
+        id: queryParaMap.get('id'), // list request
+        jobExecutionId: queryParaMap.get('job_execution_id'), // query template
+        executionId: queryParaMap.get('execution_id'), // query template
+        sort: queryParaMap.get('sort'), // list request
+        pageSize: queryParaMap.get('s'), // list request
+        pageIndex: queryParaMap.get('p'), // list request
+        watch: queryParaMap.get('watch'), // list request
       })),
       share(),
     );
 
-    const warcId$ = routeParam$.pipe(
-      map(({warcId}) => warcId),
+    const id$ = routeParam$.pipe(
+      map(({id}) => id),
       distinctUntilChanged());
 
     const watch$ = routeParam$.pipe(
       map(({watch}) => watch),
       distinctUntilChanged());
 
-    const executionId$ = routeParam$.pipe(
-      map(({executionId}) => executionId),
-      distinctUntilChanged());
-
     const jobExecutionId$ = routeParam$.pipe(
       map(({jobExecutionId}) => jobExecutionId),
       distinctUntilChanged());
 
-    const uri$ = routeParam$.pipe(
-      map(({uri}) => uri),
+    const executionId$ = routeParam$.pipe(
+      map(({executionId}) => executionId),
       distinctUntilChanged());
 
     const sort$: Observable<Sort> = routeParam$.pipe(
@@ -128,6 +125,15 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
     this.sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
 
+    const searchComplete = new Subject<void>();
+
+    this.pageLength$ = searchComplete.pipe(
+      withLatestFrom(pageSize$, pageIndex$),
+      map(([_, pageSize, pageIndex]) =>
+        // we don't know real count of search so if length of data modulus pageSize is zero
+        // we must add 1 to allow paginator to go to next page
+        this.dataSource.length % pageSize === 0 ? (pageIndex + 1) * this.dataSource.length + 1 : this.dataSource.length));
+
     this.pageSize$ = pageSize$;
 
     this.pageIndex$ = pageIndex$;
@@ -136,69 +142,50 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
       distinctUntilChanged(),
     );
 
-    const query$: Observable<PageLogQuery> = combineLatest([uri$, jobExecutionId$, executionId$, sort$,
-      watch$, pageIndex$, pageSize$, init$
+    const query$: Observable<CrawlLogQuery> = combineLatest([
+      executionId$, jobExecutionId$, sort$, pageSize$, pageIndex$, watch$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([uri, jobExecutionId, executionId, sort, watch, pageIndex, pageSize]) => ({
-        uri,
-        jobExecutionId,
+      map(([executionId, jobExecutionId, sort, pageSize, pageIndex, watch]) => ({
         executionId,
+        jobExecutionId,
         sort,
-        watch,
+        pageSize,
         pageIndex,
-        pageSize
+        watch,
       })),
-      share()
     );
-
-    const searchComplete = new Subject<void>();
-
-    const countQuery$ = searchComplete.pipe(
-      withLatestFrom(query$),
-      map(([_, query]) => query),
-      distinctUntilChanged((a: PageLogQuery, b: PageLogQuery) =>
-        // only count when these query parameters change
-        (a.uri === b.uri
-          && a.executionId === b.executionId
-          && a.jobExecutionId === b.jobExecutionId
-        )),
-    );
-
-    this.pageLength$ = countQuery$.pipe(
-      switchMap(query => (query.executionId || query.jobExecutionId)
-        ? this.pageLogService.count(query)
-        : of(this.dataSource.length)
-      ));
 
     query$.pipe(
       tap(query => this.updateQueryForm(query)),
       tap(() => this.dataSource.clear()),
-      switchMap(query => this.pageLogService.search(query).pipe(
+      switchMap(query => this.crawlLogService.search(query).pipe(
         // let us know when search is complete so we can determine
-        // pageLength and fool the paginator (no counting for crawlExecutions in API)
+        // pageLength and fool the paginator (no counting for crawlLog in API)
         finalize(() => searchComplete.next())
       )),
       takeUntil(this.ngUnsubscribe)
-    ).subscribe(pageLog => this.dataSource.add(pageLog));
+    ).subscribe(crawlLog => this.dataSource.add(crawlLog));
 
-    warcId$.pipe(
-      switchMap(warcId => warcId ? this.pageLogService.get(warcId) : of(null)),
+    id$.pipe(
+      switchMap(id => id ? this.crawlLogService.get(id) : of(null)),
       tap(s => {
         if (s === null) {
           this.list.reset();
         }
       }),
       takeUntil(this.ngUnsubscribe)
-    ).subscribe(pageLog => this.pageLog.next(pageLog));
+    ).subscribe(crawlLog => this.crawlLog.next(crawlLog));
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
     this.form.valueChanges.subscribe(value => {
       const queryParams = {
-        uri: value.uri || null,
-        job_execution_id: value.jobExecutionId || null,
         execution_id: value.executionId || null,
+        job_execution_id: value.jobExecutionId || null
       };
       this.list.reset();
       this.router.navigate([], {
@@ -209,17 +196,19 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
     });
   }
 
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
       this.router.navigate([], {
         relativeTo: this.route,
         queryParamsHandling: 'merge',
-        queryParams: {warc_id: item.id},
+        queryParams: {id: item.id},
       }).catch(error => this.errorService.dispatch(error));
     }
   }
@@ -243,12 +232,11 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
   private createQueryForm(): void {
     this.form = this.fb.group({
       jobExecutionId: '',
-      executionId: '',
-      uri: '',
+      executionId: ''
     });
   }
 
-  private updateQueryForm(query: PageLogQuery): void {
+  private updateQueryForm(query: CrawlLogQuery): void {
     this.form.patchValue(query, {emitEvent: false});
     this.form.markAsPristine();
     this.form.markAsUntouched();

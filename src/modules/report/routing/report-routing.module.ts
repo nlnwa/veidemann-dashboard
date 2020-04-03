@@ -7,6 +7,7 @@ import {JobExecutionComponent} from '../components/job-execution/job-execution.c
 import {CrawlExecutionComponent} from '../components/crawl-execution/crawl-execution.component';
 import {OptionsResolver} from '../services/options.resolver.service';
 import {PageLogComponent} from '../components/pagelog/pagelog.component';
+import {CrawlLogComponent} from '../components/crawl-log/crawl-log.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,13 @@ const routes: Routes = [
         resolve: {
           options: OptionsResolver
         } ,
+      },
+      {
+        path: 'crawllog',
+        component: CrawlLogComponent,
+        resolve: {
+          options: OptionsResolver
+        },
       },
     ]
   },

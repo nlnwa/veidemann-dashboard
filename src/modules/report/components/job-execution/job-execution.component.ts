@@ -15,7 +15,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {Sort} from '../../../commons/services/query.service';
 import {SortDirection} from '@angular/material/sort';
-import {ConfigListComponent} from '../../../config/components';
 import {JobExecutionState, jobExecutionStates, JobExecutionStatus} from '../../../../shared/models/report';
 import {ListDataSource} from '../../../../shared/models/list-datasource';
 import {ListItem} from '../../../commons/components/base-list/base-list';
@@ -25,6 +24,7 @@ import {ErrorService} from '../../../core/services';
 import {distinctUntilArrayChanged, isValidDate} from '../../../../shared/func';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigObject} from '../../../../shared/models/config';
+import {JobExecutionStatusListComponent} from '../job-execution-status-list/job-execution-status-list.component';
 
 @Component({
   selector: 'app-job-execution',
@@ -51,7 +51,7 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
 
   dataSource: ListDataSource<JobExecutionStatus>;
 
-  @ViewChild('list') list: ConfigListComponent;
+  @ViewChild('list') list: JobExecutionStatusListComponent;
 
   private ngUnsubscribe = new Subject();
 

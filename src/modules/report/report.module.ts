@@ -4,7 +4,7 @@ import {CommonsModule} from '../commons/commons.module';
 
 import {ReportComponent} from './containers/report/report.component';
 import {ReportRoutingModule} from './routing/report-routing.module';
-import {CrawlExecutionService, JobExecutionService, OptionsResolver} from './services';
+import {CrawlExecutionService, CrawlLogService, JobExecutionService, OptionsResolver} from './services';
 import {JobExecutionComponent} from './components/job-execution/job-execution.component';
 import {JobExecutionStatusComponent} from './components/job-execution-status/job-execution-status.component';
 import {JobExecutionStatusListComponent} from './components/job-execution-status-list/job-execution-status-list.component';
@@ -17,8 +17,11 @@ import {CrawlExecutionComponent} from './components/crawl-execution/crawl-execut
 import {PageLogListComponent} from './components/pagelog-list/pagelog-list.component';
 import {PageLogComponent} from './components/pagelog/pagelog.component';
 import {PageLogService} from './services/pagelog.service';
-import {PageLogStatusComponent} from './components//pagelog-status/pagelog-status.component';
+import {PageLogStatusComponent} from './components/pagelog-status/pagelog-status.component';
 import {ResourceComponent} from './components/resource/resource.component';
+import {CrawlLogComponent} from './components/crawl-log/crawl-log.component';
+import {CrawlLogListComponent} from './components/crawl-log-list/crawl-log-list.component';
+import {CrawlLogStatusComponent} from './components/crawl-log-status/crawl-log-status.component';
 
 
 @NgModule({
@@ -35,7 +38,10 @@ import {ResourceComponent} from './components/resource/resource.component';
     PageLogListComponent,
     PageLogComponent,
     PageLogStatusComponent,
-    ResourceComponent
+    ResourceComponent,
+    CrawlLogComponent,
+    CrawlLogListComponent,
+    CrawlLogStatusComponent,
   ],
   imports: [
     CommonsModule,
@@ -46,7 +52,8 @@ import {ResourceComponent} from './components/resource/resource.component';
     CrawlExecutionService,
     OptionsResolver,
     ConfigService,
-    PageLogService
+    PageLogService,
+    CrawlLogService,
   ]
 })
 export class ReportModule {

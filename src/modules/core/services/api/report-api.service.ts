@@ -1,22 +1,22 @@
 import {Injectable} from '@angular/core';
 import {Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
+import {catchError, defaultIfEmpty, map, tap} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
-  CrawlExecutionStatusProto,
+  CrawlExecutionStatusProto, CrawlLogProto,
   ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
-  JobExecutionStatusProto,
+  JobExecutionStatusProto, PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
-import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models';
-import {PageLogListRequest} from '../../../../api/gen/report/v1/report_pb';
-import {PageLog} from '../../../../shared/models/report';
+import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
+import {CrawlLogListRequest, PageLogListRequest} from '../../../../api/gen/report/v1/report_pb';
+import {fromTimestamp} from '../../../../shared/func';
 
 
 @Injectable()
@@ -114,6 +114,22 @@ export class ReportApiService {
   listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
     const metadata = this.authService.metadata;
 
+    if (listRequest.getWarcIdList().length) {
+      return new Observable((observer: Observer<PageLogProto>) => {
+        const stream = this.reportClient.listPageLogs(listRequest, metadata)
+          .on('data', data => observer.next(data))
+          .on('error', error => observer.error(error))
+          .on('end', () => observer.complete());
+        return () => stream.cancel();
+      }).pipe(
+        map(PageLog.fromProto),
+        catchError(error => {
+          this.errorService.dispatch(error);
+          return of(null)
+        })
+      );
+    }
+
     let queryStr = `r.table('page_log')`;
     if (listRequest.hasQueryMask()) {
       const paths = listRequest.getQueryMask().getPathsList();
@@ -155,22 +171,73 @@ export class ReportApiService {
         return of(null)
       })
     );
+  }
 
-    /*
-        return new Observable((observer: Observer<PageLogProto>) => {
-          const stream = this.reportClient.listPageLogs(listRequest, metadata)
-            .on('data', data => observer.next(data))
-            .on('error', error => observer.error(error))
-            .on('end', () => observer.complete());
-          return () => stream.cancel();
-        }).pipe(
-          map(PageLog.fromProto),
-          catchError(error => {
-            this.errorService.dispatch(error);
-            return of(null)
-          })
-        );
-    */
+
+  listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
+    const metadata = this.authService.metadata;
+
+    if (listRequest.getWarcIdList().length) {
+      return new Observable((observer: Observer<CrawlLogProto>) => {
+        const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
+          .on('data', data => observer.next(data))
+          .on('error', error => observer.error(error))
+          .on('end', () => observer.complete());
+        return () => stream.cancel();
+      }).pipe(
+        map(CrawlLog.fromProto),
+        catchError(error => {
+          this.errorService.dispatch(error);
+          return of(null)
+        })
+      );
+    }
+
+    let queryStr = `r.table('crawl_log')`;
+    if (listRequest.hasQueryMask()) {
+      const paths = listRequest.getQueryMask().getPathsList();
+      const pageLog = CrawlLog.fromProto(listRequest.getQueryTemplate());
+      if (paths.includes('executionId')) {
+        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
+        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
+      }
+      for (const path of paths) {
+        const value = pageLog[path];
+        queryStr += `.filter({${path}: '${value}'})`;
+      }
+    }
+    if (listRequest.getOffset()) {
+      queryStr += `.skip(${listRequest.getOffset()})`;
+    }
+
+    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
+    dbQueryRequest.setQuery(queryStr);
+    dbQueryRequest.setLimit(listRequest.getPageSize());
+
+    return new Observable((observer: Observer<any>) => {
+      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
+        .on('data', data => observer.next(data))
+        .on('error', error => observer.error(error))
+        .on('end', () => observer.complete());
+      return () => stream.cancel();
+    }).pipe(
+      map((record: string) => JSON.parse(record)),
+      map((record: any) => {
+        const crawlLog = new CrawlLog(record);
+        crawlLog.id = record.warcId;
+        if (record.timeStamp) {
+          crawlLog.timeStamp = fromTimestamp(record.timeStamp);
+        }
+        if (record.fetchTimeStamp) {
+          crawlLog.fetchTimeStamp = fromTimestamp(record.fetchTimeStamp);
+        }
+        return crawlLog;
+      }),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return of(null)
+      })
+    );
   }
 
   getLastJobStatus(jobId: string): Observable<JobExecutionStatus> {

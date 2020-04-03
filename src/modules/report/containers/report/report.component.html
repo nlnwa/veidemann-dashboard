@@ -17,6 +17,11 @@
         <mat-icon mat-list-icon>art_track</mat-icon>
         <span i18n="@@reportNavigationLinkPageLog">PageLog</span>
       </a>
+
+      <a mat-list-item [routerLink]="['/report', 'crawllog']" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>event_note</mat-icon>
+        <span i18n="@@reportNavigationLinkCrawlLog">CrawlLog</span>
+      </a>
     </mat-nav-list>
   </mat-drawer>
 

@@ -93,6 +93,7 @@ export {
   JobExecutionStatus as JobExecutionStatusProto,
   CrawlExecutionStatus as CrawlExecutionStatusProto,
   PageLog as PageLogProto,
+  CrawlLog as CrawlLogProto,
 } from './gen/frontier/v1/resources_pb';
 
 export {

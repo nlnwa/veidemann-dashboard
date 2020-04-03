@@ -1,0 +1,49 @@
+<form [formGroup]="form" fxLayout="row wrap" fxLayoutGap="16px">
+  <mat-form-field>
+    <input matInput
+           formControlName="jobExecutionId"
+           placeholder="Job execution ID"
+           i18n-placeholder="@@reportCrawlLogQueryJobExecutiondInputPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="executionId"
+           placeholder="Execution ID"
+           i18n-placeholder="@@reportCrawlLogQueryExecutiondInputPlaceholder">
+  </mat-form-field>
+</form>
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-crawl-log-list fxFlex
+                      #list
+                      [pageLength]="pageLength$ | async"
+                      [pageIndex]="pageIndex$ | async"
+                      [pageSize]="pageSize$ | async"
+                      [sortDirection]="sortDirection$ | async"
+                      [sortActive]="sortActive$ | async"
+                      (selectedChange)="onSelectedChange($event)"
+                      (sort)="onSort($event)"
+                      (page)="onPage($event)"
+                      [dataSource]="dataSource">
+    <a *appAction="let row" mat-icon-button
+       [routerLink]="['/report', 'jobexecution']"
+       [queryParams]="{id: row.jobExecutionId}">
+      <mat-icon matTooltip="Go to job execution"
+                i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">hdr_strong</mat-icon>
+    </a>
+    <a *appAction="let row" mat-icon-button
+       [routerLink]="['/report', 'crawlexecution']"
+       [queryParams]="{id: row.executionId}">
+      <mat-icon matTooltip="Go to crawl execution"
+                i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak</mat-icon>
+    </a>
+    <a *appAction="let row" mat-icon-button
+       target="_blank"
+       [href]="appConfigService.waybackUrl + '*?url=' + row.requestedUri">
+      <mat-icon matTooltip="Search wayback"
+                i18n-matTooltip="@@pageLogListGoToWaybackTooltip">camera</mat-icon>
+    </a>
+  </app-crawl-log-list>
+  <app-crawl-log-status fxFlex *ngIf="crawlLog$ | async as crawlLog"
+                        [crawlLog]="crawlLog"></app-crawl-log-status>
+</div>
