@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {PageLog} from '../../../../shared/models/report/pagelog.model';
 import {ListDataSource} from '../../../../shared/models/list-datasource';
-import {ConfigListComponent} from '../../../config/components';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
 import {
@@ -23,6 +22,7 @@ import {AppConfigService, ErrorService} from '../../../core/services';
 import {SortDirection} from '@angular/material/sort';
 import {Sort} from '../../../commons/services/query.service';
 import {PageEvent} from '@angular/material/paginator';
+import {PageLogListComponent} from '../pagelog-list/pagelog-list.component';
 
 @Component({
   selector: 'app-pagelog',
@@ -45,7 +45,7 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
 
   dataSource: ListDataSource<PageLog>;
 
-  @ViewChild('list') list: ConfigListComponent;
+  @ViewChild('list') list: PageLogListComponent;
 
   private ngUnsubscribe = new Subject();
 

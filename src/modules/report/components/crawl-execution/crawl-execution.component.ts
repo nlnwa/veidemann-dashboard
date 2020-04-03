@@ -20,7 +20,6 @@ import {
 import {distinctUntilArrayChanged, isValidDate} from '../../../../shared/func';
 import {CrawlExecutionState, crawlExecutionStates, CrawlExecutionStatus} from '../../../../shared/models/report';
 import {ListDataSource} from '../../../../shared/models/list-datasource';
-import {ConfigListComponent} from '../../../config/components';
 import {ErrorService} from '../../../core/services';
 import {Sort} from '../../../commons/services/query.service';
 import {ListItem} from '../../../commons/components/base-list/base-list';
@@ -28,6 +27,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigObject} from '../../../../shared/models/config';
+import {CrawlExecutionStatusListComponent} from '../crawl-execution-status-list/crawl-execution-status-list.component';
 
 @Component({
   selector: 'app-crawl-execution',
@@ -54,7 +54,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
 
   dataSource: ListDataSource<CrawlExecutionStatus>;
 
-  @ViewChild('list') list: ConfigListComponent;
+  @ViewChild('list') list: CrawlExecutionStatusListComponent;
 
   private ngUnsubscribe = new Subject();
 

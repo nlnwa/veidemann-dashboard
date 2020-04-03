@@ -22,7 +22,7 @@ import {ListItem} from '../../../commons/components/base-list/base-list';
 import {Sort} from '../../../commons/services/query.service';
 import {PageEvent} from '@angular/material/paginator';
 import {AppConfigService, ErrorService} from '../../../core/services';
-import {ConfigListComponent} from '../../../config/components';
+import {CrawlLogListComponent} from '../crawl-log-list/crawl-log-list.component';
 
 @Component({
   selector: 'app-crawl-log',
@@ -46,7 +46,7 @@ export class CrawlLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   dataSource: ListDataSource<CrawlLog>;
 
-  @ViewChild('list') list: ConfigListComponent;
+  @ViewChild('list') list: CrawlLogListComponent;
 
   private ngUnsubscribe = new Subject();
 
