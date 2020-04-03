@@ -7,11 +7,11 @@ import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
-  CrawlExecutionStatusProto,
+  CrawlExecutionStatusProto, CrawlLogProto,
   ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
-  JobExecutionStatusProto,
+  JobExecutionStatusProto, PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
@@ -114,6 +114,22 @@ export class ReportApiService {
   listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
     const metadata = this.authService.metadata;
 
+    if (listRequest.getWarcIdList().length) {
+      return new Observable((observer: Observer<PageLogProto>) => {
+        const stream = this.reportClient.listPageLogs(listRequest, metadata)
+          .on('data', data => observer.next(data))
+          .on('error', error => observer.error(error))
+          .on('end', () => observer.complete());
+        return () => stream.cancel();
+      }).pipe(
+        map(PageLog.fromProto),
+        catchError(error => {
+          this.errorService.dispatch(error);
+          return of(null)
+        })
+      );
+    }
+
     let queryStr = `r.table('page_log')`;
     if (listRequest.hasQueryMask()) {
       const paths = listRequest.getQueryMask().getPathsList();
@@ -155,27 +171,27 @@ export class ReportApiService {
         return of(null)
       })
     );
-
-    /*
-        return new Observable((observer: Observer<PageLogProto>) => {
-          const stream = this.reportClient.listPageLogs(listRequest, metadata)
-            .on('data', data => observer.next(data))
-            .on('error', error => observer.error(error))
-            .on('end', () => observer.complete());
-          return () => stream.cancel();
-        }).pipe(
-          map(PageLog.fromProto),
-          catchError(error => {
-            this.errorService.dispatch(error);
-            return of(null)
-          })
-        );
-    */
   }
 
 
   listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
     const metadata = this.authService.metadata;
+
+    if (listRequest.getWarcIdList().length) {
+      return new Observable((observer: Observer<CrawlLogProto>) => {
+        const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
+          .on('data', data => observer.next(data))
+          .on('error', error => observer.error(error))
+          .on('end', () => observer.complete());
+        return () => stream.cancel();
+      }).pipe(
+        map(CrawlLog.fromProto),
+        catchError(error => {
+          this.errorService.dispatch(error);
+          return of(null)
+        })
+      );
+    }
 
     let queryStr = `r.table('crawl_log')`;
     if (listRequest.hasQueryMask()) {
@@ -222,22 +238,6 @@ export class ReportApiService {
         return of(null)
       })
     );
-
-    /*
-      return new Observable((observer: Observer<CrawlLogProto>) => {
-        const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
-          .on('data', data => observer.next(data))
-          .on('error', error => observer.error(error))
-          .on('end', () => observer.complete());
-        return () => stream.cancel();
-      }).pipe(
-        map(CrawlLog.fromProto),
-        catchError(error => {
-          this.errorService.dispatch(error);
-          return of(null)
-        })
-      );
-   */
   }
 
   getLastJobStatus(jobId: string): Observable<JobExecutionStatus> {
