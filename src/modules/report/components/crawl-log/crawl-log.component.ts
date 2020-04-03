@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
@@ -27,7 +27,8 @@ import {ConfigListComponent} from '../../../config/components';
 @Component({
   selector: 'app-crawl-log',
   templateUrl: './crawl-log.component.html',
-  styleUrls: ['./crawl-log.component.css']
+  styleUrls: ['./crawl-log.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
