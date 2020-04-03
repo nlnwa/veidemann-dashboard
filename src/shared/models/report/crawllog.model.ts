@@ -4,6 +4,7 @@ import {fromTimestampProto, toTimestampProto} from '../../func';
 
 export class CrawlLog {
   id: string;
+  warcId: string;
   timeStamp: string;
   surt: string;
   statusCode: number;
@@ -30,6 +31,7 @@ export class CrawlLog {
 
   constructor({
                 id = '',
+                warcId = '',
                 timeStamp = '',
                 surt = '',
                 statusCode = 0,
@@ -55,6 +57,7 @@ export class CrawlLog {
                 method = ''
               }: Partial<CrawlLog> = {}) {
     this.id = id;
+    this.warcId = warcId;
     this.timeStamp = timeStamp;
     this.surt = surt;
     this.statusCode = statusCode;
@@ -83,6 +86,7 @@ export class CrawlLog {
   static fromProto(proto: CrawlLogProto): CrawlLog {
     return new CrawlLog({
       id: proto.getWarcId(),
+      warcId: proto.getWarcId(),
       timeStamp: fromTimestampProto(proto.getTimeStamp()),
       surt: proto.getSurt(),
       statusCode: proto.getStatusCode(),
@@ -111,7 +115,7 @@ export class CrawlLog {
 
   static toProto(crawlLog: CrawlLog): CrawlLogProto {
     const proto = new CrawlLogProto();
-    proto.setWarcId(crawlLog.id);
+    proto.setWarcId(crawlLog.warcId);
     proto.setTimeStamp(toTimestampProto(crawlLog.timeStamp));
     proto.setSurt(crawlLog.surt);
     proto.setStatusCode(crawlLog.statusCode);
