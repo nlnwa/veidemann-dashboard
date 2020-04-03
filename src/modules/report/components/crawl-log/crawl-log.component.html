@@ -37,6 +37,12 @@
       <mat-icon matTooltip="Go to crawl execution"
                 i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak</mat-icon>
     </a>
+    <a *appAction="let row" mat-icon-button
+       target="_blank"
+       [href]="appConfigService.waybackUrl + '*?url=' + row.requestedUri">
+      <mat-icon matTooltip="Search wayback"
+                i18n-matTooltip="@@pageLogListGoToWaybackTooltip">camera</mat-icon>
+    </a>
   </app-crawl-log-list>
   <app-crawl-log-status fxFlex *ngIf="crawlLog$ | async as crawlLog"
                         [crawlLog]="crawlLog"></app-crawl-log-status>

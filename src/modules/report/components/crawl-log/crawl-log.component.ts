@@ -21,7 +21,7 @@ import {
 import {ListItem} from '../../../commons/components/base-list/base-list';
 import {Sort} from '../../../commons/services/query.service';
 import {PageEvent} from '@angular/material/paginator';
-import {ErrorService} from '../../../core/services';
+import {AppConfigService, ErrorService} from '../../../core/services';
 import {ConfigListComponent} from '../../../config/components';
 
 @Component({
@@ -55,7 +55,8 @@ export class CrawlLogComponent implements OnInit, OnDestroy, AfterViewInit {
               private router: Router,
               private fb: FormBuilder,
               private crawlLogService: CrawlLogService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              public appConfigService: AppConfigService) {
     this.createQueryForm();
 
     this.crawlLog = new Subject<CrawlLog>();
