@@ -1,0 +1,142 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>event_notes</mat-icon>
+    <mat-card-title i18n="@@crawlLogReportStatusCardTitle">CrawlLog</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutGap="16px">
+      <table class="mat-table table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" i18n="@@crawlLogReportStatusRequestUriHeaderCell">Requested URI</th>
+          <th class="mat-header-cell" i18n="@@crawlLogReportStatusReferrerHeaderCell">Referrer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{crawlLog.requestedUri}}</td>
+          <td class="mat-cell">{{crawlLog.referrer}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="mat-table table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" i18n="@@crawlLogReportStatusResponseUriHeaderCell">Response URI</th>
+          <th class="mat-header-cell" i18n="@@crawlLogReportStatusDiscoveryPathHeaderCell">Discovery path</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{crawlLog.responseUri}}</td>
+          <td class="mat-cell">{{crawlLog.discoveryPath}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table class="mat-table">
+        <tr class="mat-header-row">
+          <th class="mat-header-cell"></th>
+          <th class="mat-header-cell"></th>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusSurtLabelCell">SURT</td>
+          <td class="mat-cell">{{crawlLog.surt}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusStatusCodeLabelCell">statusCode</td>
+          <td class="mat-cell">{{crawlLog.statusCode}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusTimestampLabelCell">Timestamp</td>
+          <td class="mat-cell">{{crawlLog.timeStamp |date: 'long'}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusFetchTimestampLabelCell">Fetch timestamp</td>
+          <td class="mat-cell">{{crawlLog.fetchTimeStamp|date: 'long'}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusFetchTimeMsLabelCell">Fetch time</td>
+          <td class="mat-cell">{{crawlLog.fetchTimeMs/1000}} seconds</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusBlockDigestLabelCell">Block digest</td>
+          <td class="mat-cell">{{crawlLog.blockDigest}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusPayloadDigestLabelCell">Payload digest</td>
+          <td class="mat-cell">{{crawlLog.blockDigest}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusSizeLabelCell">Size</td>
+          <td class="mat-cell">{{crawlLog.size |filesize}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusContentTypeLabelCell">Content type</td>
+          <td class="mat-cell">{{crawlLog.contentType}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell"i18n="@@crawlLogReportStatusStorageReferenceLabelCell">Storage reference</td>
+          <td class="mat-cell">{{crawlLog.storageRef}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusRecordTypeLabelCell">Record type</td>
+          <td class="mat-cell">{{crawlLog.recordType}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusWarcRefersToLabelCell">WARC refers to</td>
+          <td class="mat-cell">{{crawlLog.warcRefersTo}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusIPAddressLabelCell">IP address</td>
+          <td class="mat-cell">{{crawlLog.ipAddress}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusRetriesLabelCell">Retries</td>
+          <td class="mat-cell">{{crawlLog.retries}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusCollectionFinalNameLabelCell">Collection name</td>
+          <td class="mat-cell">{{crawlLog.collectionFinalName}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlLogReportStatusMethodLabelCell">Method</td>
+          <td class="mat-cell">{{crawlLog.method}}</td>
+        </tr>
+      </table>
+
+      <table class="mat-table">
+        <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">WARC ID</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Crawl Execution Id</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mat-row">
+          <td class="mat-cell">{{crawlLog.id}}</td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'crawlexecution']"
+               [queryParams]="{id: crawlLog.executionId}">{{crawlLog.executionId}}</a>
+          </td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'jobexecution']"
+               [queryParams]="{id: crawlLog.jobExecutionId}">{{crawlLog.jobExecutionId}}</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="content-padding" *ngIf="crawlLog.error as error">
+        <h2>Error</h2>
+        <h3>{{error.code}}: {{ExtraStatusCodes[error.code]}}</h3>
+        <h4 class="monospace">{{error.msg}}</h4>
+        <p class="monospace">{{error.detail}}</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+
