@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, first, map} from 'rxjs/operators';
+import {Observable, Observer, of} from 'rxjs';
+import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
@@ -8,10 +8,10 @@ import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
   CrawlExecutionStatusProto,
+  ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
   JobExecutionStatusProto,
-  PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models';
@@ -66,32 +66,111 @@ export class ReportApiService {
 
   countPageLogs(listRequest: PageLogListRequest): Observable<number> {
     const metadata = this.authService.metadata;
-    return from(this.reportClient.countPageLogs(listRequest, metadata))
-      .pipe(
-        map(listCountResponse => listCountResponse.getCount()),
-        first(),
-        catchError(error => {
-          this.errorService.dispatch(error);
-          return of(0)
-        })
-      );
-  }
 
-  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
-    const metadata = this.authService.metadata;
-    return new Observable((observer: Observer<PageLogProto>) => {
-      const stream = this.reportClient.listPageLogs(listRequest, metadata)
+    let queryStr = `r.table('page_log')`;
+    if (listRequest.hasQueryMask()) {
+      const paths = listRequest.getQueryMask().getPathsList();
+      const pageLog = PageLog.fromProto(listRequest.getQueryTemplate());
+      if (paths.includes('executionId')) {
+        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
+        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
+      }
+      for (const path of paths) {
+        const value = pageLog[path];
+        queryStr += `.filter({${path}: '${value}'})`;
+      }
+    }
+    queryStr += `.count()`;
+
+    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
+    dbQueryRequest.setQuery(queryStr);
+
+    return new Observable((observer: Observer<any>) => {
+      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map(PageLog.fromProto),
+      map((record: string) => JSON.parse(record)),
       catchError(error => {
         this.errorService.dispatch(error);
         return of(null)
       })
     );
+    /*
+        return from(this.reportClient.countPageLogs(listRequest, metadata))
+          .pipe(
+            map(listCountResponse => listCountResponse.getCount()),
+            first(),
+            catchError(error => {
+              this.errorService.dispatch(error);
+              return of(0)
+            })
+          );
+    */
+  }
+
+  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
+    const metadata = this.authService.metadata;
+
+    let queryStr = `r.table('page_log')`;
+    if (listRequest.hasQueryMask()) {
+      const paths = listRequest.getQueryMask().getPathsList();
+      const pageLog = PageLog.fromProto(listRequest.getQueryTemplate());
+      if (paths.includes('executionId')) {
+        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
+        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
+      }
+      for (const path of paths) {
+        const value = pageLog[path];
+        queryStr += `.filter({${path}: '${value}'})`;
+      }
+    }
+    if (listRequest.getOffset()) {
+      queryStr += `.skip(${listRequest.getOffset()})`;
+    }
+
+    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
+    dbQueryRequest.setQuery(queryStr);
+    dbQueryRequest.setLimit(listRequest.getPageSize());
+
+    return new Observable((observer: Observer<any>) => {
+      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
+        .on('data', data => observer.next(data))
+        .on('error', error => observer.error(error))
+        .on('end', () => observer.complete());
+      return () => stream.cancel();
+    }).pipe(
+      map((record: string) => JSON.parse(record)),
+      map((record: any) => {
+        const pageLog = new PageLog(record);
+        pageLog.id = record.warcId;
+        pageLog.outlinkList = record.outlink;
+        pageLog.resourceList = record.resource;
+        return pageLog;
+      }),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return of(null)
+      })
+    );
+
+    /*
+        return new Observable((observer: Observer<PageLogProto>) => {
+          const stream = this.reportClient.listPageLogs(listRequest, metadata)
+            .on('data', data => observer.next(data))
+            .on('error', error => observer.error(error))
+            .on('end', () => observer.complete());
+          return () => stream.cancel();
+        }).pipe(
+          map(PageLog.fromProto),
+          catchError(error => {
+            this.errorService.dispatch(error);
+            return of(null)
+          })
+        );
+    */
   }
 
   getLastJobStatus(jobId: string): Observable<JobExecutionStatus> {

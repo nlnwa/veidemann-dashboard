@@ -84,7 +84,9 @@ export {
 
 export {
   JobExecutionsListRequest,
-  CrawlExecutionsListRequest
+  CrawlExecutionsListRequest,
+  ExecuteDbQueryRequest,
+  ExecuteDbQueryReply,
 } from './gen/report/v1/report_pb';
 
 export {
