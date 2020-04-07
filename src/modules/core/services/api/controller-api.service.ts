@@ -32,15 +32,15 @@ export class ControllerApiService {
   }
 
   getRunStatus(): Observable<RunStatus> {
-    return from(this.controllerPromiseClient.status(new Empty()))
+    return from(this.controllerPromiseClient.status(new Empty(), this.authService.metadata))
       .pipe(map(status => status.getRunstatus()));
   }
 
   pauseCrawler(): void {
-    this.controllerPromiseClient.pauseCrawler(new Empty());
+    this.controllerPromiseClient.pauseCrawler(new Empty(), this.authService.metadata);
   }
 
   unpauseCrawler(): void {
-    this.controllerPromiseClient.unPauseCrawler(new Empty());
+    this.controllerPromiseClient.unPauseCrawler(new Empty(), this.authService.metadata);
   }
 }

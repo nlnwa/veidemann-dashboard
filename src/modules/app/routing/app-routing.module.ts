@@ -5,11 +5,6 @@ import {GuardService} from '../../core/services/auth';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'config',
-    pathMatch: 'full'
-  },
-  {
     path: 'config',
     loadChildren: () => import('../../config/configurations.module').then(m => m.ConfigurationsModule),
     canLoad: [GuardService]

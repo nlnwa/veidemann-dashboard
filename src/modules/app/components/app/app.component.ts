@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 
-import {merge, Observable, Subject, timer} from 'rxjs';
-import {filter, map, mergeMap} from 'rxjs/operators';
+import {merge, Observable, Subject, throwError, timer} from 'rxjs';
+import {catchError, filter, map, mergeMap, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppInitializerService, ControllerApiService, SnackBarService} from '../../../core/services/';
+import {AppInitializerService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services/';
 import {AuthService, GuardService} from '../../../core/services/auth';
 import {RunStatus} from '../../../../shared/models/controller';
 import {MatDialog} from '@angular/material/dialog';
@@ -33,7 +33,8 @@ export class AppComponent implements OnInit {
               private route: ActivatedRoute,
               private guardService: GuardService,
               private snackBarService: SnackBarService,
-              private crawlerStatusDialog: MatDialog) {
+              private crawlerStatusDialog: MatDialog,
+              private errorService: ErrorService) {
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
       map((event: RouterEvent) => {
@@ -59,7 +60,11 @@ export class AppComponent implements OnInit {
       });
     }
     this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
-      mergeMap(() => this.controllerApiService.getRunStatus())
+      mergeMap(() => this.controllerApiService.getRunStatus()),
+      catchError(error => {
+        this.errorService.dispatch(error);
+        return throwError(error);
+      })
     );
   }
 
