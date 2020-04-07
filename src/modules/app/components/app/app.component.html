@@ -44,7 +44,9 @@
 
     <span fxFlex></span>
 
-    <app-crawlerstatus [runStatus]="runStatus$ | async" (change)="onChangeRunStatus($event)"></app-crawlerstatus>
+    <app-crawlerstatus *ngIf="isLoggedIn"
+                       [runStatus]="runStatus$ | async"
+                       (change)="onChangeRunStatus($event)"></app-crawlerstatus>
 
     <a mat-button
        mat-icon-button
