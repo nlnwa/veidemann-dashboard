@@ -37,7 +37,7 @@ export class CrawlLogService extends QueryService {
     const queryTemplate = new CrawlLog();
     const fieldMask = new FieldMask();
 
-    listRequest.setOffset(query.pageIndex);
+    listRequest.setOffset(query.pageIndex * query.pageSize);
     listRequest.setPageSize(query.pageSize);
 
     if (query.jobExecutionId) {
