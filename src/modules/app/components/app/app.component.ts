@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 
 import {merge, Observable, Subject, throwError, timer} from 'rxjs';
-import {catchError, filter, map, mergeMap, tap} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppInitializerService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services/';
@@ -49,15 +49,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isLoggedIn && this.authService.requestPath) {
-      // navigate to any requested path after login
-      this.router.navigate([this.authService.requestPath]);
-    } else if (!this.isLoggedIn) {
-      // force redirect to login
-      // we must wait a cycle (setTimeout) until guardService.canLoad has been called to learn requested path
-      setTimeout(() => {
-        this.authService.login(this.guardService.requestedPath);
-      });
+    if (this.isLoggedIn && this.authService.requestedUri) {
+      this.router.navigateByUrl(this.authService.requestedUri);
     }
     this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
       mergeMap(() => this.controllerApiService.getRunStatus()),

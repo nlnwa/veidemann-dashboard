@@ -7,16 +7,17 @@ const routes: Routes = [
   {
     path: 'config',
     loadChildren: () => import('../../config/configurations.module').then(m => m.ConfigurationsModule),
-    canLoad: [GuardService]
+    canActivate: [GuardService],
   },
   {
     path: 'report',
     loadChildren: () => import('../../report/report.module').then(m => m.ReportModule),
+    canActivate: [GuardService],
   },
   {
     path: 'validator',
     loadChildren: () => import('../../warc/warc.module').then(m => m.WarcModule),
-    canLoad: [GuardService]
+    canActivate: [GuardService],
   },
 ];
 
