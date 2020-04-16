@@ -8,9 +8,6 @@ import {Role} from '../../../../shared/models';
 @Injectable()
 export class GuardService implements CanActivate, CanLoad {
 
-  // stores requested path to be able to redirect after login
-  requestedPath: string;
-
   constructor(public authService: AuthService) {
   }
 
@@ -19,6 +16,7 @@ export class GuardService implements CanActivate, CanLoad {
       case 'rolemapping':
         return [Role.ADMIN];
       case 'validator':
+      case 'report':
         return [Role.CURATOR, Role.ADMIN];
       case 'schedule':
       case 'collection':
@@ -50,18 +48,20 @@ export class GuardService implements CanActivate, CanLoad {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const allowedRoles = GuardService.getAllowedRolesWhenActivating(route);
 
-    return this.authService.isAuthorized(allowedRoles) ? of(true) : of(false);
+    if (!this.authService.isLoggedIn) {
+      this.authService.login(state.url);
+    }
+
+    return this.authService.isAuthorized(allowedRoles)
+      ? of(true)
+      : of(false);
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
     const allowedRoles = GuardService.getAllowedRolesWhenLoading(route);
 
-    if (this.authService.isAuthorized(allowedRoles)) {
-      return of(true);
-    }
-    // store requested path
-    this.requestedPath = segments.join('/');
-
-    return of(false);
+    return this.authService.isAuthorized(allowedRoles)
+      ? of(true)
+      : of(false);
   }
 }

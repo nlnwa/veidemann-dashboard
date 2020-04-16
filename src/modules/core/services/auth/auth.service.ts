@@ -35,7 +35,7 @@ export class AuthService {
     return this.roles.some(role => role !== Role.ANY);
   }
 
-  get requestPath(): string {
+  get requestedUri(): string {
     return this.oauthService.state;
   }
 
