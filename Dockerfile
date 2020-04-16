@@ -35,7 +35,7 @@ RUN apk add --update --no-cache git
 
 COPY package.json yarn.lock .yarnrc /usr/src/app/
 WORKDIR /usr/src/app
-RUN yarn
+RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . .
 
@@ -53,4 +53,3 @@ COPY --from=app /usr/src/app/dist/ /usr/share/nginx/html${DEPLOY_URL}
 COPY --from=documentation /usr/share/site/out /usr/share/nginx/html${DEPLOY_URL}/docs/
 
 COPY nginx/default.conf /etc/nginx/conf.d/
-
