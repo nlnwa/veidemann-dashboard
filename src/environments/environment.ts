@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  version: '',
+  version: 'DEV',
   configUrl: '/veidemann/assets/config/environment.json',
   grpcWebUrl: '/grpc-web',
   waybackUrl: 'https://veidemann.local/loke/nb/',
@@ -17,6 +17,10 @@ export const environment = {
     // URL of the SPA to redirect the user to after login
 //     redirectUri: window.location.origin + '/veidemann',
     redirectUri: window.location.origin + '/veidemann',
+
+    requestAccessToken: false,
+    oidc: true,
+    responseType: 'id_token',
 
     // The SPA's id. The SPA is registered with this id at the auth-server
     clientId: 'veidemann-dashboard',

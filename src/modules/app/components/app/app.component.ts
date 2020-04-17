@@ -11,7 +11,6 @@ import {RunStatus} from '../../../../shared/models/controller';
 import {MatDialog} from '@angular/material/dialog';
 import {CrawlerStatusDialogComponent} from '../crawlerstatus-dialog/crawlerstatus-dialog.component';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -50,7 +49,20 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isLoggedIn && this.authService.requestedUri) {
-      this.router.navigateByUrl(this.authService.requestedUri);
+      try {
+        const url: URL = new URL(this.authService.requestedUri, 'http://localhost');
+        const queryParams = {};
+        // @ts-ignore
+        for (const [key, value] of url.searchParams) {
+          queryParams[key] = value;
+        }
+        const fragment = url.hash.substring(1) || null;
+        const commands = url.pathname.split('/');
+        this.router.navigate(commands, {queryParams, fragment, replaceUrl: true})
+          .catch(e => this.errorService.dispatch(e));
+      } catch (e) {
+        this.errorService.dispatch(e);
+      }
     }
     this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
       mergeMap(() => this.controllerApiService.getRunStatus()),

@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   get requestedUri(): string {
-    return this.oauthService.state;
+    return decodeURIComponent(this.oauthService.state);
   }
 
   /**
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   login(redirectUrl?: string) {
-    this.oauthService.initImplicitFlow(redirectUrl);
+    this.oauthService.initLoginFlow(redirectUrl);
   }
 
   logout() {
