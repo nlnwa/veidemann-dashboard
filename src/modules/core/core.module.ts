@@ -5,7 +5,8 @@ import {registerLocaleData} from '@angular/common';
 import localeNbExtra from '@angular/common/locales/extra/nb';
 import localeNb from '@angular/common/locales/nb';
 
-import {JwksValidationHandler, OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
+import {OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
+import {JwksValidationHandler} from 'angular-oauth2-oidc-jwks';
 import {CommonsModule} from '../commons/commons.module';
 
 import {
