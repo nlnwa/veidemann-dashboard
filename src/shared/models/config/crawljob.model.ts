@@ -105,6 +105,8 @@ export class CrawlJob {
 
     if (equalMaxBytes) {
       crawlJob.limits.maxBytes = compareObj.limits.maxBytes;
+    } else {
+      crawlJob.limits.maxBytes = NaN;
     }
 
     crawlJob.scheduleRef = equalSchedule ? compareObj.scheduleRef : crawlJob.scheduleRef = new ConfigRef({kind: Kind.CRAWLSCHEDULECONFIG});

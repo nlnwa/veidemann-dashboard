@@ -102,10 +102,17 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
   }
 
   protected updateForm(fileSize: number): void {
-    const hrFilesize = this.bytesToHumanReadable(fileSize);
-    this.form.patchValue({
-      fileSize: hrFilesize || ''
-    });
+    if (fileSize) {
+      const hrFilesize = this.bytesToHumanReadable(fileSize);
+      this.form.patchValue({
+        fileSize: hrFilesize || ''
+      });
+    } else {
+      this.form.patchValue({
+        fileSize: ''
+      });
+    }
+
   }
 
   bytesToHumanReadable(bytes: number, decimals = 2): string {
