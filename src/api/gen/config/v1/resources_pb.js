@@ -6523,7 +6523,8 @@ proto.veidemann.api.config.v1.Role = {
   CURATOR: 3,
   READONLY: 4,
   OPERATOR: 5,
-  SYSTEM: 6
+  SYSTEM: 6,
+  CONSULTANT: 7
 };
 
 goog.object.extend(exports, proto.veidemann.api.config.v1);
