@@ -9,7 +9,7 @@
 
     <mat-menu #menu="matMenu">
       <a mat-menu-item
-         *ngIf="canConfigure"
+         *ngIf="canConfigure || canConsult"
          [routerLink]="['/config']">
         <mat-icon>settings</mat-icon>
         <span i18n="@@mainMenuConfiguration">Configuration</span>
@@ -30,6 +30,7 @@
       </a>
 
       <a mat-menu-item
+         *ngIf="canAdministrate"
          [routerLink]="['/config/logconfig']">
         <mat-icon>notes</mat-icon>
         <span i18n="@@mainMenuLogConfiguration">Log level</span>
@@ -44,7 +45,7 @@
 
     <span fxFlex></span>
 
-    <app-crawlerstatus *ngIf="isLoggedIn"
+    <app-crawlerstatus *ngIf="isLoggedIn && canConfigure"
                        [runStatus]="runStatus$ | async"
                        (change)="onChangeRunStatus($event)"></app-crawlerstatus>
 

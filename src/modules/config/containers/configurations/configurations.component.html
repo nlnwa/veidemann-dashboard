@@ -11,7 +11,7 @@
         Create new
       </button>
     </mat-action-list>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="!canConsult">
       <h3 mat-subheader i18n="@@configurationSidebarMenuHeader">Configuration</h3>
 
       <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLENTITY]]" [routerLinkActive]="['is-active']">
@@ -62,6 +62,18 @@
         <span i18n="@@configurationSidebarMenuRolemapping">Users</span>
       </a>
     </mat-nav-list>
+    <mat-nav-list *ngIf="canConsult">
+      <h3 mat-subheader i18n="@@configurationSidebarMenuHeader">Configuration</h3>
+
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLENTITY]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>business</mat-icon>
+        <span i18n="@@configurationSidebarMenuEntity">Entity</span>
+      </a>
+      <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.SEED]]" [routerLinkActive]="['is-active']">
+        <mat-icon mat-list-icon>link</mat-icon>
+        <span i18n="@@configurationSidebarMenuSeed">Seed</span>
+      </a>
+    </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content class="content-padding" fxLayoutGap="16px" *ngIf="kind$ | async as kind">
     <app-config-query [options]="options$ | async" [query]="query$ | async"
@@ -97,7 +109,7 @@
                        [dataSource]="dataSource">
 
         <button mat-icon-button
-                *ngIf="!isAllSelected"
+                *ngIf="!isAllSelected && canAdministrate"
                 (click)="onDeleteSelectedConfigs()">
           <mat-icon matTooltip="Delete selected configurations"
                     i18n-matTooltip="@@configurationDeleteSelectedConfigurationsButtonTooltip">delete</mat-icon>

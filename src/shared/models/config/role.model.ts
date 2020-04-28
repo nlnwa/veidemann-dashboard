@@ -15,6 +15,8 @@ export enum Role {
   OPERATOR = 5,
   // Machine to machine
   SYSTEM = 6,
+  // A user with permission to maintain seeds and entities
+  CONSULTANT = 7,
 }
 
 export const roles = Object.keys(Role).filter(p => !isNumeric(p)).map(key => Role[key]);

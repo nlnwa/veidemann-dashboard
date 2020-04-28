@@ -342,6 +342,14 @@ export class ConfigurationsComponent implements OnDestroy {
     return this.authService.isAdmin();
   }
 
+  get canConfigure(): boolean {
+    return this.authService.isAdmin() || this.authService.isCurator();
+  }
+
+  get canConsult(): boolean {
+    return this.authService.isConsultant();
+  }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
