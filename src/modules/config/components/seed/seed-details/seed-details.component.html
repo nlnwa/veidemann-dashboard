@@ -78,7 +78,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="canEdit">
+    <mat-card-actions *ngIf="canEdit || canConsult">
       <button mat-raised-button
               [color]="form.valid ? 'accent' : 'warn'"
               *ngIf="showSave"
@@ -100,7 +100,7 @@
       </button>
       <span fxFlex></span>
       <button mat-button
-              *ngIf="!showSave"
+              *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">DELETE
       </button>

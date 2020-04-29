@@ -841,4 +841,5 @@ export enum Role {
   READONLY = 4,
   OPERATOR = 5,
   SYSTEM = 6,
+  CONSULTANT = 7,
 }

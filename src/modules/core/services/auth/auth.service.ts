@@ -72,6 +72,10 @@ export class AuthService {
     return this.roles.includes(Role.READONLY);
   }
 
+  isConsultant(): boolean {
+    return this.roles.includes(Role.CONSULTANT);
+  }
+
   login(redirectUrl?: string) {
     this.oauthService.initLoginFlow(redirectUrl);
   }

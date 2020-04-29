@@ -18,15 +18,20 @@ export class GuardService implements CanActivate, CanLoad {
       case 'validator':
       case 'report':
         return [Role.CURATOR, Role.ADMIN];
+      case 'config':
+         return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
       case 'schedule':
       case 'collection':
       case 'crawlconfig':
       case 'crawljobs':
       case 'search':
-      case 'config':
       case 'activity':
       case 'status':
         return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR];
+      case 'entity':
+        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
+      case 'seed':
+        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
       case 'logconfig':
         return [Role.READONLY, Role.CURATOR, Role.ADMIN];
       default:

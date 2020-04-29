@@ -97,6 +97,10 @@ export class AppComponent implements OnInit {
     return this.authService.isAdmin() || this.authService.isCurator();
   }
 
+  get canConsult(): boolean {
+    return this.authService.isConsultant();
+  }
+
   onLogin() {
     this.authService.login(this.route.snapshot.url.join('/'));
   }

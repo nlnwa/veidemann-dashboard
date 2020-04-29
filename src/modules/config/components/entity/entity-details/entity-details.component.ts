@@ -51,7 +51,11 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isConsultant();
+  }
+
+  get canDelete(): boolean {
+    return this.authService.isAdmin();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
