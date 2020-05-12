@@ -166,4 +166,22 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   isSelected(item: T): boolean {
     return this.selectedRow ? this.selectedRow.id === item.id : false;
   }
+
+  isDisabled(item: T): boolean {
+    // @ts-ignore
+    if(item.seed !== undefined) {
+      // @ts-ignore
+      if (item.seed.disabled) {
+        return true;
+      }
+    }
+    // @ts-ignore
+    if(item.crawlJob !== undefined) {
+      // @ts-ignore
+      if (item.crawlJob.disabled) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

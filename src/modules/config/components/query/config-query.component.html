@@ -30,6 +30,10 @@
                     [value]="option.id">{{option.meta.name}}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <mat-checkbox labelPosition="after" formControlName="disabled">
+      Deactivated
+    </mat-checkbox>
   </ng-container>
 
   <ng-container *ngSwitchCase="Kind.SEED">
@@ -47,6 +51,11 @@
              placeholder="Entity ID"
              i18n-placeholder="@@configQueryEntityIdInputPlaceholder">
     </mat-form-field>
+
+    <mat-checkbox labelPosition="after" formControlName="disabled">
+      Deactivated
+    </mat-checkbox>
+
   </ng-container>
 
   <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">

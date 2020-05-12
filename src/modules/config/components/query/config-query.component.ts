@@ -76,6 +76,7 @@ export class ConfigQueryComponent implements OnChanges, AfterViewInit {
       politenessId: '',
       crawlJobIdList: {value: []},
       scriptIdList: {value: []},
+      disabled: false,
     });
   }
 

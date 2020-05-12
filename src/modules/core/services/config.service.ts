@@ -25,6 +25,7 @@ export interface ConfigQuery {
   collectionId: string;
   browserConfigId: string;
   politenessId: string;
+  disabled: boolean;
   crawlJobIdList: string[];
   scriptIdList: string[];
   term: string;
@@ -154,6 +155,10 @@ export class ConfigService extends QueryService {
           fieldMask.addPaths('crawlJob.crawlConfigRef');
           queryTemplate.crawlJob.crawlConfigRef = new ConfigRef({id: query.crawlConfigId, kind: Kind.CRAWLCONFIG});
         }
+        if (query.disabled) {
+          fieldMask.addPaths('crawlJob.disabled');
+          queryTemplate.crawlJob.disabled = query.disabled;
+        }
         break;
       case Kind.CRAWLCONFIG:
         queryTemplate.crawlConfig = new CrawlConfig();
@@ -198,6 +203,10 @@ export class ConfigService extends QueryService {
         if (query.crawlJobIdList.length) {
           fieldMask.addPaths('seed.jobRef');
           queryTemplate.seed.jobRefList = query.crawlJobIdList.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
+        }
+        if (query.disabled) {
+          fieldMask.addPaths('seed.disabled');
+          queryTemplate.seed.disabled = query.disabled;
         }
         break;
       case Kind.ROLEMAPPING:
@@ -261,7 +270,6 @@ export class ConfigService extends QueryService {
         }
       });
     }
-
     return listRequest;
   }
 }
