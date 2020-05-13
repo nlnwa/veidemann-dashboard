@@ -107,6 +107,10 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     this.move.emit({seed: seeds, entityRef: this.entityRef});
   }
 
+  goToUrl(url: string): void {
+    window.open(url, '_blank');
+  }
+
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     return (this.name.pending
         ? this.name.statusChanges.pipe(

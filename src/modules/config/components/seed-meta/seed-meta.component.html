@@ -10,6 +10,7 @@
               cdkAutosizeMaxRows="10"
               #autosize="cdkTextareaAutosize">
     </textarea>
+    <button mat-icon-button matSuffix (click)="goToUrl(name.value)"><mat-icon>open_in_browser</mat-icon></button>
     <mat-error
       *ngIf="name.hasError('required')"
       i18n="@@seedMetaUrlRequiredError">

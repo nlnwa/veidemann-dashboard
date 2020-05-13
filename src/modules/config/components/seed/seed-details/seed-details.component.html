@@ -41,8 +41,11 @@
           <mat-form-field formGroupName="entityRef">
             <input matInput formControlName="id"
                    placeholder="Entity Id"
-                   readonly
+                   [attr.disabled]="entityIdDisabled ? '' : null"
                    i18n-placeholder="@@metaEntityIdInputPlaceholder">
+            <button mat-icon-button matSuffix
+                    matTooltip="Move seed to another entity"
+                    (click)="onMoveSeed()"><mat-icon>swap_horiz</mat-icon></button>
             <mat-error>
               Reference to entity is required
             </mat-error>

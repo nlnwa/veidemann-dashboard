@@ -40,6 +40,8 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
+  entityIdDisabled = true;
+
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
     this.createForm();
@@ -133,6 +135,12 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   onRevert() {
     this.updateForm();
   }
+
+  onMoveSeed() {
+    console.log(this.configObject);
+    this.entityIdDisabled = false;
+  }
+
 
   protected createForm() {
     this.form = this.fb.group({
