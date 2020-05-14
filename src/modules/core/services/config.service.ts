@@ -279,12 +279,16 @@ export class ConfigService extends QueryService {
         } else if (name.startsWith('"') && name.endsWith('"')) {
           const exact = '^' + escapeRegex(name.substring(1, name.length - 1)) + '$';
           listRequest.setNameRegex(exact);
-        } else if (name.startsWith('.')) {
-          const subDomainSearch = '^(?:https?://)?.*' + escapeRegex(name) + '/?';
-          listRequest.setNameRegex(subDomainSearch);
+        } else if (query.kind === Kind.SEED) {
+          if (name.startsWith('.')) {
+            const subDomainSearch = '^(?:https?://)?.*' + escapeRegex(name) + '/?';
+            listRequest.setNameRegex(subDomainSearch);
+          } else {
+            const commonSearch = '^(?:https?://)?(?:w{3}\.)?' + escapeRegex(name) + '/?';
+            listRequest.setNameRegex(commonSearch);
+          }
         } else {
-          const commonSearch = '^(?:https?://)?(?:w{3}\.)?' + escapeRegex(name) + '/?';
-          listRequest.setNameRegex(commonSearch);
+          listRequest.setNameRegex(escapeRegex(name))
         }
       }
     }
