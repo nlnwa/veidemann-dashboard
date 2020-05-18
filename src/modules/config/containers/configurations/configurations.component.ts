@@ -65,8 +65,6 @@ export class ConfigurationsComponent implements OnDestroy {
 
   private selectedConfigs: ConfigObject[] = [];
 
-  private disabledConfigs: ConfigObject[] = [];
-
   private isAllSelected = false;
 
   private ngUnsubscribe = new Subject();
