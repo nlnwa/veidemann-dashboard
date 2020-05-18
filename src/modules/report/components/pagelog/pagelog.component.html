@@ -23,6 +23,8 @@
   </mat-form-field>
 </form>
 
+<mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+
 <div fxLayout="column" fxLayoutGap="16px">
   <app-pagelog-list fxFlex
                     #list

@@ -213,6 +213,9 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+  get loading$(): Observable<boolean> {
+    return this.pageLogService.loading$;
+  }
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {

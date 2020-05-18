@@ -13,6 +13,9 @@
            i18n-placeholder="@@reportCrawlLogQueryExecutiondInputPlaceholder">
   </mat-form-field>
 </form>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+
 <div fxLayout="column" fxLayoutGap="16px">
   <app-crawl-log-list fxFlex
                       #list
