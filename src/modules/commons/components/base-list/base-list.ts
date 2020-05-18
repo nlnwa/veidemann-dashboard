@@ -169,18 +169,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   isDisabled(item: T): boolean {
     // @ts-ignore
-    if(item.seed !== undefined) {
-      // @ts-ignore
-      if (item.seed.disabled) {
-        return true;
-      }
-    }
-    // @ts-ignore
-    if(item.crawlJob !== undefined) {
-      // @ts-ignore
-      if (item.crawlJob.disabled) {
-        return true;
-      }
+    if (item?.crawlJob?.disabled || item?.seed?.disabled) {
+      return true;
     }
     return false;
   }
