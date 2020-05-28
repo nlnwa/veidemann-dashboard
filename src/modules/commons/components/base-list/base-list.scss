@@ -12,6 +12,10 @@ table {
   background-color: $dark-focused;
 }
 
+.row-disabled .mat-cell {
+  color: $warn;
+}
+
 .mat-row.row-selected:hover {
   background-color: $dark-focused;
   cursor: pointer;

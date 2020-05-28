@@ -127,6 +127,7 @@ export class ConfigurationsComponent implements OnDestroy {
         collectionId: queryParamMap.get('collection_id'),
         browserConfigId: queryParamMap.get('browser_config_id'),
         politenessId: queryParamMap.get('politeness_id'),
+        disabled: queryParamMap.get('disabled'),
         crawlJobIds: queryParamMap.getAll('crawl_job_id'),
         scriptIds: queryParamMap.getAll('script_id'),
         scriptSelectors: queryParamMap.getAll('script_selector'),
@@ -175,6 +176,10 @@ export class ConfigurationsComponent implements OnDestroy {
       map(({politenessId}) => politenessId),
       distinctUntilChanged());
 
+    const disabled$ = routeParam$.pipe(
+      map(({disabled}) => disabled),
+      distinctUntilChanged());
+
     const crawlJobIdList$ = routeParam$.pipe(
       map(({crawlJobIds}) => crawlJobIds),
       distinctUntilArrayChanged);
@@ -216,15 +221,15 @@ export class ConfigurationsComponent implements OnDestroy {
     const query$: Observable<ConfigQuery> = combineLatest([
       kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
       entityId$, scheduleId$, crawlConfigId$, collectionId$,
-      browserConfigId$, politenessId$, crawlJobIdList$, scriptIdList$,
+      browserConfigId$, politenessId$, disabled$, crawlJobIdList$, scriptIdList$,
       q$, sort$, pageIndex$, pageSize$, reload$
     ]).pipe(
       debounceTime<any>(0), // synchronize observables
       map(([kind, entityId, scheduleId, crawlConfigId, collectionId,
-             browserConfigId, politenessId, crawlJobIdList, scriptIdList,
+             browserConfigId, politenessId, disabled, crawlJobIdList, scriptIdList,
              term, sort, pageIndex, pageSize]) => ({
         kind, entityId, scheduleId, crawlConfigId, collectionId,
-        browserConfigId, politenessId, crawlJobIdList, scriptIdList, term,
+        browserConfigId, politenessId, disabled, crawlJobIdList, scriptIdList, term,
         sort, pageIndex, pageSize
       })),
       shareReplay(1),
@@ -249,6 +254,7 @@ export class ConfigurationsComponent implements OnDestroy {
           && a.collectionId === b.collectionId
           && a.browserConfigId === b.browserConfigId
           && a.politenessId === b.politenessId
+          && a.disabled === b.disabled
           && (a.crawlJobIdList.length === b.crawlJobIdList.length
               ? a.crawlJobIdList.every(p => b.crawlJobIdList.some(q => p === q))
               : false
@@ -369,6 +375,7 @@ export class ConfigurationsComponent implements OnDestroy {
       collection_id: value.collectionId || null,
       browser_config_id: value.browserConfigId || null,
       politeness_id: value.politenessId || null,
+      disabled: value.disabled || null,
       crawl_job_id: value.crawlJobIdList.length ? value.crawlJobIdList : null,
       script_id: value.scriptIdList.length ? value.scriptIdList : null,
       q: value.term || null
