@@ -32,8 +32,20 @@ Ikon                                                                            
 ----------------------------------
 
 For å redusere utvalget i listen over tilgjengelige seeds, kan man benytte seg av søk og filtrering.
-Søk og sortering fungerer likt som i andre konfigurasjoner, som beskrevet [her](../#config-search-filter-sort)  
-I tillegg kan listen filtreres til å:
+Søk og sortering fungerer likt som i andre konfigurasjoner, som beskrevet [her.](../#config-search-filter-sort)  
+I tillegg har man noen flere muligheter når det kommer til å søke på navn (URL) for seeds:
+
+#### {#veidemann-seed-search}
+- Domene  
+  Et søk etter nb.no vil gi et resultat på alle seeds som inneholder nb.no i URL. Her vil man da få de fleste varianter av nb.no, med og uten protokoll, www og path.  
+  ![seed_domain_query](/veidemann/docs/img/seed/veidemann_dashboard_seed_domain_query.png)
+- Subdomene  
+  Man kan inkludere treff på seeds med subdomener ved å starte søkeordet på navn med et punktum.
+  Eksempelvis vil et søk på .nb.no føre til resultatet vist i bildet under.
+  ![seed:subdomain_query](/veidemann/docs/img/seed/veidemann_dashboard_seed_subdomain_query.png)
+  
+
+Listen kan også filtreres til å:
 
 1. Kun vise seeds tilknyttet bestemte [høstejobber](../crawljob).  
 Når feltet for crawljob filteret blir trykket, hentes en liste over eksisterende høstejobber.

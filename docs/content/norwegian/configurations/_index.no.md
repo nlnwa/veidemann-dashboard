@@ -63,22 +63,54 @@ For alle konfigurasjoner finnnes det et felt for å søke etter en konfigurasjon
 Her kan man søke etter konfigurasjoner på:
  
  - Navn  
- Alle søkeord som ikke inneholder kolon *(" : ")*, regnes som et søk på navn.  
- Treff på konfigurasjoner som har et navn som stemmer med søkeordet vil da vises i listen.  
- Dersom man vil søke etter konfigurasjoner som har kolon i navnet (eks. en seed med som *https://wwww*),
- kan man bruke prefikset *name:* for overstyre søket til å gjelde navn.  
- Man kan også søke etter konfigurasjoner med et bestemt navn ved hjelp av [regulære uttrykk](https://en.wikipedia.org/wiki/Regular_expression).
+ Som standard vil et søk forsøke å finne konfigurasjoner som har et navn som stemmer med søkeordet.   
+ Treff på konfigurasjoner med dette navnet vil da vises i listen.
+ Søk etter navn kan gjøres på to måter:
+ 1. Fritekst:
+ Et søkeord som f.eks. *Nasjonalbiblioteket* vil lete etter en konfigurasjon som inneholder Nasjonalbiblioteket i navnet.  
+ Det er i tillegg mulig å søke etter konfigurasjoner som matcher eksakt ved å sette anførselstegn rundt søkeordet.  
+ For seeds finnes det noen flere muligheter for fritekstsøk, som beskrevet [her.](seed/#veidemann-seed-search)  
+ 
+ ![config_query](/veidemann/docs/img/config/veidemann_dashboard_config_query.png)   ![config_query_exact](/veidemann/docs/img/config/veidemann_dashboard_config_query_exact.png)
+ 
+ 1. Regulært uttrykk:  
+ Man kan også søke etter konfigurasjoner med et bestemt navn ved hjelp av et [regulært uttrykk](https://en.wikipedia.org/wiki/Regular_expression), ved å bruke prefikset *regex:* etterfulgt av uttrykket.
+ 
+ {{% notice note %}}
+ Om man vil søke etter konfigurasjon med navn ved hjelp av et regulært uttrykk, må  utrykket ha prefikset *regex:*
+ Eksempel: regex:^nb.no$
+ {{% /notice %}}
     
  - Label  
- Søk etter konfigurasjoner som inneholder en bestemt label gjøres med et søk etter [nøkkel:verdi](#meta-label).  
+ Søk etter konfigurasjoner som inneholder en bestemt label gjøres med et søk etter *label:*[nøkkel:verdi](#meta-label).  
  Her er det mulig å søke etter en eksakt label, hvor både nøkkel og verdi er angitt. Men det er også mulig å søke
- etter konfigurasjoner som har en label som inneholder bare nøkkelen eller verdien, ved å la en av sidene av kolonet stå tomt.
- *("nøkkel:", ":verdi")* 
+ etter konfigurasjoner som har en label som matcher andre kriterier:
  
-Det er også mulig å søke etter kombinasjon av både navn og label.
+  ```
+     Eksempel:
+       "foo:bar"  - matcher nøyaktig label med nøkkel=foo og verdi=bar
+       "foo:"     - matcher alle labels med nøkkel=foo
+       ":bar"     - matcher alle labels med verdi=bar
+       "bar"      - matcher alle labels med verdi=bar
+       "foo:ba*"  - matcher labels med nøkkel=foo og med verdi som starter med ba (eks. matcher bar, men ikke ber)
+       ":ba*"     - matcher labels med hvilken som helst nøkkel og med verdi som starter med ba (eks. matcher bar, men ikke ber)
+       "ba*"      - matcher labels med hvilken som helst nøkkel og med verdi som starter med ba (eks. matcher bar, men ikke ber)
+       ":"        - matcher alle labels
+       ""         - matcher alle labels
+  ```
+ 
+ 
+ - Kombinasjon  
+ Det er også mulig å søke etter kombinasjon av både navn(tekst eller regulært uttrykk) og label.
+{{% notice note %}}
+For å søke etter label, må søket inneholde prefikset *label:*, før labelen man ønsker å søke etter.
+ I tilfeller hvor man vil søke både på navn (tekst eller regex) og label, må label komme til slutt i søkestrengen.
+{{% /notice %}}
 
-![config search](/veidemann/docs/img/config/veidemann_dashboard_config_search.png)
-
+![config_query_combined_text_label](/veidemann/docs/img/config/veidemann_dashboard_config_query_combined_text_and_label.png)
+![config_query_combined_regex_label](/veidemann/docs/img/config/veidemann_dashboard_config_query_combined_regex_and_label.png)
+  
+  
 ##### Filtrering
 Ved å sette et filter reduseres utvalget i listen til å kun vise konfigurasjoner som stemmer med filteret.
 Hvilke filter som kan benyttes avhenger av typen konfigurasjon. en beskrivelse av tilgjengelige filter blir 
