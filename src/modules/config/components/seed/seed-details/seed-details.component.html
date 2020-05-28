@@ -41,8 +41,14 @@
           <mat-form-field formGroupName="entityRef">
             <input matInput formControlName="id"
                    placeholder="Entity Id"
-                   readonly
+                   [readonly]="entityIdReadonly"
                    i18n-placeholder="@@metaEntityIdInputPlaceholder">
+            <button mat-icon-button matSuffix
+                    matTooltip="Move seed to another entity"
+                    i18n-matTooltip="seedDetailsEditEntityIdButtonTooltip"
+                    (click)="onEditEntityId()">
+              <mat-icon>swap_horiz</mat-icon>
+            </button>
             <mat-error>
               Reference to entity is required
             </mat-error>
@@ -68,7 +74,8 @@
           <mat-list *ngIf="configObject?.id">
             <mat-list-item *ngFor="let id of jobRefListId.value">
               <mat-icon matTooltip="CrawlJob"
-                        i18n-matTooltip="@@seedDetailsCrawljobShortcutTooltip">work</mat-icon>
+                        i18n-matTooltip="@@seedDetailsCrawljobShortcutTooltip">work
+              </mat-icon>
               <a class="shortcut-link"
                  [routerLink]="['/config/crawljobs']"
                  [queryParams]="{id: id}">{{ getCrawlJobName(id) }}</a>

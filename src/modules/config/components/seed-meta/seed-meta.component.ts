@@ -53,6 +53,19 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     this.asyncUrlValidator = SeedUrlValidator.createBackendValidator(this.configService);
   }
 
+  get isSingleUrl(): boolean {
+    const url = this.name.value;
+    const parts = url.split(/[\s]+/);
+    if (parts.length > 1) {
+      for (let i=1; i<parts.length; i++) {
+        if (parts[i]!=='') {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   protected createForm(): void {
     super.createForm();
   }
@@ -105,6 +118,10 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   onMoveSeedsToCurrentEntity(seeds: ConfigObject[]) {
     this.onRemoveExistingUrls(seeds);
     this.move.emit({seed: seeds, entityRef: this.entityRef});
+  }
+
+  goToUrl(url: string): void {
+    window.open(url, '_blank');
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
