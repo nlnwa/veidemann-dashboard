@@ -34,6 +34,33 @@ export interface ConfigQuery {
   pageIndex: number;
 }
 
+// this is a direct translation to code of the spec
+// @see https://github.com/benjamingr/RegExp.escape
+function escapeRegex(S) {
+  // 1. let str be ToString(S).
+  // 2. ReturnIfAbrupt(str).
+  const str = String(S);
+  // 3. Let cpList be a List containing in order the code
+  // points as defined in 6.1.4 of str, starting at the first element of str.
+  const cpList = Array.from(str[Symbol.iterator]());
+  // 4. let cuList be a new List
+  const cuList = [];
+  // 5. For each code point c in cpList in List order, do:
+  for (const c of cpList) {
+    // i. If c is a SyntaxCharacter then do:
+    if ('^$\\.*+?()[]{}|'.indexOf(c) !== -1) {
+      // a. Append "\" to cuList.
+      cuList.push('\\');
+    }
+    // Append c to cpList.
+    cuList.push(c);
+  }
+  // 6. Let L be a String whose elements are, in order, the elements of cuList.
+  const L = cuList.join('');
+  // 7. Return L.
+  return L;
+}
+
 @Injectable()
 export class ConfigService extends QueryService {
 
@@ -245,30 +272,34 @@ export class ConfigService extends QueryService {
     }
 
     if (query.term !== null && query.kind !== Kind.ROLEMAPPING) {
-      const tokens = query.term.split(/\s+/);
+      const parts = query.term.split('label:');
 
-      // Search defaults to match on meta.name but can be modified with search prefixes:
-      //
-      // "label:" label query see https://github.com/nlnwa/veidemann-api/blob/master/protobuf/config/v1/config.proto for further syntax
-      // "name:"  name query (match on meta.name)
-      //
-      // E.g.:
-      // label:a:b  - search for label "a:b"
-      // a:b        - search for label "a:b" because it contains :
-      // name:hello:babe - search for name "hello:babe"
-      tokens.forEach(token => {
-        if (token.startsWith('label:')) {
-          const labelSelector = token.substring(token.indexOf(':') + 1);
-          listRequest.setLabelSelectorList([labelSelector]);
-        } else if (token.startsWith('name:')) {
-          const name = token.substring(token.indexOf(':') + 1);
-          listRequest.setNameRegex(name);
-        } else if (token.includes(':')) {
-          listRequest.setLabelSelectorList([token]);
+      const label = (parts[1] || '').trim();
+      const name = parts[0].trim();
+
+      if (label) {
+        listRequest.setLabelSelectorList([label]);
+      }
+
+      if (name) {
+        if (name.startsWith('regex:')) {
+          const regex = name.substring(name.indexOf(':') + 1)
+          listRequest.setNameRegex(regex);
+        } else if (name.startsWith('"') && name.endsWith('"')) {
+          const exact = '^' + escapeRegex(name.substring(1, name.length - 1)) + '$';
+          listRequest.setNameRegex(exact);
+        } else if (query.kind === Kind.SEED) {
+          if (name.startsWith('.')) {
+            const subDomainSearch = '^(?:https?://)?.*' + escapeRegex(name) + '/?';
+            listRequest.setNameRegex(subDomainSearch);
+          } else {
+            const commonSearch = '^(?:https?://)?(?:w{3}\.)?' + escapeRegex(name) + '/?';
+            listRequest.setNameRegex(commonSearch);
+          }
         } else {
-          listRequest.setNameRegex(token);
+          listRequest.setNameRegex(escapeRegex(name))
         }
-      });
+      }
     }
     return listRequest;
   }

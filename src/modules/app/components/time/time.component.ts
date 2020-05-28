@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {interval, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 
 @Component({
@@ -8,17 +9,12 @@ import {Subject} from 'rxjs';
   styleUrls: ['./time.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimeComponent implements OnInit, OnDestroy {
-  time$: Subject<Date> = new Subject();
-  interval: number;
+export class TimeComponent {
+  time$: Observable<Date>;
 
-  ngOnInit() {
-    this.interval = setInterval(() => {
-      this.time$.next(new Date());
-    }, 1000);
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.interval);
+  constructor() {
+    this.time$ = interval(1000).pipe(
+      map(() => new Date())
+    );
   }
 }
