@@ -229,6 +229,10 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  get loading$(): Observable<boolean> {
+    return this.jobExecutionService.loading$;
+  }
+
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
       this.router.navigate([], {

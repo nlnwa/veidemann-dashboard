@@ -164,7 +164,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
       map(([_, pageSize, pageIndex]) =>
         // we don't know real count of search so if length of data modulus pageSize is zero
         // we must add 1 to allow paginator to go to next page
-        this.dataSource.length % pageSize === 0 ? ((pageIndex + 1)  * pageSize) + 1 : this.dataSource.length));
+        this.dataSource.length % pageSize === 0 ? ((pageIndex + 1) * pageSize) + 1 : this.dataSource.length));
 
     this.pageSize$ = pageSize$;
 
@@ -247,6 +247,10 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  get loading$(): Observable<boolean> {
+    return this.crawlExecutionService.loading$;
   }
 
 

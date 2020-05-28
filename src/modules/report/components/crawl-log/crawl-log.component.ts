@@ -202,6 +202,9 @@ export class CrawlLogComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ngUnsubscribe.complete();
   }
 
+  get loading$(): Observable<boolean> {
+    return this.crawlLogService.loading$;
+  }
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
