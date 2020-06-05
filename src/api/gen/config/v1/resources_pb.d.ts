@@ -566,6 +566,9 @@ export class BrowserScript extends jspb.Message {
   clearUrlRegexpList(): void;
   addUrlRegexp(value: string, index?: number): void;
 
+  getBrowserScriptType(): BrowserScript.BrowserScriptType;
+  setBrowserScriptType(value: BrowserScript.BrowserScriptType): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BrowserScript.AsObject;
   static toObject(includeInstance: boolean, msg: BrowserScript): BrowserScript.AsObject;
@@ -578,6 +581,14 @@ export namespace BrowserScript {
   export type AsObject = {
     script: string,
     urlRegexpList: Array<string>,
+    browserScriptType: BrowserScript.BrowserScriptType,
+  }
+
+  export enum BrowserScriptType { 
+    EXTRACT_OUTLINKS = 0,
+    REPLACEMENT = 1,
+    ON_LOAD = 2,
+    ON_NEW_DOCUMENT = 3,
   }
 }
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes} from '../../../shared/models';
+import {Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes, browserScriptTypes} from '../../../shared/models';
 import {map, toArray} from 'rxjs/operators';
 import {ConfigApiService} from '../../core/services';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -67,6 +67,9 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
           toArray(),
           map(crawlJobs => ({crawlJobs}))
         );
+
+      case Kind.BROWSERSCRIPT:
+        return {browserScriptTypes};
 
       default:
         return of({});
