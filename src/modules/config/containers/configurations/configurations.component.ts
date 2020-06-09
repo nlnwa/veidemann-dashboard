@@ -18,7 +18,17 @@ import {
 } from 'rxjs/operators';
 
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
-import {ConfigObject, ConfigRef, Kind, RobotsPolicy, Role, RotationPolicy, Seed, SubCollectionType} from '../../../../shared/models';
+import {
+  BrowserScriptType,
+  ConfigObject,
+  ConfigRef,
+  Kind,
+  RobotsPolicy,
+  Role,
+  RotationPolicy,
+  Seed,
+  SubCollectionType
+} from '../../../../shared/models';
 import {ConfigListComponent, DeleteDialogComponent, DeleteMultiDialogComponent, Parcel} from '../../components';
 import {ReferrerError} from '../../../../shared';
 import {ConfigService, LabelService} from '../../services';
@@ -39,6 +49,7 @@ export interface ConfigOptions {
   collections?: ConfigObject[];
   politenessConfigs?: ConfigObject[];
   browserScripts?: ConfigObject[];
+  browserScriptTypes?: BrowserScriptType[];
   robotsPolicies?: RobotsPolicy[];
   crawlJobs?: ConfigObject[];
   roles?: Role[];

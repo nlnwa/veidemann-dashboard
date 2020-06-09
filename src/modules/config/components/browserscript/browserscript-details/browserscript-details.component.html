@@ -22,6 +22,13 @@
         </mat-form-field>
       </div>
       <div fxLayout="column" fxFlex>
+        <mat-form-field>
+          <mat-select placeholder="Choose type"
+                      formControlName="browserScriptType"
+                      i18n-placeholder="@@browserScriptFormBrowserScriptTypeDropdownPlaceholder">
+            <mat-option *ngFor="let type of browserScriptTypes" [value]="type">{{BrowserScriptType[type]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <fieldset style="border: 0px;">
           <legend>{{name}}</legend>
 

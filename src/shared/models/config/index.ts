@@ -1,5 +1,5 @@
 export {BrowserConfig} from './browserconfig.model';
-export {BrowserScript} from './browserscript.model';
+export {BrowserScript, BrowserScriptType, browserScriptTypes} from './browserscript.model';
 export {CrawlConfig} from './crawlconfig.model';
 export {CrawlEntity} from './crawlentity.model';
 export {CrawlHostGroupConfig} from './crawlhostgroupconfig.model';

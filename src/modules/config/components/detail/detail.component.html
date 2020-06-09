@@ -58,6 +58,7 @@
 
   <app-browserscript-details *ngSwitchCase="Kind.BROWSERSCRIPT"
                              [configObject]="configObject"
+                             [browserScriptTypes]="options.browserScriptTypes"
                              (update)="onUpdateConfig($event)"
                              (save)="onSaveConfig($event)"
                              (delete)="onDeleteConfig($event)">

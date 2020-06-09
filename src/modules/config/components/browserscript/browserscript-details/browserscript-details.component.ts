@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {BrowserScript, ConfigObject, Kind, Meta} from '../../../../../shared/models';
+import {BrowserScript, BrowserScriptType, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 
@@ -11,6 +11,10 @@ import {MatChipInputEvent} from '@angular/material/chips';
   templateUrl: './browserscript-details.component.html',
 })
 export class BrowserScriptDetailsComponent implements OnChanges {
+  readonly BrowserScriptType = BrowserScriptType;
+
+  @Input()
+  browserScriptTypes: BrowserScriptType[]=[];
 
   @Input()
   configObject: ConfigObject;
@@ -144,6 +148,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
       id: '',
       urlRegexpList: [],
       script: '',
+      browserScriptType: '',
       meta: new Meta(),
     });
     this.regexpForm = this.fb.group({
@@ -156,6 +161,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.form.setValue({
       id: this.configObject.id,
       script: this.configObject.browserScript.script,
+      browserScriptType: this.configObject.browserScript.browserScriptType,
       meta: this.configObject.meta,
       urlRegexpList: this.configObject.browserScript.urlRegexpList.map(_ => _)
     });
@@ -175,6 +181,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     const browserScript = new BrowserScript();
     browserScript.script = formModel.script;
     browserScript.urlRegexpList = formModel.urlRegexpList;
+    browserScript.browserScriptType = formModel.browserScriptType;
 
     configObject.meta = formModel.meta;
     configObject.browserScript = browserScript;

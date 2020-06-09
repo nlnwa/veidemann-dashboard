@@ -17,6 +17,7 @@ goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol('proto.veidemann.api.config.v1.ApiKey', null, global);
 goog.exportSymbol('proto.veidemann.api.config.v1.BrowserConfig', null, global);
 goog.exportSymbol('proto.veidemann.api.config.v1.BrowserScript', null, global);
+goog.exportSymbol('proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType', null, global);
 goog.exportSymbol('proto.veidemann.api.config.v1.Collection', null, global);
 goog.exportSymbol('proto.veidemann.api.config.v1.Collection.RotationPolicy', null, global);
 goog.exportSymbol('proto.veidemann.api.config.v1.Collection.SubCollection', null, global);
@@ -4723,7 +4724,8 @@ proto.veidemann.api.config.v1.BrowserScript.prototype.toObject = function(opt_in
 proto.veidemann.api.config.v1.BrowserScript.toObject = function(includeInstance, msg) {
   var f, obj = {
     script: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    urlRegexpList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f
+    urlRegexpList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+    browserScriptType: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -4768,6 +4770,10 @@ proto.veidemann.api.config.v1.BrowserScript.deserializeBinaryFromReader = functi
       var value = /** @type {string} */ (reader.readString());
       msg.addUrlRegexp(value);
       break;
+    case 5:
+      var value = /** @type {!proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType} */ (reader.readEnum());
+      msg.setBrowserScriptType(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -4811,8 +4817,26 @@ proto.veidemann.api.config.v1.BrowserScript.serializeBinaryToWriter = function(m
       f
     );
   }
+  f = message.getBrowserScriptType();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      5,
+      f
+    );
+  }
 };
 
+
+/**
+ * @enum {number}
+ */
+proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType = {
+  UNDEFINED: 0,
+  EXTRACT_OUTLINKS: 1,
+  REPLACEMENT: 2,
+  ON_LOAD: 3,
+  ON_NEW_DOCUMENT: 4
+};
 
 /**
  * optional string script = 3;
@@ -4866,6 +4890,24 @@ proto.veidemann.api.config.v1.BrowserScript.prototype.addUrlRegexp = function(va
  */
 proto.veidemann.api.config.v1.BrowserScript.prototype.clearUrlRegexpList = function() {
   return this.setUrlRegexpList([]);
+};
+
+
+/**
+ * optional BrowserScriptType browser_script_type = 5;
+ * @return {!proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType}
+ */
+proto.veidemann.api.config.v1.BrowserScript.prototype.getBrowserScriptType = function() {
+  return /** @type {!proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {!proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType} value
+ * @return {!proto.veidemann.api.config.v1.BrowserScript} returns this
+ */
+proto.veidemann.api.config.v1.BrowserScript.prototype.setBrowserScriptType = function(value) {
+  return jspb.Message.setProto3EnumField(this, 5, value);
 };
 
 
