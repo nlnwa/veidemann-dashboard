@@ -4831,10 +4831,11 @@ proto.veidemann.api.config.v1.BrowserScript.serializeBinaryToWriter = function(m
  * @enum {number}
  */
 proto.veidemann.api.config.v1.BrowserScript.BrowserScriptType = {
-  EXTRACT_OUTLINKS: 0,
-  REPLACEMENT: 1,
-  ON_LOAD: 2,
-  ON_NEW_DOCUMENT: 3
+  UNDEFINED: 0,
+  EXTRACT_OUTLINKS: 1,
+  REPLACEMENT: 2,
+  ON_LOAD: 3,
+  ON_NEW_DOCUMENT: 4
 };
 
 /**

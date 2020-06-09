@@ -3,10 +3,11 @@ import {ConfigObject} from './configobject.model';
 import {isNumeric} from '../../func';
 
 export enum BrowserScriptType {
-  EXTRACT_OUTLINKS = 0,
-  REPLACEMENT = 1,
-  ON_LOAD = 2,
-  ON_NEW_DOCUMENT = 3
+  UNDEFINED= 0,
+  EXTRACT_OUTLINKS = 1,
+  REPLACEMENT = 2,
+  ON_LOAD = 3,
+  ON_NEW_DOCUMENT = 4
 }
 
 export const browserScriptTypes = Object.keys(BrowserScriptType).filter(p => !isNumeric(p)).map(key => BrowserScriptType[key]);
@@ -19,7 +20,7 @@ export class BrowserScript {
   constructor({
                 script = '',
                 urlRegexpList = [],
-                browserScriptType = BrowserScriptType.EXTRACT_OUTLINKS,
+                browserScriptType = BrowserScriptType.UNDEFINED,
               }: Partial<BrowserScript> = {}) {
     this.script = script;
     this.urlRegexpList = urlRegexpList ? [...urlRegexpList] : [];
