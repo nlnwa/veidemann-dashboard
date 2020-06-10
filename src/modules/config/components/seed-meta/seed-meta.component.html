@@ -96,6 +96,7 @@
   </mat-form-field>
 
   <app-labels [removable]="editable" formControlName="labelList"></app-labels>
+  <app-annotation [removable]="editable" formControlName="annotationList"></app-annotation>
 
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
     <mat-form-field fxFlex *ngIf="created.value">

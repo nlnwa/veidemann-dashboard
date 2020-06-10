@@ -39,7 +39,8 @@ import {
   SeedDetailMultiComponent,
   SeedMetaComponent,
   SelectorComponent,
-  DurationPickerComponent
+  DurationPickerComponent,
+  AnnotationComponent
 } from './components';
 import {JobStatusComponent} from './components/job-execution-status/job-status.component';
 import {JobExecutionStatePipe} from './pipe/job-execution-state.pipe';
@@ -103,6 +104,7 @@ import {FilesizeInputComponent} from './components/filesize-input/filesize-input
     BrowserConfigNamePipe,
     PolitenessConfigNamePipe,
     FilesizeInputComponent,
+    AnnotationComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
