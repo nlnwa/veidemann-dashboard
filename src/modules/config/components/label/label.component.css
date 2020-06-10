@@ -6,6 +6,11 @@
   width: 100%;
 }
 
+/* Increase with of labels NNA-2073 */
+.mat-chip-input {
+  width: 250px;
+}
+
 .label-form {
   margin-bottom: 1rem;
 }
