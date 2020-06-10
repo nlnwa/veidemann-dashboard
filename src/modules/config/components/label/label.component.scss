@@ -9,3 +9,9 @@
 .label-form {
   margin-bottom: 1rem;
 }
+
+::ng-deep {
+  .mat-chip-list-wrapper {
+    width: 100%;
+  }
+}
