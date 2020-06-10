@@ -145,6 +145,11 @@ export class Meta extends jspb.Message {
   clearLabelList(): void;
   addLabel(value?: Label, index?: number): Label;
 
+  getAnnotationList(): Array<Annotation>;
+  setAnnotationList(value: Array<Annotation>): void;
+  clearAnnotationList(): void;
+  addAnnotation(value?: Annotation, index?: number): Annotation;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Meta.AsObject;
   static toObject(includeInstance: boolean, msg: Meta): Meta.AsObject;
@@ -162,6 +167,7 @@ export namespace Meta {
     lastModified?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     lastModifiedBy: string,
     labelList: Array<Label.AsObject>,
+    annotationList: Array<Annotation.AsObject>,
   }
 }
 
@@ -181,6 +187,28 @@ export class Label extends jspb.Message {
 }
 
 export namespace Label {
+  export type AsObject = {
+    key: string,
+    value: string,
+  }
+}
+
+export class Annotation extends jspb.Message {
+  getKey(): string;
+  setKey(value: string): void;
+
+  getValue(): string;
+  setValue(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Annotation.AsObject;
+  static toObject(includeInstance: boolean, msg: Annotation): Annotation.AsObject;
+  static serializeBinaryToWriter(message: Annotation, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Annotation;
+  static deserializeBinaryFromReader(message: Annotation, reader: jspb.BinaryReader): Annotation;
+}
+
+export namespace Annotation {
   export type AsObject = {
     key: string,
     value: string,

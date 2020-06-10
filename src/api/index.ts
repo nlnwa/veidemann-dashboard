@@ -24,6 +24,7 @@ export {
   RoleMapping as RoleMappingProto,
   Seed as SeedProto,
   LogLevels as LogLevelsProto,
+  Annotation,
 } from './gen/config/v1/resources_pb';
 
 export {
