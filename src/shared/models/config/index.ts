@@ -17,3 +17,4 @@ export {SubCollection, SubCollectionType, subCollectionTypes} from './subcollect
 export {ConfigObject} from './configobject.model';
 export {ConfigRef} from './configref.model';
 export {Kind} from './kind.model';
+export {Annotation} from './annotation.model';

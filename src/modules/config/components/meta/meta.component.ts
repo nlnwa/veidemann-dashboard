@@ -131,6 +131,7 @@ export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlV
       lastModified: {value: meta.lastModified, disabled: true},
       lastModifiedBy: {value: meta.lastModifiedBy, disabled: true},
       labelList: meta.labelList,
+      annotationList: meta.annotationList
     });
   }
 
@@ -144,6 +145,7 @@ export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlV
       lastModified: this.dateFormat(meta.lastModified),
       lastModifiedBy: meta.lastModifiedBy || '',
       labelList: meta.labelList || [],
+      annotationList: meta.annotationList || [],
     }, {emitEvent: false});
     this.form.markAsPristine();
     this.form.markAsUntouched();

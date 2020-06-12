@@ -24,3 +24,4 @@ export {SelectorComponent} from './selector/selector.component';
 export {Parcel, SeedMetaComponent} from './seed-meta/seed-meta.component';
 export {EntityViewComponent} from './entity/entity-view/entity-view.component';
 export {DurationPickerComponent} from './durationpicker/duration-picker';
+export {AnnotationComponent} from './annotation/annotation.component';
