@@ -17,6 +17,7 @@
       [configObject]="configObject"
       [crawlConfigs]="options.crawlConfigs"
       [crawlScheduleConfigs]="options.crawlScheduleConfigs"
+      (runCrawl)="onRunCrawl($event)"
       (update)="onUpdateConfig($event)"
       (save)="onSaveConfig($event)"
       (delete)="onDeleteConfig($event)">
@@ -73,8 +74,9 @@
 
   <ng-container *ngSwitchCase="Kind.SEED">
     <div class="list-container__margin">
-      <app-config-crawl-execution-status *ngIf="(configObject | getCrawlExecutionStatus | async) as crawlExecutionStatus"
-                                         [crawlExecutionStatus]="crawlExecutionStatus"></app-config-crawl-execution-status>
+      <app-config-crawl-execution-status
+        *ngIf="(configObject | getCrawlExecutionStatus | async) as crawlExecutionStatus"
+        [crawlExecutionStatus]="crawlExecutionStatus"></app-config-crawl-execution-status>
     </div>
     <app-seed-details
       [configObject]="configObject"
@@ -83,7 +85,8 @@
       (save)="onSaveConfig($event)"
       (delete)="onDeleteConfig($event)"
       (move)="onMoveSeed($event)"
-      (saveMultiple)="onSaveMultipleSeeds($event)">
+      (saveMultiple)="onSaveMultipleSeeds($event)"
+      (runCrawl)="onRunCrawl($event)">
     </app-seed-details>
   </ng-container>
 

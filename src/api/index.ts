@@ -73,10 +73,10 @@ export {
 export {
   OpenIdConnectIssuerReply,
   RoleList,
-  RunCrawlReply,
+  RunCrawlReply as RunCrawlReplyProto,
   RunStatus,
   CrawlerStatus,
-  RunCrawlRequest,
+  RunCrawlRequest as RunCrawlRequestProto,
 } from './gen/controller/v1/controller_pb';
 
 export {

@@ -33,12 +33,16 @@ export class DetailComponent {
   @Output()
   saveMultipleSeeds: EventEmitter<ConfigObject[]>;
 
+  @Output()
+  runCrawl: EventEmitter<ConfigObject>;
+
   constructor() {
     this.save = new EventEmitter();
     this.update = new EventEmitter();
     this.delete = new EventEmitter();
     this.move = new EventEmitter<Parcel>();
     this.saveMultipleSeeds = new EventEmitter();
+    this.runCrawl = new EventEmitter();
   }
 
   onSaveConfig(configObject: ConfigObject) {
@@ -59,5 +63,9 @@ export class DetailComponent {
 
   onSaveMultipleSeeds(event) {
     this.saveMultipleSeeds.emit(event);
+  }
+
+  onRunCrawl(event) {
+    this.runCrawl.emit(event);
   }
 }

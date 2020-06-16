@@ -1,0 +1,48 @@
+<h1 mat-dialog-title i18n="@@runningCrawlDialogTitle">Crawl running</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="configObject.kind === Kind.CRAWLJOB">
+    <h4 i18n="@@runningCrawlDialogCrawlJobSummaryText">
+      Started crawljob: <strong>{{configObject.meta.name}}</strong>
+    </h4>
+    <mat-divider></mat-divider>
+    <p>Show job execution report
+      <a mat-icon-button
+         target="_blank"
+         [routerLink]="['/report/jobexecution']"
+         [queryParams]="{id: runCrawlReply.jobExecutionId}">
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </p>
+  </ng-container>
+  <ng-container *ngIf="configObject.kind === Kind.SEED">
+    <h4 i18n="@@runningCrawlDialogCrawlSeedSummaryText">
+      Started crawling seed: <strong>{{configObject.meta.name}}</strong>
+    </h4>
+    <mat-divider></mat-divider>
+    <p>Show job execution report
+      <a mat-icon-button
+         target="_blank"
+         [routerLink]="['/report/jobexecution']"
+         [queryParams]="{id: runCrawlReply.jobExecutionId}">
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </p>
+    <p>Show crawl execution reports for seed
+      <a mat-icon-button
+         target="_blank"
+         [routerLink]="['/report/crawlexecution']"
+         [queryParams]="{seed_id: configObject.id, job_id: runCrawlRequest.jobId}">
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+
+    </p>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="warn"
+          i18n="@@commonButtonRun"
+          [mat-dialog-close]="true">CLOSE
+  </button>
+</div>

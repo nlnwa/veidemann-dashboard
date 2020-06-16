@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {from, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {from, Observable, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 
@@ -9,6 +9,8 @@ import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {RunStatus} from '../../../../shared/models/controller';
 import {Role} from '../../../../shared/models/config';
+import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
+import {ApplicationErrorHandler} from '../error.handler';
 
 
 @Injectable()
@@ -17,7 +19,8 @@ export class ControllerApiService {
   private controllerPromiseClient: ControllerPromiseClient;
 
   constructor(private authService: AuthService,
-              private appConfig: AppConfigService) {
+              private appConfig: AppConfigService,
+              private errorHandler: ApplicationErrorHandler) {
     this.controllerPromiseClient = new ControllerPromiseClient(appConfig.grpcWebUrl, null, null);
   }
 
@@ -42,5 +45,16 @@ export class ControllerApiService {
 
   unpauseCrawler(): void {
     this.controllerPromiseClient.unPauseCrawler(new Empty(), this.authService.metadata);
+  }
+
+  runCrawl(request: RunCrawlRequest): Observable<RunCrawlReply> {
+    return from(this.controllerPromiseClient.runCrawl(RunCrawlRequest.toProto(request), this.authService.metadata))
+      .pipe(
+        map(runCrawlReply => RunCrawlReply.fromProto(runCrawlReply)),
+        catchError(error => {
+          this.errorHandler.handleError(error);
+          return of(null);
+        })
+      )
   }
 }
