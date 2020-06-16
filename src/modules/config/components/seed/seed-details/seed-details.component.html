@@ -3,13 +3,7 @@
     <mat-card-header>
       <mat-icon mat-card-avatar>link</mat-icon>
       <mat-card-title>
-        <ng-container i18n="@@seedDetailsCardTitle">Seed
-        <button *ngIf="!showSave"  mat-icon-button
-                matTooltip="Start crawling seed" i18n-matTooltip="@@seedDetailsStartCrawlSeedButtonTooltip"
-                (click)="onRunCrawl()">
-          <mat-icon>play_arrow</mat-icon>
-        </button>
-        </ng-container>
+        <span i18n="@@seedDetailsCardTitle">Seed</span>
       </mat-card-title>
       <mat-card-subtitle *ngIf="!configObject.id">
         <span i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
@@ -111,11 +105,15 @@
               (click)="onRevert()"
               i18n="@@commonButtonRevert">REVERT
       </button>
-      <span fxFlex></span>
       <button mat-button
               *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">DELETE
+      </button>
+      <span fxFlex></span>
+      <button *ngIf="!showSave"  mat-button
+              matTooltip="Start crawling seed" i18n-matTooltip="@@seedDetailsStartCrawlSeedButtonTooltip"
+              (click)="onRunCrawl()">RUN CRAWL
       </button>
     </mat-card-actions>
   </mat-card>
