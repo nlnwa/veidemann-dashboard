@@ -40,7 +40,6 @@ import {Sort} from '../../../commons/services/query.service';
 import {ConfigQuery} from '../../../core/services/config.service';
 import {distinctUntilArrayChanged} from '../../../../shared/func/rxjs';
 import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';
-import {RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 import {RunningCrawlDialogComponent} from '../../components/running-crawl-dialog/running-crawl-dialog.component';
 
 export interface ConfigOptions {
@@ -443,7 +442,10 @@ export class ConfigurationsComponent implements OnDestroy {
 
   onFilterByEntityRef(configObject: ConfigObject) {
     this.reset();
-    this.router.navigate(['seed'], {queryParams: {entity_id: configObject.seed.entityRef.id}, relativeTo: this.route.parent});
+    this.router.navigate(['seed'], {
+      queryParams: {entity_id: configObject.seed.entityRef.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByScheduleRef(configObject: ConfigObject) {
@@ -451,19 +453,31 @@ export class ConfigurationsComponent implements OnDestroy {
   }
 
   onFilterByCrawlConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawljobs'], {queryParams: {crawl_config_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['crawljobs'], {
+      queryParams: {crawl_config_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByCollectionRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {queryParams: {collection_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['crawlconfig'], {
+      queryParams: {collection_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByBrowserConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {queryParams: {browser_config_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['crawlconfig'], {
+      queryParams: {browser_config_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByPolitenessConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {queryParams: {politeness_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['crawlconfig'], {
+      queryParams: {politeness_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByBrowserScriptRef(configObject: ConfigObject) {
@@ -641,13 +655,15 @@ export class ConfigurationsComponent implements OnDestroy {
     dialogRef.afterClosed()
       .subscribe(runCrawlRequest => {
         if (runCrawlRequest) {
-          this.controllerApiService.runCrawl(runCrawlRequest).subscribe(runCrawlReply => {
-            const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
-              disableClose: false,
-              autoFocus: true,
-              data: {runCrawlRequest, runCrawlReply, configObject}
+          this.controllerApiService.runCrawl(runCrawlRequest)
+            .pipe(filter(_ => !!_))
+            .subscribe(runCrawlReply => {
+              const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
+                disableClose: false,
+                autoFocus: true,
+                data: {runCrawlRequest, runCrawlReply, configObject}
+              })
             })
-          })
         }
       })
   }
