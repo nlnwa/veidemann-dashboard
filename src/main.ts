@@ -15,9 +15,16 @@ if (environment.production) {
 fetch(environment.configUrl)
   .then(async response => {
     const dynamicConfig = await response.json();
-    return Object.assign({}, environment, dynamicConfig) as AppConfig;
+    const appConfig: AppConfig = Object.assign({}, environment, dynamicConfig);
+    Object.entries(environment).forEach(([key, value]) => {
+      if (value !== null && typeof value === 'object') {
+        // merge values of type object properly (because Object.assign does not assign recursively)
+        appConfig[key] = Object.assign({}, environment[key], dynamicConfig[key]);
+      }
+    });
+    return appConfig;
   })
-  .then((appConfig: AppConfigService) =>
+  .then((appConfig: AppConfig) =>
     platformBrowserDynamic([{provide: AppConfigService, useValue: appConfig}])
       .bootstrapModule(AppModule)
       .catch(err => console.error(err))
