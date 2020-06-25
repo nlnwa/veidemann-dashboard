@@ -37,6 +37,7 @@ Ikon                                                                            
 ![show_crawlconfig](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawlconfig.png)        | Gå til crawlconfig som er brukt for konfigurasjonen
 ![show_seeds_with_crawljob](/veidemann/docs/img/icons/veidemann_dashboard_icon_list_seeds.png) | Vis seeds med samme crawljob som er brukt i konfigurasjonen
 ![clone_config](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)           | Lag en clone av crawljob 
+![run_crawljob](/veidemann/docs/img/icons/veidemann_dashboard_icon_run_crawl.png)              | Start crawljob
 
 ##### Søk, filtrering og sortering
 ----------------------------------
@@ -99,3 +100,9 @@ Den benytter seg av de samme feltene som [rapport-crawljob](../../report/crawljo
 men viser her bare data fra den siste registrerte statusen for den aktuelle jobben. 
 
 ![crawljob_execution](/veidemann/docs/img/crawljob/veidemann_dashboard_crawljob_jobexecution.png)
+
+#### Manuell start av crawljob
+---------------------------------------------
+I tilfeller hvor man har behov for å starte en jobb manuelt, kan dette gjøres enten via snarveien i listen over tilgjengelige jobber eller med knappen nede i høyre hjørne.   
+En dialog vil vises for å bekrefte at jobben skal startes, og deretter vil den starte å høste [seeds](../seed) som er tilknyttet denne jobben. 
+
