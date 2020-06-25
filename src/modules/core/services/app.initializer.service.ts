@@ -24,9 +24,8 @@ export class AppInitializerService {
       const issuer = await this.controllerService.getOpenIdConnectIssuer();
 
       if (issuer) {
-        this.appConfig.authConfig = new AuthConfig(Object.assign(this.appConfig.authConfig, {issuer}));
-
-        this.oAuthService.configure(this.appConfig.authConfig);
+        this.appConfig.authConfig.issuer = issuer;
+        this.oAuthService.configure(new AuthConfig(this.appConfig.authConfig));
         await this.oAuthService.loadDiscoveryDocumentAndTryLogin();
         if (!this.oAuthService.hasValidIdToken()) {
           this.oAuthService.logOut(true);
