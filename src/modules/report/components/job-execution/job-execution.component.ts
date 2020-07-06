@@ -126,7 +126,7 @@ export class JobExecutionComponent implements AfterViewInit, OnDestroy {
     );
 
     const pageSize$ = routeParam$.pipe(
-      map(({pageSize}) => parseInt(pageSize, 10) || 10),
+      map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
       shareReplay(1)
     );
