@@ -10,7 +10,6 @@ Grensesnittet er oppdelt i tre seksjoner:
 
 ![site structure](/veidemann/docs/img/sitestructure/veidemann_dashboard_overview.png)
 
-*nytt bilde for seksjoner*
 
 Seksjon                             | Funksjon
 ------------------------------------|----------------- 
@@ -23,13 +22,18 @@ Seksjon                             | Funksjon
 #### Verktøylinjen {#page-toolbar}
 ----------------------------------
 
-Ved å trykke på knappen til venstre i verktøylinjen kan man vise/skjule hovedmenyen.
+- Meny: Ved å trykke på knappen til venstre i verktøylinjen kan man vise/skjule hovedmenyen.
 
-Trykker man på teksten Veidemann, blir man tatt til startsiden.
+- Hjem: Trykker man på teksten Veidemann, blir man tatt til startsiden.
 
-Klokken i midten av linjen viser tiden i UTC, som er tiden høsteren opererer med.
+- Klokke: Klokken i midten av linjen viser tiden i UTC, som er tiden høsteren opererer med.
 
-Knappen helt til høyre brukes til å logge inn/ut en bruker.  
+- Crawler status: Status for crawler vises som tekst, og man har mulighet til å starte/pause crawler ved å trykke på knappen.  
+  En dialog vil vises for å bekrefte valget. 
+
+- Hjelp: Knappen åpner en meny med lenker til dokumentasjonen for Veidemann dashboard og en *Om oss_-side*.
+
+- Login: Knappen helt til høyre brukes til å logge inn/ut en bruker. 
 
   
   

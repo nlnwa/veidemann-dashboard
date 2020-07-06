@@ -27,6 +27,7 @@ Ikon                                                                            
 ![show_crawljob](/veidemann/docs/img/icons/veidemann_dashboard_icon_crawljob.png)                    | Vis høstejobben som brukes for å høste denne seeden
 ![filter_seeds_with_entity](/veidemann/docs/img/icons/veidemann_dashboard_icon_entity.png)           | Filtrer listen til å vise seeds med samme entitet.
 ![clone_seed](/veidemann/docs/img/icons/veidemann_dashboard_icon_clone_config.png)                   | Lag en klone av seeden  
+![run_crawl](/veidemann/docs/img/icons/veidemann_dashboard_icon_run_crawl.png)                       | Start crawl av seed
   
 ##### Søk, sortering og filtrering
 ----------------------------------
@@ -90,6 +91,14 @@ Er det mange i listen kan knappen øverst benyttes for å flytte alle.
 En seed som er flyttet fra en annen entitet vil få en label med ID-en til entiteten den er flyttet fra.
 
 ![move_seeds](/veidemann/docs/img/seed/veidemann_dashboard_seed_move.png)
+  
+  
+##### Manuell crawl av seed
+----------------------------------
+Ved å benytte snarveien i listen over tilgjengelige seeds, eller knappen nede til høyre, kan man manuelt starte høstingen av en seed.  
+Ved å trykke på en av disse får man opp en dialog for å bekrefte at høstingen skal start. Her velger man hvilken crawljob som skal brukes under høstingen, 
+og på den måten gi høsteren en [crawlconfig](../crawlconfig).
+
 
  
 
