@@ -140,7 +140,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const pageSize$ = routeParam$.pipe(
-      map(({pageSize}) => parseInt(pageSize, 10) || 10),
+      map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
       shareReplay(1)
     );

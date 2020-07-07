@@ -29,7 +29,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   pageLength = 0;
 
   @Input()
-  pageSize = 10;
+  pageSize = 25;
 
   @Input()
   pageIndex = 0;
