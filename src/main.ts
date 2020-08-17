@@ -13,9 +13,22 @@ if (environment.production) {
 
 // load dynamic configuration pre bootstrap
 fetch(environment.configUrl)
-  .then(async response => {
-    const dynamicConfig = await response.json();
+  .then(async config => {
+    const versions = await fetch(environment.versionUrl)
+    return {config, versions}
+  })
+  .then(async ({config, versions}) => {
+    const dynamicConfig = await config.json();
+    // development server uses versions from environment.json
+    const deploymentVersions = await versions.json().catch(error => {
+       return null;
+     });
     const appConfig: AppConfig = Object.assign({}, environment, dynamicConfig);
+     if (deploymentVersions) {
+       /* tslint:disable:no-string-literal */
+      appConfig.veidemannVersion = deploymentVersions['veidemann'];
+       /* tslint:enable:no-string-literal */
+     }
     Object.entries(environment).forEach(([key, value]) => {
       if (value !== null && typeof value === 'object') {
         // merge values of type object properly (because Object.assign does not assign recursively)

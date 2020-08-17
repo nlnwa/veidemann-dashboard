@@ -4,6 +4,7 @@ export class AppConfig {
   authConfig?: AuthConfig;
   grpcWebUrl?: string;
   waybackUrl?: string;
+  veidemannVersion?: string;
 
   constructor(json?: Partial<AppConfig>) {
     if (json) {
