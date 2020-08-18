@@ -11,6 +11,7 @@ import {toTimestampProto} from '../../../shared/func';
 
 export interface CrawlExecutionStatusQuery {
   jobId: string;
+  jobExecutionId: string;
   seedId: string;
   stateList: CrawlExecutionState[];
   sort: Sort;
@@ -60,6 +61,11 @@ export class CrawlExecutionService extends QueryService {
     if (query.jobId) {
       queryTemplate.jobId = query.jobId;
       fieldMask.addPaths('jobId');
+    }
+
+    if (query.jobExecutionId) {
+      queryTemplate.jobExecutionId = query.jobExecutionId;
+      fieldMask.addPaths('jobExecutionId');
     }
 
     if (query.seedId) {
