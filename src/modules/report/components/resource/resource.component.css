@@ -1,5 +1,14 @@
 table {
   width: 100%;
+  table-layout: fixed;
+}
+
+.mat-column-uri {
+  flex: 0 0 90%;
+  width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 tr.resource-detail-row {
@@ -45,3 +54,4 @@ tr.resource-row:not(.resource-expanded-row):active {
 .resource-description-attribution {
   opacity: 0.5;
 }
+

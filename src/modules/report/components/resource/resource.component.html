@@ -17,6 +17,10 @@
     <td mat-cell *matCellDef="let resource" [attr.colspan]="displayedColumns.length">
       <div class="resource-detail" [@detailExpand]="resource == expandedResource ? 'expanded' : 'collapsed'">
             <table class="mat-table table">
+              <colgroup>
+                <col style="width: 10%">
+                <col style="width: 90%">
+              </colgroup>
               <thead>
               <tr class="mat-header-row">
                 <th class="mat-header-cell">Resource</th>
@@ -25,7 +29,7 @@
               </thead>
               <tbody>
               <tr class="mat-row">
-                <td class="mat-cell">uri</td>
+                <td class="mat-cell">UR</td>
                 <td class="mat-cell">{{resource.uri}}</td>
               </tr>
               <tr class="mat-row">
