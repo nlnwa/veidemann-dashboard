@@ -6,6 +6,7 @@ import {AppModule} from './modules/app/app.module';
 import {environment} from './environments/environment';
 import {AppConfig} from './modules/core/models/app-config.model';
 import {AppConfigService} from './modules/core/services';
+import {DeploymentVersions} from './shared/models/deployment-versions.model';
 
 if (environment.production) {
   enableProdMode();
@@ -21,14 +22,31 @@ fetch(environment.configUrl)
     const dynamicConfig = await config.json();
     // development server uses versions from environment.json
     const deploymentVersions = await versions.json().catch(error => {
-       return null;
-     });
+      return null;
+    });
     const appConfig: AppConfig = Object.assign({}, environment, dynamicConfig);
-     if (deploymentVersions) {
-       /* tslint:disable:no-string-literal */
-      appConfig.veidemannVersion = deploymentVersions['veidemann'];
-       /* tslint:enable:no-string-literal */
-     }
+    if (deploymentVersions) {
+      /* tslint:disable:no-string-literal */
+      appConfig.versions = new DeploymentVersions({
+        veidemann: deploymentVersions['veidemann'],
+        veidemannCache: deploymentVersions['norsknettarkiv/veidemann-cache'],
+        veidemannContentWriter: deploymentVersions['norsknettarkiv/veidemann-contentwriter'],
+        veidemannController: deploymentVersions['norsknettarkiv/veidemann-controller'],
+        veidemannDnsResolver: deploymentVersions['norsknettarkiv/veidemann-dns-resolver'],
+        veidemannFrontier: deploymentVersions['norsknettarkiv/veidemann-frontier'],
+        veidemannBrowserController: deploymentVersions['norsknettarkiv/veidemann-browser-controller'],
+        veidemannRecorderProxy: deploymentVersions['norsknettarkiv/veidemann-recorderproxy'],
+        veidemannHealthCheckApi: deploymentVersions['norsknettarkiv/veidemann-health-check-api'],
+        veidemannMetrics: deploymentVersions['norsknettarkiv/veidemann-metrics'],
+        veidemannOoshandler: deploymentVersions['norsknettarkiv/veidemann-ooshandler'],
+        veidemannRobotsEvaluatorService: deploymentVersions['norsknettarkiv/veidemann-robotsevaluator-service'],
+        veidemannWarcValidator: deploymentVersions['norsknettarkiv/veidemann-warcvalidator'],
+        veidemannWarcValidatorApi: deploymentVersions['norsknettarkiv/veidemann-warcvalidator-api'],
+        veidemannDbInitializer: deploymentVersions['norsknettarkiv/rethinkdb-backup'],
+        rethinkdbBackup: deploymentVersions['norsknettarkiv/rethinkdb-backup']
+      });
+      /* tslint:enable:no-string-literal */
+    }
     Object.entries(environment).forEach(([key, value]) => {
       if (value !== null && typeof value === 'object') {
         // merge values of type object properly (because Object.assign does not assign recursively)

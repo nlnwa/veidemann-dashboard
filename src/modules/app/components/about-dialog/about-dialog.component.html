@@ -1,10 +1,25 @@
 <img style="max-height: 300px; max-width: 600px" src="assets/veidemann_logo_inline_black.png" mat-dialog-title>
 <mat-list mat-dialog-content>
   <div mat-subheader>Deployment versions</div>
-    <h4>Veidemann: {{veidemannVersion}}</h4>
+    <h4>Veidemann: {{versions.veidemann}}</h4>
     <div class="deployment-version-list">
       <ul>
-        <li>Veidemann dashboard: {{dashBoardversion}}</li>
+        <li>Veidemann-dashboard: {{dashBoardversion}}</li>
+        <li>Veidemann-cache: {{versions.veidemannCache}}</li>
+        <li>Veidemann-contentwriter: {{versions.veidemannContentWriter}}</li>
+        <li>Veidemann-controller: {{versions.veidemannController}}</li>
+        <li>Veidemann-dns-resolver: {{versions.veidemannDnsResolver}}</li>
+        <li>Veidemann-frontier: {{versions.veidemannFrontier}}</li>
+        <li>Veidemann-browser-controller: {{versions.veidemannBrowserController}}</li>
+        <li>Veidemann-recorderproxy: {{versions.veidemannRecorderProxy}}</li>
+        <li>Veidemann-health-check-api: {{versions.veidemannHealthCheckApi}}</li>
+        <li>Veidemann-metrics: {{versions.veidemannMetrics}}</li>
+        <li>Veidemann-ooshandler: {{versions.veidemannOoshandler}}</li>
+        <li>Veidemann-robotsevaluator-service: {{versions.veidemannRobotsEvaluatorService}}</li>
+        <li>Veidemann-warcvalidator: {{versions.veidemannWarcValidator}}</li>
+        <li>Veidemann-warcvalidator-api: {{versions.veidemannWarcValidatorApi}}</li>
+        <li>Veidemann-db-initializer: {{versions.veidemannDbInitializer}}</li>
+        <li>Rethinkdb-backup: {{versions.rethinkdbBackup}}</li>
       </ul>
     </div>
   <mat-divider></mat-divider>
