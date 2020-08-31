@@ -2,6 +2,38 @@
 
 table {
   width: 100%;
+  table-layout: fixed;
+}
+
+.mat-column-select {
+  flex: 0 0 1%;
+  width: 1%;
+}
+
+.mat-column-name, .mat-column-description {
+  flex: 0 0 35%;
+  width: 35%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 15px;
+}
+
+.mat-column-name:hover, .mat-column-description:hover {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.mat-column-extra {
+  flex: 0 0 5%;
+  width: 5%;
+}
+
+.mat-column-action {
+  flex: 0 0 24%;
+  width: 24%;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .row-checked {
@@ -46,9 +78,4 @@ table {
 
 .mat-row:hover .actions {
   opacity: 100;
-}
-
-.mat-column-action {
-  white-space: nowrap;
-  width: 1%;
 }

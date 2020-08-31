@@ -1,0 +1,44 @@
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.mat-column-requestedUri {
+  flex: 0 0 63%;
+  width: 63%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 15px;
+}
+
+.mat-column-requestedUri:hover {
+  white-space: normal;
+  height: auto;
+  word-break: break-word;
+}
+
+.mat-column-timestamp {
+  flex: 0 0 10%;
+  width: 10%;
+}
+
+.mat-column-statusCode {
+  flex: 0 0 5%;
+  width: 5%;
+}
+
+.mat-column-discoveryPath {
+  flex: 0 0 5%;
+  width: 5%;
+}
+
+.mat-column-contentType {
+  flex: 0 0 10%;
+  width: 10%;
+}
+
+.mat-column-action {
+  flex: 0 0 7%;
+  width: 7%;
+}
