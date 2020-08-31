@@ -6,18 +6,17 @@ import {ConfigObject, ConfigRef, CrawlExecutionState, CrawlExecutionStatus, Kind
 import {ReportApiService} from '../../core/services';
 import {ConfigService} from '../../commons/services';
 import {tap} from 'rxjs/operators';
-import {DetailQuery, Page, Sort, toTimestampProto} from '../../../shared/func';
+import {DetailQuery, Page, Sort, toTimestampProto, WatchQuery} from '../../../shared/func';
 import {LoadingService} from '../../../shared/services';
 import {Getter, Searcher} from '../../../shared/directives';
 
-export interface CrawlExecutionStatusQuery extends Page, Sort {
+export interface CrawlExecutionStatusQuery extends Page, Sort, WatchQuery {
   jobId: string;
   seedId: string;
   stateList: CrawlExecutionState[];
   hasError: boolean;
   startTimeTo: string;
   startTimeFrom: string;
-  watch: boolean;
 }
 
 @Injectable()

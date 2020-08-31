@@ -48,6 +48,11 @@
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #startTimeToDatePicker></mat-datepicker>
   </mat-form-field>
+
+  <mat-checkbox labelPosition="after" formControlName="watch"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Watch
+  </mat-checkbox>
 </form>
 <!--
 

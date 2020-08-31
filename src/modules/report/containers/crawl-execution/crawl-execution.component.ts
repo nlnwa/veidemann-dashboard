@@ -11,6 +11,7 @@ import {ErrorService} from '../../../core/services';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
 import {CrawlExecutionStatusListComponent} from '../../components';
+import {SortDirection} from '@angular/material/sort';
 
 @Component({
   selector: 'app-crawl-execution',
@@ -105,6 +106,12 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       distinctUntilChanged<Sort>((p, q) => p && q ? p.direction === q.direction && p.active === q.active : p === q),
     );
 
+    const sortDirection$ = sort$.pipe(
+      map(sort => (sort ? sort.direction : '') as SortDirection));
+
+    const sortActive$ = sort$.pipe(
+      map(sort => sort ? sort.active : ''));
+
     const pageSize$ = queryParam.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
@@ -120,17 +127,17 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
     );
 
     this.query$ = combineLatest([
-      jobId$, seedId$, stateList$, sort$, pageIndex$, pageSize$, hasError$,
+      jobId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
       startTimeFrom$, startTimeTo$, watch$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([jobId, seedId, stateList, sort, pageIndex, pageSize,
+      map(([jobId, seedId, stateList, active, direction, pageIndex, pageSize,
              hasError, startTimeFrom, startTimeTo, watch]) => ({
         jobId,
         stateList,
         seedId,
-        active: (sort as Sort).active,
-        direction: (sort as Sort).direction,
+        active,
+        direction,
         pageIndex,
         pageSize,
         hasError,
