@@ -1,0 +1,44 @@
+<div class="content-padding" fxLayout="row" fxLayoutGap="16px">
+  <div fxFlex class="preview-meta-column">
+    <ng-container [ngSwitch]="configObject.kind">
+      <ng-container *ngSwitchCase="Kind.SEED">
+        <app-seed-meta-preview [configObject]="configObject"></app-seed-meta-preview>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <app-meta-preview [configObject]="configObject"></app-meta-preview>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div fxFlex class="preview-details-column">
+    <ng-container [ngSwitch]="configObject.kind">
+      <ng-container *ngSwitchCase="Kind.SEED">
+        <app-seed-preview [configObject]="configObject" (edit)="onEditConfig($event)"></app-seed-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.COLLECTION">
+        <app-collection-preview [configObject]="configObject"></app-collection-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+        <app-crawljob-preview [configObject]="configObject"></app-crawljob-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG">
+        <app-schedule-preview [configObject]="configObject"></app-schedule-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
+        <app-crawlconfig-preview [configObject]="configObject"></app-crawlconfig-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.CRAWLHOSTGROUPCONFIG">
+        <app-crawlhostgroupconfig-preview [configObject]="configObject"></app-crawlhostgroupconfig-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
+        <app-browserconfig-preview [configObject]="configObject"></app-browserconfig-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT">
+        <app-browserscript-preview [configObject]="configObject"></app-browserscript-preview>
+      </ng-container>
+      <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG">
+        <app-politenessconfig-preview [configObject]="configObject"></app-politenessconfig-preview>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+

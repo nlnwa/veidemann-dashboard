@@ -11,16 +11,11 @@ import {CommonsModule} from '../commons/commons.module';
 
 import {
   AppConfigService,
+  AppInitializerService,
   ApplicationErrorHandler,
   AuthService,
-  ConfigApiService,
-  ErrorService,
-  GuardService,
-  SnackBarService,
-  TokenInterceptor,
-  AppInitializerService,
   ControllerApiService,
-  ReportApiService,
+  TokenInterceptor,
 } from './services';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -33,16 +28,7 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
     OAuthModule.forRoot(),
   ],
   providers: [
-    AppInitializerService,
-    ControllerApiService,
-    AuthService,
     OAuthService,
-    GuardService,
-    ErrorService,
-    ConfigApiService,
-    ReportApiService,
-    SnackBarService,
-    ApplicationErrorHandler,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
       provide: APP_INITIALIZER,

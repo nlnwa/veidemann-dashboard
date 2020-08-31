@@ -1,38 +1,34 @@
 import {Injectable} from '@angular/core';
-import {QueryService, Sort} from '../../commons/services/query.service';
 import {ReportApiService} from '../../core/services';
 import {Observable} from 'rxjs';
 import {CrawlLog} from '../../../shared/models/report';
 import {CrawlLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
+import {LoadingService} from '../../../shared/services';
+import {Page, Sort} from '../../../shared/func';
+import {Getter, Searcher} from '../../../shared/directives';
 
-export interface CrawlLogQuery {
+
+export interface CrawlLogQuery extends Page, Sort {
   jobExecutionId: string;
   executionId: string;
-  sort: Sort;
-  pageSize: number;
-  pageIndex: number;
   watch: boolean;
 }
 
 
 @Injectable()
-export class CrawlLogService extends QueryService {
+export class CrawlLogService extends LoadingService
+  implements Getter<CrawlLog>, Searcher<CrawlLogQuery, CrawlLog> {
   constructor(private reportApiService: ReportApiService) {
     super();
   }
 
-  get(warcId: string): Observable<CrawlLog> {
-    const listRequest = new CrawlLogListRequest();
-    listRequest.addWarcId(warcId);
-    return this.reportApiService.listCrawlLogs(listRequest);
-  }
+  static getListRequest(query
 
-  search(query: CrawlLogQuery): Observable<CrawlLog> {
-    return this.load(this.reportApiService.listCrawlLogs(this.getListRequest(query)));
-  }
-
-  private getListRequest(query: CrawlLogQuery): CrawlLogListRequest {
+                          :
+                          CrawlLogQuery
+  ):
+    CrawlLogListRequest {
     const listRequest = new CrawlLogListRequest();
     const queryTemplate = new CrawlLog();
     const fieldMask = new FieldMask();
@@ -59,11 +55,29 @@ export class CrawlLogService extends QueryService {
       listRequest.setWatch(query.watch);
     }
 
-    if (query.sort) {
-      listRequest.setOrderByPath(query.sort.active);
-      listRequest.setOrderDescending(query.sort.direction === 'desc');
+    if (query.direction) {
+      listRequest.setOrderByPath(query.active);
+      listRequest.setOrderDescending(query.direction === 'desc');
     }
 
     return listRequest;
+  }
+
+  get(warcId
+        :
+        string
+  ):
+    Observable<CrawlLog> {
+    const listRequest = new CrawlLogListRequest();
+    listRequest.addWarcId(warcId);
+    return this.reportApiService.listCrawlLogs(listRequest);
+  }
+
+  search(query
+           :
+           CrawlLogQuery
+  ):
+    Observable<CrawlLog> {
+    return this.load(this.reportApiService.listCrawlLogs(CrawlLogService.getListRequest(query)));
   }
 }

@@ -1,42 +1,5 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
   <mat-toolbar class="main-toolbar" color="primary">
-    <button mat-icon-button
-            [mat-menu-trigger-for]="menu"
-            *ngIf="isLoggedIn"
-            class="header--button__margin">
-      <mat-icon>menu</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-      <a mat-menu-item
-         *ngIf="canConfigure || canConsult"
-         [routerLink]="['/config']">
-        <mat-icon>settings</mat-icon>
-        <span i18n="@@mainMenuConfiguration">Configuration</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canConfigure"
-         [routerLink]="['/report']">
-        <mat-icon>report</mat-icon>
-        <span i18n="@@mainMenuReport">Report</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canAdministrate"
-         [routerLink]="['/validator']">
-        <mat-icon>storage</mat-icon>
-        <span i18n="@@mainMenuWarc">WARC</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canAdministrate"
-         [routerLink]="['/config/logconfig']">
-        <mat-icon>notes</mat-icon>
-        <span i18n="@@mainMenuLogConfiguration">Log level</span>
-      </a>
-    </mat-menu>
-
     <a routerLink="/" class="title"><h1>Veidemann {{ version }}</h1></a>
 
     <span fxFlex></span>
@@ -79,6 +42,44 @@
       <span i18n="@@mainToolbarLogoutButton">LOGOUT</span>
     </button>
   </mat-toolbar>
+
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link
+       *ngIf="canConfigure || canConsult"
+       [routerLink]="['/config']"
+       routerLinkActive
+       #config="routerLinkActive"
+       [active]="config.isActive">
+      <span i18n="@@mainMenuConfiguration">CONFIGURATION</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="canConfigure"
+       [routerLink]="['/report']"
+       routerLinkActive
+       #report="routerLinkActive"
+       [active]="report.isActive">
+      <span i18n="@@mainMenuReport">REPORT</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="canAdministrate"
+       [routerLink]="['/validator']"
+       routerLinkActive
+       #validator="routerLinkActive"
+       [active]="validator.isActive">
+      <span i18n="@@mainMenuWarc">STORAGE</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="canAdministrate"
+       [routerLink]="['/logconfig']"
+       routerLinkActive
+       #log="routerLinkActive"
+       [active]="log.isActive">
+      <span i18n="@@mainMenuLogConfiguration">LOG LEVEL</span>
+    </a>
+  </nav>
 
   <div *ngIf="isModuleLoading$ | async" class="module-loader">
     <h2 i18n="@@appModuleLoadingText">Loading module...</h2>

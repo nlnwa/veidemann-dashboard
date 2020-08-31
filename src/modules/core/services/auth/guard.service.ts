@@ -5,7 +5,9 @@ import {Observable, of} from 'rxjs';
 import {AuthService} from './auth.service';
 import {Role} from '../../../../shared/models';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GuardService implements CanActivate, CanLoad {
 
   constructor(public authService: AuthService) {

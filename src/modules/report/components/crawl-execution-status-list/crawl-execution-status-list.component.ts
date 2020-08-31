@@ -1,6 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components/base-list/base-list';
-import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models';
+import {ConfigObject, CrawlExecutionState, crawlExecutionStates, CrawlExecutionStatus} from '../../../../shared/models';
+import {FormBuilder} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-crawl-execution-status-list',
@@ -10,12 +12,19 @@ import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/mode
 })
 export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlExecutionStatus> {
   readonly CrawlExecutionState = CrawlExecutionState;
+  readonly crawlExecutionStates = crawlExecutionStates;
+  readonly crawlJobOptions: ConfigObject[];
 
-  @Input()
   multiSelect = false;
 
-  @Input()
   sortActive = 'startTime';
 
   displayedColumns: string[] = ['seedId', 'jobId', 'state', 'startTime', 'endTime', 'extra', 'action'];
+
+  private isWatching = false;
+
+  constructor(private fb: FormBuilder,
+              private route: ActivatedRoute) {
+    super();
+  }
 }

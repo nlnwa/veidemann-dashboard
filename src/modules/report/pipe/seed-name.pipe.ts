@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
-import {CrawlExecutionService} from '../services/crawl-execution.service';
+import {CrawlExecutionService} from '../services';
 
 
 @Pipe({

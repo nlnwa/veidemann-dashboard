@@ -1,4 +1,4 @@
-<div class="mat-elevation-z1">
+<div class="mat-elevation-z1" style="width: 100%">
   <table mat-table [dataSource]="dataSource"
          matSort
          [matSortActive]="sortActive"
@@ -54,7 +54,7 @@
 
   <mat-paginator
     (page)="onPage($event)"
-    [length]="pageLength"
+    [length]="length"
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageOptions">

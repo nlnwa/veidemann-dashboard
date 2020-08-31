@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ConfigObject, Kind} from '../../../../shared/models';
-import {ConfigOptions} from '../../containers';
+import {ConfigOptions} from '../../func';
 
 @Component({
   selector: 'app-detail-multi',

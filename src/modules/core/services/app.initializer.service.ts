@@ -5,7 +5,9 @@ import {ControllerApiService} from './api/controller-api.service';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppInitializerService {
 
   error: Error;

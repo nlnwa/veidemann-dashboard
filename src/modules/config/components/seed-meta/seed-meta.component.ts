@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, Optional, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output
+} from '@angular/core';
 
 import {DatePipe} from '@angular/common';
 import {
@@ -17,7 +25,6 @@ import {Observable, of} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
 import {MULTI_VALID_URL, VALID_URL} from '../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, Meta} from '../../../../shared/models';
-import {ConfigService} from '../../services';
 
 export interface Parcel {
   seed: ConfigObject | ConfigObject[];
@@ -47,18 +54,17 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   constructor(protected fb: FormBuilder,
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef,
-              private configService: ConfigApiService,
-              @Optional() private dataService: ConfigService) {
+              private configApiService: ConfigApiService) {
     super(fb, datePipe);
-    this.asyncUrlValidator = SeedUrlValidator.createBackendValidator(this.configService);
+    this.asyncUrlValidator = SeedUrlValidator.createBackendValidator(this.configApiService);
   }
 
   get isSingleUrl(): boolean {
     const url = this.name.value;
     const parts = url.split(/[\s]+/);
     if (parts.length > 1) {
-      for (let i=1; i<parts.length; i++) {
-        if (parts[i]!=='') {
+      for (let i = 1; i < parts.length; i++) {
+        if (parts[i] !== '') {
           return false;
         }
       }
@@ -128,13 +134,12 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     return (this.name.pending
         ? this.name.statusChanges.pipe(
           map(state => state === 'VALID' ? null : this.name.errors),
-          tap(() => this.cdr.markForCheck())
-        )
+          tap(() => this.cdr.markForCheck()))
         : this.name.valid
           ? of(null)
           : of(this.name.errors)
     ).pipe(
-      first() // must ensure the observable returned is completed
+    first() // must ensure the observable returned is completed
     );
   }
 }

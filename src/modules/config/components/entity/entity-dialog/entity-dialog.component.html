@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@entityDetailsCardTitle">Entity</ng-container>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <app-meta formControlName="meta"></app-meta>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

@@ -4,16 +4,21 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   ConfigObject,
   CrawlScheduleConfig,
-  DateTime,
   Kind,
   Meta,
+} from '../../../../../shared/models';
+
+
+import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
   VALID_CRON_HOUR_PATTERN,
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
-} from '../../../../../shared';
+} from '../../../../../shared/validation';
+
 import {AuthService} from '../../../../core/services/auth';
+import {DateTime} from '../../../../../shared/func';
 
 
 @Component({

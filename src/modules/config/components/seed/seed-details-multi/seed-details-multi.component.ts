@@ -3,7 +3,7 @@ import {FormBuilder} from '@angular/forms';
 
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind} from '../../../../../shared/models';
-import {SeedDetailComponent} from '../seed-details/seed-details.component';
+import {SeedDetailsComponent} from '../seed-details/seed-details.component';
 
 
 @Component({
@@ -11,7 +11,7 @@ import {SeedDetailComponent} from '../seed-details/seed-details.component';
   templateUrl: './seed-details-multi.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailMultiComponent extends SeedDetailComponent {
+export class SeedDetailMultiComponent extends SeedDetailsComponent {
 
   shouldAddLabel = undefined;
   shouldAddCrawlJob = undefined;

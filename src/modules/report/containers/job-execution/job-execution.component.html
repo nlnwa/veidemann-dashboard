@@ -1,0 +1,43 @@
+<div fxLayout="row" *ngIf="query$ | async as query">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+  <div>
+    <mat-action-list>
+      <button mat-list-item (click)="onShowRunning()">RUNNING</button>
+    </mat-action-list>
+    <mat-action-list>
+      <button mat-list-item (click)="onToggleWatch()">WATCH</button>
+    </mat-action-list>
+
+    <div class="content-padding">
+      <app-job-execution-status-query
+        [crawlJobOptions]="crawlJobOptions" [query]="query"
+        (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
+    </div>
+  </div>
+  <div fxFlex>
+    <app-job-execution-status-list
+      appQueryJobExecutionStatus [query]="query"
+      [pageIndex]="pageIndex$ | async"
+      [pageSize]="pageSize$ | async"
+      [sortDirection]="sortDirection$ | async"
+      [sortActive]="sortActive$ | async"
+      (selectedChange)="onSelectedChange($event)"
+      (sort)="onSort($event)"
+      (page)="onPage($event)">
+      <a *appAction="let row" mat-icon-button
+         [routerLink]="['/config', 'crawljobs']"
+         [queryParams]="{id: row.jobId}">
+        <mat-icon matTooltip="Go to crawljob"
+                  i18n-matTooltip="@@crawljobExecutionReportGoToCrawljobShortcutTooltip">work
+        </mat-icon>
+      </a>
+      <a *appAction="let row" mat-icon-button
+         [routerLink]="['/report', 'crawlexecution']"
+         [queryParams]="{job_execution_id: row.id}">
+        <mat-icon matTooltip="Go to crawlexecution"
+                  i18n-matTooltip="@@crawljobExecutionReportGoToCrawlExecutionShortcutTooltip">hdr_weak
+        </mat-icon>
+      </a>
+    </app-job-execution-status-list>
+  </div>
+</div>

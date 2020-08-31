@@ -1,0 +1,9 @@
+@import "src/styles/theme";
+
+.sidenav--icon__margin {
+  margin-right: 0.2em;
+}
+
+.is-active {
+  background-color: $highlight;
+}

@@ -15,10 +15,10 @@ if (environment.production) {
 fetch(environment.configUrl)
   .then(async response => {
     const dynamicConfig = await response.json();
-    const appConfig: AppConfig = Object.assign({}, environment, dynamicConfig);
+    const appConfig = Object.assign({}, environment, dynamicConfig) as AppConfig;
     Object.entries(environment).forEach(([key, value]) => {
       if (value !== null && typeof value === 'object') {
-        // merge values of type object properly (because Object.assign does not assign recursively)
+        // merge object values because (because Object.assign does not assign recursively)
         appConfig[key] = Object.assign({}, environment[key], dynamicConfig[key]);
       }
     });

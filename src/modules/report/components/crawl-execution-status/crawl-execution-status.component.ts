@@ -13,7 +13,4 @@ export class CrawlExecutionStatusComponent {
 
   @Input()
   crawlExecutionStatus: CrawlExecutionStatus;
-
-  constructor() {
-  }
 }

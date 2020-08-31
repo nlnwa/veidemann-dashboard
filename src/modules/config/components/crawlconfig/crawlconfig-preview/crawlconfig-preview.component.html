@@ -1,0 +1,13 @@
+<div fxLayout="column">
+  <mat-label><b>Collection: </b> {{configObject.crawlConfig.collectionRef.id}}</mat-label>
+  <mat-label><b>BrowserConfig: </b>{{configObject.crawlConfig.browserConfigRef.id}}</mat-label>
+  <mat-label><b>PolitenessConfig: </b>{{configObject.crawlConfig.politenessRef.id}}</mat-label>
+  <mat-label><b>DNS TTL: </b>{{configObject.crawlConfig.minimumDnsTtlS}}</mat-label>
+  <mat-label><b>Priority weight: </b>{{configObject.crawlConfig.priorityWeight}}</mat-label>
+  <mat-checkbox [(ngModel)]="configObject.crawlConfig.extra.createScreenshot" labelPosition="before" disabled="true">
+    Create screenshot
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="configObject.crawlConfig.extra.extractText" labelPosition="before" disabled="true">
+    Extract text
+  </mat-checkbox>
+</div>

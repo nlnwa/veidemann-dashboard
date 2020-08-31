@@ -1,31 +1,9 @@
 <mat-drawer-container class="container">
   <mat-drawer mode="side" [opened]="true">
-    <mat-nav-list>
-      <h3 mat-subheader i18n="@@reportNavigationReportHeader">Report</h3>
-
-      <a mat-list-item [routerLink]="['/report', 'jobexecution']" [routerLinkActive]="['is-active']">
-        <mat-icon mat-list-icon>hdr_strong</mat-icon>
-        <span i18n="@@reportNavigationLinkJobExecution">JobExecution</span>
-      </a>
-
-      <a mat-list-item [routerLink]="['/report', 'crawlexecution']" [routerLinkActive]="['is-active']">
-        <mat-icon mat-list-icon>hdr_weak</mat-icon>
-        <span i18n="@@reportNavigationLinkCrawlExecution">CrawlExecution</span>
-      </a>
-
-      <a mat-list-item [routerLink]="['/report', 'pagelog']" [routerLinkActive]="['is-active']">
-        <mat-icon mat-list-icon>art_track</mat-icon>
-        <span i18n="@@reportNavigationLinkPageLog">PageLog</span>
-      </a>
-
-      <a mat-list-item [routerLink]="['/report', 'crawllog']" [routerLinkActive]="['is-active']">
-        <mat-icon mat-list-icon>event_note</mat-icon>
-        <span i18n="@@reportNavigationLinkCrawlLog">CrawlLog</span>
-      </a>
-    </mat-nav-list>
+    <app-report-navigation-list></app-report-navigation-list>
   </mat-drawer>
 
-  <mat-drawer-content class="content-padding">
+  <mat-drawer-content>
     <router-outlet></router-outlet>
   </mat-drawer-content>
 </mat-drawer-container>

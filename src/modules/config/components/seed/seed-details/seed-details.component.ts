@@ -1,18 +1,28 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, ConfigRef, Kind, Meta} from '../../../../../shared/models';
 import {Subject} from 'rxjs';
-import {Parcel} from '../../seed-meta/seed-meta.component';
+import {Parcel} from '../..';
+import {configRefIdRequired} from '../../../../../shared/validation/configref';
 
 @Component({
   selector: 'app-seed-details',
   templateUrl: './seed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeedDetailComponent implements OnChanges, OnDestroy {
+export class SeedDetailsComponent implements OnChanges, OnDestroy {
 
   @Input()
   configObject: ConfigObject;
@@ -121,6 +131,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
   }
 
   onSave(): void {
+    console.log('onSave');
     if (this.isMultipleSeed()) {
       this.saveMultiple.emit(this.prepareSaveMultiple());
     } else {
@@ -148,14 +159,15 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     this.runCrawl.emit(this.configObject);
   }
 
+
   protected createForm() {
     this.form = this.fb.group({
       id: {value: ''},
       disabled: '',
       entityRef: this.fb.group({
         kind: '',
-        id: ['', [Validators.required]],
-      }),
+        id: '',
+      }, {validator: configRefIdRequired}),
       jobRefListId: {value: [], disabled: this.canConsult},
       scope: this.fb.group({
         surtPrefix: {value: '', disabled: this.canConsult}
@@ -188,7 +200,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
    */
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
-
+    console.log('prepareSave', this.form.value);
     return new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
@@ -202,7 +214,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private prepareSaveMultiple(): ConfigObject[] {
+  protected prepareSaveMultiple(): ConfigObject[] {
     const formModel = this.form.value;
 
     const configObjectTemplate = new ConfigObject({
@@ -227,7 +239,7 @@ export class SeedDetailComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private isMultipleSeed() {
+  protected isMultipleSeed() {
     const meta = this.meta.value;
     const parts = meta.name.split(/\s+/);
     return parts.length > 1;

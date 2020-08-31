@@ -1,0 +1,32 @@
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field>
+    <mat-select placeholder="State" multiple formControlName="stateList"
+                i18n-placeholder="@@crawlJobExecutionReportFilterStatePlaceholder">
+      <mat-option *ngFor="let state of jobExecutionStates"
+                  [value]="state.toString(10)">{{JobExecutionState[state]}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="CrawlJob" formControlName="jobId"
+                i18n-placeholder="@@crawlJobExecutionReportFilterCrawlJobPlaceholder">
+      <mat-option [value]=""></mat-option>
+      <mat-option *ngFor="let job of crawlJobOptions"
+                  [value]="job.id">{{job.meta.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
+           placeholder="From" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeFromPlaceholder">
+    <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo"
+           placeholder="To" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeToPlaceholder">
+    <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeToDatePicker></mat-datepicker>
+  </mat-form-field>
+</form>

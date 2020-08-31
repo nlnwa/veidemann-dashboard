@@ -1,0 +1,21 @@
+import {Directive, Inject, Input, OnInit} from '@angular/core';
+import {BASE_LIST, QueryDirective} from '../../../shared/directives';
+import {ConfigQuery} from '../../../shared/func';
+import {ConfigObject} from '../../../shared/models/config';
+import {ConfigService} from '../../commons/services';
+import {ListDataSource} from '../../../shared/models';
+import {ConfigListComponent} from '../components';
+
+
+@Directive({
+  selector: '[appQueryConfigObject]'
+})
+export class ConfigQueryDirective extends QueryDirective<ConfigQuery, ConfigObject> implements OnInit {
+  @Input()
+  count: number;
+
+  constructor(private configService: ConfigService,
+              @Inject(BASE_LIST) private baseList: ConfigListComponent) {
+    super(configService, baseList, new ListDataSource<ConfigObject>());
+  }
+}

@@ -1,4 +1,4 @@
-<div class="list-container__margin mat-elevation-z1">
+<div class="mat-elevation-z1">
   <table mat-table [dataSource]="dataSource">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
@@ -43,7 +43,7 @@
   </table>
 
   <mat-paginator (page)="page.emit($event)"
-                 [length]="pageLength"
+                 [length]="length$ | async"
                  [pageIndex]="pageIndex"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageOptions">

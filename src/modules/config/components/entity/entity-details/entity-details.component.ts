@@ -106,12 +106,10 @@ export class EntityDetailsComponent implements OnChanges {
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
-    const configObject = new ConfigObject({
+    return new ConfigObject({
       id: formModel.id,
       meta: formModel.meta,
       kind: Kind.CRAWLENTITY
     });
-
-    return configObject;
   }
 }

@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@seedDetailsCardTitle">Seed</ng-container>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <app-seed-meta formControlName="meta"
+                   [entityRef]="entityRef.value"
+                   (move)="move.emit($event)"></app-seed-meta>
+    <mat-form-field>
+      <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
+                  multiple formControlName="jobRefListId">
+        <mat-option *ngFor="let crawlJob of crawlJobs"
+                    [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          *ngIf="!showSave"
+          [disabled]="!canUpdate"
+          (click)="onUpdate()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-raised-button color="primary"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

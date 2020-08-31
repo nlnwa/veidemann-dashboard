@@ -1,10 +1,11 @@
 import {NgModule} from '@angular/core';
 
-import {CommonsModule} from '../commons/commons.module';
-import {LogResolver, OptionsResolver} from './services';
-import {ConfigurationsRoutingModule} from './routing/configurations-routing.module';
-import {ConfigurationsComponent, LoglevelComponent} from './containers';
+import {CommonsModule} from '../commons';
+import {KindService, LabelService, OptionsResolver, OptionsService} from './services';
+import {ConfigurationsRoutingModule} from './routing';
+import {ConfigComponent, ConfigurationComponent, ConfigurationsComponent, ConfigNavListComponent} from './containers';
 import {
+  AnnotationComponent,
   BrowserConfigDetailsComponent,
   BrowserConfigDetailsMultiComponent,
   BrowserScriptDetailsComponent,
@@ -15,17 +16,21 @@ import {
   ConfigQueryComponent,
   CrawlConfigDetailsComponent,
   CrawlConfigDetailsMultiComponent,
+  CrawlExecutionStatusComponent,
   CrawlHostGroupConfigDetailsComponent,
   CrawlHostGroupConfigDetailsMultiComponent,
   CrawlJobDetailsComponent,
   CrawlJobDetailsMultiComponent,
   DeleteDialogComponent,
   DeleteMultiDialogComponent,
-  DetailComponent,
   DetailMultiComponent,
+  DurationPickerComponent,
   EntityDetailsComponent,
   EntityDetailsMultiComponent,
+  EntityDialogComponent,
   EntityViewComponent,
+  FilesizeInputComponent,
+  JobStatusComponent,
   LabelComponent,
   MetaComponent,
   PolitenessConfigDetailsComponent,
@@ -33,32 +38,50 @@ import {
   RoleMappingDetailsComponent,
   RoleMappingDetailsMultiComponent,
   RoleMappingListComponent,
+  RunCrawlDialogComponent,
+  RunningCrawlDialogComponent,
   ScheduleDetailsComponent,
   ScheduleDetailsMultiComponent,
-  SeedDetailComponent,
+  SeedDetailsComponent,
   SeedDetailMultiComponent,
   SeedMetaComponent,
   SelectorComponent,
-  DurationPickerComponent,
-  AnnotationComponent
 } from './components';
-import {JobStatusComponent} from './components/job-execution-status/job-status.component';
-import {JobExecutionStatePipe} from './pipe/job-execution-state.pipe';
-import {JobExecutionStatusPipe} from './pipe/job-execution-status.pipe';
-import {CrawlExecutionStatusComponent} from './components/crawl-execution-status/crawl-execution-status.component';
-import {CrawlExecutionStatusPipe} from './pipe/crawl-execution-status.pipe';
-import {CrawlConfigNamePipe} from './pipe/crawl-config-name.pipe';
-import {CrawlScheduleNamePipe} from './pipe/crawl-schedule-name.pipe';
-import {CollectionNamePipe} from './pipe/collection.name.pipe';
-import {BrowserConfigNamePipe} from './pipe/browser-config-name.pipe';
-import {PolitenessConfigNamePipe} from './pipe/politeness-config-name.pipe';
-import {FilesizeInputComponent} from './components/filesize-input/filesize-input.component';
-import { RunCrawlDialogComponent } from './components/run-crawl-dialog/run-crawl-dialog.component';
-import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/running-crawl-dialog.component';
+import {
+  BrowserConfigNamePipe,
+  CollectionNamePipe,
+  CrawlConfigNamePipe,
+  CrawlExecutionStatusPipe,
+  CrawlScheduleNamePipe,
+  JobExecutionStatePipe,
+  JobExecutionStatusPipe,
+  PolitenessConfigNamePipe
+} from './pipe';
+
+import {ConfigService} from '../commons/services';
+import {ConfigQueryDirective} from './directives';
+import {SeedDialogComponent} from './components/seed/seed-dialog/seed-dialog.component';
+import {PreviewComponent} from './components/preview/preview.component';
+import {SeedPreviewComponent} from './components/seed/seed-preview/seed-preview.component';
+import {ReportModule} from '../report/report.module';
+import {ToArrayPipe} from './pipe/to-array.pipe';
+import { MetaPreviewComponent } from './components/meta/meta-preview/meta-preview.component';
+import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
+import { CollectionPreviewComponent } from './components/collection/collection-preview/collection-preview.component';
+import { CrawljobPreviewComponent } from './components/crawljobs/crawljob-preview/crawljob-preview.component';
+import { SchedulePreviewComponent } from './components/schedule/schedule-preview/schedule-preview.component';
+import { CrawlconfigPreviewComponent } from './components/crawlconfig/crawlconfig-preview/crawlconfig-preview.component';
+import { CrawlhostgroupconfigPreviewComponent } from './components/crawlhostgroupconfig/crawlhostgroupconfig-preview/crawlhostgroupconfig-preview.component';
+import { BrowserconfigPreviewComponent } from './components/browserconfig/browserconfig-preview/browserconfig-preview.component';
+import { BrowserscriptPreviewComponent } from './components/browserscript/browserscript-preview/browserscript-preview.component';
+import { PolitenessconfigPreviewComponent } from './components/politenessconfig/politenessconfig-preview/politenessconfig-preview.component';
+
 
 @NgModule({
   declarations: [
+    ConfigComponent,
     ConfigurationsComponent,
+    ConfigurationComponent,
     CrawlJobDetailsComponent,
     CrawlJobDetailsMultiComponent,
     ScheduleDetailsComponent,
@@ -71,7 +94,6 @@ import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/r
     PolitenessConfigDetailsMultiComponent,
     BrowserScriptDetailsComponent,
     BrowserScriptDetailsMultiComponent,
-    LoglevelComponent,
     CrawlHostGroupConfigDetailsComponent,
     CrawlHostGroupConfigDetailsMultiComponent,
     BrowserScriptDirective,
@@ -82,7 +104,6 @@ import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/r
     DeleteDialogComponent,
     DeleteMultiDialogComponent,
     ConfigQueryComponent,
-    DetailComponent,
     DetailMultiComponent,
     ConfigListComponent,
     LabelComponent,
@@ -91,7 +112,7 @@ import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/r
     SeedMetaComponent,
     EntityDetailsComponent,
     EntityDetailsMultiComponent,
-    SeedDetailComponent,
+    SeedDetailsComponent,
     SeedDetailMultiComponent,
     EntityViewComponent,
     JobStatusComponent,
@@ -109,18 +130,41 @@ import { RunningCrawlDialogComponent } from './components/running-crawl-dialog/r
     AnnotationComponent,
     RunCrawlDialogComponent,
     RunningCrawlDialogComponent,
+    ConfigNavListComponent,
+    EntityDialogComponent,
+    ConfigQueryDirective,
+    SeedDialogComponent,
+    PreviewComponent,
+    SeedPreviewComponent,
+    ToArrayPipe,
+    MetaPreviewComponent,
+    SeedMetaPreviewComponent,
+    CollectionPreviewComponent,
+    CrawljobPreviewComponent,
+    SchedulePreviewComponent,
+    CrawlconfigPreviewComponent,
+    CrawlhostgroupconfigPreviewComponent,
+    BrowserconfigPreviewComponent,
+    BrowserscriptPreviewComponent,
+    PolitenessconfigPreviewComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
     DeleteDialogComponent,
+    EntityDialogComponent,
+    SeedDialogComponent,
   ],
   imports: [
     CommonsModule,
     ConfigurationsRoutingModule,
+    ReportModule,
   ],
   providers: [
     OptionsResolver,
-    LogResolver,
+    ConfigService,
+    KindService,
+    OptionsService,
+    LabelService
   ]
 })
 export class ConfigurationsModule {

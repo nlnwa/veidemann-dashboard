@@ -1,0 +1,11 @@
+<div fxLayout="column">
+  <mat-label><b>Depth: </b>{{configObject.crawlJob.limits.depth}}</mat-label>
+  <mat-label><b>Max duration: </b>{{configObject.crawlJob.limits.maxDurationS}}</mat-label>
+  <mat-label><b>Max bytes: </b>{{configObject.crawlJob.limits.maxBytes |filesize}}</mat-label>
+  <mat-label><b>Schedule: </b></mat-label>
+  <p>{{configObject.crawlJob.scheduleRef | json}}</p>
+<!--  <ul *ngFor="let schedule of configObject.crawlJob.scheduleRef">-->
+<!--    <li>{{schedule.id}}</li>-->
+<!--  </ul>-->
+<!--  <mat-label><b>Crawlconfig: </b> {{configObject| getCrawlConfigName}}</mat-label>-->
+</div>

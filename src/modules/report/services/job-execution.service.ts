@@ -4,10 +4,10 @@ import {Observable, of} from 'rxjs';
 import {FieldMask, JobExecutionsListRequest} from '../../../api';
 import {ConfigObject, ConfigRef, JobExecutionState, JobExecutionStatus, Kind} from '../../../shared/models';
 import {ReportApiService} from '../../core/services';
-import {QueryService, Sort} from '../../commons/services/query.service';
-import {ConfigService} from '../../core/services/config.service';
+import {ConfigService} from '../../commons/services';
 import {tap} from 'rxjs/operators';
-import {toTimestampProto} from '../../../shared/func';
+import {Sort, toTimestampProto} from '../../../shared/func';
+import {LoadingService} from '../../../shared/services';
 
 export interface JobExecutionStatusQuery {
   jobId: string;
@@ -21,7 +21,7 @@ export interface JobExecutionStatusQuery {
 }
 
 @Injectable()
-export class JobExecutionService extends QueryService {
+export class JobExecutionService extends LoadingService {
 
   private readonly cache: Map<string, ConfigObject>;
 

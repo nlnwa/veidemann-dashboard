@@ -1,0 +1,16 @@
+<div fxLayout="column">
+  <mat-label><b>URI:</b> {{configObject.meta.name}}</mat-label>
+  <mat-label><b>Description:</b> {{configObject.meta.description}}</mat-label>
+  <mat-label><b>Label:</b></mat-label>
+  <mat-chip-list>
+    <mat-chip *ngFor="let label of configObject.meta.labelList">
+      {{label.key}}:{{label.value}}
+    </mat-chip>
+  </mat-chip-list>
+  <mat-label><b>ID:</b> {{configObject.id}}</mat-label>
+  <mat-label><b>Entity ID</b> {{configObject.seed.entityRef.id}}</mat-label>
+  <mat-label><b>Created:</b> {{configObject.meta.created | date}}</mat-label>
+  <mat-label><b>Created by:</b> {{configObject.meta.createdBy}}</mat-label>
+  <mat-label><b>Last modified:</b> {{configObject.meta.lastModified | date}}</mat-label>
+  <mat-label><b>Last modified by:</b> {{configObject.meta.lastModifiedBy}}</mat-label>
+</div>

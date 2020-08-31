@@ -1,7 +1,9 @@
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>hdr_weak</mat-icon>
-    <mat-card-title i18n="@@crawlExecutionReportStatusCardTitle">CrawlExecution</mat-card-title>
+    <mat-card-title
+      i18n="@@crawlExecutionReportStatusCardTitle">{{crawlExecutionStatus.seedId | getSeedNamePipe | async}}</mat-card-title>
+    <mat-card-subtitle>CrawlExecutionStatus</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -9,7 +11,6 @@
       <table class="mat-table table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedHeaderCell">Seed</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusCrawljobHeaderCell">Job</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStateHeaderCell">State</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSurtPrefixHeaderCell">Surt prefiks</th>
@@ -17,7 +18,6 @@
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell">{{crawlExecutionStatus.seedId | getSeedNamePipe | async}}</td>
           <td class="mat-cell">{{crawlExecutionStatus.jobId | getJobNamePipe | async}}</td>
           <td class="mat-cell">{{CrawlExecutionState[crawlExecutionStatus.state]}}</td>
           <td class="mat-cell">{{crawlExecutionStatus.scope.surtPrefix}}</td>
@@ -93,31 +93,31 @@
       </div>
 
       <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedIdHeaderCell">Seed Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Job Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</th>
-        </tr>
-        </thead>
-        <tbody>
         <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">Id</td>
           <td class="mat-cell">{{crawlExecutionStatus.id}}</td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusSeedIdHeaderCell">Seed Id</td>
           <td class="mat-cell">
             <a [routerLink]="['/config', 'seed']"
                [queryParams]="{id: crawlExecutionStatus.seedId}">{{crawlExecutionStatus.seedId}}</a>
           </td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Job Id</td>
           <td class="mat-cell">
             <a [routerLink]="['/config', 'crawljobs']"
                [queryParams]="{id: crawlExecutionStatus.jobId}">{{crawlExecutionStatus.jobId}}</a>
           </td>
+        </tr>
+        <tr class="mat-row">
+          <td class="mat-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</td>
           <td class="mat-cell">
             <a [routerLink]="['/report', 'jobexecution']"
                [queryParams]="{id: crawlExecutionStatus.jobExecutionId}">{{crawlExecutionStatus.jobExecutionId}}</a>
           </td>
         </tr>
-        </tbody>
       </table>
     </div>
   </mat-card-content>

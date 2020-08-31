@@ -1,2 +1,2 @@
-export {ActionDirective} from './action/action.directive';
-export {ExtraDirective} from './extra/extra.directive';
+export * from './action.directive';
+export * from './extra.directive';

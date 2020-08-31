@@ -1,13 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {GetLabelKeysRequest, LabelKeysResponse} from '../../../api';
-import {map} from 'rxjs/operators';
+import {GetLabelKeysRequest} from '../../../api';
 import {ConfigApiService} from '../../core/services';
 import {Kind} from '../../../shared/models';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LabelService {
 
   // tslint:disable-next-line:variable-name

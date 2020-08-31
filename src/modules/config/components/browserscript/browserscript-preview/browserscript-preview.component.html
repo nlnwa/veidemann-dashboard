@@ -1,0 +1,11 @@
+<div fxLayout="column">
+  <mat-label><b>Script type: </b>{{BrowserScriptType[configObject.browserScript.browserScriptType]}}</mat-label>
+  <mat-label><b>Script: </b></mat-label>
+  <textarea>{{configObject.browserScript.script}}</textarea>
+  <mat-label><b>URL regexp: </b></mat-label>
+  <mat-chip-list>
+    <mat-chip *ngFor="let regex of configObject.browserScript.urlRegexpList">
+      {{regex}}
+    </mat-chip>
+  </mat-chip-list>
+</div>

@@ -13,7 +13,9 @@ import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controll
 import {ApplicationErrorHandler} from '../error.handler';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ControllerApiService {
 
   private controllerPromiseClient: ControllerPromiseClient;

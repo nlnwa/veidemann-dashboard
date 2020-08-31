@@ -4,7 +4,9 @@ import {OAuthService} from 'angular-oauth2-oidc';
 import {Role} from '../../../../shared/models';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
   roles: Role[];

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
-import {QueryService, Sort} from '../../commons/services/query.service';
 import {ConfigObject} from '../../../shared/models/config';
 import {ReportApiService} from '../../core/services';
 import {Observable} from 'rxjs';
 import {PageLog} from '../../../shared/models/report';
 import {PageLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
+import {LoadingService} from '../../../shared/services';
+import {Sort} from '../../../shared/func';
 
 export interface PageLogQuery {
   uri: string;
@@ -21,7 +22,7 @@ export interface PageLogQuery {
 }
 
 @Injectable()
-export class PageLogService extends QueryService {
+export class PageLogService extends LoadingService {
   private readonly cache: Map<string, ConfigObject>;
 
   constructor(private reportApiService: ReportApiService){

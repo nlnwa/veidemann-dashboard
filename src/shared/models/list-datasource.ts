@@ -1,14 +1,29 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
 
-import {ListItem} from '../../modules/commons/components/base-list/base-list';
+export interface BaseList<T> {
+  dataSource: DataSource<T>;
+  length: number;
+  reset(): void;
+}
 
+export interface ListItem {
+  id: string;
+}
 
+@Injectable()
 export class ListDataSource<T extends ListItem> implements DataSource<T> {
   private readonly data: BehaviorSubject<T[]>;
 
   constructor() {
     this.data = new BehaviorSubject([]);
+  }
+
+  private capacity;
+
+  set length(length: number) {
+    this.capacity = length;
   }
 
   get length(): number {
@@ -20,6 +35,7 @@ export class ListDataSource<T extends ListItem> implements DataSource<T> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    this.clear();
   }
 
   /**
@@ -35,7 +51,12 @@ export class ListDataSource<T extends ListItem> implements DataSource<T> {
     if (found) {
       this.replace(item);
     } else {
-      this.data.next(this.data.value.concat(item));
+      if (this.capacity && this.data.value.length === this.capacity) {
+        console.log('this capacity');
+        this.data.next([item, ...this.data.value.slice(0, -1)]);
+      } else {
+        this.data.next(this.data.value.concat(item));
+      }
     }
   }
 

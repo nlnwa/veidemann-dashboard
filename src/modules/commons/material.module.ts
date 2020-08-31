@@ -27,8 +27,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatTabsModule} from '@angular/material/tabs';
 
 const modules = [
+  MatTabsModule,
   MatButtonModule,
   MatToolbarModule,
   MatSnackBarModule,

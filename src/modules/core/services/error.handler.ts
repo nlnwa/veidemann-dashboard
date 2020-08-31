@@ -7,7 +7,9 @@ import {ErrorService} from './error.service';
 import {ReferrerError} from '../../../shared/error';
 import {ConfigObject} from '../../../shared/models/config';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApplicationErrorHandler extends ErrorHandler {
 
   constructor(private errorService: ErrorService) {

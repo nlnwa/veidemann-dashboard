@@ -19,7 +19,9 @@ import {CrawlLogListRequest, PageLogListRequest} from '../../../../api/gen/repor
 import {fromTimestamp} from '../../../../shared/func';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReportApiService {
 
   private reportClient: ReportPromiseClient;
@@ -257,7 +259,7 @@ export class ReportApiService {
     return this.listJobExecutions(request).pipe(defaultIfEmpty(null));
   }
 
-  getLastSeedStatus(seedId: string): Observable<CrawlExecutionStatus> {
+  getLastSeedStatus(seedId: string, pageSize?:number): Observable<CrawlExecutionStatus> {
     const request = new CrawlExecutionsListRequest();
 
     const template = new CrawlExecutionStatus();
@@ -270,7 +272,11 @@ export class ReportApiService {
 
     request.setOrderByPath('startTime');
     request.setOrderDescending(true);
-    request.setPageSize(1);
+    if(pageSize) {
+      request.setPageSize(pageSize);
+    } else {
+      request.setPageSize(1);
+    }
     return this.listCrawlExecutions(request).pipe(defaultIfEmpty(null));
   }
 

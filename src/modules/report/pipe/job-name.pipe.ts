@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
-import {JobExecutionService} from '../services/job-execution.service';
+import {JobExecutionService} from '../services';
 
 
 @Pipe({
