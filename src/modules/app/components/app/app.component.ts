@@ -10,6 +10,7 @@ import {AuthService, GuardService} from '../../../core/services/auth';
 import {RunStatus} from '../../../../shared/models/controller';
 import {MatDialog} from '@angular/material/dialog';
 import {CrawlerStatusDialogComponent} from '../crawlerstatus-dialog/crawlerstatus-dialog.component';
+import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
               private route: ActivatedRoute,
               private guardService: GuardService,
               private snackBarService: SnackBarService,
-              private crawlerStatusDialog: MatDialog,
+              private dialog: MatDialog,
               private errorService: ErrorService) {
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
@@ -77,10 +78,6 @@ export class AppComponent implements OnInit {
     return this.appInitializer.error;
   }
 
-  get version(): string {
-    return environment.version;
-  }
-
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
@@ -111,8 +108,12 @@ export class AppComponent implements OnInit {
       .then(() => this.snackBarService.openSnackBar($localize`:@snackBarMessage.loggedOut:You are now logged out`));
   }
 
+  onAbout() {
+    this.dialog.open(AboutDialogComponent)
+  }
+
   onChangeRunStatus(shouldPause: boolean) {
-    this.crawlerStatusDialog.open(CrawlerStatusDialogComponent, {
+    this.dialog.open(CrawlerStatusDialogComponent, {
       disableClose: true,
       autoFocus: true,
       data: {shouldPause}
