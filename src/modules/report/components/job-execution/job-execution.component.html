@@ -53,7 +53,7 @@
     </a>
     <a *appAction="let row" mat-icon-button
        [routerLink]="['/report', 'crawlexecution']"
-       [queryParams]="{job_id: row.jobId}">
+       [queryParams]="{job_execution_id: row.id}">
       <mat-icon matTooltip="Go to crawlexecution"
                 i18n-matTooltip="@@crawljobExecutionReportGoToCrawlExecutionShortcutTooltip">hdr_weak</mat-icon>
     </a>

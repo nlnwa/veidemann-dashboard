@@ -76,6 +76,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
       map(queryParamMap => ({
         id: queryParamMap.get('id'), // list request
         jobId: queryParamMap.get('job_id'), // query template
+        jobExecutionId: queryParamMap.get('job_execution_id'), // query template
         seedId: queryParamMap.get('seed_id'), // query template
         hasError: queryParamMap.get('has_error'), // list request
         startTimeTo: queryParamMap.get('start_time_to'), // list request
@@ -99,6 +100,10 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
 
     const jobId$ = routeParam$.pipe(
       map(({jobId}) => jobId),
+      distinctUntilChanged());
+
+    const jobExecutionId$ = routeParam$.pipe(
+      map(({jobExecutionId}) => jobExecutionId),
       distinctUntilChanged());
 
     const seedId$ = routeParam$.pipe(
@@ -140,7 +145,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const pageSize$ = routeParam$.pipe(
-      map(({pageSize}) => parseInt(pageSize, 10) || 10),
+      map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
       shareReplay(1)
     );
@@ -175,13 +180,14 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const query$: Observable<CrawlExecutionStatusQuery> = combineLatest([
-      jobId$, seedId$, stateList$, sort$, pageIndex$, pageSize$, hasError$,
+      jobId$, jobExecutionId$, seedId$, stateList$, sort$, pageIndex$, pageSize$, hasError$,
       startTimeFrom$, startTimeTo$, watch$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([jobId, seedId, stateList, sort, pageIndex, pageSize,
+      map(([jobId, jobExecutionId, seedId, stateList, sort, pageIndex, pageSize,
              hasError, startTimeFrom, startTimeTo, watch]) => ({
         jobId,
+        jobExecutionId,
         stateList,
         seedId,
         sort,
@@ -231,6 +237,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
         state: value.stateList && value.stateList.length ? value.stateList : null,
         seed_id: value.seedId || null,
         job_id: value.jobId || null,
+        job_execution_id: value.jobExecutionId || null,
         start_time_to: startTimeTo,
         start_time_from: startTimeFrom,
         has_error: value.hasError || null,
@@ -285,6 +292,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy, AfterViewInit
       stateList: null,
       seedId: '',
       jobId: '',
+      jobExecutionId: '',
       startTimeFrom: '',
       startTimeTo: '',
       hasError: null,

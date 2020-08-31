@@ -17,5 +17,5 @@ export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlEx
   @Input()
   sortActive = 'startTime';
 
-  displayedColumns: string[] = ['seedId', 'jobId', 'state', 'createdTime', 'startTime', 'lastChangeTime', 'endTime', 'extra', 'action'];
+  displayedColumns: string[] = ['seedId', 'jobId', 'state', 'startTime', 'endTime', 'extra', 'action'];
 }

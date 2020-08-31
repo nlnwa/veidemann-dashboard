@@ -4,9 +4,8 @@ pre: "<i class='fa fa-cog'></i>"
 weight: 3
 ---
 
-Veidemann Dashboard gir deg muligheten til å sette en rekke forskjellige konfigurasjoner for innhøstingen av websider.
-
-I denne delen vil vi gå gjennom bruken av de ulike konfigurasjonene og parameterene som kan settes.  
+Veidemann Dashboard gir deg muligheten til å sette en rekke forskjellige konfigurasjoner for innhøstingen av websider.  
+I tillegg til parametere som kan settes i hver enkelt konfigurasjon, inneholder alle [meta](#veidemann-meta).
 
 I tabellen under vises alle tilgjengelige konfigurasjoner og en kort beskrivelse av hvilke oppgaver disse har.
 For en mer utfyllende beskrivelse av deres funksjon, gå til siden for den aktuelle konfigurasjonen. 
@@ -193,6 +192,7 @@ Felt                                      | Betydning
 [Navn](#meta-name)                        | Navn for konfigurasjonen
 [Beskrivelse](#meta-description)          | Beskrivelse av konfigurasjonen
 [Label](#meta-label)                      | Merkelapper for gruppering, søk osv.
+[Annotasjon](#meta-annotation)            | Notater/anmerkninger for en konfigurasjon
 [Opprettet](#meta-created)                | Dato for når konfigurasjonen ble opprettet
 [Opprettet av](#meta-created-by)          | Navnet på brukeren som opprett konfigurasjonen
 [Sist endret](#meta-last-modified)        | Dato for når konfigurasjonen ble sist endret
@@ -231,7 +231,13 @@ i listen, vil dette fylles inn  i skjemaet.
 Eksisterende labels kan også redigeres eller slettes. Ved å trykke på en label vil man få muligheten til å redigere
 nøkkel og verdi.
 
-![meta edit label](/veidemann/docs/img/config/veidemann_dashboard_config_meta_edit_label.png)
+![meta edit label](/veidemann/docs/img/config/veidemann_dashboard_config_meta_edit_label.png)  
+
+##### Annotasjon {#meta-annotation}
+------------------------------------
+En annotasjon er utformet og brukes likt som en [label](#meta-label), men benyttes til å knytte 
+vilkårlige ikke-identifiserende metadata til konfigurasjoner. 
+Disse annoteringene kan eksempelvis brukes til å overstyre deler av en konfigurasjon. 
 
 ##### Opprettet {#meta-created}
 ------------------------------

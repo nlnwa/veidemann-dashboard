@@ -15,3 +15,5 @@ Rapport                          | Beskrivelse
 ---------------------------------|-------------------------------------------------------------
 [CrawlJob](crawljob)             | Viser status for kjørende og utførte høstejobber i Veidemann
 [CrawlExecution](crawlexecution) | Viser status for seeds er eller har blitt høstet i Veidemann
+[Pagelog](pagelog)               |
+[Crawllog](crawllog)             |
