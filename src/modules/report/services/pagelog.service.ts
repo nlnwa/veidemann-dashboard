@@ -6,26 +6,22 @@ import {PageLog} from '../../../shared/models/report';
 import {PageLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
-import {Sort} from '../../../shared/func';
+import {Page, Sort, WatchQuery} from '../../../shared/func';
 
-export interface PageLogQuery {
+export interface PageLogQuery extends Page, Sort, WatchQuery {
   uri: string;
   executionId: string;
   jobExecutionId: string;
-  pageSize: number;
-  pageIndex: number;
-  watch: boolean;
-  sort: Sort;
- // offset: number;
- // orderByPath: string;
- // orderDescending: boolean;
+  // offset: number;
+  // orderByPath: string;
+  // orderDescending: boolean;
 }
 
 @Injectable()
 export class PageLogService extends LoadingService {
   private readonly cache: Map<string, ConfigObject>;
 
-  constructor(private reportApiService: ReportApiService){
+  constructor(private reportApiService: ReportApiService) {
     super();
     this.cache = new Map();
   }
@@ -77,9 +73,9 @@ export class PageLogService extends LoadingService {
       listRequest.setWatch(query.watch);
     }
 
-    if (query.sort) {
-      listRequest.setOrderByPath(query.sort.active);
-      listRequest.setOrderDescending(query.sort.direction === 'desc');
+    if (query.active && query.direction) {
+      listRequest.setOrderByPath(query.active);
+      listRequest.setOrderDescending(query.direction === 'desc');
     }
 
     return listRequest;

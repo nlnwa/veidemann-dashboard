@@ -1,0 +1,24 @@
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field>
+    <input matInput
+           size="37"
+           formControlName="jobExecutionId"
+           placeholder="JobExecution ID"
+           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           size="37"
+           formControlName="executionId"
+           placeholder="Execution ID"
+           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="uri"
+           placeholder="URI"
+           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
+  </mat-form-field>
+</form>

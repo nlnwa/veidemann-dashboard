@@ -93,7 +93,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"
-          class=config-row
+          class="config-row"
           [class.expanded-row]="expandedConfigObject === row"
           (click)="expandedConfigObject = expandedConfigObject === row ? null : row"
           [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"

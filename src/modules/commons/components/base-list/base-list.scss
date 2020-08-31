@@ -54,10 +54,10 @@ table {
   color: $warn;
 }
 
-.mat-row.row-selected:hover {
-  background-color: $dark-focused;
-  cursor: pointer;
-}
+//.mat-row.row-selected:hover {
+//  background-color: $dark-focused;
+//  cursor: pointer;
+//}
 
 .mat-row.no-interaction {
   cursor: default;

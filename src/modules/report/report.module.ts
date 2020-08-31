@@ -32,6 +32,8 @@ import {QueryCrawlLogDirective} from './directives/query-crawl-log.directive';
 import {CrawlLogQueryComponent} from './components/crawl-log-query/crawl-log-query.component';
 import {CrawlLogDetailComponent} from './containers/crawl-log-detail/crawl-log-detail.component';
 import {QueryJobExecutionStatusDirective} from './directives/query-job-execution-status.directive';
+import { PageLogQueryComponent } from './components/page-log-query/page-log-query.component';
+import {QueryPageLogDirective} from './directives/query-page-log.directive';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,8 @@ import {QueryJobExecutionStatusDirective} from './directives/query-job-execution
     QueryJobExecutionStatusDirective,
     JobNamePipe,
     SeedNamePipe,
+    PageLogQueryComponent,
+    QueryPageLogDirective,
   ],
   imports: [
     CommonsModule,

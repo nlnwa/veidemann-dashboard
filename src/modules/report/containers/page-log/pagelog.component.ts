@@ -1,52 +1,44 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {PageLog} from '../../../../shared/models/report/pagelog.model';
 import {ListDataSource, ListItem} from '../../../../shared/models/list-datasource';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  finalize,
-  map,
-  share,
-  shareReplay,
-  switchMap,
-  takeUntil,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {AppConfigService, ErrorService} from '../../../core/services';
 import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
-import {PageLogListComponent} from '../../components/pagelog-list/pagelog-list.component';
 import {Sort} from '../../../../shared/func';
+import {BASE_LIST} from '../../../../shared/directives';
+import {PageLogListComponent} from '../../components';
 
 @Component({
   selector: 'app-pagelog',
   templateUrl: './pagelog.component.html',
-  styleUrls: ['./pagelog.component.css']
+  styleUrls: ['./pagelog.component.css'],
+  providers: [
+    ListDataSource,
+    {
+      provide: BASE_LIST,
+      useClass: PageLogListComponent,
+    }
+  ],
 })
-export class PageLogComponent implements OnDestroy, AfterViewInit {
+export class PageLogComponent implements OnInit {
 
-  // query form
-  form: FormGroup;
-
-  pageLength$: Observable<number>;
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
   sortDirection$: Observable<SortDirection>;
   sortActive$: Observable<string>;
+  query$: Observable<PageLogQuery>;
 
   pageLog: Subject<PageLog>;
   pageLog$: Observable<PageLog>;
 
-  dataSource: ListDataSource<PageLog>;
-
-  @ViewChild('list') list: PageLogListComponent;
-
-  private ngUnsubscribe = new Subject();
+  get loading$(): Observable<boolean> {
+    return this.pageLogService.loading$;
+  }
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -54,14 +46,12 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
               private pageLogService: PageLogService,
               private errorService: ErrorService,
               public appConfigService: AppConfigService) {
-    this.createQueryForm();
-
     this.pageLog = new Subject<PageLog>();
     this.pageLog$ = this.pageLog.asObservable();
+  }
 
-    this.dataSource = new ListDataSource<PageLog>();
-
-    const routeParam$ = route.queryParamMap.pipe(
+  ngOnInit(): void {
+    const routeParam$ = this.route.queryParamMap.pipe(
       debounceTime(0), // synchronize
       map(queryParaMap => ({
         warcId: queryParaMap.get('warc_id'),
@@ -76,9 +66,9 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
       share(),
     );
 
-    const warcId$ = routeParam$.pipe(
-      map(({warcId}) => warcId),
-      distinctUntilChanged());
+    // const warcId$ = routeParam$.pipe(
+    //   map(({warcId}) => warcId),
+    //   distinctUntilChanged());
 
     const watch$ = routeParam$.pipe(
       map(({watch}) => watch),
@@ -121,100 +111,41 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
       shareReplay(1),
     );
 
-    this.sortDirection$ = sort$.pipe(
+    const sortDirection$ = sort$.pipe(
       map(sort => (sort ? sort.direction : '') as SortDirection));
 
-    this.sortActive$ = sort$.pipe(
+    const sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
-
-    this.pageSize$ = pageSize$;
-
-    this.pageIndex$ = pageIndex$;
 
     const init$ = of(null).pipe(
       distinctUntilChanged(),
     );
 
-    const query$: Observable<PageLogQuery> = combineLatest([uri$, jobExecutionId$, executionId$, sort$,
-      watch$, pageIndex$, pageSize$, init$
+    const query$: Observable<PageLogQuery> = combineLatest([uri$, jobExecutionId$, executionId$, sortActive$,
+      sortDirection$, watch$, pageIndex$, pageSize$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([uri, jobExecutionId, executionId, sort, watch, pageIndex, pageSize]) => ({
-        uri,
-        jobExecutionId,
-        executionId,
-        sort,
-        watch,
-        pageIndex,
-        pageSize
+      map(([uri, jobExecutionId, executionId, active, direction, watch, pageIndex, pageSize]) => ({
+        uri, jobExecutionId, executionId, active, direction, watch, pageIndex, pageSize
       })),
       share()
     );
 
-    const searchComplete = new Subject<void>();
-
-    const countQuery$ = searchComplete.pipe(
-      withLatestFrom(query$),
-      map(([_, query]) => query),
-      distinctUntilChanged((a: PageLogQuery, b: PageLogQuery) =>
-        // only count when these query parameters change
-        (a.uri === b.uri
-          && a.executionId === b.executionId
-          && a.jobExecutionId === b.jobExecutionId
-        )),
-    );
-
-    this.pageLength$ = countQuery$.pipe(
-      switchMap(query => (query.executionId || query.jobExecutionId)
-        ? this.pageLogService.count(query)
-        : of(this.dataSource.length)
-      ));
-
-    query$.pipe(
-      tap(query => this.updateQueryForm(query)),
-      tap(() => this.dataSource.clear()),
-      switchMap(query => this.pageLogService.search(query).pipe(
-        // let us know when search is complete so we can determine
-        // pageLength and fool the paginator (no counting for crawlExecutions in API)
-        finalize(() => searchComplete.next())
-      )),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(pageLog => this.dataSource.add(pageLog));
-
-    warcId$.pipe(
-      switchMap(warcId => warcId ? this.pageLogService.get(warcId) : of(null)),
-      tap(s => {
-        if (s === null) {
-          this.list.reset();
-        }
-      }),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(pageLog => this.pageLog.next(pageLog));
+    this.pageSize$ = pageSize$;
+    this.pageIndex$ = pageIndex$;
+    this.query$ = query$;
+    //
+    // warcId$.pipe(
+    //   switchMap(warcId => warcId ? this.pageLogService.get(warcId) : of(null)),
+    //   tap(s => {
+    //     if (s === null) {
+    //       this.list.reset();
+    //     }
+    //   }),
+    //   takeUntil(this.ngUnsubscribe)
+    // ).subscribe(pageLog => this.pageLog.next(pageLog));
   }
 
-  ngAfterViewInit(): void {
-    this.form.valueChanges.subscribe(value => {
-      const queryParams = {
-        uri: value.uri || null,
-        job_execution_id: value.jobExecutionId || null,
-        execution_id: value.executionId || null,
-      };
-      this.list.reset();
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: {...queryParams, id: null}
-      }).catch(error => this.errorService.dispatch(error));
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-  get loading$(): Observable<boolean> {
-    return this.pageLogService.loading$;
-  }
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
@@ -240,19 +171,5 @@ export class PageLogComponent implements OnDestroy, AfterViewInit {
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
     }).catch(error => this.errorService.dispatch(error));
-  }
-
-  private createQueryForm(): void {
-    this.form = this.fb.group({
-      jobExecutionId: '',
-      executionId: '',
-      uri: '',
-    });
-  }
-
-  private updateQueryForm(query: PageLogQuery): void {
-    this.form.patchValue(query, {emitEvent: false});
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
   }
 }

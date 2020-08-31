@@ -1,6 +1,7 @@
 <div class="container">
 
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+
   <div fxLayout="row">
     <app-crawl-execution-status-query [query]="query$ | async"></app-crawl-execution-status-query>
 

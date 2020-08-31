@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {PagelogStatusComponent} from './pagelog-status.component';
+import {PagelogStatusComponent} from './page-log-status.component';
 
 describe('PagelogStatusComponent', () => {
   let component: PagelogStatusComponent;
