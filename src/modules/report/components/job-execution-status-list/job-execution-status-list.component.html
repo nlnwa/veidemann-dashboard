@@ -54,7 +54,7 @@
 
   <mat-paginator
     (page)="onPage($event)"
-    [length]="length"
+    [length]="length$ | async"
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageOptions">

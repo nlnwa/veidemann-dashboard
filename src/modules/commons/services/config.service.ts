@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {from, Observable} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {count, mergeMap} from 'rxjs/operators';
 
 import {FieldMask, ListRequest, UpdateRequest} from '../../../api';

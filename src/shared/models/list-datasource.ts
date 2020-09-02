@@ -52,7 +52,6 @@ export class ListDataSource<T extends ListItem> implements DataSource<T> {
       this.replace(item);
     } else {
       if (this.capacity && this.data.value.length === this.capacity) {
-        console.log('this capacity');
         this.data.next([item, ...this.data.value.slice(0, -1)]);
       } else {
         this.data.next(this.data.value.concat(item));

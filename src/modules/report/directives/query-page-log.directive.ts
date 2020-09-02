@@ -19,7 +19,7 @@ export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog>
   ngOnInit() {
     super.ngOnInit();
 
-    this.subject.pipe(
+    this.query$.pipe(
       distinctUntilChanged((a: PageLogQuery, b: PageLogQuery) =>
         // only count when these query parameters change
         (a.uri === b.uri

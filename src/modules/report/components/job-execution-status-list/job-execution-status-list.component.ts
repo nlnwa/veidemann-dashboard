@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components/base-list/base-list';
 import {JobExecutionState, JobExecutionStatus, ListDataSource} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';

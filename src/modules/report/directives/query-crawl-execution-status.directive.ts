@@ -20,16 +20,16 @@ export class QueryCrawlExecutionStatusDirective extends QueryWithPageLengthDirec
   }
 
   ngOnInit() {
-    this.query$ = this.query$.pipe(
-      tap(query => {
-        if (query.pageSize) {
-          this.dataSource.length = query.pageSize;
-        }
-        if (!query.watch) {
-          this.dataSource.clear();
-        }
-      })
-    );
+    // this.query$ = this.query$.pipe(
+    //   tap(query => {
+    //     if (query.pageSize) {
+    //       this.dataSource.length = query.pageSize;
+    //     }
+    //     if (!query.watch) {
+    //       this.dataSource.clear();
+    //     }
+    //   })
+    // );
     super.ngOnInit();
   }
 }

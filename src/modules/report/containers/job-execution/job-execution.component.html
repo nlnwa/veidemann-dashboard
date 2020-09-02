@@ -1,29 +1,19 @@
 <div fxLayout="row" *ngIf="query$ | async as query">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div>
-    <mat-action-list>
-      <button mat-list-item (click)="onShowRunning()">Running</button>
-    </mat-action-list>
-    <mat-action-list>
-      <button mat-list-item (click)="onToggleWatch()">WATCH</button>
-    </mat-action-list>
-
-    <div class="content-padding">
-      <app-job-execution-status-query
-        [crawlJobOptions]="crawlJobOptions" [query]="query"
-        (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
-    </div>
+  <div class="content-padding">
+    <app-job-execution-status-query
+      [crawlJobOptions]="crawlJobOptions" [query]="query"
+      (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
   </div>
   <div fxFlex>
-    <app-job-execution-status-list
-      appQueryJobExecutionStatus [query]="query"
-      [pageIndex]="pageIndex$ | async"
-      [pageSize]="pageSize$ | async"
-      [sortDirection]="sortDirection$ | async"
-      [sortActive]="sortActive$ | async"
-      (selectedChange)="onSelectedChange($event)"
-      (sort)="onSort($event)"
-      (page)="onPage($event)">
+    <app-job-execution-status-list appQueryJobExecutionStatus [query]="query"
+                                   [pageIndex]="pageIndex$ | async"
+                                   [pageSize]="pageSize$ | async"
+                                   [sortDirection]="sortDirection$ | async"
+                                   [sortActive]="sortActive$ | async"
+                                   (selectedChange)="onSelectedChange($event)"
+                                   (sort)="onSort($event)"
+                                   (page)="onPage($event)">
       <a *appAction="let row" mat-icon-button
          [routerLink]="['/config', 'crawljobs']"
          [queryParams]="{id: row.jobId}">

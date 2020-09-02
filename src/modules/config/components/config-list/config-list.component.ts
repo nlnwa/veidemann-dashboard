@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, forwardRef} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components/base-list/base-list';
 import {ConfigObject} from '../../../../shared/models/config';
 import {BASE_LIST} from '../../../../shared/directives';
@@ -25,12 +25,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 
 export class ConfigListComponent extends BaseListComponent<ConfigObject> {
-  constructor(public cdr: ChangeDetectorRef) {
+  constructor() {
     super();
-  }
-
-  reset() {
-    super.reset();
-    this.cdr.markForCheck();
   }
 }

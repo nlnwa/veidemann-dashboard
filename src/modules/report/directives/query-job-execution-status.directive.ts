@@ -1,9 +1,8 @@
-import {Directive, Host, Inject, Self} from '@angular/core';
+import {Directive, Host, Inject} from '@angular/core';
 import {BASE_LIST} from '../../../shared/directives';
 import {BaseList, JobExecutionStatus, ListDataSource} from '../../../shared/models';
 import {QueryWithPageLengthDirective} from './query-with-page-length.directive';
 import {JobExecutionService, JobExecutionStatusQuery} from '../services';
-import {BaseListComponent} from '../../commons/components';
 
 
 @Directive({

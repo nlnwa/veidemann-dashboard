@@ -26,8 +26,6 @@ export class JobExecutionComponent implements OnInit {
   pageIndex$: Observable<number>;
   sortDirection$: Observable<SortDirection>;
   sortActive$: Observable<string>;
-
-  private query: JobExecutionStatusQuery;
   query$: Observable<JobExecutionStatusQuery>;
 
   constructor(private route: ActivatedRoute,
@@ -36,7 +34,6 @@ export class JobExecutionComponent implements OnInit {
               private errorService: ErrorService) {
 
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
-
   }
 
   ngOnInit(): void {
@@ -114,9 +111,7 @@ export class JobExecutionComponent implements OnInit {
 
     this.pageIndex$ = pageIndex$;
 
-    const init$ = of(null).pipe(
-      distinctUntilChanged(),
-    );
+    const init$ = of(null);
 
     const query$: Observable<JobExecutionStatusQuery> = combineLatest([
       jobId$, stateList$, sort$, pageIndex$, pageSize$, startTimeFrom$,
@@ -134,11 +129,12 @@ export class JobExecutionComponent implements OnInit {
         startTimeTo,
         watch,
       })),
+      tap(q => console.log('query', q)),
+      share()
     );
 
-    this.query$ = query$.pipe(
-      tap(query => this.query = query)
-    );
+    this.query$ = query$;
+
     // id$.pipe(
     //   switchMap(id => id ? this.jobExecutionService.get(id) : of(null)),
     //   tap(s => {
@@ -172,20 +168,6 @@ export class JobExecutionComponent implements OnInit {
 
   get loading$(): Observable<boolean> {
     return this.jobExecutionService.loading$;
-  }
-
-  onShowRunning() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {state: JobExecutionState.RUNNING}
-    }).catch(error => this.errorService.dispatch(error));
-  }
-
-  onToggleWatch() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {watch: !this.query.watch || null}
-    }).catch(error => this.errorService.dispatch(error));
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {
