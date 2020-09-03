@@ -135,7 +135,7 @@ export class CrawlLogComponent implements OnInit, OnDestroy {
     );
 
     id$.pipe(
-      switchMap(id => id ? this.crawlLogService.get(id) : of(null)),
+      switchMap(id => id ? this.crawlLogService.get({id}) : of(null)),
       tap(s => {
         if (s === null) {
           this.list.reset();

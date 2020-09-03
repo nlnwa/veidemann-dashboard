@@ -1,13 +1,12 @@
-import {Directive, InjectionToken, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {share, shareReplay, switchMap, takeUntil} from 'rxjs/operators';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {Directive, InjectionToken, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
 import {BaseList, ConfigRef, ListDataSource, ListItem} from '../models';
 import {DetailQuery} from '../func';
 import {Loader} from '../services';
-import {BaseListComponent} from '../../modules/commons/components';
 
 export interface Getter<T extends ListItem> extends Loader {
-  get(query: DetailQuery | string | ConfigRef): Observable<T>;
+  get(query: DetailQuery | ConfigRef): Observable<T>;
 }
 
 export interface Searcher<S, T extends ListItem> extends Loader {
@@ -17,10 +16,12 @@ export interface Searcher<S, T extends ListItem> extends Loader {
 export const BASE_LIST = new InjectionToken<BaseList<any>>('base.list');
 
 @Directive()
-export abstract class QueryDirective<S, T extends ListItem> implements OnInit, OnChanges, OnDestroy {
+export abstract class QueryDirective<S, T extends ListItem> implements OnChanges, OnDestroy {
 
   protected readonly ngUnsubscribe: Subject<void>;
-  protected query$: BehaviorSubject<S>;
+  protected subject: Subject<S>;
+  // TODO use ReplaySubject and ngOnInit...
+  protected query$: Observable<S>;
 
   @Input()
   query: S;
@@ -29,27 +30,33 @@ export abstract class QueryDirective<S, T extends ListItem> implements OnInit, O
                         protected list: BaseList<T>,
                         protected dataSource: ListDataSource<T>) {
     this.ngUnsubscribe = new Subject();
-    this.query$ = new BehaviorSubject<S>({} as S);
+    this.subject = new Subject<S>();
+    this.query$ = this.subject.asObservable();
     list.dataSource = dataSource;
+    this.onInit();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.query && this.query) {
-      this.dataSource.clear();
-      this.list.reset();
-      this.query$.next(this.query);
+      this.onQuery();
     }
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
+  protected onInit(): void {
     this.query$.pipe(
       switchMap(query => this.service.search(query)),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(item => this.dataSource.add(item));
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+  protected onQuery(): void {
+    this.dataSource.clear();
+    this.list.reset();
+    this.subject.next(this.query);
   }
 }

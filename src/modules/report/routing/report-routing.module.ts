@@ -10,6 +10,7 @@ import {PageLogComponent} from '../containers/page-log/pagelog.component';
 import {CrawlLogComponent} from '../containers/crawl-log/crawl-log.component';
 import {ReportNavigationListComponent} from '../containers/report-navigation-list/report-navigation-list.component';
 import {CrawlExecutionDetailComponent} from '../containers/crawl-execution-detail/crawl-execution-detail.component';
+import {JobExecutionDetailComponent} from '../containers/job-execution-detail/job-execution-detail.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
         resolve: {
           options: OptionsResolver
         },
+      },
+      {
+        path: 'jobexecution/:id',
+        component: JobExecutionDetailComponent,
       },
       {
         path: 'pagelog',

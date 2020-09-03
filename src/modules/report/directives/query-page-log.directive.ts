@@ -1,4 +1,4 @@
-import {Directive, Inject, OnInit} from '@angular/core';
+import {Directive, Inject} from '@angular/core';
 import {BASE_LIST, QueryDirective} from '../../../shared/directives';
 import {PageLogQuery, PageLogService} from '../services';
 import {PageLog} from '../../../shared/models/report';
@@ -10,14 +10,14 @@ import {of} from 'rxjs';
 @Directive({
   selector: '[appQueryPageLog]'
 })
-export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog> implements OnInit {
+export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog> {
   constructor(protected service: PageLogService,
               @Inject(BASE_LIST) protected baseList: BaseList<PageLog>) {
     super(service, baseList, new ListDataSource<PageLog>());
   }
 
-  ngOnInit() {
-    super.ngOnInit();
+  onInit(): void {
+    super.onInit();
 
     this.query$.pipe(
       distinctUntilChanged((a: PageLogQuery, b: PageLogQuery) =>

@@ -1,4 +1,4 @@
-import {Directive, Inject, Input, OnInit} from '@angular/core';
+import {Directive, Inject, Input} from '@angular/core';
 import {BASE_LIST, QueryDirective} from '../../../shared/directives';
 import {ConfigQuery} from '../../../shared/func';
 import {ConfigObject} from '../../../shared/models/config';
@@ -10,7 +10,7 @@ import {ConfigListComponent} from '../components';
 @Directive({
   selector: '[appQueryConfigObject]'
 })
-export class ConfigQueryDirective extends QueryDirective<ConfigQuery, ConfigObject> implements OnInit {
+export class ConfigQueryDirective extends QueryDirective<ConfigQuery, ConfigObject> {
   @Input()
   count: number;
 

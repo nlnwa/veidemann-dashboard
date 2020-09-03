@@ -33,7 +33,7 @@ export class RunCrawlDialogComponent implements OnInit {
   ngOnInit() {
     this.configApiService.list(createListRequest(Kind.CRAWLJOB.valueOf())).subscribe(crawlJob => {
       this.crawlJobs.push(crawlJob);
-    })
+    });
   }
 
   onRunCrawl() {

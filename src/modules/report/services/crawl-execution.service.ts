@@ -30,7 +30,7 @@ export class CrawlExecutionService extends LoadingService
     this.cache = new Map();
   }
 
-  get(query: DetailQuery): Observable<CrawlExecutionStatus> {
+  get(query: DetailQuery & WatchQuery): Observable<CrawlExecutionStatus> {
     return this.load(this.reportApiService.listCrawlExecutions(this.getRequest(query)));
   }
 
@@ -45,7 +45,7 @@ export class CrawlExecutionService extends LoadingService
     return this.load(this.reportApiService.listCrawlExecutions(this.getListRequest(query)));
   }
 
-  private getRequest(query: DetailQuery): CrawlExecutionsListRequest {
+  private getRequest(query: DetailQuery & WatchQuery): CrawlExecutionsListRequest {
     if (!query.id) {
       return null;
     }

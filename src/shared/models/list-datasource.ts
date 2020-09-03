@@ -5,6 +5,7 @@ import {Injectable} from '@angular/core';
 export interface BaseList<T> {
   dataSource: DataSource<T>;
   length: number;
+
   reset(): void;
 }
 
@@ -20,10 +21,15 @@ export class ListDataSource<T extends ListItem> implements DataSource<T> {
     this.data = new BehaviorSubject([]);
   }
 
-  private capacity;
+  // tslint:disable-next-line:variable-name
+  private _capacity;
 
-  set length(length: number) {
-    this.capacity = length;
+  get capacity(): number {
+    return this._capacity;
+  }
+
+  set capacity(length: number) {
+    this._capacity = length;
   }
 
   get length(): number {

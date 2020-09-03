@@ -43,7 +43,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.urisCrawled">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsUrisCrawled">URIs crawled</td>
             <td class="mat-cell">{{jobExecutionStatus.urisCrawled}}</td>
           </tr>
@@ -51,23 +51,23 @@
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsBytesCrawled">Bytes crawled</td>
             <td class="mat-cell">{{jobExecutionStatus.bytesCrawled | filesize}}</td>
           </tr>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsCrawled">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsCrawled">Documents crawled</td>
             <td class="mat-cell">{{jobExecutionStatus.documentsCrawled}}</td>
           </tr>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsDenied">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsDenied">Documents denied</td>
             <td class="mat-cell">{{jobExecutionStatus.documentsDenied}}</td>
           </tr>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsFailed">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsFailed">Documents failed</td>
             <td class="mat-cell">{{jobExecutionStatus.documentsFailed}}</td>
           </tr>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsOutOfScope">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsOutOfScope">Documents out of scope</td>
             <td class="mat-cell">{{jobExecutionStatus.documentsOutOfScope}}</td>
           </tr>
-          <tr class="mat-row">
+          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsRetried">
             <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsRetried">Documents retried</td>
             <td class="mat-cell">{{jobExecutionStatus.documentsRetried}}</td>
           </tr>

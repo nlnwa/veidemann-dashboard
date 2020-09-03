@@ -5,7 +5,7 @@ import {CrawlLog} from '../../../shared/models/report';
 import {CrawlLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
-import {Page, Sort} from '../../../shared/func';
+import {DetailQuery, Page, Sort} from '../../../shared/func';
 import {Getter, Searcher} from '../../../shared/directives';
 
 
@@ -63,13 +63,9 @@ export class CrawlLogService extends LoadingService
     return listRequest;
   }
 
-  get(warcId
-        :
-        string
-  ):
-    Observable<CrawlLog> {
+  get(query: DetailQuery): Observable<CrawlLog> {
     const listRequest = new CrawlLogListRequest();
-    listRequest.addWarcId(warcId);
+    listRequest.addWarcId(query.id);
     return this.reportApiService.listCrawlLogs(listRequest);
   }
 

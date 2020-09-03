@@ -15,4 +15,12 @@ export class QueryJobExecutionStatusDirective extends QueryWithPageLengthDirecti
               protected dataSource: ListDataSource<JobExecutionStatus>) {
     super(service, baseList, dataSource);
   }
+
+  protected onQuery() {
+    if (this.query.watch) {
+      this.subject.next(this.query);
+    } else {
+      super.onQuery();
+    }
+  }
 }

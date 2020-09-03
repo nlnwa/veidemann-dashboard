@@ -19,7 +19,9 @@ export class JobExecutionStatusComponent {
   getExecMap(executionStateMap: Map<string, number>) {
     const datasource = [];
     for (const [key, value] of executionStateMap) {
-      datasource.push({key, value});
+      if (value) {
+        datasource.push({key, value});
+      }
     }
     return datasource;
   }

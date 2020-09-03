@@ -1,90 +1,91 @@
-<div class="mat-elevation-z1" style="overflow-x: auto;">
-  <table mat-table [dataSource]="dataSource"
-         matSort
-         matSortStart="desc"
-         [matSortActive]="sortActive"
-         [matSortDirection]="sortDirection"
-         (matSortChange)="onSortChange($event)">
+<div fxLayout="column" class="container">
+  <div fxFlex style="overflow-x: auto;">
+    <table mat-table [dataSource]="dataSource"
+           matSort
+           matSortStart="desc"
+           [matSortActive]="sortActive"
+           [matSortDirection]="sortDirection"
+           (matSortChange)="onSortChange($event)">
 
-    <ng-container matColumnDef="jobId">
-      <th i18n="@@crawlExecutionReportListCrawljobHeaderCell"
-          mat-header-cell *matHeaderCellDef mat-sort-header>Job
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.jobId | getJobNamePipe | async }}</td>
-    </ng-container>
+      <ng-container matColumnDef="jobId">
+        <th i18n="@@crawlExecutionReportListCrawljobHeaderCell"
+            mat-header-cell *matHeaderCellDef mat-sort-header>Job
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.jobId | getJobNamePipe | async }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="seedId">
-      <th i18n="@@crawlExecutionReportListSeedHeaderCell"
-          mat-header-cell *matHeaderCellDef mat-sort-header>Seed
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.seedId | getSeedNamePipe | async }}</td>
-    </ng-container>
+      <ng-container matColumnDef="seedId">
+        <th i18n="@@crawlExecutionReportListSeedHeaderCell"
+            mat-header-cell *matHeaderCellDef mat-sort-header>Seed
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.seedId | getSeedNamePipe | async }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="state">
-      <th i18n="@@crawlExecutionReportListStateHeaderCell"
-          mat-header-cell *matHeaderCellDef mat-sort-header>State
-      </th>
-      <td mat-cell *matCellDef="let row">{{CrawlExecutionState[row.state]}}</td>
-    </ng-container>
+      <ng-container matColumnDef="state">
+        <th i18n="@@crawlExecutionReportListStateHeaderCell"
+            mat-header-cell *matHeaderCellDef mat-sort-header>State
+        </th>
+        <td mat-cell *matCellDef="let row">{{CrawlExecutionState[row.state]}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="createdTime">
-      <th i18n="@@crawlExecutionReportListCreatedTimeHeaderCell"
-          mat-header-cell *matHeaderCellDef>Created
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="createdTime">
+        <th i18n="@@crawlExecutionReportListCreatedTimeHeaderCell"
+            mat-header-cell *matHeaderCellDef>Created
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="startTime">
-      <th i18n="@@crawlExecutionReportListStartTimeHeaderCell"
-          mat-header-cell *matHeaderCellDef mat-sort-header>Started
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="startTime">
+        <th i18n="@@crawlExecutionReportListStartTimeHeaderCell"
+            mat-header-cell *matHeaderCellDef mat-sort-header>Started
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.startTime | date : 'short'}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="lastChangeTime">
-      <th i18n="@@crawlExecutionReportListLastChangeTimeHeaderCell"
-          mat-header-cell *matHeaderCellDef>Last changed
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.lastChangeTime | date : 'short' }}</td>
-    </ng-container>
+      <ng-container matColumnDef="lastChangeTime">
+        <th i18n="@@crawlExecutionReportListLastChangeTimeHeaderCell"
+            mat-header-cell *matHeaderCellDef>Last changed
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.lastChangeTime | date : 'short' }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="endTime">
-      <th i18n="@@crawlExecutionReportListEndTimeHeaderCell"
-          mat-header-cell *matHeaderCellDef>Ended
-      </th>
-      <td mat-cell *matCellDef="let row">{{row.endTime | date : 'short' }}</td>
-    </ng-container>
+      <ng-container matColumnDef="endTime">
+        <th i18n="@@crawlExecutionReportListEndTimeHeaderCell"
+            mat-header-cell *matHeaderCellDef>Ended
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.endTime | date : 'short' }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="extra">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <ng-container *ngFor="let extraTemplate of extraTemplates">
-          <ng-container *ngTemplateOutlet="extraTemplate; context: {$implicit: row}"></ng-container>
-        </ng-container>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="extra">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <ng-container *ngFor="let extraTemplate of extraTemplates">
+            <ng-container *ngTemplateOutlet="extraTemplate; context: {$implicit: row}"></ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
-        <div class="actions" *ngFor="let actionButtonTemplate of actionButtonTemplates">
-          <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
-        </div>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
+          <div class="actions" *ngFor="let actionButtonTemplate of actionButtonTemplates">
+            <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
+          </div>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
-        (click)="onRowClick(row)"></tr>
-  </table>
-
-    <mat-paginator
-      (page)="onPage($event)"
-      [length]="length$ | async"
-      [pageIndex]="pageIndex"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageOptions">
-    </mat-paginator>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
+          (click)="onRowClick(row)"></tr>
+    </table>
+  </div>
+  <mat-paginator
+    (page)="onPage($event)"
+    [length]="length$ | async"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageOptions">
+  </mat-paginator>
 </div>

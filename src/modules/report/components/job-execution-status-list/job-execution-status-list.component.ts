@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
-import {BaseListComponent} from '../../../commons/components/base-list/base-list';
+import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
+import {BaseListComponent} from '../../../commons/components';
 import {JobExecutionState, JobExecutionStatus, ListDataSource} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
 
 @Component({
   selector: 'app-job-execution-status-list',
   templateUrl: './job-execution-status-list.component.html',
-  styleUrls: ['../../../commons/components/base-list/base-list.scss', './job-execution-status-list.component.css'],
+  styleUrls: ['../../../commons/components/base-list/base-list.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     ListDataSource,

@@ -1,12 +1,12 @@
-<div fxLayout="row" *ngIf="query$ | async as query">
+<div class="container" *ngIf="query$ | async as query">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div class="content-padding">
+  <div class="container" fxLayout="row">
     <app-job-execution-status-query
+      class="content-padding"
       [crawlJobOptions]="crawlJobOptions" [query]="query"
       (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
-  </div>
-  <div fxFlex>
-    <app-job-execution-status-list appQueryJobExecutionStatus [query]="query"
+    <app-job-execution-status-list fxFlex style="overflow-y: auto;"
+                                   appQueryJobExecutionStatus [query]="query"
                                    [pageIndex]="pageIndex$ | async"
                                    [pageSize]="pageSize$ | async"
                                    [sortDirection]="sortDirection$ | async"

@@ -6,8 +6,9 @@ import {ConfigObject, ConfigRef, JobExecutionState, JobExecutionStatus, Kind} fr
 import {ReportApiService} from '../../core/services';
 import {ConfigService} from '../../commons/services';
 import {tap} from 'rxjs/operators';
-import {Sort, toTimestampProto} from '../../../shared/func';
+import {DetailQuery, Sort, toTimestampProto, WatchQuery} from '../../../shared/func';
 import {LoadingService} from '../../../shared/services';
+import {Getter, Searcher} from '../../../shared/directives';
 
 export interface JobExecutionStatusQuery {
   jobId: string;
@@ -21,7 +22,8 @@ export interface JobExecutionStatusQuery {
 }
 
 @Injectable()
-export class JobExecutionService extends LoadingService {
+export class JobExecutionService extends LoadingService
+  implements Searcher<JobExecutionStatusQuery, JobExecutionStatus>, Getter<JobExecutionStatus> {
 
   private readonly cache: Map<string, ConfigObject>;
 
@@ -31,24 +33,7 @@ export class JobExecutionService extends LoadingService {
     this.cache = new Map();
   }
 
-  get(id: string): Observable<JobExecutionStatus> {
-    const listRequest = new JobExecutionsListRequest();
-    listRequest.addId(id);
-    return this.reportApiService.listJobExecutions(listRequest);
-  }
-
-  getJob(id: string): Observable<ConfigObject> {
-    const configRef = new ConfigRef({id, kind: Kind.CRAWLJOB});
-    return this.cache.has(id) ? of(this.cache.get(id)) : this.configService.get(configRef).pipe(
-      tap(configObject => this.cache.set(id, configObject)),
-    );
-  }
-
-  search(query: JobExecutionStatusQuery): Observable<JobExecutionStatus> {
-    return this.load(this.reportApiService.listJobExecutions(this.getListRequest(query)));
-  }
-
-  private getListRequest(query: JobExecutionStatusQuery): JobExecutionsListRequest {
+  private static getListRequest(query: JobExecutionStatusQuery): JobExecutionsListRequest {
     const listRequest = new JobExecutionsListRequest();
     const queryTemplate = new JobExecutionStatus();
     const fieldMask = new FieldMask();
@@ -89,5 +74,23 @@ export class JobExecutionService extends LoadingService {
     }
 
     return listRequest;
+  }
+
+  get(query: DetailQuery & WatchQuery): Observable<JobExecutionStatus> {
+    const listRequest = new JobExecutionsListRequest();
+    listRequest.addId(query.id);
+    listRequest.setWatch(query.watch);
+    return this.reportApiService.listJobExecutions(listRequest);
+  }
+
+  getJob(id: string): Observable<ConfigObject> {
+    const configRef = new ConfigRef({id, kind: Kind.CRAWLJOB});
+    return this.cache.has(id) ? of(this.cache.get(id)) : this.configService.get(configRef).pipe(
+      tap(configObject => this.cache.set(id, configObject)),
+    );
+  }
+
+  search(query: JobExecutionStatusQuery): Observable<JobExecutionStatus> {
+    return this.load(this.reportApiService.listJobExecutions(JobExecutionService.getListRequest(query)));
   }
 }

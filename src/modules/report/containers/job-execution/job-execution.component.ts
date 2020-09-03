@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
 import {JobExecutionState, jobExecutionStates} from '../../../../shared/models/report';
-import {ListItem} from '../../../../shared/models/list-datasource';
+import {ListItem} from '../../../../shared/models';
 import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
 import {ErrorService} from '../../../core/services';
@@ -129,7 +129,6 @@ export class JobExecutionComponent implements OnInit {
         startTimeTo,
         watch,
       })),
-      tap(q => console.log('query', q)),
       share()
     );
 
@@ -146,18 +145,19 @@ export class JobExecutionComponent implements OnInit {
     // ).subscribe(jobExecutionStatus => this.jobExecutionStatus.next(jobExecutionStatus));
   }
 
-  onQueryChange(value: Partial<JobExecutionStatusQuery>) {
-    const startTimeTo = value.startTimeTo && isValidDate(new Date(value.startTimeTo))
-      ? new Date(value.startTimeTo).toISOString()
+  onQueryChange(query: Partial<JobExecutionStatusQuery>) {
+    const startTimeTo = query.startTimeTo && isValidDate(new Date(query.startTimeTo))
+      ? new Date(query.startTimeTo).toISOString()
       : null;
-    const startTimeFrom = value.startTimeFrom && isValidDate(new Date(value.startTimeFrom))
-      ? new Date(value.startTimeFrom).toISOString()
+    const startTimeFrom = query.startTimeFrom && isValidDate(new Date(query.startTimeFrom))
+      ? new Date(query.startTimeFrom).toISOString()
       : null;
     const queryParams = {
-      state: value.stateList && value.stateList.length ? value.stateList : null,
-      job_id: value.jobId || null,
+      state: query.stateList && query.stateList.length ? query.stateList : null,
+      job_id: query.jobId || null,
       start_time_to: startTimeTo,
       start_time_from: startTimeFrom,
+      watch: query.watch || null,
     };
     this.router.navigate([], {
       relativeTo: this.route,
@@ -172,10 +172,8 @@ export class JobExecutionComponent implements OnInit {
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
-      this.router.navigate([], {
+      this.router.navigate([item.id], {
         relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: {id: item.id},
       }).catch(error => this.errorService.dispatch(error));
     }
   }

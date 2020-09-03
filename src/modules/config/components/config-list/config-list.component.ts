@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, forwardRef} from '@angular/core';
-import {BaseListComponent} from '../../../commons/components/base-list/base-list';
+import {BaseListComponent} from '../../../commons/components';
 import {ConfigObject} from '../../../../shared/models/config';
 import {BASE_LIST} from '../../../../shared/directives';
 import {animate, state, style, transition, trigger} from '@angular/animations';

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CrawlLogService} from '../../services';
-import {DetailComponent} from '../../directives/detail-component.directive';
+import {DetailDirective} from '../../directives';
 import {CrawlLog} from '../../../../shared/models/report';
 
 @Component({
@@ -9,7 +9,7 @@ import {CrawlLog} from '../../../../shared/models/report';
   templateUrl: './crawl-log-detail.component.html',
   styleUrls: ['./crawl-log-detail.component.css']
 })
-export class CrawlLogDetailComponent extends DetailComponent<CrawlLog> {
+export class CrawlLogDetailComponent extends DetailDirective<CrawlLog> {
 
   constructor(protected route: ActivatedRoute,
               protected crawlLogService: CrawlLogService) {

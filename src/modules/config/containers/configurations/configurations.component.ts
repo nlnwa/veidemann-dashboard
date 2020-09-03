@@ -19,7 +19,7 @@ import {
 
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
 import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
-import {DeleteMultiDialogComponent, RunCrawlDialogComponent, RunningCrawlDialogComponent} from '../../components';
+import {DeleteMultiDialogComponent, RunCrawlDialogComponent} from '../../components';
 import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';
 import {ConfigService} from '../../../commons/services';
@@ -410,7 +410,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParamsHandling: 'merge',
       queryParams: {sort: sort.active && sort.direction ? `${sort.active}:${sort.direction}` : null}
-    });
+    }).catch(error => this.errorService.dispatch(error));
   }
 
   onSelectAll() {
@@ -553,11 +553,15 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
           this.controllerApiService.runCrawl(runCrawlRequest)
             .pipe(filter(_ => !!_))
             .subscribe(runCrawlReply => {
-              const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
-                disableClose: false,
-                autoFocus: true,
-                data: {runCrawlRequest, runCrawlReply, configObject}
-              });
+              this.router.navigate(
+                ['report', 'jobexecution', runCrawlReply.jobExecutionId],
+                {queryParams: {watch: true}}
+              ).catch(error => this.errorService.dispatch(error));
+              // const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
+              //   disableClose: false,
+              //   autoFocus: true,
+              //   data: {runCrawlRequest, runCrawlReply, configObject}
+              // });
             });
         }
       });

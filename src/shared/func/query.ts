@@ -15,7 +15,7 @@ export interface WatchQuery {
   watch: boolean;
 }
 
-export interface DetailQuery extends WatchQuery {
+export interface DetailQuery {
   id: string;
 }
 
