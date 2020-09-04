@@ -15,7 +15,14 @@
       </mat-action-list>
       <app-config-query [options]="options$ | async" [query]="query$ | async"
                         (queryChange)="onQueryChange($event)"></app-config-query>
-      <app-entity-view class="content-padding" *ngIf="entity$ | async as entity" [configObject]="entity"></app-entity-view>
+      <app-shortcut *ngIf="configObject$ | async as configObject"
+                    [configObject]="configObject"
+                    (createSeed)="onCreateSeedFromEntity($event)"
+                    (runCrawl)="onRunCrawl($event)"
+                    (clone)="onClone($event)">
+      </app-shortcut>
+      <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
+                       [configObject]="entity"></app-entity-view>
     </div>
     <ng-container *ngIf="kind$ | async as kind" [ngSwitch]="kind">
       <app-rolemapping-list fxFlex *ngSwitchCase="Kind.ROLEMAPPING"
@@ -29,7 +36,7 @@
         <app-detail-multi class="content-padding"
                           *ngIf="!isSingleMode"
                           (update)="onUpdateMulti($event)"
-                          [configObject]="configObject$ | async"
+                          [configObject]="configObjects$ | async"
                           [options]="options$ | async">
         </app-detail-multi>
         <app-config-list fxFlex style="min-height: 0px; overflow: auto;"

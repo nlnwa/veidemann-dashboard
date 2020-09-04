@@ -97,7 +97,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   allSelected: boolean;
   isAllInPageSelected$: Observable<boolean>;
   protected selectedRow: T;
-  expandedConfigObject: ConfigObject | null;
+  expandedConfigObject: T | null;
 
   protected constructor() {
     this.sort = new EventEmitter<Sort>();
@@ -136,6 +136,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.selection.clear();
     this.selectedRow = item;
     this.selectedChange.emit(this.selectedRow);
+    this.expandedConfigObject = this.expandedConfigObject === item ? null : item;
+
   }
 
   onMasterCheckboxToggle(checked: boolean) {

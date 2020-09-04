@@ -66,6 +66,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   kind$: Observable<Kind>;
 
   configObject$: BehaviorSubject<ConfigObject>;
+  configObjects$: BehaviorSubject<ConfigObject>;
 
   get loading$(): Observable<boolean> {
     return this.configService.loading$;
@@ -109,6 +110,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe = new Subject<void>();
 
     // for merged config
+    this.configObjects$ = new BehaviorSubject<ConfigObject>(null);
     this.configObject$ = new BehaviorSubject<ConfigObject>(null);
 
     // for reloading the current query (on save, delete, etc.)
@@ -262,6 +264,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         pageIndex,
         pageSize,
       })),
+      tap(() => this.configObject$.next(null)),
       share(),
     );
 
@@ -354,6 +357,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         }
       }
     });
+
   }
 
   onClone(configObject: ConfigObject) {
@@ -422,15 +426,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
     if (!Array.isArray(configs)) {
       this.selectedConfigs = [];
-      this.configObject$.next(null);
-      // navigate to configobject
-      this.router.navigate([configs.id], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
+      this.configObjects$.next(null);
+      this.configObject$.next(configs);
     } else {
       this.selectedConfigs = configs;
       const mergedConfigObject = ConfigObject.mergeConfigs(configs);
-      this.configObject$.next(mergedConfigObject);
+      this.configObjects$.next(mergedConfigObject);
     }
   }
 
@@ -507,7 +508,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(updatedConfigs => {
         this.reload.next();
-        this.configObject$.next(null);
+        this.configObjects$.next(null);
         this.snackBarService.openSnackBar(
           updatedConfigs + $localize`:@snackBarMessage.multipleUpdated: configurations updated`);
       });
