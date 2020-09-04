@@ -8,15 +8,17 @@
     {{crawlHostGroupSelector}}
   </mat-chip>
   <mat-label><b>Minimum robots validity: </b>
-    {{configObject.politenessConfig.minimumRobotsValidityDurationS}}
+    {{configObject.politenessConfig.minimumRobotsValidityDurationS | durationFormat: 's':'ddhhmmss'}}
   </mat-label>
   <mat-label><b>Minimum time between page load: </b>
-    {{configObject.politenessConfig.minTimeBetweenPageLoadMs}}
+    {{configObject.politenessConfig.minTimeBetweenPageLoadMs | durationFormat: 'ms':'mmss'}}
   </mat-label>
   <mat-label><b>Maximum time between page load: </b>
-    {{configObject.politenessConfig.maxTimeBetweenPageLoadMs}}
+    {{configObject.politenessConfig.maxTimeBetweenPageLoadMs | durationFormat: 'ms': 'mmss'}}
   </mat-label>
   <mat-label><b>Delay factor: </b>{{configObject.politenessConfig.delayFactor}}</mat-label>
   <mat-label><b>Maximum retries: </b>{{configObject.politenessConfig.maxRetries}}</mat-label>
-  <mat-label><b>Retry delay: </b>{{configObject.politenessConfig.retryDelaySeconds}}</mat-label>
+  <mat-label><b>Retry delay: </b>
+    {{configObject.politenessConfig.retryDelaySeconds | durationFormat: 's':'mmss'}}
+  </mat-label>
 </div>

@@ -2,7 +2,9 @@
   <mat-label><b>Deduplication policy: </b>{{RotationPolicy[configObject.collection.collectionDedupPolicy]}}</mat-label>
   <mat-label><b>File rotation policy: </b>{{RotationPolicy[configObject.collection.fileRotationPolicy]}}</mat-label>
   <mat-label><b>File size: </b>{{configObject.collection.fileSize|filesize}}</mat-label>
-  <mat-checkbox [(ngModel)]="configObject.collection.compress" labelPosition="before"><b>Compress: </b></mat-checkbox>
+  <mat-checkbox [(ngModel)]="configObject.collection.compress" labelPosition="before" disabled="true">
+    <b>Compress: </b>
+  </mat-checkbox>
   <mat-label><b>Subcollections: </b></mat-label>
   <table style="text-align: left">
     <tr>
