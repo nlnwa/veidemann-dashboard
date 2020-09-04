@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@collectionDetailsCardTitle">Collection</ng-container>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" fxLayoutGap="16px">
+    <app-meta formControlName="meta"></app-meta>
+    <mat-form-field>
+      <mat-select placeholder="Deduplication policy"
+                  formControlName="collectionDedupPolicy"
+                  i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder">
+        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="File rotation policy"
+                  formControlName="fileRotationPolicy"
+                  i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder">
+        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-filesize-input [placeholder]="'File size'" formControlName="fileSize">
+    </app-filesize-input>
+
+    <mat-checkbox formControlName="compress"
+                  labelPosition="after"
+                  i18n="@@collectionFormCompressLabel"
+                  color="accent">
+      Compress
+    </mat-checkbox>
+
+    <fieldset class="mat-elevation-z1" formArrayName="subCollectionsList">
+      <legend mat-card-subtitle i18n="@@collectionFormSubCollectionTitle">Subcollections</legend>
+
+      <div *ngFor="let subCollectionsList of subCollectionControlArray.controls; let i=index"
+           [formGroupName]="i"
+           fxLayout="row"
+           fxLayoutGap="16px">
+        <mat-form-field fxFlex>
+          <input matInput formControlName="name" placeholder="Name"
+                 i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Subcollection type"
+                      formControlName="type"
+                      i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder">
+            <mat-option *ngFor="let type of subCollectionTypes"
+                        [value]="type">{{SubCollectionType[type]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button
+                (click)="onRemoveSubCollection(i)"
+                *ngIf="canEdit">
+          <mat-icon>remove_circle</mat-icon>&nbsp;
+          <span i18n="@@collectionFormRemoveSubcollectionButton">REMOVE</span>
+        </button>
+      </div>
+
+      <button mat-stroked-button (click)="onAddSubCollection()" *ngIf="canEdit">
+        <mat-icon>add_circle</mat-icon>&nbsp;
+        <span i18n="@@collectionFormAddSubcollectionButton">ADD SUBCOLLECTION</span>
+      </button>
+    </fieldset>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">
+    SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">
+    REVERT
+  </button>
+  <span fxFlex></span>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>
+
+
+
+

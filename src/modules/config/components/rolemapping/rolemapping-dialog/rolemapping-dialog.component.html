@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@entityDetailsCardTitle">Rolemapping</ng-container>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" fxLayoutGap="16px">
+    <mat-form-field>
+      <mat-select placeholder="Choose a type" [(value)]="selectedType"
+                  i18n-placeholder="@@roleMappingDetailsTypeDropdownPlaceholder">
+        <mat-option value="email" i18n="@@roleMappingDetailsTypeOptionEmail">Email</mat-option>
+        <mat-option value="group" i18n="@@roleMappingDetailsTypeOptionGroup">Group</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex *ngIf="selectedType === 'email'">
+      <input matInput formControlName="email" placeholder="Email"
+             i18n-placeholder="@@roleMappingDetailsEmailInputPlaceholder">
+    </mat-form-field>
+    <mat-form-field fxFlex *ngIf="selectedType === 'group'">
+      <input matInput formControlName="group" placeholder="Group"
+             i18n-placeholder="@@roleMappingDetailsGroupInputPlaceholder">
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <mat-select placeholder="Choose role" formControlName="roleList" multiple
+                  i18n-placeholder="@@rolemappingDetailsRoleDropdownPlaceholder">
+        <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="! roleList.valid" i18n="@@roleMappingDetailsRoleRequiredError">
+        A user must be assigned at least one role.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>
