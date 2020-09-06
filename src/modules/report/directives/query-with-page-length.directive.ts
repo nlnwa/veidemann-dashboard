@@ -2,11 +2,11 @@ import {Directive} from '@angular/core';
 import {QueryDirective, Searcher} from '../../../shared/directives';
 import {BaseList, ListDataSource, ListItem} from '../../../shared/models';
 import {finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {Page, WatchQuery} from '../../../shared/func';
+import {Page, Watch} from '../../../shared/func';
 
 
 @Directive()
-export abstract class QueryWithPageLengthDirective<S extends Page & WatchQuery, T extends ListItem> extends QueryDirective<S, T> {
+export abstract class QueryWithPageLengthDirective<S extends Page & Watch, T extends ListItem> extends QueryDirective<S, T> {
   protected constructor(protected service: Searcher<S, T>,
                         protected baseList: BaseList<T>,
                         protected dataSource: ListDataSource<T>) {

@@ -17,17 +17,11 @@ export class QueryCrawlExecutionStatusDirective extends QueryWithPageLengthDirec
     super(service, baseList, dataSource);
   }
 
-  onInit() {
-    // this.query$ = this.query$.pipe(
-    //   tap(query => {
-    //     if (query.pageSize) {
-    //       this.dataSource.length = query.pageSize;
-    //     }
-    //     if (!query.watch) {
-    //       this.dataSource.clear();
-    //     }
-    //   })
-    // );
-    super.onInit();
+  protected onQuery() {
+    if (this.query.watch) {
+      this.subject.next(this.query);
+    } else {
+      super.onQuery();
+    }
   }
 }

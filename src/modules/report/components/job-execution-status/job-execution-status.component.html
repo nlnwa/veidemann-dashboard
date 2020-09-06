@@ -2,6 +2,8 @@
   <mat-card-header>
     <mat-icon mat-card-avatar>hdr_strong</mat-icon>
     <mat-card-title i18n="@@crawlJobExecutionReportStatusCardTitle">JobExecution</mat-card-title>
+    <mat-card-subtitle>{{jobExecutionStatus.id}}</mat-card-subtitle>
+
   </mat-card-header>
 
   <mat-card-content>
@@ -15,7 +17,10 @@
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</td>
+          <td class="mat-cell">
+            <a [routerLink]="['/config', 'crawljobs']"
+               [queryParams]="{id: jobExecutionStatus.jobId}">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
+            </td>
           <td class="mat-cell">{{JobExecutionState[jobExecutionStatus.state]}}</td>
         </tr>
         </tbody>
@@ -99,23 +104,6 @@
         <h4 class="monospace">{{error.msg}}</h4>
         <p class="monospace">{{error.detail}}</p>
       </div>
-      <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportJobExecutionIdHeaderCell">Id</th>
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportJobExecutionJobIdHeaderCell">Job Id</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell">{{jobExecutionStatus.id}}</td>
-          <td class="mat-cell">
-            <a [routerLink]="['/config', 'crawljobs']"
-               [queryParams]="{id: jobExecutionStatus.jobId}">{{jobExecutionStatus.jobId}}</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
     </div>
   </mat-card-content>
 </mat-card>

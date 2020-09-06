@@ -1,2 +1,4 @@
-<app-job-execution-status *ngIf="item$ | async as jobExecutionStatus"
-                      [jobExecutionStatus]="jobExecutionStatus"></app-job-execution-status>
+<div class="content-padding">
+  <app-job-execution-status *ngIf="item$ | async as jobExecutionStatus"
+                            [jobExecutionStatus]="jobExecutionStatus"></app-job-execution-status>
+</div>

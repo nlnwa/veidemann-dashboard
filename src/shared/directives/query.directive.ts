@@ -2,11 +2,11 @@ import {Directive, InjectionToken, Input, OnChanges, OnDestroy, SimpleChanges} f
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import {BaseList, ConfigRef, ListDataSource, ListItem} from '../models';
-import {DetailQuery} from '../func';
+import {Detail} from '../func';
 import {Loader} from '../services';
 
-export interface Getter<T extends ListItem> extends Loader {
-  get(query: DetailQuery | ConfigRef): Observable<T>;
+export interface Getter<T> extends Loader {
+  get(query: Detail | ConfigRef): Observable<T>;
 }
 
 export interface Searcher<S, T extends ListItem> extends Loader {

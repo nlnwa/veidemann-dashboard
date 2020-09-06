@@ -12,6 +12,7 @@ import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
 import {CrawlExecutionStatusListComponent} from '../../components';
 import {SortDirection} from '@angular/material/sort';
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-crawl-execution',
@@ -28,7 +29,15 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
   private searchComplete: Subject<void>;
   private ngUnsubscribe: Subject<void>;
 
+  pageSize$: Observable<number>;
+  pageIndex$: Observable<number>;
+  sortDirection$: Observable<SortDirection>;
+  sortActive$: Observable<string>;
   query$: Observable<CrawlExecutionStatusQuery>;
+
+  get loading$(): Observable<boolean> {
+    return this.crawlExecutionService.loading$;
+  }
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -39,14 +48,11 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
     this.searchComplete = new Subject<void>();
   }
 
-  get loading$(): Observable<boolean> {
-    return this.crawlExecutionService.loading$;
-  }
-
   ngOnInit() {
     const queryParam = this.route.queryParamMap.pipe(
       debounceTime(0), // synchronize
       map(queryParamMap => ({
+        jobExecutionId: queryParamMap.get('job_execution_id'),
         jobId: queryParamMap.get('job_id'), // query template
         seedId: queryParamMap.get('seed_id'), // query template
         hasError: queryParamMap.get('has_error'), // list request
@@ -67,6 +73,10 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
 
     const jobId$ = queryParam.pipe(
       map(({jobId}) => jobId),
+      distinctUntilChanged());
+
+    const jobExecutionId$ = queryParam.pipe(
+      map(({jobExecutionId}) => jobExecutionId),
       distinctUntilChanged());
 
     const seedId$ = queryParam.pipe(
@@ -126,14 +136,15 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
     );
 
-    this.query$ = combineLatest([
-      jobId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
+    const query$ = combineLatest([
+      jobId$, jobExecutionId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
       startTimeFrom$, startTimeTo$, watch$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([jobId, seedId, stateList, active, direction, pageIndex, pageSize,
+      map(([jobId, jobExecutionId, seedId, stateList, active, direction, pageIndex, pageSize,
              hasError, startTimeFrom, startTimeTo, watch]) => ({
         jobId,
+        jobExecutionId,
         stateList,
         seedId,
         active,
@@ -148,6 +159,11 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       share(),
     );
 
+    this.query$ = query$;
+    this.pageIndex$ = pageIndex$;
+    this.pageSize$ = pageSize$;
+    this.sortActive$ = sortActive$;
+    this.sortDirection$ = sortDirection$;
   }
 
   ngOnDestroy(): void {
@@ -168,6 +184,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
         state: query.stateList || null,
         seed_id: query.seedId || null,
         job_id: query.jobId || null,
+        job_execution_id: query.jobExecutionId || null,
         start_time_to: query.startTimeTo || null,
         start_time_from: query.startTimeFrom || null,
         has_error: query.hasError || null,
@@ -179,10 +196,24 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
       this.router.navigate([item.id], {
-        queryParamsHandling: 'merge',
-        queryParams: null,
         relativeTo: this.route
       }).catch(error => this.errorService.dispatch(error));
     }
+  }
+
+  onSort(sort: Sort) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+      queryParams: {sort: sort.active && sort.direction ? `${sort.active}:${sort.direction}` : null}
+    }).catch(error => this.errorService.dispatch(error));
+  }
+
+  onPage(page: PageEvent) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+      queryParams: {p: page.pageIndex, s: page.pageSize}
+    }).catch(error => this.errorService.dispatch(error));
   }
 }

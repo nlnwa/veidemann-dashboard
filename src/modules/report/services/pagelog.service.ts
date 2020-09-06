@@ -6,9 +6,9 @@ import {PageLog} from '../../../shared/models/report';
 import {PageLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
-import {Page, Sort, WatchQuery} from '../../../shared/func';
+import {Page, Sort, Watch} from '../../../shared/func';
 
-export interface PageLogQuery extends Page, Sort, WatchQuery {
+export interface PageLogQuery extends Page, Sort, Watch {
   uri: string;
   executionId: string;
   jobExecutionId: string;

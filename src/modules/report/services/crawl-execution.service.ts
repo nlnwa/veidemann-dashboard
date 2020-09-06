@@ -6,12 +6,13 @@ import {ConfigObject, ConfigRef, CrawlExecutionState, CrawlExecutionStatus, Kind
 import {ReportApiService} from '../../core/services';
 import {ConfigService} from '../../commons/services';
 import {tap} from 'rxjs/operators';
-import {DetailQuery, Page, Sort, toTimestampProto, WatchQuery} from '../../../shared/func';
+import {Detail, Page, Sort, toTimestampProto, Watch} from '../../../shared/func';
 import {LoadingService} from '../../../shared/services';
 import {Getter, Searcher} from '../../../shared/directives';
 
-export interface CrawlExecutionStatusQuery extends Page, Sort, WatchQuery {
+export interface CrawlExecutionStatusQuery extends Page, Sort, Watch {
   jobId: string;
+  jobExecutionId: string;
   seedId: string;
   stateList: CrawlExecutionState[];
   hasError: boolean;
@@ -30,8 +31,11 @@ export class CrawlExecutionService extends LoadingService
     this.cache = new Map();
   }
 
-  get(query: DetailQuery & WatchQuery): Observable<CrawlExecutionStatus> {
-    return this.load(this.reportApiService.listCrawlExecutions(this.getRequest(query)));
+  get(query: Detail & Watch): Observable<CrawlExecutionStatus> {
+    const listRequest = new CrawlExecutionsListRequest();
+    listRequest.addId(query.id);
+    listRequest.setWatch(query.watch);
+    return this.reportApiService.listCrawlExecutions(listRequest);
   }
 
   getSeed(id: string): Observable<ConfigObject> {
@@ -43,16 +47,6 @@ export class CrawlExecutionService extends LoadingService
 
   search(query: CrawlExecutionStatusQuery): Observable<CrawlExecutionStatus> {
     return this.load(this.reportApiService.listCrawlExecutions(this.getListRequest(query)));
-  }
-
-  private getRequest(query: DetailQuery & WatchQuery): CrawlExecutionsListRequest {
-    if (!query.id) {
-      return null;
-    }
-    const listRequest = new CrawlExecutionsListRequest();
-    listRequest.addId(query.id);
-    listRequest.setWatch(query.watch);
-    return listRequest;
   }
 
   private getListRequest(query: CrawlExecutionStatusQuery): CrawlExecutionsListRequest {
@@ -98,7 +92,7 @@ export class CrawlExecutionService extends LoadingService
       listRequest.setWatch(query.watch);
     }
 
-    if (query.direction) {
+    if (query.direction && query.active) {
       listRequest.setOrderByPath(query.active);
       listRequest.setOrderDescending(query.direction === 'desc');
     }

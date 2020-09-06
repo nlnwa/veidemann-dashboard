@@ -58,6 +58,7 @@ export class CrawlExecutionStatusQueryComponent extends QueryComponent<CrawlExec
       stateList: null,
       seedId: '',
       jobId: '',
+      jobExecutionId: '',
       startTimeFrom: '',
       startTimeTo: '',
       hasError: null,

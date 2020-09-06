@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {debounceTime, distinctUntilChanged, map, share, shareReplay, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
@@ -27,6 +27,10 @@ export class JobExecutionComponent implements OnInit {
   sortDirection$: Observable<SortDirection>;
   sortActive$: Observable<string>;
   query$: Observable<JobExecutionStatusQuery>;
+
+  get loading$(): Observable<boolean> {
+    return this.jobExecutionService.loading$;
+  }
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -101,28 +105,25 @@ export class JobExecutionComponent implements OnInit {
       shareReplay(1),
     );
 
-    this.sortDirection$ = sort$.pipe(
+    const sortDirection$ = sort$.pipe(
       map(sort => (sort ? sort.direction : '') as SortDirection));
 
-    this.sortActive$ = sort$.pipe(
+    const sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
-
-    this.pageSize$ = pageSize$;
-
-    this.pageIndex$ = pageIndex$;
 
     const init$ = of(null);
 
     const query$: Observable<JobExecutionStatusQuery> = combineLatest([
-      jobId$, stateList$, sort$, pageIndex$, pageSize$, startTimeFrom$,
+      jobId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, startTimeFrom$,
       startTimeTo$, watch$, init$
     ]).pipe(
       debounceTime<any>(0),
-      map(([jobId, stateList, sort, pageIndex, pageSize, startTimeFrom,
+      map(([jobId, stateList, active, direction, pageIndex, pageSize, startTimeFrom,
              startTimeTo, watch]) => ({
         jobId,
         stateList,
-        sort,
+        active,
+        direction,
         pageIndex,
         pageSize,
         startTimeFrom,
@@ -132,6 +133,10 @@ export class JobExecutionComponent implements OnInit {
       share()
     );
 
+    this.pageSize$ = pageSize$;
+    this.pageIndex$ = pageIndex$;
+    this.sortActive$ = sortActive$;
+    this.sortDirection$ = sortDirection$;
     this.query$ = query$;
 
     // id$.pipe(
@@ -164,10 +169,6 @@ export class JobExecutionComponent implements OnInit {
       queryParamsHandling: 'merge',
       queryParams,
     }).catch(error => this.errorService.dispatch(error));
-  }
-
-  get loading$(): Observable<boolean> {
-    return this.jobExecutionService.loading$;
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {

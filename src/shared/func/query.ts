@@ -11,12 +11,16 @@ export interface Sort {
   direction: SortDirection;
 }
 
-export interface WatchQuery {
+export interface Watch {
   watch: boolean;
 }
 
-export interface DetailQuery {
+export interface Detail extends Watch {
   id: string;
+}
+
+export interface State {
+  state: number;
 }
 
 export interface ConfigQuery extends Sort, Page {

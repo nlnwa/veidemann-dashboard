@@ -6,19 +6,15 @@ import {ConfigObject, ConfigRef, JobExecutionState, JobExecutionStatus, Kind} fr
 import {ReportApiService} from '../../core/services';
 import {ConfigService} from '../../commons/services';
 import {tap} from 'rxjs/operators';
-import {DetailQuery, Sort, toTimestampProto, WatchQuery} from '../../../shared/func';
+import {Detail, Page, Sort, toTimestampProto, Watch} from '../../../shared/func';
 import {LoadingService} from '../../../shared/services';
 import {Getter, Searcher} from '../../../shared/directives';
 
-export interface JobExecutionStatusQuery {
+export interface JobExecutionStatusQuery extends Page, Sort, Watch {
   jobId: string;
   stateList: JobExecutionState[];
-  sort: Sort;
-  pageSize: number;
-  pageIndex: number;
   startTimeTo: string;
   startTimeFrom: string;
-  watch: boolean;
 }
 
 @Injectable()
@@ -68,15 +64,15 @@ export class JobExecutionService extends LoadingService
     }
 
 
-    if (query.sort) {
-      listRequest.setOrderByPath(query.sort.active);
-      listRequest.setOrderDescending(query.sort.direction === 'desc');
+    if (query.direction && query.active) {
+      listRequest.setOrderByPath(query.active);
+      listRequest.setOrderDescending(query.direction === 'desc');
     }
 
     return listRequest;
   }
 
-  get(query: DetailQuery & WatchQuery): Observable<JobExecutionStatus> {
+  get(query: Detail): Observable<JobExecutionStatus> {
     const listRequest = new JobExecutionsListRequest();
     listRequest.addId(query.id);
     listRequest.setWatch(query.watch);
