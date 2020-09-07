@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 
 import {CrawlExecutionsListRequest, FieldMask} from '../../../api';
 import {ConfigObject, ConfigRef, CrawlExecutionState, CrawlExecutionStatus, Kind} from '../../../shared/models';
 import {ReportApiService} from '../../core/services';
 import {ConfigService} from '../../commons/services';
-import {tap} from 'rxjs/operators';
+import {catchError, shareReplay} from 'rxjs/operators';
 import {Detail, Page, Sort, toTimestampProto, Watch} from '../../../shared/func';
 import {LoadingService} from '../../../shared/services';
 import {Getter, Searcher} from '../../../shared/directives';
@@ -23,7 +23,7 @@ export interface CrawlExecutionStatusQuery extends Page, Sort, Watch {
 @Injectable()
 export class CrawlExecutionService extends LoadingService
   implements Searcher<CrawlExecutionStatusQuery, CrawlExecutionStatus>, Getter<CrawlExecutionStatus> {
-  private readonly cache: Map<string, ConfigObject>;
+  private readonly cache: Map<string, Observable<ConfigObject>>;
 
   constructor(private reportApiService: ReportApiService,
               private configService: ConfigService) {
@@ -40,9 +40,19 @@ export class CrawlExecutionService extends LoadingService
 
   getSeed(id: string): Observable<ConfigObject> {
     const configRef = new ConfigRef({id, kind: Kind.SEED});
-    return this.cache.has(id) ? of(this.cache.get(id)) : this.configService.get(configRef).pipe(
-      tap(configObject => this.cache.set(id, configObject)),
+    if (this.cache.has(id)) {
+      return this.cache.get(id);
+    }
+    const seed$ = this.configService.get(configRef).pipe(
+      shareReplay(1),
+      catchError(err => {
+        this.cache.delete(id);
+        return EMPTY;
+      })
     );
+    this.cache.set(id, seed$);
+
+    return seed$;
   }
 
   search(query: CrawlExecutionStatusQuery): Observable<CrawlExecutionStatus> {

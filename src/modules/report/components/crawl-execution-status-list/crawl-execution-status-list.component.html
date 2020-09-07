@@ -11,7 +11,7 @@
         <th i18n="@@crawlExecutionReportListCrawljobHeaderCell"
             mat-header-cell *matHeaderCellDef mat-sort-header>Job
         </th>
-        <td mat-cell *matCellDef="let row">{{row.jobId | getJobNamePipe | async }}</td>
+        <td mat-cell *matCellDef="let row" >{{row.jobId | getJobNamePipe | async }}</td>
       </ng-container>
 
       <ng-container matColumnDef="seedId">

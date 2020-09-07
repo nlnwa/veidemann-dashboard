@@ -1,12 +1,20 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components/base-list/base-list';
-import {PageLog} from '../../../../shared/models';
+import {ListDataSource, PageLog} from '../../../../shared/models';
+import {BASE_LIST} from '../../../../shared/directives';
 
 @Component({
   selector: 'app-pagelog-list',
   templateUrl: './page-log-list.component.html',
   styleUrls: ['../../../commons/components/base-list/base-list.scss', './page-log-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    ListDataSource,
+    {
+      provide: BASE_LIST,
+      useExisting: forwardRef(() => PageLogListComponent)
+    }
+  ]
 })
 export class PageLogListComponent extends BaseListComponent<PageLog> {
 

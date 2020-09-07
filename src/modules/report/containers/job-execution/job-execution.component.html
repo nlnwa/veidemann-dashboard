@@ -2,10 +2,10 @@
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div class="container" fxLayout="row">
     <app-job-execution-status-query
-      class="content-padding"
+      class="content-padding scroll"
       [crawlJobOptions]="crawlJobOptions" [query]="query"
       (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
-    <app-job-execution-status-list fxFlex style="overflow-y: auto;"
+    <app-job-execution-status-list fxFlex
                                    appQueryJobExecutionStatus [query]="query"
                                    [pageIndex]="pageIndex$ | async"
                                    [pageSize]="pageSize$ | async"

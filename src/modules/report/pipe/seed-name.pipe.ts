@@ -3,7 +3,6 @@ import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
 import {CrawlExecutionService} from '../services';
 
-
 @Pipe({
   name: 'getSeedNamePipe'
 })

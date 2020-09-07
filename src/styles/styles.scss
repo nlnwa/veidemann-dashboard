@@ -44,6 +44,11 @@ html, body {
   height: 100%;
 }
 
+.scroll {
+  overflow-y: auto;
+}
+
+
 .monospace {
   font-family: monospace;
 }

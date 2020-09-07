@@ -1,10 +1,9 @@
-<div class="container">
+<div fxLayout="column" class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-
-  <div fxLayout="row">
-    <app-page-log-query [query]="query$ | async"></app-page-log-query>
-    <div fxLayout="column" fxLayoutGap="16px">
-      <app-pagelog-list fxFlex
+  <div fxFlex fxLayout="row">
+    <app-page-log-query class="content-padding" [query]="query$ | async"></app-page-log-query>
+    <div fxFlex fxLayout="column" fxLayoutGap="16px">
+      <app-pagelog-list fxFlex style="overflow-y: auto; min-height: 0"
                         appQueryPageLog [query]="query$ | async"
                         [pageIndex]="pageIndex$ | async"
                         [pageSize]="pageSize$ | async"

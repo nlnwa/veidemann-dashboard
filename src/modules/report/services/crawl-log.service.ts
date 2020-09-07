@@ -5,14 +5,13 @@ import {CrawlLog} from '../../../shared/models/report';
 import {CrawlLogListRequest} from '../../../api/gen/report/v1/report_pb';
 import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
-import {Detail, Page, Sort} from '../../../shared/func';
+import {Detail, Page, Sort, Watch} from '../../../shared/func';
 import {Getter, Searcher} from '../../../shared/directives';
 
 
-export interface CrawlLogQuery extends Page, Sort {
+export interface CrawlLogQuery extends Page, Sort, Watch {
   jobExecutionId: string;
   executionId: string;
-  watch: boolean;
 }
 
 
@@ -69,11 +68,7 @@ export class CrawlLogService extends LoadingService
     return this.reportApiService.listCrawlLogs(listRequest);
   }
 
-  search(query
-           :
-           CrawlLogQuery
-  ):
-    Observable<CrawlLog> {
+  search(query: CrawlLogQuery): Observable<CrawlLog> {
     return this.load(this.reportApiService.listCrawlLogs(CrawlLogService.getListRequest(query)));
   }
 }

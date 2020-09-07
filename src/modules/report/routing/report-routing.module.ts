@@ -11,6 +11,7 @@ import {CrawlLogComponent} from '../containers/crawl-log/crawl-log.component';
 import {ReportNavigationListComponent} from '../containers/report-navigation-list/report-navigation-list.component';
 import {CrawlExecutionDetailComponent} from '../containers/crawl-execution-detail/crawl-execution-detail.component';
 import {JobExecutionDetailComponent} from '../containers/job-execution-detail/job-execution-detail.component';
+import {CrawlLogDetailComponent} from '../containers/crawl-log-detail/crawl-log-detail.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
         path: 'crawllog',
         component: CrawlLogComponent,
       },
+      {
+        path: 'crawllog/:id',
+        component: CrawlLogDetailComponent
+      }
     ]
   },
 ];
