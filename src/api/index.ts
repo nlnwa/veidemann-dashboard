@@ -84,6 +84,8 @@ export {
 } from './gen/report/v1/report_grpc_web_pb';
 
 export {
+  PageLogListRequest,
+  CrawlLogListRequest,
   JobExecutionsListRequest,
   CrawlExecutionsListRequest,
   ExecuteDbQueryRequest,

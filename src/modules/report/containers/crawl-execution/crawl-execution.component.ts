@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {combineLatest, Observable, of, Subject} from 'rxjs';
+import {combineLatest, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, share} from 'rxjs/operators';
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
-import {ListDataSource, ListItem} from '../../../../shared/models';
+import {ConfigObject, ListDataSource, ListItem} from '../../../../shared/models';
 import {ErrorService} from '../../../core/services';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
@@ -35,6 +35,8 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
   sortActive$: Observable<string>;
   query$: Observable<CrawlExecutionStatusQuery>;
 
+  crawlJobOptions: ConfigObject[];
+
   get loading$(): Observable<boolean> {
     return this.crawlExecutionService.loading$;
   }
@@ -46,6 +48,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
               private errorService: ErrorService) {
     this.ngUnsubscribe = new Subject<void>();
     this.searchComplete = new Subject<void>();
+    this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
   }
 
   ngOnInit() {
@@ -132,13 +135,9 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
     );
 
-    const init$ = of(null).pipe(
-      distinctUntilChanged(),
-    );
-
     const query$ = combineLatest([
       jobId$, jobExecutionId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
-      startTimeFrom$, startTimeTo$, watch$, init$
+      startTimeFrom$, startTimeTo$, watch$
     ]).pipe(
       debounceTime<any>(0),
       map(([jobId, jobExecutionId, seedId, stateList, active, direction, pageIndex, pageSize,
@@ -171,7 +170,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onQueryChange(query: CrawlExecutionStatusQuery) {
+  onQueryChange(query: Partial<CrawlExecutionStatusQuery>) {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParamsHandling: 'merge',

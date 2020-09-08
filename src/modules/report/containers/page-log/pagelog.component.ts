@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {PageLog} from '../../../../shared/models/report/pagelog.model';
@@ -149,10 +149,8 @@ export class PageLogComponent implements OnInit {
 
   onSelectedChange(item: ListItem | ListItem[]) {
     if (!Array.isArray(item)) {
-      this.router.navigate([], {
+      this.router.navigate([item.id], {
         relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: {warc_id: item.id},
       }).catch(error => this.errorService.dispatch(error));
     }
   }

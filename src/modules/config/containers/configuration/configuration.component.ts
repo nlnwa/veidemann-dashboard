@@ -66,6 +66,7 @@ export class ConfigurationComponent implements OnDestroy {
   kind: Kind;
   kind$: Observable<Kind>;
 
+  options: ConfigOptions;
   options$: Observable<ConfigOptions>;
 
   constructor(private authService: AuthService,
@@ -81,7 +82,8 @@ export class ConfigurationComponent implements OnDestroy {
     this.configObject = new Subject();
 
     this.options$ = this.optionsService.options$.pipe(
-      tap(_ => {
+      tap(options => {
+        this.options = options;
         // make sure any detail view relying on some option not present is removed before a new set of options is loaded
         this.configObject.next(null);
       }),
@@ -227,10 +229,11 @@ export class ConfigurationComponent implements OnDestroy {
   }
 
   onRunCrawl(configObject: ConfigObject) {
+    const crawlJobs = this.options.crawlJobs;
     const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
       disableClose: true,
       autoFocus: true,
-      data: {configObject, jobRefId: null}
+      data: {configObject, jobRefId: null, crawlJobs}
     });
     dialogRef.afterClosed()
       .subscribe(runCrawlRequest => {

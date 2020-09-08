@@ -3,10 +3,10 @@ import {ConfigObject} from '../../../shared/models/config';
 import {ReportApiService} from '../../core/services';
 import {Observable} from 'rxjs';
 import {PageLog} from '../../../shared/models/report';
-import {PageLogListRequest} from '../../../api/gen/report/v1/report_pb';
-import {FieldMask} from '../../../api';
+import {FieldMask, PageLogListRequest} from '../../../api';
 import {LoadingService} from '../../../shared/services';
-import {Page, Sort, Watch} from '../../../shared/func';
+import {Detail, Page, Sort, Watch} from '../../../shared/func';
+import {Getter} from '../../../shared/directives';
 
 export interface PageLogQuery extends Page, Sort, Watch {
   uri: string;
@@ -18,7 +18,7 @@ export interface PageLogQuery extends Page, Sort, Watch {
 }
 
 @Injectable()
-export class PageLogService extends LoadingService {
+export class PageLogService extends LoadingService implements Getter<PageLog> {
   private readonly cache: Map<string, ConfigObject>;
 
   constructor(private reportApiService: ReportApiService) {
@@ -26,9 +26,9 @@ export class PageLogService extends LoadingService {
     this.cache = new Map();
   }
 
-  get(warcId: string): Observable<PageLog> {
+  get(query: Detail): Observable<PageLog> {
     const listRequest = new PageLogListRequest();
-    listRequest.addWarcId(warcId);
+    listRequest.addWarcId(query.id);
     return this.reportApiService.listPageLogs(listRequest);
   }
 

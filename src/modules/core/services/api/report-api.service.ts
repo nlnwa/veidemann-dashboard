@@ -1,22 +1,27 @@
 import {Injectable} from '@angular/core';
-import {Observable, Observer, of} from 'rxjs';
+import {EMPTY, Observable, Observer, of} from 'rxjs';
 import {catchError, defaultIfEmpty, map, tap} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {
+  CrawlLogListRequest,
+  PageLogListRequest,
   CrawlExecutionsListRequest,
-  CrawlExecutionStatusProto, CrawlLogProto,
+  CrawlExecutionStatusProto,
+  CrawlLogProto,
+  ExecuteDbQueryReply,
   ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
-  JobExecutionStatusProto, PageLogProto,
+  JobExecutionStatusProto,
+  PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
-import {CrawlLogListRequest, PageLogListRequest} from '../../../../api/gen/report/v1/report_pb';
-import {fromTimestamp} from '../../../../shared/func';
+import {fromRethinkTimeStamp} from '../../../../shared/func/rethinkdb';
+import {Changefeed} from '../../../../shared/func/rethinkdb';
 
 
 @Injectable({
@@ -51,6 +56,55 @@ export class ReportApiService {
 
   listCrawlExecutions(listRequest: CrawlExecutionsListRequest): Observable<CrawlExecutionStatus> {
     const metadata = this.authService.metadata;
+
+    if (listRequest.getWatch() && listRequest.hasQueryMask()) {
+      const paths = listRequest.getQueryMask().getPathsList();
+      if (paths.includes('jobExecutionId') && paths.includes('seedId')) {
+        let queryStr = `r.table('executions')`;
+
+        const crawlExecution = CrawlExecutionStatus.fromProto(listRequest.getQueryTemplate());
+        if (paths.includes('executionId')) {
+          queryStr += `.getAll([${crawlExecution.jobExecutionId}, ${crawlExecution.seedId}]', {index: 'jobExecutionId_seedId'})`;
+          paths.splice(paths.findIndex(p => p === 'jobExecutionId'), 1);
+          paths.splice(paths.findIndex(p => p === 'seedId'), 1);
+        }
+        for (const path of paths) {
+          const value = crawlExecution[path];
+          queryStr += `.filter({${path}: '${value}'})`;
+        }
+
+        if (listRequest.getOffset()) {
+          queryStr += `.skip(${listRequest.getOffset()})`;
+        }
+
+        queryStr += '.changes()';
+
+        const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
+        dbQueryRequest.setQuery(queryStr);
+        dbQueryRequest.setLimit(listRequest.getPageSize());
+
+        return new Observable((observer: Observer<any>) => {
+          const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
+            .on('data', data => observer.next(data))
+            .on('error', error => observer.error(error))
+            .on('end', () => observer.complete());
+          return () => stream.cancel();
+        }).pipe(
+          map((reply: ExecuteDbQueryReply) => reply.getRecord()),
+          tap(console.log),
+
+          map(record => JSON.parse(record, CrawlExecutionStatus.reviver)),
+          tap(console.log),
+          map((change: Changefeed<any>) => change.new_val),
+          map((record: any) => new CrawlExecutionStatus(record)),
+          catchError(error => {
+            this.errorService.dispatch(error);
+            return EMPTY;
+          })
+        );
+      }
+    }
+
     return new Observable((observer: Observer<CrawlExecutionStatusProto>) => {
       const stream = this.reportClient.listExecutions(listRequest, metadata)
         .on('data', data => observer.next(data))
@@ -97,7 +151,7 @@ export class ReportApiService {
       map((record: string) => JSON.parse(record)),
       catchError(error => {
         this.errorService.dispatch(error);
-        return of(null)
+        return of(null);
       })
     );
     /*
@@ -127,7 +181,7 @@ export class ReportApiService {
         map(PageLog.fromProto),
         catchError(error => {
           this.errorService.dispatch(error);
-          return of(null)
+          return EMPTY;
         })
       );
     }
@@ -170,7 +224,7 @@ export class ReportApiService {
       }),
       catchError(error => {
         this.errorService.dispatch(error);
-        return of(null)
+        return EMPTY;
       })
     );
   }
@@ -190,7 +244,7 @@ export class ReportApiService {
         map(CrawlLog.fromProto),
         catchError(error => {
           this.errorService.dispatch(error);
-          return of(null)
+          return EMPTY;
         })
       );
     }
@@ -228,16 +282,16 @@ export class ReportApiService {
         const crawlLog = new CrawlLog(record);
         crawlLog.id = record.warcId;
         if (record.timeStamp) {
-          crawlLog.timeStamp = fromTimestamp(record.timeStamp);
+          crawlLog.timeStamp = fromRethinkTimeStamp(record.timeStamp);
         }
         if (record.fetchTimeStamp) {
-          crawlLog.fetchTimeStamp = fromTimestamp(record.fetchTimeStamp);
+          crawlLog.fetchTimeStamp = fromRethinkTimeStamp(record.fetchTimeStamp);
         }
         return crawlLog;
       }),
       catchError(error => {
         this.errorService.dispatch(error);
-        return of(null)
+        return EMPTY;
       })
     );
   }
@@ -259,7 +313,7 @@ export class ReportApiService {
     return this.listJobExecutions(request).pipe(defaultIfEmpty(null));
   }
 
-  getLastSeedStatus(seedId: string, pageSize?:number): Observable<CrawlExecutionStatus> {
+  getLastSeedStatus(seedId: string, pageSize?: number): Observable<CrawlExecutionStatus> {
     const request = new CrawlExecutionsListRequest();
 
     const template = new CrawlExecutionStatus();
@@ -272,7 +326,7 @@ export class ReportApiService {
 
     request.setOrderByPath('startTime');
     request.setOrderDescending(true);
-    if(pageSize) {
+    if (pageSize) {
       request.setPageSize(pageSize);
     } else {
       request.setPageSize(1);

@@ -27,15 +27,18 @@ import {
   ResourceComponent,
 } from './components';
 import {JobNamePipe, SeedNamePipe} from './pipe';
-import {QueryCrawlExecutionStatusDirective} from './directives';
-import {QueryCrawlLogDirective} from './directives/query-crawl-log.directive';
+import {
+  QueryCrawlExecutionStatusDirective,
+  QueryCrawlLogDirective,
+  QueryJobExecutionStatusDirective,
+  QueryPageLogDirective
+} from './directives';
 import {CrawlLogQueryComponent} from './components/crawl-log-query/crawl-log-query.component';
 import {CrawlLogDetailComponent} from './containers/crawl-log-detail/crawl-log-detail.component';
-import {QueryJobExecutionStatusDirective} from './directives/query-job-execution-status.directive';
 import {PageLogQueryComponent} from './components/page-log-query/page-log-query.component';
-import {QueryPageLogDirective} from './directives/query-page-log.directive';
 import {JobExecutionDetailComponent} from './containers/job-execution-detail/job-execution-detail.component';
 import {SedPipe} from './pipe/sed.pipe';
+import {PageLogDetailComponent} from './containers/page-log-detail/page-log-detail.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,7 @@ import {SedPipe} from './pipe/sed.pipe';
     PageLogQueryComponent,
     QueryPageLogDirective,
     JobExecutionDetailComponent,
+    PageLogDetailComponent,
   ],
   imports: [
     CommonsModule,

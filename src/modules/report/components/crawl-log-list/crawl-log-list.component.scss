@@ -1,12 +1,12 @@
 table {
   width: 100%;
-  overflow-x: hidden;
 }
 
 .mat-column-requestedUri {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 30em;
 }
 
 .action-cell {

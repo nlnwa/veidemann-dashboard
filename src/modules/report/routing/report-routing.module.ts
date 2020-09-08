@@ -12,6 +12,7 @@ import {ReportNavigationListComponent} from '../containers/report-navigation-lis
 import {CrawlExecutionDetailComponent} from '../containers/crawl-execution-detail/crawl-execution-detail.component';
 import {JobExecutionDetailComponent} from '../containers/job-execution-detail/job-execution-detail.component';
 import {CrawlLogDetailComponent} from '../containers/crawl-log-detail/crawl-log-detail.component';
+import {PageLogDetailComponent} from '../containers/page-log-detail/page-log-detail.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,9 @@ const routes: Routes = [
       {
         path: 'crawlexecution',
         component: CrawlExecutionComponent,
+        resolve: {
+          options: OptionsResolver
+        },
       },
       {
         path: 'crawlexecution/:id',
@@ -45,6 +49,10 @@ const routes: Routes = [
       {
         path: 'pagelog',
         component: PageLogComponent,
+      },
+      {
+        path: 'pagelog/:id',
+        component: PageLogDetailComponent,
       },
       {
         path: 'crawllog',

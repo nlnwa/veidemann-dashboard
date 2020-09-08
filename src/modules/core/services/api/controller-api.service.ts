@@ -57,6 +57,6 @@ export class ControllerApiService {
           this.errorHandler.handleError(error);
           return of(null);
         })
-      )
+      );
   }
 }

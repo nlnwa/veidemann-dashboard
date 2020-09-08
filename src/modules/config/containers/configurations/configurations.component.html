@@ -40,7 +40,7 @@
                           [configObject]="configObjects$ | async"
                           [options]="options$ | async">
         </app-detail-multi>
-        <app-config-list fxFlex style="min-height: 0px; overflow: auto;"
+        <app-config-list fxFlex
                          appQueryConfigObject [query]="query$ | async"
                          [length]="length$ | async"
                          [pageIndex]="pageIndex$ | async"
@@ -236,12 +236,17 @@
                 </a>
               </ng-container>
             </ng-container>
-            <button *appAction="let row" mat-icon-button
-                    (click)="onFilterByCrawlJobRef(row)">
-              <mat-icon matTooltip="Show seeds with reference to the crawljob"
-                        i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">link
-              </mat-icon>
-            </button>
+            <!-- {crawl_job_id: configObject.id} -->
+            <ng-container *appAction="let row">
+              <a mat-icon-button class="shortcut-link"
+                 [routerLink]="['../seed']"
+                 [queryParams]="{crawl_job_id: row.id}">
+                <mat-icon matTooltip="Show seeds with reference to the crawljob"
+                          i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">link
+                </mat-icon>
+              </a>
+            </ng-container>
+
             <button *appAction="let row" mat-icon-button
                     (click)="onRunCrawl(row)">
               <mat-icon matTooltip="Run crawljob: {{row.meta.name}}">play_arrow</mat-icon>

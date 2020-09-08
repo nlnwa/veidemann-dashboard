@@ -72,6 +72,11 @@ export class CrawlExecutionService extends LoadingService
       fieldMask.addPaths('jobId');
     }
 
+    if (query.jobExecutionId) {
+      queryTemplate.jobExecutionId = query.jobExecutionId;
+      fieldMask.addPaths('jobExecutionId');
+    }
+
     if (query.seedId) {
       queryTemplate.seedId = query.seedId;
       fieldMask.addPaths('seedId');

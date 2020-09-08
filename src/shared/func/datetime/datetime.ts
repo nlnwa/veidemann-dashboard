@@ -43,28 +43,6 @@ export function fromTimestampProto(proto: any): string {
   }
 }
 
-export function fromTimestamp(t: {
-  dateTime: {
-    date: {
-      day: number
-      month: number,
-      year: number,
-    },
-    time: {
-      hour: number,
-      minute: number,
-      nano: number,​​​
-      second: number,
-    }
-  },
-  offset: {
-    totalSeconds: number
-  }
-}): string {
-  return new Date(Date.UTC(t.dateTime.date.year, t.dateTime.date.month, t.dateTime.date.day,
-    t.dateTime.time.hour, t.dateTime.time.minute, t.dateTime.time.second)).toISOString();
-}
-
 /* tslint:disable:no-bitwise */
 export function toTimestampProto(timestamp: string): any {
   if (timestamp) {

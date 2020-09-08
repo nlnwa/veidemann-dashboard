@@ -2,8 +2,10 @@
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div class="container" fxLayout="row">
     <app-crawl-execution-status-query style="overflow-y: auto" class="content-padding"
-                                      [query]="query$ | async"></app-crawl-execution-status-query>
-    <app-crawl-execution-status-list fxFlex style="overflow-y: auto; min-height: 0"
+                                      [crawlJobOptions]="crawlJobOptions"
+                                      [query]="query$ | async"
+                                      (queryChange)="onQueryChange($event)"></app-crawl-execution-status-query>
+    <app-crawl-execution-status-list fxFlex
                                      appQueryCrawlExecutionStatus [query]="query$ | async"
                                      [pageIndex]="pageIndex$ | async"
                                      [pageSize]="pageSize$ | async"
@@ -12,8 +14,6 @@
                                      (selectedChange)="onSelectedChange($event)"
                                      (sort)="onSort($event)"
                                      (page)="onPage($event)">
-
-    (selectedChange)="onSelectedChange($event)">
       <a *appAction="let row" mat-icon-button
          [routerLink]="['/config', 'seed', row.seedId]">
         <mat-icon matTooltip="Go to seed"

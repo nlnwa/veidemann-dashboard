@@ -543,21 +543,37 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onRunCrawl(configObject: ConfigObject) {
+    const crawlJobs = this.options.crawlJobs;
     const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
       disableClose: true,
       autoFocus: true,
-      data: {configObject, jobRefId: null}
+      data: {configObject, jobRefId: null, crawlJobs}
     });
+
     dialogRef.afterClosed()
       .subscribe(runCrawlRequest => {
         if (runCrawlRequest) {
           this.controllerApiService.runCrawl(runCrawlRequest)
             .pipe(filter(_ => !!_))
             .subscribe(runCrawlReply => {
-              this.router.navigate(
-                ['report', 'jobexecution', runCrawlReply.jobExecutionId],
-                {queryParams: {watch: true}}
-              ).catch(error => this.errorService.dispatch(error));
+              if (configObject.kind === Kind.SEED) {
+                this.router.navigate(
+                  ['report', 'crawlexecution'],
+                  {
+                    queryParams: {
+                      job_execution_id: runCrawlReply.jobExecutionId,
+                      seed_id: configObject.id,
+                      watch: true
+                    }
+                  }
+                ).catch(error => this.errorService.dispatch(error));
+              } else {
+                this.router.navigate(
+                  ['report', 'jobexecution', runCrawlReply.jobExecutionId],
+                  {queryParams: {watch: true}}
+                ).catch(error => this.errorService.dispatch(error));
+              }
+
               // const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
               //   disableClose: false,
               //   autoFocus: true,

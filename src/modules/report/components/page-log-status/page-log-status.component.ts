@@ -18,7 +18,7 @@ interface UriFlatNode {
 }
 
 @Component({
-  selector: 'app-pagelog-status',
+  selector: 'app-page-log-status',
   templateUrl: './page-log-status.component.html',
   styleUrls: ['./page-log-status.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
