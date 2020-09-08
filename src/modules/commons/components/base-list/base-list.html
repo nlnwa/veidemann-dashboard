@@ -94,7 +94,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"
           class="item-row"
           [class.expanded-row]="expandedConfigObject === row"
-          (click)="expandedConfigObject = expandedConfigObject === row ? null : row"
+          (click)="onRowClick(row)"
           [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
           [class.row-disabled]="isDisabled(row)">
       </tr>

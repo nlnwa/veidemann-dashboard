@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@entityDetailsCardTitle">CrawlHostGroup</ng-container>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <app-meta formControlName="meta"></app-meta>
+    <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
+      <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
+      <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">
+        <div [formGroupName]="i"
+             fxLayout="row"
+             fxlayoutgap="16px">
+          <mat-form-field fxFlex>
+            <input matInput formControlName="ipFrom" placeholder="IP address"
+                   i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
+            <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
+            <mat-error *ngIf="!ipFromControl(i).valid"
+                       i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
+              A valid IP address is required.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <input matInput formControlName="ipTo" placeholder="IP address"
+                   i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
+            <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
+            <mat-error *ngIf="!ipToControl(i).valid"
+                       i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
+              A valid IP address is required.
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-button
+                  (click)="onRemoveIpRange(i)"
+                  *ngIf="canEdit">
+            <mat-icon>remove_circle</mat-icon>
+            <span>REMOVE</span>
+          </button>
+        </div>
+
+        <mat-error *ngIf="!isValidIpRange(ipFromControl(i).value, ipToControl(i).value)"
+                   i18n="@@crawlhostgroupconfigFormValidIpRangeError">
+          The IP range is not valid
+        </mat-error>
+      </div>
+
+      <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button">
+        <mat-icon>add_circle</mat-icon>
+        <span i18n="@@crawlhostgroupconfigFormAddIpRangeButton">ADD IP RANGE</span>
+      </button>
+    </fieldset>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

@@ -15,6 +15,12 @@
       </mat-action-list>
       <app-config-query [options]="options$ | async" [query]="query$ | async"
                         (queryChange)="onQueryChange($event)"></app-config-query>
+      <app-shortcut *ngIf="configObject$ | async as configObject"
+                    [configObject]="configObject"
+                    (createSeed)="onCreateSeedFromEntity($event)"
+                    (runCrawl)="onRunCrawl($event)"
+                    (clone)="onClone($event)">
+      </app-shortcut>
       <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
                        [configObject]="entity"></app-entity-view>
     </div>
@@ -26,222 +32,230 @@
                             (selectedChange)="onSelectedChange($event)"
                             (selectAll)="onSelectAll()">
       </app-rolemapping-list>
-      <app-config-list fxFlex *ngSwitchDefault
-                       appQueryConfigObject [query]="query$ | async"
-                       [length]="length$ | async"
-                       [pageIndex]="pageIndex$ | async"
-                       [pageSize]="pageSize$ | async"
-                       [sortDirection]="sortDirection$ | async"
-                       [sortActive]="sortActive$ | async"
-                       [multiSelect]="kind !== Kind.COLLECTION"
-                       (selectedChange)="onSelectedChange($event)"
-                       (selectAll)="onSelectAll()"
-                       (sort)="onSort($event)"
-                       (page)="onPage($event)">
 
-        <button mat-icon-button
-                *ngIf="!isAllSelected && canAdministrate"
-                (click)="onDeleteSelectedConfigs()">
-          <mat-icon matTooltip="Delete selected configurations"
-                    i18n-matTooltip="@@configurationDeleteSelectedConfigurationsButtonTooltip">delete
-          </mat-icon>
-        </button>
+      <div fxFlex fxLayout="column" *ngSwitchDefault>
+        <app-detail-multi class="content-padding"
+                          *ngIf="!isSingleMode"
+                          (update)="onUpdateMulti($event)"
+                          [configObject]="configObjects$ | async"
+                          [options]="options$ | async">
+        </app-detail-multi>
+        <app-config-list fxFlex style="min-height: 0px; overflow: auto;"
+                         appQueryConfigObject [query]="query$ | async"
+                         [length]="length$ | async"
+                         [pageIndex]="pageIndex$ | async"
+                         [pageSize]="pageSize$ | async"
+                         [sortDirection]="sortDirection$ | async"
+                         [sortActive]="sortActive$ | async"
+                         [multiSelect]="kind !== Kind.COLLECTION"
+                         (selectedChange)="onSelectedChange($event)"
+                         (selectAll)="onSelectAll()"
+                         (sort)="onSort($event)"
+                         (page)="onPage($event)">
 
-        <ng-container *ngIf="kind === Kind.COLLECTION">
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByCollectionRef(row)">
-            <mat-icon matTooltip="Show crawlconfigs with reference to the collection"
-                      i18n-matTooltip="@@collectionListShowCrawlConfigsWitchCollectionRefActionButtonTooltip">
-              settings_system_daydream
+          <button mat-icon-button
+                  *ngIf="!isAllSelected && canAdministrate"
+                  (click)="onDeleteSelectedConfigs()">
+            <mat-icon matTooltip="Delete selected configurations"
+                      i18n-matTooltip="@@configurationDeleteSelectedConfigurationsButtonTooltip">delete
             </mat-icon>
           </button>
-        </ng-container>
 
-        <ng-container *ngIf="kind === Kind.CRAWLENTITY">
-          <a *appAction="let row" mat-icon-button class="shortcut-link"
-             [routerLink]="['../seed']"
-             [queryParams]="{entity_id: row.id}">
-            <mat-icon matTooltip="Go to seed list"
-                      i18n-matTooltip="@@crawlEntityListGoToSeedListActionButtonTooltip">link
-            </mat-icon>
-          </a>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onCreateSeedFromEntity(row)">
-            <mat-icon matTooltip="Create a new seed with reference to the entity"
-                      i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">add_circle
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.SEED">
-          <a *appAction="let row"
-             mat-icon-button class="shortcut-link"
-             [routerLink]="['/report/crawlexecution']"
-             [queryParams]="{seed_id: row.id}">
-            <mat-icon matTooltip="Show crawlexecutions for the seed"
-                      i18n-matTooltip="@@seedListShowCrawlExecutionsActionButtonTooltip">hdr_weak
-            </mat-icon>
-          </a>
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.seed.jobRefList.length">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../seed']"
-                 [queryParams]="getJobRefListQueryParams(row)">
-                <mat-icon matTooltip=" Show seeds with the same crawljob"
-                          i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">work
-                </mat-icon>
-              </a>
-            </ng-container>
+          <ng-container *ngIf="kind === Kind.COLLECTION">
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByCollectionRef(row)">
+              <mat-icon matTooltip="Show crawlconfigs with reference to the collection"
+                        i18n-matTooltip="@@collectionListShowCrawlConfigsWitchCollectionRefActionButtonTooltip">
+                settings_system_daydream
+              </mat-icon>
+            </button>
           </ng-container>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByEntityRef(row)">
-            <mat-icon matTooltip="Show seeds with the same entity"
-                      i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">business
-            </mat-icon>
-          </button>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onRunCrawl(row)">
-            <mat-icon matTooltip="Start crawling seed: {{row.meta.name}}">play_arrow</mat-icon>
-          </button>
-        </ng-container>
 
-        <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByScheduleRef(row)">
-            <mat-icon matTooltip="Show crawljobs with reference to the schedule"
-                      i18n-matTooltip="@@scheduleListShowCrawljobsWithScheduleActionButtonTooltip">work
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.CRAWLCONFIG">
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.crawlConfig?.collectionRef?.id">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../collection']"
-                 [queryParams]="{id: row.crawlConfig.collectionRef?.id}">
-                <mat-icon matTooltip="Go to collection: {{row | getCollectionName | async}}"
-                          i18n-matTooltip="@@crawlConfigListGoToCollectionActionButtonTooltip">collections_bookmark
-                </mat-icon>
-              </a>
-            </ng-container>
+          <ng-container *ngIf="kind === Kind.CRAWLENTITY">
+            <a *appAction="let row" mat-icon-button class="shortcut-link"
+               [routerLink]="['../seed']"
+               [queryParams]="{entity_id: row.id}">
+              <mat-icon matTooltip="Go to seed list"
+                        i18n-matTooltip="@@crawlEntityListGoToSeedListActionButtonTooltip">link
+              </mat-icon>
+            </a>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onCreateSeedFromEntity(row)">
+              <mat-icon matTooltip="Create a new seed with reference to the entity"
+                        i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">add_circle
+              </mat-icon>
+            </button>
           </ng-container>
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.crawlConfig?.browserConfigRef?.id">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../browserconfig']"
-                 [queryParams]="{id: row.crawlConfig.browserConfigRef?.id}">
-                <mat-icon matTooltip="Go to browserconfig: {{row | getBrowserConfigName | async}}"
-                          i18n-matTooltip="@@crawlConfigListGoToBrowserConfigActionButtonTooltip">web
-                </mat-icon>
-              </a>
+
+          <ng-container *ngIf="kind === Kind.SEED">
+            <a *appAction="let row"
+               mat-icon-button class="shortcut-link"
+               [routerLink]="['/report/crawlexecution']"
+               [queryParams]="{seed_id: row.id}">
+              <mat-icon matTooltip="Show crawlexecutions for the seed"
+                        i18n-matTooltip="@@seedListShowCrawlExecutionsActionButtonTooltip">hdr_weak
+              </mat-icon>
+            </a>
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.seed.jobRefList.length">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../seed']"
+                   [queryParams]="getJobRefListQueryParams(row)">
+                  <mat-icon matTooltip=" Show seeds with the same crawljob"
+                            i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">work
+                  </mat-icon>
+                </a>
+              </ng-container>
             </ng-container>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByEntityRef(row)">
+              <mat-icon matTooltip="Show seeds with the same entity"
+                        i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">business
+              </mat-icon>
+            </button>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onRunCrawl(row)">
+              <mat-icon matTooltip="Start crawling seed: {{row.meta.name}}">play_arrow</mat-icon>
+            </button>
           </ng-container>
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.crawlConfig?.politenessRef?.id">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../politenessconfig']"
-                 [queryParams]="{id: row.crawlConfig.politenessRef?.id}">
-                <mat-icon matTooltip="Go to politenessconfig: {{row | getPolitenessConfigName | async}}"
-                          i18n-matTooltip="@@crawlConfigListGoToPolitenessActionButtonTooltip">
-                  sentiment_very_satisfied
-                </mat-icon>
-              </a>
+
+          <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByScheduleRef(row)">
+              <mat-icon matTooltip="Show crawljobs with reference to the schedule"
+                        i18n-matTooltip="@@scheduleListShowCrawljobsWithScheduleActionButtonTooltip">work
+              </mat-icon>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="kind === Kind.CRAWLCONFIG">
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.crawlConfig?.collectionRef?.id">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../collection']"
+                   [queryParams]="{id: row.crawlConfig.collectionRef?.id}">
+                  <mat-icon matTooltip="Go to collection: {{row | getCollectionName | async}}"
+                            i18n-matTooltip="@@crawlConfigListGoToCollectionActionButtonTooltip">collections_bookmark
+                  </mat-icon>
+                </a>
+              </ng-container>
             </ng-container>
-          </ng-container>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByCrawlConfigRef(row)">
-            <mat-icon matTooltip="Show crawljobs with reference to the crawlconfig"
-                      i18n-matTooltip="@@crawlConfigListFilterCrawljobsWithCrawlconfigActionButtonTooltip">
-              work
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.BROWSERCONFIG">
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByBrowserConfigRef(row)">
-            <mat-icon matTooltip="Show crawlconfigs with reference to the browserconfig"
-                      i18n-matTooltip="@@browserConfigListFilterCrawljobsWithBrowserconfigActionButtonTooltip">
-              settings_system_daydream
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.POLITENESSCONFIG">
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByPolitenessConfigRef(row)">
-            <mat-icon matTooltip="Show crawlconfigs with reference to the politeness"
-                      i18n-matTooltip="@@politenessConfigListFilterCrawlconfigWithPolitenessActionButtonTooltip">
-              settings_system_daydream
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.BROWSERSCRIPT">
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByBrowserScriptRef(row)">
-            <mat-icon matTooltip="Show browserconfigs with reference to the browserscript"
-                      i18n-matTooltip="@@browserscriptListFikterBrowserconfigsWithBrowserscriptActionButtonTooltip">
-              web
-            </mat-icon>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="kind === Kind.CRAWLJOB">
-          <span *appExtra="let row">{{row | getJobStatus | jobState | async}}</span>
-          <a *appAction="let row"
-             mat-icon-button class="shortcut-link"
-             [routerLink]="['/report/jobexecution']"
-             [queryParams]="{job_id: row.id}">
-            <mat-icon matTooltip="Go to jobexecutions for crawljob"
-                      i18n-matTooltip="@@crawljobListJobExecutionShortcutActionButtonTooltip">hdr_strong
-            </mat-icon>
-          </a>
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.crawlJob?.scheduleRef.id">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../schedule']"
-                 [queryParams]="{id: row.crawlJob.scheduleRef?.id}">
-                <mat-icon matTooltip="Go to schedule: {{row | getCrawlScheduleName | async}}"
-                          i18n-matTooltip="@@crawljobListScheduleShortcutActionButtonTooltip">schedule
-                </mat-icon>
-              </a>
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.crawlConfig?.browserConfigRef?.id">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../browserconfig']"
+                   [queryParams]="{id: row.crawlConfig.browserConfigRef?.id}">
+                  <mat-icon matTooltip="Go to browserconfig: {{row | getBrowserConfigName | async}}"
+                            i18n-matTooltip="@@crawlConfigListGoToBrowserConfigActionButtonTooltip">web
+                  </mat-icon>
+                </a>
+              </ng-container>
             </ng-container>
-          </ng-container>
-          <ng-container *appAction="let row">
-            <ng-container *ngIf="row.crawlJob?.crawlConfigRef?.id">
-              <a mat-icon-button class="shortcut-link"
-                 [routerLink]="['../crawlconfig']"
-                 [queryParams]="{id: row.crawlJob.crawlConfigRef?.id}">
-                <mat-icon
-                  matTooltip="Go to crawlconfig: {{row | getCrawlConfigName | async}}"
-                  i18n-matTooltip="@@crawljobListCrawlconfigShortcutActionButtonTooltip">
-                  settings_system_daydream
-                </mat-icon>
-              </a>
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.crawlConfig?.politenessRef?.id">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../politenessconfig']"
+                   [queryParams]="{id: row.crawlConfig.politenessRef?.id}">
+                  <mat-icon matTooltip="Go to politenessconfig: {{row | getPolitenessConfigName | async}}"
+                            i18n-matTooltip="@@crawlConfigListGoToPolitenessActionButtonTooltip">
+                    sentiment_very_satisfied
+                  </mat-icon>
+                </a>
+              </ng-container>
             </ng-container>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByCrawlConfigRef(row)">
+              <mat-icon matTooltip="Show crawljobs with reference to the crawlconfig"
+                        i18n-matTooltip="@@crawlConfigListFilterCrawljobsWithCrawlconfigActionButtonTooltip">
+                work
+              </mat-icon>
+            </button>
           </ng-container>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onFilterByCrawlJobRef(row)">
-            <mat-icon matTooltip="Show seeds with reference to the crawljob"
-                      i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">link
-            </mat-icon>
-          </button>
-          <button *appAction="let row" mat-icon-button
-                  (click)="onRunCrawl(row)">
-            <mat-icon matTooltip="Run crawljob: {{row.meta.name}}">play_arrow</mat-icon>
-          </button>
 
-        </ng-container>
+          <ng-container *ngIf="kind === Kind.BROWSERCONFIG">
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByBrowserConfigRef(row)">
+              <mat-icon matTooltip="Show crawlconfigs with reference to the browserconfig"
+                        i18n-matTooltip="@@browserConfigListFilterCrawljobsWithBrowserconfigActionButtonTooltip">
+                settings_system_daydream
+              </mat-icon>
+            </button>
+          </ng-container>
 
-        <button *appAction="let row" mat-icon-button
-                matTooltip="Clone"
-                i18n-matTooltip="@@configurationListCloneActionButtonTooltip"
-                (click)="onClone(row)">
-          <mat-icon>file_copy</mat-icon>
-        </button>
-      </app-config-list>
+          <ng-container *ngIf="kind === Kind.POLITENESSCONFIG">
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByPolitenessConfigRef(row)">
+              <mat-icon matTooltip="Show crawlconfigs with reference to the politeness"
+                        i18n-matTooltip="@@politenessConfigListFilterCrawlconfigWithPolitenessActionButtonTooltip">
+                settings_system_daydream
+              </mat-icon>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="kind === Kind.BROWSERSCRIPT">
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByBrowserScriptRef(row)">
+              <mat-icon matTooltip="Show browserconfigs with reference to the browserscript"
+                        i18n-matTooltip="@@browserscriptListFikterBrowserconfigsWithBrowserscriptActionButtonTooltip">
+                web
+              </mat-icon>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="kind === Kind.CRAWLJOB">
+            <span *appExtra="let row">{{row | getJobStatus | jobState | async}}</span>
+            <a *appAction="let row"
+               mat-icon-button class="shortcut-link"
+               [routerLink]="['/report/jobexecution']"
+               [queryParams]="{job_id: row.id}">
+              <mat-icon matTooltip="Go to jobexecutions for crawljob"
+                        i18n-matTooltip="@@crawljobListJobExecutionShortcutActionButtonTooltip">hdr_strong
+              </mat-icon>
+            </a>
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.crawlJob?.scheduleRef.id">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../schedule']"
+                   [queryParams]="{id: row.crawlJob.scheduleRef?.id}">
+                  <mat-icon matTooltip="Go to schedule: {{row | getCrawlScheduleName | async}}"
+                            i18n-matTooltip="@@crawljobListScheduleShortcutActionButtonTooltip">schedule
+                  </mat-icon>
+                </a>
+              </ng-container>
+            </ng-container>
+            <ng-container *appAction="let row">
+              <ng-container *ngIf="row.crawlJob?.crawlConfigRef?.id">
+                <a mat-icon-button class="shortcut-link"
+                   [routerLink]="['../crawlconfig']"
+                   [queryParams]="{id: row.crawlJob.crawlConfigRef?.id}">
+                  <mat-icon
+                    matTooltip="Go to crawlconfig: {{row | getCrawlConfigName | async}}"
+                    i18n-matTooltip="@@crawljobListCrawlconfigShortcutActionButtonTooltip">
+                    settings_system_daydream
+                  </mat-icon>
+                </a>
+              </ng-container>
+            </ng-container>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onFilterByCrawlJobRef(row)">
+              <mat-icon matTooltip="Show seeds with reference to the crawljob"
+                        i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">link
+              </mat-icon>
+            </button>
+            <button *appAction="let row" mat-icon-button
+                    (click)="onRunCrawl(row)">
+              <mat-icon matTooltip="Run crawljob: {{row.meta.name}}">play_arrow</mat-icon>
+            </button>
+
+          </ng-container>
+
+          <button *appAction="let row" mat-icon-button
+                  matTooltip="Clone"
+                  i18n-matTooltip="@@configurationListCloneActionButtonTooltip"
+                  (click)="onClone(row)">
+            <mat-icon>file_copy</mat-icon>
+          </button>
+        </app-config-list>
     </ng-container>
   </div>
 </div>

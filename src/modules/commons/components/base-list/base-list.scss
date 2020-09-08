@@ -53,6 +53,11 @@ tr.item-row.row-selected {
   color: $warn;
 }
 
+//.mat-column-name:hover, .mat-column-description:hover {
+//  white-space: normal;
+//  word-break: break-word;
+//}
+
 //.mat-row.row-selected:hover {
 //  background-color: $dark-focused;
 //  cursor: pointer;
@@ -75,6 +80,7 @@ tr.item-row:nth-child(4n+1):hover {
   cursor: default;
   background-color: inherit;
 }
+
 //
 //.mat-row:nth-child(n+1) {
 //  background-color: lighten($dark-focused, 80%);

@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@entityDetailsCardTitle">Schedule</ng-container>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <app-meta formControlName="meta"></app-meta>
+    <div fxLayout="column" fxLayoutAlign="space-evenly">
+      <div formGroupName="cronExpression" class="cron-expression">
+        <h3 mat-subheader i18n="@@scheduleFormCronExpressionHeader">CRON expression</h3>
+        <div fxLayout="rolw wrap" fxLayoutGap="24px">
+          <mat-form-field>
+            <input matInput formControlName="minute"
+                   placeholder="Minute"
+                   i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
+            <mat-hint>0-59</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="hour"
+                   placeholder="Hour"
+                   i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
+            <mat-hint>0-23</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="dom"
+                   placeholder="Day of month"
+                   i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
+            <mat-hint>1-31</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="month"
+                   placeholder="Month"
+                   i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
+            <mat-hint>1-12</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="dow"
+                   placeholder="Day of week"
+                   i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
+            <mat-hint>0-7</mat-hint>
+          </mat-form-field>
+        </div>
+        <mat-error *ngIf="form.dirty && !form.disabled && !cronExpression.valid"
+                   i18n="@@scheduleFormCronExpressionRequiredError">
+          CRON expression required
+        </mat-error>
+      </div>
+
+      <div>
+        <h3 mat-subheader i18n="@@scheduleDetailsValidFromToHeader">Time limit</h3>
+        <div fxLayout="row wrap" fxLayoutGap="24px">
+          <mat-form-field>
+            <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
+                   placeholder="Valid from" i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder">
+            <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #validFromDatepicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
+                   placeholder="Valid to" i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder">
+            <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #validToDatepicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

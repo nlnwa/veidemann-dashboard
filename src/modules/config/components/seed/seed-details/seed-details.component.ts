@@ -131,7 +131,6 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
   }
 
   onSave(): void {
-    console.log('onSave');
     if (this.isMultipleSeed()) {
       this.saveMultiple.emit(this.prepareSaveMultiple());
     } else {
@@ -200,7 +199,6 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
    */
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
-    console.log('prepareSave', this.form.value);
     return new ConfigObject({
       id: formModel.id,
       kind: Kind.SEED,
