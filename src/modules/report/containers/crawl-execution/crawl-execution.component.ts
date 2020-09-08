@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {combineLatest, Observable, Subject} from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
@@ -26,8 +26,6 @@ import {PageEvent} from '@angular/material/paginator';
 })
 export class CrawlExecutionComponent implements OnInit {
 
-  private searchComplete: Subject<void>;
-
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
   sortDirection$: Observable<SortDirection>;
@@ -45,7 +43,6 @@ export class CrawlExecutionComponent implements OnInit {
               private crawlExecutionService: CrawlExecutionService,
               private dataSource: ListDataSource<CrawlExecutionStatus>,
               private errorService: ErrorService) {
-    this.searchComplete = new Subject<void>();
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
   }
 
@@ -115,27 +112,27 @@ export class CrawlExecutionComponent implements OnInit {
         return s.direction ? s : null;
       }),
       distinctUntilChanged<Sort>((p, q) => p && q ? p.direction === q.direction && p.active === q.active : p === q),
-      shareReplay(1)
+      shareReplay(1),
     );
 
     const sortDirection$ = sort$.pipe(
       map(sort => (sort ? sort.direction : '') as SortDirection),
-      shareReplay(1)
     );
 
     const sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''),
-      shareReplay(1)
     );
 
     const pageSize$ = queryParam.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
+      shareReplay(1)
     );
 
     const pageIndex$ = queryParam.pipe(
       map(({pageIndex}) => parseInt(pageIndex, 10) || 0),
       distinctUntilChanged(),
+      shareReplay(1),
     );
 
     const query$: Observable<CrawlExecutionStatusQuery> = combineLatest([

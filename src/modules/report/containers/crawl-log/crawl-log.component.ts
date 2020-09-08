@@ -5,7 +5,7 @@ import {ListItem} from '../../../../shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService, ErrorService} from '../../../core/services';
 import {CrawlLogQuery, CrawlLogService} from '../../services';
-import {debounceTime, distinctUntilChanged, map, share} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 
@@ -71,16 +71,19 @@ export class CrawlLogComponent implements OnInit {
         return s.direction ? s : null;
       }),
       distinctUntilChanged<Sort>((p, q) => p && q ? p.direction === q.direction && p.active === q.active : p === q),
+      shareReplay(1),
     );
 
     const pageSize$ = queryParams.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
+      shareReplay(1),
     );
 
     const pageIndex$ = queryParams.pipe(
       map(({pageIndex}) => parseInt(pageIndex, 10) || 0),
       distinctUntilChanged(),
+      shareReplay(1),
     );
 
     const sortDirection$ = sort$.pipe(

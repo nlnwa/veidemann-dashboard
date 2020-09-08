@@ -201,6 +201,7 @@ export class ReportApiService {
     if (listRequest.getWatch()) {
       queryStr += '.changes()';
     } else if (listRequest.getOffset()) {
+      console.log(listRequest.getOffset());
       queryStr += `.skip(${listRequest.getOffset()})`;
     }
 

@@ -30,7 +30,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.length$.next(length);
   }
 
-
   @Input()
   pageSize = 25;
 
