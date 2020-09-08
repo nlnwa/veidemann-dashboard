@@ -2,17 +2,20 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {combineLatest, Observable, of, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, share} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, startWith} from 'rxjs/operators';
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
 import {ListDataSource, ListItem} from '../../../../shared/models';
-import {ErrorService} from '../../../core/services';
+import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
 import {CrawlExecutionStatusListComponent} from '../../components';
 import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
+import {MatDialog} from '@angular/material/dialog';
+import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
+
 
 @Component({
   selector: 'app-crawl-execution',
@@ -25,9 +28,13 @@ import {PageEvent} from '@angular/material/paginator';
   }],
 })
 export class CrawlExecutionComponent implements OnInit, OnDestroy {
+  readonly CrawlExecutionState = CrawlExecutionState;
 
   private searchComplete: Subject<void>;
   private ngUnsubscribe: Subject<void>;
+
+  private reload$: Observable<void>;
+  private reload: Subject<void>;
 
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
@@ -43,9 +50,14 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
               private router: Router,
               private crawlExecutionService: CrawlExecutionService,
               private dataSource: ListDataSource<CrawlExecutionStatus>,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private dialog: MatDialog,
+              private controllerApiService: ControllerApiService,
+              private snackBarService: SnackBarService) {
     this.ngUnsubscribe = new Subject<void>();
     this.searchComplete = new Subject<void>();
+    this.reload = new Subject<void>();
+    this.reload$ = this.reload.asObservable();
   }
 
   ngOnInit() {
@@ -132,13 +144,9 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
     );
 
-    const init$ = of(null).pipe(
-      distinctUntilChanged(),
-    );
-
     const query$ = combineLatest([
       jobId$, jobExecutionId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
-      startTimeFrom$, startTimeTo$, watch$, init$
+      startTimeFrom$, startTimeTo$, watch$, this.reload$.pipe(startWith(null as string))
     ]).pipe(
       debounceTime<any>(0),
       map(([jobId, jobExecutionId, seedId, stateList, active, direction, pageIndex, pageSize,
@@ -215,5 +223,30 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
     }).catch(error => this.errorService.dispatch(error));
+  }
+
+  canAbort(state: CrawlExecutionState) {
+    if (state === CrawlExecutionState.CREATED || state === CrawlExecutionState.FETCHING || state === CrawlExecutionState.SLEEPING) {
+      return true;
+    }
+  }
+
+  onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus) {
+    const dialogRef = this.dialog.open(AbortCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {crawlExecutionStatus}
+    });
+    dialogRef.afterClosed()
+      .subscribe(executionId => {
+        if (executionId) {
+          this.controllerApiService.abortCrawlExecution(executionId).subscribe(crawlExecStatus => {
+            if (crawlExecStatus.state === CrawlExecutionState.ABORTED_MANUAL) {
+              this.snackBarService.openSnackBar('Crawl aborted');
+              this.reload.next();
+            }
+          });
+        }
+      });
   }
 }
