@@ -10,7 +10,6 @@ import {
 import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {BASE_LIST} from '../../../../shared/directives';
-import {SEED_NAME_CACHE} from '../../pipe/seed-name.pipe';
 
 @Component({
   selector: 'app-crawl-execution-status-list',
