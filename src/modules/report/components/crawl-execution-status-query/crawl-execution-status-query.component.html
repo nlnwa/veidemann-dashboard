@@ -1,4 +1,4 @@
-<form [formGroup]="form" fxLayout="column">
+<form [formGroup]="form" fxLayout="column" fxLayout.lt-lg="row wrap" fxLayoutGap.lt-lg="16px">
   <mat-form-field>
     <mat-select placeholder="State" multiple formControlName="stateList"
                 i18n-placeholder="@@crawlExecutionReportFilterStatePlaceholder">

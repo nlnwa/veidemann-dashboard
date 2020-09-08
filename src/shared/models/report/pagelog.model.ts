@@ -1,6 +1,8 @@
 import {Resource} from './resource.model';
 import {PageLogProto} from '../../../api';
 import {ApiError} from './api-error.model';
+import {fromRethinkTimeStamp} from '../../func/rethinkdb';
+import {CrawlExecutionState} from './crawlexecutionstatus.model';
 
 export class PageLog {
   id: string;
@@ -11,8 +13,8 @@ export class PageLog {
   jobExecutionId: string;
   collectionFinalName: string;
   method: string;
-  resourceList: Resource[];
-  outlinkList: Array<string>;
+  resource: Resource[];
+  outlink: string[];
 
   constructor({
                 id = '',
@@ -23,10 +25,10 @@ export class PageLog {
                 jobExecutionId = '',
                 collectionFinalName = '',
                 method = '',
-                resourceList = [],
-                outlinkList = []
+                resource = [],
+                outlink = [],
               }: Partial<PageLog> = {}) {
-    this.id = id;
+    this.id = id || warcId;
     this.warcId = warcId;
     this.uri = uri;
     this.executionId = executionId;
@@ -34,13 +36,23 @@ export class PageLog {
     this.jobExecutionId = jobExecutionId;
     this.collectionFinalName = collectionFinalName;
     this.method = method;
-    this.resourceList = resourceList ? resourceList.map(resouce => new Resource(resouce)) : [];
-    this.outlinkList = outlinkList;
+    this.resource = resource ? resource.map(_ => new Resource(_)) : [];
+    this.outlink = outlink;
+  }
+  /**
+   * A function that transforms the results. This function is called for each member of the object.
+   * If a member contains nested objects, the nested objects are transformed before the parent object is.
+   * @see JSON.parse
+   */
+  static reviver(key: string, value: any) {
+    switch (key) {
+      default:
+        return value;
+    }
   }
 
   static fromProto(proto: PageLogProto): PageLog {
     return new PageLog({
-      id: proto.getWarcId(),
       warcId: proto.getWarcId(),
       uri: proto.getUri(),
       executionId: proto.getExecutionId(),
@@ -48,7 +60,7 @@ export class PageLog {
       jobExecutionId: proto.getJobExecutionId(),
       collectionFinalName: proto.getCollectionFinalName(),
       method: proto.getMethod(),
-      resourceList: proto.getResourceList().map(resourceProto => new Resource({
+      resource: proto.getResourceList().map(resourceProto => new Resource({
         uri: resourceProto.getUri(),
         fromCache: resourceProto.getFromCache(),
         renderable: resourceProto.getRenderable(),
@@ -61,7 +73,7 @@ export class PageLog {
         error: ApiError.fromProto(resourceProto.getError()),
         method: resourceProto.getMethod()
       })),
-      outlinkList: proto.getOutlinkList()
+      outlink: proto.getOutlinkList()
     });
   }
 
@@ -74,8 +86,8 @@ export class PageLog {
     proto.setJobExecutionId(pageLog.jobExecutionId);
     proto.setCollectionFinalName(pageLog.collectionFinalName);
     proto.setMethod(pageLog.method);
-    proto.setResourceList(pageLog.resourceList.map(resource => Resource.toProto(resource)));
-    proto.setOutlinkList(pageLog.outlinkList);
+    proto.setResourceList(pageLog.resource.map(resource => Resource.toProto(resource)));
+    proto.setOutlinkList(pageLog.outlink);
     return proto;
   }
 }

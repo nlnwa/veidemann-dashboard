@@ -18,8 +18,7 @@
         <tbody>
         <tr class="mat-row">
           <td class="mat-cell">
-            <a [routerLink]="['/config', 'crawljobs']"
-               [queryParams]="{id: jobExecutionStatus.jobId}">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
+            <a [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
             </td>
           <td class="mat-cell">{{JobExecutionState[jobExecutionStatus.state]}}</td>
         </tr>

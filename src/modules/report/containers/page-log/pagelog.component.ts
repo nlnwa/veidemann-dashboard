@@ -12,6 +12,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 import {BASE_LIST} from '../../../../shared/directives';
 import {PageLogListComponent} from '../../components';
+import {CrawlExecutionStatusQuery} from '../../services';
 
 @Component({
   selector: 'app-pagelog',
@@ -33,9 +34,6 @@ export class PageLogComponent implements OnInit {
   sortActive$: Observable<string>;
   query$: Observable<PageLogQuery>;
 
-  pageLog: Subject<PageLog>;
-  pageLog$: Observable<PageLog>;
-
   get loading$(): Observable<boolean> {
     return this.pageLogService.loading$;
   }
@@ -46,15 +44,12 @@ export class PageLogComponent implements OnInit {
               private pageLogService: PageLogService,
               private errorService: ErrorService,
               public appConfigService: AppConfigService) {
-    this.pageLog = new Subject<PageLog>();
-    this.pageLog$ = this.pageLog.asObservable();
   }
 
   ngOnInit(): void {
     const routeParam$ = this.route.queryParamMap.pipe(
       debounceTime(0), // synchronize
       map(queryParaMap => ({
-        warcId: queryParaMap.get('warc_id'),
         uri: queryParaMap.get('uri'),
         executionId: queryParaMap.get('execution_id'),
         jobExecutionId: queryParaMap.get('job_execution_id'),
@@ -65,10 +60,6 @@ export class PageLogComponent implements OnInit {
       })),
       share(),
     );
-
-    // const warcId$ = routeParam$.pipe(
-    //   map(({warcId}) => warcId),
-    //   distinctUntilChanged());
 
     const watch$ = routeParam$.pipe(
       map(({watch}) => watch),
@@ -134,16 +125,6 @@ export class PageLogComponent implements OnInit {
     this.pageSize$ = pageSize$;
     this.pageIndex$ = pageIndex$;
     this.query$ = query$;
-    //
-    // warcId$.pipe(
-    //   switchMap(warcId => warcId ? this.pageLogService.get(warcId) : of(null)),
-    //   tap(s => {
-    //     if (s === null) {
-    //       this.list.reset();
-    //     }
-    //   }),
-    //   takeUntil(this.ngUnsubscribe)
-    // ).subscribe(pageLog => this.pageLog.next(pageLog));
   }
 
 
@@ -168,6 +149,21 @@ export class PageLogComponent implements OnInit {
       relativeTo: this.route,
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
+    }).catch(error => this.errorService.dispatch(error));
+  }
+
+  onQueryChange(query: Partial<PageLogQuery>) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+      queryParams: {
+        p: query.pageIndex || null,
+        s: query.pageSize || null,
+        uri: query.uri || null,
+        job_execution_id: query.jobExecutionId || null,
+        execution_id: query.executionId || null,
+        watch: query.watch || null
+      },
     }).catch(error => this.errorService.dispatch(error));
   }
 }

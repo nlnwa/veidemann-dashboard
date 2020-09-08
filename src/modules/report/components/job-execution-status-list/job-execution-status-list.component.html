@@ -2,6 +2,7 @@
   <div fxFlex class="scroll">
     <table mat-table [dataSource]="dataSource"
            matSort
+           matSortStart="desc"
            [matSortActive]="sortActive"
            [matSortDirection]="sortDirection"
            (matSortChange)="onSortChange($event)">

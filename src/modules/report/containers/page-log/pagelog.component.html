@@ -1,40 +1,37 @@
-<div fxLayout="column" class="container">
+<div class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div fxFlex fxLayout="row">
-    <app-page-log-query class="content-padding" [query]="query$ | async"></app-page-log-query>
-    <div fxFlex fxLayout="column" fxLayoutGap="16px">
-      <app-pagelog-list fxFlex style="overflow-y: auto; min-height: 0"
-                        appQueryPageLog [query]="query$ | async"
-                        [pageIndex]="pageIndex$ | async"
-                        [pageSize]="pageSize$ | async"
-                        [sortDirection]="sortDirection$ | async"
-                        [sortActive]="sortActive$ | async"
-                        (selectedChange)="onSelectedChange($event)"
-                        (sort)="onSort($event)"
-                        (page)="onPage($event)">
-        <a *appAction="let row" mat-icon-button
-           [routerLink]="['/report', 'jobexecution']"
-           [queryParams]="{id: row.jobExecutionId}">
-          <mat-icon matTooltip="Go to job execution"
-                    i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">hdr_strong
-          </mat-icon>
-        </a>
-        <a *appAction="let row" mat-icon-button
-           [routerLink]="['/report', 'crawlexecution']"
-           [queryParams]="{id: row.executionId}">
-          <mat-icon matTooltip="Go to crawl execution"
-                    i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak
-          </mat-icon>
-        </a>
-        <a *appAction="let row" mat-icon-button
-           target="_blank"
-           [href]="appConfigService.waybackUrl + '*?url=' + row.uri">
-          <mat-icon matTooltip="Search wayback"
-                    i18n-matTooltip="@@pageLogListGoToWaybackTooltip">camera
-          </mat-icon>
-        </a>
-      </app-pagelog-list>
-      <app-page-log-status fxFlex *ngIf="pageLog$ | async as pageLog" [pageLog]="pageLog"></app-page-log-status>
-    </div>
+  <div class="container no-scroll" fxLayout="row" *ngIf="query$ | async as query">
+    <app-page-log-query class="content-padding scroll"
+                        [query]="query"
+                        (queryChange)="onQueryChange($event)"></app-page-log-query>
+    <app-pagelog-list fxFlex
+                      appQueryPageLog [query]="query"
+                      [pageIndex]="pageIndex$ | async"
+                      [pageSize]="pageSize$ | async"
+                      [sortDirection]="sortDirection$ | async"
+                      [sortActive]="sortActive$ | async"
+                      (selectedChange)="onSelectedChange($event)"
+                      (sort)="onSort($event)"
+                      (page)="onPage($event)">
+      <a *appAction="let row" mat-icon-button
+         [routerLink]="['/report', 'jobexecution', row.jobExecutionId]">
+        <mat-icon matTooltip="Go to job execution"
+                  i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">hdr_strong
+        </mat-icon>
+      </a>
+      <a *appAction="let row" mat-icon-button
+         [routerLink]="['/report', 'crawlexecution', row.executionId]">
+        <mat-icon matTooltip="Go to crawl execution"
+                  i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak
+        </mat-icon>
+      </a>
+      <a *appAction="let row" mat-icon-button
+         target="_blank"
+         [href]="appConfigService.waybackUrl + '*?url=' + row.uri">
+        <mat-icon matTooltip="Search wayback"
+                  i18n-matTooltip="@@pageLogListGoToWaybackTooltip">camera
+        </mat-icon>
+      </a>
+    </app-pagelog-list>
   </div>
 </div>

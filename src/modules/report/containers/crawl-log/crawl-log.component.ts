@@ -110,16 +110,6 @@ export class CrawlLogComponent implements OnInit {
     this.pageSize$ = pageSize$;
     this.pageIndex$ = pageIndex$;
     this.query$ = query$;
-
-    // id$.pipe(
-    //   switchMap(id => id ? this.crawlLogService.get({id}) : of(null)),
-    //   tap(s => {
-    //     if (s === null) {
-    //       this.list.reset();
-    //     }
-    //   }),
-    //   takeUntil(this.ngUnsubscribe)
-    // ).subscribe(crawlLog => this.crawlLog.next(crawlLog));
   }
 
 
@@ -144,6 +134,20 @@ export class CrawlLogComponent implements OnInit {
       relativeTo: this.route,
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
+    }).catch(error => this.errorService.dispatch(error));
+  }
+
+  onQueryChange(query: Partial<CrawlLogQuery>) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+      queryParams: {
+        p: query.pageIndex || null,
+        s: query.pageSize || null,
+        job_execution_id: query.jobExecutionId || null,
+        execution_id: query.executionId || null,
+        watch: query.watch || null
+      },
     }).catch(error => this.errorService.dispatch(error));
   }
 }

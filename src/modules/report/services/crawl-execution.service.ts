@@ -64,6 +64,7 @@ export class CrawlExecutionService extends LoadingService
     const queryTemplate = new CrawlExecutionStatus();
     const fieldMask = new FieldMask();
 
+    console.log(query);
     listRequest.setOffset(query.pageIndex * query.pageSize);
     listRequest.setPageSize(query.pageSize);
 

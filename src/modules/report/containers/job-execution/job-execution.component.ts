@@ -151,24 +151,15 @@ export class JobExecutionComponent implements OnInit {
   }
 
   onQueryChange(query: Partial<JobExecutionStatusQuery>) {
-    const startTimeTo = query.startTimeTo && isValidDate(new Date(query.startTimeTo))
-      ? new Date(query.startTimeTo).toISOString()
-      : null;
-    const startTimeFrom = query.startTimeFrom && isValidDate(new Date(query.startTimeFrom))
-      ? new Date(query.startTimeFrom).toISOString()
-      : null;
     const queryParams = {
       state: query.stateList && query.stateList.length ? query.stateList : null,
       job_id: query.jobId || null,
-      start_time_to: startTimeTo,
-      start_time_from: startTimeFrom,
+      start_time_to: query.startTimeTo || null,
+      start_time_from: query.startTimeFrom || null,
       watch: query.watch || null,
     };
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-      queryParams,
-    }).catch(error => this.errorService.dispatch(error));
+    this.router.navigate([], {relativeTo: this.route, queryParams})
+      .catch(error => this.errorService.dispatch(error));
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {

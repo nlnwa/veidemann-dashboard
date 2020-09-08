@@ -19,6 +19,7 @@ export class PageLogQueryComponent extends QueryComponent<PageLogQuery> {
       jobExecutionId: '',
       executionId: '',
       uri: '',
+      watch: null,
     });
   }
   //

@@ -22,14 +22,6 @@ export class CrawlExecutionDetailComponent extends DetailDirective<CrawlExecutio
   ngOnInit() {
     super.ngOnInit();
 
-    const DONE_STATES = [
-      CrawlExecutionState.ABORTED_MANUAL,
-      CrawlExecutionState.ABORTED_SIZE,
-      CrawlExecutionState.ABORTED_TIMEOUT,
-      CrawlExecutionState.FAILED,
-      CrawlExecutionState.FINISHED,
-    ];
-
     const item$: Observable<CrawlExecutionStatus> = this.query$.pipe(
       map(({id}) => ({id, watch: false})),
       mergeMap(query => this.service.get(query)),
@@ -37,9 +29,9 @@ export class CrawlExecutionDetailComponent extends DetailDirective<CrawlExecutio
 
     const watchedItem$: Observable<CrawlExecutionStatus> = combineLatest([this.query$, item$]).pipe(
       // only watch if job execution isn't in one of the done states
-      filter(([_, item]) => !DONE_STATES.includes(item.state)),
+      filter(([_, item]) => !CrawlExecutionStatus.DONE_STATES.includes(item.state)),
       switchMap(([query]) => this.service.get(query).pipe(
-        takeWhile(item => !DONE_STATES.includes((item.state)), true),
+        takeWhile(item => !CrawlExecutionStatus.DONE_STATES.includes((item.state)), true),
       )),
     );
 

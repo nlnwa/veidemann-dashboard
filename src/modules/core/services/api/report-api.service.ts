@@ -1,27 +1,26 @@
 import {Injectable} from '@angular/core';
 import {EMPTY, Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, map, tap} from 'rxjs/operators';
+import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {
-  CrawlLogListRequest,
-  PageLogListRequest,
   CrawlExecutionsListRequest,
   CrawlExecutionStatusProto,
+  CrawlLogListRequest,
   CrawlLogProto,
   ExecuteDbQueryReply,
   ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
   JobExecutionStatusProto,
+  PageLogListRequest,
   PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
-import {fromRethinkTimeStamp} from '../../../../shared/func/rethinkdb';
-import {Changefeed} from '../../../../shared/func/rethinkdb';
+import {Changefeed, fromRethinkTimeStamp} from '../../../../shared/func/rethinkdb';
 
 
 @Injectable({
@@ -91,12 +90,10 @@ export class ReportApiService {
           return () => stream.cancel();
         }).pipe(
           map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-          tap(console.log),
-
           map(record => JSON.parse(record, CrawlExecutionStatus.reviver)),
-          tap(console.log),
-          map((change: Changefeed<any>) => change.new_val),
-          map((record: any) => new CrawlExecutionStatus(record)),
+          map((object: any) => listRequest.getWatch()
+            ? new CrawlExecutionStatus((object as Changefeed<any>).new_val)
+            : new CrawlExecutionStatus(object)),
           catchError(error => {
             this.errorService.dispatch(error);
             return EMPTY;
@@ -148,7 +145,9 @@ export class ReportApiService {
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map((record: string) => JSON.parse(record)),
+      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
+      map(record => JSON.parse(record, PageLog.reviver)),
+      map(object => new PageLog(object)),
       catchError(error => {
         this.errorService.dispatch(error);
         return of(null);
@@ -199,7 +198,9 @@ export class ReportApiService {
         queryStr += `.filter({${path}: '${value}'})`;
       }
     }
-    if (listRequest.getOffset()) {
+    if (listRequest.getWatch()) {
+      queryStr += '.changes()';
+    } else if (listRequest.getOffset()) {
       queryStr += `.skip(${listRequest.getOffset()})`;
     }
 
@@ -214,14 +215,10 @@ export class ReportApiService {
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map((record: string) => JSON.parse(record)),
-      map((record: any) => {
-        const pageLog = new PageLog(record);
-        pageLog.id = record.warcId;
-        pageLog.outlinkList = record.outlink;
-        pageLog.resourceList = record.resource;
-        return pageLog;
-      }),
+      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
+      map(record => JSON.parse(record, PageLog.reviver)),
+      map((object: any) => listRequest.getWatch() ? (object as Changefeed<any>).new_val : object),
+      map(object => new PageLog(object)),
       catchError(error => {
         this.errorService.dispatch(error);
         return EMPTY;

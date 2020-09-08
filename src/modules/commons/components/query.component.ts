@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {JobExecutionStatusQuery} from '../../report/services';
+import {isValidDate} from '../../../shared/func';
 
 @Directive()
 // tslint:disable-next-line:directive-class-suffix
@@ -52,7 +54,7 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
   }
 
   onQuery(query: T) {
-    this.queryChange.emit(query);
+    this.queryChange.emit(this.transform(query));
   }
 
   protected createForm(): void {
@@ -63,5 +65,22 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
     this.form.patchValue(this.query, {emitEvent: false});
     this.form.markAsPristine();
     this.form.markAsUntouched();
+  }
+
+  protected transform(query: T): T {
+    for (const [key, value] of Object.entries(query)) {
+
+      // match date values and convert to ISO string if valid
+      if (value && key.match(/time/i)) {
+        const date = new Date(value);
+        if (isValidDate(date)) {
+          query[key] = date.toISOString();
+        } else {
+          query[key] = '';
+        }
+      }
+
+    }
+    return query;
   }
 }

@@ -21,38 +21,6 @@ export class CrawlExecutionStatusQueryComponent extends QueryComponent<CrawlExec
     super(fb);
   }
 
-  onQuery(query: CrawlExecutionStatusQuery) {
-    super.onQuery(query);
-    // combineLatest([
-    //     this.form.valueChanges.pipe(
-    //       startWith({}),
-    //       map(value => {
-    //         const startTimeTo = value.startTimeTo && isValidDate(new Date(value.startTimeTo))
-    //           ? new Date(value.startTimeTo).toISOString()
-    //           : null;
-    //         const startTimeFrom = value.startTimeFrom && isValidDate(new Date(value.startTimeFrom))
-    //           ? new Date(value.startTimeFrom).toISOString()
-    //           : null;
-    //
-    //         return {
-    //           watch: value.watch,
-    //           startTimeTo,
-    //           startTimeFrom,
-    //           hasError: value.hasError,
-    //           stateList: value.stateList,
-    //           jobId: value.jobId,
-    //           seedId: value.seedId,
-    //         } as CrawlExecutionStatusQuery;
-    //       })
-    //     ),
-    //     this.sorter,
-    //     this.pager
-    //   ]
-    // ).pipe(
-    //   map(([q, sort, page]) => ({...q, sort: sort as Sort, page: page as Page}))
-    // ).subscribe(query => this.queryChange.emit(query));
-  }
-
   protected createForm(): void {
     this.form = this.fb.group({
       stateList: null,
@@ -64,24 +32,5 @@ export class CrawlExecutionStatusQueryComponent extends QueryComponent<CrawlExec
       hasError: null,
       watch: null,
     });
-  }
-
-  protected updateForm(): void {
-    super.updateForm();
-    /*
-
-    if (this.query.sort) {
-      this.sortDirection = this.query.sort.direction as SortDirection;
-      this.sortActive = this.query.sort.active;
-    }
-    if (this.query.page) {
-      this.pageIndex = this.query.page.pageIndex;
-      this.pageSize = this.query.page.pageSize;
-    }
-    this.queryForm.patchValue(query, {emitEvent: false});
-    this.queryForm.markAsPristine();
-    this.queryForm.markAsUntouched();
-
-     */
   }
 }

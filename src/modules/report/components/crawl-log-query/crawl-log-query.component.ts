@@ -17,7 +17,8 @@ export class CrawlLogQueryComponent extends QueryComponent<CrawlLogQuery> {
   protected createForm(): void {
     this.form = this.fb.group({
       jobExecutionId: '',
-      executionId: ''
+      executionId: '',
+      watch: null,
     });
   }
 }

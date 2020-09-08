@@ -22,6 +22,14 @@ export const crawlExecutionStates: CrawlExecutionState[] =
   Object.keys(CrawlExecutionState).filter(p => !isNumeric(p)).map(state => CrawlExecutionState[state]);
 
 export class CrawlExecutionStatus {
+  static DONE_STATES = [
+    CrawlExecutionState.ABORTED_MANUAL,
+    CrawlExecutionState.ABORTED_SIZE,
+    CrawlExecutionState.ABORTED_TIMEOUT,
+    CrawlExecutionState.FAILED,
+    CrawlExecutionState.FINISHED,
+  ];
+
   id: string;
   state: CrawlExecutionState;
   jobId: string;
@@ -38,7 +46,7 @@ export class CrawlExecutionStatus {
   documentsDenied: number;
   lastChangeTime: string;
   createdTime: string;
-  currentUriIdList: Array<string>;
+  currentUriIdList: string[];
   jobExecutionId: string;
   error: ApiError;
 
@@ -90,7 +98,6 @@ export class CrawlExecutionStatus {
    * @see JSON.parse
    */
   static reviver(key: string, value: any) {
-    console.log('key');
     switch (key) {
       case 'state':
         return CrawlExecutionState[value];

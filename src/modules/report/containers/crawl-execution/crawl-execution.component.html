@@ -1,12 +1,12 @@
-<div fxLayout="column" class="container">
+<div class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div class="container" fxLayout="row">
-    <app-crawl-execution-status-query style="overflow-y: auto" class="content-padding"
+  <div fxLayout="row" class="container no-scroll" *ngIf="query$ | async as query">
+    <app-crawl-execution-status-query class="content-padding scroll"
                                       [crawlJobOptions]="crawlJobOptions"
-                                      [query]="query$ | async"
+                                      [query]="query"
                                       (queryChange)="onQueryChange($event)"></app-crawl-execution-status-query>
     <app-crawl-execution-status-list fxFlex
-                                     appQueryCrawlExecutionStatus [query]="query$ | async"
+                                     appQueryCrawlExecutionStatus [query]="query"
                                      [pageIndex]="pageIndex$ | async"
                                      [pageSize]="pageSize$ | async"
                                      [sortDirection]="sortDirection$ | async"
@@ -28,7 +28,7 @@
       </a>
       <a *appAction="let row" mat-icon-button
          [routerLink]="['../pagelog']"
-         [queryParams]="{execution_id: row.id}">
+         [queryParams]="{execution_id: row.id, watch: isDone(row) ? null : true}">
         <mat-icon matTooltip="Go to pagelog"
                   i18n-matTooltip="@@crawlExecutionReportListGoToPagelogShortcutTooltip">art_track
         </mat-icon>

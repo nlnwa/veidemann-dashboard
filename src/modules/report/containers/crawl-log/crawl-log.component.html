@@ -1,7 +1,8 @@
-<div class="container" fxLayout="column" *ngIf="query$ | async as query">
+<div class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div fxFlex fxLayout="row">
-    <app-crawl-log-query class="content-padding" [query]="query"></app-crawl-log-query>
+  <div class="container no-scroll" fxLayout="row" *ngIf="query$ | async as query">
+    <app-crawl-log-query class="content-padding scroll"
+                         [query]="query"></app-crawl-log-query>
     <app-crawl-log-list fxFlex
                         appQueryCrawlLog [query]="query"
                         [length]="pageLength$ | async"
@@ -32,7 +33,5 @@
         </mat-icon>
       </a>
     </app-crawl-log-list>
-    <!--    <app-crawl-log-status fxFlex *ngIf="crawlLog$ | async as crawlLog"-->
-    <!--                          [crawlLog]="crawlLog"></app-crawl-log-status>-->
   </div>
 </div>

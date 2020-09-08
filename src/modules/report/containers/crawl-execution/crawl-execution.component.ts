@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {combineLatest, Observable, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, share} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
@@ -24,10 +24,9 @@ import {PageEvent} from '@angular/material/paginator';
     useClass: CrawlExecutionStatusListComponent,
   }],
 })
-export class CrawlExecutionComponent implements OnInit, OnDestroy {
+export class CrawlExecutionComponent implements OnInit {
 
   private searchComplete: Subject<void>;
-  private ngUnsubscribe: Subject<void>;
 
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
@@ -46,7 +45,6 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
               private crawlExecutionService: CrawlExecutionService,
               private dataSource: ListDataSource<CrawlExecutionStatus>,
               private errorService: ErrorService) {
-    this.ngUnsubscribe = new Subject<void>();
     this.searchComplete = new Subject<void>();
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
   }
@@ -117,13 +115,18 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
         return s.direction ? s : null;
       }),
       distinctUntilChanged<Sort>((p, q) => p && q ? p.direction === q.direction && p.active === q.active : p === q),
+      shareReplay(1)
     );
 
     const sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : '') as SortDirection));
+      map(sort => (sort ? sort.direction : '') as SortDirection),
+      shareReplay(1)
+    );
 
     const sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : ''));
+      map(sort => sort ? sort.active : ''),
+      shareReplay(1)
+    );
 
     const pageSize$ = queryParam.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
@@ -135,7 +138,7 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
     );
 
-    const query$ = combineLatest([
+    const query$: Observable<CrawlExecutionStatusQuery> = combineLatest([
       jobId$, jobExecutionId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
       startTimeFrom$, startTimeTo$, watch$
     ]).pipe(
@@ -165,31 +168,19 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
     this.sortDirection$ = sortDirection$;
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   onQueryChange(query: Partial<CrawlExecutionStatusQuery>) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-      queryParams: {
-        p: query.pageIndex || null,
-        s: query.pageSize || null,
-        sort: query.direction
-          ? query.active + (query.direction && ':') + query.direction
-          : null,
-        state: query.stateList || null,
-        seed_id: query.seedId || null,
-        job_id: query.jobId || null,
-        job_execution_id: query.jobExecutionId || null,
-        start_time_to: query.startTimeTo || null,
-        start_time_from: query.startTimeFrom || null,
-        has_error: query.hasError || null,
-        watch: query.watch || null
-      },
-    }).catch(error => this.errorService.dispatch(error));
+    const queryParams = {
+      state: query.stateList || null,
+      seed_id: query.seedId || null,
+      job_id: query.jobId || null,
+      job_execution_id: query.jobExecutionId || null,
+      start_time_to: query.startTimeTo || null,
+      start_time_from: query.startTimeFrom || null,
+      has_error: query.hasError || null,
+      watch: query.watch || null
+    };
+    this.router.navigate([], {relativeTo: this.route, queryParams})
+      .catch(error => this.errorService.dispatch(error));
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {
@@ -214,5 +205,9 @@ export class CrawlExecutionComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
     }).catch(error => this.errorService.dispatch(error));
+  }
+
+  isDone(item: CrawlExecutionStatus): boolean {
+    return CrawlExecutionStatus.DONE_STATES.includes(item.state);
   }
 }

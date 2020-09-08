@@ -1,4 +1,4 @@
-<div fxLayout="column" class="container">
+<div fxLayout="column" class="container mat-elevation-z1">
   <div fxFlex style="overflow-x: auto;">
     <table mat-table [dataSource]="dataSource"
            matSort
@@ -75,7 +75,6 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-
       <tr mat-row *matRowDef="let row; columns: displayedColumns"
           [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
           (click)="onRowClick(row)"></tr>
