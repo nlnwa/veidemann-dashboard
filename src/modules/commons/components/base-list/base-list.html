@@ -84,7 +84,7 @@
       <!-- Expanded Content Column - The preview row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedPreview">
         <td mat-cell class="preview-col" *matCellDef="let row" [attr.colspan]="displayedColumns.length">
-          <div class="preview" [@detailExpand]="row === expandedConfigObject ? 'expanded' : 'collapsed'">
+          <div class="preview" [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
             <app-preview [configObject]="row"></app-preview>
           </div>
         </td>
@@ -93,7 +93,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"
           class="item-row"
-          [class.expanded-row]="expandedConfigObject === row"
+          [class.expanded-row]="selectedRow === row"
           (click)="onRowClick(row)"
           [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
           [class.row-disabled]="isDisabled(row)">

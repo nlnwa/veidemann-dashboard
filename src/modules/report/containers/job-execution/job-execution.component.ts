@@ -178,11 +178,11 @@ export class JobExecutionComponent implements OnInit {
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {
-    if (!Array.isArray(item)) {
-      this.router.navigate([item.id], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
-    }
+    // if (!Array.isArray(item)) {
+    //   this.router.navigate([item.id], {
+    //     relativeTo: this.route,
+    //   }).catch(error => this.errorService.dispatch(error));
+    // }
   }
 
   onSort(sort: Sort) {

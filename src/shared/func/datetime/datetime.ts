@@ -79,3 +79,10 @@ export function toTimestampProto(timestamp: string): any {
   }
 }
 
+export function secondsBetweenDates(startTime: string, endTime: string): string {
+  const start = moment(startTime);
+  const end = moment(endTime);
+  const duration = moment.duration(start.diff(end));
+  return duration.seconds().toString();
+}
+
