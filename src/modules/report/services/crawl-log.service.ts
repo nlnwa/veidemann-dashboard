@@ -7,6 +7,7 @@ import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
 import {Detail, Page, Sort, Watch} from '../../../shared/func';
 import {Getter, Searcher} from '../../../shared/directives';
+import {PageLogQuery} from './pagelog.service';
 
 
 export interface CrawlLogQuery extends Page, Sort, Watch {
@@ -18,16 +19,12 @@ export interface CrawlLogQuery extends Page, Sort, Watch {
 @Injectable()
 export class CrawlLogService extends LoadingService
   implements Getter<CrawlLog>, Searcher<CrawlLogQuery, CrawlLog> {
+
   constructor(private reportApiService: ReportApiService) {
     super();
   }
 
-  static getListRequest(query
-
-                          :
-                          CrawlLogQuery
-  ):
-    CrawlLogListRequest {
+  static getListRequest(query: CrawlLogQuery): CrawlLogListRequest {
     const listRequest = new CrawlLogListRequest();
     const queryTemplate = new CrawlLog();
     const fieldMask = new FieldMask();
@@ -61,6 +58,7 @@ export class CrawlLogService extends LoadingService
 
     return listRequest;
   }
+
 
   get(query: Detail): Observable<CrawlLog> {
     const listRequest = new CrawlLogListRequest();

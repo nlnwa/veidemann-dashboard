@@ -2,7 +2,7 @@
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div class="container no-scroll" fxLayout="row" *ngIf="query$ | async as query">
     <app-crawl-log-query class="content-padding scroll"
-                         [query]="query"></app-crawl-log-query>
+                         [query]="query" (queryChange)="onQueryChange($event)"></app-crawl-log-query>
     <app-crawl-log-list fxFlex
                         appQueryCrawlLog [query]="query"
                         [length]="pageLength$ | async"

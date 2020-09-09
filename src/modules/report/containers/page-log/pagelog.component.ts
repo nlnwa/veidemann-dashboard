@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {combineLatest, Observable, of, Subject} from 'rxjs';
-import {PageLog} from '../../../../shared/models/report/pagelog.model';
+import {combineLatest, Observable, of} from 'rxjs';
 import {ListDataSource, ListItem} from '../../../../shared/models/list-datasource';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
@@ -12,7 +11,6 @@ import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 import {BASE_LIST} from '../../../../shared/directives';
 import {PageLogListComponent} from '../../components';
-import {CrawlExecutionStatusQuery} from '../../services';
 
 @Component({
   selector: 'app-pagelog',

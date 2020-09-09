@@ -105,6 +105,7 @@ export class CrawlExecutionStatus {
       case 'endTime':
       case 'lastChangeTime':
       case 'createdTime':
+        console.log(key, value);
         return fromRethinkTimeStamp(value);
       default:
         return value;

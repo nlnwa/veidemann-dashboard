@@ -7,15 +7,15 @@
            (matSortChange)="onSortChange($event)">
       <ng-container matColumnDef="uri">
         <th i18n="@@PageLogReportListWarcIdNameHeaderCell" mat-header-cell *matHeaderCellDef>URI</th>
-        <td mat-cell *matCellDef="let row">{{row.uri}}</td>
+        <td mat-cell *matCellDef="let row">{{row.uri | sedPipe}}</td>
       </ng-container>
       <ng-container matColumnDef="nrOfResources">
         <th i18n="@@PageLogReportListNrOfResourcesNameHeaderCell" mat-header-cell *matHeaderCellDef># Resources</th>
-        <td mat-cell *matCellDef="let row">{{row.resourceList?.length}}</td>
+        <td mat-cell *matCellDef="let row">{{row.resource?.length}}</td>
       </ng-container>
       <ng-container matColumnDef="nrOfOutlinks">
         <th i18n="@@PageLogReportListNrOfOutlinksNameHeaderCell" mat-header-cell *matHeaderCellDef># Outlinks</th>
-        <td mat-cell *matCellDef="let row">{{row.outlinkList?.length}}</td>
+        <td mat-cell *matCellDef="let row">{{row.outlink?.length}}</td>
       </ng-container>
       <!--    <ng-container matColumnDef="executionId">-->
       <!--      <th i18n="@@PageLogReportListExecutionIdNameHeaderCell" mat-header-cell mat-sort-header *matHeaderCellDef>Execution id</th>-->

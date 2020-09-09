@@ -1,6 +1,6 @@
-<div class="container">
+<div fxLayout="column" class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div fxLayout="row" class="container no-scroll" *ngIf="query$ | async as query">
+  <div fxFlex fxLayout="row" class="no-scroll" *ngIf="query$ | async as query">
     <app-crawl-execution-status-query class="content-padding scroll"
                                       [crawlJobOptions]="crawlJobOptions"
                                       [query]="query"

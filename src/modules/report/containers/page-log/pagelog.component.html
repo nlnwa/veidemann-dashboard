@@ -1,6 +1,6 @@
-<div class="container">
+<div fxLayout="column" class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div class="container no-scroll" fxLayout="row" *ngIf="query$ | async as query">
+  <div fxFlex class="no-scroll" fxLayout="row" *ngIf="query$ | async as query">
     <app-page-log-query class="content-padding scroll"
                         [query]="query"
                         (queryChange)="onQueryChange($event)"></app-page-log-query>

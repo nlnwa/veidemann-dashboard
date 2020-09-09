@@ -119,7 +119,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.selection.clear();
     this.selectedRow = null;
     this.allSelected = false;
-    this.length$.next(0);
+    // this.length$.next(0);
   }
 
   onSortChange(sort: Sort) {

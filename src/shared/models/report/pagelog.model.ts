@@ -39,6 +39,7 @@ export class PageLog {
     this.resource = resource ? resource.map(_ => new Resource(_)) : [];
     this.outlink = outlink;
   }
+
   /**
    * A function that transforms the results. This function is called for each member of the object.
    * If a member contains nested objects, the nested objects are transformed before the parent object is.

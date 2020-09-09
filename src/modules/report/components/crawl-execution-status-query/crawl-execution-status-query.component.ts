@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {CrawlExecutionStatusQuery} from '../../services';
 import {QueryComponent} from '../../../commons/components';
@@ -8,7 +8,8 @@ import {CrawlExecutionState, crawlExecutionStates} from '../../../../shared/mode
 @Component({
   selector: 'app-crawl-execution-status-query',
   templateUrl: './crawl-execution-status-query.component.html',
-  styleUrls: ['./crawl-execution-status-query.component.css']
+  styleUrls: ['./crawl-execution-status-query.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlExecutionStatusQueryComponent extends QueryComponent<CrawlExecutionStatusQuery> {
   readonly crawlExecutionStates = crawlExecutionStates;

@@ -20,7 +20,7 @@ import {
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
-import {Changefeed, fromRethinkTimeStamp} from '../../../../shared/func/rethinkdb';
+import {Changefeed} from '../../../../shared/func/rethinkdb';
 
 
 @Injectable({
@@ -59,28 +59,22 @@ export class ReportApiService {
     if (listRequest.getWatch() && listRequest.hasQueryMask()) {
       const paths = listRequest.getQueryMask().getPathsList();
       if (paths.includes('jobExecutionId') && paths.includes('seedId')) {
+
         let queryStr = `r.table('executions')`;
 
         const crawlExecution = CrawlExecutionStatus.fromProto(listRequest.getQueryTemplate());
-        if (paths.includes('executionId')) {
-          queryStr += `.getAll([${crawlExecution.jobExecutionId}, ${crawlExecution.seedId}]', {index: 'jobExecutionId_seedId'})`;
-          paths.splice(paths.findIndex(p => p === 'jobExecutionId'), 1);
-          paths.splice(paths.findIndex(p => p === 'seedId'), 1);
-        }
+        queryStr += `.getAll(['${crawlExecution.jobExecutionId}', '${crawlExecution.seedId}'], {index: 'jobExecutionId_seedId'})`;
+        paths.splice(paths.findIndex(p => p === 'jobExecutionId'), 1);
+        paths.splice(paths.findIndex(p => p === 'seedId'), 1);
+
         for (const path of paths) {
           const value = crawlExecution[path];
           queryStr += `.filter({${path}: '${value}'})`;
         }
-
-        if (listRequest.getOffset()) {
-          queryStr += `.skip(${listRequest.getOffset()})`;
-        }
-
         queryStr += '.changes()';
 
         const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
         dbQueryRequest.setQuery(queryStr);
-        dbQueryRequest.setLimit(listRequest.getPageSize());
 
         return new Observable((observer: Observer<any>) => {
           const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
@@ -138,6 +132,7 @@ export class ReportApiService {
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
 
+    console.log('queryStr', queryStr);
     return new Observable((observer: Observer<any>) => {
       const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
         .on('data', data => observer.next(data))
@@ -146,8 +141,7 @@ export class ReportApiService {
       return () => stream.cancel();
     }).pipe(
       map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-      map(record => JSON.parse(record, PageLog.reviver)),
-      map(object => new PageLog(object)),
+      map(record => JSON.parse(record)),
       catchError(error => {
         this.errorService.dispatch(error);
         return of(null);
@@ -201,13 +195,15 @@ export class ReportApiService {
     if (listRequest.getWatch()) {
       queryStr += '.changes()';
     } else if (listRequest.getOffset()) {
-      console.log(listRequest.getOffset());
       queryStr += `.skip(${listRequest.getOffset()})`;
     }
 
+    console.log('queryStr', queryStr);
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
-    dbQueryRequest.setLimit(listRequest.getPageSize());
+    if (!listRequest.getWatch()) {
+      dbQueryRequest.setLimit(listRequest.getPageSize());
+    }
 
     return new Observable((observer: Observer<any>) => {
       const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
@@ -231,7 +227,7 @@ export class ReportApiService {
   listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
     const metadata = this.authService.metadata;
 
-    if (listRequest.getWarcIdList().length) {
+    if (!listRequest.getWatch()) {
       return new Observable((observer: Observer<CrawlLogProto>) => {
         const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
           .on('data', data => observer.next(data))
@@ -260,13 +256,17 @@ export class ReportApiService {
         queryStr += `.filter({${path}: '${value}'})`;
       }
     }
-    if (listRequest.getOffset()) {
-      queryStr += `.skip(${listRequest.getOffset()})`;
+
+    if (listRequest.getWatch()) {
+      queryStr += '.changes()';
     }
 
+    console.log('queryStr for crawlLog', queryStr);
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
-    dbQueryRequest.setLimit(listRequest.getPageSize());
+    if (!listRequest.getWatch()) {
+      dbQueryRequest.setLimit(listRequest.getPageSize());
+    }
 
     return new Observable((observer: Observer<any>) => {
       const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
@@ -275,18 +275,10 @@ export class ReportApiService {
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map((record: string) => JSON.parse(record)),
-      map((record: any) => {
-        const crawlLog = new CrawlLog(record);
-        crawlLog.id = record.warcId;
-        if (record.timeStamp) {
-          crawlLog.timeStamp = fromRethinkTimeStamp(record.timeStamp);
-        }
-        if (record.fetchTimeStamp) {
-          crawlLog.fetchTimeStamp = fromRethinkTimeStamp(record.fetchTimeStamp);
-        }
-        return crawlLog;
-      }),
+      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
+      map((record: string) => JSON.parse(record, CrawlLog.reviver)),
+      map(_ => listRequest.getWatch() ? (_ as Changefeed<any>).new_val : _),
+      map(_ => new CrawlLog(_)),
       catchError(error => {
         this.errorService.dispatch(error);
         return EMPTY;
