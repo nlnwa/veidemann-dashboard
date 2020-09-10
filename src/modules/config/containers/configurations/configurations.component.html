@@ -2,8 +2,6 @@
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div fxFlex fxLayout="row" class="container no-scroll">
     <div fxLayout="column" class="scroll">
-      <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
-                       [configObject]="entity"></app-entity-view>
       <mat-action-list>
         <button mat-list-item
                 *ngIf="showCreateButton$ | async"
@@ -28,6 +26,8 @@
       </app-rolemapping-list>
 
       <div fxFlex fxLayout="column" *ngSwitchDefault>
+        <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
+                         [configObject]="entity"></app-entity-view>
         <app-detail-multi class="content-padding"
                           *ngIf="!isSingleMode"
                           (update)="onUpdateMulti($event)"
@@ -55,6 +55,12 @@
             </mat-icon>
           </button>
 
+          <button mat-icon-button
+                  *appAction="let row"
+                  (click)="onEdit(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+
           <ng-container *ngIf="kind === Kind.COLLECTION">
             <button *appAction="let row" mat-icon-button
                     (click)="onFilterByCollectionRef(row)">
@@ -66,7 +72,7 @@
           </ng-container>
 
           <ng-container *ngIf="kind === Kind.CRAWLENTITY">
-            <a *appAction="let row" mat-icon-button class="shortcut-link"
+            <a *appExtra="let row" mat-icon-button class="shortcut-link"
                [routerLink]="['../seed']"
                [queryParams]="{entity_id: row.id}">
               <mat-icon matTooltip="Go to seed list"
@@ -82,7 +88,7 @@
           </ng-container>
 
           <ng-container *ngIf="kind === Kind.SEED">
-            <a *appAction="let row"
+            <a *appExtra="let row"
                mat-icon-button class="shortcut-link"
                [routerLink]="['/report/crawlexecution']"
                [queryParams]="{seed_id: row.id}">
@@ -90,7 +96,7 @@
                         i18n-matTooltip="@@seedListShowCrawlExecutionsActionButtonTooltip">hdr_weak
               </mat-icon>
             </a>
-            <ng-container *appAction="let row">
+            <ng-container *appExtra="let row">
               <ng-container *ngIf="row.seed.jobRefList.length">
                 <a mat-icon-button class="shortcut-link"
                    [routerLink]="['../seed']"
@@ -101,7 +107,7 @@
                 </a>
               </ng-container>
             </ng-container>
-            <button *appAction="let row" mat-icon-button
+            <button *appExtra="let row" mat-icon-button
                     (click)="onFilterByEntityRef(row)">
               <mat-icon matTooltip="Show seeds with the same entity"
                         i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">business

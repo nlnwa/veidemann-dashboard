@@ -164,7 +164,11 @@ export class JobExecutionComponent implements OnInit {
       start_time_from: query.startTimeFrom || null,
       watch: query.watch || null,
     };
-    this.router.navigate([], {relativeTo: this.route, queryParams})
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge',
+    })
       .catch(error => this.errorService.dispatch(error));
   }
 

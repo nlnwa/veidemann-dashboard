@@ -1,4 +1,4 @@
-<form [formGroup]="form" fxLayout="column" fxLayout.lt-lg="row wrap" fxLayoutGap.lt-lg="16px">
+<form [formGroup]="form" fxLayout="column">
   <mat-form-field>
     <mat-select placeholder="State" multiple formControlName="stateList"
                 i18n-placeholder="@@crawlExecutionReportFilterStatePlaceholder">
@@ -30,11 +30,6 @@
            i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
   </mat-form-field>
 
-  <mat-checkbox labelPosition="after" formControlName="hasError"
-                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
-    Failed
-  </mat-checkbox>
-
   <mat-form-field>
     <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
            placeholder="From" i18n-placeholder="@@crawlExecutionReportFilterStartTimeFromPlaceholder">
@@ -48,6 +43,11 @@
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #startTimeToDatePicker></mat-datepicker>
   </mat-form-field>
+
+  <mat-checkbox labelPosition="after" formControlName="hasError"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Failed
+  </mat-checkbox>
 
   <mat-checkbox labelPosition="after" formControlName="watch"
                 i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">

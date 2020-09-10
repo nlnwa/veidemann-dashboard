@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {JobExecutionState, JobExecutionStatus} from 'src/shared/models';
-import {DateTime, secondsBetweenDates} from '../../../../shared/func';
+import {durationBetweenDates} from '../../../../shared/func';
 
 
 @Component({
@@ -18,6 +18,6 @@ export class JobExecutionPreviewComponent {
   }
 
   getDuration(startTime: string, endTime: string): string {
-    return secondsBetweenDates(startTime, endTime);
+    return durationBetweenDates(startTime, endTime);
   }
 }

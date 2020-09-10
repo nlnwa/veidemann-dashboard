@@ -26,7 +26,7 @@
 <div mat-dialog-actions>
   <button mat-button
           i18n="@@commonButtonCancel"
-          [mat-dialog-close]="false">CANCEL
+          mat-dialog-close>CANCEL
   </button>
   <button *ngIf="kind === Kind.CRAWLJOB || kind === Kind.SEED && jobRefId"
           mat-raised-button

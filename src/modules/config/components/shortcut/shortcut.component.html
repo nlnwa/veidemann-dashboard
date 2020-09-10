@@ -1,25 +1,19 @@
 <mat-nav-list>
-  <mat-list-item (click)="onEdit()">
-    <mat-icon>edit</mat-icon>
-    Edit configuration
-  </mat-list-item>
-
-  <app-action-shortcut [configObject]="configObject"
-                       (createSeed)="onCreateSeed()"
-                       (runCrawl)="onRunCrawl()"
-                       (clone)="onClone()">
-  </app-action-shortcut>
+  <!--  <app-action-shortcut [configObject]="configObject"-->
+  <!--                       (createSeed)="onCreateSeed()"-->
+  <!--                       (runCrawl)="onRunCrawl()"-->
+  <!--                       (clone)="onClone()">-->
+  <!--  </app-action-shortcut>-->
 
   <ng-container [ngSwitch]="configObject.kind">
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.SEED">
-      <h2 mat-subheader>
-        <mat-icon mat-list-icon>work</mat-icon>
-        Crawljobs
-      </h2>
+      <h2 mat-subheader
+          *ngIf="configObject.seed.jobRefList.length">Crawljobs</h2>
       <mat-list-item *ngFor="let crawlJob of configObject.seed.jobRefList">
+        <mat-icon mat-list-icon>work</mat-icon>
         <a class="shortcut-link"
            [routerLink]="['/config/crawljobs/' + crawlJob.id]">
           {{ crawlJob.id | getJobNamePipe | async }}

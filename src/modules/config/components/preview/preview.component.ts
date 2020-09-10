@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ConfigObject, Kind} from '../../../../shared/models/config';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorService} from '../../../core/services';
@@ -9,10 +9,8 @@ import {ErrorService} from '../../../core/services';
   styleUrls: ['./preview.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent {
   readonly Kind = Kind;
-
-  kind: Kind;
 
   @Input()
   configObject: ConfigObject;
@@ -28,8 +26,5 @@ export class PreviewComponent implements OnInit {
       queryParamsHandling: 'merge',
       queryParams: {id: configObject.id},
     }).catch(error => this.errorService.dispatch(error));
-  }
-
-  ngOnInit(): void {
   }
 }

@@ -19,7 +19,13 @@ import {
   PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
-import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
+import {
+  CrawlExecutionStatus,
+  CrawlLog,
+  JobExecutionState,
+  JobExecutionStatus,
+  PageLog
+} from '../../../../shared/models';
 import {Changefeed} from '../../../../shared/func/rethinkdb';
 
 

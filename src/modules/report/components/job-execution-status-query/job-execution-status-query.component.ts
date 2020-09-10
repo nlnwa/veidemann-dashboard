@@ -28,7 +28,7 @@ export class JobExecutionStatusQueryComponent extends QueryComponent<JobExecutio
       jobId: '',
       startTimeFrom: '',
       startTimeTo: '',
-      watch: null,
+      watch: {value: null, disabled: true},
     });
   }
 }

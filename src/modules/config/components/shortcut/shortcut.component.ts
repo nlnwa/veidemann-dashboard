@@ -35,12 +35,6 @@ export class ShortcutComponent {
     this.createSeed.emit(this.configObject);
   }
 
-  onEdit(): void {
-    this.router.navigate([this.configObject.id], {
-      relativeTo: this.route,
-    }).catch(error => this.errorService.dispatch(error));
-  }
-
   onRunCrawl() {
     this.runCrawl.emit(this.configObject);
   }
