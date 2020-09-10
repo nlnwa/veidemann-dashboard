@@ -93,7 +93,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   allSelected: boolean;
   isAllInPageSelected$: Observable<boolean>;
   protected selectedRow: T;
-  expandedConfigObject: T | null;
+ // expandedConfigObject: T | null;
 
   protected constructor() {
     this.sort = new EventEmitter<Sort>();
@@ -129,10 +129,15 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   onRowClick(item: T) {
     this.allSelected = false;
-    this.selection.clear();
-    this.selectedRow = item;
+    if (item.id === this.selectedRow?.id) {
+      this.selectedRow = null;
+    } else {
+      this.selectedRow = item;
+    }
+    //  this.selection.clear();
+
     this.selectedChange.emit(this.selectedRow);
-    this.expandedConfigObject = this.expandedConfigObject === item ? null : item;
+    // this.expandedConfigObject = this.expandedConfigObject === item ? null : item;
 
   }
 

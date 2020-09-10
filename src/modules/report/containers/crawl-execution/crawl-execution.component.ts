@@ -1,18 +1,21 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {combineLatest, Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay, startWith} from 'rxjs/operators';
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
 import {ConfigObject, ListDataSource, ListItem} from '../../../../shared/models';
-import {ErrorService} from '../../../core/services';
+import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
 import {CrawlExecutionStatusListComponent} from '../../components';
 import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
+import {MatDialog} from '@angular/material/dialog';
+import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
+
 
 @Component({
   selector: 'app-crawl-execution',
@@ -25,6 +28,10 @@ import {PageEvent} from '@angular/material/paginator';
   }],
 })
 export class CrawlExecutionComponent implements OnInit {
+  readonly CrawlExecutionState = CrawlExecutionState;
+
+  private reload$: Observable<void>;
+  private reload: Subject<void>;
 
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
@@ -42,8 +49,13 @@ export class CrawlExecutionComponent implements OnInit {
               private router: Router,
               private crawlExecutionService: CrawlExecutionService,
               private dataSource: ListDataSource<CrawlExecutionStatus>,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private dialog: MatDialog,
+              private controllerApiService: ControllerApiService,
+              private snackBarService: SnackBarService) {
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
+    this.reload = new Subject<void>();
+    this.reload$ = this.reload.asObservable();
   }
 
   ngOnInit() {
@@ -137,7 +149,7 @@ export class CrawlExecutionComponent implements OnInit {
 
     const query$: Observable<CrawlExecutionStatusQuery> = combineLatest([
       jobId$, jobExecutionId$, seedId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, hasError$,
-      startTimeFrom$, startTimeTo$, watch$
+      startTimeFrom$, startTimeTo$, watch$, this.reload$.pipe(startWith(null as string))
     ]).pipe(
       debounceTime<any>(0),
       map(([jobId, jobExecutionId, seedId, stateList, active, direction, pageIndex, pageSize,
@@ -206,5 +218,28 @@ export class CrawlExecutionComponent implements OnInit {
 
   isDone(item: CrawlExecutionStatus): boolean {
     return CrawlExecutionStatus.DONE_STATES.includes(item.state);
+  }
+
+  canAbort(state: CrawlExecutionState) {
+    return !CrawlExecutionStatus.DONE_STATES.includes(state);
+  }
+
+  onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus) {
+    const dialogRef = this.dialog.open(AbortCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {crawlExecutionStatus}
+    });
+    dialogRef.afterClosed()
+      .subscribe(executionId => {
+        if (executionId) {
+          this.controllerApiService.abortCrawlExecution(executionId).subscribe(crawlExecStatus => {
+            if (crawlExecStatus.state === CrawlExecutionState.ABORTED_MANUAL) {
+              this.snackBarService.openSnackBar('Crawl aborted');
+              this.reload.next();
+            }
+          });
+        }
+      });
   }
 }

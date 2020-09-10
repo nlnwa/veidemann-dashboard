@@ -3,10 +3,10 @@
   <mat-label><b>Window width: </b> {{configObject.browserConfig.windowWidth}}</mat-label>
   <mat-label><b>Window height: </b> {{configObject.browserConfig.windowHeight}}</mat-label>
   <mat-label><b>Page load timeout: </b>
-    {{configObject.browserConfig.pageLoadTimeoutMs | durationFormat: 'ms':'mmss'}}
+    {{configObject.browserConfig.pageLoadTimeoutMs | durationFormat: 'ms'}}
   </mat-label>
   <mat-label><b>Max inactivity time: </b>
-    {{configObject.browserConfig.maxInactivityTimeMs | durationFormat: 'ms':'mmss'}}
+    {{configObject.browserConfig.maxInactivityTimeMs | durationFormat: 'ms'}}
   </mat-label>
   <mat-chip-list>
     <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList">

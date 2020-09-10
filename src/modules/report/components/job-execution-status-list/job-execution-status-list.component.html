@@ -5,7 +5,8 @@
            matSortStart="desc"
            [matSortActive]="sortActive"
            [matSortDirection]="sortDirection"
-           (matSortChange)="onSortChange($event)">
+           (matSortChange)="onSortChange($event)"
+           multiTemplateDataRows>
       <ng-container matColumnDef="jobId">
         <th i18n="@@crawlJobExecutionReportListCrawljobHeaderCell"
             mat-header-cell *matHeaderCellDef mat-sort-header>Job
@@ -52,10 +53,23 @@
         </td>
       </ng-container>
 
+      <!-- Expanded Content Column -->
+      <ng-container matColumnDef="expandedPreview">
+        <td mat-cell class="preview-col" *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+          <div class="preview" [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
+            <app-job-execution-preview [jobExecutionStatus]="row"></app-job-execution-preview>
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          class="item-row"
+          [class.expanded-row]="selectedRow === row"
           [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
-          (click)="onRowClick(row)"></tr>
+          (click)="onRowClick(row)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedPreview']" class="preview-row"></tr>
     </table>
   </div>
   <mat-paginator

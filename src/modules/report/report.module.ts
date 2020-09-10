@@ -39,6 +39,9 @@ import {PageLogQueryComponent} from './components/page-log-query/page-log-query.
 import {JobExecutionDetailComponent} from './containers/job-execution-detail/job-execution-detail.component';
 import {SedPipe} from './pipe/sed.pipe';
 import {PageLogDetailComponent} from './containers/page-log-detail/page-log-detail.component';
+import {AbortCrawlDialogComponent} from './components/abort-crawl-dialog/abort-crawl-dialog.component';
+import {JobExecutionPreviewComponent} from './components/job-execution-preview/job-execution-preview.component';
+
 
 @NgModule({
   declarations: [
@@ -72,13 +75,16 @@ import {PageLogDetailComponent} from './containers/page-log-detail/page-log-deta
     QueryPageLogDirective,
     JobExecutionDetailComponent,
     PageLogDetailComponent,
+    AbortCrawlDialogComponent,
+    JobExecutionPreviewComponent,
   ],
   imports: [
     CommonsModule,
     ReportRoutingModule
   ],
   exports: [
-    JobNamePipe
+    JobNamePipe,
+    SeedNamePipe
   ],
   providers: [
     JobExecutionService,

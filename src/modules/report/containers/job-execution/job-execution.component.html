@@ -27,6 +27,16 @@
                   i18n-matTooltip="@@crawljobExecutionReportGoToCrawlExecutionShortcutTooltip">hdr_weak
         </mat-icon>
       </a>
+      <ng-container *appAction="let row">
+        <ng-container *ngIf="row.state === JobExecutionState.RUNNING">
+          <a mat-icon-button
+             (click)="onAbortJobExecution(row)">
+            <mat-icon matTooltip="Abort crawl"
+                      i18n-matTooltip="@@crawljobExecutionReportAbortCrawlExecutionTooltip">cancel
+            </mat-icon>
+          </a>
+        </ng-container>
+      </ng-container>
     </app-job-execution-status-list>
   </div>
 </div>

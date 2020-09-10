@@ -1,19 +1,5 @@
-<div fxLayout="row wrap" fxLayoutGap="16px">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Depth</mat-card-title>
-    </mat-card-header>
-    <mat-card-content><h2>{{configObject.crawlJob.limits.depth}}</h2></mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Max duration</mat-card-title>
-      <mat-card-subtitle>Seconds</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content><p>{{configObject.crawlJob.limits.maxDurationS}}</p></mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Max bytes</mat-card-title>
-    <mat-card-content>{{configObject.crawlJob.limits.maxBytes | filesize }}</mat-card-content>
-  </mat-card>
+<div fxLayout="column">
+  <mat-label><b>Depth: </b>{{configObject.crawlJob.limits.depth}}</mat-label>
+  <mat-label><b>Max duration: </b>{{configObject.crawlJob.limits.maxDurationS |durationFormat: 's'}}</mat-label>
+  <mat-label><b>Max bytes: </b>{{configObject.crawlJob.limits.maxBytes |filesize}}</mat-label>
 </div>

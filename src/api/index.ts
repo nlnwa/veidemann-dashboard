@@ -80,6 +80,10 @@ export {
 } from './gen/controller/v1/controller_pb';
 
 export {
+  ExecutionId as ExecutionIdProto,
+} from './gen/controller/v1/resources_pb';
+
+export {
   ReportPromiseClient
 } from './gen/report/v1/report_grpc_web_pb';
 

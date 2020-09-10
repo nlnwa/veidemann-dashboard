@@ -40,6 +40,16 @@
                   i18n-matTooltip="@@crawlExecutionReportListGoToCrawlogShortcutTooltip">event_note
         </mat-icon>
       </a>
+      <ng-container *appAction="let row">
+        <ng-container *ngIf="canAbort(row.state)">
+        <a mat-icon-button
+           (click)="onAbortCrawlExecution(row)">
+          <mat-icon matTooltip="Abort crawl"
+                    i18n-matTooltip="@@crawljobExecutionReportAbortCrawlExecutionTooltip">cancel
+          </mat-icon>
+        </a>
+        </ng-container>
+      </ng-container>
     </app-crawl-execution-status-list>
   </div>
 </div>

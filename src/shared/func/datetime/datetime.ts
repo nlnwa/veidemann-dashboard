@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import 'moment-duration-format';
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
 export class DateTime {
@@ -55,5 +56,21 @@ export function toTimestampProto(timestamp: string): any {
   } else {
     return undefined;
   }
+}
+
+export function durationBetweenDates(startTime: string, endTime: string): string {
+  const start = moment(startTime);
+  const end = moment(endTime);
+  return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]');
+}
+
+export function timeToDuration(time: number, unit: string) {
+  if (unit === 'ms') {
+    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]');
+  }
+  if (unit === 's') {
+    return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]');
+  }
+
 }
 

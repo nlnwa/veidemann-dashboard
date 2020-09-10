@@ -3,13 +3,16 @@ import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
-import {JobExecutionState, jobExecutionStates} from '../../../../shared/models/report';
-import {ListItem} from '../../../../shared/models';
+import {JobExecutionState, jobExecutionStates, JobExecutionStatus} from '../../../../shared/models/report';
+import {ListItem} from '../../../../shared/models/list-datasource';
 import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
-import {ErrorService} from '../../../core/services';
+import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {ConfigObject} from '../../../../shared/models/config';
+import {MatDialog} from '@angular/material/dialog';
+import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
+
 
 @Component({
   selector: 'app-job-execution',
@@ -35,7 +38,10 @@ export class JobExecutionComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private jobExecutionService: JobExecutionService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private dialog: MatDialog,
+              private controllerApiService: ControllerApiService,
+              private snackBarService: SnackBarService) {
 
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
   }
@@ -163,11 +169,11 @@ export class JobExecutionComponent implements OnInit {
   }
 
   onSelectedChange(item: ListItem | ListItem[]) {
-    if (!Array.isArray(item)) {
-      this.router.navigate([item.id], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
-    }
+    // if (!Array.isArray(item)) {
+    //   this.router.navigate([item.id], {
+    //     relativeTo: this.route,
+    //   }).catch(error => this.errorService.dispatch(error));
+    // }
   }
 
   onSort(sort: Sort) {
@@ -184,6 +190,24 @@ export class JobExecutionComponent implements OnInit {
       queryParamsHandling: 'merge',
       queryParams: {p: page.pageIndex, s: page.pageSize}
     }).catch(error => this.errorService.dispatch(error));
+  }
+
+  onAbortJobExecution(jobExecutionStatus: JobExecutionStatus) {
+    const dialogRef = this.dialog.open(AbortCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {jobExecutionStatus}
+    });
+    dialogRef.afterClosed()
+      .subscribe(executionId => {
+        if (executionId) {
+          this.controllerApiService.abortJobExecution(executionId).subscribe(jobExecStatus => {
+            if (jobExecStatus.state === JobExecutionState.ABORTED_MANUAL) {
+              this.snackBarService.openSnackBar('Job aborted');
+            }
+          });
+        }
+      });
   }
 
 }
