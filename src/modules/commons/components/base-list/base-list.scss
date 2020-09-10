@@ -103,7 +103,7 @@ tr.item-row:nth-child(4n+1):hover {
   opacity: 0;
 }
 
-.mat-row:hover .actions {
+.mat-row:hover .actions, .expanded-row.row-selected .actions {
   opacity: 100;
 }
 

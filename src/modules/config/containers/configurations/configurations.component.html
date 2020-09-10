@@ -1,7 +1,9 @@
 <div fxLayout="column" class="container">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div fxLayout="row" class="container">
-    <div fxLayout="column" style="overflow-y: auto">
+  <div fxFlex fxLayout="row" class="container no-scroll">
+    <div fxLayout="column" class="scroll">
+      <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
+                       [configObject]="entity"></app-entity-view>
       <mat-action-list>
         <button mat-list-item
                 *ngIf="showCreateButton$ | async"
@@ -15,14 +17,6 @@
       </mat-action-list>
       <app-config-query [options]="options$ | async" [query]="query$ | async"
                         (queryChange)="onQueryChange($event)"></app-config-query>
-      <app-shortcut *ngIf="configObject$ | async as configObject"
-                    [configObject]="configObject"
-                    (createSeed)="onCreateSeedFromEntity($event)"
-                    (runCrawl)="onRunCrawl($event)"
-                    (clone)="onClone($event)">
-      </app-shortcut>
-      <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
-                       [configObject]="entity"></app-entity-view>
     </div>
     <ng-container *ngIf="kind$ | async as kind" [ngSwitch]="kind">
       <app-rolemapping-list fxFlex *ngSwitchCase="Kind.ROLEMAPPING"
