@@ -7,12 +7,14 @@ import {MaterialModule} from './material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ActionDirective, ExtraDirective} from './directives';
 import {NgxFilesizeModule} from 'ngx-filesize';
+import {DurationFormatPipe} from './pipes/duration-format.pipe';
 
 
 @NgModule({
   declarations: [
     ActionDirective,
     ExtraDirective,
+    DurationFormatPipe,
   ],
   imports: [
     MaterialModule,
@@ -34,6 +36,7 @@ import {NgxFilesizeModule} from 'ngx-filesize';
     ActionDirective,
     ExtraDirective,
     NgxFilesizeModule,
+    DurationFormatPipe,
   ],
   providers: [DatePipe],
 })

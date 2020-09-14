@@ -8,4 +8,3 @@ export * from './job-execution-state.pipe';
 export * from './job-execution-status.pipe';
 export * from './politeness-config-name.pipe';
 export * from './browser-script-name.pipe';
-export * from './duration-format.pipe';

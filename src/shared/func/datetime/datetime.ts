@@ -54,7 +54,7 @@ export function fromTimestamp(t: {
     time: {
       hour: number,
       minute: number,
-      nano: number, ​​​
+      nano: number,
       second: number,
     }
   },
@@ -88,7 +88,7 @@ export function durationBetweenDates(startTime: string, endTime: string): string
 
 export function timeToDuration(time: number, unit: string) {
   if (unit === 'ms') {
-    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]');
+    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]');
   }
   if (unit === 's') {
     return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]');
