@@ -20,7 +20,7 @@ export class SeedPreviewComponent {
   @Output()
   edit: EventEmitter<ConfigObject>;
 
-  crawlStatusTableHeaders = ['Job', 'Status', 'Started', ' Ended']
+  crawlStatusTableHeaders = ['Job', 'Status', 'Started', ' Ended'];
 
   constructor(protected router: Router,
               protected route: ActivatedRoute) {
@@ -37,14 +37,9 @@ export class SeedPreviewComponent {
   }
 
   onFilterByEntityRef(configObject: ConfigObject) {
-    console.log('filter by entityRef');
-     this.router.navigate(['seed'], {
+    this.router.navigate(['seed'], {
       queryParams: {entity_id: configObject.seed.entityRef.id},
-       relativeTo: this.route.parent
-     });
-  }
-
-  onRunCrawl(configObject: ConfigObject) {
-    console.log('run crawl')
+      relativeTo: this.route.parent
+    });
   }
 }

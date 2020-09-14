@@ -10,6 +10,7 @@ import {
 import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {BASE_LIST} from '../../../../shared/directives';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-crawl-execution-status-list',
@@ -22,7 +23,14 @@ import {BASE_LIST} from '../../../../shared/directives';
       provide: BASE_LIST,
       useExisting: forwardRef(() => CrawlExecutionStatusListComponent)
     }
-  ]
+  ],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlExecutionStatus> {
   readonly CrawlExecutionState = CrawlExecutionState;

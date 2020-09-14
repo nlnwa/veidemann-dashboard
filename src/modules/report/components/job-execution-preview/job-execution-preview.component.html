@@ -1,93 +1,57 @@
-<div class="content-padding" fxLayout="row" fxLayoutGap="16px"
+<div class="content-padding" fxLayout="column" fxLayoutGap="16px"
      *ngIf="jobExecutionStatus">
-  <div fxFlex fxLayout="row wrap">
-    <mat-card>
-      <h3>Job: <a [routerLink]="['/config/crawljobs/'+ jobExecutionStatus.jobId]">
-        {{jobExecutionStatus.jobId | getJobNamePipe | async}}
-      </a>
-      </h3>
-      <h3>State: {{JobExecutionState[jobExecutionStatus.state]}}</h3>
-    </mat-card>
-    <!--    <mat-card>-->
-    <!--      <mat-card-title>Start</mat-card-title>-->
-    <!--      <mat-card-content>{{jobExecutionStatus.startTime | date : 'long'}}</mat-card-content>-->
-    <!--    </mat-card>-->
-    <!--    <mat-card>-->
-    <!--      <mat-card-title>End</mat-card-title>-->
-    <!--      <mat-card-content>{{jobExecutionStatus.endTime | date : 'long'}}</mat-card-content>-->
-    <!--    </mat-card>-->
-
+  <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
     <mat-card>
       <h2>Duration</h2>
       <h1>{{getDuration(jobExecutionStatus.startTime, jobExecutionStatus.endTime)}}</h1>
     </mat-card>
 
     <mat-card *ngIf="jobExecutionStatus.urisCrawled">
-      <h4>URIs crawled</h4>
-      <h2>{{jobExecutionStatus.urisCrawled}}</h2>
+      <h2>URIs crawled</h2>
+      <h1>{{jobExecutionStatus.urisCrawled}}</h1>
     </mat-card>
 
     <mat-card>
-      <mat-card-title>Bytes crawled</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.bytesCrawled | filesize}}</mat-card-content>
+      <h2>Bytes crawled</h2>
+      <h1>{{jobExecutionStatus.bytesCrawled | filesize}}</h1>
     </mat-card>
-
-    <mat-card *ngIf="jobExecutionStatus.documentsCrawled">
-      <mat-card-title>Documents crawled</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.documentsCrawled}}</mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="jobExecutionStatus.documentsDenied">
-      <mat-card-title>Documents denied</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.documentsDenied}}</mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="jobExecutionStatus.documentsFailed">
-      <mat-card-title>Documents failed</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.documentsFailed}}</mat-card-content>
-    </mat-card>
-
-    <mat-card *ngIf="jobExecutionStatus.documentsOutOfScope">
-      <mat-card-title>Documents out of scope</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.documentsOutOfScope}}</mat-card-content>
-    </mat-card>
-
-
-    <mat-card *ngIf="jobExecutionStatus.documentsRetried">
-      <mat-card-title>Documents retried</mat-card-title>
-      <mat-card-content>{{jobExecutionStatus.documentsRetried}}</mat-card-content>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-title>State map</mat-card-title>
-      <mat-card-content>test</mat-card-content>
+    <mat-card *ngIf="jobExecutionStatus.error as error">
+      <h2>Error</h2>
+      <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>
+             <h4 class="monospace">{{error.msg}}</h4>
+             <p class="monospace">{{error.detail}}</p>
     </mat-card>
   </div>
-
-  <!--        <table mat-table-->
-  <!--               [dataSource]="getExecMap(jobExecutionStatus.executionsStateMap)">-->
-  <!--          <ng-container matColumnDef="state">-->
-  <!--            <th i18n="@@crawlJobExecutionReportJobExecutionStateHeaderCell"-->
-  <!--                mat-header-cell *matHeaderCellDef>State-->
-  <!--            </th>-->
-  <!--            <td mat-cell *matCellDef="let execution">{{execution.key}}</td>-->
-  <!--          </ng-container>-->
-
-  <!--          <ng-container matColumnDef="count">-->
-  <!--            <th i18n="@@crawlJobExecutionReportJobExecutionStateCountHeaderCell"-->
-  <!--                mat-header-cell *matHeaderCellDef>Count-->
-  <!--            </th>-->
-  <!--            <td mat-cell *matCellDef="let execution">{{execution.value}}</td>-->
-  <!--          </ng-container>-->
-
-  <!--          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
-  <!--          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>-->
-  <!--        </table>-->
-  <!--      </div>-->
-  <!--      <div fxFlex class="content-padding" *ngIf="jobExecutionStatus.error as error">-->
-  <!--        <h2 i18n="@@crawlJobExecutionReportJobExecutionErrorsHeader">Error</h2>-->
-  <!--        <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>-->
-  <!--        <h4 class="monospace">{{error.msg}}</h4>-->
-  <!--        <p class="monospace">{{error.detail}}</p>-->
-  <!--      </div>-->
+  <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
+    <mat-card style="max-width: 50%; min-width: 45%">
+      <mat-card-title>State overview</mat-card-title>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="stateMapPieChartData"
+                [labels]="stateMapPieChartLabels"
+                [chartType]="pieChartType"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+    <mat-card style="max-width: 50%; min-width: 45%">
+      <mat-card-title>Documents</mat-card-title>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="pieChartData"
+                [labels]="pieChartLabels"
+                [chartType]="pieChartType"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
+
+
+
+

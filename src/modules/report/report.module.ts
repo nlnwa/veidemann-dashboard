@@ -38,6 +38,10 @@ import {JobExecutionDetailComponent} from './containers/job-execution-detail/job
 import {SedPipe} from './pipe/sed.pipe';
 import {AbortCrawlDialogComponent} from './components/abort-crawl-dialog/abort-crawl-dialog.component';
 import {JobExecutionPreviewComponent} from './components/job-execution-preview/job-execution-preview.component';
+import {ChartsModule} from 'ng2-charts';
+import { CrawlExecutionPreviewComponent } from './components/crawl-execution-preview/crawl-execution-preview.component';
+import { CrawlLogPreviewComponent } from './components/crawl-log-preview/crawl-log-preview.component';
+import {ConfigurationsModule} from '../config/configurations.module';
 
 
 @NgModule({
@@ -73,10 +77,13 @@ import {JobExecutionPreviewComponent} from './components/job-execution-preview/j
     JobExecutionDetailComponent,
     AbortCrawlDialogComponent,
     JobExecutionPreviewComponent,
+    CrawlExecutionPreviewComponent,
+    CrawlLogPreviewComponent,
   ],
   imports: [
     CommonsModule,
-    ReportRoutingModule
+    ReportRoutingModule,
+    ChartsModule,
   ],
   exports: [
     JobNamePipe,

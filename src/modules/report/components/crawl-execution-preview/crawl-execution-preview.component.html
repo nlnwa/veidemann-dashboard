@@ -1,0 +1,50 @@
+<div class="content-padding" fxLayout="row" fxLayoutGap="16px" *ngIf="crawlExecutionStatus as crawlExec">
+  <div fxFlex fxLayout="column " fxLayoutGap="16px">
+    <mat-card *ngIf="crawlExec.startTime && crawlExec.endTime">
+      <h2>Duration</h2>
+      <h1>{{getDuration(crawlExec.startTime, crawlExec.endTime)}}</h1>
+    </mat-card>
+    <mat-card *ngIf="(crawlExec.startTime && crawlExec.lastChangeTime) && !crawlExec.endTime">
+      <h2>Duration</h2>
+      <h1>{{getDuration(crawlExec.startTime, crawlExec.lastChangeTime)}}</h1>
+    </mat-card>
+
+    <mat-card>
+      <h2>Bytes crawled</h2>
+      <h1>{{crawlExec.bytesCrawled | filesize}}</h1>
+    </mat-card>
+
+    <mat-card *ngIf="crawlExec.urisCrawled">
+      <h2>URIs crawled</h2>
+      <h1>{{crawlExec.urisCrawled}}</h1>
+    </mat-card>
+
+    <mat-card>
+      <h2>Scope</h2>
+      <h1>{{crawlExec.scope.surtPrefix}}</h1>
+    </mat-card>
+
+    <mat-card *ngIf="crawlExec.error as error">
+      <h2>Error</h2>
+      <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>
+      <h4 class="monospace">{{error.msg}}</h4>
+      <p class="monospace">{{error.detail}}</p>
+    </mat-card>
+  </div>
+
+  <div fxFlex fxLayout="column wrap">
+    <mat-card style="max-width: 100%">
+      <h1>Documents</h1>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="documentsPieChartData"
+                [labels]="documentsPieChartLabels"
+                [chartType]="'pie'"
+                [options]="documentsPieChartOptions"
+                [plugins]="[documentsPieChartPlugins]"
+                [legend]="true">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

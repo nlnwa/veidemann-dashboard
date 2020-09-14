@@ -122,15 +122,6 @@ export class CrawlLogComponent implements OnInit {
     // ).subscribe(crawlLog => this.crawlLog.next(crawlLog));
   }
 
-
-  onSelectedChange(item: ListItem | ListItem[]) {
-    if (!Array.isArray(item)) {
-      this.router.navigate([item.id], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
-    }
-  }
-
   onSort(sort: Sort) {
     this.router.navigate([], {
       relativeTo: this.route,
