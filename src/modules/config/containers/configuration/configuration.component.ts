@@ -85,7 +85,7 @@ export class ConfigurationComponent implements OnDestroy {
       tap(options => {
         this.options = options;
         // make sure any detail view relying on some option not present is removed before a new set of options is loaded
-        this.configObject.next(null);
+        // this.configObject.next(null);
       }),
     );
 
@@ -118,11 +118,15 @@ export class ConfigurationComponent implements OnDestroy {
     ]).pipe(
       map(([kind, id]) => new ConfigRef({kind, id})),
     );
+
     const configObject$: Observable<ConfigObject> = configRef$.pipe(
       switchMap(configRef =>
         configRef && configRef.id ? this.dataService.get(configRef) : of(null))
     );
-    this.configObject$ = merge(this.configObject.asObservable(), configObject$);
+
+    this.configObject$ = merge(this.configObject.asObservable(), configObject$).pipe(
+      tap(console.log)
+    );
   }
 
   get loading$(): Observable<boolean> {

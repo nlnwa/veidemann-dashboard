@@ -1,110 +1,116 @@
-<div *ngIf="configObject$ | async as configObject">
-  <div class="container content-padding" *ngIf="options$ | async as options" [ngSwitch]="configObject.kind">
-
-    <app-collection-details *ngSwitchCase="Kind.COLLECTION"
-                            [configObject]="configObject"
-                            [rotationPolicies]="options.rotationPolicies"
-                            [subCollectionTypes]="options.subCollectionTypes"
-                            (update)="onUpdateConfig($event)"
-                            (save)="onSaveConfig($event)"
-                            (delete)="onDeleteConfig($event)">
-    </app-collection-details>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLJOB">
-      <app-crawljob-details
-        [configObject]="configObject"
-        [crawlConfigs]="options.crawlConfigs"
-        [crawlScheduleConfigs]="options.crawlScheduleConfigs"
-        (runCrawl)="onRunCrawl($event)"
-        (update)="onUpdateConfig($event)"
-        (save)="onSaveConfig($event)"
-        (delete)="onDeleteConfig($event)">
-      </app-crawljob-details>
-      <div class="list-container__margin">
-        <app-config-job-execution-status *ngIf="configObject | getJobStatus | async as jobExecutionStatus"
-                                         [jobExecutionStatus]="jobExecutionStatus"></app-config-job-execution-status>
-      </div>
-    </ng-container>
-
-    <app-crawlconfig-details *ngSwitchCase="Kind.CRAWLCONFIG"
-                             [configObject]="configObject"
-                             [browserConfigs]="options.browserConfigs"
-                             [collections]="options.collections"
-                             [politenessConfigs]="options.politenessConfigs"
-                             (update)="onUpdateConfig($event)"
-                             (save)="onSaveConfig($event)"
-                             (delete)="onDeleteConfig($event)">
-    </app-crawlconfig-details>
-
-    <app-schedule-details *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG"
-                          [configObject]="configObject"
-                          (update)="onUpdateConfig($event)"
-                          (save)="onSaveConfig($event)"
-                          (delete)="onDeleteConfig($event)">
-    </app-schedule-details>
-
-    <app-browserconfig-details *ngSwitchCase="Kind.BROWSERCONFIG"
-                               [configObject]="configObject"
-                               [browserScripts]="options.browserScripts"
-                               (update)="onUpdateConfig($event)"
-                               (save)="onSaveConfig($event)"
-                               (delete)="onDeleteConfig($event)">
-    </app-browserconfig-details>
-
-    <app-politenessconfig-details *ngSwitchCase="Kind.POLITENESSCONFIG"
+<div class="container content-padding">
+  <ng-container *ngIf="configObject$ | async as configObject">
+    <ng-container *ngIf="options$ | async as options">
+      <div fxLayout="row">
+        <app-shortcut [configObject]="configObject"></app-shortcut>
+        <div fxFlex [ngSwitch]="configObject.kind">
+          <app-collection-details *ngSwitchCase="Kind.COLLECTION"
                                   [configObject]="configObject"
-                                  [robotsPolicies]="options.robotsPolicies"
+                                  [rotationPolicies]="options.rotationPolicies"
+                                  [subCollectionTypes]="options.subCollectionTypes"
                                   (update)="onUpdateConfig($event)"
                                   (save)="onSaveConfig($event)"
                                   (delete)="onDeleteConfig($event)">
-    </app-politenessconfig-details>
+          </app-collection-details>
 
-    <app-browserscript-details *ngSwitchCase="Kind.BROWSERSCRIPT"
-                               [configObject]="configObject"
-                               [browserScriptTypes]="options.browserScriptTypes"
-                               (update)="onUpdateConfig($event)"
-                               (save)="onSaveConfig($event)"
-                               (delete)="onDeleteConfig($event)">
-    </app-browserscript-details>
+          <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+            <app-crawljob-details
+              [configObject]="configObject"
+              [crawlConfigs]="options.crawlConfigs"
+              [crawlScheduleConfigs]="options.crawlScheduleConfigs"
+              (runCrawl)="onRunCrawl($event)"
+              (update)="onUpdateConfig($event)"
+              (save)="onSaveConfig($event)"
+              (delete)="onDeleteConfig($event)">
+            </app-crawljob-details>
+            <div class="list-container__margin">
+              <app-config-job-execution-status *ngIf="configObject | getJobStatus | async as jobExecutionStatus"
+                                               [jobExecutionStatus]="jobExecutionStatus"></app-config-job-execution-status>
+            </div>
+          </ng-container>
 
-    <app-crawlhostgroupconfig-details *ngSwitchCase="Kind.CRAWLHOSTGROUPCONFIG"
-                                      [configObject]="configObject"
-                                      (update)="onUpdateConfig($event)"
-                                      (save)="onSaveConfig($event)"
-                                      (delete)="onDeleteConfig($event)">
-    </app-crawlhostgroupconfig-details>
+          <app-crawlconfig-details *ngSwitchCase="Kind.CRAWLCONFIG"
+                                   [configObject]="configObject"
+                                   [browserConfigs]="options.browserConfigs"
+                                   [collections]="options.collections"
+                                   [politenessConfigs]="options.politenessConfigs"
+                                   (update)="onUpdateConfig($event)"
+                                   (save)="onSaveConfig($event)"
+                                   (delete)="onDeleteConfig($event)">
+          </app-crawlconfig-details>
 
-    <ng-container *ngSwitchCase="Kind.SEED">
-      <div *ngIf="(configObject | getCrawlExecutionStatus | async) as crawlExecutionStatus"
-           class="list-container__margin">
-        <app-config-crawl-execution-status
-          [crawlExecutionStatus]="crawlExecutionStatus"></app-config-crawl-execution-status>
+          <app-schedule-details *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG"
+                                [configObject]="configObject"
+                                (update)="onUpdateConfig($event)"
+                                (save)="onSaveConfig($event)"
+                                (delete)="onDeleteConfig($event)">
+          </app-schedule-details>
+
+          <app-browserconfig-details *ngSwitchCase="Kind.BROWSERCONFIG"
+                                     [configObject]="configObject"
+                                     [browserScripts]="options.browserScripts"
+                                     (update)="onUpdateConfig($event)"
+                                     (save)="onSaveConfig($event)"
+                                     (delete)="onDeleteConfig($event)">
+          </app-browserconfig-details>
+
+          <app-politenessconfig-details *ngSwitchCase="Kind.POLITENESSCONFIG"
+                                        [configObject]="configObject"
+                                        [robotsPolicies]="options.robotsPolicies"
+                                        (update)="onUpdateConfig($event)"
+                                        (save)="onSaveConfig($event)"
+                                        (delete)="onDeleteConfig($event)">
+          </app-politenessconfig-details>
+
+          <app-browserscript-details *ngSwitchCase="Kind.BROWSERSCRIPT"
+                                     [configObject]="configObject"
+                                     [browserScriptTypes]="options.browserScriptTypes"
+                                     (update)="onUpdateConfig($event)"
+                                     (save)="onSaveConfig($event)"
+                                     (delete)="onDeleteConfig($event)">
+          </app-browserscript-details>
+
+          <app-crawlhostgroupconfig-details *ngSwitchCase="Kind.CRAWLHOSTGROUPCONFIG"
+                                            [configObject]="configObject"
+                                            (update)="onUpdateConfig($event)"
+                                            (save)="onSaveConfig($event)"
+                                            (delete)="onDeleteConfig($event)">
+          </app-crawlhostgroupconfig-details>
+
+          <ng-container *ngSwitchCase="Kind.SEED">
+            <div *ngIf="(configObject | getCrawlExecutionStatus | async) as crawlExecutionStatus"
+                 class="list-container__margin">
+              <app-config-crawl-execution-status
+                [crawlExecutionStatus]="crawlExecutionStatus"></app-config-crawl-execution-status>
+            </div>
+            <app-seed-details
+              [configObject]="configObject"
+              [crawlJobs]="options.crawlJobs"
+              (update)="onUpdateConfig($event)"
+              (save)="onSaveConfig($event)"
+              (delete)="onDeleteConfig($event)"
+              (move)="onMoveSeed($event)"
+              (saveMultiple)="onSaveMultipleSeeds($event)"
+              (runCrawl)="onRunCrawl($event)">
+            </app-seed-details>
+          </ng-container>
+
+          <app-entity-details *ngSwitchCase="Kind.CRAWLENTITY"
+                              [configObject]="configObject"
+                              (update)="onUpdateConfig($event)"
+                              (save)="onSaveConfig($event)"
+                              (delete)="onDeleteConfig($event)">
+          </app-entity-details>
+
+          <app-rolemapping-details *ngSwitchCase="Kind.ROLEMAPPING"
+                                   [configObject]="configObject"
+                                   [roles]="options.roles"
+                                   (update)="onUpdateConfig($event)"
+                                   (save)="onSaveConfig($event)"
+                                   (delete)="onDeleteConfig($event)">
+          </app-rolemapping-details>
+        </div>
       </div>
-      <app-seed-details
-        [configObject]="configObject"
-        [crawlJobs]="options.crawlJobs"
-        (update)="onUpdateConfig($event)"
-        (save)="onSaveConfig($event)"
-        (delete)="onDeleteConfig($event)"
-        (move)="onMoveSeed($event)"
-        (saveMultiple)="onSaveMultipleSeeds($event)"
-        (runCrawl)="onRunCrawl($event)">
-      </app-seed-details>
     </ng-container>
-
-    <app-entity-details *ngSwitchCase="Kind.CRAWLENTITY"
-                        [configObject]="configObject"
-                        (update)="onUpdateConfig($event)"
-                        (save)="onSaveConfig($event)"
-                        (delete)="onDeleteConfig($event)">
-    </app-entity-details>
-
-    <app-rolemapping-details *ngSwitchCase="Kind.ROLEMAPPING"
-                             [configObject]="configObject"
-                             [roles]="options.roles"
-                             (update)="onUpdateConfig($event)"
-                             (save)="onSaveConfig($event)"
-                             (delete)="onDeleteConfig($event)">
-    </app-rolemapping-details>
-  </div>
+  </ng-container>
 </div>
