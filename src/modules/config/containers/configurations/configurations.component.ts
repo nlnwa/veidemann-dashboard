@@ -332,10 +332,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     return {crawl_job_id: configObject.seed.jobRefList.map(jobRef => jobRef.id)};
   }
 
-  onEdit(configObject?: ConfigObject) {
-    this.onCreateConfigWithDialog(configObject);
-  }
-
   onCreateConfigWithDialog(configObject?: ConfigObject) {
     if (!configObject) {
       configObject = new ConfigObject({kind: this.kind});
