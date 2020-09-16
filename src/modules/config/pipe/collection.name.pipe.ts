@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ConfigObject} from '../../../shared/models/config';
-import {OptionsService} from '../services';
+import {OptionsService} from '../services/options.service';
 
 
 @Pipe({

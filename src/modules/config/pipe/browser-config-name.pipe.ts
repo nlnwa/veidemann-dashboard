@@ -3,7 +3,8 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
 import {ConfigObject} from '../../../shared/models/config';
-import {OptionsService} from '../services';
+import {OptionsService} from '../services/options.service';
+
 
 @Pipe({
   name: 'getBrowserConfigName'
