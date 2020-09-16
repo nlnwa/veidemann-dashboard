@@ -17,14 +17,16 @@
                         (queryChange)="onQueryChange($event)"></app-config-query>
     </div>
     <ng-container *ngIf="kind$ | async as kind" [ngSwitch]="kind">
-      <app-rolemapping-list fxFlex *ngSwitchCase="Kind.ROLEMAPPING"
-                            appQueryConfigObject [query]="query$ | async"
-                            [pageIndex]="pageIndex$ | async"
-                            [pageSize]="pageSize$ | async"
-                            (selectedChange)="onSelectedChange($event)"
-                            (selectAll)="onSelectAll()">
-      </app-rolemapping-list>
-
+      <div fxFlex fxLayout="column" *ngSwitchCase="Kind.ROLEMAPPING">
+        <app-rolemapping-list appQueryConfigObject [query]="query$ | async"
+                              [pageIndex]="pageIndex$ | async"
+                              [pageSize]="pageSize$ | async"
+                              (selectedChange)="onSelectedChange($event)"
+                              (selectAll)="onSelectAll()">
+        </app-rolemapping-list>
+        <app-rolemapping-details *ngIf="configObject$| async as configObject"
+                                 [configObject]="configObject"></app-rolemapping-details>
+      </div>
       <div fxFlex fxLayout="column" *ngSwitchDefault>
         <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
                          [configObject]="entity"></app-entity-view>
