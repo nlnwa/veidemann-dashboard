@@ -10,43 +10,9 @@
         <mat-icon mat-list-icon>add_circle</mat-icon>
         Crate new seed for entity
       </a>
-      <a mat-list-item
-         [routerLink]="['/config/seed']"
-         [queryParams]="{entity_id: configObject.id}"
-         matTooltip="Go to seed list"
-         i18n-matTooltip="@@crawlEntityListGoToSeedListActionButtonTooltip">
-        <mat-icon mat-list-icon>link</mat-icon>
-        Go to seed list
-      </a>
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.SEED">
-      <a mat-list-item
-         [routerLink]="['/report/crawlexecution/']"
-         [queryParams]="{seed_id: configObject.id}"
-         matTooltip="Show crawlexecutions for the seed"
-         i18n-matTooltip="@@seedListShowCrawlExecutionsActionButtonTooltip">
-        <mat-icon mat-list-icon>hdr_weak</mat-icon>
-        Show crawlexecutions
-      </a>
-      <ng-container *ngIf="configObject.seed.jobRefList.length">
-        <a mat-list-item
-           [routerLink]="['../seed']"
-           [queryParams]="getJobRefListQueryParams(configObject)"
-           matTooltip="Show seeds with the same crawljob"
-           i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">
-          <mat-icon mat-list-icon>work</mat-icon>
-          Show seeds with crawljob
-        </a>
-      </ng-container>
-      <a mat-list-item
-         [routerLink]="['../seed']"
-         [queryParams]="{entity_id: configObject.seed.entityRef.id}"
-         matTooltip="Show seeds with the same entity"
-         i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">
-        <mat-icon mat-list-icon>business</mat-icon>
-        Show seeds with entity
-      </a>
       <a mat-list-item
          (click)="onRunCrawl()"
          matTooltip="Start crawling seed: {{configObject.meta.name}}"
@@ -58,92 +24,10 @@
 
     <ng-container *ngSwitchCase="Kind.CRAWLJOB">
       <a mat-list-item
-         [routerLink]="['/report/jobexecution']"
-         [queryParams]="{job_id: configObject.id}"
-         matTooltip="Go to jobexecutions for the crawljob"
-         i18n-matTooltip="@@crawljobListJobExecutionShortcutActionButtonTooltip">
-        <mat-icon mat-list-icon>hdr_strong</mat-icon>
-        Show jobexecutions
-      </a>
-      <a mat-list-item
-         [routerLink]="['../seed']"
-         [queryParams]="{crawl_job_id: configObject.id}"
-         matTooltip="Show seeds with reference to the crawljob"
-         i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">
-        <mat-icon mat-list-icon>link</mat-icon>
-        Show seed with crawljob
-      </a>
-      <a mat-list-item
          (click)="onRunCrawl()"
          matTooltip="Run crawljob: {{configObject.meta.name}}">
         <mat-icon mat-list-icon>play_arrow</mat-icon>
         Run crawljob
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG">
-      <a mat-list-item
-         [routerLink]="['../crawljobs']"
-         [queryParams]="{schedule_id: configObject.id}"
-         matTooltip="Show crawljobs with reference to the schedule"
-         i18n-matTooltip="@@scheduleListShowCrawljobsWithScheduleActionButtonTooltip">
-        <mat-icon mat-list-icon>work</mat-icon>
-        Show crawljobs
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
-      <a mat-list-item
-         [routerLink]="['../crawljobs']"
-         [queryParams]="{crawl_config_id: configObject.id}"
-         matTooltip="Show crawljobs with reference to the crawlconfig"
-         i18n-matTooltip="@@crawlConfigListFilterCrawljobsWithCrawlconfigActionButtonTooltip">
-        <mat-icon mat-list-icon>work</mat-icon>
-        Show crawljobs
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.COLLECTION">
-      <a mat-list-item
-         [routerLink]="['../crawlconfig']"
-         [queryParams]="{collection_id: configObject.id}"
-         matTooltip="Show crawlconfigs with reference to the collection"
-         i18n-matTooltip="@@collectionListShowCrawlConfigsWitchCollectionRefActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
-        Show crawlconfigs
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
-      <a mat-list-item
-         [routerLink]="['../crawlconfig']"
-         [queryParams]="{browser_config_id: configObject.id}"
-         matTooltip="Show crawlconfigs with reference to the browserconfig"
-         i18n-matTooltip="@@browserConfigListFilterCrawljobsWithBrowserconfigActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
-        Show crawlconfigs
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT">
-      <a mat-list-item
-         [routerLink]="['../browserconfig']"
-         [queryParams]="{script_id: configObject.id}"
-         matTooltip="Show browserconfigs with reference to the browserscript"
-         i18n-matTooltip="@@browserscriptListFikterBrowserconfigsWithBrowserscriptActionButtonTooltip">
-        <mat-icon mat-list-icon>web</mat-icon>
-        Show browserconfigs
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG">
-      <a mat-list-item
-         [routerLink]="['../crawlconfig']"
-         [queryParams]="{politeness_id: configObject.id}"
-         matTooltip="Show crawlconfigs with reference to the politeness"
-         i18n-matTooltip="@@politenessConfigListFilterCrawlconfigWithPolitenessActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
-        Show crawlconfigs
       </a>
     </ng-container>
 

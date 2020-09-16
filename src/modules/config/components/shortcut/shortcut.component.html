@@ -1,86 +1,14 @@
-<mat-nav-list>
-  <!--  <app-action-shortcut [configObject]="configObject"-->
-  <!--                       (createSeed)="onCreateSeed()"-->
-  <!--                       (runCrawl)="onRunCrawl()"-->
-  <!--                       (clone)="onClone()">-->
-  <!--  </app-action-shortcut>-->
+<div>
+  <h3>Shortcuts</h3>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
+  <div fxLayout="row wrap">
+    <app-action-shortcut [configObject]="configObject"
+                         (clone)="onClone()"
+                         (runCrawl)="onRunCrawl()"
+                         (createSeed)="onCreateSeed()">
+    </app-action-shortcut>
+    <app-filter-shortcut [configObject]="configObject"></app-filter-shortcut>
+    <app-shortcut-buttons [configObject]="configObject"></app-shortcut-buttons>
+  </div>
+</div>
 
-  <ng-container [ngSwitch]="configObject.kind">
-    <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.SEED">
-      <h2 mat-subheader
-          *ngIf="configObject.seed.jobRefList.length">Crawljobs</h2>
-      <mat-list-item *ngFor="let crawlJob of configObject.seed.jobRefList">
-        <mat-icon mat-list-icon>work</mat-icon>
-        <a class="shortcut-link"
-           [routerLink]="['/config/crawljobs/' + crawlJob.id]">
-          {{ crawlJob.id | getJobNamePipe | async }}
-        </a>
-      </mat-list-item>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLJOB">
-      <h2 mat-subheader>Latest job status:</h2>
-      <mat-list-item>
-        {{configObject | getJobStatus |jobState| async}}
-      </mat-list-item>
-      <h2 mat-subheader>Schedule:</h2>
-      <mat-list-item>
-        <a class="shortcut-link"
-           [routerLink]="['/config/schedule/' + configObject.crawlJob.scheduleRef.id]">
-          {{configObject | getCrawlScheduleName | async}}
-        </a>
-      </mat-list-item>
-      <h2 mat-subheader>CrawlConfig:</h2>
-      <mat-list-item>
-        <a class="shortcut-link"
-           [routerLink]="['/config/crawlconfig/' + configObject.crawlJob.crawlConfigRef.id]">
-          {{configObject | getCrawlConfigName | async}}
-        </a>
-      </mat-list-item>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG"></ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
-      <h2 mat-subheader>Collection:</h2>
-      <a mat-list-item class="shortcut-link"
-         [routerLink]="['/config/collection/' + configObject.crawlConfig.collectionRef.id]">
-        {{configObject | getCollectionName | async}}
-      </a>
-
-      <h2 mat-subheader>BrowserConfig:</h2>
-      <a mat-list-item class="shortcut-link"
-         [routerLink]="['/config/browserconfig/' + configObject.crawlConfig.browserConfigRef.id]">
-        {{configObject | getBrowserConfigName | async}}
-      </a>
-
-      <h2 mat-subheader>PolitenessConfig:</h2>
-      <a mat-list-item class="shortcut-link"
-         [routerLink]="['/config/politenessconfig/' + configObject.crawlConfig.politenessRef.id]">
-        {{configObject | getPolitenessConfigName | async}}
-      </a>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.COLLECTION"></ng-container>
-
-    <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
-      <h2 mat-subheader>BrowserScripts:</h2>
-      <ng-container *ngFor="let script of configObject.browserConfig.scriptRefList">
-        <a mat-list-item [routerLink]="['/config/browserscript/' + script.id]">
-          {{script.id | getBrowserScriptName | async}}
-        </a>
-      </ng-container>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT"></ng-container>
-
-    <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG"></ng-container>
-
-    <ng-container *ngSwitchCase="Kind.CRAWLHOSTGROUPCONFIG"></ng-container>
-
-  </ng-container>
-
-</mat-nav-list>

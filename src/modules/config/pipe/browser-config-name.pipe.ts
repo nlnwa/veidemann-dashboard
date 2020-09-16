@@ -3,19 +3,20 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
 import {ConfigObject} from '../../../shared/models/config';
+import {OptionsService} from '../services';
 
 @Pipe({
   name: 'getBrowserConfigName'
 })
 export class BrowserConfigNamePipe implements PipeTransform {
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private optionsService: OptionsService) {
   }
 
   transform(configObject: ConfigObject): Observable<string> {
-    return this.route.data.pipe(
+    return this.optionsService.options$.pipe(
       first(),
-      map(data => {
-        const found = data.options.browserConfigs.find(
+      map(options => {
+        const found = options.browserConfigs.find(
           browserConfig => browserConfig.id === configObject.crawlConfig.browserConfigRef.id);
         return found ? found.meta.name : 'browserConfig';
       }));

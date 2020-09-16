@@ -72,6 +72,24 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="shortcut">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell class="shortcut-cell" *matCellDef="let row">
+          <div class="shortcut" *ngFor="let shortcutButtonTemplate of shortcutButtonTemplates">
+            <ng-container *ngTemplateOutlet="shortcutButtonTemplate; context: {$implicit: row}"></ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="filter">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell class="filter-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
+          <div class="filter" *ngFor="let filterButtonTemplate of filterButtonTemplates">
+            <ng-container *ngTemplateOutlet="filterButtonTemplate; context: {$implicit: row}"></ng-container>
+          </div>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">

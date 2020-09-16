@@ -7,6 +7,7 @@ import {
   ListDataSource
 } from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-crawl-execution-status-list',
@@ -19,7 +20,14 @@ import {BASE_LIST} from '../../../../shared/directives';
       provide: BASE_LIST,
       useExisting: forwardRef(() => CrawlExecutionStatusListComponent)
     }
-  ]
+  ],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlExecutionStatus> {
   readonly CrawlExecutionState = CrawlExecutionState;
@@ -30,7 +38,7 @@ export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlEx
   @Input()
   sortActive = 'startTime';
 
-  displayedColumns: string[] = ['seedId', 'jobId', 'state', 'startTime', 'endTime', 'extra', 'action'];
+  displayedColumns: string[] = ['seedId', 'jobId', 'state', 'startTime', 'endTime', 'extra', 'shortcut', 'filter', 'action'];
 
   constructor() {
     super();

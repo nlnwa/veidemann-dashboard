@@ -1,0 +1,52 @@
+<div *ngIf="crawlLog" class="content-padding" fxFlex fxLayout="row wrap" fxLayoutGap="16px">
+  <mat-card>
+    <h2>Requested URI</h2>
+    <p style="word-break: break-all"> {{crawlLog.requestedUri}}</p>
+  </mat-card>
+  <mat-card>
+    <h2>Size</h2>
+    <h1>{{crawlLog.size | filesize}}</h1>
+  </mat-card>
+  <mat-card *ngIf="crawlLog.statusCode">
+    <h2>Status code</h2>
+    <h1>{{crawlLog.statusCode}}</h1>
+  </mat-card>
+  <mat-card *ngIf="crawlLog.timeStamp">
+    <h2>Timestamp</h2>
+    <h1>{{crawlLog.timeStamp}}</h1>
+  </mat-card>
+  <mat-card *ngIf="crawlLog.fetchTimeMs">
+    <h2>Fetch time</h2>
+    <h1>{{crawlLog.fetchTimeMs | durationFormat: 'ms'}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.contentType">
+    <h2>Content type</h2>
+    <h1>{{crawlLog.contentType}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.recordType">
+    <h2>Record type</h2>
+    <h1>{{crawlLog.recordType}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.discoveryPath">
+    <h2>Discovery path</h2>
+    <h1>{{crawlLog.discoveryPath}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.collectionFinalName">
+    <h2>Collection</h2>
+    <h1>{{crawlLog.collectionFinalName}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.retries">
+    <h2>Retries</h2>
+    <h1>{{crawlLog.retries}}</h1>
+  </mat-card>
+
+  <mat-card *ngIf="crawlLog.method">
+    <h2>Method</h2>
+    <h1>{{crawlLog.method}}</h1>
+  </mat-card>
+</div>

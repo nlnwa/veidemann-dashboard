@@ -14,7 +14,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sort';
 import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {ActionDirective, ExtraDirective} from '../../directives';
+import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
 import {ListItem} from '../../../../shared/models';
 import {ConfigObject} from '../../../../shared/models/config';
 
@@ -46,7 +46,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   sortActive = 'name';
 
   @Input()
-  displayedColumns: string[] = ['select', 'name', 'description', 'extra', 'action'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'extra', 'shortcut', 'filter', 'action'];
 
   @Input()
   multiSelect = true;
@@ -87,6 +87,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
   @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
+  @ContentChildren(FilterDirective, {read: TemplateRef, descendants: true}) filterButtonTemplates;
+  @ContentChildren(ShortcutDirective, {read: TemplateRef, descendants: true}) shortcutButtonTemplates;
 
   // selection
   selection: SelectionModel<T>;

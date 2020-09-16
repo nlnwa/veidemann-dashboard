@@ -7,7 +7,7 @@ import {JobExecutionState} from '../../../../shared/models/report';
 @Component({
   selector: 'app-shortcut',
   templateUrl: './shortcut.component.html',
-  styleUrls: ['./shortcut.component.css']
+  styleUrls: ['./shortcut.component.scss']
 })
 export class ShortcutComponent {
   readonly Kind = Kind;
