@@ -58,6 +58,12 @@
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="editable">
   <button mat-raised-button color="accent"
+          *ngIf="!showSave"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-raised-button color="accent"
           [disabled]="!canSave"
           [mat-dialog-close]="onDialogClose()"
           *ngIf="showSave"

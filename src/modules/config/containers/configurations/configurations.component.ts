@@ -352,10 +352,14 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.kind !== configObject.kind) {
       reload = false;
     }
-    dialogRef.afterClosed().subscribe(config => {
-      if (config) {
-        if (Array.isArray(config)) {
-          this.onSaveMultiple(config, reload);
+    dialogRef.afterClosed().pipe(
+      filter(_ => !!_)
+    ).subscribe((config: ConfigObject) => {
+      if (Array.isArray(config)) {
+        this.onSaveMultiple(config, reload);
+      } else {
+        if (config.id) {
+          this.onUpdateConfig(config);
         } else {
           this.onSaveConfig(config, reload);
         }
@@ -365,6 +369,15 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   onClone(configObject: ConfigObject) {
     this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
+  }
+
+  onUpdateConfig(configObject: ConfigObject) {
+    this.configService.update(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(newConfig => {
+        this.reload.next();
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
+      });
   }
 
   onSaveConfig(configObject: ConfigObject, reload: boolean = true) {
