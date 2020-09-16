@@ -2,7 +2,10 @@
   <ng-container *ngIf="configObject$ | async as configObject">
     <ng-container *ngIf="options$ | async as options">
       <div fxLayout="row">
-        <app-shortcut [configObject]="configObject"></app-shortcut>
+        <app-shortcut [configObject]="configObject"
+                      (runCrawl)="onRunCrawl($event)"
+                      (clone)="onClone($event)"
+                      (createSeed)="onCreateSeedFromEntity($event)"></app-shortcut>
         <div fxFlex [ngSwitch]="configObject.kind">
           <app-collection-details *ngSwitchCase="Kind.COLLECTION"
                                   [configObject]="configObject"

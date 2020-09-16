@@ -1,4 +1,4 @@
-<mat-nav-list>
+<mat-nav-list class="list-horizontal">
   <h2 mat-subheader>Actions</h2>
   <ng-container [ngSwitch]="configObject.kind">
 
@@ -8,7 +8,6 @@
          matTooltip="Create a new seed with reference to the entity"
          i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">
         <mat-icon mat-list-icon>add_circle</mat-icon>
-        Crate new seed for entity
       </a>
     </ng-container>
 
@@ -18,7 +17,6 @@
          matTooltip="Start crawling seed: {{configObject.meta.name}}"
          i18n-matTooltip="@@seedListRunCrawlActionButtonTooltip">
         <mat-icon mat-list-icon>play_arrow</mat-icon>
-        Run crawl
       </a>
     </ng-container>
 
@@ -27,7 +25,6 @@
          (click)="onRunCrawl()"
          matTooltip="Run crawljob: {{configObject.meta.name}}">
         <mat-icon mat-list-icon>play_arrow</mat-icon>
-        Run crawljob
       </a>
     </ng-container>
 
@@ -37,6 +34,5 @@
      matTooltip="Clone"
      i18n-matTooltip="@@configurationListCloneActionButtonTooltip">
     <mat-icon mat-list-icon>file_copy</mat-icon>
-    Clone config
   </a>
 </mat-nav-list>

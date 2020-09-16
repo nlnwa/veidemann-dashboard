@@ -23,6 +23,7 @@ import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-cra
 import {RunningCrawlDialogComponent} from '../../components/running-crawl-dialog/running-crawl-dialog.component';
 import {ConfigService} from '../../../commons/services';
 import {ConfigQuery} from '../../../../shared/func';
+import {ConfigDialogData, dialogByKind} from '../../func';
 
 export interface ConfigOptions {
   rotationPolicies?: RotationPolicy[];
@@ -124,9 +125,7 @@ export class ConfigurationComponent implements OnDestroy {
         configRef && configRef.id ? this.dataService.get(configRef) : of(null))
     );
 
-    this.configObject$ = merge(this.configObject.asObservable(), configObject$).pipe(
-      tap(console.log)
-    );
+    this.configObject$ = merge(this.configObject.asObservable(), configObject$);
   }
 
   get loading$(): Observable<boolean> {
@@ -149,16 +148,44 @@ export class ConfigurationComponent implements OnDestroy {
     }
   }
 
+  onCreateSeedFromEntity(entity: ConfigObject) {
+    const entityRef = ConfigObject.toConfigRef(entity);
+    const configObject = new ConfigObject({kind: Kind.SEED, seed: new Seed({entityRef})});
+
+    this.onCreateConfigWithDialog(configObject);
+    }
+
+    onCreateConfigWithDialog(configObject: ConfigObject) {
+    if (configObject) {
+
+      const data: ConfigDialogData = {configObject, options: this.options};
+      const componentType = dialogByKind(configObject.kind);
+      const dialogRef = this.dialog.open(componentType, {data});
+
+      dialogRef.afterClosed().pipe(
+        filter(_ => !!_)
+      ).subscribe((config: ConfigObject) => {
+        if (config.id) {
+          this.onUpdateConfig(config);
+        } else {
+          this.onSaveConfig(config);
+        }
+      });
+    }
+    }
+
   onClone(configObject: ConfigObject) {
     // we don't want the id of any selected configObject to be present in the url
     // when we create a clone
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-      queryParams: {id: null}
-    })
-      .catch(error => this.errorService.dispatch(error))
-      .then(() => setTimeout(() => this.configObject.next(ConfigObject.clone(configObject))));
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParamsHandling: 'merge',
+    //   queryParams: {id: null}
+    // })
+    //   .catch(error => this.errorService.dispatch(error))
+    //   .then(() => setTimeout(() => this.configObject.next(ConfigObject.clone(configObject))));
+
+    this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
   }
 
   onSaveConfig(configObject: ConfigObject) {

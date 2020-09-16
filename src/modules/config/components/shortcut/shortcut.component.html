@@ -1,14 +1,10 @@
 <div>
-  <h3>Shortcuts</h3>
   <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
-  <div fxLayout="row wrap">
     <app-action-shortcut [configObject]="configObject"
                          (clone)="onClone()"
                          (runCrawl)="onRunCrawl()"
                          (createSeed)="onCreateSeed()">
     </app-action-shortcut>
     <app-filter-shortcut [configObject]="configObject"></app-filter-shortcut>
-    <app-shortcut-buttons [configObject]="configObject"></app-shortcut-buttons>
-  </div>
 </div>
 
