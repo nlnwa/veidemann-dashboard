@@ -14,17 +14,22 @@
                                    (selectedChange)="onSelectedChange($event)"
                                    (sort)="onSort($event)"
                                    (page)="onPage($event)">
-      <a *appAction="let row" mat-icon-button
+      <a *appShortcut="let row" mat-icon-button
          [routerLink]="['/config', 'crawljobs', row.jobId]">
         <mat-icon matTooltip="Go to crawljob"
                   i18n-matTooltip="@@crawljobExecutionReportGoToCrawljobShortcutTooltip">work
         </mat-icon>
       </a>
-      <a *appAction="let row" mat-icon-button
+      <a *appFilter="let row" mat-icon-button
          [routerLink]="['/report', 'crawlexecution']"
          [queryParams]="{job_execution_id: row.id}">
         <mat-icon matTooltip="Go to crawlexecution"
                   i18n-matTooltip="@@crawljobExecutionReportGoToCrawlExecutionShortcutTooltip">hdr_weak
+        </mat-icon>
+      </a>
+      <a *appAction="let row" mat-icon-button [routerLink]="['../jobexecution', row.id]">
+        <mat-icon matTooltip="Show full report" i18n-matTooltip="@@crawljobExecutionReportShowFullReportTooltip">
+          keyboard_arrow_right
         </mat-icon>
       </a>
       <ng-container *appAction="let row">
