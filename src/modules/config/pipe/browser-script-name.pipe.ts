@@ -1,22 +1,22 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
+import {OptionsService} from '../services';
 
 
 @Pipe({
   name: 'getBrowserScriptName'
 })
 export class BrowserScriptNamePipe implements PipeTransform {
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private optionsService: OptionsService) {
   }
 
 
   transform(id: string): Observable<string> {
-    return this.route.data.pipe(
-      first(),
-      map(data => {
-        const found = data.options.browserScripts.find(
+    return this.optionsService.options$.pipe(
+      map(options => {
+        const found = options.browserScripts.find(
           browserScript => browserScript.id === id);
         return found ? found.meta.name : 'browserScript';
       }));

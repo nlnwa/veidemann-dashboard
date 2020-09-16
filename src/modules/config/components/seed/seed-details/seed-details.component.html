@@ -71,16 +71,7 @@
                    i18n-placeholder="@@seedDetailsFormSurtPrefixPlaceholder">
           </mat-form-field>
 
-          <mat-list *ngIf="configObject?.id">
-            <mat-list-item *ngFor="let id of jobRefListId.value">
-              <mat-icon matTooltip="CrawlJob"
-                        i18n-matTooltip="@@seedDetailsCrawljobShortcutTooltip">work
-              </mat-icon>
-              <a class="shortcut-link"
-                 [routerLink]="['/config/crawljobs']"
-                 [queryParams]="{id: id}">{{ getCrawlJobName(id) }}</a>
-            </mat-list-item>
-          </mat-list>
+          <app-shortcut [configObject]="configObject"></app-shortcut>
 
         </div>
       </div>

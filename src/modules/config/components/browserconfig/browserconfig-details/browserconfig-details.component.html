@@ -84,15 +84,16 @@
                       i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
         </app-selector>
 
-        <mat-list *ngIf="showShortcuts">
-          <mat-list-item *ngFor="let id of scriptRefIdList.value">
-            <mat-icon matTooltip="BrowserScript"
-                      i18n-matTooltip="@@browserconfigBrowserscriptShortcutTooltip">web_asset</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['/config/browserscript']"
-               [queryParams]="{id: id}">{{ getScriptName(id) }}</a>
-          </mat-list-item>
-        </mat-list>
+<!--        <mat-list *ngIf="showShortcuts">-->
+<!--          <mat-list-item *ngFor="let id of scriptRefIdList.value">-->
+<!--            <mat-icon matTooltip="BrowserScript"-->
+<!--                      i18n-matTooltip="@@browserconfigBrowserscriptShortcutTooltip">web_asset</mat-icon>&nbsp;-->
+<!--            <a class="shortcut-link"-->
+<!--               [routerLink]="['/config/browserscript']"-->
+<!--               [queryParams]="{id: id}">{{ getScriptName(id) }}</a>-->
+<!--          </mat-list-item>-->
+<!--        </mat-list>-->
+        <app-shortcut [configObject]="configObject"></app-shortcut>
       </div>
     </mat-card-content>
 

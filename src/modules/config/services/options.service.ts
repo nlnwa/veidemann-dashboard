@@ -5,15 +5,20 @@ import {ConfigOptions} from '../func';
 
 @Injectable()
 export class OptionsService {
-  private options: BehaviorSubject<ConfigOptions>;
+  // tslint:disable-next-line:variable-name
+  private _options: BehaviorSubject<ConfigOptions>;
   options$: Observable<ConfigOptions>;
 
+  get options() {
+    return this._options.value;
+  }
+
   constructor() {
-    this.options = new BehaviorSubject<ConfigOptions>(null);
-    this.options$ = this.options.asObservable();
+    this._options = new BehaviorSubject<ConfigOptions>(null);
+    this.options$ = this._options.asObservable();
   }
 
   next(options: ConfigOptions) {
-    this.options.next(options);
+    this._options.next(options);
   }
 }

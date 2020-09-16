@@ -360,6 +360,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   }
 
+  onEdit(configObject: ConfigObject) {
+    this.router.navigate([configObject.id], {
+      relativeTo: this.route,
+    }).catch(error => this.errorService.dispatch(error));
+  }
+
   onClone(configObject: ConfigObject) {
     this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
   }

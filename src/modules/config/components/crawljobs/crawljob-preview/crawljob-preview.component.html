@@ -2,4 +2,5 @@
   <mat-label><b>Depth: </b>{{configObject.crawlJob.limits.depth}}</mat-label>
   <mat-label><b>Max duration: </b>{{configObject.crawlJob.limits.maxDurationS |durationFormat: 's'}}</mat-label>
   <mat-label><b>Max bytes: </b>{{configObject.crawlJob.limits.maxBytes |filesize}}</mat-label>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
 </div>

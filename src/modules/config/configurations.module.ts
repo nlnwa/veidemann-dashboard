@@ -87,6 +87,9 @@ import { CrawlJobDialogComponent } from './components/crawljobs/crawljob-dialog/
 import { PolitenessConfigDialogComponent } from './components/politenessconfig/politenessconfig-dialog/politenessconfig-dialog.component';
 import { RoleMappingDialogComponent } from './components/rolemapping/rolemapping-dialog/rolemapping-dialog.component';
 import { ScheduleDialogComponent } from './components/schedule/schedule-dialog/schedule-dialog.component';
+import { FilterShortcutComponent } from './components/shortcut/filter-shortcut/filter-shortcut.component';
+import { ShortcutButtonsComponent } from './components/shortcut/shortcut-buttons/shortcut-buttons.component';
+import { ShortcutListComponent } from './components/shortcut/shortcut-list/shortcut-list.component';
 
 
 @NgModule({
@@ -171,6 +174,9 @@ import { ScheduleDialogComponent } from './components/schedule/schedule-dialog/s
         PolitenessConfigDialogComponent,
         RoleMappingDialogComponent,
         ScheduleDialogComponent,
+        FilterShortcutComponent,
+        ShortcutButtonsComponent,
+        ShortcutListComponent,
     ],
     entryComponents: [
         DeleteMultiDialogComponent,

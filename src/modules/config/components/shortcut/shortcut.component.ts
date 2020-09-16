@@ -7,7 +7,7 @@ import {JobExecutionState} from '../../../../shared/models/report';
 @Component({
   selector: 'app-shortcut',
   templateUrl: './shortcut.component.html',
-  styleUrls: ['./shortcut.component.css']
+  styleUrls: ['./shortcut.component.scss']
 })
 export class ShortcutComponent {
   readonly Kind = Kind;
@@ -33,12 +33,6 @@ export class ShortcutComponent {
 
   onCreateSeed() {
     this.createSeed.emit(this.configObject);
-  }
-
-  onEdit(): void {
-    this.router.navigate([this.configObject.id], {
-      relativeTo: this.route,
-    }).catch(error => this.errorService.dispatch(error));
   }
 
   onRunCrawl() {

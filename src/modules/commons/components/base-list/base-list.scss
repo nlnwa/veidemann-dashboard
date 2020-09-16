@@ -98,12 +98,38 @@ tr.item-row:nth-child(4n+1):hover {
   text-align: right;
 }
 
+.shortcut-cell {
+  text-align: right;
+}
+
+.filter-cell {
+  text-align: right;
+}
+
+.shortcut {
+  display: inline-block;
+  opacity: 0;
+}
+
+.filter {
+  display: inline-block;
+  opacity: 0;
+}
+
 .actions {
   display: inline-block;
   opacity: 0;
 }
 
 .mat-row:hover .actions {
+  opacity: 100;
+}
+
+.mat-row:hover .filter {
+  opacity: 100;
+}
+
+.mat-row:hover .shortcut {
   opacity: 100;
 }
 

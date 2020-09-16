@@ -13,26 +13,26 @@
                                      (page)="onPage($event)">
 
     (selectedChange)="onSelectedChange($event)">
-      <a *appAction="let row" mat-icon-button
+      <a *appShortcut="let row" mat-icon-button
          [routerLink]="['/config', 'seed', row.seedId]">
         <mat-icon matTooltip="Go to seed"
                   i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">link
         </mat-icon>
       </a>
-      <a *appAction="let row" mat-icon-button
+      <a *appShortcut="let row" mat-icon-button
          [routerLink]="['/config', 'crawljobs', row.jobId]">
         <mat-icon matTooltip="Go to crawljob"
                   i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">work
         </mat-icon>
       </a>
-      <a *appAction="let row" mat-icon-button
+      <a *appFilter="let row" mat-icon-button
          [routerLink]="['../pagelog']"
          [queryParams]="{execution_id: row.id}">
         <mat-icon matTooltip="Go to pagelog"
                   i18n-matTooltip="@@crawlExecutionReportListGoToPagelogShortcutTooltip">art_track
         </mat-icon>
       </a>
-      <a *appAction="let row" mat-icon-button
+      <a *appFilter="let row" mat-icon-button
          [routerLink]="['../crawllog']"
          [queryParams]="{execution_id: row.id}">
         <mat-icon matTooltip="Go to crawllog"
@@ -49,6 +49,11 @@
         </a>
         </ng-container>
       </ng-container>
+      <a *appAction="let row" mat-icon-button [routerLink]="['/crawlexecution', row.id]">
+        <mat-icon matTooltip="Show full report" i18n-matTooltip="@@crawljobExecutionReportShowFullReportTooltip">
+          open_in_full
+        </mat-icon>
+      </a>
     </app-crawl-execution-status-list>
   </div>
 </div>

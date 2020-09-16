@@ -1,22 +1,23 @@
 <div fxLayout="column">
-      <mat-label><b>SURT:</b> {{configObject.seed.scope.surtPrefix}}</mat-label>
-      <mat-label><b>Latest crawls of seed: </b></mat-label>
-      <table style="width: 100%">
-        <tr>
-          <th *ngFor="let column of crawlStatusTableHeaders" style="text-align: left">
-            {{column}}
-          </th>
-        </tr>
-        <tr *ngFor="let execution of ( configObject | getCrawlExecutionStatus: 3 | toArray| async) ">
-          <ng-container *ngIf="execution">
-          <td>{{execution.jobId | getJobNamePipe | async}}</td>
-          <td>{{JobExecutionState[execution.state]}}</td>
-          <td>{{execution.startTime | date:'medium'}}</td>
-          <td>{{execution.endTime | date: 'medium'}}</td>
-          </ng-container>
-        </tr>
-     </table>
-    </div>
+  <mat-label><b>SURT:</b> {{configObject.seed.scope.surtPrefix}}</mat-label>
+  <mat-label><b>Latest crawls of seed: </b></mat-label>
+  <table style="width: 100%">
+    <tr>
+      <th *ngFor="let column of crawlStatusTableHeaders" style="text-align: left">
+        {{column}}
+      </th>
+    </tr>
+    <tr *ngFor="let execution of ( configObject | getCrawlExecutionStatus: 3 | toArray| async) ">
+      <ng-container *ngIf="execution">
+        <td>{{execution.jobId | getJobNamePipe | async}}</td>
+        <td>{{JobExecutionState[execution.state]}}</td>
+        <td>{{execution.startTime | date:'medium'}}</td>
+        <td>{{execution.endTime | date: 'medium'}}</td>
+      </ng-container>
+    </tr>
+  </table>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
+</div>
 
 
 
