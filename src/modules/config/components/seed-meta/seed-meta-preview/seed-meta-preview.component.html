@@ -7,6 +7,11 @@
       {{label.key}}:{{label.value}}
     </mat-chip>
   </mat-chip-list>
+  <mat-chip-list>
+    <mat-chip *ngFor="let annotation of configObject.meta.annotationList">
+      {{annotation.key}}:{{annotation.value}}
+    </mat-chip>
+  </mat-chip-list>
   <mat-label><b>ID:</b> {{configObject.id}}</mat-label>
   <mat-label><b>Entity ID</b> {{configObject.seed.entityRef.id}}</mat-label>
   <mat-label><b>Created:</b> {{configObject.meta.created | date: 'medium'}}</mat-label>
