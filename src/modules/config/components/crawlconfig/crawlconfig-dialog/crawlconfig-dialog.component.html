@@ -74,6 +74,12 @@
           [mat-dialog-close]="onDialogClose()"
           i18n="@@commonButtonSave">SAVE
   </button>
+  <button mat-raised-button color="accent"
+          *ngIf="!showSave"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonUpdate">UPDATE
+  </button>
   <button mat-button
           (click)="onRevert()"
           [disabled]="!form.dirty"

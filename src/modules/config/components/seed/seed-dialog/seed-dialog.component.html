@@ -21,10 +21,11 @@
   <button mat-raised-button color="accent"
           *ngIf="!showSave"
           [disabled]="!canUpdate"
-          (click)="onUpdate()"
+          [mat-dialog-close]="onDialogClose()"
           i18n="@@commonButtonSave">UPDATE
   </button>
   <button mat-raised-button color="primary"
+          *ngIf="showSave"
           [disabled]="!canSave"
           [mat-dialog-close]="onDialogClose()"
           i18n="@@commonButtonSave">SAVE
