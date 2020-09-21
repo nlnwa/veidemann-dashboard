@@ -1,0 +1,133 @@
+<h2 mat-dialog-title>BrowserConfig </h2>
+<p>Mass update</p>
+
+<mat-dialog-content fxLayout="row wrap" fxLayoutGap="24px">
+  <form [formGroup]="form">
+    <div fxFlex>
+      <div fxLayout="row" fxLayoutGap="16px">
+        <app-labels fxFlex [removable]="form.enabled"
+                    formControlName="labelList"></app-labels>
+        <div>
+          <mat-button-toggle-group
+            name="shouldAddLabel"
+            [value]="shouldAddLabel"
+            (valueChange)="onToggleShouldAddLabels($event)">
+            <mat-button-toggle [value]="true">
+              <mat-icon>add</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+              <mat-icon>remove</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex fxLayout="column">
+      <mat-form-field>
+        <input matInput formControlName="userAgent" placeholder="User agent"
+               i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
+        <mat-error *ngIf="!userAgent.valid"
+                   i18n="@@browserconfigFormUserAgentRequiredError">
+          Must contain at least 1 character.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="windowWidth" placeholder="Window width"
+               i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
+        <mat-error *ngIf="!windowWidth.valid"
+                   i18n="@@browserconfigFormWindowWidthRequiredError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="windowHeight" placeholder="Window height"
+               i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
+        <mat-error *ngIf="!windowHeight.valid"
+                   i18n="@@browserconfigFormWindowHeightRequiredError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-label i18n="@@browserconfigFormPageLoadTimeoutLabel">Page load timeout</mat-label>
+      <app-duration-picker formControlName="pageLoadTimeoutMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s'">
+
+      </app-duration-picker>
+      <mat-error *ngIf="!pageLoadTimeoutMs.valid"
+                 i18n="@@browserconfigFormPageLoadTimeoutRequiredError">
+        Must be a number.
+      </mat-error>
+
+      <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
+      <app-duration-picker formControlName="maxInactivityTimeMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!maxInactivityTimeMs.valid"
+                 i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
+        Must be a number.
+      </mat-error>
+
+      <div fxlayout="row" fxLayoutGap="16px">
+        <mat-form-field fxFlex>
+          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
+                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+            <mat-option *ngFor="let browserScript of browserScripts"
+                        [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <mat-button-toggle-group [value]="shouldAddBrowserScript"
+                                   (valueChange)="onToggleBrowserScript($event)"
+                                   name="shouldAddBrowserScript">
+            <mat-button-toggle [value]="true">
+              <mat-icon>add</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+              <mat-icon>remove</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <div fxlayout="row" fxLayoutGap="16px">
+        <app-selector fxFlex placeholder="Script selector" formControlName="scriptSelectorList"
+                      [removable]="canEdit" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        </app-selector>
+        <div>
+          <mat-button-toggle-group
+            [value]="shouldAddSelector"
+            (valueChange)="onToggleShouldAddSelector($event)"
+            name="shouldAddSelector">
+            <mat-button-toggle [value]="true">
+              <mat-icon>add</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+              <mat-icon>remove</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

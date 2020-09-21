@@ -25,7 +25,7 @@ import {SortDirection} from '@angular/material/sort';
 import {ConfigService} from '../../../commons/services';
 import {ConfigQuery, distinctUntilArrayChanged, Sort} from '../../../../shared/func';
 import {KindService, OptionsService} from '../../services';
-import {ConfigDialogData, ConfigOptions, dialogByKind} from '../../func';
+import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '../../func';
 import {ReferrerError} from '../../../../shared/error';
 
 @Component({
@@ -67,6 +67,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   configObject$: BehaviorSubject<ConfigObject>;
   configObjects$: BehaviorSubject<ConfigObject>;
+
+  mergedConfig: ConfigObject;
 
   get loading$(): Observable<boolean> {
     return this.configService.loading$;
@@ -453,7 +455,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     } else {
       this.selectedConfigs = configs;
       const mergedConfigObject = ConfigObject.mergeConfigs(configs);
-      this.configObjects$.next(mergedConfigObject);
+      this.mergedConfig = mergedConfigObject;
+      // this.configObjects$.next(mergedConfigObject);
     }
   }
 
@@ -522,6 +525,17 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       relativeTo: this.route
     })
       .catch(error => this.errorService.dispatch(error));
+  }
+
+  onEditMultipleWithDialog(configObject: ConfigObject){
+    const data: ConfigDialogData = {configObject, options: this.options};
+    const componentType = multiDialogByKind(configObject.kind);
+    const dialogRef = this.dialog.open(componentType, {data});
+    dialogRef.afterClosed().pipe(
+      filter(_ => !!_)
+    ).subscribe(({updateTemplate, pathList}: { updateTemplate: ConfigObject, pathList: string[] }) => {
+      this.onUpdateMulti({updateTemplate, pathList});
+    });
   }
 
   onUpdateMulti({updateTemplate, pathList}: { updateTemplate: ConfigObject, pathList: string[] }) {
