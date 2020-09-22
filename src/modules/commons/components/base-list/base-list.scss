@@ -6,13 +6,13 @@ table {
 }
 
 .mat-column-select {
-  flex: 0 0 1%;
-  width: 1%;
+  flex: 0 0 5%;
+  width: 5%;
 }
 
 .mat-column-name, .mat-column-description {
-  flex: 0 0 35%;
-  width: 35%;
+  flex: 0 0 20%;
+  width: 20%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -30,8 +30,8 @@ table {
 }
 
 .mat-column-action {
-  flex: 0 0 24%;
-  width: 24%;
+  flex: 0 0 25%;
+  width: 25%;
   text-align: right;
   white-space: nowrap;
 }
