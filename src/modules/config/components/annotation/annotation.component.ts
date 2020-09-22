@@ -50,7 +50,7 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
   }
 
   get canShow(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
+    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isOperator();
   }
 
   get canUpdate(): boolean {
