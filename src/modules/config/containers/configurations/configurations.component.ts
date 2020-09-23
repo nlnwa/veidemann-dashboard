@@ -19,7 +19,7 @@ import {
 
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
 import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
-import {DeleteMultiDialogComponent, RunCrawlDialogComponent} from '../../components';
+import {DeleteDialogComponent, DeleteMultiDialogComponent, RunCrawlDialogComponent} from '../../components';
 import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';
 import {ConfigService} from '../../../commons/services';
@@ -527,7 +527,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .catch(error => this.errorService.dispatch(error));
   }
 
-  onEditMultipleWithDialog(configObject: ConfigObject){
+  onUpdateMultiWithDialog(configObject: ConfigObject) {
     const data: ConfigDialogData = {configObject, options: this.options};
     const componentType = multiDialogByKind(configObject.kind);
     const dialogRef = this.dialog.open(componentType, {data});
@@ -547,6 +547,28 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
         this.configObjects$.next(null);
         this.snackBarService.openSnackBar(
           updatedConfigs + $localize`:@snackBarMessage.multipleUpdated: configurations updated`);
+      });
+  }
+
+  onDeleteConfig(configObject: ConfigObject) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {configObject},
+    });
+
+    dialogRef.afterClosed()
+      .pipe(
+        filter(result => !!result),
+        switchMap(() => this.configService.delete(configObject)),
+        filter(deleted => !!deleted)
+      )
+      .subscribe(() => {
+        this.router.navigate([], {
+          relativeTo: this.route.parent,
+        }).catch(error => this.errorService.dispatch(error));
+        this.reload.next();
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
       });
   }
 
@@ -609,18 +631,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
                   {queryParams: {watch: true}}
                 ).catch(error => this.errorService.dispatch(error));
               }
-
-              // const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
-              //   disableClose: false,
-              //   autoFocus: true,
-              //   data: {runCrawlRequest, runCrawlReply, configObject}
-              // });
             });
         }
       });
   }
 }
-
-
-
-

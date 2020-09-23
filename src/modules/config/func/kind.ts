@@ -21,6 +21,7 @@ import {PolitenessConfigMultiDialogComponent} from '../components/politenessconf
 import {CrawlHostGroupConfigMultiDialogComponent} from '../components/crawlhostgroupconfig/crawlhostgroupconfig-multi-dialog/crawlhostgroupconfig-multi-dialog.component';
 import {ScheduleMultiDialogComponent} from '../components/schedule/schedule-multi-dialog/schedule-multi-dialog.component';
 import {BrowserConfigMultiDialogComponent} from '../components/browserconfig/browserconfig-multi-dialog/browserconfig-multi-dialog.component';
+import {RoleMappingMultiDialogComponent} from '../components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
 
 export interface ConfigDialogData {
   configObject: ConfigObject;
@@ -74,6 +75,8 @@ export function multiDialogByKind(kind: Kind): ComponentType<any> {
       return PolitenessConfigMultiDialogComponent;
     case Kind.CRAWLHOSTGROUPCONFIG:
       return CrawlHostGroupConfigMultiDialogComponent;
+    case Kind.ROLEMAPPING:
+      return RoleMappingMultiDialogComponent;
   }
 }
 

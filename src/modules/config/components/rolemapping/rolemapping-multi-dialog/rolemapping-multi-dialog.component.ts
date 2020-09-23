@@ -1,22 +1,30 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {RoleMappingDetailsComponent} from '..';
 import {FormBuilder, Validators} from '@angular/forms';
-import {ConfigObject, Kind} from '../../../../../shared/models';
-import {RoleMappingDetailsComponent} from '../rolemapping-details/rolemapping-details.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ConfigDialogData} from '../../../func';
 import {CustomValidators} from '../../../../../shared/validation';
-
+import {ConfigObject, Kind} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-rolemapping-details-multi',
-  templateUrl: './rolemapping-details-multi.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-rolemapping-multi-dialog',
+  templateUrl: './rolemapping-multi-dialog.component.html',
+  styleUrls: ['./rolemapping-multi-dialog.component.css']
 })
-
-export class RoleMappingDetailsMultiComponent extends RoleMappingDetailsComponent {
+export class RoleMappingMultiDialogComponent extends RoleMappingDetailsComponent implements OnInit {
 
   allSelected = false;
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public data: ConfigDialogData,
+              public dialogRef: MatDialogRef<RoleMappingMultiDialogComponent>) {
     super(fb);
+    this.configObject = this.data.configObject;
+    this.roles = this.data.options.roles;
+  }
+
+  ngOnInit(): void {
+    this.updateForm();
   }
 
   protected createForm() {
@@ -49,5 +57,9 @@ export class RoleMappingDetailsMultiComponent extends RoleMappingDetailsComponen
     }
 
     return {updateTemplate, pathList};
+  }
+
+  onDialogClose(): { updateTemplate: ConfigObject, pathList: string[] } {
+    return this.prepareSave();
   }
 }

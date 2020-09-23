@@ -18,24 +18,34 @@
     </div>
     <ng-container *ngIf="kind$ | async as kind" [ngSwitch]="kind">
       <div fxFlex fxLayout="column" *ngSwitchCase="Kind.ROLEMAPPING">
-        <app-rolemapping-list appQueryConfigObject [query]="query$ | async"
+        <app-rolemapping-list fxFlex appQueryConfigObject [query]="query$ | async"
                               [pageIndex]="pageIndex$ | async"
                               [pageSize]="pageSize$ | async"
                               (selectedChange)="onSelectedChange($event)"
                               (selectAll)="onSelectAll()">
+          <button mat-icon-button
+                  (click)="onUpdateMultiWithDialog(mergedConfig)">
+            <mat-icon matTooltip="Edit selected configurations"
+                      i18n-matTooltip="@@configurationEditSelectedConfigurationsButtonTooltip">edit
+            </mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onDeleteSelectedConfigs()">
+            <mat-icon matTooltip="Delete selected configurations"
+                      i18n-matTooltip="@@configurationDeleteSelectedConfigurationsButtonTooltip">delete
+            </mat-icon>
+          </button>
         </app-rolemapping-list>
-        <app-rolemapping-details *ngIf="configObject$| async as configObject"
-                                 [configObject]="configObject"></app-rolemapping-details>
+        <app-rolemapping-details fxFlex *ngIf="configObject$| async as configObject"
+                                 [configObject]="configObject" [roles]="options.roles"
+                                 (update)="onUpdateConfig($event)"
+                                 (save)="onSaveConfig($event)"
+                                 (delete)="onDeleteConfig($event)">
+        </app-rolemapping-details>
       </div>
       <div fxFlex fxLayout="column" *ngSwitchDefault>
         <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
                          [configObject]="entity"></app-entity-view>
-<!--        <app-detail-multi class="content-padding"-->
-<!--                          *ngIf="!isSingleMode"-->
-<!--                          (update)="onUpdateMulti($event)"-->
-<!--                          [configObject]="configObjects$ | async"-->
-<!--                          [options]="options$ | async">-->
-<!--        </app-detail-multi>-->
         <app-config-list fxFlex
                          appQueryConfigObject [query]="query$ | async"
                          [length]="length$ | async"
@@ -51,7 +61,7 @@
 
           <button mat-icon-button
                   *ngIf="!isAllSelected && canAdministrate"
-                  (click)="onEditMultipleWithDialog(mergedConfig)">
+                  (click)="onUpdateMultiWithDialog(mergedConfig)">
             <mat-icon matTooltip="Edit selected configurations"
                       i18n-matTooltip="@@configurationEditSelectedConfigurationsButtonTooltip">edit
             </mat-icon>
