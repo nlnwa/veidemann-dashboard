@@ -1,4 +1,4 @@
-<div fxLayout="column">
+<div fxLayout="column" *ngIf="canShow">
   <form>
     <mat-form-field>
       <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
