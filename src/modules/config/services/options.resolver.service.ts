@@ -72,6 +72,12 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
           map(crawlJobs => ({crawlJobs}))
         );
 
+      case Kind.CRAWLENTITY:
+        return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
+          toArray(),
+          map(crawlJobs => ({crawlJobs}))
+        );
+
       case Kind.BROWSERSCRIPT:
         return {browserScriptTypes};
 
