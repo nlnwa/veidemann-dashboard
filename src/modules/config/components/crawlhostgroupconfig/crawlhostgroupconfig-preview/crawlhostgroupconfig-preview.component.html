@@ -1,5 +1,5 @@
 <div fxLayout="column">
-  <mat-label><b>IP range </b></mat-label>
+  <mat-label *ngIf="configObject.crawlHostGroupConfig.ipRangeList.length"><b>IP range </b></mat-label>
   <ul *ngFor="let ipRange of configObject.crawlHostGroupConfig.ipRangeList">
     <li>{{ipRange.ipFrom}} - {{ipRange.ipTo}}</li>
   </ul>

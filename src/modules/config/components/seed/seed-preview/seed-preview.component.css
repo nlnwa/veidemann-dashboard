@@ -21,3 +21,7 @@
 .toolbar-spacer {
   flex: 1 1 auto;
 }
+
+mat-label {
+  margin-top: 16px;
+}

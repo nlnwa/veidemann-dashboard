@@ -4,9 +4,11 @@
             [value]="configObject.politenessConfig.customRobots">
   </textarea>
   <mat-label><b>CrawlHostGroup selector: </b></mat-label>
+  <mat-chip-list>
   <mat-chip *ngFor="let crawlHostGroupSelector of configObject.politenessConfig.crawlHostGroupSelectorList">
     {{crawlHostGroupSelector}}
   </mat-chip>
+  </mat-chip-list>
   <mat-label><b>Minimum robots validity: </b>
     {{configObject.politenessConfig.minimumRobotsValidityDurationS | durationFormat: 's'}}
   </mat-label>

@@ -8,6 +8,7 @@
   <mat-label><b>Max inactivity time: </b>
     {{configObject.browserConfig.maxInactivityTimeMs | durationFormat: 'ms'}}
   </mat-label>
+  <mat-label *ngIf="configObject.browserConfig.scriptSelectorList.length"><b>Script selector</b></mat-label>
   <mat-chip-list>
     <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList">
       {{scriptSelector}}
