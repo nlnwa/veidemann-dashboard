@@ -6,6 +6,7 @@ import {map, startWith} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {NO_COLON} from '../../../../shared/validation/patterns';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {AuthService} from '../../../core/services/auth';
 
 @Component({
   selector: 'app-annotation',
@@ -39,7 +40,8 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
   @ViewChild('chipInput', {static: true}) chipInputControl: ElementRef;
 
   constructor(protected fb: FormBuilder,
-              protected  cdr: ChangeDetectorRef) {
+              protected  cdr: ChangeDetectorRef,
+              protected authService: AuthService) {
     this.createForm();
   }
 
@@ -49,6 +51,10 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
 
   get canUpdate(): boolean {
     return !this.disabled;
+  }
+
+  get canShow(): boolean {
+    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isOperator();
   }
 
   get key(): AbstractControl {

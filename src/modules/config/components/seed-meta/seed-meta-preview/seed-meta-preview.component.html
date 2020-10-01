@@ -1,21 +1,40 @@
 <div fxLayout="column">
   <mat-label><b>URI:</b> {{configObject.meta.name}}</mat-label>
   <mat-label><b>Description:</b> {{configObject.meta.description}}</mat-label>
-  <mat-label><b>Label:</b></mat-label>
+  <mat-label *ngIf="configObject.meta.labelList.length"><b>Label:</b></mat-label>
   <mat-chip-list>
     <mat-chip *ngFor="let label of configObject.meta.labelList">
       {{label.key}}:{{label.value}}
     </mat-chip>
   </mat-chip-list>
-  <mat-chip-list>
-    <mat-chip *ngFor="let annotation of configObject.meta.annotationList">
+  <mat-label *ngIf="configObject.meta.annotationList.length && canShowAnnotation"><b>Annotation:</b></mat-label>
+  <mat-chip-list *ngIf="canShowAnnotation">
+    <mat-chip *ngFor="let annotation of configObject.meta.annotationList" class="annotation-chip">
       {{annotation.key}}:{{annotation.value}}
     </mat-chip>
   </mat-chip-list>
-  <mat-label><b>ID:</b> {{configObject.id}}</mat-label>
-  <mat-label><b>Entity ID</b> {{configObject.seed.entityRef.id}}</mat-label>
-  <mat-label><b>Created:</b> {{configObject.meta.created | date: 'medium'}}</mat-label>
-  <mat-label><b>Created by:</b> {{configObject.meta.createdBy}}</mat-label>
-  <mat-label><b>Last modified:</b> {{configObject.meta.lastModified | date: 'medium'}}</mat-label>
-  <mat-label><b>Last modified by:</b> {{configObject.meta.lastModifiedBy}}</mat-label>
+  <mat-label><b>ID:</b> {{configObject.id}}
+    <button mat-icon-button (click)="copyIdToClipboard(configObject.id)">
+      <mat-icon matTooltip="copy ID to clipboard"
+                i18n-matTooltip="@@copyIdButtonTooltip"
+                matSuffix>content_copy</mat-icon>
+    </button>
+  </mat-label>
+  <mat-label><b>Entity ID</b> {{configObject.seed.entityRef.id}}
+    <button mat-icon-button (click)="copyIdToClipboard(configObject.seed.entityRef.id)">
+      <mat-icon matTooltip="copy ID to clipboard"
+                i18n-matTooltip="@@copyIdButtonTooltip"
+                matSuffix>content_copy</mat-icon>
+    </button>
+  </mat-label>
+  <div fxLayout="row">
+    <div fxFlex fxLayout="column">
+  <mat-label><b>Created:</b> {{configObject.meta.created | date: 'medium'}} by</mat-label>
+  <p>{{configObject.meta.createdBy}}</p>
+    </div>
+    <div fxFlex fxLayout="column">
+  <mat-label><b>Updated:</b> {{configObject.meta.lastModified | date: 'medium'}} by</mat-label>
+  <p>{{configObject.meta.lastModifiedBy}}</p>
+    </div>
+  </div>
 </div>

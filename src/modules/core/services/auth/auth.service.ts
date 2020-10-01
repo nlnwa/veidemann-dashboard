@@ -78,6 +78,10 @@ export class AuthService {
     return this.roles.includes(Role.CONSULTANT);
   }
 
+  isOperator(): boolean {
+    return this.roles.includes(Role.OPERATOR);
+  }
+
   login(redirectUrl?: string) {
     this.oauthService.initLoginFlow(redirectUrl);
   }
