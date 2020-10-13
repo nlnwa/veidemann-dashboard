@@ -61,15 +61,15 @@ export function toTimestampProto(timestamp: string): any {
 export function durationBetweenDates(startTime: string, endTime: string): string {
   const start = moment(startTime);
   const end = moment(endTime);
-  return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]');
+  return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
 }
 
 export function timeToDuration(time: number, unit: string) {
   if (unit === 'ms') {
-    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]');
+    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]', {trim: 'both'});
   }
   if (unit === 's') {
-    return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]');
+     return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
   }
 
 }

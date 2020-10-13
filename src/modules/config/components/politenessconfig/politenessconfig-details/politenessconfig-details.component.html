@@ -58,7 +58,7 @@
         <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
         <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
         <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
                    i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
@@ -68,7 +68,7 @@
         <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
         <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
         <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
                    i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
