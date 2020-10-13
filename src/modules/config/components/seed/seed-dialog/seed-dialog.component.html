@@ -1,9 +1,17 @@
-<h2 mat-dialog-title>
-  <ng-container i18n="@@seedDetailsCardTitle">Seed</ng-container>
-</h2>
+<form [formGroup]="form">
+  <div>
+    <h2 mat-dialog-title>
+      <ng-container i18n="@@seedDetailsCardTitle">Seed</ng-container>
+    </h2>
+    <span fxFlex></span>
+    <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
+                      formControlName="disabled"
+                      color="warn">
+      Deactivated
+    </mat-slide-toggle>
+  </div>
 
-<mat-dialog-content>
-  <form [formGroup]="form">
+  <mat-dialog-content>
     <app-seed-meta formControlName="meta"
                    [entityRef]="entityRef.value"
                    (move)="move.emit($event)"></app-seed-meta>
@@ -14,8 +22,8 @@
                     [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
       </mat-select>
     </mat-form-field>
-  </form>
-</mat-dialog-content>
+  </mat-dialog-content>
+</form>
 
 <mat-dialog-actions *ngIf="canEdit">
   <button mat-raised-button color="accent"

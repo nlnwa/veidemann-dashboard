@@ -20,7 +20,7 @@
                 matSuffix>content_copy</mat-icon>
     </button>
   </mat-label>
-  <mat-label><b>Entity ID</b> {{configObject.seed.entityRef.id}}
+  <mat-label matTooltip="ID: {{configObject.seed.entityRef.id}}"><b>Entity ID:</b> {{configObject.seed.entityRef.id | getEntityName | async}}
     <button mat-icon-button (click)="copyIdToClipboard(configObject.seed.entityRef.id)">
       <mat-icon matTooltip="copy ID to clipboard"
                 i18n-matTooltip="@@copyIdButtonTooltip"

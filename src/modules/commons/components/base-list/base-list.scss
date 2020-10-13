@@ -121,15 +121,15 @@ tr.item-row:nth-child(4n+1):hover {
   opacity: 0;
 }
 
-.mat-row:hover .actions, .expanded-row.row-selected .actions {
+.mat-row:hover .actions , .expanded-row.row-selected .actions {
   opacity: 100;
 }
 
-.mat-row:hover .filter {
+.mat-row:hover .filter, .expanded-row.row-selected .filter {
   opacity: 100;
 }
 
-.mat-row:hover .shortcut {
+.mat-row:hover .shortcut, .expanded-row.row-selected .shortcut {
   opacity: 100;
 }
 
@@ -158,4 +158,4 @@ td.preview-col {
 //.preview-row td {
 //  border-bottom-width: 0;
 //}
-//
+

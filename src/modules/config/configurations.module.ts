@@ -46,6 +46,7 @@ import {
   JobExecutionStatusPipe,
   PolitenessConfigNamePipe,
   BrowserScriptNamePipe,
+  EntityNamePipe,
 } from './pipe';
 
 import {ConfigService} from '../commons/services';
@@ -88,6 +89,7 @@ import {BrowserConfigMultiDialogComponent} from './components/browserconfig/brow
 import {BrowserScriptMultiDialogComponent} from './components/browserscript/browserscript-multi-dialog/browserscript-multi-dialog.component';
 import {PolitenessConfigMultiDialogComponent} from './components/politenessconfig/politenessconfig-multi-dialog/politenessconfig-multi-dialog.component';
 import { RoleMappingMultiDialogComponent } from './components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
+import { LabelMultiComponent } from './components/label/label-multi/label-multi.component';
 
 
 @NgModule({
@@ -173,6 +175,8 @@ import { RoleMappingMultiDialogComponent } from './components/rolemapping/rolema
     BrowserScriptMultiDialogComponent,
     PolitenessConfigMultiDialogComponent,
     RoleMappingMultiDialogComponent,
+    LabelMultiComponent,
+    EntityNamePipe,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,

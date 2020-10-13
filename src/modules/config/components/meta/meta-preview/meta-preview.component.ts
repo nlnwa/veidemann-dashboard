@@ -17,7 +17,6 @@ export class MetaPreviewComponent {
   }
 
   get canShowAnnotation() {
-    console.log('canShowAnnotation: ', this.authService.isAdmin() || this.authService.isOperator() || this.authService.isCurator());
     return this.authService.isAdmin() || this.authService.isOperator() || this.authService.isCurator();
   }
 
