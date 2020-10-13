@@ -1,11 +1,12 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {CrawlJobDetailsComponent} from '..';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
-import {ConfigObject, Kind} from '../../../../../shared/models/config';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-crawljobs-multi-dialog',
@@ -16,6 +17,8 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
 
   shouldAddLabel: boolean = undefined;
   allSelected = false;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -51,11 +54,17 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
     return this.prepareSave();
   }
 
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
+  onRevert() {
+    this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
+    super.onRevert();
+  }
+
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
   }
 
   protected createForm() {
@@ -97,7 +106,6 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.labelList.disable();
     if (!this.canEdit) {
       this.form.disable();
     }

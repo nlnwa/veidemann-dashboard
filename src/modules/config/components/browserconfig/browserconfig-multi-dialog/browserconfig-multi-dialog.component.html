@@ -1,25 +1,73 @@
-<h2 mat-dialog-title>BrowserConfig </h2>
-<p>Mass update</p>
+<form [formGroup]="form">
+  <h2 mat-dialog-title>BrowserConfig - Mass update </h2>
 
-<mat-dialog-content fxLayout="row wrap" fxLayoutGap="24px">
-  <form [formGroup]="form">
-    <div fxFlex>
-      <div fxLayout="row" fxLayoutGap="16px">
-        <app-labels fxFlex [removable]="form.enabled"
-                    formControlName="labelList"></app-labels>
+  <mat-dialog-content fxLayout="row" fxLayoutGap="16px">
+    <div fxFlex fxLayout="column" fxLayoutGap="16px">
+      <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
+
+      <h4>Common browserscripts for the selected configs:</h4>
+      <div fxlayout="row" fxLayoutGap="16px">
+        <mat-form-field fxFlex>
+          <mat-select placeholder="BrowserScripts" multiple formControlName="commonScriptRefIdList"
+                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+            <mat-option *ngFor="let browserScript of browserScripts" disabled="true"
+                        [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <div>
-          <mat-button-toggle-group
-            name="shouldAddLabel"
-            [value]="shouldAddLabel"
-            (valueChange)="onToggleShouldAddLabels($event)">
-            <mat-button-toggle [value]="true">
+          <mat-button-toggle-group [value]="shouldAddBrowserScript"
+                                   (valueChange)="onToggleBrowserScript($event)"
+                                   name="shouldAddBrowserScript">
+            <mat-button-toggle [value]="true" matTooltip="Add browserscripts to all selected configurations"
+                               i18n-matTooltip="@@browserConfigMultiAddBrowserScriptsButtonToggleTooltip">
               <mat-icon>add</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle [value]="false">
+            <mat-button-toggle [value]="false" matTooltip="Remove browserscripts from the selected configurations"
+                               i18n-matTooltip="@@browserConfigMultiRemoveBrowserScriptsButtonToggleTooltip">
               <mat-icon>remove</mat-icon>
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
+      </div>
+      <div fxLayout="column" *ngIf="shouldAddBrowserScript !== undefined">
+        <p *ngIf="shouldAddBrowserScript">Add browserscripts</p>
+        <p *ngIf="!shouldAddBrowserScript">Remove browserscripts</p>
+        <mat-form-field fxFlex>
+          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
+                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+            <mat-option *ngFor="let browserScript of browserScripts" [value]="browserScript.id">
+              {{browserScript.meta.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <h4>Common script selectors for the selected configs:</h4>
+      <div fxlayout="row" fxLayoutGap="16px">
+        <app-selector fxFlex placeholder="Script selector" formControlName="commonScriptSelectorList"
+                      [removable]="false" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        </app-selector>
+        <div>
+          <mat-button-toggle-group
+            [value]="shouldAddSelector"
+            (valueChange)="onToggleShouldAddSelector($event)"
+            name="shouldAddSelector">
+            <mat-button-toggle [value]="true" matTooltip="Add script selectors to all the selected configurations"
+                               i18n-matTooltip="@@browserConfigMultiAddScriptSelectorButtonToggleTooltip">
+              <mat-icon>add</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false" matTooltip="Remove script selectors from all the selected configurations"
+                               i18n-matTooltip="@@browserConfigMultiRemoveScriptSelectorButtonToggleTooltip">
+              <mat-icon>remove</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
+        <p *ngIf="shouldAddSelector">Add script selectors</p>
+        <p *ngIf="!shouldAddSelector">Remove script selectors</p>
+        <app-selector fxFlex placeholder="Script selector" formControlName="scriptSelectorList"
+                      [removable]="true" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder"></app-selector>
       </div>
     </div>
 
@@ -54,7 +102,7 @@
       <mat-label i18n="@@browserconfigFormPageLoadTimeoutLabel">Page load timeout</mat-label>
       <app-duration-picker formControlName="pageLoadTimeoutMs"
                            [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s'">
+                           [durationGranularity]="'m:s:ms'">
 
       </app-duration-picker>
       <mat-error *ngIf="!pageLoadTimeoutMs.valid"
@@ -65,56 +113,15 @@
       <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
       <app-duration-picker formControlName="maxInactivityTimeMs"
                            [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s'">
+                           [durationGranularity]="'m:s:ms'">
       </app-duration-picker>
       <mat-error *ngIf="!maxInactivityTimeMs.valid"
                  i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
         Must be a number.
       </mat-error>
-
-      <div fxlayout="row" fxLayoutGap="16px">
-        <mat-form-field fxFlex>
-          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
-                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
-            <mat-option *ngFor="let browserScript of browserScripts"
-                        [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div>
-          <mat-button-toggle-group [value]="shouldAddBrowserScript"
-                                   (valueChange)="onToggleBrowserScript($event)"
-                                   name="shouldAddBrowserScript">
-            <mat-button-toggle [value]="true">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-              <mat-icon>remove</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
-
-      <div fxlayout="row" fxLayoutGap="16px">
-        <app-selector fxFlex placeholder="Script selector" formControlName="scriptSelectorList"
-                      [removable]="canEdit" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
-        </app-selector>
-        <div>
-          <mat-button-toggle-group
-            [value]="shouldAddSelector"
-            (valueChange)="onToggleShouldAddSelector($event)"
-            name="shouldAddSelector">
-            <mat-button-toggle [value]="true">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-              <mat-icon>remove</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
     </div>
-  </form>
-</mat-dialog-content>
+  </mat-dialog-content>
+</form>
 <mat-dialog-actions *ngIf="canEdit">
   <button mat-raised-button color="accent"
           [disabled]="!canUpdate"

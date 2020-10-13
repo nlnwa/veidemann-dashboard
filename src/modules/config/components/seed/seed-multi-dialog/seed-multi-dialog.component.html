@@ -1,8 +1,7 @@
-<h2 mat-dialog-title>Seed</h2>
-<p>Mass update</p>
-
-<mat-dialog-content>
-  <form [formGroup]="form">
+<form [formGroup]="form">
+  <div fxLayout="row">
+    <h2 mat-dialog-title>Seed - Mass update</h2>
+    <span fxFlex></span>
     <div (click)="disabled.disabled ? disabled.enable(): null">
       <mat-slide-toggle class="disabled-toggle"
                         formControlName="disabled"
@@ -16,54 +15,52 @@
         Deactivated
       </mat-slide-toggle>
     </div>
+  </div>
 
+  <mat-dialog-content>
     <div fxLayout="row wrap" fxLayoutGap="24px">
-      <div fxFlex fxLayout="column">
-        <div fxLayout="row" fxLayoutGap="16px">
-          <app-labels fxFlex [removable]="form.enabled"
-                      formControlName="labelList"></app-labels>
-          <div>
-            <mat-button-toggle-group
-              name="shouldAddLabel"
-              [value]="shouldAddLabel"
-              (valueChange)="onToggleShouldAddLabels($event)">
-              <mat-button-toggle [value]="true">
-                <mat-icon>add</mat-icon>
-              </mat-button-toggle>
-              <mat-button-toggle [value]="false">
-                <mat-icon>remove</mat-icon>
-              </mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-        </div>
-      </div>
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
+        <app-label-multi [configObject]="configObject"
+                         (update)="onUpdateLabels($event)">
+        </app-label-multi>
 
-      <div fxFlex fxLayout="column">
-        <div fxLayout="row" fxLayoutGap="16px">
-          <mat-form-field fxFlex>
-            <mat-select placeholder="Crawlob" multiple formControlName="jobRefListId"
-                        i18n-placeholder="@@seedDetailsFormJobRefListPlaceholder">
-              <mat-option *ngFor="let crawlJob of crawlJobs"
-                          [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div>
+        <div fxLayout="column" fxLayoutGap="16px">
+          <h5>Common crawljob for the selected configs:</h5>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field fxFlex>
+              <mat-select placeholder="Crawlob" multiple formControlName="commonJobRefListId"
+                          i18n-placeholder="@@seedDetailsFormJobRefListPlaceholder">
+                <mat-option *ngFor="let crawlJob of crawlJobs"
+                            [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
             <mat-button-toggle-group [value]="shouldAddCrawlJob"
                                      (valueChange)="onToggleShouldAddCrawlJob($event)"
                                      name="shouldAddCrawlJob">
-              <mat-button-toggle [value]="true">
+              <mat-button-toggle [value]="true" matTooltip="Add crawljobs to the selected configs">
                 <mat-icon>add</mat-icon>
               </mat-button-toggle>
-              <mat-button-toggle [value]="false">
+              <mat-button-toggle [value]="false" matTooltip="Remove crawljobs from the selected configs">
                 <mat-icon>remove</mat-icon>
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
+          <div *ngIf="shouldAddCrawlJob">
+            <p>Select crawljobs to add</p>
+          </div>
+          <div *ngIf="!shouldAddCrawlJob && shouldAddCrawlJob!==undefined">
+            <p>Select crawljobs that should be removed from all selected configs</p>
+          </div>
+          <mat-form-field *ngIf="shouldAddCrawlJob!==undefined">
+            <mat-select placeholder="Crawljob" multiple formControlName="updateJobRefListId">
+              <mat-option *ngFor="let crawlJob of crawlJobs" [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </div>
-  </form>
-</mat-dialog-content>
+  </mat-dialog-content>
+</form>
 <mat-dialog-actions>
   <button mat-raised-button color="accent"
           *ngIf="canUpdate"

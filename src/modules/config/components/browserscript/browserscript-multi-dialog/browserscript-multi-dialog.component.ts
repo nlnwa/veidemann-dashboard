@@ -1,10 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {BrowserScriptDetailsComponent} from '..';
 import {AbstractControl, FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
-import {ConfigObject, Kind} from '../../../../../shared/models/config';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-browserscript-multi-dialog',
@@ -15,6 +16,8 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
 
   shouldAddLabel = undefined;
   allSelected = false;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -29,7 +32,7 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
   }
 
   get canUpdate(): boolean {
-    return this.form.valid && this.shouldAddLabel !== undefined;
+    return this.form.valid && (this.form.dirty || (this.shouldAddLabel !== undefined && this.labelList.value.length));
   }
 
   get canRevert(): boolean {
@@ -40,11 +43,17 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
     this.updateForm();
   }
 
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
+  }
+
+  onRevert() {
+    this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
+    super.onRevert();
   }
 
   protected createForm() {
@@ -59,7 +68,6 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.labelList.disable();
     if (!this.editable) {
       this.form.disable();
     }

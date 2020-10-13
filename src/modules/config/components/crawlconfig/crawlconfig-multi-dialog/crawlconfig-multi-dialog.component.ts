@@ -1,11 +1,12 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {CrawlConfigDetailsComponent} from '..';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
-import {ConfigObject, ConfigRef, Kind} from '../../../../../shared/models/config';
+import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models/config';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-crawlconfig-multi-dialog',
@@ -16,6 +17,8 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
 
   shouldAddLabel = undefined;
   allSelected = false;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -48,16 +51,17 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
     this.updateForm();
   }
 
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
-  }
-
   onRevert() {
     this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
     super.onRevert();
+  }
+
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
   }
 
   protected createForm() {
@@ -97,7 +101,6 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.labelList.disable();
     if (!(this.canEdit)) {
       this.form.disable();
     }
@@ -111,7 +114,7 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
     const updateTemplate = new ConfigObject({kind: Kind.CRAWLCONFIG});
     const crawlConfig = updateTemplate.crawlConfig;
 
-    if (this.labelList.dirty && this.shouldAddLabel !== undefined) {
+    if (this.labelList.value.length && this.shouldAddLabel !== undefined) {
       updateTemplate.meta.labelList = formModel.labelList;
       if (this.shouldAddLabel && (this.allSelected || this.configObject.meta.labelList !== formModel.labelList)) {
         pathList.push('meta.label+');

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {PolitenessConfigDetailsComponent} from '..';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, Kind, Label, RobotsPolicy} from '../../../../../shared/models/config';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-politenessconfig-multi-dialog',
@@ -17,6 +18,8 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
   allSelected = false;
   shouldAddLabel = undefined;
   shouldAddSelector = undefined;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -57,18 +60,24 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
     }
   }
 
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
-  }
-
   onToggleShouldAddSelector(shouldAdd: boolean): void {
     this.shouldAddSelector = shouldAdd;
     if (shouldAdd !== undefined) {
       this.crawlHostGroupSelectorList.enable();
     }
+  }
+
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
+  }
+
+  onRevert() {
+    this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
+    super.onRevert();
   }
 
   protected createForm() {
@@ -106,7 +115,6 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.labelList.disable();
     this.crawlHostGroupSelectorList.disable();
     if (this.configObject.politenessConfig.robotsPolicy === undefined) {
       this.robotsPolicy.disable();

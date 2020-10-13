@@ -1,68 +1,53 @@
-<h2 mat-dialog-title>Schedule</h2>
-<p>Mass update</p>
+<form [formGroup]="form">
+    <h2 mat-dialog-title>Schedule - Mass update</h2>
+  <mat-dialog-content>
+    <div fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
+        <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
+      </div>
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
+        <div fxLayout="row" fxLayoutGap="24px">
+          <div (click)="validFrom.disabled ? validFrom.enable() : null"
+               i18n-matTooltip="@@scheduleMassUpdateValidFromDisabledTooltip"
+               [matTooltip]="validFrom.disabled ?
+                        ' The value for this field is not equal for all the selected configs.'
+                        + 'Click the field and set desired state to override all, '
+                        + 'or leave untouched to keep the configurations original value.'
+                        : null">
+            <mat-form-field>
+              <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
+                     i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
+                     placeholder="Valid from">
+              <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #validFromDatepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div (click)="validTo.disabled ? validTo.enable() : null"
+               i18n-matTooltip="@@scheduleMassUpdateValidToDisabledTooltip"
+               [matTooltip]="validFrom.disabled ?
+                        ' The value for this field is not equal for all the selected configs.'
+                        + 'Click the field and set desired state to override all, '
+                        + 'or leave untouched to keep the configurations original value.'
+                        : null">
+            <mat-form-field>
+              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
+                     i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
+                     placeholder="Valid to">
+              <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #validToDatepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <button mat-icon-button (click)="onRemoveValidFromTo()"
+                  [matTooltip]="'Remove valid from / valid to for all the selected configurations'"
+                  i18n-matTooltip="@@scheduleMassUpdateRemoveValidFromToButtonTooltip">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</form>
 
-<mat-dialog-content fxLayout="row wrap" fxLayoutGap="24px">
-  <form [formGroup]="form">
-    <div fxFlex fxLayout="column">
-      <div fxLayout="row" fxLayoutGap="16px">
-        <app-labels fxFlex [removable]="form.enabled"
-                    formControlName="labelList"></app-labels>
-        <div>
-          <mat-button-toggle-group
-            name="shouldAddLabel"
-            [value]="shouldAddLabel"
-            (valueChange)="onToggleShouldAddLabels($event)">
-            <mat-button-toggle [value]="true">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-              <mat-icon>remove</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
-    </div>
-    <div fxFlex fxLayout="column wrap">
-      <div fxLayout="row" fxLayoutGap="24px">
-        <div (click)="validFrom.disabled ? validFrom.enable() : null"
-             i18n-matTooltip ="@@scheduleMassUpdateValidFromDisabledTooltip"
-             [matTooltip]="validFrom.disabled ?
-                        ' The value for this field is not equal for all the selected configs.'
-                        + 'Click the field and set desired state to override all, '
-                        + 'or leave untouched to keep the configurations original value.'
-                        : null">
-          <mat-form-field>
-            <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                   i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
-                   placeholder="Valid from">
-            <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #validFromDatepicker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div (click)="validTo.disabled ? validTo.enable() : null"
-             i18n-matTooltip ="@@scheduleMassUpdateValidToDisabledTooltip"
-             [matTooltip]="validFrom.disabled ?
-                        ' The value for this field is not equal for all the selected configs.'
-                        + 'Click the field and set desired state to override all, '
-                        + 'or leave untouched to keep the configurations original value.'
-                        : null">
-          <mat-form-field>
-            <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
-                   i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
-                   placeholder="Valid to">
-            <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #validToDatepicker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <button mat-icon-button (click)="onRemoveValidFromTo()"
-                [matTooltip]="'Remove valid from / valid to for all the selected configurations'"
-                i18n-matTooltip="@@scheduleMassUpdateRemoveValidFromToButtonTooltip">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-  </form>
-</mat-dialog-content>
 <mat-dialog-actions *ngIf="canEdit">
   <button mat-raised-button color="accent"
           [disabled]="!canUpdate"

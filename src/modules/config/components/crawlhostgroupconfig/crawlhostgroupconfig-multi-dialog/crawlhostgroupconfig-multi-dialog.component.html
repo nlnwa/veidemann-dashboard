@@ -1,29 +1,10 @@
-<h2 mat-dialog-title>CrawlHostGroupConfig</h2>
-<p>Mass update</p>
-
+<form [formGroup]="form">
+<h2 mat-dialog-title>CrawlHostGroupConfig - Mass update</h2>
 <mat-dialog-content>
-  <form [formGroup]="form">
-    <div fxFlex fxLayout="column">
-      <div fxLayout="row" fxLayoutGap="16px">
-        <app-labels fxFlex [removable]="form.enabled"
-                    formControlName="labelList"></app-labels>
-        <div>
-          <mat-button-toggle-group
-            name="shouldAddLabel"
-            [value]="shouldAddLabel"
-            (valueChange)="onToggleShouldAddLabels($event)">
-            <mat-button-toggle [value]="true">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-              <mat-icon>remove</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
-    </div>
-  </form>
+      <app-label-multi [configObject]="configObject"
+                       (update)="onUpdateLabels($event)"></app-label-multi>
 </mat-dialog-content>
+</form>
 <mat-dialog-actions *ngIf="canEdit">
   <button mat-raised-button color="accent"
           [disabled]="!canUpdate"

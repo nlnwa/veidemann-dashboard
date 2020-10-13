@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {BrowserConfigDetailsComponent} from '..';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models/config';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-browserconfig-multi-dialog',
@@ -22,6 +23,8 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
   shouldAddLabel = undefined;
   shouldAddBrowserScript = undefined;
   shouldAddSelector = undefined;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -52,29 +55,25 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
     return this.form.get('labelList');
   }
 
-  ngOnInit(): void {
-   this.updateForm();
+  get commonScriptSelectorList(): AbstractControl {
+    return this.form.get('commonScriptSelectorList');
   }
 
-  onToggleShouldAddLabels(value: boolean) {
-    this.shouldAddLabel = value;
-    if (value !== undefined) {
-      this.labelList.enable();
-    }
+  ngOnInit(): void {
+    this.updateForm();
   }
 
   onToggleShouldAddSelector(value: boolean) {
     this.shouldAddSelector = value;
-    if (value !== undefined) {
-      this.scriptSelectorList.enable();
-    }
+    // if (value !== undefined) {
+    //   this.scriptSelectorList.enable();
+    // }
+    this.scriptSelectorList.patchValue('');
   }
 
   onToggleBrowserScript(value: boolean) {
     this.shouldAddBrowserScript = value;
-    if (value !== undefined) {
-      this.scriptRefIdList.enable();
-    }
+    this.scriptRefIdList.patchValue([]);
   }
 
   onRevert() {
@@ -82,6 +81,14 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
     this.shouldAddLabel = undefined;
     this.shouldAddBrowserScript = undefined;
     this.shouldAddSelector = undefined;
+    this.labelMulti.onRevert();
+  }
+
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
   }
 
   protected createForm() {
@@ -93,8 +100,10 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
       pageLoadTimeoutMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxInactivityTimeMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       // headers: this.fb.group({''}),
-      scriptRefIdList: {value: []},
-      scriptSelectorList: '',
+      commonScriptRefIdList: [[]],
+      scriptRefIdList: [[]],
+      commonScriptSelectorList: '',
+      scriptSelectorList: [[]],
     });
   }
 
@@ -107,17 +116,17 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
       pageLoadTimeoutMs: this.configObject.browserConfig.pageLoadTimeoutMs || '',
       maxInactivityTimeMs: this.configObject.browserConfig.maxInactivityTimeMs || '',
       // headers: this.configObject.configObject.headers;
-      scriptRefIdList: this.configObject.browserConfig.scriptRefList.map(ref => ref.id),
-      scriptSelectorList: this.configObject.browserConfig.scriptSelectorList.map(selector => {
+      commonScriptRefIdList: this.configObject.browserConfig.scriptRefList.map(ref => ref.id),
+      scriptRefIdList: [],
+      commonScriptSelectorList: this.configObject.browserConfig.scriptSelectorList.map(selector => {
         const parts = selector.split(':', 2);
         const key = parts.shift();
         const value = parts.join(':');
         return new Label({key, value});
       }),
+       scriptSelectorList: [[]],
     });
-    this.labelList.disable();
-    this.scriptSelectorList.disable();
-    this.scriptRefIdList.disable();
+    this.commonScriptSelectorList.disable();
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {

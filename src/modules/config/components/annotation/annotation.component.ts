@@ -37,7 +37,7 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
   protected groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$: Observable<any> = this.groupsSubject.asObservable();
 
-  @ViewChild('chipInput', {static: true}) chipInputControl: ElementRef;
+  @ViewChild('chipInput') chipInputControl: ElementRef;
 
   constructor(protected fb: FormBuilder,
               protected  cdr: ChangeDetectorRef,

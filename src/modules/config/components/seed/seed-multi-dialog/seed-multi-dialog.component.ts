@@ -1,10 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {SeedDetailsComponent} from '..';
 import {FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
-import {ConfigObject, ConfigRef, Kind} from '../../../../../shared/models/config';
+import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models/config';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-seed-multi-dialog',
@@ -16,6 +17,8 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
   shouldAddLabel = undefined;
   shouldAddCrawlJob = undefined;
   allSelected = false;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -31,16 +34,24 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     return this.form.get('labelList');
   }
 
+  get updateJobRefListId() {
+    return this.form.get('updateJobRefListId');
+  }
+
+  get commonJobRefListId() {
+    return this.form.get('commonJobRefListId');
+  }
+
   get canUpdate(): boolean {
     return this.form.valid && (
       this.form.dirty
-      || (this.shouldAddLabel !== undefined)
-      || (this.shouldAddCrawlJob !== undefined)
+      || (this.shouldAddLabel !== undefined && this.labelList.value.length)
+      || (this.shouldAddCrawlJob !== undefined && this.updateJobRefListId.value.length > 0)
     );
   }
 
   get canRevert(): boolean {
-    return this.form.dirty || this.shouldAddLabel !== undefined;
+    return this.form.dirty || this.shouldAddLabel !== undefined || this.shouldAddCrawlJob !== undefined;
   }
 
   ngOnInit(): void {
@@ -49,28 +60,21 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
 
   onRevert() {
     this.shouldAddCrawlJob = this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
     super.onRevert();
-  }
-
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
   }
 
   onToggleShouldAddCrawlJob(shouldAdd: boolean): void {
     this.shouldAddCrawlJob = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.jobRefListId.enable();
-    }
+    this.updateJobRefListId.patchValue([]);
   }
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: [[]],
       disabled: {value: '', disabled: true},
-      jobRefListId: {value: []}
+      commonJobRefListId: [[]],
+      updateJobRefListId: [[]]
     });
   }
 
@@ -83,13 +87,13 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     this.form.setValue({
       labelList: this.configObject.meta.labelList,
       disabled: !!this.configObject.seed.disabled,
-      jobRefListId: this.configObject.seed.jobRefList.map(job => job.id),
+      commonJobRefListId: this.configObject.seed.jobRefList.map(job => job.id),
+      updateJobRefListId: []
     });
 
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.labelList.disable();
-    this.jobRefListId.disable();
+    this.commonJobRefListId.disable();
     if (!this.canEdit) {
       this.form.disable();
     }
@@ -110,7 +114,7 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     }
 
     if (this.shouldAddCrawlJob !== undefined) {
-      seed.jobRefList = formModel.jobRefListId.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
+      seed.jobRefList = formModel.updateJobRefListId.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
       if (this.shouldAddCrawlJob) {
         pathList.push('seed.jobRef+');
       } else {
@@ -126,11 +130,17 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
         pathList.push('meta.label-');
       }
     }
-
     return {updateTemplate, pathList};
   }
+
   onDialogClose(): { updateTemplate: ConfigObject, pathList: string[] } {
     return this.prepareSave();
   }
 
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
+  }
 }

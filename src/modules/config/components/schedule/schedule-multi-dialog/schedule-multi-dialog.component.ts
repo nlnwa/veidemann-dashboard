@@ -1,11 +1,12 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ScheduleDetailsComponent} from '..';
 import {FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
-import {ConfigObject, Kind} from '../../../../../shared/models/config';
+import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {DateTime} from '../../../../../shared/func';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
   selector: 'app-schedule-multi-dialog',
@@ -17,6 +18,8 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
   shouldAddLabel = undefined;
   allSelected = false;
   shouldRemoveValidFromTo = false;
+
+  @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -68,11 +71,10 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
     }
   }
 
-  onToggleShouldAddLabels(shouldAdd: boolean): void {
-    this.shouldAddLabel = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.labelList.enable();
-    }
+  onRevert() {
+    this.shouldAddLabel = undefined;
+    this.labelMulti.onRevert();
+    super.onRevert();
   }
 
   onRemoveValidFromTo(): void {
@@ -86,6 +88,13 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
     this.form.markAsDirty();
     this.form.markAsTouched();
     this.shouldRemoveValidFromTo = true;
+  }
+
+  onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
+    this.form.patchValue({
+      labelList: labels
+    });
+    this.shouldAddLabel = add;
   }
 
   protected createForm() {
@@ -109,7 +118,6 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.shouldDisableValidFromTo();
-    this.labelList.disable();
     if (!this.canEdit) {
       this.form.disable();
     }
