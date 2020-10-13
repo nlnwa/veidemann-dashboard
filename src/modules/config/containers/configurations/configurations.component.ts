@@ -69,6 +69,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   configObjects$: BehaviorSubject<ConfigObject>;
 
   mergedConfig: ConfigObject;
+  updateAllConfigObject: ConfigObject;
 
   get loading$(): Observable<boolean> {
     return this.configService.loading$;
@@ -443,6 +444,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   onSelectAll() {
     this.isAllSelected = true;
+    this.updateAllConfigObject = new ConfigObject({kind: this.kind});
   }
 
   onSelectedChange(configs: ConfigObject | ConfigObject[]) {
@@ -527,7 +529,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .catch(error => this.errorService.dispatch(error));
   }
 
-  onUpdateMultiWithDialog(configObject: ConfigObject) {
+  onUpdateMultiWithDialog(configObject?: ConfigObject) {
     const data: ConfigDialogData = {configObject, options: this.options};
     const componentType = multiDialogByKind(configObject.kind);
     const dialogRef = this.dialog.open(componentType, {data});

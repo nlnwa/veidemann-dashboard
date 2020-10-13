@@ -66,6 +66,13 @@
                       i18n-matTooltip="@@configurationEditSelectedConfigurationsButtonTooltip">edit
             </mat-icon>
           </button>
+          <button mat-icon-button
+                  *ngIf="isAllSelected && canAdministrate"
+                  (click)="onUpdateMultiWithDialog(updateAllConfigObject)">
+            <mat-icon matTooltip="Edit all configurations in database"
+                      i18n-matTooltip="@@configurationEditAllConfigurationsInDbButtonTooltip">edit
+            </mat-icon>
+          </button>
 
           <button mat-icon-button
                   *ngIf="!isAllSelected && canAdministrate"
