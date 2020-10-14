@@ -1,67 +1,16 @@
 @import "src/styles/theme";
 
-
 table {
   width: 100%;
 }
 
-//.mat-column-select {
-//  flex: 0 0 1%;
-//  width: 1%;
-//}
-//
-//.mat-column-name, .mat-column-description {
-//  flex: 0 0 35%;
-//  width: 35%;
-//  white-space: nowrap;
-//  overflow: hidden;
-//  text-overflow: ellipsis;
-//  padding-right: 15px;
-//}
-//
-//.mat-column-name:hover, .mat-column-description:hover {
-//  white-space: normal;
-//  word-break: break-word;
-//}
-//
-//.mat-column-extra {
-//  flex: 0 0 5%;
-//  width: 5%;
-//}
-//
-//.mat-column-action {
-//  flex: 0 0 24%;
-//  width: 24%;
-//  text-align: right;
-//  white-space: nowrap;
-//}
-
-//
-//.mat-row.row-checked:nth-child(even) {
-//  background-color: $dark-focused;
-//}
-
 tr.item-row.row-checked {
-  background-color: lighten($dark-focused, 50);
-}
-
-tr.item-row.row-selected {
   background-color: lighten($dark-focused, 50%);
 }
 
 .row-disabled td {
   color: $warn;
 }
-
-//.mat-column-name:hover, .mat-column-description:hover {
-//  white-space: normal;
-//  word-break: break-word;
-//}
-
-//.mat-row.row-selected:hover {
-//  background-color: $dark-focused;
-//  cursor: pointer;
-//}
 
 tr.item-row:not(.row-checked):nth-child(4n+1) {
   background-color: lighten($dark-focused, 80%);
@@ -75,61 +24,24 @@ tr.item-row:nth-child(4n+1):hover {
   background-color: $dark-focused;
 }
 
-
 .mat-row.no-interaction {
   cursor: default;
   background-color: inherit;
 }
 
-//
-//.mat-row:nth-child(n+1) {
-//  background-color: lighten($dark-focused, 80%);
-//}
-//
-//.mat-row:hover:nth-child(n+1) {
-//  background-color: lighten($dark-focused, 25%);
-//}
-
 .checkbox-padding {
   padding-right: 16px;
 }
 
-.action-cell {
+.mat-column-action {
   text-align: right;
 }
 
-.shortcut-cell {
-  text-align: right;
-}
-
-.filter-cell {
-  text-align: right;
-}
-
-.shortcut {
-  display: inline-block;
+.action {
   opacity: 0;
 }
 
-.filter {
-  display: inline-block;
-  opacity: 0;
-}
-
-.actions {
-  display: inline-block;
-  opacity: 0;
-}
-
-.mat-row:hover .actions , .expanded-row.row-selected .actions {
-  opacity: 100;
-}
-
-.mat-row:hover .filter, .expanded-row.row-selected .filter {
-  opacity: 100;
-}
-
-.mat-row:hover .shortcut, .expanded-row.row-selected .shortcut {
+.mat-row:hover .action , .expanded-row.row-selected .action {
   opacity: 100;
 }
 
@@ -137,25 +49,10 @@ tr.preview-row {
   height: 0;
 }
 
-td.preview-col {
+.item-row td {
   border-bottom-width: 0;
 }
 
 .preview {
   overflow: hidden;
 }
-
-//
-//tr.config-row:not(.expanded-row):hover {
-//    background-color: lighten($dark-focused, 50%);
-//    cursor: pointer;
-//}
-//
-//tr.config-row:not(expanded-row):active {
-//  background: inherit;
-//}
-
-//.preview-row td {
-//  border-bottom-width: 0;
-//}
-

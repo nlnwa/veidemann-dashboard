@@ -16,7 +16,6 @@ import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
 import {ListItem} from '../../../../shared/models';
-import {ConfigObject} from '../../../../shared/models/config';
 
 
 @Directive()
@@ -46,7 +45,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   sortActive = 'name';
 
   @Input()
-  displayedColumns: string[] = ['select', 'name', 'description', 'extra', 'shortcut', 'filter', 'action'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'extra', 'action'];
 
   @Input()
   multiSelect = true;
@@ -94,7 +93,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   selection: SelectionModel<T>;
   allSelected: boolean;
   isAllInPageSelected$: Observable<boolean>;
-  protected selectedRow: T;
+  selectedRow: T;
  // expandedConfigObject: T | null;
 
   protected constructor() {
