@@ -124,11 +124,11 @@
               </mat-icon>
             </a>
             <ng-container *appFilter="let row">
-              <ng-container *ngIf="row.seed.jobRefList.length">
+              <ng-container *ngIf="row?.seed?.jobRefList.length">
                 <a mat-icon-button class="shortcut-link"
                    [routerLink]="['../seed']"
                    [queryParams]="getJobRefListQueryParams(row)">
-                  <mat-icon matTooltip=" Show seeds with the same crawljob"
+                  <mat-icon matTooltip="Show seeds with the same crawljob"
                             i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">work
                   </mat-icon>
                 </a>

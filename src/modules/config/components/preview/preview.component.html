@@ -1,4 +1,4 @@
-<div class="content-padding" fxLayout="row" fxLayoutGap="16px">
+<div *ngIf="configObject" class="content-padding" fxLayout="row" fxLayoutGap="16px">
   <div fxFlex class="preview-meta-column">
     <ng-container [ngSwitch]="configObject.kind">
       <ng-container *ngSwitchCase="Kind.SEED">

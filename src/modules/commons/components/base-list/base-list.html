@@ -103,7 +103,7 @@
       <ng-container matColumnDef="expandedPreview">
         <td mat-cell class="preview-col" *matCellDef="let row" [attr.colspan]="displayedColumns.length">
           <div class="preview" [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
-            <app-preview [configObject]="row"></app-preview>
+            <app-preview *ngIf="row === selectedRow" [configObject]="row"></app-preview>
           </div>
         </td>
       </ng-container>

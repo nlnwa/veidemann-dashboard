@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="configObject.kind">
+<ng-container [ngSwitch]="configObject?.kind">
   <ng-container *ngSwitchCase="Kind.SEED">
     <mat-nav-list *ngIf="configObject.seed.jobRefList.length > 0">
       <h2 mat-subheader>

@@ -19,6 +19,6 @@ export class OptionsService {
   }
 
   next(options: ConfigOptions) {
-    this._options.next(options);
+    this._options.next({...this._options.value, ...options});
   }
 }
