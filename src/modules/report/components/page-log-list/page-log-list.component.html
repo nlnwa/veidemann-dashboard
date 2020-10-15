@@ -39,8 +39,10 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
-          <div class="actions" *ngFor="let actionButtonTemplate of actionButtonTemplates">
-            <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
+          <div class="action">
+            <ng-container *ngFor="let actionButtonTemplate of actionButtonTemplates">
+              <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
+            </ng-container>
           </div>
         </td>
       </ng-container>

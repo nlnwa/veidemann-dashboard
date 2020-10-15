@@ -34,7 +34,7 @@ export class CrawlLogListComponent extends BaseListComponent<CrawlLog> {
   sortActive = 'timestamp';
 
   displayedColumns: string[] =
-    ['requestedUri', 'timestamp', 'statusCode', 'discoveryPath', 'contentType', 'extra', 'shortcut', 'filter', 'action'];
+    ['requestedUri', 'timestamp', 'statusCode', 'discoveryPath', 'contentType', 'extra', 'action'];
 
   constructor() {
     super();

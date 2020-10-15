@@ -6,7 +6,7 @@ import {BASE_LIST} from '../../../../shared/directives';
 @Component({
   selector: 'app-pagelog-list',
   templateUrl: './page-log-list.component.html',
-  styleUrls: ['../../../commons/components/base-list/base-list.scss', './page-log-list.component.css'],
+  styleUrls: ['../../../commons/components/base-list/base-list.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     ListDataSource,
