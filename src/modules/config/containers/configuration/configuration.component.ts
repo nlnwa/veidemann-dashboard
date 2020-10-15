@@ -210,7 +210,6 @@ export class ConfigurationComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
-        this.reload.next();
         this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
       });
   }

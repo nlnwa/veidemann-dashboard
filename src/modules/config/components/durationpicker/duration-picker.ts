@@ -149,7 +149,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   secondsToDuration(seconds: number): Duration {
-    const s = moment.duration(seconds);
+    const s = moment.duration(seconds, 'seconds');
     return new Duration({
       days: s.days(),
       hours: s.hours(),
