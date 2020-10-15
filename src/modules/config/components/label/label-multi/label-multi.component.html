@@ -1,6 +1,6 @@
 <form>
   <div fxLayout="column">
-    <h5>Common labels for the selected configs: </h5>
+    <h5>Common labels for the selected configurations: </h5>
     <div fxFlex fxLayout="row" fxLayoutGap="16px">
       <mat-chip-list fxFlex id="commonLabelsChipList" cdkDropList cdkDropListConnectedTo="labelInputChipList">
         <mat-chip *ngFor="let label of configObject.meta.labelList" [selectable]="false"
@@ -27,10 +27,6 @@
       <div *ngIf="shouldAddLabel">
         <p>Add labels to the selected configs</p>
       </div>
-      <div *ngIf="!shouldAddLabel">
-        <p>Remove labels from the selected configs.</p>
-        <p>Add labels by typing a valid label, or by dragging a label from the common label list </p>
-      </div>
       <mat-form-field>
         <mat-chip-list id="labelInputChipList" #labelInputChipList
                        cdkDropList cdkDropListConnectedTo="commonLabelsChipList"
@@ -49,6 +45,12 @@
                  [matAutocomplete]="auto"
                  (matChipInputTokenEnd)="onAdd($event)">
         </mat-chip-list>
+        <mat-hint align="start" *ngIf="shouldAddLabel">
+          Add labels to the selected configs
+        </mat-hint>
+        <mat-hint align="start" *ngIf="!shouldAddLabel">
+          Add labels to remove by typing a label, or dragging a label from the common label list
+        </mat-hint>
       </mat-form-field>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteOptionSelected($event)">
         <mat-option *ngFor="let key of filteredKey$ | async" [value]="key">{{key}}</mat-option>

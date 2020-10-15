@@ -45,17 +45,15 @@
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
-          <div *ngIf="shouldAddCrawlJob">
-            <p>Select crawljobs to add</p>
+          <div *ngIf="shouldAddCrawlJob !== undefined">
+            <mat-form-field *ngIf="shouldAddCrawlJob!==undefined">
+              <mat-select placeholder="Crawljob" multiple formControlName="updateJobRefListId">
+                <mat-option *ngFor="let crawlJob of crawlJobs" [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+              </mat-select>
+              <mat-hint *ngIf="shouldAddCrawlJob">Select crawljobs to add</mat-hint>
+              <mat-hint *ngIf="!shouldAddCrawlJob">Select crawljobs to remove</mat-hint>
+            </mat-form-field>
           </div>
-          <div *ngIf="!shouldAddCrawlJob && shouldAddCrawlJob!==undefined">
-            <p>Select crawljobs that should be removed from all selected configs</p>
-          </div>
-          <mat-form-field *ngIf="shouldAddCrawlJob!==undefined">
-            <mat-select placeholder="Crawljob" multiple formControlName="updateJobRefListId">
-              <mat-option *ngFor="let crawlJob of crawlJobs" [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
         </div>
       </div>
     </div>

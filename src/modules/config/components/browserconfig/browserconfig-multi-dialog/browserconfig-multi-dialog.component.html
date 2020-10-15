@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="column" fxLayoutGap="16px">
       <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
 
-      <h4>Common browserscripts for the selected configs:</h4>
+      <h5>Common browserscripts for the selected configs:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
         <mat-form-field fxFlex>
           <mat-select placeholder="BrowserScripts" multiple formControlName="commonScriptRefIdList"
@@ -30,8 +30,6 @@
         </div>
       </div>
       <div fxLayout="column" *ngIf="shouldAddBrowserScript !== undefined">
-        <p *ngIf="shouldAddBrowserScript">Add browserscripts</p>
-        <p *ngIf="!shouldAddBrowserScript">Remove browserscripts</p>
         <mat-form-field fxFlex>
           <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
                       i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
@@ -39,14 +37,18 @@
               {{browserScript.meta.name}}
             </mat-option>
           </mat-select>
+          <mat-hint *ngIf="shouldAddBrowserScript">Select browser scripts to add</mat-hint>
+          <mat-hint *ngIf="!shouldAddBrowserScript">Select browser scripts to remove</mat-hint>
         </mat-form-field>
       </div>
 
-      <h4>Common script selectors for the selected configs:</h4>
+      <h5>Common script selectors for the selected configs:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
-        <app-selector fxFlex placeholder="Script selector" formControlName="commonScriptSelectorList"
-                      [removable]="false" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
-        </app-selector>
+        <mat-chip-list fxFlex>
+          <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList" [selectable]="false">
+            {{scriptSelector}}
+          </mat-chip>
+        </mat-chip-list>
         <div>
           <mat-button-toggle-group
             [value]="shouldAddSelector"
@@ -64,10 +66,11 @@
         </div>
       </div>
       <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
-        <p *ngIf="shouldAddSelector">Add script selectors</p>
-        <p *ngIf="!shouldAddSelector">Remove script selectors</p>
         <app-selector fxFlex placeholder="Script selector" formControlName="scriptSelectorList"
-                      [removable]="true" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder"></app-selector>
+                      [removable]="true" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        </app-selector>
+        <mat-hint *ngIf="shouldAddSelector">Enter script selectors to add</mat-hint>
+        <mat-hint *ngIf="!shouldAddSelector">Enter script selectors to remove</mat-hint>
       </div>
     </div>
 

@@ -62,9 +62,7 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
 
   onToggleShouldAddSelector(shouldAdd: boolean): void {
     this.shouldAddSelector = shouldAdd;
-    if (shouldAdd !== undefined) {
-      this.crawlHostGroupSelectorList.enable();
-    }
+    this.crawlHostGroupSelectorList.patchValue([]);
   }
 
   onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
@@ -106,16 +104,10 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
       delayFactor: this.configObject.politenessConfig.delayFactor || '',
       maxRetries: this.configObject.politenessConfig.maxRetries || '',
       retryDelaySeconds: this.configObject.politenessConfig.retryDelaySeconds || '',
-      crawlHostGroupSelectorList: this.configObject.politenessConfig.crawlHostGroupSelectorList.map(selector => {
-        const parts = selector.split(':', 2);
-        const key = parts.shift();
-        const value = parts.join(':');
-        return new Label({key, value});
-      })
+      crawlHostGroupSelectorList: [[]]
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.crawlHostGroupSelectorList.disable();
     if (this.configObject.politenessConfig.robotsPolicy === undefined) {
       this.robotsPolicy.disable();
     }

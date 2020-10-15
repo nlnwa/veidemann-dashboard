@@ -65,10 +65,7 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
 
   onToggleShouldAddSelector(value: boolean) {
     this.shouldAddSelector = value;
-    // if (value !== undefined) {
-    //   this.scriptSelectorList.enable();
-    // }
-    this.scriptSelectorList.patchValue('');
+    this.scriptSelectorList.patchValue([]);
   }
 
   onToggleBrowserScript(value: boolean) {
@@ -102,8 +99,7 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
       // headers: this.fb.group({''}),
       commonScriptRefIdList: [[]],
       scriptRefIdList: [[]],
-      commonScriptSelectorList: '',
-      scriptSelectorList: [[]],
+      scriptSelectorList: '',
     });
   }
 
@@ -118,15 +114,8 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
       // headers: this.configObject.configObject.headers;
       commonScriptRefIdList: this.configObject.browserConfig.scriptRefList.map(ref => ref.id),
       scriptRefIdList: [],
-      commonScriptSelectorList: this.configObject.browserConfig.scriptSelectorList.map(selector => {
-        const parts = selector.split(':', 2);
-        const key = parts.shift();
-        const value = parts.join(':');
-        return new Label({key, value});
-      }),
        scriptSelectorList: [[]],
     });
-    this.commonScriptSelectorList.disable();
     this.form.markAsPristine();
     this.form.markAsUntouched();
     if (!this.canEdit) {
