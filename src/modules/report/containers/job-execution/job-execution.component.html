@@ -14,31 +14,32 @@
                                    (selectedChange)="onSelectedChange($event)"
                                    (sort)="onSort($event)"
                                    (page)="onPage($event)">
-      <a *appShortcut="let row" mat-icon-button
+      <a *appShortcut="let row" mat-menu-item
          [routerLink]="['/config', 'crawljobs', row.jobId]">
         <mat-icon matTooltip="Go to crawljob"
                   i18n-matTooltip="@@crawljobExecutionReportGoToCrawljobShortcutTooltip">work
-        </mat-icon>
+        </mat-icon>Go to crawljob
       </a>
-      <a *appFilter="let row" mat-icon-button
+      <a *appFilter="let row" mat-menu-item
          [routerLink]="['/report', 'crawlexecution']"
          [queryParams]="{job_execution_id: row.id}">
         <mat-icon matTooltip="Go to crawlexecution"
                   i18n-matTooltip="@@crawljobExecutionReportGoToCrawlExecutionShortcutTooltip">hdr_weak
-        </mat-icon>
+        </mat-icon>Go to crawlexecution
       </a>
-      <a *appAction="let row" mat-icon-button [routerLink]="['../jobexecution', row.id]">
+      <a *appAction="let row" mat-menu-item
+         [routerLink]="['../jobexecution', row.id]">
         <mat-icon matTooltip="Show full report" i18n-matTooltip="@@crawljobExecutionReportShowFullReportTooltip">
           keyboard_arrow_right
-        </mat-icon>
+        </mat-icon>Show full report
       </a>
       <ng-container *appAction="let row">
         <ng-container *ngIf="row.state === JobExecutionState.RUNNING">
-          <a mat-icon-button
+          <a mat-menu-item
              (click)="onAbortJobExecution(row)">
             <mat-icon matTooltip="Abort crawl"
                       i18n-matTooltip="@@crawljobExecutionReportAbortCrawlExecutionTooltip">cancel
-            </mat-icon>
+            </mat-icon>Abort crawl
           </a>
         </ng-container>
       </ng-container>

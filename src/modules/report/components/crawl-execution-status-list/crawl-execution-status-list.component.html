@@ -70,6 +70,10 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
           <div class="action">
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionMenu>
             <ng-container *ngFor="let filterTemplate of filterButtonTemplates">
               <ng-container *ngTemplateOutlet="filterTemplate; context: {$implicit: row}"></ng-container>
             </ng-container>
@@ -79,6 +83,7 @@
             <ng-container *ngFor="let actionButtonTemplate of actionButtonTemplates">
               <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
             </ng-container>
+            </mat-menu>
           </div>
         </td>
       </ng-container>

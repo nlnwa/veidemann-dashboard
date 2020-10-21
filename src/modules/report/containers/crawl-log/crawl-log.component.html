@@ -12,22 +12,24 @@
                         [sortActive]="sortActive$ | async"
                         (sort)="onSort($event)"
                         (page)="onPage($event)">
-      <a *appShortcut="let row" mat-icon-button
+      <a *appShortcut="let row" mat-menu-item
          [routerLink]="['/report', 'jobexecution', row.jobExecutionId]">
         <mat-icon matTooltip="Go to job execution"
                   i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">hdr_strong
-        </mat-icon>
+        </mat-icon>Go to job execution
       </a>
-      <a *appShortcut="let row" mat-icon-button
+      <a *appShortcut="let row" mat-menu-item
          [routerLink]="['/report', 'crawlexecution', row.executionId]">
         <mat-icon matTooltip="Go to crawl execution"
                   i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak
-        </mat-icon>
+        </mat-icon>Go to crawl execution
       </a>
-     <a *appAction="let row" mat-icon-button [routerLink]="['../crawllog', row.id]">
+     <a *appAction="let row" mat-menu-item
+        [routerLink]="['../crawllog', row.id]">
        <mat-icon matTooltip="Show full crawllog" i18n-matTooltip="@@crawljobExecutionReportShowFullCrawllogTooltip">
          keyboard_arrow_right
-       </mat-icon></a>
+       </mat-icon>Show full crawllog
+     </a>
     </app-crawl-log-list>
   </div>
 </div>
