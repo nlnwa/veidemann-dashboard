@@ -1,4 +1,4 @@
-<div fxLayout="column" class="container">
+<div fxLayout="column wrap" class="container">
   <table class="mat-table" *ngIf="multiSelect && selection.selected.length > 1">
     <tr class="mat-row no-interaction">
       <td class="mat-cell" *ngIf="!allSelected">
@@ -22,7 +22,7 @@
       </td>
     </tr>
   </table>
-  <div fxFlex class="scroll">
+  <div fxFlex class="scroll" style="overflow: hidden; display: flex">
     <table mat-table
            [dataSource]="dataSource"
            matSort
@@ -50,12 +50,14 @@
 
       <ng-container matColumnDef="name">
         <th i18n="@@baseListNameHeader" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
+        <td mat-cell *matCellDef="let row" matTooltip="{{row.meta.name}}"
+            matTooltipClass="tooltip-overflow">{{row.meta.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="description">
         <th i18n="baseListDescriptionHeader" mat-header-cell *matHeaderCellDef>Description</th>
-        <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
+        <td mat-cell *matCellDef="let row" matTooltip="{{row.meta.description}}"
+            matTooltipClass="tooltip-overflow">{{row.meta.description}}</td>
       </ng-container>
 
       <ng-container matColumnDef="id">
@@ -75,24 +77,30 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
-          <div class="action">
-            <ng-container *ngFor="let filterButtonTemplate of filterButtonTemplates">
-              <ng-container *ngTemplateOutlet="filterButtonTemplate; context: {$implicit: row}"></ng-container>
-            </ng-container>
-            <ng-container *ngFor="let shortcutButtonTemplate of shortcutButtonTemplates">
-              <ng-container *ngTemplateOutlet="shortcutButtonTemplate; context: {$implicit: row}"></ng-container>
-            </ng-container>
-            <ng-container *ngFor="let actionButtonTemplate of actionButtonTemplates">
-              <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
-            </ng-container>
+          <div>
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionMenu>
+              <ng-container *ngFor="let filterButtonTemplate of filterButtonTemplates">
+                <ng-container *ngTemplateOutlet="filterButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+              <ng-container *ngFor="let shortcutButtonTemplate of shortcutButtonTemplates">
+                <ng-container *ngTemplateOutlet="shortcutButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+              <ng-container *ngFor="let actionButtonTemplate of actionButtonTemplates">
+                <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+            </mat-menu>
           </div>
         </td>
       </ng-container>
 
       <!-- Expanded Content Column - The preview row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedPreview">
-        <td mat-cell [class.expanded-preview-cell]="row === selectedRow" *matCellDef="let row" [attr.colspan]="displayedColumns.length">
-          <div [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
+        <td mat-cell [class.expanded-preview-cell]="row === selectedRow" *matCellDef="let row"
+            [attr.colspan]="displayedColumns.length">
+          <div class="preview" [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
             <app-preview *ngIf="row === selectedRow" [configObject]="row"></app-preview>
           </div>
         </td>

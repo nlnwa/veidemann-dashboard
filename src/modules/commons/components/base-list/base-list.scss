@@ -4,16 +4,16 @@ table {
   width: 100%;
 }
 
+.checkbox-padding {
+  padding-right: 16px;
+}
+
 tr.item-row.row-checked {
   background-color: lighten($dark-focused, 50%);
 }
 
 .row-disabled td {
   color: $warn;
-}
-
-tr.item-row:not(.row-checked):nth-child(4n+1) {
-  background-color: lighten($dark-focused, 80%);
 }
 
 tr.item-row:hover {
@@ -24,25 +24,13 @@ tr.item-row:nth-child(4n+1):hover {
   background-color: $dark-focused;
 }
 
+tr.item-row:not(.row-checked):nth-child(4n+1) {
+  background-color: lighten($dark-focused, 80%);
+}
+
 .mat-row.no-interaction {
   cursor: default;
   background-color: inherit;
-}
-
-.checkbox-padding {
-  padding-right: 16px;
-}
-
-.mat-column-action {
-  text-align: right;
-}
-
-.action {
-  opacity: 0;
-}
-
-.mat-row:hover .action , .expanded-row.row-selected .action {
-  opacity: 100;
 }
 
 tr.preview-row {
@@ -55,4 +43,26 @@ tr.preview-row {
 
 .preview {
   overflow: hidden;
+  display: flex;
 }
+
+.mat-column-name {
+  padding-right: 10px;
+  max-width: 0px;
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mat-column-description {
+  padding-right: 10px;
+  max-width: 0px;
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+}
+
+
