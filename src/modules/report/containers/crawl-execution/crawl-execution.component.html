@@ -13,48 +13,48 @@
                                      [sortActive]="sortActive$ | async"
                                      (sort)="onSort($event)"
                                      (page)="onPage($event)">
-    (selectedChange)="onSelectedChange($event)">
+      (selectedChange)="onSelectedChange($event)">
       <a *appShortcut="let row" mat-menu-item
-         [routerLink]="['/config', 'seed', row.seedId]">
-        <mat-icon matTooltip="Go to seed"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">link
-        </mat-icon>Go to seed
+         [routerLink]="['/config', 'seed', row.seedId]"
+         i18n="@@reportListActionButtonGoToSeed">
+        <mat-icon>link</mat-icon>
+        Go to seed
       </a>
       <a *appShortcut="let row" mat-menu-item
-         [routerLink]="['/config', 'crawljobs', row.jobId]">
-        <mat-icon matTooltip="Go to crawljob"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">work
-        </mat-icon>Go to crawljob
+         [routerLink]="['/config', 'crawljobs', row.jobId]"
+         i18n="@@reportListActionButtonGoToCrawljob">
+        <mat-icon>work</mat-icon>
+        Go to crawljob
       </a>
       <a *appFilter="let row" mat-menu-item
          [routerLink]="['../pagelog']"
-         [queryParams]="{execution_id: row.id, watch: isDone(row) ? null : true}">
-        <mat-icon matTooltip="Go to pagelog"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToPagelogShortcutTooltip">art_track
-        </mat-icon>Go to pagelog
+         [queryParams]="{execution_id: row.id, watch: isDone(row) ? null : true}"
+         i18n="@@reportListActionButtonGoToPagelog">
+        <mat-icon>art_track</mat-icon>
+        Go to pagelog
       </a>
       <a *appFilter="let row" mat-menu-item
          [routerLink]="['../crawllog']"
-         [queryParams]="{execution_id: row.id}">
-        <mat-icon matTooltip="Go to crawllog"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToCrawlogShortcutTooltip">event_note
-        </mat-icon>Go to crawllog
+         [queryParams]="{execution_id: row.id}"
+         i18n="@@reportListActionButtonGoToCrawlog">
+        <mat-icon>event_note</mat-icon>
+        Go to crawllog
       </a>
       <ng-container *appAction="let row">
         <ng-container *ngIf="canAbort(row.state)">
-        <a mat-menu-item
-           (click)="onAbortCrawlExecution(row)">
-          <mat-icon matTooltip="Abort crawl"
-                    i18n-matTooltip="@@crawljobExecutionReportAbortCrawlExecutionTooltip">cancel
-          </mat-icon>Abort crawl
-        </a>
+          <a mat-menu-item
+             (click)="onAbortCrawlExecution(row)"
+             i18n="@@reportListActionButtonAbortCrawlExecution">
+            <mat-icon>cancel</mat-icon>
+            Abort crawl
+          </a>
         </ng-container>
       </ng-container>
       <a *appAction="let row" mat-menu-item
-         [routerLink]="['../crawlexecution', row.id]">
-        <mat-icon matTooltip="Show full report" i18n-matTooltip="@@crawljobExecutionReportShowFullReportTooltip">
-          keyboard_arrow_right
-        </mat-icon>Show full report
+         [routerLink]="['../crawlexecution', row.id]"
+         i18n-matTooltip="@@reportListActionButtonShowFullReport">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+        Show full report
       </a>
     </app-crawl-execution-status-list>
   </div>

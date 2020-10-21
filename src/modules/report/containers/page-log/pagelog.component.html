@@ -14,23 +14,23 @@
                       (sort)="onSort($event)"
                       (page)="onPage($event)">
       <a *appAction="let row" mat-menu-item
-         [routerLink]="['/report', 'jobexecution', row.jobExecutionId]">
-        <mat-icon matTooltip="Go to job execution"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToSeedShortcutTooltip">hdr_strong
-        </mat-icon>Go to job execution
+         [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
+         i18n="@@reportListActionButtonGoToJobExecution">
+        <mat-icon>hdr_strong</mat-icon>
+        Go to job execution
       </a>
       <a *appAction="let row" mat-menu-item
-         [routerLink]="['/report', 'crawlexecution', row.executionId]">
-        <mat-icon matTooltip="Go to crawl execution"
-                  i18n-matTooltip="@@crawlExecutionReportListGoToCrawljobShortcutTooltip">hdr_weak
-        </mat-icon>Go to crawl execution
+         [routerLink]="['/report', 'crawlexecution', row.executionId]"
+         i18n="@@reportListActionButtonGoToCrawlExecution">
+        <mat-icon>hdr_weak</mat-icon>
+        Go to crawl execution
       </a>
       <a *appAction="let row" mat-menu-item
          target="_blank"
-         [href]="appConfigService.waybackUrl + '*?url=' + row.uri">
-        <mat-icon matTooltip="Search wayback"
-                  i18n-matTooltip="@@pageLogListGoToWaybackTooltip">camera
-        </mat-icon>Search wayback
+         [href]="appConfigService.waybackUrl + '*?url=' + row.uri"
+         i18n="@@reportListActionButtonSearchWayback">
+        <mat-icon>camera</mat-icon>
+        Search wayback
       </a>
     </app-pagelog-list>
   </div>
