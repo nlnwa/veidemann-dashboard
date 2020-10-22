@@ -11,7 +11,6 @@
                                    [pageSize]="pageSize$ | async"
                                    [sortDirection]="sortDirection$ | async"
                                    [sortActive]="sortActive$ | async"
-                                   (selectedChange)="onSelectedChange($event)"
                                    (sort)="onSort($event)"
                                    (page)="onPage($event)">
       <a *appShortcut="let row" mat-menu-item

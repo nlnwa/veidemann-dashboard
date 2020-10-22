@@ -228,7 +228,7 @@ export class CrawlExecutionComponent implements OnInit {
           this.controllerApiService.abortCrawlExecution(executionId).subscribe(crawlExecStatus => {
             if (crawlExecStatus.state === CrawlExecutionState.ABORTED_MANUAL) {
               this.snackBarService.openSnackBar('Crawl aborted');
-              this.reload.next();
+              this.reload.next(null);
             }
           });
         }

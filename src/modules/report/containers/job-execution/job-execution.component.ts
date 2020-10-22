@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, shareReplay, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, Observable, of} from 'rxjs';
+import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
 import {JobExecutionState, jobExecutionStates, JobExecutionStatus} from '../../../../shared/models/report';
-import {ListItem} from '../../../../shared/models/list-datasource';
 import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
@@ -25,6 +24,9 @@ export class JobExecutionComponent implements OnInit {
   readonly JobExecutionState = JobExecutionState;
   readonly crawlJobOptions: ConfigObject[];
 
+  private reload$: Observable<void>;
+  private reload: Subject<void>;
+
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
   sortDirection$: Observable<SortDirection>;
@@ -44,6 +46,8 @@ export class JobExecutionComponent implements OnInit {
               private snackBarService: SnackBarService) {
 
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
+    this.reload = new Subject<void>();
+    this.reload$ = this.reload.asObservable();
   }
 
   ngOnInit(): void {
@@ -121,7 +125,8 @@ export class JobExecutionComponent implements OnInit {
 
     const query$: Observable<JobExecutionStatusQuery> = combineLatest([
       jobId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, startTimeFrom$,
-      startTimeTo$, watch$, init$
+      startTimeTo$, watch$, init$, this.reload$.pipe(startWith(null as string))
+
     ]).pipe(
       debounceTime<any>(0),
       map(([jobId, stateList, active, direction, pageIndex, pageSize, startTimeFrom,
@@ -144,16 +149,6 @@ export class JobExecutionComponent implements OnInit {
     this.sortActive$ = sortActive$;
     this.sortDirection$ = sortDirection$;
     this.query$ = query$;
-
-    // id$.pipe(
-    //   switchMap(id => id ? this.jobExecutionService.get(id) : of(null)),
-    //   tap(s => {
-    //     if (s === null) {
-    //       this.list.reset();
-    //     }
-    //   }),
-    //   takeUntil(this.ngUnsubscribe)
-    // ).subscribe(jobExecutionStatus => this.jobExecutionStatus.next(jobExecutionStatus));
   }
 
   onQueryChange(query: Partial<JobExecutionStatusQuery>) {
@@ -170,14 +165,6 @@ export class JobExecutionComponent implements OnInit {
       queryParamsHandling: 'merge',
     })
       .catch(error => this.errorService.dispatch(error));
-  }
-
-  onSelectedChange(item: ListItem | ListItem[]) {
-    // if (!Array.isArray(item)) {
-    //   this.router.navigate([item.id], {
-    //     relativeTo: this.route,
-    //   }).catch(error => this.errorService.dispatch(error));
-    // }
   }
 
   onSort(sort: Sort) {
@@ -208,6 +195,7 @@ export class JobExecutionComponent implements OnInit {
           this.controllerApiService.abortJobExecution(executionId).subscribe(jobExecStatus => {
             if (jobExecStatus.state === JobExecutionState.ABORTED_MANUAL) {
               this.snackBarService.openSnackBar('Job aborted');
+              this.reload.next(null);
             }
           });
         }
