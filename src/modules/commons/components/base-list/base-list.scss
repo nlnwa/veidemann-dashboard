@@ -8,6 +8,10 @@ table {
   padding-right: 16px;
 }
 
+.action-cell {
+  text-align: right;
+}
+
 tr.item-row.row-checked {
   background-color: lighten($dark-focused, 50%);
 }
@@ -62,10 +66,9 @@ tr.preview-row {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
 }
 
-.action {
+.mat-column-action {
   text-align: right;
 }
 
