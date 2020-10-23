@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ConfigObject} from '../../../../../shared/models/config';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {JobExecutionState} from '../../../../../shared/models/report';
+import { CrawlExecutionState } from 'src/shared/models';
+
 
 @Component({
   selector: 'app-seed-preview',
@@ -9,7 +10,7 @@ import {JobExecutionState} from '../../../../../shared/models/report';
   styleUrls: ['./seed-preview.component.css']
 })
 export class SeedPreviewComponent {
-  readonly JobExecutionState = JobExecutionState;
+  readonly CrawlExecutionState = CrawlExecutionState;
 
   @Input()
   configObject: ConfigObject;
