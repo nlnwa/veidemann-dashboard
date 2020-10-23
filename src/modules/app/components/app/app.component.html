@@ -24,13 +24,6 @@
 
       <a mat-menu-item
          *ngIf="canAdministrate"
-         [routerLink]="['/validator']">
-        <mat-icon>storage</mat-icon>
-        <span i18n="@@mainMenuWarc">WARC</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canAdministrate"
          [routerLink]="['/config/logconfig']">
         <mat-icon>notes</mat-icon>
         <span i18n="@@mainMenuLogConfiguration">Log level</span>
