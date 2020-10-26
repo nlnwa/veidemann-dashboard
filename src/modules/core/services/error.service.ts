@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {ReferrerError} from '../../../shared/error';
-import {ConfigObject} from '../../../shared/models/config';
 
 @Injectable({
   providedIn: 'root'

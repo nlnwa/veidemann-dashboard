@@ -85,8 +85,6 @@ export class ConfigurationComponent implements OnDestroy {
     this.options$ = this.optionsService.options$.pipe(
       tap(options => {
         this.options = options;
-        // make sure any detail view relying on some option not present is removed before a new set of options is loaded
-        // this.configObject.next(null);
       }),
     );
 
@@ -137,17 +135,6 @@ export class ConfigurationComponent implements OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onCreateConfig(): void {
-    const configObject = new ConfigObject({kind: this.kind});
-
-    if (this.kind === Kind.SEED && this.route.snapshot.queryParamMap.get('entity_id')) {
-      const kind = Kind.CRAWLENTITY;
-      const id = this.route.snapshot.queryParamMap.get('entity_id');
-      const entityRef = new ConfigRef({kind, id});
-      configObject.seed = new Seed({entityRef});
-    }
-  }
-
   onCreateSeedFromEntity(entity: ConfigObject) {
     const entityRef = ConfigObject.toConfigRef(entity);
     const configObject = new ConfigObject({kind: Kind.SEED, seed: new Seed({entityRef})});
@@ -175,16 +162,6 @@ export class ConfigurationComponent implements OnDestroy {
     }
 
   onClone(configObject: ConfigObject) {
-    // we don't want the id of any selected configObject to be present in the url
-    // when we create a clone
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParamsHandling: 'merge',
-    //   queryParams: {id: null}
-    // })
-    //   .catch(error => this.errorService.dispatch(error))
-    //   .then(() => setTimeout(() => this.configObject.next(ConfigObject.clone(configObject))));
-
     this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
   }
 

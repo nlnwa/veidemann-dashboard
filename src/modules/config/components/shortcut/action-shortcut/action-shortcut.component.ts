@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ConfigObject, Kind, ConfigRef} from '../../../../../shared/models/config';
-import {Params} from '@angular/router';
+import {ConfigObject, Kind} from '../../../../../shared/models/config';
 
 @Component({
   selector: 'app-action-shortcut',

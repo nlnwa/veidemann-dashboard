@@ -42,9 +42,8 @@ import {PageLogDetailComponent} from './containers/page-log-detail/page-log-deta
 import {AbortCrawlDialogComponent} from './components/abort-crawl-dialog/abort-crawl-dialog.component';
 import {JobExecutionPreviewComponent} from './components/job-execution-preview/job-execution-preview.component';
 import {ChartsModule} from 'ng2-charts';
-import { CrawlExecutionPreviewComponent } from './components/crawl-execution-preview/crawl-execution-preview.component';
-import { CrawlLogPreviewComponent } from './components/crawl-log-preview/crawl-log-preview.component';
-import {ConfigurationsModule} from '../config/configurations.module';
+import {CrawlExecutionPreviewComponent} from './components/crawl-execution-preview/crawl-execution-preview.component';
+import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log-preview.component';
 
 
 @NgModule({

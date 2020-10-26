@@ -138,7 +138,6 @@ export class ReportApiService {
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
 
-    console.log('queryStr', queryStr);
     return new Observable((observer: Observer<any>) => {
       const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
         .on('data', data => observer.next(data))
@@ -204,7 +203,6 @@ export class ReportApiService {
       queryStr += `.skip(${listRequest.getOffset()})`;
     }
 
-    console.log('queryStr', queryStr);
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
     if (!listRequest.getWatch()) {
@@ -267,7 +265,6 @@ export class ReportApiService {
       queryStr += '.changes()';
     }
 
-    console.log('queryStr for crawlLog', queryStr);
     const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
     dbQueryRequest.setQuery(queryStr);
     if (!listRequest.getWatch()) {

@@ -13,9 +13,4 @@ export class CrawljobPreviewComponent {
 
   constructor() {
   }
-
-  isDeactivated(): boolean {
-    return this.configObject.crawlJob.disabled;
-  }
-
 }

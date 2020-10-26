@@ -1,8 +1,6 @@
 import {Resource} from './resource.model';
 import {PageLogProto} from '../../../api';
 import {ApiError} from './api-error.model';
-import {fromRethinkTimeStamp} from '../../func/rethinkdb';
-import {CrawlExecutionState} from './crawlexecutionstatus.model';
 
 export class PageLog {
   id: string;

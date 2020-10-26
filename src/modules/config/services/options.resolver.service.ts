@@ -1,14 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {
-  Kind,
-  robotsPolicies,
-  roles,
-  rotationPolicies,
-  subCollectionTypes,
-  browserScriptTypes,
-  RotationPolicy, SubCollectionType, ConfigObject, BrowserScriptType, RobotsPolicy, Role
-} from '../../../shared/models';
+import {browserScriptTypes, Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes} from '../../../shared/models';
 import {map, toArray} from 'rxjs/operators';
 import {ConfigApiService} from '../../core/services';
 import {combineLatest, Observable, of} from 'rxjs';

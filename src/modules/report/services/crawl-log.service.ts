@@ -7,7 +7,6 @@ import {FieldMask} from '../../../api';
 import {LoadingService} from '../../../shared/services';
 import {Detail, Page, Sort, Watch} from '../../../shared/func';
 import {Getter, Searcher} from '../../../shared/directives';
-import {PageLogQuery} from './pagelog.service';
 
 
 export interface CrawlLogQuery extends Page, Sort, Watch {

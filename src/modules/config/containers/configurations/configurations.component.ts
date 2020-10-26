@@ -458,7 +458,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       this.selectedConfigs = configs;
       const mergedConfigObject = ConfigObject.mergeConfigs(configs);
       this.mergedConfig = mergedConfigObject;
-      // this.configObjects$.next(mergedConfigObject);
     }
   }
 

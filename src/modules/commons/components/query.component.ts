@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {JobExecutionStatusQuery} from '../../report/services';
 import {isValidDate} from '../../../shared/func';
 
 @Directive()

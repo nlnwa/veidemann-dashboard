@@ -3,8 +3,7 @@ import {BASE_LIST, QueryDirective} from '../../../shared/directives';
 import {PageLogQuery, PageLogService} from '../services';
 import {PageLog} from '../../../shared/models/report';
 import {BaseList, ListDataSource} from '../../../shared/models';
-import {distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/operators';
 
 
 @Directive({
