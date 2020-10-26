@@ -64,15 +64,6 @@
 
     <a mat-tab-link
        *ngIf="canAdministrate"
-       [routerLink]="['/validator']"
-       routerLinkActive
-       #validator="routerLinkActive"
-       [active]="validator.isActive">
-      <span i18n="@@mainMenuWarc">STORAGE</span>
-    </a>
-
-    <a mat-tab-link
-       *ngIf="canAdministrate"
        [routerLink]="['/logconfig']"
        routerLinkActive
        #log="routerLinkActive"
