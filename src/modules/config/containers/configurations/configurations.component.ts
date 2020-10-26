@@ -470,43 +470,49 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onFilterByScheduleRef(configObject: ConfigObject) {
-    this.router.navigate(['crawljobs'], {queryParams: {schedule_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../crawljobs'], {queryParams: {schedule_id: configObject.id}, relativeTo: this.route.parent});
   }
 
   onFilterByCrawlConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawljobs'], {
+    this.router.navigate(['../crawljobs'], {
       queryParams: {crawl_config_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByCollectionRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {collection_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByBrowserConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {browser_config_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByPolitenessConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {politeness_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByBrowserScriptRef(configObject: ConfigObject) {
-    this.router.navigate(['browserconfig'], {queryParams: {script_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../browserconfig'], {
+      queryParams: {script_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByCrawlJobRef(configObject: ConfigObject) {
-    this.router.navigate(['seed'], {queryParams: {crawl_job_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../seed'], {
+      queryParams: {crawl_job_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onListSeed(configRef: ConfigRef) {

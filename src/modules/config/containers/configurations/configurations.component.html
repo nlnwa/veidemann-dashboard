@@ -166,8 +166,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.collectionRef?.id">
                 <a mat-menu-item
-                   [routerLink]="['../collection']"
-                   [queryParams]="{id: row.crawlConfig.collectionRef?.id}"
+                   [routerLink]="['../collection/' + row.crawlConfig.collectionRef?.id]"
                    i18n="@@configListActionButtonGoToCollection"
                    matTooltip="Go to collection: {{row | getCollectionName | async}}"
                    i18n-matTooltip="@@crawlConfigListGoToCollectionActionButtonTooltip">
@@ -179,8 +178,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.browserConfigRef?.id">
                 <a mat-menu-item
-                   [routerLink]="['../browserconfig']"
-                   [queryParams]="{id: row.crawlConfig.browserConfigRef?.id}"
+                   [routerLink]="['../browserconfig/' + row.crawlConfig.browserConfigRef?.id]"
                    i18n="@@configListActionButtonGoToBrowserconfig"
                    matTooltip="Go to browserconfig: {{row | getBrowserConfigName | async}}"
                    i18n-matTooltip="@@crawlConfigListGoToBrowserConfigActionButtonTooltip">
@@ -192,8 +190,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.politenessRef?.id">
                 <a mat-menu-item
-                   [routerLink]="['../politenessconfig']"
-                   [queryParams]="{id: row.crawlConfig.politenessRef?.id}"
+                   [routerLink]="['../politenessconfig/' + row.crawlConfig.politenessRef?.id]"
                    i18n="@@configListActionButtonGoToPolitenessconfig"
                    matTooltip="Go to politenessconfig: {{row | getPolitenessConfigName | async}}"
                    i18n-matTooltip="@@crawlConfigListGoToPolitenessActionButtonTooltip">
@@ -272,8 +269,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlJob?.crawlConfigRef?.id">
                 <a mat-menu-item
-                   [routerLink]="['../crawlconfig']"
-                   [queryParams]="{id: row.crawlJob.crawlConfigRef?.id}"
+                   [routerLink]="['../crawlconfig/' + row.crawlJob.crawlConfigRef?.id]"
                    i18n="@@configListActionButtonGoToCrawlconfig"
                    matTooltip="Go to crawlconfig: {{row | getCrawlConfigName | async}}"
                    i18n-matTooltip="@@crawljobListCrawlconfigShortcutActionButtonTooltip">
