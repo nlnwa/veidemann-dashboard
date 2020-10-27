@@ -1100,6 +1100,18 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@casl/ability@^4.1.6":
+  version "4.1.6"
+  resolved "https://registry.npmjs.org/@casl/ability/-/ability-4.1.6.tgz#89f263903adfc9316cedff329ad615564662448a"
+  integrity sha512-ZI30fRacHKCCrWJn1pmxx/+IKUkoycVNz+Mge9EeIH+esDT7nydgWbitVPnlBAbxQXz5eybPAvfPSg3WOa2izw==
+  dependencies:
+    sift "^13.0.0"
+
+"@casl/angular@^4.1.6":
+  version "4.1.6"
+  resolved "https://registry.npmjs.org/@casl/angular/-/angular-4.1.6.tgz#8dd67a3f5e3659063ee58a6e1cd29212209f8e1c"
+  integrity sha512-fB+tdW+r4dDBn63WPn49eAaN8J1b3E4XtFIiHBufiWXofSw+k+5OEr0CCTam9XUdPwhulyl0In3rEnUx9bsD/Q==
+
 "@istanbuljs/schema@^0.1.2":
   version "0.1.2"
   resolved "https://registry.npmjs.org/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
@@ -7801,6 +7813,11 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
+
+sift@^13.0.0:
+  version "13.3.5"
+  resolved "https://registry.npmjs.org/sift/-/sift-13.3.5.tgz#de08275e1427731e1fe25192f88786e38bbfa89e"
+  integrity sha512-apSwBXO0Xpl7zGb26xwq7KGre9/WwyzMxUv0zmI6mLpDJQGOX+CynBgKDaSrn+AXuAuiS4orQo1ty6bU+OEN/Q==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"

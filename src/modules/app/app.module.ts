@@ -15,6 +15,8 @@ import {
   TimeComponent
 } from './components';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {AbilityModule} from '@casl/angular';
+import {Ability, PureAbility} from '@casl/ability';
 
 
 @NgModule({
@@ -35,8 +37,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     CommonsModule,
     CoreModule,
     MatProgressSpinnerModule,
+    AbilityModule
+  ],
+  providers: [
+    {provide: Ability, useValue: new Ability()},
+    {provide: PureAbility, useExisting: Ability}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

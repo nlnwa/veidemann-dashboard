@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {Role} from '../../../../shared/models';
+import {Ability, AbilityBuilder} from '@casl/ability';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ export class AuthService {
 
   roles: Role[];
 
-  constructor(private oauthService: OAuthService) {
+  constructor(private oauthService: OAuthService, private ability: Ability) {
     this.roles = [Role.ANY];
   }
 
@@ -39,6 +40,10 @@ export class AuthService {
 
   get requestedUri(): string {
     return decodeURIComponent(this.oauthService.state);
+  }
+
+  getAbility(): any {
+    return this.ability;
   }
 
   /**
@@ -82,12 +87,51 @@ export class AuthService {
     return this.roles.includes(Role.OPERATOR);
   }
 
+  isAnyUser(): boolean {
+    return this.roles.includes(Role.ANY_USER);
+  }
+
   login(redirectUrl?: string) {
     this.oauthService.initLoginFlow(redirectUrl);
+    //console.log('onLogin before abilities updated: ', this.ability);
+    //this.updateAbility();
   }
 
   logout() {
     this.oauthService.logOut();
     this.roles = [Role.ANY];
+    this.updateAbility();
+  }
+
+  updateAbility() {
+    console.log('running updateAbility for Roles: ', this.roles);
+    const {can, rules} = new AbilityBuilder<Ability>();
+
+    const reports = ['JobExecution', 'CrawlExecution', 'CrawlLog', 'PageLog'];
+    const operatorConfigs = ['Entity', 'Seed', 'Collection', 'CrawlJobs', 'Schedule', 'CrawlConfig',
+      'CrawlHostGroup', 'BrowserConfig', 'BrowserScript', 'Politeness', 'LogLevel'];
+    const curatorConfigs = ['Entity', 'Seed', 'Collection', 'CrawlJobs', 'CrawlConfig'];
+
+    if (this.isAdmin()) {
+      can('manage', 'all');
+    }
+
+    if (this.isOperator()) {
+      can('manage', operatorConfigs);
+      can('read', reports);
+    }
+
+    if (this.isCurator()) {
+      can('manage', curatorConfigs);
+      can('view', reports);
+    }
+
+    if (this.isAnyUser()) {
+      can('view', ['Entity', 'Seed']);
+    } else {
+      can('view', 'Home');
+    }
+    this.ability.update(rules);
+    console.log('ability after update:', this.ability);
   }
 }

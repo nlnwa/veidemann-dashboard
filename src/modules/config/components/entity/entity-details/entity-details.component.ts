@@ -59,6 +59,7 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('get: ', this.authService.getAbility());
     if (changes.configObject) {
       if (this.configObject) {
         this.updateForm();

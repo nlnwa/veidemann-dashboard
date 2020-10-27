@@ -25,7 +25,7 @@
   </mat-dialog-content>
 </form>
 
-<mat-dialog-actions *ngIf="canEdit">
+<mat-dialog-actions *ngIf="'manage' | able: 'Seed'">
   <button mat-raised-button color="accent"
           *ngIf="!showSave"
           [disabled]="!canUpdate"

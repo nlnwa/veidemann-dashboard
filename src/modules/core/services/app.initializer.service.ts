@@ -34,6 +34,7 @@ export class AppInitializerService {
         }
       }
       this.authService.roles = await this.controllerService.getRolesForActiveUser();
+      this.authService.updateAbility();
     } catch (error) {
       this.error = error;
     }
