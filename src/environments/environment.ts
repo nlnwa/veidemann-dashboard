@@ -8,7 +8,6 @@ export const environment = {
   version: 'DEV',
   configUrl: '/veidemann/assets/config/environment.json',
   grpcWebUrl: '/grpc-web',
-  waybackUrl: 'https://veidemann.local/loke/nb/',
   authConfig: {
 
     // Url of the Identity Provider

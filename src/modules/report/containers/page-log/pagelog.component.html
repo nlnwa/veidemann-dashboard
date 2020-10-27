@@ -25,13 +25,6 @@
         <mat-icon>hdr_weak</mat-icon>
         Go to crawl execution
       </a>
-      <a *appAction="let row" mat-menu-item
-         target="_blank"
-         [href]="appConfigService.waybackUrl + '*?url=' + row.uri"
-         i18n="@@reportListActionButtonSearchWayback">
-        <mat-icon>camera</mat-icon>
-        Search wayback
-      </a>
     </app-pagelog-list>
   </div>
 </div>
