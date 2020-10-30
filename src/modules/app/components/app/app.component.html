@@ -45,7 +45,7 @@
 
   <nav mat-tab-nav-bar>
     <a mat-tab-link
-       *ngIf="canConfigure || canConsult"
+       *ngIf="'read' | able: 'configs'"
        [routerLink]="['/config']"
        routerLinkActive
        #config="routerLinkActive"
@@ -54,7 +54,7 @@
     </a>
 
     <a mat-tab-link
-       *ngIf="canConfigure"
+       *ngIf="'read' | able: 'reports'"
        [routerLink]="['/report']"
        routerLinkActive
        #report="routerLinkActive"
@@ -63,16 +63,7 @@
     </a>
 
     <a mat-tab-link
-       *ngIf="canAdministrate"
-       [routerLink]="['/validator']"
-       routerLinkActive
-       #validator="routerLinkActive"
-       [active]="validator.isActive">
-      <span i18n="@@mainMenuWarc">STORAGE</span>
-    </a>
-
-    <a mat-tab-link
-       *ngIf="canAdministrate"
+       *ngIf="'read' | able: 'logconfig'"
        [routerLink]="['/logconfig']"
        routerLinkActive
        #log="routerLinkActive"

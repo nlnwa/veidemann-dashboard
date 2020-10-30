@@ -79,17 +79,15 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     return !this.isAllSelected && this.selectedConfigs.length < 1;
   }
 
-  get canAdministrate(): boolean {
-    return this.authService.isAdmin();
-  }
+  //
+  // get canAdministrate(): boolean {
+  //   return this.authService.isAdmin();
+  // }
+  //
+  // get canConfigure(): boolean {
+  //   return this.authService.isAdmin() || this.authService.isCurator();
+  // }
 
-  get canConfigure(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
-  }
-
-  get canConsult(): boolean {
-    return this.authService.isConsultant();
-  }
 
   constructor(private authService: AuthService,
               private configService: ConfigService,
@@ -329,6 +327,22 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  canRead(configObject: ConfigObject): boolean {
+    return this.authService.canRead(configObject.kind);
+  }
+
+  canEdit(configObject: ConfigObject): boolean {
+    return this.authService.canUpdate(configObject.kind);
+  }
+
+  canClone(configObject: ConfigObject): boolean {
+    return this.authService.canCreate(configObject.kind);
+  }
+
+  canRunCrawl(configObject: ConfigObject): boolean {
+    return this.authService.canRunCrawl(configObject.kind);
   }
 
   getJobRefListQueryParams(configObject: ConfigObject): Params {

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {Role} from '../../../../shared/models';
+import {Kind, Role} from '../../../../shared/models';
 import {Ability, AbilityBuilder} from '@casl/ability';
 
 
@@ -42,8 +42,28 @@ export class AuthService {
     return decodeURIComponent(this.oauthService.state);
   }
 
-  getAbility(): any {
+  getAbility(): Ability {
     return this.ability;
+  }
+
+  canCreate(subject): boolean {
+    return this.ability.can('create', subject.toString());
+  }
+
+  canUpdate(subject): boolean {
+    return this.ability.can('update', subject.toString());
+  }
+
+  canDelete(subject): boolean {
+    return this.ability.can('delete', subject.toString());
+  }
+
+  canRead(subject): boolean {
+    return this.ability.can('read', subject.toString());
+  }
+
+  canRunCrawl(subject): boolean {
+    return this.ability.can('runCrawl', subject.toString());
   }
 
   /**
@@ -67,34 +87,34 @@ export class AuthService {
     return false;
   }
 
-  isAdmin(): boolean {
+   isAdmin(): boolean {
     return this.roles.includes(Role.ADMIN);
   }
 
-  isCurator(): boolean {
+   isCurator(): boolean {
     return this.roles.includes(Role.CURATOR);
   }
 
-  isReadonly(): boolean {
+   isReadonly(): boolean {
     return this.roles.includes(Role.READONLY);
   }
 
-  isConsultant(): boolean {
+   isConsultant(): boolean {
     return this.roles.includes(Role.CONSULTANT);
   }
 
-  isOperator(): boolean {
+   isOperator(): boolean {
     return this.roles.includes(Role.OPERATOR);
   }
 
-  isAnyUser(): boolean {
+   isAnyUser(): boolean {
     return this.roles.includes(Role.ANY_USER);
   }
 
   login(redirectUrl?: string) {
     this.oauthService.initLoginFlow(redirectUrl);
-    //console.log('onLogin before abilities updated: ', this.ability);
-    //this.updateAbility();
+    // console.log('onLogin before abilities updated: ', this.ability);
+    // this.updateAbility();
   }
 
   logout() {
@@ -104,32 +124,38 @@ export class AuthService {
   }
 
   updateAbility() {
-    console.log('running updateAbility for Roles: ', this.roles);
-    const {can, rules} = new AbilityBuilder<Ability>();
+    const {can, cannot, rules} = new AbilityBuilder<Ability>();
 
-    const reports = ['JobExecution', 'CrawlExecution', 'CrawlLog', 'PageLog'];
-    const operatorConfigs = ['Entity', 'Seed', 'Collection', 'CrawlJobs', 'Schedule', 'CrawlConfig',
-      'CrawlHostGroup', 'BrowserConfig', 'BrowserScript', 'Politeness', 'LogLevel'];
-    const curatorConfigs = ['Entity', 'Seed', 'Collection', 'CrawlJobs', 'CrawlConfig'];
+    const operatorConfigs = [Kind.CRAWLENTITY, Kind.SEED, Kind.CRAWLJOB, Kind.CRAWLCONFIG, Kind.CRAWLSCHEDULECONFIG,
+      Kind.BROWSERCONFIG, Kind.POLITENESSCONFIG, Kind.BROWSERSCRIPT, Kind.CRAWLHOSTGROUPCONFIG, Kind.COLLECTION];
+    const curatorConfigs = [Kind.CRAWLENTITY, Kind.SEED, Kind.COLLECTION, Kind.CRAWLJOB, Kind.CRAWLCONFIG];
 
     if (this.isAdmin()) {
       can('manage', 'all');
     }
 
     if (this.isOperator()) {
-      can('manage', operatorConfigs);
-      can('read', reports);
+      can(['create', 'read', 'delete', 'update', 'updateAll'], operatorConfigs.map(String));
+      can('read', 'configs');
+      can('read', 'reports');
+      can('read', 'logconfig');
+      can('runCrawl', [Kind.SEED, Kind.CRAWLJOB].map(String));
     }
 
     if (this.isCurator()) {
-      can('manage', curatorConfigs);
-      can('view', reports);
+      can('manage', curatorConfigs.map(String));
+      can('read', 'reports');
+    }
+
+    if (this.isConsultant()) {
+      can('manage', ['Entity', 'Seed']);
+      can('read', 'reports');
     }
 
     if (this.isAnyUser()) {
-      can('view', ['Entity', 'Seed']);
+      can('read', ['Entity', 'Seed']);
     } else {
-      can('view', 'Home');
+      can('read', 'Home');
     }
     this.ability.update(rules);
     console.log('ability after update:', this.ability);

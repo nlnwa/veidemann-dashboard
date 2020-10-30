@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ConfigObject, Kind, ConfigRef} from '../../../../../shared/models/config';
 import {Params} from '@angular/router';
+import {AuthService} from '../../../../core/services/auth';
 
 @Component({
   selector: 'app-action-shortcut',
@@ -23,7 +24,7 @@ export class ActionShortcutComponent implements OnInit {
   clone = new EventEmitter();
 
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -33,8 +34,16 @@ export class ActionShortcutComponent implements OnInit {
     this.clone.emit();
   }
 
+  private canCreateSeed(): boolean {
+    return this.authService.canCreate(Kind.SEED);
+  }
+
   onCreateSeed() {
     this.createSeed.emit();
+  }
+
+ private  canRunCrawl(): boolean {
+    return this.authService.canRunCrawl('runCrawl');
   }
 
   onRunCrawl() {

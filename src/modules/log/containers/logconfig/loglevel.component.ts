@@ -44,7 +44,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
+    return this.authService.canUpdate('LogLevel');
   }
 
   get logLevelList(): FormArray {
