@@ -14,11 +14,6 @@ const routes: Routes = [
     loadChildren: () => import('../../report/report.module').then(m => m.ReportModule),
     canActivate: [GuardService],
   },
-  {
-    path: 'validator',
-    loadChildren: () => import('../../warc/warc.module').then(m => m.WarcModule),
-    canActivate: [GuardService],
-  },
 ];
 
 @NgModule({

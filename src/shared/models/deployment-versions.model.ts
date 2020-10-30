@@ -30,7 +30,6 @@ export class DeploymentVersions {
                 veidemannOoshandler = '',
                 veidemannRobotsEvaluatorService = '',
                 veidemannWarcValidator = '',
-                veidemannWarcValidatorApi = '',
                 veidemannDbInitializer = '',
                 rethinkdbBackup = '',
               }: Partial<DeploymentVersions> = {}) {
@@ -47,7 +46,6 @@ export class DeploymentVersions {
     this.veidemannOoshandler = veidemannOoshandler;
     this.veidemannRobotsEvaluatorService = veidemannRobotsEvaluatorService;
     this.veidemannWarcValidator = veidemannWarcValidator;
-    this.veidemannWarcValidatorApi = veidemannWarcValidatorApi;
     this.veidemannDbInitializer = veidemannDbInitializer;
     this.rethinkdbBackup = rethinkdbBackup;
   }

@@ -41,7 +41,6 @@ fetch(environment.configUrl)
         veidemannOoshandler: deploymentVersions['norsknettarkiv/veidemann-ooshandler'],
         veidemannRobotsEvaluatorService: deploymentVersions['norsknettarkiv/veidemann-robotsevaluator-service'],
         veidemannWarcValidator: deploymentVersions['norsknettarkiv/veidemann-warcvalidator'],
-        veidemannWarcValidatorApi: deploymentVersions['norsknettarkiv/veidemann-warcvalidator-api'],
         veidemannDbInitializer: deploymentVersions['norsknettarkiv/rethinkdb-backup'],
         rethinkdbBackup: deploymentVersions['norsknettarkiv/rethinkdb-backup']
       });
