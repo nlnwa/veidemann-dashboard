@@ -12,7 +12,8 @@ import {
   CrawlerStatusDialogComponent,
   DialogComponent,
   ErrorDialogComponent,
-  TimeComponent
+  TimeComponent,
+  AboutDialogComponent,
 } from './components';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
@@ -25,6 +26,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     TimeComponent,
     CrawlerStatusDialogComponent,
     CrawlerStatusComponent,
+    AboutDialogComponent,
   ],
   entryComponents: [ErrorDialogComponent, CrawlerStatusDialogComponent],
   imports: [

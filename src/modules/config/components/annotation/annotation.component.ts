@@ -49,12 +49,12 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
     return this.showUpdateAnnotation;
   }
 
-  get canUpdate(): boolean {
-    return !this.disabled;
-  }
-
   get canShow(): boolean {
     return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isOperator();
+  }
+
+  get canUpdate(): boolean {
+    return !this.disabled;
   }
 
   get key(): AbstractControl {

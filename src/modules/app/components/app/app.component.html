@@ -1,6 +1,7 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
   <mat-toolbar class="main-toolbar" color="primary">
     <a routerLink="/"><img border="0" class="veidemann_logo" src="assets/logo/veidemann_horizontal_white.png"></a>
+
     <span fxFlex></span>
 
     <app-time></app-time>
@@ -11,16 +12,15 @@
                        [runStatus]="runStatus$ | async"
                        (change)="onChangeRunStatus($event)"></app-crawlerstatus>
 
-    <a mat-button
-       mat-icon-button
-       matTooltip="Help"
-       i18n-matTooltip="@@mainToolbarHelpButtonTooltip"
-       target="_blank"
-       [routerLink]="['/docs']"
-       [routerLinkActiveOptions]="{exact: true}"
-       [routerLinkActive]="['is-active']">
-      <mat-icon>help</mat-icon>
-    </a>
+    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu"><mat-icon>help</mat-icon></a>
+    <mat-menu #helpMenu="matMenu">
+      <a mat-menu-item
+         target="_blank"
+         [routerLink]="['/docs']"
+         [routerLinkActive]="['is-active']"
+         [routerLinkActiveOptions]="{exact:true}">Docs</a>
+      <a mat-menu-item (click)="onAbout()">About</a>
+    </mat-menu>
 
     <button color="primary"
             mat-button

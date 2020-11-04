@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {NoPreloading, PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {NoPreloading, RouterModule, Routes} from '@angular/router';
 import {GuardService} from '../../core/services/auth';
 
 
@@ -12,11 +12,6 @@ const routes: Routes = [
   {
     path: 'report',
     loadChildren: () => import('../../report/report.module').then(m => m.ReportModule),
-    canActivate: [GuardService],
-  },
-  {
-    path: 'validator',
-    loadChildren: () => import('../../warc/warc.module').then(m => m.WarcModule),
     canActivate: [GuardService],
   },
   {
