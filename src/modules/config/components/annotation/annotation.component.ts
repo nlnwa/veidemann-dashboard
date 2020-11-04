@@ -32,7 +32,7 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
 
   protected clickedIndex = -1;
   protected annotations: Annotation[];
-  protected showUpdateAnnotation = false
+  protected showUpdateAnnotation = false;
 
   protected groupsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
   groups$: Observable<any> = this.groupsSubject.asObservable();
@@ -45,12 +45,12 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
     this.createForm();
   }
 
-  get showUpdate(): boolean {
-    return this.showUpdateAnnotation;
+  get canEdit(): boolean {
+    return this.authService.canUpdate('annotation');
   }
 
-  get canShow(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isOperator();
+  get showUpdate(): boolean {
+    return this.showUpdateAnnotation;
   }
 
   get canUpdate(): boolean {
@@ -187,6 +187,10 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
       value: ['', Validators.required]
     });
     this.annotationForm.disable();
+    if (!this.canEdit){
+      this.setDisabledState(true);
+    }
+
   }
 
   // group annotations with similar key together

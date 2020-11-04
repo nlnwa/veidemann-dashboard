@@ -13,18 +13,22 @@
                       (selectedChange)="onSelectedChange($event)"
                       (sort)="onSort($event)"
                       (page)="onPage($event)">
-      <a *appAction="let row" mat-menu-item
-         [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
-         i18n="@@reportListActionButtonGoToJobExecution">
-        <mat-icon>hdr_strong</mat-icon>
-        Go to job execution
-      </a>
-      <a *appAction="let row" mat-menu-item
-         [routerLink]="['/report', 'crawlexecution', row.executionId]"
-         i18n="@@reportListActionButtonGoToCrawlExecution">
-        <mat-icon>hdr_weak</mat-icon>
-        Go to crawl execution
-      </a>
+      <ng-container *appAction="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: 'jobexecution'"
+           [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
+           i18n="@@reportListActionButtonGoToJobExecution">
+          <mat-icon>hdr_strong</mat-icon>
+          Go to job execution
+        </a>
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawlexecution'"
+           [routerLink]="['/report', 'crawlexecution', row.executionId]"
+           i18n="@@reportListActionButtonGoToCrawlExecution">
+          <mat-icon>hdr_weak</mat-icon>
+          Go to crawl execution
+        </a>
+      </ng-container>
     </app-pagelog-list>
   </div>
 </div>

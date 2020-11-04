@@ -6,7 +6,7 @@ import {debounceTime, distinctUntilChanged, map, share, shareReplay, startWith} 
 
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
-import {ConfigObject, ListDataSource, ListItem} from '../../../../shared/models';
+import {ConfigObject, ListDataSource, ListItem, Kind} from '../../../../shared/models';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
@@ -29,6 +29,7 @@ import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abo
 })
 export class CrawlExecutionComponent implements OnInit {
   readonly CrawlExecutionState = CrawlExecutionState;
+  readonly Kind = Kind;
 
   private reload$: Observable<void>;
   private reload: Subject<void>;

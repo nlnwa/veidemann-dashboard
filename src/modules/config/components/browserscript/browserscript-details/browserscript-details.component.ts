@@ -43,8 +43,13 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     this.createForm();
   }
 
-  get editable(): boolean {
-    return this.authService.isAdmin();
+  get canEdit(): boolean {
+    console.log('canUpdate browserscript: ', this.authService.canUpdate(this.configObject.kind));
+    return this.authService.canUpdate(this.configObject.kind);
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get canSave(): boolean {
@@ -167,7 +172,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    if (!this.editable) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }

@@ -1,74 +1,63 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, CanLoad, Route, RouterStateSnapshot, UrlSegment} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate} from '@angular/router';
 import {Observable, of} from 'rxjs';
 
 import {AuthService} from './auth.service';
-import {Role} from '../../../../shared/models';
+import {Kind} from '../../../../shared/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GuardService implements CanActivate, CanLoad {
+export class GuardService implements CanActivate {
+  readonly Kind = Kind;
 
   constructor(public authService: AuthService) {
   }
 
-  private static getRolesByPath(path: string): Role[] {
-    switch (path) {
-      case 'rolemapping':
-        return [Role.ADMIN];
-      case 'validator':
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    const ability = this.authService.getAbility();
+    const path = route.url.map(segment => segment.path);
+    switch (path[0]) {
       case 'report':
-        return [Role.CURATOR, Role.ADMIN];
-      case 'config':
-         return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
-      case 'schedule':
-      case 'collection':
-      case 'crawlconfig':
-      case 'crawljobs':
-      case 'search':
-      case 'activity':
-      case 'status':
-        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR];
-      case 'entity':
-        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
-      case 'seed':
-        return [Role.READONLY, Role.CURATOR, Role.ADMIN, Role.OPERATOR, Role.CONSULTANT];
+        return of(ability.can('read', 'report'));
+      case 'jobexecution' :
+        return of(ability.can('read', 'jobexecution'));
+      case 'crawlexecution':
+        return of(ability.can('read', 'crawlexecution'));
+      case 'pagelog':
+        return of(ability.can('read', 'pagelog'));
+      case 'crawllog':
+        return of(ability.can('read', 'crawllog'));
       case 'logconfig':
-        return [Role.READONLY, Role.CURATOR, Role.ADMIN];
+        return of(ability.can('read', 'logconfig'));
+      case 'status':
+        return of(ability.can('read', 'status'));
+      case 'config':
+        return of(ability.can('read', 'configs'));
+      case 'browserconfig':
+        return of(ability.can('read', Kind[Kind.BROWSERCONFIG]));
+      case 'browserscript':
+        return of(ability.can('read', Kind[Kind.BROWSERSCRIPT]));
+      case 'schedule':
+        return of(ability.can('read', Kind[Kind.CRAWLSCHEDULECONFIG]));
+      case 'collection':
+        return of(ability.can('read', Kind[Kind.COLLECTION]));
+      case 'crawlconfig':
+        return of(ability.can('read', Kind[Kind.CRAWLCONFIG]));
+      case 'crawljobs':
+        return of(ability.can('read', Kind[Kind.CRAWLJOB]));
+      case 'entity':
+        return of(ability.can('read', Kind[Kind.CRAWLENTITY]));
+      case 'seed':
+        return of(ability.can('read', Kind[Kind.SEED]));
+      case 'politenessconfig':
+        return of(ability.can('read', Kind[Kind.POLITENESSCONFIG]));
+      case 'crawlhostgroupconfig':
+        return of(ability.can('read', Kind[Kind.CRAWLHOSTGROUPCONFIG]));
+      case 'rolemapping':
+        return of(ability.can('read', Kind[Kind.ROLEMAPPING]));
       default:
-        return [Role.ANY];
+        return of(false);
     }
-  }
-
-  private static getAllowedRolesWhenLoading(route: Route): Role[] {
-    return GuardService.getRolesByPath(route.path) || [Role.ANY];
-  }
-
-  private static getAllowedRolesWhenActivating(route: ActivatedRouteSnapshot): Role[] {
-    return route.url
-        .map(segment => segment.path)
-        .reduce((roles: Role[], path) => roles || GuardService.getRolesByPath(path), undefined)
-      || [Role.ANY];
-  }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const allowedRoles = GuardService.getAllowedRolesWhenActivating(route);
-
-    if (!this.authService.isLoggedIn) {
-      this.authService.login(state.url);
-    }
-
-    return this.authService.isAuthorized(allowedRoles)
-      ? of(true)
-      : of(false);
-  }
-
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    const allowedRoles = GuardService.getAllowedRolesWhenLoading(route);
-
-    return this.authService.isAuthorized(allowedRoles)
-      ? of(true)
-      : of(false);
   }
 }

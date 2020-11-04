@@ -41,7 +41,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
   }
 
   get canSave(): boolean {
@@ -50,6 +50,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   get canUpdate(): boolean {
     return this.form.valid && this.form.dirty;
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {

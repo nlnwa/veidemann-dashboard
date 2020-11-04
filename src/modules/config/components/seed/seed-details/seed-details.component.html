@@ -73,7 +73,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="canEdit || canConsult">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button
               [color]="form.valid ? 'accent' : 'warn'"
               *ngIf="showSave"

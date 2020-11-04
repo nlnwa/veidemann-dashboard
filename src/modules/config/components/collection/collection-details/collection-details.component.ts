@@ -41,7 +41,11 @@ export class CollectionDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {

@@ -1,4 +1,4 @@
-<div fxLayout="column" *ngIf="canShow">
+<div fxLayout="column" *ngIf="'read' | able: 'annotation'">
   <form>
     <mat-form-field>
       <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">

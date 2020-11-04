@@ -4,18 +4,19 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 
 import {AppRoutingModule} from './routing/app-routing.module';
-import {CommonsModule} from '../commons/commons.module';
+import {CommonsModule} from '../commons';
 import {CoreModule} from '../core/core.module';
 import {
+  AboutDialogComponent,
   AppComponent,
   CrawlerStatusComponent,
   CrawlerStatusDialogComponent,
   DialogComponent,
   ErrorDialogComponent,
   TimeComponent,
-  AboutDialogComponent,
 } from './components';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {AbilityModule} from '@casl/angular';
+import {Ability, PureAbility} from '@casl/ability';
 
 
 @NgModule({
@@ -36,9 +37,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AppRoutingModule,
     CommonsModule,
     CoreModule,
-    MatProgressSpinnerModule,
+    AbilityModule
+  ],
+  providers: [
+    {provide: Ability, useValue: new Ability()},
+    {provide: PureAbility, useExisting: Ability}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

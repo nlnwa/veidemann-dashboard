@@ -44,6 +44,7 @@ import {JobExecutionPreviewComponent} from './components/job-execution-preview/j
 import {ChartsModule} from 'ng2-charts';
 import {CrawlExecutionPreviewComponent} from './components/crawl-execution-preview/crawl-execution-preview.component';
 import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log-preview.component';
+import {AbilityModule} from '@casl/angular';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log
     CommonsModule,
     ReportRoutingModule,
     ChartsModule,
+    AbilityModule,
   ],
   exports: [
     JobNamePipe,

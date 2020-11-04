@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   private moduleLoadSemaphore = 0;
 
   updateRunStatus: Subject<void> = new Subject();
-  runStatus$: Observable<RunStatus>;
+  // runStatus$: Observable<RunStatus>;
 
   constructor(private appInitializer: AppInitializerService,
               private authService: AuthService,
@@ -65,13 +65,13 @@ export class AppComponent implements OnInit {
         this.errorService.dispatch(e);
       }
     }
-    this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
-      mergeMap(() => this.controllerApiService.getRunStatus()),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return throwError(error);
-      })
-    );
+    // this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
+    //   mergeMap(() => this.controllerApiService.getRunStatus()),
+    //   catchError(error => {
+    //     this.errorService.dispatch(error);
+    //     return throwError(error);
+    //   })
+    // );
   }
 
   get error(): Error {
@@ -86,17 +86,17 @@ export class AppComponent implements OnInit {
     return this.authService.name;
   }
 
-  get canAdministrate(): boolean {
-    return this.authService.isAdmin();
-  }
-
-  get canConfigure(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
-  }
-
-  get canConsult(): boolean {
-    return this.authService.isConsultant();
-  }
+  // get canAdministrate(): boolean {
+  //   return this.authService.isAdmin();
+  // }
+  //
+  // get canConfigure(): boolean {
+  //   return this.authService.isAdmin() || this.authService.isCurator();
+  // }
+  //
+  // get canConsult(): boolean {
+  //   return this.authService.isConsultant();
+  // }
 
   onLogin() {
     this.authService.login(this.route.snapshot.url.join('/'));

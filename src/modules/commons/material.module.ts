@@ -28,6 +28,7 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const modules = [
   MatTabsModule,
@@ -58,7 +59,8 @@ const modules = [
   MatBadgeModule,
   MatDividerModule,
   MatAutocompleteModule,
-  MatTreeModule
+  MatTreeModule,
+  MatProgressSpinnerModule,
 ];
 
 @NgModule({

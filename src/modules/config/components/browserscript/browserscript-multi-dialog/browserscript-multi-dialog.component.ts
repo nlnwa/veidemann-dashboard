@@ -68,7 +68,7 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    if (!this.editable) {
+    if (!this.canEdit) {
       this.form.disable();
     }
   }

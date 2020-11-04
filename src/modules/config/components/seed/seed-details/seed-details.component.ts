@@ -82,15 +82,11 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
   }
 
   get canDelete(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isConsultant();
-  }
-
-  get canConsult(): boolean {
-    return this.authService.isConsultant();
+    return this.authService.canUpdate(this.configObject.kind);
   }
 
   get entityRef(): AbstractControl {
@@ -167,9 +163,9 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
         kind: '',
         id: '',
       }, {validator: configRefIdRequired}),
-      jobRefListId: {value: [], disabled: this.canConsult},
+      jobRefListId: {value: []},
       scope: this.fb.group({
-        surtPrefix: {value: '', disabled: this.canConsult}
+        surtPrefix: {value: ''}
       }),
       meta: new Meta(),
     });

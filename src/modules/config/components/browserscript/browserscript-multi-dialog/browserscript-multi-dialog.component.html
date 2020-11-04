@@ -7,7 +7,7 @@
     </app-label-multi>
   </mat-dialog-content>
 </form>
-<mat-dialog-actions *ngIf="editable">
+<mat-dialog-actions *ngIf="canEdit">
   <button mat-raised-button color="accent"
           [disabled]="!canUpdate"
           [mat-dialog-close]="onDialogClose()"
