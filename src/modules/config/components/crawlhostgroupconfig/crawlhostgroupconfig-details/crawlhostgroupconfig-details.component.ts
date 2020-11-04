@@ -33,7 +33,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
+    return this.authService.canUpdate(this.configObject.kind);
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {

@@ -4,7 +4,7 @@
 
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
       <a mat-list-item
-         *ngIf="'create' | able: Kind.SEED.toString()"
+         *ngIf="'create' | able: Kind[Kind.SEED]"
          (click)="onCreateSeed()"
          matTooltip="Create a new seed with reference to the entity"
          i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">
@@ -14,7 +14,7 @@
 
     <ng-container *ngSwitchCase="Kind.SEED">
       <a mat-list-item
-         *ngIf="canRunCrawl()"
+         *ngIf="'runCrawl' | able: Kind[Kind.SEED]"
          (click)="onRunCrawl()"
          matTooltip="Start crawling seed: {{configObject.meta.name}}"
          i18n-matTooltip="@@seedListRunCrawlActionButtonTooltip">
@@ -24,7 +24,7 @@
 
     <ng-container *ngSwitchCase="Kind.CRAWLJOB">
       <a mat-list-item
-         *ngIf="canRunCrawl()"
+         *ngIf="'runCrawl' | able: Kind[Kind.CRAWLJOB]"
          (click)="onRunCrawl()"
          matTooltip="Run crawljob: {{configObject.meta.name}}">
         <mat-icon mat-list-icon>play_arrow</mat-icon>
@@ -33,7 +33,7 @@
 
   </ng-container>
   <a mat-list-item
-     *ngIf="'create' | able: this.configObject.kind.toString()"
+     *ngIf="'create' | able: Kind[this.configObject.kind]"
      (click)="onClone()"
      matTooltip="Clone"
      i18n-matTooltip="@@configurationListCloneActionButtonTooltip">

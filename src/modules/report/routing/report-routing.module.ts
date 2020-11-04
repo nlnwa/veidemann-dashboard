@@ -22,11 +22,11 @@ const routes: Routes = [
   {
     path: '',
     component: ReportComponent,
-    canActivate: [GuardService],
     children: [
       {
         path: 'crawlexecution',
         component: CrawlExecutionComponent,
+        canActivate: [GuardService],
         resolve: {
           options: OptionsResolver
         },
@@ -37,6 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'jobexecution',
+        canActivate: [GuardService],
         component: JobExecutionComponent,
         resolve: {
           options: OptionsResolver
@@ -48,6 +49,7 @@ const routes: Routes = [
       },
       {
         path: 'pagelog',
+        canActivate: [GuardService],
         component: PageLogComponent,
       },
       {
@@ -56,6 +58,7 @@ const routes: Routes = [
       },
       {
         path: 'crawllog',
+        canActivate: [GuardService],
         component: CrawlLogComponent,
       },
       {

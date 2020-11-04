@@ -1,73 +1,62 @@
 <mat-nav-list>
-  <a mat-list-item *ngIf="'read' | able: Kind.CRAWLENTITY.toString()"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.CRAWLENTITY]"
      [routerLink]="['/config', ConfigPath[Kind.CRAWLENTITY]]"
      [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>business</mat-icon>
     <span i18n="@@configurationSidebarMenuEntity">Entity</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able: Kind.SEED.toString()"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.SEED]"
      [routerLink]="['/config', ConfigPath[Kind.SEED]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>link</mat-icon>
     <span i18n="@@configurationSidebarMenuSeed">Seed</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able: Kind.CRAWLJOB.toString()"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
      [routerLink]="['/config', ConfigPath[Kind.CRAWLJOB]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>work</mat-icon>
     <span i18n="@@configurationSidebarMenuCrawljobs">Crawljobs</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able: Kind.CRAWLSCHEDULECONFIG.toString()"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.CRAWLSCHEDULECONFIG]"
      [routerLink]="['/config', ConfigPath[Kind.CRAWLSCHEDULECONFIG]]"
      [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>schedule</mat-icon>
     <span i18n="@@configurationSidebarMenuSchedule">Schedule</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'CrawlConfig'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
      [routerLink]="['/config', ConfigPath[Kind.CRAWLCONFIG]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
     <span i18n="@@configurationSidebarMenuCrawlconfig">CrawlConfig</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'Collection'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.COLLECTION]"
      [routerLink]="['/config', ConfigPath[Kind.COLLECTION]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>collections_bookmark</mat-icon>
     <span i18n="@@configurationSidebarMenuCollection">Collection</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'BrowserConfig'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"
      [routerLink]="['/config', ConfigPath[Kind.BROWSERCONFIG]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>web</mat-icon>
     <span i18n="@@configurationSidebarMenuBrowserconfig">BrowserConfig</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'BrowserScript'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.BROWSERSCRIPT]"
      [routerLink]="['/config', ConfigPath[Kind.BROWSERSCRIPT]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>web_asset</mat-icon>
     <span i18n="@@configurationSidebarMenuBrowserscript">BrowserScript</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'Politeness'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.POLITENESSCONFIG]"
      [routerLink]="['/config', ConfigPath[Kind.POLITENESSCONFIG]]" [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>sentiment_very_satisfied</mat-icon>
     <span i18n="@@@@configurationSidebarMenuPolitenessconfig">Politeness</span>
   </a>
-  <a mat-list-item *ngIf="'read' | able:'CrawlHostGroup'"
+  <a mat-list-item *ngIf="'read' | able: Kind[Kind.CRAWLHOSTGROUPCONFIG]"
      [routerLink]="['/config', ConfigPath[Kind.CRAWLHOSTGROUPCONFIG]]"
      [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>group_work</mat-icon>
     <span i18n="@@configurationSidebarMenuCrawlhostgroupconfig">CrawlHostGroup</span>
   </a>
-  <a *ngIf="'manage' | able: 'RoleMapping'" mat-list-item
+  <a *ngIf="'read' | able: Kind[Kind.ROLEMAPPING]" mat-list-item
      [routerLink]="['/config', ConfigPath[Kind.ROLEMAPPING]]"
      [routerLinkActive]="['is-active']">
     <mat-icon mat-list-icon>people</mat-icon>
     <span i18n="@@configurationSidebarMenuRolemapping">Users</span>
   </a>
 </mat-nav-list>
-<!--<mat-nav-list *ngIf="canConsult">-->
-<!--  <h3 mat-subheader i18n="@@configurationSidebarMenuHeader">Configuration</h3>-->
 
-<!--  <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.CRAWLENTITY]]" [routerLinkActive]="['is-active']">-->
-<!--    <mat-icon mat-list-icon>business</mat-icon>-->
-<!--    <span i18n="@@configurationSidebarMenuEntity">Entity</span>-->
-<!--  </a>-->
-<!--  <a mat-list-item [routerLink]="['/config', ConfigPath[Kind.SEED]]" [routerLinkActive]="['is-active']">-->
-<!--    <mat-icon mat-list-icon>link</mat-icon>-->
-<!--    <span i18n="@@configurationSidebarMenuSeed">Seed</span>-->
-<!--  </a>-->
-<!--</mat-nav-list>-->

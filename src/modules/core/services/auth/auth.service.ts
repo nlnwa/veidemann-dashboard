@@ -9,6 +9,7 @@ import {Ability, AbilityBuilder} from '@casl/ability';
   providedIn: 'root'
 })
 export class AuthService {
+  readonly Kind = Kind;
 
   roles: Role[];
 
@@ -46,24 +47,46 @@ export class AuthService {
     return this.ability;
   }
 
-  canCreate(subject): boolean {
-    return this.ability.can('create', subject.toString());
+  canCreate(subject: Kind | string): boolean {
+    if (typeof subject === 'string') {
+      return this.ability.can('create', subject);
+    } else {
+      return this.ability.can('create', Kind[subject]);
+    }
   }
 
-  canUpdate(subject): boolean {
-    return this.ability.can('update', subject.toString());
+  canUpdate(subject: Kind | string): boolean {
+    if (typeof subject === 'string') {
+      return this.ability.can('update', subject);
+    } else {
+      return this.ability.can('update', Kind[subject]);
+    }
   }
 
-  canDelete(subject): boolean {
-    return this.ability.can('delete', subject.toString());
+  canDelete(subject: Kind | string): boolean {
+    if (typeof subject === 'string') {
+      return this.ability.can('delete', subject);
+    } else {
+      return this.ability.can('delete', Kind[subject]);
+    }
   }
 
-  canRead(subject): boolean {
-    return this.ability.can('read', subject.toString());
+  canRead(subject: Kind | string): boolean {
+    if (typeof subject === 'string') {
+      return this.ability.can('read', subject);
+    } else {
+      return this.ability.can('read', Kind[subject]);
+    }
   }
 
-  canRunCrawl(subject): boolean {
-    return this.ability.can('runCrawl', subject.toString());
+  canRunCrawl(kind: Kind): boolean {
+    return this.ability.can('runCrawl', Kind[kind]);
+  }
+
+  canAbortCrawl(subject: string) {
+    console.log('can abort: ', subject);
+    console.log('canAbortCrawl; ', this.ability.can('abort', subject));
+    return this.ability.can('abort', subject);
   }
 
   /**
@@ -87,34 +110,32 @@ export class AuthService {
     return false;
   }
 
-   isAdmin(): boolean {
+  isAdmin(): boolean {
     return this.roles.includes(Role.ADMIN);
   }
 
-   isCurator(): boolean {
+  isCurator(): boolean {
     return this.roles.includes(Role.CURATOR);
   }
 
-   isReadonly(): boolean {
+  isReadonly(): boolean {
     return this.roles.includes(Role.READONLY);
   }
 
-   isConsultant(): boolean {
+  isConsultant(): boolean {
     return this.roles.includes(Role.CONSULTANT);
   }
 
-   isOperator(): boolean {
+  isOperator(): boolean {
     return this.roles.includes(Role.OPERATOR);
   }
 
-   isAnyUser(): boolean {
+  isAnyUser(): boolean {
     return this.roles.includes(Role.ANY_USER);
   }
 
   login(redirectUrl?: string) {
     this.oauthService.initLoginFlow(redirectUrl);
-    // console.log('onLogin before abilities updated: ', this.ability);
-    // this.updateAbility();
   }
 
   logout() {
@@ -124,40 +145,44 @@ export class AuthService {
   }
 
   updateAbility() {
-    const {can, cannot, rules} = new AbilityBuilder<Ability>();
+    const {can, rules} = new AbilityBuilder<Ability>();
 
-    const operatorConfigs = [Kind.CRAWLENTITY, Kind.SEED, Kind.CRAWLJOB, Kind.CRAWLCONFIG, Kind.CRAWLSCHEDULECONFIG,
-      Kind.BROWSERCONFIG, Kind.POLITENESSCONFIG, Kind.BROWSERSCRIPT, Kind.CRAWLHOSTGROUPCONFIG, Kind.COLLECTION];
-    const curatorConfigs = [Kind.CRAWLENTITY, Kind.SEED, Kind.COLLECTION, Kind.CRAWLJOB, Kind.CRAWLCONFIG];
+    const operatorConfigs = [Kind[Kind.CRAWLENTITY], Kind[Kind.SEED], Kind[Kind.CRAWLJOB], Kind[Kind.CRAWLCONFIG],
+      Kind[Kind.CRAWLSCHEDULECONFIG], Kind[Kind.BROWSERCONFIG], Kind[Kind.POLITENESSCONFIG], Kind[Kind.BROWSERSCRIPT],
+      Kind[Kind.CRAWLHOSTGROUPCONFIG], Kind[Kind.COLLECTION]];
+    const curatorConfigs = [Kind[Kind.CRAWLENTITY], Kind[Kind.SEED], Kind[Kind.COLLECTION], Kind[Kind.CRAWLJOB], Kind[Kind.CRAWLCONFIG]];
+
+    const reports = ['report', 'jobexecution', 'crawlexecution', 'pagelog', 'crawllog'];
 
     if (this.isAdmin()) {
       can('manage', 'all');
     }
 
     if (this.isOperator()) {
-      can(['create', 'read', 'delete', 'update', 'updateAll'], operatorConfigs.map(String));
+      can('read', reports);
+      can(['read', 'update'], 'annotation');
       can('read', 'configs');
-      can('read', 'reports');
-      can('read', 'logconfig');
-      can('runCrawl', [Kind.SEED, Kind.CRAWLJOB].map(String));
+      can('read', 'status');
+      can(['create', 'read', 'update', 'delete', 'updateAll'], operatorConfigs);
+      can('runCrawl', [Kind[Kind.SEED], Kind[Kind.CRAWLJOB]]);
+      can('abort', ['jobexecution']);
+      can(['read', 'update'], 'logconfig');
     }
 
     if (this.isCurator()) {
-      can('manage', curatorConfigs.map(String));
-      can('read', 'reports');
+      can(['create', 'read', 'update', 'delete', 'updateAll'], curatorConfigs);
+      can(['read', 'update'], 'annotation');
+      can('read', 'configs');
+      can('read', reports);
     }
 
     if (this.isConsultant()) {
-      can('manage', ['Entity', 'Seed']);
-      can('read', 'reports');
-    }
-
-    if (this.isAnyUser()) {
-      can('read', ['Entity', 'Seed']);
+      can(['create', 'read', 'update', 'delete'], [Kind[Kind.CRAWLENTITY], Kind[Kind.SEED]]);
+      can('read', 'configs');
+      can('read', reports);
     } else {
       can('read', 'Home');
     }
     this.ability.update(rules);
-    console.log('ability after update:', this.ability);
   }
 }

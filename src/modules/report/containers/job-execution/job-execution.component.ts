@@ -8,7 +8,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
-import {ConfigObject} from '../../../../shared/models/config';
+import {ConfigObject, Kind} from '../../../../shared/models/config';
 import {MatDialog} from '@angular/material/dialog';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
 
@@ -23,6 +23,7 @@ export class JobExecutionComponent implements OnInit {
   readonly jobExecutionStates = jobExecutionStates;
   readonly JobExecutionState = JobExecutionState;
   readonly crawlJobOptions: ConfigObject[];
+  readonly Kind = Kind;
 
   private reload$: Observable<void>;
   private reload: Subject<void>;
