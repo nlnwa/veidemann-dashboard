@@ -4,13 +4,13 @@ import {SeedMetaComponent} from './seed-meta.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../../commons/material.module';
 import {RouterTestingModule} from '@angular/router/testing';
-import {LabelsComponent} from '../../../commons/components';
 import {DatePipe} from '@angular/common';
 import {ConfigApiService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {LabelService} from '../../services/label.service';
 import {of} from 'rxjs';
+import {LabelComponent} from '..';
 
 describe('SeedMetaComponent', () => {
   let component: SeedMetaComponent;
@@ -18,7 +18,7 @@ describe('SeedMetaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SeedMetaComponent, LabelsComponent],
+      declarations: [SeedMetaComponent, LabelComponent],
       imports: [
         MaterialModule,
         FormsModule,

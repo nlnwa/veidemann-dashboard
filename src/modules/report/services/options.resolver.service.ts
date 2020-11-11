@@ -4,9 +4,13 @@ import {Observable} from 'rxjs';
 import {map, toArray} from 'rxjs/operators';
 
 import {ConfigApiService} from '../../core/services';
-import {Kind} from '../../../shared/models';
+import {ConfigObject, Kind} from '../../../shared/models';
 import {ListRequest} from '../../../api';
-import {ConfigOptions} from '../containers/report/report.component';
+
+
+export interface ConfigOptions {
+  crawlJobs?: ConfigObject[];
+}
 
 @Injectable()
 export class OptionsResolver implements Resolve<ConfigOptions> {

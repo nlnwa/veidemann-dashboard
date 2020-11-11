@@ -14,14 +14,13 @@ export const environment = {
   configUrl: '/veidemann/assets/config/environment.json',
   versionUrl: '/veidemann/assets/versions.json',
   grpcWebUrl: '/grpc-web',
-  waybackUrl: 'https://veidemann.local/loke/nb/',
   authConfig: {
 
     // Url of the Identity Provider
     issuer: '',
 
     // URL of the SPA to redirect the user to after login
-//     redirectUri: window.location.origin + '/veidemann',
+    //     redirectUri: window.location.origin + '/veidemann',
     redirectUri: window.location.origin + '/veidemann',
 
     requestAccessToken: false,

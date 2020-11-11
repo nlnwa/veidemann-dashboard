@@ -5,7 +5,9 @@ import {ControllerApiService} from './api/controller-api.service';
 import {AuthService} from './auth';
 import {AppConfigService} from './app.config.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppInitializerService {
 
   error: Error;
@@ -32,6 +34,7 @@ export class AppInitializerService {
         }
       }
       this.authService.roles = await this.controllerService.getRolesForActiveUser();
+      this.authService.updateAbility();
     } catch (error) {
       this.error = error;
     }

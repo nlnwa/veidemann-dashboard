@@ -1,0 +1,27 @@
+.test {
+  width: 100%
+}
+
+.meta-column {
+  width: 45%;
+}
+
+.seed-column {
+  width: 45%;
+}
+
+.shortcut-column {
+  width: 10%;
+}
+
+.mat-label {
+  padding: 2px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-label {
+  margin-top: 16px;
+}

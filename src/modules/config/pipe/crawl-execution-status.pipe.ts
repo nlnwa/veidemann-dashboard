@@ -14,7 +14,11 @@ export class CrawlExecutionStatusPipe implements PipeTransform {
   constructor(private reportService: ReportApiService) {
   }
 
-  transform(configObject: ConfigObject): Observable<CrawlExecutionStatus> {
-    return this.reportService.getLastSeedStatus(configObject.id);
+  transform(configObject: ConfigObject, pageSize?: number): Observable<CrawlExecutionStatus> {
+    if (configObject && pageSize) {
+      return this.reportService.getLastSeedStatus(configObject.id, pageSize);
+    } else if (configObject && !pageSize) {
+      return this.reportService.getLastSeedStatus(configObject.id);
+    }
   }
 }

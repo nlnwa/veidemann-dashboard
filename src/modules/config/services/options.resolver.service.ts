@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes, browserScriptTypes} from '../../../shared/models';
+import {browserScriptTypes, Kind, robotsPolicies, roles, rotationPolicies, subCollectionTypes} from '../../../shared/models';
 import {map, toArray} from 'rxjs/operators';
 import {ConfigApiService} from '../../core/services';
 import {combineLatest, Observable, of} from 'rxjs';
-import {ConfigOptions} from '../containers';
-import {ConfigPath} from '../func';
+import {ConfigOptions, ConfigPath} from '../func';
 import {createListRequest} from '../func/query';
-
 
 @Injectable()
 export class OptionsResolver implements Resolve<ConfigOptions> {
@@ -19,8 +17,6 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
     const kind: Kind = ConfigPath[route.paramMap.get('kind')] || route.data.kind;
 
     switch (kind) {
-
-
       case Kind.CRAWLJOB:
         const crawlScheduleConfig$ = this.backendService.list(createListRequest(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
           toArray(),
@@ -63,6 +59,12 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
         return {roles};
 
       case Kind.SEED:
+        return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
+          toArray(),
+          map(crawlJobs => ({crawlJobs}))
+        );
+
+      case Kind.CRAWLENTITY:
         return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
           toArray(),
           map(crawlJobs => ({crawlJobs}))

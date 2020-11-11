@@ -1,0 +1,69 @@
+<div fxLayout="column" class="container">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+  <div fxFlex fxLayout="row" class="no-scroll" *ngIf="query$ | async as query">
+    <app-crawl-execution-status-query class="content-padding scroll"
+                                      [crawlJobOptions]="crawlJobOptions"
+                                      [query]="query"
+                                      (queryChange)="onQueryChange($event)"></app-crawl-execution-status-query>
+    <app-crawl-execution-status-list fxFlex
+                                     appQueryCrawlExecutionStatus [query]="query"
+                                     [pageIndex]="pageIndex$ | async"
+                                     [pageSize]="pageSize$ | async"
+                                     [sortDirection]="sortDirection$ | async"
+                                     [sortActive]="sortActive$ | async"
+                                     (sort)="onSort($event)"
+                                     (page)="onPage($event)">
+      <ng-container *appShortcut="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: Kind[Kind.SEED]"
+           [routerLink]="['/config', 'seed', row.seedId]"
+           i18n="@@reportListActionButtonGoToSeed">
+          <mat-icon>link</mat-icon>
+          Go to seed
+        </a>
+        <a mat-menu-item
+           *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+           [routerLink]="['/config', 'crawljobs', row.jobId]"
+           i18n="@@reportListActionButtonGoToCrawljob">
+          <mat-icon>work</mat-icon>
+          Go to crawljob
+        </a>
+      </ng-container>
+      <ng-container *appFilter="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: 'pagelog'"
+           [routerLink]="['../pagelog']"
+           [queryParams]="{execution_id: row.id, watch: isDone(row) ? null : true}"
+           i18n="@@reportListActionButtonGoToPagelog">
+          <mat-icon>art_track</mat-icon>
+          Go to pagelog
+        </a>
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawllog'"
+           [routerLink]="['../crawllog']"
+           [queryParams]="{execution_id: row.id}"
+           i18n="@@reportListActionButtonGoToCrawlog">
+          <mat-icon>event_note</mat-icon>
+          Go to crawllog
+        </a>
+      </ng-container>
+      <ng-container *appAction="let row">
+        <ng-container *ngIf="canAbort(row.state) && ('abort' | able: 'crawlexecution')">
+          <a mat-menu-item
+             (click)="onAbortCrawlExecution(row)"
+             i18n="@@reportListActionButtonAbortCrawlExecution">
+            <mat-icon>cancel</mat-icon>
+            Abort crawl
+          </a>
+        </ng-container>
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawlexecution'"
+           [routerLink]="['../crawlexecution', row.id]"
+           i18n-matTooltip="@@reportListActionButtonShowFullReport">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+          Show full report
+        </a>
+      </ng-container>
+    </app-crawl-execution-status-list>
+  </div>
+</div>

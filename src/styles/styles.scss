@@ -40,6 +40,25 @@ html, body {
   // padding: 0.5rem 1rem 1.5rem 0.8rem;
 }
 
+.container {
+  height: 100%;
+}
+
+.scroll {
+  overflow-y: auto;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
 .monospace {
   font-family: monospace;
+}
+.tooltip-overflow {
+  word-wrap: break-word;
+  white-space: unset;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }

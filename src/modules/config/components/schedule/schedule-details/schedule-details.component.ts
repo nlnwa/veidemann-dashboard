@@ -4,16 +4,21 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   ConfigObject,
   CrawlScheduleConfig,
-  DateTime,
   Kind,
   Meta,
+} from '../../../../../shared/models';
+
+
+import {
   VALID_CRON_DOM_PATTERN,
   VALID_CRON_DOW_PATTERN,
   VALID_CRON_HOUR_PATTERN,
   VALID_CRON_MINUTE_PATTERN,
   VALID_CRON_MONTH_PATTERN
-} from '../../../../../shared';
+} from '../../../../../shared/validation';
+
 import {AuthService} from '../../../../core/services/auth';
+import {DateTime} from '../../../../../shared/func';
 
 
 @Component({
@@ -48,11 +53,11 @@ export class ScheduleDetailsComponent implements OnChanges {
   }
 
   get canDelete(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get canEdit(): boolean {
-    return this.authService.isCurator() || this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
   }
 
   get showSave(): boolean {

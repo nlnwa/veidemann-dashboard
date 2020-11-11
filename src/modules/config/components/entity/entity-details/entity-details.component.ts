@@ -51,14 +51,15 @@ export class EntityDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator() || this.authService.isConsultant();
+    return this.authService.canUpdate(this.configObject.kind);
   }
 
   get canDelete(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('get: ', this.authService.getAbility());
     if (changes.configObject) {
       if (this.configObject) {
         this.updateForm();
@@ -98,6 +99,7 @@ export class EntityDetailsComponent implements OnChanges {
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+
     if (!this.canEdit) {
       this.form.disable();
     }
@@ -106,12 +108,10 @@ export class EntityDetailsComponent implements OnChanges {
   protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
-    const configObject = new ConfigObject({
+    return new ConfigObject({
       id: formModel.id,
       meta: formModel.meta,
       kind: Kind.CRAWLENTITY
     });
-
-    return configObject;
   }
 }

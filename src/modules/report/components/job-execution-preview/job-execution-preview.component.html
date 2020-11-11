@@ -1,0 +1,57 @@
+<div class="content-padding" fxLayout="column" fxLayoutGap="16px"
+     *ngIf="jobExecutionStatus">
+  <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
+    <mat-card>
+      <h2>Duration</h2>
+      <h1>{{getDuration(jobExecutionStatus.startTime, jobExecutionStatus.endTime)}}</h1>
+    </mat-card>
+
+    <mat-card *ngIf="jobExecutionStatus.urisCrawled">
+      <h2>URIs crawled</h2>
+      <h1>{{jobExecutionStatus.urisCrawled}}</h1>
+    </mat-card>
+
+    <mat-card>
+      <h2>Bytes crawled</h2>
+      <h1>{{jobExecutionStatus.bytesCrawled | filesize}}</h1>
+    </mat-card>
+    <mat-card *ngIf="jobExecutionStatus.error as error">
+      <h2>Error</h2>
+      <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>
+             <h4 class="monospace">{{error.msg}}</h4>
+             <p class="monospace">{{error.detail}}</p>
+    </mat-card>
+  </div>
+  <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
+    <mat-card style="max-width: 50%; min-width: 45%">
+      <mat-card-title>State overview</mat-card-title>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="stateMapPieChartData"
+                [labels]="stateMapPieChartLabels"
+                [chartType]="pieChartType"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+    <mat-card style="max-width: 50%; min-width: 45%">
+      <mat-card-title>Documents</mat-card-title>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="pieChartData"
+                [labels]="pieChartLabels"
+                [chartType]="pieChartType"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+
+
+

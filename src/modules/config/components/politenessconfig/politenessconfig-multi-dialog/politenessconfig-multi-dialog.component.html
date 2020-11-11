@@ -1,0 +1,144 @@
+<form [formGroup]="form">
+  <h2 mat-dialog-title>PolitenessConfig - Mass update</h2>
+
+  <mat-dialog-content fxLayout="row" fxLayoutGap="16px">
+    <div fxFlex fxLayout="column" fxLayoutGap="16px">
+      <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
+      <h5>Common crawl host group selectors for the selected configurations:</h5>
+      <div fxlayout="row" fxLayoutGap="16px">
+        <mat-chip-list fxFlex>
+          <mat-chip *ngFor="let crawlHostGroupSelector of configObject.politenessConfig.crawlHostGroupSelectorList"
+                    [selectable]="false">
+            {{crawlHostGroupSelector}}
+          </mat-chip>
+        </mat-chip-list>
+        <div>
+          <mat-button-toggle-group
+            [value]="shouldAddSelector"
+            (valueChange)="onToggleShouldAddSelector($event)"
+            name="shouldAddSelector">
+            <mat-button-toggle [value]="true">
+              <mat-icon>add</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+              <mat-icon>remove</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
+        <app-selector placeholder="CrawlHostGroup Selector" fxFlex formControlName="crawlHostGroupSelectorList"
+                      [removable]="canEdit"></app-selector>
+        <mat-hint *ngIf="shouldAddSelector">Enter crawl host group selectors to add</mat-hint>
+        <mat-hint *ngIf="!shouldAddSelector">Enter crawl host group selectors to remove</mat-hint>
+      </div>
+    </div>
+
+    <div fxFlex fxLayout="column">
+      <div (click)="onEnableRobotsPolicy()">
+        <mat-form-field>
+          <mat-select placeholder="Choose policy"
+                      formControlName="robotsPolicy"
+                      i18n-placeholder='@@politenessconfigFormRobotPolicyDropdownPlaceholder'
+                      i18n-matTooltip='@@politenessconfigFormRobotPolicyDisabledExplanation'
+                      [matTooltip]="robotsPolicy.disabled ?
+                        'Setting is not the same for all selected configurations.'
+                        + 'Click here and set the desired value to override all,'
+                        + 'or leave untouched to retain the original configuration value'
+                        : null">
+            <mat-option *ngFor="let policy of robotsPolicies" [value]="policy">{{RobotsPolicy[policy]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div *ngIf="robotsPolicy.value === 'CUSTOM_ROBOTS'" class="customRobotTxtInput">
+        <mat-form-field>
+            <textarea matInput
+                      formControlName="customRobots"
+                      placeholder="robots.txt"
+                      i18n-placeholder="politenessconfigFormCustomRobotsPolicyInputPlaceholder">
+            </textarea>
+        </mat-form-field>
+      </div>
+
+      <mat-label i18n="@@politenessconfigFormMinRobotsValidDurationLabel">Minimum robots validity</mat-label>
+      <app-duration-picker formControlName="minimumRobotsValidityDurationS"
+                           [unit]="UnitOfTime.SECOND"
+                           [durationGranularity]="'d:h:m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!minRobotsValidDurationSec.valid"
+                 i18n="@@politenessconfigFormMinRobotsValidDurationValidationError">
+        Must be a number.
+      </mat-error>
+
+      <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
+      <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
+                 i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
+        Must be a number.
+      </mat-error>
+
+      <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
+      <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
+                 i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
+        Must be a number.
+      </mat-error>
+
+      <mat-form-field>
+        <input matInput
+               formControlName="delayFactor"
+               placeholder="Delay factor"
+               i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
+        <mat-error *ngIf="!delayFactor.valid"
+                   i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               formControlName="maxRetries"
+               placeholder="Maximum retries"
+               i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
+        <mat-error *ngIf="!maxRetries.valid"
+                   i18n="@@politenessconfigFormMaxRetriesValidationError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-label i18n="politenessconfigFormRetryDelayLabel">Retry delay</mat-label>
+      <app-duration-picker formControlName="retryDelaySeconds"
+                           [unit]="UnitOfTime.SECOND"
+                           [durationGranularity]="'m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!retryDelaySeconds.valid"
+                 i18n="@@politenessconfigFormRetryDelayValidationError">
+        Must be a number.
+      </mat-error>
+    </div>
+  </mat-dialog-content>
+</form>
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

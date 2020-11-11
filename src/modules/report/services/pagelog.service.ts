@@ -1,37 +1,34 @@
 import {Injectable} from '@angular/core';
-import {QueryService, Sort} from '../../commons/services/query.service';
 import {ConfigObject} from '../../../shared/models/config';
 import {ReportApiService} from '../../core/services';
 import {Observable} from 'rxjs';
 import {PageLog} from '../../../shared/models/report';
-import {PageLogListRequest} from '../../../api/gen/report/v1/report_pb';
-import {FieldMask} from '../../../api';
+import {FieldMask, PageLogListRequest} from '../../../api';
+import {LoadingService} from '../../../shared/services';
+import {Detail, Page, Sort, Watch} from '../../../shared/func';
+import {Getter} from '../../../shared/directives';
 
-export interface PageLogQuery {
+export interface PageLogQuery extends Page, Sort, Watch {
   uri: string;
   executionId: string;
   jobExecutionId: string;
-  pageSize: number;
-  pageIndex: number;
-  watch: boolean;
-  sort: Sort;
- // offset: number;
- // orderByPath: string;
- // orderDescending: boolean;
+  // offset: number;
+  // orderByPath: string;
+  // orderDescending: boolean;
 }
 
 @Injectable()
-export class PageLogService extends QueryService {
+export class PageLogService extends LoadingService implements Getter<PageLog> {
   private readonly cache: Map<string, ConfigObject>;
 
-  constructor(private reportApiService: ReportApiService){
+  constructor(private reportApiService: ReportApiService) {
     super();
     this.cache = new Map();
   }
 
-  get(warcId: string): Observable<PageLog> {
+  get(query: Detail): Observable<PageLog> {
     const listRequest = new PageLogListRequest();
-    listRequest.addWarcId(warcId);
+    listRequest.addWarcId(query.id);
     return this.reportApiService.listPageLogs(listRequest);
   }
 
@@ -76,9 +73,9 @@ export class PageLogService extends QueryService {
       listRequest.setWatch(query.watch);
     }
 
-    if (query.sort) {
-      listRequest.setOrderByPath(query.sort.active);
-      listRequest.setOrderDescending(query.sort.direction === 'desc');
+    if (query.active && query.direction) {
+      listRequest.setOrderByPath(query.active);
+      listRequest.setOrderDescending(query.direction === 'desc');
     }
 
     return listRequest;

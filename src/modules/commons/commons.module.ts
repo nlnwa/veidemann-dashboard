@@ -5,14 +5,18 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {MaterialModule} from './material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {ActionDirective, ExtraDirective} from './directives';
+import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from './directives';
 import {NgxFilesizeModule} from 'ngx-filesize';
+import {DurationFormatPipe} from './pipes/duration-format.pipe';
 
 
 @NgModule({
   declarations: [
     ActionDirective,
     ExtraDirective,
+    ShortcutDirective,
+    FilterDirective,
+    DurationFormatPipe,
   ],
   imports: [
     MaterialModule,
@@ -33,7 +37,10 @@ import {NgxFilesizeModule} from 'ngx-filesize';
     DragDropModule,
     ActionDirective,
     ExtraDirective,
+    ShortcutDirective,
+    FilterDirective,
     NgxFilesizeModule,
+    DurationFormatPipe,
   ],
   providers: [DatePipe],
 })

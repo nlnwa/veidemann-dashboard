@@ -2,65 +2,6 @@
 
 table {
   width: 100%;
-  table-layout: fixed;
-}
-
-.mat-column-select {
-  flex: 0 0 5%;
-  width: 5%;
-}
-
-.mat-column-name, .mat-column-description {
-  flex: 0 0 20%;
-  width: 20%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 15px;
-}
-
-.mat-column-name:hover, .mat-column-description:hover {
-  white-space: normal;
-  word-break: break-word;
-}
-
-.mat-column-extra {
-  flex: 0 0 5%;
-  width: 5%;
-}
-
-.mat-column-action {
-  flex: 0 0 25%;
-  width: 25%;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.row-checked {
-  background-color: lighten($dark-focused, 50%);
-}
-
-.row-selected {
-  background-color: $dark-focused;
-}
-
-.row-disabled .mat-cell {
-  color: $warn;
-}
-
-.mat-row.row-selected:hover {
-  background-color: $dark-focused;
-  cursor: pointer;
-}
-
-.mat-row:hover {
-  background-color: lighten($dark-focused, 50%);
-  cursor: pointer;
-}
-
-.mat-row.no-interaction {
-  cursor: default;
-  background-color: inherit;
 }
 
 .checkbox-padding {
@@ -71,11 +12,64 @@ table {
   text-align: right;
 }
 
-.actions {
-  display: inline-block;
-  opacity: 0;
+tr.item-row.row-checked {
+  background-color: lighten($dark-focused, 50%);
 }
 
-.mat-row:hover .actions {
-  opacity: 100;
+.row-disabled td {
+  color: $warn;
 }
+
+tr.item-row:hover {
+  background-color: lighten($dark-focused, 25%);
+}
+
+tr.item-row:nth-child(4n+1):hover {
+  background-color: $dark-focused;
+}
+
+tr.item-row:not(.row-checked):nth-child(4n+1) {
+  background-color: lighten($dark-focused, 80%);
+}
+
+.mat-row.no-interaction {
+  cursor: default;
+  background-color: inherit;
+}
+
+tr.preview-row {
+  height: 0;
+}
+
+.item-row td {
+  border-bottom-width: 0;
+}
+
+.preview {
+  overflow: hidden;
+  display: flex;
+}
+
+.mat-column-name {
+  padding-right: 10px;
+  max-width: 0px;
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mat-column-description {
+  padding-right: 10px;
+  max-width: 0px;
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mat-column-action {
+  text-align: right;
+}
+
+

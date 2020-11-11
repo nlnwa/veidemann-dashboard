@@ -1,0 +1,78 @@
+<form [formGroup]="form">
+  <div fxLayout="row">
+    <h2 mat-dialog-title>Seed - Mass update</h2>
+    <span fxFlex></span>
+    <div (click)="disabled.disabled ? disabled.enable(): null">
+      <mat-slide-toggle class="disabled-toggle"
+                        formControlName="disabled"
+                        i18n="@@seedDisabledToggleSwitch"
+                        i18n-matTooltip="@@seedDisabledToggleSwitchTooltip"
+                        [matTooltip]="disabled.disabled ?
+                            'Disabled state for all of the selected configs are not equal.'
+                             +'Click here and set desired state to override all, '
+                             + 'or leave untouched to keep the configurations original value.'
+                            : null">
+        Deactivated
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <mat-dialog-content>
+    <div fxLayout="row wrap" fxLayoutGap="24px">
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
+        <app-label-multi [configObject]="configObject"
+                         (update)="onUpdateLabels($event)">
+        </app-label-multi>
+
+        <div fxLayout="column" fxLayoutGap="16px">
+          <h5>Common crawljob for the selected configs:</h5>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field fxFlex>
+              <mat-select placeholder="Crawlob" multiple formControlName="commonJobRefListId"
+                          i18n-placeholder="@@seedDetailsFormJobRefListPlaceholder">
+                <mat-option *ngFor="let crawlJob of crawlJobs"
+                            [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-button-toggle-group [value]="shouldAddCrawlJob"
+                                     (valueChange)="onToggleShouldAddCrawlJob($event)"
+                                     name="shouldAddCrawlJob">
+              <mat-button-toggle [value]="true" matTooltip="Add crawljobs to the selected configs">
+                <mat-icon>add</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle [value]="false" matTooltip="Remove crawljobs from the selected configs">
+                <mat-icon>remove</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div *ngIf="shouldAddCrawlJob !== undefined">
+            <mat-form-field *ngIf="shouldAddCrawlJob!==undefined">
+              <mat-select placeholder="Crawljob" multiple formControlName="updateJobRefListId">
+                <mat-option *ngFor="let crawlJob of crawlJobs" [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+              </mat-select>
+              <mat-hint *ngIf="shouldAddCrawlJob">Select crawljobs to add</mat-hint>
+              <mat-hint *ngIf="!shouldAddCrawlJob">Select crawljobs to remove</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</form>
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          *ngIf="canUpdate"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-button
+          [disabled]="!canRevert"
+          (click)="onRevert()"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

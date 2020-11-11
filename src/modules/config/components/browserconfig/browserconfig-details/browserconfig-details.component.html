@@ -54,7 +54,7 @@
         <mat-label i18n="@@browserconfigFormPageLoadTimeoutLabel">Page load timeout</mat-label>
         <app-duration-picker formControlName="pageLoadTimeoutMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
 
         </app-duration-picker>
         <mat-error *ngIf="!pageLoadTimeoutMs.valid"
@@ -65,7 +65,7 @@
         <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
         <app-duration-picker formControlName="maxInactivityTimeMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
         <mat-error *ngIf="!maxInactivityTimeMs.valid"
                    i18n="@@browserconfigFormSleepAfterPageLoadRequiredError">
@@ -83,16 +83,6 @@
         <app-selector placeholder="Script selector" formControlName="scriptSelectorList" [removable]="canEdit"
                       i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
         </app-selector>
-
-        <mat-list *ngIf="showShortcuts">
-          <mat-list-item *ngFor="let id of scriptRefIdList.value">
-            <mat-icon matTooltip="BrowserScript"
-                      i18n-matTooltip="@@browserconfigBrowserscriptShortcutTooltip">web_asset</mat-icon>&nbsp;
-            <a class="shortcut-link"
-               [routerLink]="['/config/browserscript']"
-               [queryParams]="{id: id}">{{ getScriptName(id) }}</a>
-          </mat-list-item>
-        </mat-list>
       </div>
     </mat-card-content>
 

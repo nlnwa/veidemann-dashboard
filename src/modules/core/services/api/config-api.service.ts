@@ -15,7 +15,9 @@ const catchConfigError = (errorService: ErrorHandler, returnValue: any) =>
     return of(returnValue);
   });
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ConfigApiService {
 
   private configPromiseClient: ConfigPromiseClient;

@@ -4,7 +4,6 @@ import {DeploymentVersions} from '../../../shared/models/deployment-versions.mod
 export class AppConfig {
   authConfig?: AuthConfig;
   grpcWebUrl?: string;
-  waybackUrl?: string;
   versions?: DeploymentVersions;
 
   constructor(json?: Partial<AppConfig>) {

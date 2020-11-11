@@ -35,13 +35,17 @@ export class CollectionDetailsComponent implements OnChanges {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder,
-              private authService: AuthService) {
+  constructor(protected fb: FormBuilder,
+              protected authService: AuthService) {
     this.createForm();
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {
@@ -103,7 +107,7 @@ export class CollectionDetailsComponent implements OnChanges {
     this.form.markAsDirty();
   }
 
-  private createForm(): void {
+  protected createForm(): void {
     this.form = this.fb.group({
       id: {value: ''},
       collectionDedupPolicy: '',
@@ -115,7 +119,7 @@ export class CollectionDetailsComponent implements OnChanges {
     });
   }
 
-  private updateForm(): void {
+  protected updateForm(): void {
     const subCollectionsFG: FormGroup[] = this.configObject.collection.subCollectionsList
       .map(subCollectionsList => this.fb.group(subCollectionsList));
     const subCollectionsFGArray: FormArray = this.fb.array(subCollectionsFG);
@@ -137,7 +141,7 @@ export class CollectionDetailsComponent implements OnChanges {
     }
   }
 
-  private prepareSave(): ConfigObject {
+  protected prepareSave(): ConfigObject {
     const formModel = this.form.value;
 
     const configObject = new ConfigObject({kind: Kind.COLLECTION});

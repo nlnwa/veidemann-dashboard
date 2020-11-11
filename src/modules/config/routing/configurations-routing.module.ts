@@ -1,35 +1,37 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {ConfigurationsComponent, LoglevelComponent} from '../containers';
-import {LogResolver, OptionsResolver} from '../services';
+import {ConfigurationComponent, ConfigurationsComponent} from '../containers';
+import {OptionsResolver} from '../services';
 import {GuardService} from '../../core/services/auth';
+import {ConfigComponent} from '../containers';
+import {ConfigNavListComponent} from '../containers/config-nav-list/config-nav-list.component';
 
 const routes: Routes = [
   {
-    path: 'logconfig',
-    component: LoglevelComponent,
-    resolve: {
-      levels: LogResolver
-    },
-    canActivate: [GuardService]
+    path: '',
+    pathMatch: 'full',
+    component: ConfigNavListComponent,
   },
   {
     path: ':kind',
-    component: ConfigurationsComponent,
+    component: ConfigComponent,
     resolve: {
       options: OptionsResolver
     },
-    canActivate: [GuardService]
+    canActivate: [GuardService],
+    children: [
+      {
+        path: '',
+        component: ConfigurationsComponent,
+      },
+      {
+        path: ':id',
+        component: ConfigurationComponent,
+      },
+    ],
   },
-  {
-    path: '',
-    component: ConfigurationsComponent,
-    resolve: {
-      options: OptionsResolver
-    },
-    canActivate: [GuardService]
-  },
+
 ];
 
 @NgModule({

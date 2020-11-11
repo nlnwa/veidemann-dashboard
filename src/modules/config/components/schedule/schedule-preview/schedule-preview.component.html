@@ -1,0 +1,5 @@
+<div fxLayout="column">
+  <mat-label><b>CRON expression: </b> {{configObject.crawlScheduleConfig.cronExpression}}</mat-label>
+  <mat-label><b>Valid from: </b> {{configObject.crawlScheduleConfig.validFrom | date: 'medium'}}</mat-label>
+  <mat-label><b>Valid to: </b> {{configObject.crawlScheduleConfig.validTo | date: 'medium'}}</mat-label>
+</div>

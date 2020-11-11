@@ -4,7 +4,9 @@ import {Observable} from 'rxjs';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {AppConfigService} from '../app.config.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TokenInterceptor implements HttpInterceptor {
 
   constructor(private oAuthService: OAuthService,

@@ -1,6 +1,7 @@
 import {ApiError} from './api-error.model';
 import {CrawlLogProto} from '../../../api';
 import {fromTimestampProto, toTimestampProto} from '../../func';
+import {fromRethinkTimeStamp} from '../../func/rethinkdb';
 
 export class CrawlLog {
   id: string;
@@ -56,7 +57,7 @@ export class CrawlLog {
                 collectionFinalName = '',
                 method = ''
               }: Partial<CrawlLog> = {}) {
-    this.id = id;
+    this.id = id || warcId;
     this.warcId = warcId;
     this.timeStamp = timeStamp;
     this.surt = surt;
@@ -83,9 +84,23 @@ export class CrawlLog {
     this.method = method;
   }
 
+  /**
+   * A function that transforms the results. This function is called for each member of the object.
+   * If a member contains nested objects, the nested objects are transformed before the parent object is.
+   * @see JSON.parse
+   */
+  static reviver(key: string, value: any) {
+    switch (key) {
+      case 'timeStamp':
+      case 'fetchTimeStamp':
+        return fromRethinkTimeStamp(value);
+      default:
+        return value;
+    }
+  }
+
   static fromProto(proto: CrawlLogProto): CrawlLog {
     return new CrawlLog({
-      id: proto.getWarcId(),
       warcId: proto.getWarcId(),
       timeStamp: fromTimestampProto(proto.getTimeStamp()),
       surt: proto.getSurt(),

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, Kind, Label, Meta, PolitenessConfig, RobotsPolicy} from '../../../../../shared/models';
 import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
 
@@ -40,7 +40,11 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {
@@ -52,7 +56,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
   }
 
   get canUpdate(): boolean {
-    return (this.form.valid && this.form.dirty);
+   return (this.form.valid && this.form.dirty);
   }
 
   get canRevert(): boolean {
@@ -133,7 +137,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
       customRobots: '',
       minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(DECIMAL_NUMBER_OR_EMPTY_STRING)]],
       maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       crawlHostGroupSelectorList: [],
@@ -183,7 +187,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
     politenessConfig.customRobots = formModel.customRobots;
     politenessConfig.minTimeBetweenPageLoadMs = parseInt(formModel.minTimeBetweenPageLoadMs, 10) || 0;
     politenessConfig.maxTimeBetweenPageLoadMs = parseInt(formModel.maxTimeBetweenPageLoadMs, 10) || 0;
-    politenessConfig.delayFactor = parseFloat(formModel.delayFactor) || 0.0;
+    politenessConfig.delayFactor = parseFloat(formModel.delayFactor) || 0;
     politenessConfig.maxRetries = parseInt(formModel.maxRetries, 10) || 0;
     politenessConfig.retryDelaySeconds = parseInt(formModel.retryDelaySeconds, 10) || 0;
     politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);

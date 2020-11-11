@@ -83,7 +83,6 @@
             <span i18n="@@collectionFormAddSubcollectionButton">ADD SUBCOLLECTION</span>
           </button>
         </fieldset>
-
       </div>
     </mat-card-content>
 
@@ -110,7 +109,7 @@
       </button>
       <span fxFlex></span>
       <button mat-button
-              *ngIf="!showSave"
+              *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
         DELETE

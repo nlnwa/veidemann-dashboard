@@ -23,3 +23,17 @@
 .main-toolbar {
   min-height: 48px;
 }
+
+main {
+  overflow: hidden;
+}
+
+.veidemann_logo {
+  height: auto;
+  width: auto;
+  max-height: 64px;
+  max-width: 250px;
+
+  line-height: 64px;
+  vertical-align: middle;
+}

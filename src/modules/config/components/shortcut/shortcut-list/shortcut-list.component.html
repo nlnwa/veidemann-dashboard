@@ -1,0 +1,91 @@
+<ng-container [ngSwitch]="configObject?.kind">
+  <ng-container *ngSwitchCase="Kind.SEED">
+    <mat-nav-list *ngIf="configObject.seed.jobRefList.length > 0 && ('read' | able: Kind[Kind.CRAWLJOB])">
+      <h2 mat-subheader>
+        <mat-icon mat-list-icon>work</mat-icon>
+        Crawljobs
+      </h2>
+      <ng-container *ngFor="let crawlJob of configObject.seed.jobRefList">
+        <a mat-list-item
+           [routerLink]="['/config/crawljobs/' + crawlJob.id]">
+          {{ crawlJob.id | getJobNamePipe | async }}
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+    <mat-nav-list>
+      <ng-container *ngIf="configObject.crawlJob.scheduleRef.id && ('read' | able: Kind[Kind.CRAWLSCHEDULECONFIG])">
+        <h2 mat-subheader>
+          <mat-icon mat-list-icon>schedule</mat-icon>
+          Schedule
+        </h2>
+        <a mat-list-item
+           [routerLink]="['/config/schedule/' + configObject.crawlJob.scheduleRef.id]">
+          {{configObject | getCrawlScheduleName | async}}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="configObject.crawlJob.crawlConfigRef && ('read' | able: Kind[Kind.CRAWLCONFIG])">
+        <h2 mat-subheader>
+          <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+          CrawlConfig
+        </h2>
+        <a mat-list-item
+           [routerLink]="['/config/crawlconfig/' + configObject.crawlJob.crawlConfigRef.id]">
+          {{configObject | getCrawlConfigName | async}}
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
+    <mat-nav-list>
+      <ng-container *ngIf="configObject.crawlConfig.collectionRef.id && ('read' | able: Kind[Kind.COLLECTION])">
+        <h2 mat-subheader>
+          <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+          Collection
+        </h2>
+        <a mat-list-item
+           [routerLink]="['/config/collection/' + configObject.crawlConfig.collectionRef.id]">
+          {{configObject | getCollectionName | async}}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="configObject.crawlConfig.browserConfigRef.id && ('read' | able: Kind[Kind.BROWSERCONFIG])">
+        <h2 mat-subheader>
+          <mat-icon mat-list-icon>web</mat-icon>
+          BrowserConfig
+        </h2>
+        <a mat-list-item
+           [routerLink]="['/config/browserconfig/' + configObject.crawlConfig.browserConfigRef.id]">
+          {{configObject | getBrowserConfigName | async}}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="configObject.crawlConfig.politenessRef.id && ('read' | able: Kind[Kind.POLITENESSCONFIG])">
+        <h2 mat-subheader>
+          <mat-icon mat-list-icon>sentiment_very_satisfied</mat-icon>
+          PolitenessConfig
+        </h2>
+        <a mat-list-item
+           [routerLink]="['/config/politenessconfig/' + configObject.crawlConfig.politenessRef.id]">
+          {{configObject | getPolitenessConfigName | async}}
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
+    <mat-nav-list *ngIf="configObject.browserConfig.scriptRefList.length > 0 && ('read' | able: Kind[Kind.BROWSERSCRIPT])">
+      <h2 mat-subheader>
+        <mat-icon mat-list-icon>web_asset</mat-icon>
+        BrowserScripts
+      </h2>
+      <ng-container *ngFor="let script of configObject.browserConfig.scriptRefList">
+        <a mat-list-item [routerLink]="['/config/browserscript/' + script.id]">
+          {{script.id | getBrowserScriptName | async}}
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+</ng-container>
+

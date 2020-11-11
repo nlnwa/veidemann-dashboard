@@ -3,6 +3,7 @@ import {fromTimestampProto, isNumeric, toTimestampProto} from '../../func';
 import {ExtraStatusCodes} from './extrastatuscodes.model';
 import {ApiError} from './api-error.model';
 import {CrawlScope} from '../config/crawlscope.model';
+import {fromRethinkTimeStamp} from '../../func/rethinkdb';
 
 export enum CrawlExecutionState {
   UNDEFINED = 0,
@@ -21,6 +22,14 @@ export const crawlExecutionStates: CrawlExecutionState[] =
   Object.keys(CrawlExecutionState).filter(p => !isNumeric(p)).map(state => CrawlExecutionState[state]);
 
 export class CrawlExecutionStatus {
+  static DONE_STATES = [
+    CrawlExecutionState.ABORTED_MANUAL,
+    CrawlExecutionState.ABORTED_SIZE,
+    CrawlExecutionState.ABORTED_TIMEOUT,
+    CrawlExecutionState.FAILED,
+    CrawlExecutionState.FINISHED,
+  ];
+
   id: string;
   state: CrawlExecutionState;
   jobId: string;
@@ -37,7 +46,7 @@ export class CrawlExecutionStatus {
   documentsDenied: number;
   lastChangeTime: string;
   createdTime: string;
-  currentUriIdList: Array<string>;
+  currentUriIdList: string[];
   jobExecutionId: string;
   error: ApiError;
 
@@ -83,16 +92,34 @@ export class CrawlExecutionStatus {
     this.error = error;
   }
 
+  /**
+   * A function that transforms the results. This function is called for each member of the object.
+   * If a member contains nested objects, the nested objects are transformed before the parent object is.
+   * @see JSON.parse
+   */
+  static reviver(key: string, value: any) {
+    switch (key) {
+      case 'state':
+        return CrawlExecutionState[value];
+      case 'startTime':
+      case 'endTime':
+      case 'lastChangeTime':
+      case 'createdTime':
+        return fromRethinkTimeStamp(value);
+      default:
+        return value;
+    }
+  }
+
   static fromProto(proto: CrawlExecutionStatusProto): CrawlExecutionStatus {
     const extraStatusCodes = ExtraStatusCodes;
     const state = CrawlExecutionState;
 
-    return new CrawlExecutionStatus({
+    const crawlExecutionStatus = new CrawlExecutionStatus({
       id: proto.getId(),
       jobId: proto.getJobId(),
       seedId: proto.getSeedId(),
       state: CrawlExecutionState[CrawlExecutionState[proto.getState()]],
-      scope: CrawlScope.fromProto(proto.getScope()),
       startTime: fromTimestampProto(proto.getStartTime()),
       endTime: fromTimestampProto(proto.getEndTime()),
       documentsCrawled: proto.getDocumentsCrawled(),
@@ -108,6 +135,12 @@ export class CrawlExecutionStatus {
       jobExecutionId: proto.getJobExecutionId(),
       error: ApiError.fromProto(proto.getError())
     });
+
+    if (proto.getScope()) {
+      crawlExecutionStatus.scope = CrawlScope.fromProto(proto.getScope());
+    }
+
+    return crawlExecutionStatus;
   }
 
   static toProto(crawlExecutionStatus: CrawlExecutionStatus): CrawlExecutionStatusProto {

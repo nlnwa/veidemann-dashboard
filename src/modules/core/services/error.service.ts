@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {ReferrerError} from '../../../shared/error';
-import {ConfigObject} from '../../../shared/models/config';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ErrorService {
 
   private error: Subject<Error> = new Subject<Error>();

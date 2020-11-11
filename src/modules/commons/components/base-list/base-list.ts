@@ -1,32 +1,33 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
 import {
   ContentChildren,
+  Directive,
   EventEmitter,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
-  Directive,
-  Component
+  ViewChild
 } from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sort';
 import {first, map, shareReplay} from 'rxjs/operators';
-import {combineLatest, Observable} from 'rxjs';
-import {ActionDirective, ExtraDirective} from '../../directives';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
+import {ListItem} from '../../../../shared/models';
 
-export interface ListItem {
-  id: string;
-}
 
 @Directive()
 // tslint:disable-next-line:directive-class-suffix
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
 
+  length$: BehaviorSubject<number>;
+
   @Input()
-  pageLength = 0;
+  set length(length: number) {
+    this.length$.next(length);
+  }
 
   @Input()
   pageSize = 25;
@@ -49,8 +50,25 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   @Input()
   multiSelect = true;
 
+  // tslint:disable-next-line:variable-name
+  private _dataSource: DataSource<T>;
+
   @Input()
-  dataSource: DataSource<T>;
+  set dataSource(dataSource: DataSource<T>) {
+    this._dataSource = dataSource;
+    this.isAllInPageSelected$ = combineLatest([
+      this.selection.changed.asObservable(),
+      dataSource.connect(null),
+    ]).pipe(
+      map(([_, rows]) =>
+        rows.length === this.selection.selected.length && rows.length > 0),
+      shareReplay(1)
+    );
+  }
+
+  get dataSource(): DataSource<T> {
+    return this._dataSource;
+  }
 
   @Output()
   selectedChange: EventEmitter<T | T[]>;
@@ -68,32 +86,27 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
   @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
+  @ContentChildren(FilterDirective, {read: TemplateRef, descendants: true}) filterButtonTemplates;
+  @ContentChildren(ShortcutDirective, {read: TemplateRef, descendants: true}) shortcutButtonTemplates;
 
   // selection
-  selection = new SelectionModel<T>(true, []);
-  allSelected = false;
+  selection: SelectionModel<T>;
+  allSelected: boolean;
   isAllInPageSelected$: Observable<boolean>;
-  protected selectedRow: T;
+  selectedRow: T;
+ // expandedConfigObject: T | null;
 
   protected constructor() {
     this.sort = new EventEmitter<Sort>();
     this.selectedChange = new EventEmitter<T | T[]>();
     this.selectAll = new EventEmitter<void>();
     this.page = new EventEmitter<PageEvent>();
+    this.selection = new SelectionModel<T>(true, []);
+    this.allSelected = false;
+    this.length$ = new BehaviorSubject<number>(0);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.dataSource && this.dataSource) {
-      this.isAllInPageSelected$ = combineLatest([
-        this.selection.changed.asObservable(),
-        this.dataSource.connect(null),
-      ]).pipe(
-        map(([_, rows]) =>
-          rows.length === this.selection.selected.length && rows.length > 0),
-        shareReplay(1)
-      );
-    }
-
     if (changes.sortDirection && changes.sortActive) {
       // ugly hack see https://github.com/angular/components/issues/10242 and https://github.com/angular/components/issues/10524
       const sortHeader = (this.matSort.sortables.get(this.sortActive) as MatSortHeader);
@@ -106,6 +119,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   reset() {
     this.selection.clear();
     this.selectedRow = null;
+    this.allSelected = false;
+    // this.length$.next(0);
   }
 
   onSortChange(sort: Sort) {
@@ -115,9 +130,16 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   onRowClick(item: T) {
     this.allSelected = false;
-    this.selection.clear();
-    this.selectedRow = item;
+    if (item.id === this.selectedRow?.id) {
+      this.selectedRow = null;
+    } else {
+      this.selectedRow = item;
+    }
+    //  this.selection.clear();
+
     this.selectedChange.emit(this.selectedRow);
+    // this.expandedConfigObject = this.expandedConfigObject === item ? null : item;
+
   }
 
   onMasterCheckboxToggle(checked: boolean) {
@@ -169,9 +191,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   isDisabled(item: T): boolean {
     // @ts-ignore
-    if (item?.crawlJob?.disabled || item?.seed?.disabled) {
-      return true;
-    }
-    return false;
+    return item?.crawlJob?.disabled || item?.seed?.disabled;
   }
 }

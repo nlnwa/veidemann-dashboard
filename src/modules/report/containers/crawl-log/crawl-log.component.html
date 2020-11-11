@@ -1,0 +1,42 @@
+<div class="container">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+  <div class="container no-scroll" fxLayout="row" *ngIf="query$ | async as query">
+    <app-crawl-log-query class="content-padding scroll"
+                         [query]="query" (queryChange)="onQueryChange($event)"></app-crawl-log-query>
+    <app-crawl-log-list fxFlex
+                        appQueryCrawlLog [query]="query"
+                        [length]="pageLength$ | async"
+                        [pageIndex]="pageIndex$ | async"
+                        [pageSize]="pageSize$ | async"
+                        [sortDirection]="sortDirection$ | async"
+                        [sortActive]="sortActive$ | async"
+                        (sort)="onSort($event)"
+                        (page)="onPage($event)">
+      <ng-container *appShortcut="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: 'jobexecution'"
+           [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
+           i18n="@@reportListActionButtonGoToJobExecution">
+          <mat-icon>hdr_strong</mat-icon>
+          Go to job execution
+        </a>
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawlexecution'"
+           [routerLink]="['/report', 'crawlexecution', row.executionId]"
+           i18n="@@reportListActionButtonGoToCrawlExecution">
+          <mat-icon>hdr_weak</mat-icon>
+          Go to crawl execution
+        </a>
+      </ng-container>
+      <ng-container *appAction="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawllog'"
+           [routerLink]="['../crawllog', row.id]"
+           i18n-matTooltip="@@reportListActionButtonShowFullReport">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+          Show full report
+        </a>
+      </ng-container>
+    </app-crawl-log-list>
+  </div>
+</div>

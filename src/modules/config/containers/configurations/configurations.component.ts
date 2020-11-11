@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
-import {combineLatest, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -17,192 +17,173 @@ import {
   tap
 } from 'rxjs/operators';
 
-import {
-  BrowserScriptType,
-  ConfigObject,
-  ConfigRef,
-  Kind,
-  RobotsPolicy,
-  Role,
-  RotationPolicy,
-  Seed,
-  SubCollectionType
-} from '../../../../shared/models';
+import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
 import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
-import {ConfigListComponent, DeleteDialogComponent, DeleteMultiDialogComponent, Parcel} from '../../components';
-import {ReferrerError} from '../../../../shared';
-import {ConfigService, LabelService} from '../../services';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {ConfigPath} from '../../func';
+import {DeleteDialogComponent, DeleteMultiDialogComponent, RunCrawlDialogComponent} from '../../components';
+import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';
-import {ListDataSource} from '../../../../shared/models/list-datasource';
-import {Sort} from '../../../commons/services/query.service';
-import {ConfigQuery} from '../../../core/services/config.service';
-import {distinctUntilArrayChanged} from '../../../../shared/func/rxjs';
-import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';
-import {RunningCrawlDialogComponent} from '../../components/running-crawl-dialog/running-crawl-dialog.component';
-
-export interface ConfigOptions {
-  rotationPolicies?: RotationPolicy[];
-  subCollectionTypes?: SubCollectionType[];
-  crawlConfigs?: ConfigObject[];
-  crawlScheduleConfigs?: ConfigObject[];
-  browserConfigs?: ConfigObject[];
-  collections?: ConfigObject[];
-  politenessConfigs?: ConfigObject[];
-  browserScripts?: ConfigObject[];
-  browserScriptTypes?: BrowserScriptType[];
-  robotsPolicies?: RobotsPolicy[];
-  crawlJobs?: ConfigObject[];
-  roles?: Role[];
-}
+import {ConfigService} from '../../../commons/services';
+import {ConfigQuery, distinctUntilArrayChanged, Sort} from '../../../../shared/func';
+import {KindService, OptionsService} from '../../services';
+import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '../../func';
+import {ReferrerError} from '../../../../shared/error';
 
 @Component({
   selector: 'app-configurations',
   templateUrl: './configurations.component.html',
   styleUrls: ['./configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ConfigService, LabelService]
 })
-export class ConfigurationsComponent implements OnDestroy {
-  readonly ConfigPath = ConfigPath;
+export class ConfigurationsComponent implements OnInit, OnDestroy {
   readonly Kind = Kind;
 
-  pageLength$: Observable<number>;
+  length$: Observable<number>;
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
   sortDirection$: Observable<SortDirection>;
   sortActive$: Observable<string>;
 
-  options$: Observable<ConfigOptions>;
-
   private selectedConfigs: ConfigObject[] = [];
 
-  private isAllSelected = false;
+  isAllSelected = false;
 
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe: Subject<void>;
 
-  private configObject: Subject<ConfigObject>;
-  configObject$: Observable<ConfigObject>;
+  query$: Observable<ConfigQuery>;
+
+  private recount: Subject<void>;
+  private reload: Subject<void>;
+
+  entityId: string;
+  entity$: Observable<ConfigObject>;
+
+  showCreateButton$: Observable<boolean>;
+
+  options: ConfigOptions;
+  options$: Observable<ConfigOptions>;
 
   kind: Kind;
   kind$: Observable<Kind>;
 
-  query$: Observable<ConfigQuery>;
+  configObject$: BehaviorSubject<ConfigObject>;
+  configObjects$: BehaviorSubject<ConfigObject>;
 
-  private reload: Subject<void>;
+  mergedConfig: ConfigObject;
+  updateAllConfigObject: ConfigObject;
 
-  entity$: Observable<ConfigObject>;
+  get loading$(): Observable<boolean> {
+    return this.configService.loading$;
+  }
 
-  fetchConfigObject = true;
+  get isSingleMode(): boolean {
+    return !this.isAllSelected && this.selectedConfigs.length < 1;
+  }
 
-  showCreateButton$: Observable<boolean>;
+  //
+  // get canAdministrate(): boolean {
+  //   return this.authService.isAdmin();
+  // }
+  //
+  // get canConfigure(): boolean {
+  //   return this.authService.isAdmin() || this.authService.isCurator();
+  // }
 
-  @ViewChild('baseList') list: ConfigListComponent;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
-  dataSource: ListDataSource<ConfigObject>;
 
   constructor(private authService: AuthService,
-              private dataService: ConfigService,
+              private configService: ConfigService,
               private snackBarService: SnackBarService,
               private errorService: ErrorService,
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
-              private labelService: LabelService,
-              private controllerApiService: ControllerApiService) {
-    this.dataSource = new ListDataSource<ConfigObject>();
+              private controllerApiService: ControllerApiService,
+              private kindService: KindService,
+              private optionsService: OptionsService) {
 
-    this.options$ = this.route.data.pipe(
-      map(data => data.options),
-      tap(_ => {
-        // make sure any detail view relying on some option not present is removed before a new set of options is loaded
-        this.configObject.next(null);
-      }),
-      shareReplay(1),
+    this.options$ = this.optionsService.options$.pipe(
+      tap(options => this.options = options)
     );
+
+    this.kind$ = this.kindService.kind$.pipe(
+      tap(kind => this.kind = kind)
+    );
+
+    this.ngUnsubscribe = new Subject<void>();
+
+    // for merged config
+    this.configObjects$ = new BehaviorSubject<ConfigObject>(null);
+    this.configObject$ = new BehaviorSubject<ConfigObject>(null);
 
     // for reloading the current query (on save, delete, etc.)
     this.reload = new Subject();
 
-    this.configObject = new Subject();
-    this.configObject$ = this.configObject.asObservable();
+    this.recount = new Subject();
+  }
 
-    const routeParam$ = combineLatest([route.queryParamMap, route.paramMap]).pipe(
-      debounceTime(0), // synchronize queryParamMap and paramMap observables
-      map(([queryParamMap, paramMap]) => ({
-        kind: paramMap.get('kind'),
-        id: queryParamMap.get('id'),
-        q: queryParamMap.get('q'),
-        entityId: queryParamMap.get('entity_id'),
-        scheduleId: queryParamMap.get('schedule_id'),
-        crawlConfigId: queryParamMap.get('crawl_config_id'),
-        collectionId: queryParamMap.get('collection_id'),
-        browserConfigId: queryParamMap.get('browser_config_id'),
-        politenessId: queryParamMap.get('politeness_id'),
-        disabled: queryParamMap.get('disabled'),
-        crawlJobIds: queryParamMap.getAll('crawl_job_id'),
-        scriptIds: queryParamMap.getAll('script_id'),
-        scriptSelectors: queryParamMap.getAll('script_selector'),
-        sort: queryParamMap.get('sort'),
-        pageSize: queryParamMap.get('s'),
-        pageIndex: queryParamMap.get('p'),
+  ngOnInit(): void {
+    const queryParam$ = this.route.queryParamMap.pipe(
+      debounceTime(0), // synchronize multiple query changes
+      map(query => ({
+        q: query.get('q'),
+        entityId: query.get('entity_id'),
+        scheduleId: query.get('schedule_id'),
+        crawlConfigId: query.get('crawl_config_id'),
+        collectionId: query.get('collection_id'),
+        browserConfigId: query.get('browser_config_id'),
+        politenessId: query.get('politeness_id'),
+        disabled: query.get('disabled'),
+        crawlJobIds: query.getAll('crawl_job_id'),
+        scriptIds: query.getAll('script_id'),
+        scriptSelectors: query.getAll('script_selector'),
+        sort: query.get('sort'),
+        pageSize: query.get('s'),
+        pageIndex: query.get('p'),
       })),
       share(),
     );
 
-    const kind$ = routeParam$.pipe(
-      map(({kind}) => ConfigPath[kind]),
-      distinctUntilChanged(),
-      shareReplay(1));
-
-    const id$: Observable<string> = routeParam$.pipe(
-      map(({id}) => id),
-      distinctUntilChanged());
-
-    const q$: Observable<string> = routeParam$.pipe(
+    const q$: Observable<string> = queryParam$.pipe(
       map(({q}) => q),
       distinctUntilChanged());
 
-    const entityId$: Observable<string> = routeParam$.pipe(
+    const entityId$: Observable<string> = queryParam$.pipe(
       map(({entityId}) => entityId),
-      distinctUntilChanged(),
-      shareReplay(1)); // to get entity to show on first load
+      tap(entityId => this.entityId = entityId),
+      distinctUntilChanged());
 
-    const scheduleId$ = routeParam$.pipe(
+    const scheduleId$ = queryParam$.pipe(
       map(({scheduleId}) => scheduleId),
       distinctUntilChanged());
 
-    const crawlConfigId$ = routeParam$.pipe(
+    const crawlConfigId$ = queryParam$.pipe(
       map(({crawlConfigId}) => crawlConfigId),
       distinctUntilChanged());
 
-    const collectionId$ = routeParam$.pipe(
+    const collectionId$ = queryParam$.pipe(
       map(({collectionId}) => collectionId),
       distinctUntilChanged());
 
-    const browserConfigId$ = routeParam$.pipe(
+    const browserConfigId$ = queryParam$.pipe(
       map(({browserConfigId}) => browserConfigId),
       distinctUntilChanged());
 
-    const politenessId$ = routeParam$.pipe(
+    const politenessId$ = queryParam$.pipe(
       map(({politenessId}) => politenessId),
       distinctUntilChanged());
 
-    const disabled$ = routeParam$.pipe(
+    const disabled$ = queryParam$.pipe(
       map(({disabled}) => disabled),
       distinctUntilChanged());
 
-    const crawlJobIdList$ = routeParam$.pipe(
+    const crawlJobIdList$ = queryParam$.pipe(
       map(({crawlJobIds}) => crawlJobIds),
       distinctUntilArrayChanged);
 
-    const scriptIdList$ = routeParam$.pipe(
+    const scriptIdList$ = queryParam$.pipe(
       map(({scriptIds}) => scriptIds),
       distinctUntilArrayChanged);
 
-    const sort$: Observable<Sort> = routeParam$.pipe(
+    const sort$: Observable<Sort> = queryParam$.pipe(
       map(({sort}) => {
         if (!sort) {
           return null;
@@ -212,53 +193,85 @@ export class ConfigurationsComponent implements OnDestroy {
         return s.direction ? s : null;
       }),
       distinctUntilChanged<Sort>((p, q) => p && q ? p.direction === q.direction && p.active === q.active : p === q),
-      shareReplay(1),
     );
 
-    const pageSize$ = routeParam$.pipe(
+    const sortDirection$ = sort$.pipe(
+      map(sort => (sort ? sort.direction : '') as SortDirection));
+
+    const sortActive$ = sort$.pipe(
+      map(sort => sort ? sort.active : ''));
+
+    const pageSize$ = queryParam$.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
       distinctUntilChanged(),
       shareReplay(1)
     );
 
-    const pageIndex$ = routeParam$.pipe(
+    const pageIndex$ = queryParam$.pipe(
       map(({pageIndex}) => parseInt(pageIndex, 10) || 0),
       distinctUntilChanged(),
       shareReplay(1),
     );
 
-    const reload$ = this.reload.pipe(
-      startWith(false),
-      shareReplay(1)
-    );
-
     const query$: Observable<ConfigQuery> = combineLatest([
-      kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
-      entityId$, scheduleId$, crawlConfigId$, collectionId$,
-      browserConfigId$, politenessId$, disabled$, crawlJobIdList$, scriptIdList$,
-      q$, sort$, pageIndex$, pageSize$, reload$
+      this.kind$.pipe(filter(kind => kind !== Kind.UNDEFINED)),
+      entityId$,
+      scheduleId$,
+      crawlConfigId$,
+      collectionId$,
+      browserConfigId$,
+      politenessId$,
+      disabled$,
+      crawlJobIdList$,
+      scriptIdList$,
+      q$,
+      sortDirection$,
+      sortActive$,
+      pageIndex$,
+      pageSize$,
+      this.reload.pipe(startWith(null as object))
     ]).pipe(
       debounceTime<any>(0), // synchronize observables
-      map(([kind, entityId, scheduleId, crawlConfigId, collectionId,
-             browserConfigId, politenessId, disabled, crawlJobIdList, scriptIdList,
-             term, sort, pageIndex, pageSize]) => ({
-        kind, entityId, scheduleId, crawlConfigId, collectionId,
-        browserConfigId, politenessId, disabled, crawlJobIdList, scriptIdList, term,
-        sort, pageIndex, pageSize
+      map(([
+             kind,
+             entityId,
+             scheduleId,
+             crawlConfigId,
+             collectionId,
+             browserConfigId,
+             politenessId,
+             disabled,
+             crawlJobIdList,
+             scriptIdList,
+             term,
+             active,
+             direction,
+             pageIndex,
+             pageSize
+           ]) => ({
+        kind,
+        entityId,
+        scheduleId,
+        crawlConfigId,
+        collectionId,
+        browserConfigId,
+        politenessId,
+        disabled,
+        crawlJobIdList,
+        scriptIdList,
+        term,
+        direction,
+        active,
+        pageIndex,
+        pageSize,
       })),
-      shareReplay(1),
+      tap(() => this.configObject$.next(null)),
+      share(),
     );
 
-    this.query$ = query$;
-
-    query$.pipe(
-      tap(_ => this.dataSource.clear()),
-      switchMap(query => this.dataService.search(query)),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(configObject => this.dataSource.add(configObject));
-
-    const countQuery$ = query$.pipe(
-      distinctUntilChanged((a: ConfigQuery, b: ConfigQuery) =>
+    const length$: Observable<number> = combineLatest([
+      this.recount.pipe(startWith(null as string)),
+      query$.pipe(distinctUntilChanged((a: ConfigQuery, b: ConfigQuery) =>
         // only count when these query parameters change
         (a.kind === b.kind
           && a.term === b.term
@@ -278,66 +291,27 @@ export class ConfigurationsComponent implements OnDestroy {
               : false
           )
         )
-      ));
-
-    this.sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : '') as SortDirection));
-
-    this.sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : ''));
-
-    // count configObjects when query change or on reload
-    this.pageLength$ = combineLatest([countQuery$, reload$]).pipe(
-      map(([countQuery, _]) => countQuery),
-      mergeMap(countQuery => this.dataService.count(countQuery)),
-      shareReplay(1),
+      ))
+    ]).pipe(
+      mergeMap(([_, query]) => this.configService.count(query)),
     );
 
+    this.sortActive$ = sortActive$;
+    this.sortDirection$ = sortDirection$;
+    this.query$ = query$;
+    this.length$ = length$;
     this.pageSize$ = pageSize$;
-
     this.pageIndex$ = pageIndex$;
-
-    this.kind$ = kind$.pipe(
-      tap(kind => {
-        // make sure we empty dataSource because it is shared between
-        // rolemapping list
-        this.dataSource.clear();
-        this.kind = kind;
-        this.labelService.kind = kind;
-        this.reset();
-      }));
-
-    // configObject stream based on kind and id
-    combineLatest([
-      kind$,
-      id$.pipe(
-        // toggle id stream on/off based on passId token
-        // (e.g. when saving a configObject we don't want to
-        // refetch configObject when we set query parameter id -
-        // we already got it in the response from the call to save)
-        filter(() => {
-          if (this.fetchConfigObject) {
-            return true;
-          } else {
-            this.fetchConfigObject = !this.fetchConfigObject;
-            return false;
-          }
-        }))
-    ]).pipe(
-      map(([kind, id]) => new ConfigRef({kind, id})),
-      switchMap(configRef => configRef && configRef.id ? this.dataService.get(configRef) : of(null)),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(configObject => this.configObject.next(configObject));
 
     this.entity$ = entityId$.pipe(
       switchMap(id => id
-        ? this.dataService.get(new ConfigRef({id, kind: Kind.CRAWLENTITY}))
+        ? this.configService.get(new ConfigRef({id, kind: Kind.CRAWLENTITY}))
         : of(null)),
-      shareReplay(1),
+      startWith(null as ConfigObject)
     );
 
     // do not allow to create seed without entity reference
-    this.showCreateButton$ = combineLatest([kind$, this.entity$]).pipe(
+    this.showCreateButton$ = combineLatest([this.kind$, this.entity$]).pipe(
       map(([kind, entity]) => {
         switch (kind) {
           case Kind.SEED:
@@ -350,38 +324,110 @@ export class ConfigurationsComponent implements OnDestroy {
       }));
   }
 
-  get loading$(): Observable<boolean> {
-    return this.dataService.loading$;
-  }
-
-  get isSingleMode(): boolean {
-    return !this.isAllSelected && this.selectedConfigs.length < 1;
-  }
-
-  get canAdministrate(): boolean {
-    return this.authService.isAdmin();
-  }
-
-  get canConfigure(): boolean {
-    return this.authService.isAdmin() || this.authService.isCurator();
-  }
-
-  get canConsult(): boolean {
-    return this.authService.isConsultant();
-  }
-
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  canRead(configObject: ConfigObject): boolean {
+    return this.authService.canRead(configObject.kind);
+  }
+
+  canEdit(configObject: ConfigObject): boolean {
+    return this.authService.canUpdate(configObject.kind);
+  }
+
+  canClone(configObject: ConfigObject): boolean {
+    return this.authService.canCreate(configObject.kind);
+  }
+
+  canRunCrawl(configObject: ConfigObject): boolean {
+    return this.authService.canRunCrawl(configObject.kind);
   }
 
   getJobRefListQueryParams(configObject: ConfigObject): Params {
     return {crawl_job_id: configObject.seed.jobRefList.map(jobRef => jobRef.id)};
   }
 
-  onQueryChange(value: Partial<ConfigQuery>): any {
-    this.reset();
+  onCreateConfigWithDialog(configObject?: ConfigObject) {
+    if (!configObject) {
+      configObject = new ConfigObject({kind: this.kind});
+      if (this.entityId) {
+        configObject.seed.entityRef = new ConfigRef({kind: Kind.CRAWLENTITY, id: this.entityId});
+      }
+    }
+    const data: ConfigDialogData = {configObject, options: this.options};
+    const componentType = dialogByKind(configObject.kind);
+    const dialogRef = this.dialog.open(componentType, {data});
 
+    let reload = true;
+    // if kind is different then configObjects kind we don't want to reload
+    if (this.kind !== configObject.kind) {
+      reload = false;
+    }
+    dialogRef.afterClosed().pipe(
+      filter(_ => !!_)
+    ).subscribe((config: ConfigObject) => {
+      if (Array.isArray(config)) {
+        this.onSaveMultiple(config, reload);
+      } else {
+        if (config.id) {
+          this.onUpdateConfig(config);
+        } else {
+          this.onSaveConfig(config, reload);
+        }
+      }
+    });
+  }
+
+  onEdit(configObject: ConfigObject) {
+    this.onCreateConfigWithDialog(configObject);
+  }
+
+  onShowDetails(configObject: ConfigObject) {
+    this.router.navigate([configObject.id], {
+      relativeTo: this.route,
+    }).catch(error => this.errorService.dispatch(error));
+  }
+
+  onClone(configObject: ConfigObject) {
+    this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
+  }
+
+  onUpdateConfig(configObject: ConfigObject) {
+    this.configService.update(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(newConfig => {
+        this.reload.next();
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
+      });
+  }
+
+  onSaveConfig(configObject: ConfigObject, reload: boolean = true) {
+    this.configService.save(configObject)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(newConfig => {
+        if (reload) {
+          this.reload.next();
+          this.recount.next();
+        }
+        this.snackBarService.openSnackBar($localize`:@snackBarMessage.saved:Saved`);
+      });
+  }
+
+  onSaveMultiple(configObjects: ConfigObject[], reload: boolean = true) {
+    this.configService.saveMultiple(configObjects)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(saved => {
+        if (reload) {
+          this.reload.next();
+          this.recount.next();
+        }
+        this.snackBarService.openSnackBar(saved + $localize`:@snackBarMessage.multipleSaved: configurations saved`);
+      });
+  }
+
+  onQueryChange(value: Partial<ConfigQuery>): any {
     const queryParams = {
       entity_id: value.entityId || null,
       schedule_id: value.scheduleId || null,
@@ -407,12 +453,12 @@ export class ConfigurationsComponent implements OnDestroy {
       relativeTo: this.route,
       queryParamsHandling: 'merge',
       queryParams: {sort: sort.active && sort.direction ? `${sort.active}:${sort.direction}` : null}
-    });
+    }).catch(error => this.errorService.dispatch(error));
   }
 
   onSelectAll() {
     this.isAllSelected = true;
-    this.configObject.next(new ConfigObject({kind: this.kind}));
+    this.updateAllConfigObject = new ConfigObject({kind: this.kind});
   }
 
   onSelectedChange(configs: ConfigObject | ConfigObject[]) {
@@ -420,119 +466,77 @@ export class ConfigurationsComponent implements OnDestroy {
 
     if (!Array.isArray(configs)) {
       this.selectedConfigs = [];
-      // navigate to self with id query parameter
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: {id: configs.id},
-      }).catch(error => this.errorService.dispatch(error));
+      this.configObjects$.next(null);
+      this.configObject$.next(configs);
     } else {
       this.selectedConfigs = configs;
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: {id: null},
-      }).catch(error => this.errorService.dispatch(error))
-        .then(() => {
-          const mergedConfigObject = ConfigObject.mergeConfigs(configs);
-          setTimeout(() => this.configObject.next(mergedConfigObject));
-        });
+      const mergedConfigObject = ConfigObject.mergeConfigs(configs);
+      this.mergedConfig = mergedConfigObject;
     }
   }
 
   onFilterByEntityRef(configObject: ConfigObject) {
-    this.reset();
-    this.router.navigate(['seed'], {
+    this.router.navigate(['../seed'], {
       queryParams: {entity_id: configObject.seed.entityRef.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByScheduleRef(configObject: ConfigObject) {
-    this.router.navigate(['crawljobs'], {queryParams: {schedule_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../crawljobs'], {queryParams: {schedule_id: configObject.id}, relativeTo: this.route.parent});
   }
 
   onFilterByCrawlConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawljobs'], {
+    this.router.navigate(['../crawljobs'], {
       queryParams: {crawl_config_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByCollectionRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {collection_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByBrowserConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {browser_config_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByPolitenessConfigRef(configObject: ConfigObject) {
-    this.router.navigate(['crawlconfig'], {
+    this.router.navigate(['../crawlconfig'], {
       queryParams: {politeness_id: configObject.id},
       relativeTo: this.route.parent
     });
   }
 
   onFilterByBrowserScriptRef(configObject: ConfigObject) {
-    this.router.navigate(['browserconfig'], {queryParams: {script_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../browserconfig'], {
+      queryParams: {script_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onFilterByCrawlJobRef(configObject: ConfigObject) {
-    this.router.navigate(['seed'], {queryParams: {crawl_job_id: configObject.id}, relativeTo: this.route.parent});
+    this.router.navigate(['../seed'], {
+      queryParams: {crawl_job_id: configObject.id},
+      relativeTo: this.route.parent
+    });
   }
 
   onListSeed(configRef: ConfigRef) {
     this.router.navigate(['seed'], {queryParams: {entity_id: configRef.id}, relativeTo: this.route.parent});
   }
 
-  onCreateConfig(): void {
-    this.reset();
-    const configObject = new ConfigObject({kind: this.kind});
-
-    if (this.kind === Kind.SEED && this.route.snapshot.queryParamMap.get('entity_id')) {
-      const kind = Kind.CRAWLENTITY;
-      const id = this.route.snapshot.queryParamMap.get('entity_id');
-      const entityRef = new ConfigRef({kind, id});
-      configObject.seed = new Seed({entityRef});
-    }
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-      queryParams: {id: null}
-    })
-      .catch(error => this.errorService.dispatch(error))
-      .then(() => setTimeout(() => this.configObject.next(configObject)));
-  }
-
-
   onCreateSeedFromEntity(entity: ConfigObject) {
     const entityRef = ConfigObject.toConfigRef(entity);
     const configObject = new ConfigObject({kind: Kind.SEED, seed: new Seed({entityRef})});
-    this.router.navigate(['seed'], {queryParams: {entity_id: entityRef.id}, relativeTo: this.route.parent})
-      .catch(err => this.errorService.dispatch(err))
-      .then(() => setTimeout(() => this.configObject.next(configObject)));
-  }
 
-  onClone(configObject: ConfigObject) {
-    this.reset();
-
-    // we don't want the id of any selected configObject to be present in the url
-    // when we create a clone
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-      queryParams: {id: null}
-    })
-      .catch(error => this.errorService.dispatch(error))
-      .then(() => setTimeout(() => this.configObject.next(ConfigObject.clone(configObject))));
+    this.onCreateConfigWithDialog(configObject);
   }
 
   onPage(page: PageEvent) {
@@ -544,40 +548,24 @@ export class ConfigurationsComponent implements OnDestroy {
       .catch(error => this.errorService.dispatch(error));
   }
 
-  onSaveConfig(configObject: ConfigObject) {
-    this.dataService.save(configObject)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(newConfig => {
-        this.configObject.next(newConfig);
-        this.reload.next();
-        this.fetchConfigObject = false;
-        this.router.navigate([], {
-          queryParamsHandling: 'merge',
-          queryParams: {id: newConfig.id},
-          relativeTo: this.route,
-        })
-          .catch(error => this.errorService.dispatch(error));
-        this.snackBarService.openSnackBar($localize`:@snackBarMessage.saved:Saved`);
-      });
-  }
-
-  onUpdateConfig(configObject: ConfigObject) {
-    this.dataService.update(configObject)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(newConfig => {
-        this.configObject.next(newConfig);
-        this.reload.next();
-        this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
-      });
+  onUpdateMultiWithDialog(configObject?: ConfigObject) {
+    const data: ConfigDialogData = {configObject, options: this.options};
+    const componentType = multiDialogByKind(configObject.kind);
+    const dialogRef = this.dialog.open(componentType, {data});
+    dialogRef.afterClosed().pipe(
+      filter(_ => !!_)
+    ).subscribe(({updateTemplate, pathList}: { updateTemplate: ConfigObject, pathList: string[] }) => {
+      this.onUpdateMulti({updateTemplate, pathList});
+    });
   }
 
   onUpdateMulti({updateTemplate, pathList}: { updateTemplate: ConfigObject, pathList: string[] }) {
-    this.dataService.updateWithTemplate(
+    this.configService.updateWithTemplate(
       updateTemplate, pathList, this.isAllSelected ? [] : this.selectedConfigs.map(config => config.id))
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(updatedConfigs => {
-        this.reset();
         this.reload.next();
+        this.configObjects$.next(null);
         this.snackBarService.openSnackBar(
           updatedConfigs + $localize`:@snackBarMessage.multipleUpdated: configurations updated`);
       });
@@ -593,14 +581,12 @@ export class ConfigurationsComponent implements OnDestroy {
     dialogRef.afterClosed()
       .pipe(
         filter(result => !!result),
-        switchMap(() => this.dataService.delete(configObject)),
+        switchMap(() => this.configService.delete(configObject)),
         filter(deleted => !!deleted)
       )
       .subscribe(() => {
         this.router.navigate([], {
-          relativeTo: this.route,
-          queryParamsHandling: 'merge',
-          queryParams: {id: null},
+          relativeTo: this.route.parent,
         }).catch(error => this.errorService.dispatch(error));
         this.reload.next();
         this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
@@ -621,7 +607,7 @@ export class ConfigurationsComponent implements OnDestroy {
     dialogRef.afterClosed()
       .pipe(
         filter(_ => _),
-        switchMap(() => this.dataService.deleteMultiple(configObjects))
+        switchMap(() => this.configService.deleteMultiple(configObjects))
       )
       .subscribe(numDeleted => {
         if (configObjects.length !== numDeleted) {
@@ -630,64 +616,44 @@ export class ConfigurationsComponent implements OnDestroy {
           this.snackBarService.openSnackBar(
             numDeleted + $localize`:@snackBarMessage.multipleDeleted: configurations deleted`);
         }
-        this.reset();
         this.reload.next();
-      });
-  }
-
-  onMoveSeed(parcel: Parcel) {
-    (Array.isArray(parcel.seed)
-      ? this.dataService.moveMultiple(parcel.seed, parcel.entityRef)
-      : this.dataService.move(parcel.seed, parcel.entityRef))
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(moved => {
-        this.snackBarService.openSnackBar(moved + $localize`:@snackBarMessage.multipleMoved: configurations moved`);
-        this.reload.next();
+        this.recount.next();
       });
   }
 
   onRunCrawl(configObject: ConfigObject) {
+    const crawlJobs = this.options.crawlJobs;
     const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
       disableClose: true,
       autoFocus: true,
-      data: {configObject, jobRefId: null}
+      data: {configObject, jobRefId: null, crawlJobs}
     });
+
     dialogRef.afterClosed()
       .subscribe(runCrawlRequest => {
         if (runCrawlRequest) {
           this.controllerApiService.runCrawl(runCrawlRequest)
             .pipe(filter(_ => !!_))
             .subscribe(runCrawlReply => {
-              const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
-                disableClose: false,
-                autoFocus: true,
-                data: {runCrawlRequest, runCrawlReply, configObject}
-              })
-            })
+              if (configObject.kind === Kind.SEED) {
+                this.router.navigate(
+                  ['report', 'crawlexecution'],
+                  {
+                    queryParams: {
+                      job_execution_id: runCrawlReply.jobExecutionId,
+                      seed_id: configObject.id,
+                      watch: true
+                    }
+                  }
+                ).catch(error => this.errorService.dispatch(error));
+              } else {
+                this.router.navigate(
+                  ['report', 'jobexecution', runCrawlReply.jobExecutionId],
+                  {queryParams: {watch: true}}
+                ).catch(error => this.errorService.dispatch(error));
+              }
+            });
         }
-      })
-  }
-
-  onSaveMultipleSeeds(configObjects: ConfigObject[]) {
-    this.dataService.saveMultiple(configObjects)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(saved => {
-        this.snackBarService.openSnackBar(saved + $localize`:@snackBarMessage.multipleSaved: configurations saved`);
-        this.configObject.next(null);
-        this.reload.next();
       });
   }
-
-  private reset() {
-    this.configObject.next(null);
-    this.isAllSelected = false;
-    this.selectedConfigs = [];
-    if (this.list) {
-      this.list.reset();
-    }
-  }
 }
-
-
-
-

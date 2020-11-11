@@ -21,9 +21,8 @@
     <mat-divider></mat-divider>
     <p>Show job execution report
       <a mat-icon-button
-         target="_blank"
-         [routerLink]="['/report/jobexecution']"
-         [queryParams]="{id: runCrawlReply.jobExecutionId}">
+         [routerLink]="['report', 'jobexecution', runCrawlReply.jobExecutionId]"
+         [queryParams]="{watch: true}">
         <mat-icon>arrow_forward</mat-icon>
       </a>
     </p>

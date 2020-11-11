@@ -1,0 +1,10 @@
+<div>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
+    <app-action-shortcut [configObject]="configObject"
+                         (clone)="onClone()"
+                         (runCrawl)="onRunCrawl()"
+                         (createSeed)="onCreateSeed()">
+    </app-action-shortcut>
+    <app-filter-shortcut [configObject]="configObject"></app-filter-shortcut>
+</div>
+

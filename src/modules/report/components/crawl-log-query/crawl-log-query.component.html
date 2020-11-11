@@ -1,0 +1,20 @@
+<form [formGroup]="form" fxLayout="column" class="container">
+  <mat-form-field>
+    <input matInput
+           formControlName="jobExecutionId"
+           placeholder="Job execution ID"
+           i18n-placeholder="@@reportCrawlLogQueryJobExecutiondInputPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="executionId"
+           placeholder="Execution ID"
+           i18n-placeholder="@@reportCrawlLogQueryExecutiondInputPlaceholder">
+  </mat-form-field>
+
+  <mat-checkbox labelPosition="after" formControlName="watch"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Watch
+  </mat-checkbox>
+</form>

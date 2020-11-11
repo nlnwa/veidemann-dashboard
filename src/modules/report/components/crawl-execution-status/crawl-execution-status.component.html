@@ -1,15 +1,19 @@
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>hdr_weak</mat-icon>
-    <mat-card-title i18n="@@crawlExecutionReportStatusCardTitle">CrawlExecution</mat-card-title>
+    <mat-card-title>
+      <a [routerLink]="['/config', 'seed', crawlExecutionStatus.seedId]">
+        {{crawlExecutionStatus.seedId | getSeedNamePipe | async}}</a>
+    </mat-card-title>
+    <mat-card-subtitle>{{crawlExecutionStatus.id}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="16px">
-      <table class="mat-table table">
+      <table class="mat-table">
         <thead>
         <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedHeaderCell">Seed</th>
+          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionHeaderCell">Job execution</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusCrawljobHeaderCell">Job</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStateHeaderCell">State</th>
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSurtPrefixHeaderCell">Surt prefiks</th>
@@ -17,15 +21,20 @@
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell">{{crawlExecutionStatus.seedId | getSeedNamePipe | async}}</td>
-          <td class="mat-cell">{{crawlExecutionStatus.jobId | getJobNamePipe | async}}</td>
+          <td class="mat-cell">
+            <a [routerLink]="['/report', 'jobexecution', crawlExecutionStatus.jobExecutionId]">Execution</a>
+          </td>
+          <td class="mat-cell">
+            <a
+              [routerLink]="['/config', 'crawljobs', crawlExecutionStatus.jobId]">{{crawlExecutionStatus.jobId | getJobNamePipe | async}}</a>
+          </td>
           <td class="mat-cell">{{CrawlExecutionState[crawlExecutionStatus.state]}}</td>
           <td class="mat-cell">{{crawlExecutionStatus.scope.surtPrefix}}</td>
         </tr>
         </tbody>
       </table>
 
-      <table class="mat-table table">
+      <table class="mat-table">
         <thead>
         <tr class="mat-header-row">
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusCreatedHeaderCell">Created</th>
@@ -45,45 +54,43 @@
       </table>
 
       <table class="mat-table">
+        <thead>
         <tr class="mat-header-row">
           <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStatisticsHeaderCell">Statistics</th>
-          <th class="mat-header-cell"></th>
+          <th class="mat-header-cell">Count</th>
         </tr>
-        <tr class="mat-row">
+        </thead>
+        <tbody>
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.urisCrawled">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsUrisCrawled">URIs crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.bytesCrawled">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsBytesCrawled">Bytes crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled | filesize}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsCrawled">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsCrawled">Documents crawled</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsDenied">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsDenied">Documents denied</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsFailed">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsFailed">Documents failed</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsOutOfScope">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsOutOfScope">Documents out of scope</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>
         </tr>
-        <tr class="mat-row">
+        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsRetried">
           <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsRetried">Documents retried</td>
           <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>
         </tr>
+        </tbody>
       </table>
-
-      <mat-list *ngIf="crawlExecutionStatus.currentUriIdList.length">
-        <h3 matSubheader>Current URIs</h3>
-        <mat-list-item>https://www.http.url.no/path</mat-list-item>
-        <mat-list-item *ngFor="let uri of crawlExecutionStatus.currentUriIdList">{{uri}}</mat-list-item>
-      </mat-list>
 
       <div class="content-padding" *ngIf="crawlExecutionStatus.error as error">
         <h2>Error</h2>
@@ -91,34 +98,6 @@
         <h4 class="monospace">{{error.msg}}</h4>
         <p class="monospace">{{error.detail}}</p>
       </div>
-
-      <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusSeedIdHeaderCell">Seed Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Job Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell">{{crawlExecutionStatus.id}}</td>
-          <td class="mat-cell">
-            <a [routerLink]="['/config', 'seed']"
-               [queryParams]="{id: crawlExecutionStatus.seedId}">{{crawlExecutionStatus.seedId}}</a>
-          </td>
-          <td class="mat-cell">
-            <a [routerLink]="['/config', 'crawljobs']"
-               [queryParams]="{id: crawlExecutionStatus.jobId}">{{crawlExecutionStatus.jobId}}</a>
-          </td>
-          <td class="mat-cell">
-            <a [routerLink]="['/report', 'jobexecution']"
-               [queryParams]="{id: crawlExecutionStatus.jobExecutionId}">{{crawlExecutionStatus.jobExecutionId}}</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
     </div>
   </mat-card-content>
 </mat-card>

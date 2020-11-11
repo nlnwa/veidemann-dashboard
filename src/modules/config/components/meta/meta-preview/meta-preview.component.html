@@ -1,0 +1,31 @@
+<div fxLayout="column">
+  <mat-label><b>Name:</b> {{configObject.meta.name}}</mat-label>
+  <mat-label><b>Description:</b> {{configObject.meta.description}}</mat-label>
+  <mat-label *ngIf="configObject.meta.labelList.length"><b>Label:</b></mat-label>
+  <mat-chip-list>
+    <mat-chip *ngFor="let label of configObject.meta.labelList">
+      {{label.key}}:{{label.value}}
+    </mat-chip>
+  </mat-chip-list>
+  <mat-label *ngIf="configObject.meta.annotationList.length && canShowAnnotation"><b>Annotation:</b></mat-label>
+  <mat-chip-list *ngIf="canShowAnnotation">
+    <mat-chip class="annotation-chip" *ngFor="let annotation of configObject.meta.annotationList">
+      {{annotation.key}}:{{annotation.value}}
+    </mat-chip>
+  </mat-chip-list>
+  <mat-label><b>ID:</b> {{configObject.id}}<button mat-icon-button (click)="copyIdToClipboard()">
+    <mat-icon matTooltip="copy ID to clipboard"
+              i18n-matTooltip="@@copyIdButtonTooltip"
+              matSuffix>content_copy</mat-icon>
+  </button></mat-label>
+  <div fxLayout="row" fxLayoutGap="16px">
+    <div fxFlex fxLayout="column">
+      <mat-label><b>Created:</b> {{configObject.meta.created | date: 'medium'}} by</mat-label>
+      <p>{{configObject.meta.createdBy}}</p>
+    </div>
+    <div fxFlex fxLayout="column">
+      <mat-label><b>Updated:</b> {{configObject.meta.lastModified | date: 'medium'}} by</mat-label>
+      <p>{{configObject.meta.lastModifiedBy}}</p>
+    </div>
+  </div>
+</div>

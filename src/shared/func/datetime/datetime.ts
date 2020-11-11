@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import 'moment-duration-format';
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
 export class DateTime {
@@ -43,28 +44,6 @@ export function fromTimestampProto(proto: any): string {
   }
 }
 
-export function fromTimestamp(t: {
-  dateTime: {
-    date: {
-      day: number
-      month: number,
-      year: number,
-    },
-    time: {
-      hour: number,
-      minute: number,
-      nano: number,​​​
-      second: number,
-    }
-  },
-  offset: {
-    totalSeconds: number
-  }
-}): string {
-  return new Date(Date.UTC(t.dateTime.date.year, t.dateTime.date.month, t.dateTime.date.day,
-    t.dateTime.time.hour, t.dateTime.time.minute, t.dateTime.time.second)).toISOString();
-}
-
 /* tslint:disable:no-bitwise */
 export function toTimestampProto(timestamp: string): any {
   if (timestamp) {
@@ -77,5 +56,21 @@ export function toTimestampProto(timestamp: string): any {
   } else {
     return undefined;
   }
+}
+
+export function durationBetweenDates(startTime: string, endTime: string): string {
+  const start = moment(startTime);
+  const end = moment(endTime);
+  return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
+}
+
+export function timeToDuration(time: number, unit: string) {
+  if (unit === 'ms') {
+    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]', {trim: 'both'});
+  }
+  if (unit === 's') {
+     return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
+  }
+
 }
 

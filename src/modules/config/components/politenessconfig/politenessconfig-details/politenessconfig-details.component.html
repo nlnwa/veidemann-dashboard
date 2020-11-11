@@ -1,15 +1,16 @@
-<form [formGroup]="form">
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>sentiment_neutral</mat-icon>
-      <mat-card-title>
-        <span i18n="@@politenessconfigDetailsCardTitle">Politenessconfig</span>
-      </mat-card-title>
-      <mat-card-subtitle>
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>sentiment_neutral</mat-icon>
+    <mat-card-title>
+      <span i18n="@@politenessconfigDetailsCardTitle">Politenessconfig</span>
+    </mat-card-title>
+    <mat-card-subtitle>
         <span *ngIf="!configObject?.id"
               i18n="@@commonConfigDetailsCardSubtitle">New (unsaved)</span>
-      </mat-card-subtitle>
-    </mat-card-header>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <form [formGroup]="form">
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
@@ -57,7 +58,7 @@
         <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
         <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
         <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
                    i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
@@ -67,7 +68,7 @@
         <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
         <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
                              [unit]="UnitOfTime.MILLISECOND"
-                             [durationGranularity]="'m:s'">
+                             [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
         <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
                    i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
@@ -107,36 +108,36 @@
         </mat-error>
       </div>
     </mat-card-content>
+  </form>
 
 
-    <mat-card-actions *ngIf="canEdit">
-      <button mat-raised-button color="accent"
-              [disabled]="!canSave"
-              *ngIf="showSave"
-              (click)="onSave()"
-              i18n="@@commonButtonSave">
-        SAVE
-      </button>
-      <button mat-raised-button color="accent"
-              *ngIf="!showSave"
-              [disabled]="!canUpdate"
-              (click)="onUpdate()"
-              i18n="@@commonButtonSave">
-        UPDATE
-      </button>
-      <button mat-button
-              (click)="onRevert()"
-              [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">
-        REVERT
-      </button>
-      <span fxFlex></span>
-      <button mat-button
-              *ngIf="!showSave"
-              (click)="onDelete()"
-              i18n="@@commonButtonDelete">
-        DELETE
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</form>
+  <mat-card-actions *ngIf="canEdit">
+    <button mat-raised-button color="accent"
+            [disabled]="!canSave"
+            *ngIf="showSave"
+            (click)="onSave()"
+            i18n="@@commonButtonSave">
+      SAVE
+    </button>
+    <button mat-raised-button color="accent"
+            *ngIf="!showSave"
+            [disabled]="!canUpdate"
+            (click)="onUpdate()"
+            i18n="@@commonButtonSave">
+      UPDATE
+    </button>
+    <button mat-button
+            (click)="onRevert()"
+            [disabled]="!canRevert"
+            i18n="@@commonButtonRevert">
+      REVERT
+    </button>
+    <span fxFlex></span>
+    <button mat-button
+            *ngIf="!showSave && canDelete"
+            (click)="onDelete()"
+            i18n="@@commonButtonDelete">
+      DELETE
+    </button>
+  </mat-card-actions>
+</mat-card>

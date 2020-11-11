@@ -1,0 +1,58 @@
+<form [formGroup]="form">
+  <div>
+    <h2 mat-dialog-title>
+      <ng-container i18n="@@seedDetailsCardTitle">Seed</ng-container>
+    </h2>
+    <span fxFlex></span>
+    <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
+                      formControlName="disabled"
+                      color="warn">
+      Deactivated
+    </mat-slide-toggle>
+  </div>
+
+  <mat-dialog-content>
+    <app-seed-meta formControlName="meta"
+                   [entityRef]="entityRef.value"
+                   (move)="move.emit($event)"></app-seed-meta>
+    <div fxLayoutGap="16px">
+    <mat-form-field>
+      <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
+                  multiple formControlName="jobRefListId">
+        <mat-option *ngFor="let crawlJob of crawlJobs"
+                    [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field formGroupName="scope" *ngIf="configObject?.id">
+      <input matInput
+             formControlName="surtPrefix"
+             placeholder="Surt prefix"
+             i18n-placeholder="@@seedDetailsFormSurtPrefixPlaceholder">
+    </mat-form-field>
+    </div>
+  </mat-dialog-content>
+</form>
+
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          *ngIf="!showSave"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-raised-button color="primary"
+          *ngIf="showSave"
+          [disabled]="!canSave"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">SAVE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

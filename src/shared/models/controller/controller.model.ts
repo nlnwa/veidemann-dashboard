@@ -1,4 +1,4 @@
-import {RunCrawlReplyProto, RunCrawlRequestProto} from '../../../api';
+import {ExecutionIdProto, RunCrawlReplyProto, RunCrawlRequestProto} from '../../../api';
 
 export enum RunStatus {
   RUNNING = 0,
@@ -52,6 +52,28 @@ export class RunCrawlReply {
   static toProto(runCrawlReply: RunCrawlReply): RunCrawlReplyProto {
     const proto = new RunCrawlReplyProto();
     proto.setJobExecutionId(runCrawlReply.jobExecutionId);
+    return proto;
+  }
+}
+
+export class ExecutionId {
+  id: string;
+
+  constructor({
+    id = ''
+              }: Partial<ExecutionId> = {}) {
+    this.id =  id;
+  }
+
+  static fromProto(proto: ExecutionIdProto): ExecutionId {
+    return new ExecutionId({
+      id: proto.getId()
+    });
+  }
+
+  static toProto(executionId: ExecutionId): ExecutionIdProto {
+    const proto = new ExecutionIdProto();
+    proto.setId(executionId.id);
     return proto;
   }
 }
