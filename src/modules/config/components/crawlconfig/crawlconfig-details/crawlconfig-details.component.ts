@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, CrawlConfig, Kind, Meta} from '../../../../../shared/models';
 import {AuthService} from '../../../../core/services/auth';
 
@@ -41,7 +41,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authService.canUpdate(this.configObject.kind);
   }
 
   get canSave(): boolean {
@@ -50,6 +50,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   get canUpdate(): boolean {
     return this.form.valid && this.form.dirty;
+  }
+
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
   }
 
   get showSave(): boolean {
@@ -78,10 +82,6 @@ export class CrawlConfigDetailsComponent implements OnChanges {
 
   get priorityWeight(): AbstractControl {
     return this.form.get('priorityWeight');
-  }
-
-  get extractText(): AbstractControl {
-    return this.form.get('extra.extractText');
   }
 
   get createScreenshot(): AbstractControl {
@@ -127,11 +127,10 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       browserConfigRefId: '',
       politenessRefId: '',
       extra: this.fb.group({
-        extractText: '',
         createScreenshot: '',
       }),
       minimumDnsTtlS: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
-      priorityWeight: ['', Validators.pattern(NUMBER_OR_EMPTY_STRING)],
+      priorityWeight: ['', Validators.pattern(DECIMAL_NUMBER_OR_EMPTY_STRING)],
       meta: new Meta(),
     });
   }
@@ -174,8 +173,7 @@ export class CrawlConfigDetailsComponent implements OnChanges {
       kind: Kind.POLITENESSCONFIG
     }) : null;
     crawlConfig.minimumDnsTtlS = parseInt(formModel.minimumDnsTtlS, 10) || 0;
-    crawlConfig.priorityWeight = parseInt(formModel.priorityWeight, 10) || 0;
-    crawlConfig.extra.extractText = formModel.extra ? formModel.extra.extractText : null;
+    crawlConfig.priorityWeight = parseFloat(formModel.priorityWeight) || 0;
     crawlConfig.extra.createScreenshot = formModel.extra ? formModel.extra.createScreenshot : null;
 
     configObject.crawlConfig = crawlConfig;

@@ -1,8 +1,8 @@
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>business</mat-icon>
-    <mat-card-title><a [routerLink]="['/config', 'entity']" [queryParams]="{id: id}">{{name}}</a></mat-card-title>
-    <mat-card-subtitle>{{description}}</mat-card-subtitle>
+    <mat-card-title><a [routerLink]="['/config', 'entity', id]" matTooltip="{{name}}">{{name | slice : 0: 10}}</a></mat-card-title>
+    <mat-card-subtitle>Entity</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <mat-chip-list fxFlex [disabled]="true" fxLayout="row wrap" fxLayoutGap="8px">

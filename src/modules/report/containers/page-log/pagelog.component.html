@@ -1,0 +1,34 @@
+<div fxLayout="column" class="container">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+  <div fxFlex class="no-scroll" fxLayout="row" *ngIf="query$ | async as query">
+    <app-page-log-query class="content-padding scroll"
+                        [query]="query"
+                        (queryChange)="onQueryChange($event)"></app-page-log-query>
+    <app-pagelog-list fxFlex
+                      appQueryPageLog [query]="query"
+                      [pageIndex]="pageIndex$ | async"
+                      [pageSize]="pageSize$ | async"
+                      [sortDirection]="sortDirection$ | async"
+                      [sortActive]="sortActive$ | async"
+                      (selectedChange)="onSelectedChange($event)"
+                      (sort)="onSort($event)"
+                      (page)="onPage($event)">
+      <ng-container *appAction="let row">
+        <a mat-menu-item
+           *ngIf="'read' | able: 'jobexecution'"
+           [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
+           i18n="@@reportListActionButtonGoToJobExecution">
+          <mat-icon>hdr_strong</mat-icon>
+          Go to job execution
+        </a>
+        <a mat-menu-item
+           *ngIf="'read' | able: 'crawlexecution'"
+           [routerLink]="['/report', 'crawlexecution', row.executionId]"
+           i18n="@@reportListActionButtonGoToCrawlExecution">
+          <mat-icon>hdr_weak</mat-icon>
+          Go to crawl execution
+        </a>
+      </ng-container>
+    </app-pagelog-list>
+  </div>
+</div>

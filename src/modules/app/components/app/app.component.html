@@ -1,46 +1,12 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
   <mat-toolbar class="main-toolbar" color="primary">
-    <button mat-icon-button
-            [mat-menu-trigger-for]="menu"
-            *ngIf="isLoggedIn"
-            class="header--button__margin">
-      <mat-icon>menu</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-      <a mat-menu-item
-         *ngIf="canConfigure || canConsult"
-         [routerLink]="['/config']">
-        <mat-icon>settings</mat-icon>
-        <span i18n="@@mainMenuConfiguration">Configuration</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canConfigure"
-         [routerLink]="['/report']">
-        <mat-icon>report</mat-icon>
-        <span i18n="@@mainMenuReport">Report</span>
-      </a>
-
-      <a mat-menu-item
-         *ngIf="canAdministrate"
-         [routerLink]="['/config/logconfig']">
-        <mat-icon>notes</mat-icon>
-        <span i18n="@@mainMenuLogConfiguration">Log level</span>
-      </a>
-    </mat-menu>
-
-    <a routerLink="/" class="title"><h1>Veidemann</h1></a>
+    <a routerLink="/"><img border="0" class="veidemann_logo" src="assets/logo/veidemann_horizontal_white.png"></a>
 
     <span fxFlex></span>
 
     <app-time></app-time>
 
     <span fxFlex></span>
-
-    <app-crawlerstatus *ngIf="isLoggedIn && canConfigure"
-                       [runStatus]="runStatus$ | async"
-                       (change)="onChangeRunStatus($event)"></app-crawlerstatus>
 
     <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu"><mat-icon>help</mat-icon></a>
     <mat-menu #helpMenu="matMenu">
@@ -71,6 +37,35 @@
       <span i18n="@@mainToolbarLogoutButton">LOGOUT</span>
     </button>
   </mat-toolbar>
+
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link
+       *ngIf="'read' | able: 'configs'"
+       [routerLink]="['/config']"
+       routerLinkActive
+       #config="routerLinkActive"
+       [active]="config.isActive">
+      <span i18n="@@mainMenuConfiguration">CONFIGURATION</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="'read' | able: 'report'"
+       [routerLink]="['/report']"
+       routerLinkActive
+       #report="routerLinkActive"
+       [active]="report.isActive">
+      <span i18n="@@mainMenuReport">REPORT</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="'read' | able: 'logconfig'"
+       [routerLink]="['/logconfig']"
+       routerLinkActive
+       #log="routerLinkActive"
+       [active]="log.isActive">
+      <span i18n="@@mainMenuLogConfiguration">LOG LEVEL</span>
+    </a>
+  </nav>
 
   <div *ngIf="isModuleLoading$ | async" class="module-loader">
     <h2 i18n="@@appModuleLoadingText">Loading module...</h2>

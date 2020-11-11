@@ -1,9 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 import {ConfigObject, Kind} from '../../../../shared/models/config';
-import {ConfigApiService} from '../../../core/services';
-import {createListRequest} from '../../func/query';
 
 @Component({
   selector: 'app-run-crawl-dialog',
@@ -11,29 +9,23 @@ import {createListRequest} from '../../func/query';
   styleUrls: ['./run-crawl-dialog.component.css']
 })
 
-export class RunCrawlDialogComponent implements OnInit {
+export class RunCrawlDialogComponent {
   readonly Kind = Kind;
 
   runCrawlReply: RunCrawlReply;
   configObject: ConfigObject;
-  crawlJobs: ConfigObject[] = [];
+  crawlJobs: ConfigObject[];
   jobRefId: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private dialogRef: MatDialogRef<RunCrawlDialogComponent>,
-              private configApiService: ConfigApiService) {
+              private dialogRef: MatDialogRef<RunCrawlDialogComponent>) {
     this.runCrawlReply = data.runCrawlReply;
     this.configObject = data.configObject;
+    this.crawlJobs = data.crawlJobs;
   }
 
   get kind(): Kind {
     return this.configObject.kind;
-  }
-
-  ngOnInit() {
-    this.configApiService.list(createListRequest(Kind.CRAWLJOB.valueOf())).subscribe(crawlJob => {
-      this.crawlJobs.push(crawlJob);
-    })
   }
 
   onRunCrawl() {

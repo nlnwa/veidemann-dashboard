@@ -1,0 +1,23 @@
+<form [formGroup]="form">
+<h2 mat-dialog-title>CrawlHostGroupConfig - Mass update</h2>
+<mat-dialog-content>
+      <app-label-multi [configObject]="configObject"
+                       (update)="onUpdateLabels($event)"></app-label-multi>
+</mat-dialog-content>
+</form>
+<mat-dialog-actions *ngIf="canEdit">
+  <button mat-raised-button color="accent"
+          [disabled]="!canUpdate"
+          [mat-dialog-close]="onDialogClose()"
+          i18n="@@commonButtonSave">UPDATE
+  </button>
+  <button mat-button
+          (click)="onRevert()"
+          [disabled]="!canRevert"
+          i18n="@@commonButtonRevert">REVERT
+  </button>
+  <button mat-button
+          mat-dialog-close
+          i18n="@@commonButtonCancel">CANCEL
+  </button>
+</mat-dialog-actions>

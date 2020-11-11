@@ -13,6 +13,7 @@ import {Duration} from '../../../../shared/models/duration/duration.model';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../shared/validation/patterns';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-duration-picker',
@@ -48,6 +49,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   onChange: (duration: number) => void;
   onTouched: (duration: number) => void;
 
+  showMilliseconds = false;
   showSeconds = false;
   showMinutes = false;
   showHours = false;
@@ -56,6 +58,10 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   constructor(protected fb: FormBuilder) {
     this.createForm();
+  }
+
+  get milliseconds(): AbstractControl {
+    return this.form.get('milliseconds');
   }
 
   get seconds(): AbstractControl {
@@ -77,6 +83,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   ngOnInit(): void {
     if (this.durationGranularity) {
       const parts = this.durationGranularity.split(':');
+      this.showMilliseconds = parts.includes('ms');
       this.showSeconds = parts.includes('s');
       this.showMinutes = parts.includes('m');
       this.showHours = parts.includes('h');
@@ -113,6 +120,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   protected createForm(): void {
     this.form = this.fb.group({
+      milliseconds: ['', [Validators.min(0), Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       seconds: ['', [Validators.min(0), Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       minutes: ['', [Validators.min(0), Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       hours: ['', [Validators.min(0), Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
@@ -123,6 +131,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   protected updateForm(time: number): void {
     const duration = this.timeToDuration(time);
     this.form.patchValue({
+      milliseconds: duration.milliseconds || '',
       seconds: duration.seconds || '',
       minutes: duration.minutes || '',
       hours: duration.hours || '',
@@ -140,30 +149,24 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   secondsToDuration(seconds: number): Duration {
-    const sec = seconds;
-    const d = Math.floor(sec / (3600 * 24));
-    const h = Math.floor(sec % (3600 * 24) / 3600);
-    const m = Math.floor(sec % 3600 / 60);
-    const s = Math.floor((sec % 60));
-
+    const s = moment.duration(seconds, 'seconds');
     return new Duration({
-      days: d,
-      hours: h,
-      minutes: m,
-      seconds: s
+      days: s.days(),
+      hours: s.hours(),
+      minutes: s.minutes(),
+      seconds: s.seconds(),
+      milliseconds: null,
     });
   }
 
-  msToDuration(ms: number): Duration {
-    const millis = ms;
-    const m = Math.floor(millis / 60000);
-    const s = Number(((millis % 60000) / 1000).toFixed(0));
-
+  msToDuration(milliseconds: number): Duration {
+    const ms = moment.duration(milliseconds);
     return new Duration({
       days: null,
       hours: null,
-      minutes: m,
-      seconds: s
+      minutes: ms.minutes(),
+      seconds: ms.seconds(),
+      milliseconds: ms.milliseconds(),
     });
   }
 
@@ -187,7 +190,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   durationToMs(duration: Duration) {
     const ms = (
-      (duration.minutes * 60000) + (duration.seconds * 1000)
+      (duration.minutes * 60000) + (duration.seconds * 1000) + duration.milliseconds
     );
     return ms;
   }

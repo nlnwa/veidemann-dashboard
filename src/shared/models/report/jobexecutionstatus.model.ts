@@ -17,6 +17,12 @@ export const jobExecutionStates: JobExecutionState[] =
   Object.keys(JobExecutionState).filter(p => !isNumeric(p)).map(state => JobExecutionState[state]);
 
 export class JobExecutionStatus {
+  static DONE_STATES = [
+    JobExecutionState.ABORTED_MANUAL,
+    JobExecutionState.FAILED,
+    JobExecutionState.FINISHED,
+  ];
+
   id: string;
   jobId: string;
   state: JobExecutionState;

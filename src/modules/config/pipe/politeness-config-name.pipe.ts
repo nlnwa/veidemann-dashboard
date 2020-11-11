@@ -2,21 +2,21 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {ConfigObject} from '../../../shared/models/config';
-import {first, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
+import {OptionsService} from '../services/options.service';
 
 @Pipe({
   name: 'getPolitenessConfigName'
 })
-export class PolitenessConfigNamePipe implements PipeTransform {
+export class PolitenessConfigNamePipe implements PipeTransform {
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private optionsService: OptionsService) {
   }
 
   transform(configObject: ConfigObject): Observable<string> {
-    return this.route.data.pipe(
-      first(),
-      map(data => {
-        const found = data.options.politenessConfigs.find(
+    return this.optionsService.options$.pipe(
+      map(options => {
+        const found = options.politenessConfigs.find(
           politenessConfig => politenessConfig.id === configObject.crawlConfig.politenessRef.id);
         return found ? found.meta.name : 'politenessConfig';
       }));

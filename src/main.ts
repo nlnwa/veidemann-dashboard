@@ -15,8 +15,8 @@ if (environment.production) {
 // load dynamic configuration pre bootstrap
 fetch(environment.configUrl)
   .then(async config => {
-    const versions = await fetch(environment.versionUrl)
-    return {config, versions}
+    const versions = await fetch(environment.versionUrl);
+    return {config, versions};
   })
   .then(async ({config, versions}) => {
     const dynamicConfig = await config.json();
@@ -48,7 +48,7 @@ fetch(environment.configUrl)
     }
     Object.entries(environment).forEach(([key, value]) => {
       if (value !== null && typeof value === 'object') {
-        // merge values of type object properly (because Object.assign does not assign recursively)
+        // merge object values because (because Object.assign does not assign recursively)
         appConfig[key] = Object.assign({}, environment[key], dynamicConfig[key]);
       }
     });

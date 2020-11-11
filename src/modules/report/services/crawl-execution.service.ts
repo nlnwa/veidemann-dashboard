@@ -1,31 +1,29 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 
 import {CrawlExecutionsListRequest, FieldMask} from '../../../api';
 import {ConfigObject, ConfigRef, CrawlExecutionState, CrawlExecutionStatus, Kind} from '../../../shared/models';
 import {ReportApiService} from '../../core/services';
-import {QueryService, Sort} from '../../commons/services/query.service';
-import {ConfigService} from '../../core/services/config.service';
-import {tap} from 'rxjs/operators';
-import {toTimestampProto} from '../../../shared/func';
+import {ConfigService} from '../../commons/services';
+import {catchError, shareReplay} from 'rxjs/operators';
+import {Detail, Page, Sort, toTimestampProto, Watch} from '../../../shared/func';
+import {LoadingService} from '../../../shared/services';
+import {Getter, Searcher} from '../../../shared/directives';
 
-export interface CrawlExecutionStatusQuery {
+export interface CrawlExecutionStatusQuery extends Page, Sort, Watch {
   jobId: string;
   jobExecutionId: string;
   seedId: string;
   stateList: CrawlExecutionState[];
-  sort: Sort;
-  pageSize: number;
-  pageIndex: number;
   hasError: boolean;
   startTimeTo: string;
   startTimeFrom: string;
-  watch: boolean;
 }
 
 @Injectable()
-export class CrawlExecutionService extends QueryService {
-  private readonly cache: Map<string, ConfigObject>;
+export class CrawlExecutionService extends LoadingService
+  implements Searcher<CrawlExecutionStatusQuery, CrawlExecutionStatus>, Getter<CrawlExecutionStatus> {
+  private readonly cache: Map<string, Observable<ConfigObject>>;
 
   constructor(private reportApiService: ReportApiService,
               private configService: ConfigService) {
@@ -33,17 +31,28 @@ export class CrawlExecutionService extends QueryService {
     this.cache = new Map();
   }
 
-  get(jobExecutionId: string): Observable<CrawlExecutionStatus> {
+  get(query: Detail & Watch): Observable<CrawlExecutionStatus> {
     const listRequest = new CrawlExecutionsListRequest();
-    listRequest.addId(jobExecutionId);
+    listRequest.addId(query.id);
+    listRequest.setWatch(query.watch);
     return this.reportApiService.listCrawlExecutions(listRequest);
   }
 
   getSeed(id: string): Observable<ConfigObject> {
     const configRef = new ConfigRef({id, kind: Kind.SEED});
-    return this.cache.has(id) ? of(this.cache.get(id)) : this.configService.get(configRef).pipe(
-      tap(configObject => this.cache.set(id, configObject)),
+    if (this.cache.has(id)) {
+      return this.cache.get(id);
+    }
+    const seed$ = this.configService.get(configRef).pipe(
+      shareReplay(1),
+      catchError(err => {
+        this.cache.delete(id);
+        return EMPTY;
+      })
     );
+    this.cache.set(id, seed$);
+
+    return seed$;
   }
 
   search(query: CrawlExecutionStatusQuery): Observable<CrawlExecutionStatus> {
@@ -98,10 +107,9 @@ export class CrawlExecutionService extends QueryService {
       listRequest.setWatch(query.watch);
     }
 
-
-    if (query.sort) {
-      listRequest.setOrderByPath(query.sort.active);
-      listRequest.setOrderDescending(query.sort.direction === 'desc');
+    if (query.direction && query.active) {
+      listRequest.setOrderByPath(query.active);
+      listRequest.setOrderDescending(query.direction === 'desc');
     }
 
     return listRequest;

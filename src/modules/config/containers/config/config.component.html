@@ -1,0 +1,8 @@
+<mat-drawer-container class="container">
+  <mat-drawer mode="side" [opened]="true">
+    <app-config-navigation-list [options]="options$ | async" [kind]="kind$ | async"></app-config-navigation-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

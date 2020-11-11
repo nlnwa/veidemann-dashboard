@@ -80,10 +80,16 @@ export {
 } from './gen/controller/v1/controller_pb';
 
 export {
+  ExecutionId as ExecutionIdProto,
+} from './gen/controller/v1/resources_pb';
+
+export {
   ReportPromiseClient
 } from './gen/report/v1/report_grpc_web_pb';
 
 export {
+  PageLogListRequest,
+  CrawlLogListRequest,
   JobExecutionsListRequest,
   CrawlExecutionsListRequest,
   ExecuteDbQueryRequest,
@@ -100,3 +106,7 @@ export {
 export {
   Error as ErrorProto
 } from './gen/commons/v1/resources_pb';
+
+export {
+  CountResponse as CountResponseProto
+} from './gen/frontier/v1/frontier_pb';

@@ -70,22 +70,10 @@
                    placeholder="Surt prefix"
                    i18n-placeholder="@@seedDetailsFormSurtPrefixPlaceholder">
           </mat-form-field>
-
-          <mat-list *ngIf="configObject?.id">
-            <mat-list-item *ngFor="let id of jobRefListId.value">
-              <mat-icon matTooltip="CrawlJob"
-                        i18n-matTooltip="@@seedDetailsCrawljobShortcutTooltip">work
-              </mat-icon>
-              <a class="shortcut-link"
-                 [routerLink]="['/config/crawljobs']"
-                 [queryParams]="{id: id}">{{ getCrawlJobName(id) }}</a>
-            </mat-list-item>
-          </mat-list>
-
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="canEdit || canConsult">
+    <mat-card-actions *ngIf="canEdit">
       <button mat-raised-button
               [color]="form.valid ? 'accent' : 'warn'"
               *ngIf="showSave"
@@ -109,11 +97,6 @@
               *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">DELETE
-      </button>
-      <span fxFlex></span>
-      <button *ngIf="!showSave"  mat-button
-              matTooltip="Start crawling seed" i18n-matTooltip="@@seedDetailsStartCrawlSeedButtonTooltip"
-              (click)="onRunCrawl()">RUN CRAWL
       </button>
     </mat-card-actions>
   </mat-card>

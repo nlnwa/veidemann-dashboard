@@ -1,0 +1,8 @@
+<div fxLayout="column">
+  <mat-label><b>DNS TTL: </b>{{configObject.crawlConfig.minimumDnsTtlS | durationFormat : 's'}}</mat-label>
+  <mat-label><b>Priority weight: </b>{{configObject.crawlConfig.priorityWeight}}</mat-label>
+  <mat-checkbox [(ngModel)]="configObject.crawlConfig.extra.createScreenshot" labelPosition="before" disabled="true">
+    Create screenshot
+  </mat-checkbox>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
+</div>

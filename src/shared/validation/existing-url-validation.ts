@@ -24,7 +24,7 @@ export class SeedUrlValidator {
    * @returns An async validator that checks with a backend service if any of
    * the url's from the control already exists
    */
-  static createBackendValidator(configService: ConfigApiService) {
+  static createBackendValidator(configApiService: ConfigApiService) {
     return (entityRef: ConfigRef) => (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (!entityRef) {
         return of({missingEntityRef: true});
@@ -34,7 +34,7 @@ export class SeedUrlValidator {
       return from(urls).pipe(
         map(url => seedWithMatchingUrl(url)),
         filter(_ => !!_),
-        mergeMap(request => configService.list(request)),
+        mergeMap(request => configApiService.list(request)),
         toArray(),
         map((seeds: ConfigObject[]) => {
           if (seeds.length === 0) {

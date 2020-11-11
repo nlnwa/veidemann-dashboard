@@ -67,13 +67,6 @@
         </mat-form-field>
 
         <ng-container formGroupName="extra">
-          <mat-checkbox formControlName="extractText"
-                        labelPosition="after"
-                        i18n="@@crawlconfigFormExtractTextLabel"
-                        color="accent">
-            Extract text
-          </mat-checkbox>
-
           <mat-checkbox formControlName="createScreenshot"
                         labelPosition="after"
                         i18n="@@crawlconfigFormCreateScreenshotLabel"
@@ -106,7 +99,7 @@
       </button>
       <span fxFlex></span>
       <button mat-button
-              *ngIf="!showSave"
+              *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">
         DELETE

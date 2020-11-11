@@ -48,13 +48,15 @@ export class PolitenessConfig {
   }
 
   static fromProto(proto: PolitenessConfigProto): PolitenessConfig {
+    // a small hack, see https://github.com/grpc/grpc/issues/2227
+    const delayFactor = parseFloat(proto.getDelayFactor().toPrecision(5));
     return new PolitenessConfig({
       robotsPolicy: proto.getRobotsPolicy(),
       customRobots: proto.getCustomRobots(),
       minimumRobotsValidityDurationS: proto.getMinimumRobotsValidityDurationS(),
       minTimeBetweenPageLoadMs: proto.getMinTimeBetweenPageLoadMs(),
       maxTimeBetweenPageLoadMs: proto.getMaxTimeBetweenPageLoadMs(),
-      delayFactor: proto.getDelayFactor(),
+      delayFactor,
       maxRetries: proto.getMaxRetries(),
       retryDelaySeconds: proto.getRetryDelaySeconds(),
       crawlHostGroupSelectorList: proto.getCrawlHostGroupSelectorList()

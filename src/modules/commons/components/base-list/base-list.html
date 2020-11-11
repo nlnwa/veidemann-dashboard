@@ -1,17 +1,17 @@
-<div class="mat-elevation-z1">
+<div fxLayout="column wrap" class="container">
   <table class="mat-table" *ngIf="multiSelect && selection.selected.length > 1">
     <tr class="mat-row no-interaction">
       <td class="mat-cell" *ngIf="!allSelected">
         <span i18n="@@baseListConfigsInPageSelectedMessage">
-          <strong>{{selection.selected.length}}</strong> configurations on page is selected.
+          <strong>{{selection.selected.length}}</strong> rows selected
         </span>
         <button mat-button *ngIf="isAllInPageSelected$ | async" (click)="onSelectAll()">
-          <strong i18n="@@baseListSelectAllConfigInDBButton">Select all configurations in database</strong>
+          <strong i18n="@@baseListSelectAllConfigInDBButton">Select all rows in database</strong>
         </button>
       </td>
       <td class="mat-cell" *ngIf="allSelected">
         <span i18n="@@baseListAllConfigurationsSelectedInfoText">
-          All <b>{{pageLength || ''}}</b> configurations in database selected.
+          All <b>{{(length$ | async) || ''}}</b> rows in database selected
         </span>
         <button mat-button (click)="onDeselectAll()">
           <strong i18n="@@baseListRemoveSelectionButton">Remove selection</strong>
@@ -22,75 +22,104 @@
       </td>
     </tr>
   </table>
+  <div fxFlex class="scroll">
+    <table mat-table
+           [dataSource]="dataSource"
+           matSort
+           [matSortActive]="sortActive"
+           [matSortDirection]="sortDirection"
+           (matSortChange)="onSortChange($event)"
+           multiTemplateDataRows>
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="checkbox-padding">
+          <mat-checkbox #masterCheckbox
+                        *ngIf="multiSelect"
+                        (change)="onMasterCheckboxToggle(masterCheckbox.checked)"
+                        [checked]="isAllInPageSelected$ | async"
+                        [indeterminate]="selection.hasValue() && !(isAllInPageSelected$ | async)">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row" class="checkbox-padding">
+          <mat-checkbox *ngIf="multiSelect"
+                        [checked]="selection.isSelected(row)"
+                        (click)="$event.stopPropagation()"
+                        (change)="onCheckboxToggle(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
-  <table mat-table
-         [dataSource]="dataSource"
-         matSort
-         [matSortActive]="sortActive"
-         [matSortDirection]="sortDirection"
-         (matSortChange)="onSortChange($event)">
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef class="checkbox-padding">
-        <mat-checkbox #masterCheckbox
-                      *ngIf="multiSelect"
-                      (change)="onMasterCheckboxToggle(masterCheckbox.checked)"
-                      [checked]="isAllInPageSelected$ | async"
-                      [indeterminate]="selection.hasValue() && !(isAllInPageSelected$ | async)">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row" class="checkbox-padding">
-        <mat-checkbox *ngIf="multiSelect"
-                      [checked]="selection.isSelected(row)"
-                      (click)="$event.stopPropagation()"
-                      (change)="onCheckboxToggle(row)">
-        </mat-checkbox>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th i18n="@@baseListNameHeader" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row" matTooltip="{{row.meta.name}}"
+            matTooltipClass="tooltip-overflow">{{row.meta.name}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th i18n="@@baseListNameHeader" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{row.meta.name}}</td>
-    </ng-container>
+      <ng-container matColumnDef="description">
+        <th i18n="baseListDescriptionHeader" mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let row" matTooltip="{{row.meta.description}}"
+            matTooltipClass="tooltip-overflow">{{row.meta.description}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th i18n="baseListDescriptionHeader" mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let row">{{row.meta.description}}</td>
-    </ng-container>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let row">{{row.id}}</td>
-    </ng-container>
+      <ng-container matColumnDef="extra">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <ng-container *ngFor="let extraTemplate of extraTemplates">
+            <ng-container *ngTemplateOutlet="extraTemplate; context: {$implicit: row}"></ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="extra">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <ng-container *ngFor="let extraTemplate of extraTemplates">
-          <ng-container *ngTemplateOutlet="extraTemplate; context: {$implicit: row}"></ng-container>
-        </ng-container>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+          <div class="action">
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionMenu>
+              <ng-container *ngFor="let filterButtonTemplate of filterButtonTemplates">
+                <ng-container *ngTemplateOutlet="filterButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+              <ng-container *ngFor="let shortcutButtonTemplate of shortcutButtonTemplates">
+                <ng-container *ngTemplateOutlet="shortcutButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+              <ng-container *ngFor="let actionButtonTemplate of actionButtonTemplates">
+                <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
+              </ng-container>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell class="action-cell" *matCellDef="let row" (click)="$event.stopPropagation()">
-        <div class="actions" *ngFor="let actionButtonTemplate of actionButtonTemplates">
-          <ng-container *ngTemplateOutlet="actionButtonTemplate; context: {$implicit: row}"></ng-container>
-        </div>
-      </td>
-    </ng-container>
+      <!-- Expanded Content Column - The preview row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedPreview">
+        <td mat-cell [class.expanded-preview-cell]="row === selectedRow" *matCellDef="let row"
+            [attr.colspan]="displayedColumns.length">
+          <div class="preview" [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
+            <app-preview *ngIf="row === selectedRow" [configObject]="row"></app-preview>
+          </div>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
-        [class.row-disabled]="isDisabled(row)"
-        (click)="onRowClick(row)">
-    </tr>
-  </table>
-
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          class="item-row"
+          [class.expanded-row]="selectedRow === row"
+          (click)="onRowClick(row)"
+          [ngClass]="isSelected(row) ? 'row-selected' : isChecked(row) ? 'row-checked': ''"
+          [class.row-disabled]="isDisabled(row)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedPreview']" class="preview-row"></tr>
+    </table>
+  </div>
   <mat-paginator
     (page)="onPage($event)"
-    [length]="pageLength"
+    [length]="length$ | async"
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageOptions">

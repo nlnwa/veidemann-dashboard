@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Abort JobExecution</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="jobExecutionStatus">
+    <span>Are you sure you want to abort the job:</span>
+    <div>
+      <p>{{jobExecutionStatus.jobId | getJobNamePipe | async}}</p>
+      <p>started: {{jobExecutionStatus.startTime | date: 'medium'}}</p>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="crawlExecutionStatus">
+    <span>Are you sure you want to abort the crawl of: {{crawlExecutionStatus.seedId | getSeedNamePipe | async}}?</span>
+  </ng-container>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn"
+          (click)="onAbortCrawl()">ABORT
+  </button>
+  <button mat-button
+          [mat-dialog-close]="false">CANCEL
+  </button>
+</div>

@@ -1,0 +1,56 @@
+<form [formGroup]="form" fxLayout="column">
+  <mat-form-field>
+    <mat-select placeholder="State" multiple formControlName="stateList"
+                i18n-placeholder="@@crawlExecutionReportFilterStatePlaceholder">
+      <mat-option *ngFor="let state of crawlExecutionStates"
+                  [value]="state.toString(10)">{{CrawlExecutionState[state]}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="CrawlJob" formControlName="jobId"
+                i18n-placeholder="@@crawlExecutionReportFilterCrawlJobPlaceholder">
+      <mat-option [value]=""></mat-option>
+      <mat-option *ngFor="let job of crawlJobOptions"
+                  [value]="job.id">{{job.meta.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="jobExecutionId"
+           placeholder="JobExecution ID"
+           i18n-placeholder="@@crawlExecutionReportFilterJobExecutionIdPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="seedId"
+           placeholder="Seed ID"
+           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
+           placeholder="From" i18n-placeholder="@@crawlExecutionReportFilterStartTimeFromPlaceholder">
+    <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo"
+           placeholder="To" i18n-placeholder="@@crawlExecutionReportFilterStartTimeToPlaceholder">
+    <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startTimeToDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-checkbox labelPosition="after" formControlName="hasError"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Failed
+  </mat-checkbox>
+
+  <mat-checkbox labelPosition="after" formControlName="watch"
+                i18n-placeholder="@@crawlExecutionReportFilterHasErrorLabel">
+    Watch
+  </mat-checkbox>
+</form>

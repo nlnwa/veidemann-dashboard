@@ -16,5 +16,9 @@
     <mat-label i18n="@@durationPickerSecondsLabel">Seconds</mat-label>
     <input type="number" matInput formControlName="seconds" min="0">
   </mat-form-field>
+    <mat-form-field *ngIf="showMilliseconds" class="duration">
+      <mat-label i18n="@@durationPickerMillisecondsLabel">Milliseconds</mat-label>
+      <input type="number" matInput formControlName="milliseconds" min="0">
+    </mat-form-field>
   </div>
 </form>

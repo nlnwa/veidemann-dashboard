@@ -1,0 +1,18 @@
+<div fxLayout="column">
+  <mat-label><b>User agent: </b> {{configObject.browserConfig.userAgent}}</mat-label>
+  <mat-label><b>Window width: </b> {{configObject.browserConfig.windowWidth}}</mat-label>
+  <mat-label><b>Window height: </b> {{configObject.browserConfig.windowHeight}}</mat-label>
+  <mat-label><b>Page load timeout: </b>
+    {{configObject.browserConfig.pageLoadTimeoutMs | durationFormat: 'ms'}}
+  </mat-label>
+  <mat-label><b>Max inactivity time: </b>
+    {{configObject.browserConfig.maxInactivityTimeMs | durationFormat: 'ms'}}
+  </mat-label>
+  <mat-label *ngIf="configObject.browserConfig.scriptSelectorList.length"><b>Script selector</b></mat-label>
+  <mat-chip-list>
+    <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList">
+      {{scriptSelector}}
+    </mat-chip>
+  </mat-chip-list>
+  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
+</div>

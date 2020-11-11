@@ -9,11 +9,15 @@ import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
 import {RunStatus} from '../../../../shared/models/controller';
 import {Role} from '../../../../shared/models/config';
-import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
+import {ExecutionId, RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 import {ApplicationErrorHandler} from '../error.handler';
+import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models/report';
+import {CountResponse} from '../../../../shared/models/report/countresponse.model';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ControllerApiService {
 
   private controllerPromiseClient: ControllerPromiseClient;
@@ -55,6 +59,39 @@ export class ControllerApiService {
           this.errorHandler.handleError(error);
           return of(null);
         })
-      )
+      );
+  }
+
+  abortJobExecution(request: ExecutionId): Observable<JobExecutionStatus> {
+    return from(this.controllerPromiseClient.abortJobExecution(ExecutionId.toProto(request), this.authService.metadata))
+      .pipe(
+        map(jobExecutionStaus => JobExecutionStatus.fromProto(jobExecutionStaus)),
+        catchError(error => {
+          this.errorHandler.handleError(error);
+          return of(null);
+        })
+      );
+  }
+
+  abortCrawlExecution(request: ExecutionId): Observable<CrawlExecutionStatus> {
+    return from(this.controllerPromiseClient.abortCrawlExecution(ExecutionId.toProto(request), this.authService.metadata))
+      .pipe(
+        map(crawlExecutionStatus => CrawlExecutionStatus.fromProto(crawlExecutionStatus)),
+        catchError(error => {
+          this.errorHandler.handleError(error);
+          return of(null);
+        })
+      );
+  }
+
+  queueCountForCrawlExecution(request: ExecutionId): Observable<CountResponse> {
+    return from(this.controllerPromiseClient.queueCountForCrawlExecution(ExecutionId.toProto(request), this.authService.metadata))
+      .pipe(
+        map(countResponse => CountResponse.fromProto(countResponse)),
+        catchError(error => {
+          this.errorHandler.handleError(error);
+          return of(null);
+        })
+      );
   }
 }

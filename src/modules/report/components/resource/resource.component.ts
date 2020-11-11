@@ -24,6 +24,6 @@ export class ResourceComponent {
   constructor(public appConfigService: AppConfigService) {
   }
 
-  displayedColumns: string[] = ['uri', 'discoveryPath', 'loke'];
+  displayedColumns: string[] = ['uri', 'discoveryPath'];
   expandedResource: Resource | null;
 }
