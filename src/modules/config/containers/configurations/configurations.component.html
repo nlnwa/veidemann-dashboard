@@ -294,8 +294,7 @@
               <ng-container *ngIf="row.crawlJob?.scheduleRef.id">
                 <a mat-menu-item
                    *ngIf="'read' | able: Kind[Kind.CRAWLSCHEDULECONFIG]"
-                   [routerLink]="['../schedule']"
-                   [queryParams]="{id: row.crawlJob.scheduleRef?.id}"
+                   [routerLink]="['../schedule', row.crawlJob.scheduleRef?.id ]"
                    i18n="@@configListActionButtonGoToSchedule"
                    matTooltip="Go to schedule: {{row | getCrawlScheduleName | async}}"
                    i18n-matTooltip="@@crawljobListScheduleShortcutActionButtonTooltip">
