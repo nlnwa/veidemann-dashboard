@@ -77,12 +77,14 @@
         <tr class="mat-row">
           <td class="mat-cell">{{pageLog.warcId}}</td>
           <td class="mat-cell">
-            <a [routerLink]="['/report', 'jobexecution']"
-               [queryParams]="{id: pageLog.jobExecutionId}">{{pageLog.jobExecutionId}}</a>
+            <a [routerLink]="['/report', 'jobexecution', pageLog.jobExecutionId]">
+              {{pageLog.jobExecutionId}}
+            </a>
           </td>
           <td class="mat-cell">
-            <a [routerLink]="['/report', 'crawlexecution']"
-               [queryParams]="{id: pageLog.executionId}">{{pageLog.executionId}}</a>
+            <a [routerLink]="['/report', 'crawlexecution', pageLog.executionId]">
+              {{pageLog.executionId}}
+            </a>
           </td>
         </tr>
         </tbody>

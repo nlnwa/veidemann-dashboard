@@ -57,7 +57,7 @@
         </tr>
         <tr class="mat-row">
           <td class="mat-cell" i18n="@@crawlLogReportStatusFetchTimeMsLabelCell">Fetch time</td>
-          <td class="mat-cell">{{crawlLog.fetchTimeMs/1000}} seconds</td>
+          <td class="mat-cell">{{crawlLog.fetchTimeMs / 1000}} seconds</td>
         </tr>
         <tr class="mat-row">
           <td class="mat-cell" i18n="@@crawlLogReportStatusBlockDigestLabelCell">Block digest</td>
@@ -117,12 +117,14 @@
         <tr class="mat-row">
           <td class="mat-cell">{{crawlLog.id}}</td>
           <td class="mat-cell">
-            <a [routerLink]="['/report', 'crawlexecution']"
-               [queryParams]="{id: crawlLog.executionId}">{{crawlLog.executionId}}</a>
+            <a [routerLink]="['/report', 'crawlexecution', crawlLog.executionId]">
+              {{crawlLog.executionId}}
+            </a>
           </td>
           <td class="mat-cell">
-            <a [routerLink]="['/report', 'jobexecution']"
-               [queryParams]="{id: crawlLog.jobExecutionId}">{{crawlLog.jobExecutionId}}</a>
+            <a [routerLink]="['/report', 'jobexecution', crawlLog.jobExecutionId]">
+              {{crawlLog.jobExecutionId}}
+            </a>
           </td>
         </tr>
         </tbody>
