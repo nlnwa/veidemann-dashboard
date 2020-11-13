@@ -206,10 +206,9 @@ export class ConfigurationComponent implements OnDestroy {
         filter(deleted => !!deleted)
       )
       .subscribe(() => {
-        this.router.navigate([], {
-          relativeTo: this.route.parent,
+        this.router.navigate(['../'], {
+          relativeTo: this.route,
         }).catch(error => this.errorService.dispatch(error));
-        this.reload.next();
         this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
       });
   }
