@@ -48,6 +48,10 @@ export class CrawlJobDetailsComponent implements OnChanges {
     return this.authService.canUpdate(this.configObject.kind);
   }
 
+  get canDelete(): boolean {
+    return this.authService.canDelete(this.configObject.kind);
+  }
+
   get showSave(): boolean {
     return (this.configObject && !this.configObject.id);
   }

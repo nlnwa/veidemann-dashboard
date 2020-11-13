@@ -100,7 +100,7 @@
               i18n="@@commonButtonRevert">REVERT
       </button>
       <button mat-button
-              *ngIf="!showSave"
+              *ngIf="!showSave && canDelete"
               (click)="onDelete()"
               i18n="@@commonButtonDelete">DELETE
       </button>
