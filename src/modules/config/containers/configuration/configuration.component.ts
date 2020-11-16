@@ -170,7 +170,6 @@ export class ConfigurationComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
         this.configObject.next(newConfig);
-        this.reload.next();
         this.fetchConfigObject = false;
         this.router.navigate([], {
           queryParamsHandling: 'merge',
