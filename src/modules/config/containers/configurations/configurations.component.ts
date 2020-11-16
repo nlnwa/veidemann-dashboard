@@ -244,8 +244,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
              crawlJobIdList,
              scriptIdList,
              term,
-             active,
              direction,
+             active,
              pageIndex,
              pageSize
            ]) => ({
