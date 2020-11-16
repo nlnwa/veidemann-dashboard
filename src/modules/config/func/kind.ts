@@ -26,6 +26,7 @@ import {RoleMappingMultiDialogComponent} from '../components/rolemapping/rolemap
 export interface ConfigDialogData {
   configObject: ConfigObject;
   options: ConfigOptions;
+  allSelected: boolean;
 }
 
 export function dialogByKind(kind: Kind): ComponentType<any> {

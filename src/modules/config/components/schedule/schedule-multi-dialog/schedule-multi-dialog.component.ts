@@ -27,6 +27,7 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
               public dialogRef: MatDialogRef<ScheduleMultiDialogComponent>) {
     super(fb, authService);
     this.configObject = this.data.configObject;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList() {

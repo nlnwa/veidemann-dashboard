@@ -3,9 +3,13 @@
 
   <mat-dialog-content fxLayout="row" fxLayoutGap="16px">
     <div fxFlex fxLayout="column" fxLayoutGap="16px">
-      <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
+      <app-label-multi [configObject]="configObject"
+                       [allSelected]="allSelected"
+                       (update)="onUpdateLabels($event)">
+      </app-label-multi>
 
-      <h5>Common browserscripts for the selected configs:</h5>
+      <h5 *ngIf="!allSelected">Common browserscripts for the selected configs:</h5>
+      <h5 *ngIf="allSelected">Browserscripts:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
         <mat-form-field fxFlex>
           <mat-select placeholder="BrowserScripts" multiple formControlName="commonScriptRefIdList"
@@ -42,7 +46,8 @@
         </mat-form-field>
       </div>
 
-      <h5>Common script selectors for the selected configs:</h5>
+      <h5 *ngIf="!allSelected">Common script selectors for the selected configs:</h5>
+      <h5 *ngIf="allSelected">Script selectors:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
         <mat-chip-list fxFlex>
           <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList" [selectable]="false">

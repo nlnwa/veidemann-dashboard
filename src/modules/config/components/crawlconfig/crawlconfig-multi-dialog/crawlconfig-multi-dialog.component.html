@@ -5,7 +5,9 @@
     <div fxLayout="row" fxLayoutGap="16px">
 
       <div fxFlex>
-        <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
+        <app-label-multi [configObject]="configObject"
+                         [allSelected]="allSelected"
+                         (update)="onUpdateLabels($event)"></app-label-multi>
       </div>
 
       <div fxFlex fxLayout="column">

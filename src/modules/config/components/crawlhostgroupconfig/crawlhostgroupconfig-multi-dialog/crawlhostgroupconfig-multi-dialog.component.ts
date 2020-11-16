@@ -25,6 +25,7 @@ export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConf
               public dialogRef: MatDialogRef<CrawlHostGroupConfigMultiDialogComponent>) {
     super(fb, authService);
     this.configObject = this.data.configObject;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList(): AbstractControl {

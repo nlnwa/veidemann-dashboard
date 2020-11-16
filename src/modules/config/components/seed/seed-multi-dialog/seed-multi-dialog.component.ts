@@ -55,6 +55,7 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
   }
 
   ngOnInit(): void {
+    this.allSelected = this.data.allSelected;
     this.updateForm();
   }
 

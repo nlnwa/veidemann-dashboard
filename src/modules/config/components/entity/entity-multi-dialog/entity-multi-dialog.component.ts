@@ -24,6 +24,7 @@ export class EntityMultiDialogComponent extends EntityDetailsComponent implement
               public dialogRef: MatDialogRef<EntityMultiDialogComponent>) {
     super(fb, authService);
     this.configObject = this.data.configObject;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList() {

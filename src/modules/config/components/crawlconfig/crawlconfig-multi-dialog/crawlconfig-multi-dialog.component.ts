@@ -29,6 +29,7 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
     this.browserConfigs = this.data.options.browserConfigs;
     this.politenessConfigs = this.data.options.politenessConfigs;
     this.collections = this.data.options.collections;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList() {

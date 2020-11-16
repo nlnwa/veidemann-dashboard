@@ -1,6 +1,7 @@
 <form>
   <div fxLayout="column">
-    <h5>Common labels for the selected configurations: </h5>
+    <h5 *ngIf="!allSelected">Common labels for the selected configurations: </h5>
+    <h5 *ngIf="allSelected">Labels: </h5>
     <div fxFlex fxLayout="row" fxLayoutGap="16px">
       <mat-chip-list fxFlex id="commonLabelsChipList" cdkDropList cdkDropListConnectedTo="labelInputChipList">
         <mat-chip *ngFor="let label of configObject.meta.labelList" [selectable]="false"
@@ -24,9 +25,6 @@
       </mat-button-toggle-group>
     </div>
     <div fxflex fxLayout="column" *ngIf="shouldAddLabel !== undefined">
-      <div *ngIf="shouldAddLabel">
-        <p>Add labels to the selected configs</p>
-      </div>
       <mat-form-field>
         <mat-chip-list id="labelInputChipList" #labelInputChipList
                        cdkDropList cdkDropListConnectedTo="commonLabelsChipList"
@@ -36,9 +34,9 @@
             {{label.key}}:{{label.value}}
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
-          <input placeholder="Add label to remove..."
-                 #chipInput
+          <input #chipInput
                  matInput
+                 placeholder="Label"
                  [formControl]="control"
                  [matChipInputFor]="labelInputChipList"
                  [matChipInputSeparatorKeyCodes]="labelInputSeparators"

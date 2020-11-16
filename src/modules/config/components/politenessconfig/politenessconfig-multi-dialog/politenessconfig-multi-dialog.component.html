@@ -3,8 +3,11 @@
 
   <mat-dialog-content fxLayout="row" fxLayoutGap="16px">
     <div fxFlex fxLayout="column" fxLayoutGap="16px">
-      <app-label-multi [configObject]="configObject" (update)="onUpdateLabels($event)"></app-label-multi>
-      <h5>Common crawl host group selectors for the selected configurations:</h5>
+      <app-label-multi [configObject]="configObject"
+                       [allSelected]="allSelected"
+                       (update)="onUpdateLabels($event)"></app-label-multi>
+      <h5 *ngIf="!allSelected">Common crawl host group selectors for the selected configurations:</h5>
+      <h5 *ngIf="allSelected">Crawl host group selectors:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
         <mat-chip-list fxFlex>
           <mat-chip *ngFor="let crawlHostGroupSelector of configObject.politenessConfig.crawlHostGroupSelectorList"

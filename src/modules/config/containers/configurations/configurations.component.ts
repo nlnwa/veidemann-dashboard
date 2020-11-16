@@ -549,7 +549,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateMultiWithDialog(configObject?: ConfigObject) {
-    const data: ConfigDialogData = {configObject, options: this.options};
+    const data: ConfigDialogData = {configObject, options: this.options, allSelected: this.isAllSelected};
     const componentType = multiDialogByKind(configObject.kind);
     const dialogRef = this.dialog.open(componentType, {data});
     dialogRef.afterClosed().pipe(

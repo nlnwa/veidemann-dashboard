@@ -33,6 +33,7 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
     super(fb, authService);
     this.configObject = this.data.configObject;
     this.browserScripts = this.data.options.browserScripts;
+    this.allSelected = this.data.allSelected;
   }
 
   get canUpdate(): boolean {
