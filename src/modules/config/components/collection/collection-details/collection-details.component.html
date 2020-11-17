@@ -43,7 +43,7 @@
         <app-filesize-input [placeholder]="'File size'" formControlName="fileSize">
         </app-filesize-input>
         <mat-error *ngIf="!validFileSize" i18n="@@collectionMissingFileSizeError">
-          Not specifying any file size will generate a immense amount of WARC's
+          Not specifying any file size will generate an immense amount of WARC's
         </mat-error>
 
         <mat-checkbox formControlName="compress"
