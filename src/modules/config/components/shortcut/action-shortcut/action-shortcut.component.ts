@@ -4,7 +4,6 @@ import {ConfigObject, Kind} from '../../../../../shared/models/config';
 @Component({
   selector: 'app-action-shortcut',
   templateUrl: './action-shortcut.component.html',
-  styleUrls: ['./action-shortcut.component.scss']
 })
 export class ActionShortcutComponent implements OnInit {
   readonly Kind = Kind;
