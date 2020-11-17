@@ -5,7 +5,6 @@ import {Params} from '@angular/router';
 @Component({
   selector: 'app-filter-shortcut',
   templateUrl: './filter-shortcut.component.html',
-  styleUrls: ['./filter-shortcut.component.scss']
 })
 export class FilterShortcutComponent {
   readonly Kind = Kind;
