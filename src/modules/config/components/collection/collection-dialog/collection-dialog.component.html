@@ -22,6 +22,9 @@
 
     <app-filesize-input [placeholder]="'File size'" formControlName="fileSize">
     </app-filesize-input>
+    <mat-error *ngIf="!validFileSize" i18n="@@collectionMissingFileSizeError">
+      Not specifying any file size will generate a immense amount of WARC's
+    </mat-error>
 
     <mat-checkbox formControlName="compress"
                   labelPosition="after"
@@ -67,18 +70,25 @@
 
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="canEdit">
-  <button mat-raised-button color="accent"
+  <button mat-raised-button
           *ngIf="showSave"
           [disabled]="!canSave"
+          [color]="validFileSize ? 'accent' : 'warn'"
+          [matTooltip]="validFileSize ? null : 'Save config knowing the consequences of not setting file size'"
           [mat-dialog-close]="onDialogClose()"
-          i18n="@@commonButtonSave">
+          i18n="@@commonButtonSave"
+          i18n-matTooltip="@@collectionSaveConfigWithoutFileSizeTooltip">
     SAVE
   </button>
-  <button mat-raised-button color="accent"
+  <button mat-raised-button [color]="validFileSize ? 'accent' : 'warn'"
           *ngIf="!showSave"
           [disabled]="!canUpdate"
+          [color]="validFileSize ? 'accent' : 'warn'"
+          [matTooltip]="validFileSize ? null : 'Update config knowing the consequences of not setting file size'"
           [mat-dialog-close]="onDialogClose()"
-          i18n="@@commonButtonUpdate">UPDATE
+          i18n="@@commonButtonUpdate"
+          i18n-matTooltip="@@collectionUpdateConfigWithoutFileSizeTooltip">
+    UPDATE
   </button>
   <button mat-button
           (click)="onRevert()"

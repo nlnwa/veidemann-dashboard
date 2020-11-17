@@ -42,6 +42,9 @@
 
         <app-filesize-input [placeholder]="'File size'" formControlName="fileSize">
         </app-filesize-input>
+        <mat-error *ngIf="!validFileSize" i18n="@@collectionMissingFileSizeError">
+          Not specifying any file size will generate a immense amount of WARC's
+        </mat-error>
 
         <mat-checkbox formControlName="compress"
                       labelPosition="after"
@@ -87,17 +90,23 @@
     </mat-card-content>
 
     <mat-card-actions *ngIf="canEdit">
-      <button mat-raised-button color="accent"
+      <button mat-raised-button
               *ngIf="showSave"
               [disabled]="!canSave"
+              [color]="validFileSize ? 'accent' : 'warn'"
+              [matTooltip]="validFileSize ? null : 'Save config knowing the consequences of not setting file size'"
               (click)="onSave()"
+              i18n-matTooltip="@@collectionSaveConfigWithoutFileSizeTooltip"
               i18n="@@commonButtonSave">
         SAVE
       </button>
-      <button mat-raised-button color="accent"
+      <button mat-raised-button
               *ngIf="!showSave"
               [disabled]="!canUpdate"
+              [color]="validFileSize ? 'accent' : 'warn'"
+              [matTooltip]="validFileSize ? null : 'Update config knowing the consequences of not setting file size'"
               (click)="onUpdate()"
+              i18n-matTooltip="@@collectionUpdateConfigWithoutFileSizeTooltip"
               i18n="@@commonButtonSave">
         UPDATE
       </button>
