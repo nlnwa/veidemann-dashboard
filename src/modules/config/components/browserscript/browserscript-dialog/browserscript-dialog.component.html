@@ -53,6 +53,15 @@
                  i18n-placeholder="@@browserscriptRegexpEditFormInputPlaceholder">
         </mat-form-field>
       </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" *ngIf="canUpdateRegex"
+                (click)="onUpdateRegexp(regexpEdit.value)" i18n="@@commonButtonOk">
+          OK
+        </button>
+        <button i18n="@@commonButtonCancel" mat-button (click)="onAbort()">
+          CANCEL
+        </button>
+      </mat-card-actions>
     </mat-card>
   </form>
 </mat-dialog-content>
