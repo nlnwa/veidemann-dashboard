@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../../shared/models';
-import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 
 
@@ -72,6 +72,13 @@ export class CollectionDetailsComponent implements OnChanges {
     return this.form.get('subCollectionsList') as FormArray;
   }
 
+  get validFileSize(): boolean {
+    if (this.fileSize.value === 0 ) {
+      return false;
+    }
+    return true;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.configObject) {
       if (this.configObject) {
@@ -130,7 +137,7 @@ export class CollectionDetailsComponent implements OnChanges {
       collectionDedupPolicy: this.configObject.collection.collectionDedupPolicy || RotationPolicy.NONE,
       fileRotationPolicy: this.configObject.collection.fileRotationPolicy || RotationPolicy.NONE,
       compress: this.configObject.collection.compress,
-      fileSize: this.configObject.collection.fileSize || 0,
+      fileSize: this.configObject.collection.fileSize || 1073741824
     });
     this.form.setControl('subCollectionsList', subCollectionsFGArray);
     this.form.markAsPristine();
