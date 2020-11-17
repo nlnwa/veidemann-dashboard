@@ -25,6 +25,7 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
               public dialogRef: MatDialogRef<BrowserScriptMultiDialogComponent>) {
     super(fb, authService);
     this.configObject = this.data.configObject;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList(): AbstractControl {

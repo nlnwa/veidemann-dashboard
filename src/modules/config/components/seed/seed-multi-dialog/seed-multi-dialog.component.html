@@ -21,11 +21,13 @@
     <div fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column" fxLayoutGap="16px">
         <app-label-multi [configObject]="configObject"
+                         [allSelected]="allSelected"
                          (update)="onUpdateLabels($event)">
         </app-label-multi>
 
         <div fxLayout="column" fxLayoutGap="16px">
-          <h5>Common crawljob for the selected configs:</h5>
+          <h5 *ngIf="!allSelected">Common crawljob for the selected configs:</h5>
+          <h5 *ngIf="allSelected">Crawljobs:</h5>
           <div fxLayout="row" fxLayoutGap="16px">
             <mat-form-field fxFlex>
               <mat-select placeholder="Crawlob" multiple formControlName="commonJobRefListId"

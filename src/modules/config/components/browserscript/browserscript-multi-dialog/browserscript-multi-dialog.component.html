@@ -3,6 +3,7 @@
 
   <mat-dialog-content>
     <app-label-multi [configObject]="configObject"
+                     [allSelected]="allSelected"
                      (update)="onUpdateLabels($event)">
     </app-label-multi>
   </mat-dialog-content>

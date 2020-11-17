@@ -28,6 +28,7 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
     super(fb, authService);
     this.configObject = this.data.configObject;
     this.robotsPolicies = this.data.options.robotsPolicies;
+    this.allSelected = this.data.allSelected;
   }
 
   get canUpdate(): boolean {

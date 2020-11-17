@@ -17,6 +17,9 @@ export class LabelMultiComponent implements OnInit {
   @Input()
   configObject: ConfigObject;
 
+  @Input()
+  allSelected: boolean;
+
   @Output()
   update = new EventEmitter<any>();
 

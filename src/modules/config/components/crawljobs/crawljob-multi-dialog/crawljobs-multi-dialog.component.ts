@@ -28,6 +28,7 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
     this.configObject = this.data.configObject;
     this.crawlScheduleConfigs = this.data.options.crawlScheduleConfigs;
     this.crawlConfigs = this.data.options.crawlConfigs;
+    this.allSelected = this.data.allSelected;
   }
 
   get labelList() {
