@@ -79,11 +79,10 @@
         <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
       </button>
 
-      <a target="_blank"
-         matTooltip="Go to entity with existing seed in a new tab"
+      <a matTooltip="Go to entity with existing seed"
          i18n-matTooltip="@@seedMetaGoToEntityWithExistingSeedButtonTooltip"
-         [routerLink]="['../search']"
-         [queryParams]="{id: seed.seed.entityRef.id}">
+         [routerLink]="['config','seed']"
+         [queryParams]="{entity_id: seed.seed.entityRef.id}">
         {{seed.meta.name}}
       </a>
     </mat-list-item>

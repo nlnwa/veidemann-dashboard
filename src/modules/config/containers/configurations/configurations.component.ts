@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, NavigationStart, Params, Router, RouterEvent} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
@@ -19,7 +19,7 @@ import {
 
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
 import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
-import {DeleteDialogComponent, DeleteMultiDialogComponent, RunCrawlDialogComponent} from '../../components';
+import {DeleteDialogComponent, DeleteMultiDialogComponent, Parcel, RunCrawlDialogComponent} from '../../components';
 import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';
 import {ConfigService} from '../../../commons/services';
@@ -91,6 +91,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private configService: ConfigService,
+              private dataService: ConfigService,
               private snackBarService: SnackBarService,
               private errorService: ErrorService,
               private router: Router,
@@ -365,9 +366,21 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.kind !== configObject.kind) {
       reload = false;
     }
+
+    const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
+      this.onMoveSeed(parcel);
+      move.unsubscribe();
+    });
+
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationStart),
+      tap(() => this.dialog.closeAll())
+    ).subscribe();
+
     dialogRef.afterClosed().pipe(
       filter(_ => !!_)
     ).subscribe((config: ConfigObject) => {
+      move.unsubscribe();
       if (Array.isArray(config)) {
         this.onSaveMultiple(config, reload);
       } else {
@@ -537,6 +550,16 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     const configObject = new ConfigObject({kind: Kind.SEED, seed: new Seed({entityRef})});
 
     this.onCreateConfigWithDialog(configObject);
+  }
+
+  onMoveSeed(parcel: Parcel) {
+    (Array.isArray(parcel.seed)
+      ? this.dataService.moveMultiple(parcel.seed, parcel.entityRef)
+      : this.dataService.move(parcel.seed, parcel.entityRef))
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(moved => {
+        this.snackBarService.openSnackBar(moved + $localize`:@snackBarMessage.multipleMoved: configurations moved`);
+      });
   }
 
   onPage(page: PageEvent) {

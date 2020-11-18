@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationStart, Router, RouterEvent} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
@@ -140,14 +140,24 @@ export class ConfigurationComponent implements OnDestroy {
     const configObject = new ConfigObject({kind: Kind.SEED, seed: new Seed({entityRef})});
 
     this.onCreateConfigWithDialog(configObject);
-    }
+  }
 
-    onCreateConfigWithDialog(configObject: ConfigObject) {
+  onCreateConfigWithDialog(configObject: ConfigObject) {
     if (configObject) {
 
       const data: ConfigDialogData = {configObject, options: this.options};
       const componentType = dialogByKind(configObject.kind);
       const dialogRef = this.dialog.open(componentType, {data});
+
+      const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
+        this.onMoveSeed(parcel);
+        move.unsubscribe();
+      });
+
+      this.router.events.pipe(
+        filter((event: RouterEvent) => event instanceof NavigationStart),
+        tap(() => this.dialog.closeAll())
+      ).subscribe();
 
       dialogRef.afterClosed().pipe(
         filter(_ => !!_)
@@ -159,7 +169,7 @@ export class ConfigurationComponent implements OnDestroy {
         }
       });
     }
-    }
+  }
 
   onClone(configObject: ConfigObject) {
     this.onCreateConfigWithDialog(ConfigObject.clone(configObject));
@@ -229,7 +239,6 @@ export class ConfigurationComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(moved => {
         this.snackBarService.openSnackBar(moved + $localize`:@snackBarMessage.multipleMoved: configurations moved`);
-        this.reload.next();
       });
   }
 

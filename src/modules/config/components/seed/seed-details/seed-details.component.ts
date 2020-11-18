@@ -86,8 +86,6 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
   }
 
   get canEdit(): boolean {
-    console.log('canUpdate: ', this.configObject.kind);
-    console.log(this.authService.canUpdate(this.configObject.kind));
     return this.authService.canUpdate(this.configObject.kind);
   }
 
