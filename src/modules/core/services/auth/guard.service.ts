@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 
 import {AuthService} from './auth.service';
@@ -15,7 +15,12 @@ export class GuardService implements CanActivate {
   }
 
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+
+    if (!this.authService.isLoggedIn) {
+      this.authService.login(state.url);
+    }
+
     const ability = this.authService.getAbility();
     const path = route.url.map(segment => segment.path);
     switch (path[0]) {
