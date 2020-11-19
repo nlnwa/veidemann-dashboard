@@ -162,10 +162,10 @@ export class AuthService {
       can('read', reports);
       can(['read', 'update'], 'annotation');
       can('read', 'configs');
-      can('read', 'update', 'crawlerStatus');
+      can(['read', 'update'], 'crawlerStatus');
       can(['create', 'read', 'update', 'updateAll'], operatorConfigs);
       can('runCrawl', [Kind[Kind.SEED], Kind[Kind.CRAWLJOB]]);
-      can('abort', ['jobexecution']);
+      can('abort', ['jobexecution', 'crawlexecution']);
       can(['read', 'update'], 'logconfig');
     }
 
@@ -173,6 +173,8 @@ export class AuthService {
       can('read', 'home');
       can('read', 'crawlerStatus');
       can(['create', 'read', 'update', 'updateAll'], curatorConfigs);
+      can('runCrawl', [Kind[Kind.SEED], Kind[Kind.CRAWLJOB]]);
+      can('abort', ['jobexecution', 'crawlexecution']);
       can(['read', 'update'], 'annotation');
       can('read', 'configs');
       can('read', reports);
