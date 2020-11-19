@@ -44,7 +44,6 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   }
 
   get canEdit(): boolean {
-    console.log('canUpdate browserscript: ', this.authService.canUpdate(this.configObject.kind));
     return this.authService.canUpdate(this.configObject.kind);
   }
 

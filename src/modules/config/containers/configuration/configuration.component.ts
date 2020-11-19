@@ -149,10 +149,12 @@ export class ConfigurationComponent implements OnDestroy {
       const componentType = dialogByKind(configObject.kind);
       const dialogRef = this.dialog.open(componentType, {data});
 
-      const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
-        this.onMoveSeed(parcel);
-        move.unsubscribe();
-      });
+      if (configObject.kind === Kind.SEED) {
+        const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
+          this.onMoveSeed(parcel);
+          move.unsubscribe();
+        });
+      }
 
       this.router.events.pipe(
         filter((event: RouterEvent) => event instanceof NavigationStart),

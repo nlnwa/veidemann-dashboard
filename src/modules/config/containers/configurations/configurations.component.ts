@@ -366,11 +366,12 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     if (this.kind !== configObject.kind) {
       reload = false;
     }
-
-    const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
-      this.onMoveSeed(parcel);
-      move.unsubscribe();
-    });
+    if (configObject.kind === Kind.SEED) {
+      const move = dialogRef.componentInstance.move.subscribe((parcel: Parcel) => {
+        this.onMoveSeed(parcel);
+        move.unsubscribe();
+      });
+    }
 
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
@@ -380,7 +381,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(
       filter(_ => !!_)
     ).subscribe((config: ConfigObject) => {
-      move.unsubscribe();
       if (Array.isArray(config)) {
         this.onSaveMultiple(config, reload);
       } else {
