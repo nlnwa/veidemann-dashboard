@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 
 import {AuthService} from './auth.service';
@@ -11,11 +11,16 @@ import {Kind} from '../../../../shared/models';
 export class GuardService implements CanActivate {
   readonly Kind = Kind;
 
-  constructor(public authService: AuthService) {
+  constructor(public authService: AuthService, private router: Router) {
   }
 
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+
+    if (!this.authService.isLoggedIn) {
+      this.authService.login(state.url);
+    }
+
     const ability = this.authService.getAbility();
     const path = route.url.map(segment => segment.path);
     switch (path[0]) {
