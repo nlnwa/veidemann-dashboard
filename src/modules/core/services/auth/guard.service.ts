@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 
 import {AuthService} from './auth.service';
@@ -11,7 +11,7 @@ import {Kind} from '../../../../shared/models';
 export class GuardService implements CanActivate {
   readonly Kind = Kind;
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(public authService: AuthService) {
   }
 
 
