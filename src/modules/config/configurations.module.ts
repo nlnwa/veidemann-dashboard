@@ -91,7 +91,8 @@ import {PolitenessConfigMultiDialogComponent} from './components/politenessconfi
 import {RoleMappingMultiDialogComponent} from './components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
 import {LabelMultiComponent} from './components/label/label-multi/label-multi.component';
 import {AbilityModule} from '@casl/angular';
-import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {SeedMetaPreviewComponent} from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 import {RouterExtraService} from './services/router-extra.service';
 
@@ -202,6 +203,7 @@ import {RouterExtraService} from './services/router-extra.service';
     ConfigurationsRoutingModule,
     ReportModule,
     AbilityModule,
+    MonacoEditorModule,
     KeyboardShortcutsModule,
   ],
   exports: [],

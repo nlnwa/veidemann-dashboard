@@ -17,7 +17,8 @@ import {
 } from './components';
 import {AbilityModule} from '@casl/angular';
 import {Ability, PureAbility} from '@casl/ability';
-import { HomeComponent } from './components/home/home.component';
+import {HomeComponent} from './components/home/home.component';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {HealthCheckComponent} from './components/health-check/health-check.component';
 import {HealthCheckStatusComponent} from './components/health-check/health-check-status/health-check-status.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
@@ -37,20 +38,22 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     HealthCheckStatusComponent,
   ],
   entryComponents: [ErrorDialogComponent, CrawlerStatusDialogComponent],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        CommonsModule,
-        CoreModule,
-        AbilityModule,
-        KeyboardShortcutsModule.forRoot()
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    CommonsModule,
+    CoreModule,
+    AbilityModule,
+    MonacoEditorModule.forRoot(),
+    KeyboardShortcutsModule.forRoot()
+  ],
   providers: [
     {provide: Ability, useValue: new Ability()},
     {provide: PureAbility, useExisting: Ability}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
