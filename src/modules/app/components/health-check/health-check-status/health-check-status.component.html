@@ -1,0 +1,21 @@
+<div *ngFor="let check of checks">
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{check.componentType.charAt(0).toUpperCase() + check.componentType.slice(1)}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{check.description}}
+        <span fxFlex></span>
+        <mat-icon *ngIf="isUp(check)" style="color: forestgreen; margin-left: 1em">check_circle</mat-icon>
+        <mat-icon *ngIf="!isUp(check)" style="color: red; margin-left: 1em">warning</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p *ngIf="check.output">Output: {{check.output}}</p>
+    <span>
+      <p *ngIf="check.observedValue">Observed value: {{check.observedValue}}</p>
+      <span fxFlex></span>
+      <p>{{check.time | date: 'medium'}}</p>
+    </span>
+  </mat-expansion-panel>
+</div>

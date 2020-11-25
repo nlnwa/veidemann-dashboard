@@ -6,5 +6,8 @@
                          [runStatus]="runStatus$ | async"
                          (change)="onChangeRunStatus($event)"></app-crawlerstatus>
     </div>
+    <div fxLayout="column" fxLayoutGap="16px">
+      <app-health-check [health]="healthStatus$ | async"></app-health-check>
+    </div>
   </div>
 </div>
