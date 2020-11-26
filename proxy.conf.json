@@ -9,7 +9,7 @@
     "changeOrigin": true,
     "logLevel": "info"
   },
-  "/validator/api": {
+  "/grpc-web": {
     "target": {
       "host": "veidemann.local",
       "protocol": "https:",
@@ -19,7 +19,7 @@
     "changeOrigin": true,
     "logLevel": "info"
   },
-  "/grpc-web": {
+  "/health": {
     "target": {
       "host": "veidemann.local",
       "protocol": "https:",
