@@ -22,7 +22,7 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {HealthCheckComponent} from './components/health-check/health-check.component';
 import {HealthCheckStatusComponent} from './components/health-check/health-check-status/health-check-status.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
-
+import {MonacoConfig} from '../config/components/browserscript/monaco-editor/monaco-config';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     CommonsModule,
     CoreModule,
     AbilityModule,
-    MonacoEditorModule.forRoot(),
+    MonacoEditorModule.forRoot(MonacoConfig),
     KeyboardShortcutsModule.forRoot()
   ],
   providers: [

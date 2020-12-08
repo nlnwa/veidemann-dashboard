@@ -95,6 +95,8 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {SeedMetaPreviewComponent} from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 import {RouterExtraService} from './services/router-extra.service';
+import {MonacoEditorComponent} from './components/browserscript/monaco-editor/monaco-editor.component';
+
 
 @NgModule({
   declarations: [
@@ -182,6 +184,7 @@ import {RouterExtraService} from './services/router-extra.service';
     EntityNamePipe,
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
+    MonacoEditorComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
