@@ -17,13 +17,11 @@ export class BrowserScriptNamePipe implements PipeTransform {
     return this.optionsService.options$.pipe(
       map(options => {
         if (options.browserScripts) {
-        const found = options.browserScripts.find(
-          browserScript => browserScript.id === id);
+        const found = options.browserScripts.find(_ => _.id === id);
         return found ? found.meta.name : '';
         }
         if (options.scopeScripts) {
-          const found = options.scopeScripts.find(
-            browserScript => browserScript.id === id);
+          const found = options.scopeScripts.find(_ => _.id === id);
           return found ? found.meta.name : '';
         }
       }));
