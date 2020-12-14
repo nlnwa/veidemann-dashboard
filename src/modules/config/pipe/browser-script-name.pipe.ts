@@ -16,9 +16,14 @@ export class BrowserScriptNamePipe implements PipeTransform {
   transform(id: string): Observable<string> {
     return this.optionsService.options$.pipe(
       map(options => {
-        const found = options.browserScripts.find(
-          browserScript => browserScript.id === id);
-        return found ? found.meta.name : 'browserScript';
+        if (options.browserScripts) {
+        const found = options.browserScripts.find(_ => _.id === id);
+        return found ? found.meta.name : '';
+        }
+        if (options.scopeScripts) {
+          const found = options.scopeScripts.find(_ => _.id === id);
+          return found ? found.meta.name : '';
+        }
       }));
   }
 }

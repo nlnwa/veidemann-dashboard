@@ -31,15 +31,6 @@
         </div>
         <div fxFlex fxLayout="column">
           <ng-container formGroupName="limits">
-            <mat-form-field>
-              <input i18n-placeholder="@@crawljobFormDepthPlaceholder"
-                     matInput formControlName="depth" type="text" placeholder="Depth">
-              <mat-error i18n="@@crawljobFormDepthRequiredError"
-                         *ngIf="!depth.valid">
-                Invalid depth
-              </mat-error>
-            </mat-form-field>
-
             <mat-label i18n="@@crawljobFormMaxDurationLabel">Max duration</mat-label>
             <app-duration-picker formControlName="maxDurationS"
                                  [unit]="UnitOfTime.SECOND"
@@ -77,6 +68,27 @@
             </mat-form-field>
             <input type="hidden" formControlName="kind">
           </ng-container>
+          <ng-container formGroupName="scopeScriptRef">
+            <mat-form-field>
+              <mat-select placeholder="Scope script" formControlName="id" required
+                          i18n-placeholder="@@crawlJobDetailsFormScopeScriptDropdownPlaceholder">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let option of scopeScripts"
+                            [value]="option.id">{{option.meta.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="scopeScriptRef.invalid" i18n="@@crawlJobScopeScriptRefRequiredError">
+                A scope script is required
+              </mat-error>
+            </mat-form-field>
+            <input type="hidden" formControlName="kind">
+          </ng-container>
+            <ng-container *ngIf="this.configObject.id | getScriptAnnotations | async as scriptAnnotations">
+              <mat-label *ngIf="scriptAnnotations.length > 0">Script annotations</mat-label>
+              <ng-container>
+                <app-script-annotation
+                  [annotations]="scriptAnnotations"></app-script-annotation>
+              </ng-container>
+            </ng-container>
         </div>
       </div>
     </mat-card-content>

@@ -13,7 +13,6 @@ export {
   CrawlJob as CrawlJobProto,
   CrawlLimitsConfig as CrawlLimitsConfigProto,
   CrawlScheduleConfig as CrawlScheduleConfigProto,
-  CrawlScope as CrawlScopeProto,
   ExtraConfig,
   Kind as KindProto,
   Label,
@@ -35,6 +34,8 @@ export {
   ListRequest,
   UpdateRequest,
   UpdateResponse,
+  GetScriptAnnotationsRequest,
+  GetScriptAnnotationsResponse
 } from './gen/config/v1/config_pb';
 
 export {

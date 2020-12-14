@@ -1,5 +1,4 @@
 <div *ngIf="configObject" fxLayout="column">
-  <mat-label><b>SURT:</b> {{configObject.seed.scope.surtPrefix}}</mat-label>
   <mat-label><b>Latest crawls of seed: </b></mat-label>
   <table style="width: 100%">
     <tr>
@@ -20,6 +19,21 @@
       </ng-container>
     </tr>
   </table>
+  <div fxLayout="row" *ngIf="this.configObject.seed.jobRefList">
+    <mat-tab-group>
+      <ng-container *ngFor=" let job of configObject.seed.jobRefList">
+        <ng-container *ngIf="job.id | getScriptAnnotations: configObject.id | async as scriptAnnotation">
+          <mat-tab *ngIf="scriptAnnotation.length > 0" label="{{job.id | getJobNamePipe | async}}">
+            <div fxLayout="column" style="margin-top: 16px; overflow: hidden">
+              <app-script-annotation
+                [annotations]=" scriptAnnotation">
+              </app-script-annotation>
+            </div>
+          </mat-tab>
+        </ng-container>
+      </ng-container>
+    </mat-tab-group>
+  </div>
   <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
 </div>
 

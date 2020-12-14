@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of} from 'rxjs';
+import {from, Observable} from 'rxjs';
 import {count, mergeMap} from 'rxjs/operators';
 
-import {FieldMask, ListRequest, UpdateRequest} from '../../../api';
+import {FieldMask, GetScriptAnnotationsRequest, ListRequest, UpdateRequest} from '../../../api';
 import {
+  Annotation,
   BrowserConfig,
   ConfigObject,
   ConfigRef,
@@ -262,5 +263,16 @@ export class ConfigService
       }
     }
     return listRequest;
+  }
+
+  getScriptAnnotations(jobId: string, seedId?: string): Observable<Annotation[]> {
+    const request = new GetScriptAnnotationsRequest();
+    if (jobId) {
+      request.setJob(ConfigRef.toProto(new ConfigRef({kind: Kind.CRAWLJOB, id: jobId})));
+      if (seedId) {
+        request.setSeed(ConfigRef.toProto(new ConfigRef({kind: Kind.SEED, id: seedId})));
+      }
+      return this.configApiService.getScriptAnnotations(request);
+    }
   }
 }
