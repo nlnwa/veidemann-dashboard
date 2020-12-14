@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {EMPTY, Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
+import {EMPTY, from, Observable, Observer, of} from 'rxjs';
+import {catchError, defaultIfEmpty, first, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
@@ -10,8 +10,6 @@ import {
   CrawlExecutionStatusProto,
   CrawlLogListRequest,
   CrawlLogProto,
-  ExecuteDbQueryReply,
-  ExecuteDbQueryRequest,
   FieldMask,
   JobExecutionsListRequest,
   JobExecutionStatusProto,
@@ -19,14 +17,7 @@ import {
   PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
-import {
-  CrawlExecutionStatus,
-  CrawlLog,
-  JobExecutionState,
-  JobExecutionStatus,
-  PageLog
-} from '../../../../shared/models';
-import {Changefeed} from '../../../../shared/func/rethinkdb';
+import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
 
 
 @Injectable({
@@ -54,53 +45,13 @@ export class ReportApiService {
       map(JobExecutionStatus.fromProto),
       catchError(error => {
         this.errorService.dispatch(error);
-        return of(null);
+        return EMPTY;
       })
     );
   }
 
   listCrawlExecutions(listRequest: CrawlExecutionsListRequest): Observable<CrawlExecutionStatus> {
     const metadata = this.authService.metadata;
-
-    if (listRequest.getWatch() && listRequest.hasQueryMask()) {
-      const paths = listRequest.getQueryMask().getPathsList();
-      if (paths.includes('jobExecutionId') && paths.includes('seedId')) {
-
-        let queryStr = `r.table('executions')`;
-
-        const crawlExecution = CrawlExecutionStatus.fromProto(listRequest.getQueryTemplate());
-        queryStr += `.getAll(['${crawlExecution.jobExecutionId}', '${crawlExecution.seedId}'], {index: 'jobExecutionId_seedId'})`;
-        paths.splice(paths.findIndex(p => p === 'jobExecutionId'), 1);
-        paths.splice(paths.findIndex(p => p === 'seedId'), 1);
-
-        for (const path of paths) {
-          const value = crawlExecution[path];
-          queryStr += `.filter({${path}: '${value}'})`;
-        }
-        queryStr += '.changes()';
-
-        const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
-        dbQueryRequest.setQuery(queryStr);
-
-        return new Observable((observer: Observer<any>) => {
-          const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
-            .on('data', data => observer.next(data))
-            .on('error', error => observer.error(error))
-            .on('end', () => observer.complete());
-          return () => stream.cancel();
-        }).pipe(
-          map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-          map(record => JSON.parse(record, CrawlExecutionStatus.reviver)),
-          map((object: any) => listRequest.getWatch()
-            ? new CrawlExecutionStatus((object as Changefeed<any>).new_val)
-            : new CrawlExecutionStatus(object)),
-          catchError(error => {
-            this.errorService.dispatch(error);
-            return EMPTY;
-          })
-        );
-      }
-    }
 
     return new Observable((observer: Observer<CrawlExecutionStatusProto>) => {
       const stream = this.reportClient.listExecutions(listRequest, metadata)
@@ -112,7 +63,7 @@ export class ReportApiService {
       map(CrawlExecutionStatus.fromProto),
       catchError(error => {
         this.errorService.dispatch(error);
-        return of(null);
+        return EMPTY;
       })
     );
   }
@@ -120,106 +71,28 @@ export class ReportApiService {
   countPageLogs(listRequest: PageLogListRequest): Observable<number> {
     const metadata = this.authService.metadata;
 
-    let queryStr = `r.table('page_log')`;
-    if (listRequest.hasQueryMask()) {
-      const paths = listRequest.getQueryMask().getPathsList();
-      const pageLog = PageLog.fromProto(listRequest.getQueryTemplate());
-      if (paths.includes('executionId')) {
-        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
-        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
-      }
-      for (const path of paths) {
-        const value = pageLog[path];
-        queryStr += `.filter({${path}: '${value}'})`;
-      }
-    }
-    queryStr += `.count()`;
-
-    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
-    dbQueryRequest.setQuery(queryStr);
-
-    return new Observable((observer: Observer<any>) => {
-      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
-        .on('data', data => observer.next(data))
-        .on('error', error => observer.error(error))
-        .on('end', () => observer.complete());
-      return () => stream.cancel();
-    }).pipe(
-      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-      map(record => JSON.parse(record)),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return of(null);
-      })
-    );
-    /*
-        return from(this.reportClient.countPageLogs(listRequest, metadata))
-          .pipe(
-            map(listCountResponse => listCountResponse.getCount()),
-            first(),
-            catchError(error => {
-              this.errorService.dispatch(error);
-              return of(0)
-            })
-          );
-    */
-  }
-
-  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
-    const metadata = this.authService.metadata;
-
-    if (listRequest.getWarcIdList().length) {
-      return new Observable((observer: Observer<PageLogProto>) => {
-        const stream = this.reportClient.listPageLogs(listRequest, metadata)
-          .on('data', data => observer.next(data))
-          .on('error', error => observer.error(error))
-          .on('end', () => observer.complete());
-        return () => stream.cancel();
-      }).pipe(
-        map(PageLog.fromProto),
+    return from(this.reportClient.countPageLogs(listRequest, metadata))
+      .pipe(
+        map(listCountResponse => listCountResponse.getCount()),
+        first(),
         catchError(error => {
           this.errorService.dispatch(error);
           return EMPTY;
         })
       );
-    }
+  }
 
-    let queryStr = `r.table('page_log')`;
-    if (listRequest.hasQueryMask()) {
-      const paths = listRequest.getQueryMask().getPathsList();
-      const pageLog = PageLog.fromProto(listRequest.getQueryTemplate());
-      if (paths.includes('executionId')) {
-        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
-        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
-      }
-      for (const path of paths) {
-        const value = pageLog[path];
-        queryStr += `.filter({${path}: '${value}'})`;
-      }
-    }
-    if (listRequest.getWatch()) {
-      queryStr += '.changes()';
-    } else if (listRequest.getOffset()) {
-      queryStr += `.skip(${listRequest.getOffset()})`;
-    }
+  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
+    const metadata = this.authService.metadata;
 
-    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
-    dbQueryRequest.setQuery(queryStr);
-    if (!listRequest.getWatch()) {
-      dbQueryRequest.setLimit(listRequest.getPageSize());
-    }
-
-    return new Observable((observer: Observer<any>) => {
-      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
+    return new Observable((observer: Observer<PageLogProto>) => {
+      const stream = this.reportClient.listPageLogs(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-      map(record => JSON.parse(record, PageLog.reviver)),
-      map((object: any) => listRequest.getWatch() ? (object as Changefeed<any>).new_val : object),
-      map(object => new PageLog(object)),
+      map(PageLog.fromProto),
       catchError(error => {
         this.errorService.dispatch(error);
         return EMPTY;
@@ -231,57 +104,14 @@ export class ReportApiService {
   listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
     const metadata = this.authService.metadata;
 
-    if (!listRequest.getWatch()) {
-      return new Observable((observer: Observer<CrawlLogProto>) => {
-        const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
-          .on('data', data => observer.next(data))
-          .on('error', error => observer.error(error))
-          .on('end', () => observer.complete());
-        return () => stream.cancel();
-      }).pipe(
-        map(CrawlLog.fromProto),
-        catchError(error => {
-          this.errorService.dispatch(error);
-          return EMPTY;
-        })
-      );
-    }
-
-    let queryStr = `r.table('crawl_log')`;
-    if (listRequest.hasQueryMask()) {
-      const paths = listRequest.getQueryMask().getPathsList();
-      const pageLog = CrawlLog.fromProto(listRequest.getQueryTemplate());
-      if (paths.includes('executionId')) {
-        queryStr += `.getAll('${pageLog.executionId}', {index: 'executionId'})`;
-        paths.splice(paths.findIndex(p => p === 'executionId'), 1);
-      }
-      for (const path of paths) {
-        const value = pageLog[path];
-        queryStr += `.filter({${path}: '${value}'})`;
-      }
-    }
-
-    if (listRequest.getWatch()) {
-      queryStr += '.changes()';
-    }
-
-    const dbQueryRequest: ExecuteDbQueryRequest = new ExecuteDbQueryRequest();
-    dbQueryRequest.setQuery(queryStr);
-    if (!listRequest.getWatch()) {
-      dbQueryRequest.setLimit(listRequest.getPageSize());
-    }
-
-    return new Observable((observer: Observer<any>) => {
-      const stream = this.reportClient.executeDbQuery(dbQueryRequest, metadata)
+    return new Observable((observer: Observer<CrawlLogProto>) => {
+      const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
     }).pipe(
-      map((reply: ExecuteDbQueryReply) => reply.getRecord()),
-      map((record: string) => JSON.parse(record, CrawlLog.reviver)),
-      map(_ => listRequest.getWatch() ? (_ as Changefeed<any>).new_val : _),
-      map(_ => new CrawlLog(_)),
+      map(CrawlLog.fromProto),
       catchError(error => {
         this.errorService.dispatch(error);
         return EMPTY;
