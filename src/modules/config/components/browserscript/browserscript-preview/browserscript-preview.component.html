@@ -1,11 +1,15 @@
-<div fxLayout="column">
-  <mat-label><b>Script type: </b>{{BrowserScriptType[configObject.browserScript.browserScriptType]}}</mat-label>
-  <mat-label><b>Script: </b></mat-label>
-  <textarea>{{configObject.browserScript.script}}</textarea>
-  <mat-label *ngIf="configObject.browserScript.urlRegexpList.length"><b>URL regexp: </b></mat-label>
+<p><strong>Script type:</strong> {{BrowserScriptType[configObject.browserScript.browserScriptType]}}</p>
+  <mat-label>{{configObject.meta.name}}</mat-label>
+  <!-- Important to keep whats inside pre on the following lines, on the same line -->
+  <pre appHighlight><code
+    class="line-numbers match-braces"
+    [class.language-py]="language === 'star'"
+    [class.language-js]="language === 'js'">{{ configObject.browserScript.script }}</code></pre>
+<ng-container *ngIf="configObject.browserScript.urlRegexpList.length">
+  <mat-label>URL regexp</mat-label>
   <mat-chip-list>
-    <mat-chip *ngFor="let regex of configObject.browserScript.urlRegexpList">
+    <mat-chip color="warn" *ngFor="let regex of configObject.browserScript.urlRegexpList">
       {{regex}}
     </mat-chip>
   </mat-chip-list>
-</div>
+</ng-container>

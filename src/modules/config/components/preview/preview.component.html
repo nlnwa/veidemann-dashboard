@@ -1,4 +1,4 @@
-<div *ngIf="configObject" fxLayout="row" fxLayoutGap="16px">
+<div *ngIf="configObject" fxLayout="row wrap" fxLayoutGap="16px" class="preview-padding">
   <div fxFlex class="preview-meta-column">
     <ng-container [ngSwitch]="configObject.kind">
       <ng-container *ngSwitchCase="Kind.SEED">
@@ -33,12 +33,13 @@
         <app-browserconfig-preview [configObject]="configObject"></app-browserconfig-preview>
       </ng-container>
       <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT">
-        <app-browserscript-preview [configObject]="configObject"></app-browserscript-preview>
+        <app-browserscript-preview fxFlex [configObject]="configObject"></app-browserscript-preview>
       </ng-container>
       <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG">
         <app-politenessconfig-preview [configObject]="configObject"></app-politenessconfig-preview>
       </ng-container>
     </ng-container>
   </div>
+  <app-shortcut-list fxFlex [configObject]="configObject"></app-shortcut-list>
 </div>
 

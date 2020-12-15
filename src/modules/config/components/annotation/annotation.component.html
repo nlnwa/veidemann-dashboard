@@ -8,8 +8,7 @@
                     [removable]="removable"
                     (removed)="onRemoveAnnotation(group.key, value)"
                     (click)="onClickAnnotation(group.key, value)"
-                    color="primary"
-                    selected>
+                    color="primary" selected>
             {{group.key + ':' + value}}
             <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
           </mat-chip>

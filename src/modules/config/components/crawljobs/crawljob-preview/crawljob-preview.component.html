@@ -1,10 +1,7 @@
-<div fxLayout="column">
-  <mat-label><b>Max duration: </b>{{configObject.crawlJob.limits.maxDurationS |durationFormat: 's'}}</mat-label>
-  <mat-label><b>Max bytes: </b>{{configObject.crawlJob.limits.maxBytes |filesize}}</mat-label>
-  <ng-container *ngIf="this.configObject.id | getScriptAnnotations | async as scriptAnnotations">
+<p><b>Max duration: </b>{{configObject.crawlJob.limits.maxDurationS |durationFormat: 's'}}</p>
+<p><b>Max bytes: </b>{{configObject.crawlJob.limits.maxBytes |filesize}}</p>
+<ng-container *ngIf="this.configObject.id | getScriptAnnotations | async as scriptAnnotations">
   <mat-label *ngIf="scriptAnnotations.length > 0"><b>Script annotations</b></mat-label>
-      <app-script-annotation
-        [annotations]="scriptAnnotations"></app-script-annotation>
-  </ng-container>
-  <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
-</div>
+  <app-script-annotation
+    [annotations]="scriptAnnotations"></app-script-annotation>
+</ng-container>
