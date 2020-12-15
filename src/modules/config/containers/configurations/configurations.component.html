@@ -47,7 +47,7 @@
         </app-rolemapping-details>
       </div>
       <div fxFlex fxLayout="column" *ngSwitchDefault>
-        <app-entity-view class="content-padding" *ngIf="entity$ | async as entity"
+        <app-entity-view *ngIf="entity$ | async as entity"
                          [configObject]="entity"></app-entity-view>
         <app-config-list fxFlex
                          appQueryConfigObject [query]="query$ | async"
