@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {CommonsModule} from '../commons';
 import {KindService, LabelService, OptionsResolver, OptionsService} from './services';
 import {ConfigurationsRoutingModule} from './routing';
-import {ConfigComponent, ConfigurationComponent, ConfigurationsComponent, ConfigNavListComponent} from './containers';
+import {ConfigComponent, ConfigNavListComponent, ConfigurationComponent, ConfigurationsComponent} from './containers';
 import {
   AnnotationComponent,
   BrowserConfigDetailsComponent,
@@ -32,22 +32,22 @@ import {
   RunCrawlDialogComponent,
   RunningCrawlDialogComponent,
   ScheduleDetailsComponent,
+  ScriptAnnotationComponent,
   SeedDetailsComponent,
   SeedMetaComponent,
   SelectorComponent,
-  ScriptAnnotationComponent,
 } from './components';
 import {
   BrowserConfigNamePipe,
+  BrowserScriptNamePipe,
   CollectionNamePipe,
   CrawlConfigNamePipe,
   CrawlExecutionStatusPipe,
   CrawlScheduleNamePipe,
+  EntityNamePipe,
   JobExecutionStatePipe,
   JobExecutionStatusPipe,
   PolitenessConfigNamePipe,
-  BrowserScriptNamePipe,
-  EntityNamePipe,
   ScriptAnnotationsPipe,
 } from './pipe';
 
@@ -90,10 +90,9 @@ import {CrawlHostGroupConfigMultiDialogComponent} from './components/crawlhostgr
 import {BrowserConfigMultiDialogComponent} from './components/browserconfig/browserconfig-multi-dialog/browserconfig-multi-dialog.component';
 import {BrowserScriptMultiDialogComponent} from './components/browserscript/browserscript-multi-dialog/browserscript-multi-dialog.component';
 import {PolitenessConfigMultiDialogComponent} from './components/politenessconfig/politenessconfig-multi-dialog/politenessconfig-multi-dialog.component';
-import { RoleMappingMultiDialogComponent } from './components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
-import { LabelMultiComponent } from './components/label/label-multi/label-multi.component';
+import {RoleMappingMultiDialogComponent} from './components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
+import {LabelMultiComponent} from './components/label/label-multi/label-multi.component';
 import {AbilityModule} from '@casl/angular';
-
 
 @NgModule({
   declarations: [
@@ -198,12 +197,12 @@ import {AbilityModule} from '@casl/angular';
     RoleMappingDialogComponent,
     ScheduleDialogComponent,
   ],
-    imports: [
-        CommonsModule,
-        ConfigurationsRoutingModule,
-        ReportModule,
-        AbilityModule,
-    ],
+  imports: [
+    CommonsModule,
+    ConfigurationsRoutingModule,
+    ReportModule,
+    AbilityModule,
+  ],
   exports: [],
   providers: [
     OptionsResolver,

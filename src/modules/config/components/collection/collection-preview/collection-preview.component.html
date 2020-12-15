@@ -1,11 +1,11 @@
 <div fxLayout="column">
-  <mat-label><b>Deduplication policy: </b>{{RotationPolicy[configObject.collection.collectionDedupPolicy]}}</mat-label>
-  <mat-label><b>File rotation policy: </b>{{RotationPolicy[configObject.collection.fileRotationPolicy]}}</mat-label>
-  <mat-label><b>File size: </b>{{configObject.collection.fileSize|filesize}}</mat-label>
+  <p><b>Deduplication policy:</b> {{RotationPolicy[configObject.collection.collectionDedupPolicy]}}</p>
+  <p><b>File rotation policy:</b> {{RotationPolicy[configObject.collection.fileRotationPolicy]}}</p>
+  <p><b>File size:</b> {{configObject.collection.fileSize|filesize}}</p>
   <mat-checkbox [(ngModel)]="configObject.collection.compress" labelPosition="before" disabled="true">
-    <b>Compress: </b>
+    Compress
   </mat-checkbox>
-  <mat-label><b>Subcollections: </b></mat-label>
+  <mat-label>Subcollections</mat-label>
   <table style="text-align: left">
     <tr>
       <th>Name</th>

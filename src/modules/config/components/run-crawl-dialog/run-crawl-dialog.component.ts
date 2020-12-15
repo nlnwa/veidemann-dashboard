@@ -33,11 +33,9 @@ export class RunCrawlDialogComponent {
     if (this.kind === Kind.SEED) {
       runCrawlRequest.seedId = this.configObject.id;
       runCrawlRequest.jobId = this.jobRefId;
-      this.dialogRef.close(runCrawlRequest);
-    }
-    if (this.kind === Kind.CRAWLJOB) {
+    } else if (this.kind === Kind.CRAWLJOB) {
       runCrawlRequest.jobId = this.configObject.id;
-      this.dialogRef.close(runCrawlRequest);
     }
+    this.dialogRef.close(runCrawlRequest);
   }
 }

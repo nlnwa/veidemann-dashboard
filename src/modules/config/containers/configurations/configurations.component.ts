@@ -656,7 +656,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       .subscribe(runCrawlRequest => {
         if (runCrawlRequest) {
           this.controllerApiService.runCrawl(runCrawlRequest)
-            .pipe(filter(_ => !!_))
             .subscribe(runCrawlReply => {
               if (configObject.kind === Kind.SEED) {
                 this.router.navigate(

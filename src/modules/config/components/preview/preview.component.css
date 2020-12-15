@@ -1,7 +1,4 @@
-.preview-meta-column {
-  width: 50%;
-}
-
-.preview-details-column {
-  width: 50%;
+.preview-padding {
+  padding-top: 16px;
+  padding-bottom: 32px;
 }

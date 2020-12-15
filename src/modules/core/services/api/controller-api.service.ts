@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
 
+import {EMPTY, from, Observable, of} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 
 import {ControllerPromiseClient} from '../../../../api';
@@ -54,10 +54,10 @@ export class ControllerApiService {
   runCrawl(request: RunCrawlRequest): Observable<RunCrawlReply> {
     return from(this.controllerPromiseClient.runCrawl(RunCrawlRequest.toProto(request), this.authService.metadata))
       .pipe(
-        map(runCrawlReply => RunCrawlReply.fromProto(runCrawlReply)),
+        map(RunCrawlReply.fromProto),
         catchError(error => {
           this.errorHandler.handleError(error);
-          return of(null);
+          return EMPTY;
         })
       );
   }
@@ -68,7 +68,7 @@ export class ControllerApiService {
         map(jobExecutionStaus => JobExecutionStatus.fromProto(jobExecutionStaus)),
         catchError(error => {
           this.errorHandler.handleError(error);
-          return of(null);
+          return EMPTY;
         })
       );
   }
@@ -79,7 +79,7 @@ export class ControllerApiService {
         map(crawlExecutionStatus => CrawlExecutionStatus.fromProto(crawlExecutionStatus)),
         catchError(error => {
           this.errorHandler.handleError(error);
-          return of(null);
+          return EMPTY;
         })
       );
   }
@@ -90,7 +90,7 @@ export class ControllerApiService {
         map(countResponse => CountResponse.fromProto(countResponse)),
         catchError(error => {
           this.errorHandler.handleError(error);
-          return of(null);
+          return EMPTY;
         })
       );
   }

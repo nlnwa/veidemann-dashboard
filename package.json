@@ -33,6 +33,7 @@
     "@casl/ability": "^4.1.6",
     "@casl/angular": "^4.1.6",
     "@types/moment-duration-format": "^2.2.2",
+    "@types/prismjs": "^1.16.2",
     "angular-oauth2-oidc": "~10.0.3",
     "angular-oauth2-oidc-jwks": "^9.0.0",
     "chart.js": "^2.9.3",
@@ -47,7 +48,7 @@
     "nano-editor": "^1.2.4",
     "ng2-charts": "^2.4.0",
     "ngx-filesize": "^2.0.15",
-    "prismjs": "^1.21.0",
+    "prismjs": "^1.22.0",
     "rxjs": "~6.6.2",
     "tslib": "^2.0.1",
     "zone.js": "~0.10.3"

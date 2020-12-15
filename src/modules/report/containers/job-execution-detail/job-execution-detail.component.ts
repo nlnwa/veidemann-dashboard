@@ -4,7 +4,8 @@ import {JobExecutionService} from '../../services';
 import {DetailDirective} from '../../directives';
 import {JobExecutionStatus} from '../../../../shared/models/report';
 import {combineLatest, merge, Observable} from 'rxjs';
-import {filter, map, mergeMap, switchMap, takeWhile} from 'rxjs/operators';
+import {filter, map, switchMap, takeWhile} from 'rxjs/operators';
+import {Detail} from '../../../../shared/func';
 
 @Component({
   selector: 'app-crawl-log-detail',
@@ -12,6 +13,8 @@ import {filter, map, mergeMap, switchMap, takeWhile} from 'rxjs/operators';
   styleUrls: ['./job-execution-detail.component.css']
 })
 export class JobExecutionDetailComponent extends DetailDirective<JobExecutionStatus> implements OnInit {
+
+  protected query$: Observable<Detail>;
 
   constructor(protected route: ActivatedRoute,
               protected service: JobExecutionService) {
@@ -23,14 +26,13 @@ export class JobExecutionDetailComponent extends DetailDirective<JobExecutionSta
 
     const item$: Observable<JobExecutionStatus> = this.query$.pipe(
       map(({id}) => ({id, watch: false})),
-      mergeMap(query => this.service.get(query)),
+      switchMap(query => this.service.get(query)),
     );
 
     const watchedItem$: Observable<JobExecutionStatus> = combineLatest([this.query$, item$]).pipe(
-      // only watch if job execution isn't in one of the done states
-      filter(([_, item]) => !JobExecutionStatus.DONE_STATES.includes(item.state)),
+      filter(([query, item]) => query.watch && !JobExecutionStatus.DONE_STATES.includes(item.state)),
       switchMap(([query]) => this.service.get(query).pipe(
-        takeWhile(item => !JobExecutionStatus.DONE_STATES.includes((item.state)), true),
+        takeWhile(item => query.watch || !JobExecutionStatus.DONE_STATES.includes((item.state)), true),
       )),
     );
 

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BrowserScriptType, ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
@@ -6,11 +6,17 @@ import {BrowserScriptType, ConfigObject} from '../../../../../shared/models/conf
   templateUrl: './browserscript-preview.component.html',
   styleUrls: ['./browserscript-preview.component.css']
 })
-export class BrowserscriptPreviewComponent {
+export class BrowserscriptPreviewComponent implements OnInit {
   readonly BrowserScriptType = BrowserScriptType;
   @Input()
-  configObject: ConfigObject
+  configObject: ConfigObject;
+
+  language: string;
 
   constructor() {
+  }
+
+  ngOnInit() {
+    this.language = this.configObject.meta.name.split('.').slice(-1)[0];
   }
 }
