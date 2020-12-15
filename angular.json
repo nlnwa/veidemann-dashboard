@@ -25,6 +25,7 @@
               "src/styles/theme.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
+              "node_modules/prismjs/plugins/match-braces/prism-match-braces.css",
               "node_modules/nano-editor/src/style.css"
             ],
             "scripts": [],
