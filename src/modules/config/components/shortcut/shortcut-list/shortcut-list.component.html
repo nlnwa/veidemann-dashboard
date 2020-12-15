@@ -1,13 +1,20 @@
 <ng-container [ngSwitch]="configObject?.kind">
   <ng-container *ngSwitchCase="Kind.SEED">
-    <mat-nav-list *ngIf="configObject.seed.jobRefList.length > 0 && ('read' | able: Kind[Kind.CRAWLJOB])">
-      <h2 mat-subheader>Crawljobs</h2>
-      <ng-container *ngFor="let crawlJob of configObject.seed.jobRefList">
-        <a mat-list-item
-           [routerLink]="['/config/crawljobs/' + crawlJob.id]">
-          <mat-icon mat-list-icon>work</mat-icon>
-          {{ crawlJob.id | getJobNamePipe | async }}
-        </a>
+    <mat-nav-list>
+      <h2 mat-subheader>Entity</h2>
+      <a mat-list-item
+         [routerLink]="['/config', 'entity', configObject.seed.entityRef.id]">
+        <mat-icon mat-list-icon>business</mat-icon>
+        {{configObject.seed.entityRef.id | getEntityName | async}}</a>
+      <ng-container *ngIf="configObject.seed.jobRefList.length > 0 && ('read' | able: Kind[Kind.CRAWLJOB])">
+        <h2 mat-subheader>Crawljobs</h2>
+        <ng-container *ngFor="let crawlJob of configObject.seed.jobRefList">
+          <a mat-list-item
+             [routerLink]="['/config/crawljobs/' + crawlJob.id]">
+            <mat-icon mat-list-icon>work</mat-icon>
+            {{ crawlJob.id | getJobNamePipe | async }}
+          </a>
+        </ng-container>
       </ng-container>
     </mat-nav-list>
   </ng-container>

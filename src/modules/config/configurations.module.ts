@@ -59,7 +59,6 @@ import {SeedPreviewComponent} from './components/seed/seed-preview/seed-preview.
 import {ReportModule} from '../report/report.module';
 import {ToArrayPipe} from './pipe/to-array.pipe';
 import {MetaPreviewComponent} from './components/meta/meta-preview/meta-preview.component';
-import {SeedMetaPreviewComponent} from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {CollectionPreviewComponent} from './components/collection/collection-preview/collection-preview.component';
 import {CrawljobPreviewComponent} from './components/crawljobs/crawljob-preview/crawljob-preview.component';
 import {SchedulePreviewComponent} from './components/schedule/schedule-preview/schedule-preview.component';
@@ -145,7 +144,6 @@ import {AbilityModule} from '@casl/angular';
     SeedPreviewComponent,
     ToArrayPipe,
     MetaPreviewComponent,
-    SeedMetaPreviewComponent,
     CollectionPreviewComponent,
     CrawljobPreviewComponent,
     SchedulePreviewComponent,
