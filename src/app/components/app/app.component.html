@@ -13,7 +13,9 @@
 
     <span fxFlex></span>
 
-    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu"><mat-icon>help</mat-icon></a>
+    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu">
+      <mat-icon>help</mat-icon>
+    </a>
     <mat-menu #helpMenu="matMenu">
       <a mat-menu-item
          target="_blank"
@@ -69,6 +71,15 @@
        #log="routerLinkActive"
        [active]="log.isActive">
       <span i18n="@@mainMenuLogConfiguration">LOG LEVEL</span>
+    </a>
+
+    <a mat-tab-link
+       *ngIf="'read' | able: 'event'"
+       [routerLink]="['/event']"
+       routerLinkActive
+       #event="routerLinkActive"
+       [active]="event.isActive">
+      <span i18n="@@mainMenuEvent">EVENT</span>
     </a>
   </nav>
 
