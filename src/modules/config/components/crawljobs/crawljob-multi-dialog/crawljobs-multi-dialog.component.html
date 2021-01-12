@@ -3,14 +3,26 @@
     <h2 mat-dialog-title>Crawljob - Mass update</h2>
     <span fxFlex></span>
     <div (click)="disabled.disabled ? disabled.enable() : null">
-      <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
+      <mat-slide-toggle *ngIf="!allSelected"
+                        i18n="@@disableCrawljobToggleSwitch"
                         formControlName="disabled"
-                        i18n-matTooltip="@@crawljobFormDisabledDisabledExplanation"
+                        i18n-matTooltip="@@crawljobFormDisableToggleSwitchTooltipUpdatSelected"
                         color="accent"
                         [matTooltip]="disabled.disabled ?
-                          'Setting is not equal for all selected configurations.'
-                         +'Click here and set desired state to override all, '
+                          'Setting is not equal for the selected configurations. '
+                         +'Click here and set desired value to override all, '
                          + 'or leave untouched to keep the configurations original value.'
+                        : null">
+        Deactivated
+      </mat-slide-toggle>
+      <mat-slide-toggle *ngIf="allSelected"
+                        i18n="@@disableCrawljobToggleSwitch"
+                        formControlName="disabled"
+                        i18n-matTooltip="@@crawljobFormDisableToggleSwitchTooltipUpdateAll"
+                        color="accent"
+                        [matTooltip]="disabled.disabled ?
+                         'Field is disabled. Click here and set desired value to use for all crawljobs in database,'
+                        + 'or leave untouched to keep the configurations original value'
                         : null">
         Deactivated
       </mat-slide-toggle>

@@ -98,6 +98,11 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
     } else {
       this.disabled.disable();
     }
+
+    if (this.allSelected) {
+      this.disabled.disable();
+    }
+
     this.form.setValue({
       labelList: this.configObject.meta.labelList,
       disabled: !!this.configObject.crawlJob.disabled,

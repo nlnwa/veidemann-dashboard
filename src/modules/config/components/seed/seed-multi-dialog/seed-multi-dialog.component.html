@@ -3,15 +3,27 @@
     <h2 mat-dialog-title>Seed - Mass update</h2>
     <span fxFlex></span>
     <div (click)="disabled.disabled ? disabled.enable(): null">
-      <mat-slide-toggle class="disabled-toggle"
+      <mat-slide-toggle *ngIf="!allSelected"
+                        class="disabled-toggle"
                         formControlName="disabled"
                         i18n="@@seedDisabledToggleSwitch"
-                        i18n-matTooltip="@@seedDisabledToggleSwitchTooltip"
+                        i18n-matTooltip="@@seedDisabledToggleSwitchTooltipUpdateSelected"
                         [matTooltip]="disabled.disabled ?
-                            'Disabled state for all of the selected configs are not equal.'
-                             +'Click here and set desired state to override all, '
+                            'Setting is not equal for the selected configurations. '
+                             +'Click here and set desired value to override all, '
                              + 'or leave untouched to keep the configurations original value.'
                             : null">
+        Deactivated
+      </mat-slide-toggle>
+      <mat-slide-toggle *ngIf="allSelected"
+                        class="disabled-toggle"
+                        formControlName="disabled"
+                        i18n="@@seedDisabledToggleSwitch"
+                        i18n-matTooltip="@@seedDisabledToggleSwitchTooltipUpdateAll"
+                        [matTooltip]="disabled.disabled ?
+                        'Field is disabled. Click here and set desired value to use for all seeds in database,'
+                        + 'or leave untouched to keep the configurations original value'
+                        : null">
         Deactivated
       </mat-slide-toggle>
     </div>
