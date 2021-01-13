@@ -27,6 +27,7 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     super(fb, authService);
     this.configObject = this.data.configObject;
     this.crawlJobs = this.data.options.crawlJobs;
+    this.allSelected = this.data.allSelected;
   }
 
 
@@ -55,7 +56,6 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
   }
 
   ngOnInit(): void {
-    this.allSelected = this.data.allSelected;
     this.updateForm();
   }
 
@@ -85,6 +85,11 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     } else {
       this.disabled.disable();
     }
+
+    if (this.allSelected) {
+      this.disabled.disable();
+    }
+
     this.form.setValue({
       labelList: this.configObject.meta.labelList,
       disabled: !!this.configObject.seed.disabled,
@@ -109,7 +114,7 @@ export class SeedMultiDialogComponent extends SeedDetailsComponent implements On
     const updateTemplate = new ConfigObject({kind: Kind.SEED});
     const seed = updateTemplate.seed;
 
-    if (formModel.disabled !== undefined) {
+    if (this.disabled.dirty && formModel.disabled !== undefined) {
       seed.disabled = formModel.disabled;
       pathList.push('seed.disabled');
     }
