@@ -1,3 +1,5 @@
+@import "src/styles/theme";
+
 table {
   width: 100%;
   table-layout: fixed;
@@ -21,6 +23,10 @@ tr.resource-row:not(.resource-expanded-row):hover {
 
 tr.resource-row:not(.resource-expanded-row):active {
   background: #efefef;
+}
+
+.row-error td {
+  color: $warn;
 }
 
 .resource-row td {
