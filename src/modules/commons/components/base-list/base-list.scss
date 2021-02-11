@@ -4,50 +4,57 @@ table {
   width: 100%;
 }
 
+// because next column is too close to checkbox without padding
 .checkbox-padding {
   padding-right: 16px;
 }
 
+// the action buttons for checked rows are aligned right
 .action-cell {
   text-align: right;
 }
 
-tr.item-row.row-checked {
-  background-color: lighten($dark-focused, 50%);
-}
+// cast shade on row when checked
+//tr.item-row.row-checked {
+//  background-color: lighten($dark-focused, 50%);
+//}
 
-.row-disabled td {
+// set different text color when row is disabled
+tr.item-row.row-disabled td {
   color: $warn;
 }
 
 tr.item-row:hover {
-  background-color: lighten($dark-focused, 25%);
-}
-
-tr.item-row:nth-child(4n+1):hover {
+  cursor: pointer;
   background-color: $dark-focused;
-}
-
-tr.item-row:not(.row-checked):nth-child(4n+1) {
-  background-color: lighten($dark-focused, 80%);
-}
-
-.mat-row.no-interaction {
-  cursor: default;
-  background-color: inherit;
 }
 
 tr.preview-row {
   height: 0;
+  td {
+    border-bottom-width: 0;
+  }
+  td.preview-cell {
+    border-bottom-width: 1px;
+  }
 }
 
-.item-row td {
-  border-bottom-width: 0;
+tr.item-row.row-selected td {
+  border-bottom-style: dashed;
 }
 
-.preview {
-  overflow: hidden;
-  display: flex;
+// the master toggle checkbox row is special
+tr.mat-row.no-interaction {
+  cursor: default;
+  background-color: inherit;
+}
+
+tr.item-row td {
+  // border-bottom-width: 0;
+}
+
+tr.item-row.row-selected td {
+ // border-bottom-width: 1px;
 }
 
 .mat-column-name {
