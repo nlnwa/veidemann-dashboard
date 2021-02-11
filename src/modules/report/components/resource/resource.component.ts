@@ -6,7 +6,7 @@ import {AppConfigService} from '../../../core/services';
 @Component({
   selector: 'app-resource',
   templateUrl: './resource.component.html',
-  styleUrls: ['./resource.component.css'],
+  styleUrls: ['./resource.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
@@ -26,4 +26,13 @@ export class ResourceComponent {
 
   displayedColumns: string[] = ['uri', 'discoveryPath'];
   expandedResource: Resource | null;
+
+  hasError(resource: Resource): boolean {
+    // @ts-ignore
+    if (resource?.error) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
