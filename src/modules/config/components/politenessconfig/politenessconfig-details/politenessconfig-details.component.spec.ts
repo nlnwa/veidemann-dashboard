@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {PolitenessConfigDetailsComponent} from './politenessconfig-details.component';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -11,7 +11,7 @@ describe('PolitenessconfigDetailsComponent', () => {
   let component: PolitenessConfigDetailsComponent;
   let fixture: ComponentFixture<PolitenessConfigDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PolitenessConfigDetailsComponent],
       imports: [

@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {SeedMetaComponent} from './seed-meta.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -16,7 +16,7 @@ describe('SeedMetaComponent', () => {
   let component: SeedMetaComponent;
   let fixture: ComponentFixture<SeedMetaComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SeedMetaComponent, LabelComponent],
       imports: [

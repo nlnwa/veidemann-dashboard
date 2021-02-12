@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {MetaComponent} from './meta.component';
 import {MaterialModule} from '../../../commons/material.module';
@@ -14,7 +14,7 @@ describe('MetaComponent', () => {
   let component: MetaComponent;
   let fixture: ComponentFixture<MetaComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MetaComponent, LabelsComponent],
       imports: [

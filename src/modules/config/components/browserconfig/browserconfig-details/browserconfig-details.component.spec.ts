@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {BrowserConfigDetailsComponent} from './browserconfig-details.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
@@ -12,7 +12,7 @@ describe('BrowserConfigDetailsComponent', () => {
   let component: BrowserConfigDetailsComponent;
   let fixture: ComponentFixture<BrowserConfigDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [BrowserConfigDetailsComponent],
       imports: [

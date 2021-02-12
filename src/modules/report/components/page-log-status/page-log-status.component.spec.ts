@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {PagelogStatusComponent} from './page-log-status.component';
 
@@ -6,7 +6,7 @@ describe('PagelogStatusComponent', () => {
   let component: PagelogStatusComponent;
   let fixture: ComponentFixture<PagelogStatusComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PagelogStatusComponent ]
     })

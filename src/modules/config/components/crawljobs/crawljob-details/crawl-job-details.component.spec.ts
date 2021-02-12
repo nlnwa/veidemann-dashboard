@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {CrawlJobDetailsComponent} from './crawl-job-details.component';
 import {CommonsModule} from '../../../../commons/commons.module';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -11,7 +11,7 @@ describe('CrawljobDetailsComponent', () => {
   let component: CrawlJobDetailsComponent;
   let fixture: ComponentFixture<CrawlJobDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CrawlJobDetailsComponent],
       imports: [

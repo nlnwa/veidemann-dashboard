@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BrowserscriptDialogComponent } from './browserscript-dialog.component';
 
@@ -6,7 +6,7 @@ describe('BrowserscriptDialogComponent', () => {
   let component: BrowserscriptDialogComponent;
   let fixture: ComponentFixture<BrowserscriptDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BrowserscriptDialogComponent ]
     })

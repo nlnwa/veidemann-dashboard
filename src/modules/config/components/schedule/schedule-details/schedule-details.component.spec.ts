@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
 import {SimpleChange} from '@angular/core';
 import {FormGroup} from '@angular/forms';
@@ -16,7 +16,7 @@ describe('ScheduleDetailsComponent', () => {
   let expectedConfigObject: ConfigObject;
   let expectedLabel: Label;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ScheduleDetailsComponent],
       imports: [

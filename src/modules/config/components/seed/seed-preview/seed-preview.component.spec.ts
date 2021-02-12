@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SeedPreviewComponent } from './seed-preview.component';
 
@@ -6,7 +6,7 @@ describe('SeedPreviewComponent', () => {
   let component: SeedPreviewComponent;
   let fixture: ComponentFixture<SeedPreviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SeedPreviewComponent ]
     })

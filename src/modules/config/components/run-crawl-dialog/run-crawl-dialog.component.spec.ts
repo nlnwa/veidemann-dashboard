@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RunCrawlDialogComponent } from './run-crawl-dialog.component';
 
@@ -6,7 +6,7 @@ describe('RunCrawlDialogComponent', () => {
   let component: RunCrawlDialogComponent;
   let fixture: ComponentFixture<RunCrawlDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RunCrawlDialogComponent ]
     })
