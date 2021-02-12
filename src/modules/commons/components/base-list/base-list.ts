@@ -71,7 +71,10 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   @Output()
-  selectedChange: EventEmitter<T | T[]>;
+  rowClick: EventEmitter<T>;
+
+  @Output()
+  selectedChange: EventEmitter<T[]>;
 
   @Output()
   selectAll: EventEmitter<void>;
@@ -89,18 +92,18 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   @ContentChildren(FilterDirective, {read: TemplateRef, descendants: true}) filterButtonTemplates;
   @ContentChildren(ShortcutDirective, {read: TemplateRef, descendants: true}) shortcutButtonTemplates;
 
-  // selection
+  // selection of checked rows
   selection: SelectionModel<T>;
   allSelected: boolean;
   isAllInPageSelected$: Observable<boolean>;
   selectedRow: T;
- // expandedConfigObject: T | null;
 
   protected constructor() {
     this.sort = new EventEmitter<Sort>();
-    this.selectedChange = new EventEmitter<T | T[]>();
+    this.selectedChange = new EventEmitter<T[]>();
     this.selectAll = new EventEmitter<void>();
     this.page = new EventEmitter<PageEvent>();
+    this.rowClick = new EventEmitter<T>();
     this.selection = new SelectionModel<T>(true, []);
     this.allSelected = false;
     this.length$ = new BehaviorSubject<number>(0);
@@ -120,7 +123,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.selection.clear();
     this.selectedRow = null;
     this.allSelected = false;
-    // this.length$.next(0);
   }
 
   onSortChange(sort: Sort) {
@@ -130,16 +132,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   onRowClick(item: T) {
     this.allSelected = false;
-    if (item.id === this.selectedRow?.id) {
-      this.selectedRow = null;
-    } else {
-      this.selectedRow = item;
-    }
-    //  this.selection.clear();
-
-    this.selectedChange.emit(this.selectedRow);
-    // this.expandedConfigObject = this.expandedConfigObject === item ? null : item;
-
+    this.selectedRow = this.selectedRow?.id === item.id ? null : item;
+    this.rowClick.emit(this.selectedRow);
   }
 
   onMasterCheckboxToggle(checked: boolean) {
@@ -151,11 +145,10 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         .subscribe(rows => {
           this.selection.select(...rows);
           this.selectedChange.emit(this.selection.selected);
-          // this.cdr.detectChanges();
         });
     } else {
       this.selection.clear();
-      this.selectedChange.emit([]);
+      this.selectedChange.emit(this.selection.selected);
     }
   }
 
@@ -189,8 +182,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     return this.selectedRow ? this.selectedRow.id === item.id : false;
   }
 
-  isDisabled(item: T): boolean {
-    // @ts-ignore
-    return item?.crawlJob?.disabled || item?.seed?.disabled;
+  isDisabled(_: T): boolean {
+    return false;
   }
 }
