@@ -80,6 +80,7 @@
             },
             "development": {
               "servePath": "/veidemann/",
+              "ssl": true,
               "proxyConfig": "proxy.conf.json"
             }
           }
