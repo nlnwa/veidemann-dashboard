@@ -11,6 +11,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/veidemann/",
+            "deployUrl": "/veidemann/",
             "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
@@ -39,8 +41,6 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/veidemann/",
-              "deployUrl": "/veidemann/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -79,7 +79,6 @@
               "browserTarget": "veidemann-web:build:production"
             },
             "development": {
-              "baseHref": "/veidemann/",
               "servePath": "/veidemann/",
               "proxyConfig": "proxy.conf.json"
             }
