@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {CrawlExecutionComponent} from './crawl-execution.component';
 
@@ -6,7 +6,7 @@ describe('CrawlExecutionComponent', () => {
   let component: CrawlExecutionComponent;
   let fixture: ComponentFixture<CrawlExecutionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CrawlExecutionComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MetaPreviewComponent } from './meta-preview.component';
 
@@ -6,7 +6,7 @@ describe('MetaPreviewComponent', () => {
   let component: MetaPreviewComponent;
   let fixture: ComponentFixture<MetaPreviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MetaPreviewComponent ]
     })

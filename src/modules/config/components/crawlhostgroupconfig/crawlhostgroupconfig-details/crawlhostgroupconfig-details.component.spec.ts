@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {CrawlHostGroupConfigDetailsComponent} from './crawlhostgroupconfig-details.component';
 import {FormGroup} from '@angular/forms';
 import {SimpleChange} from '@angular/core';
@@ -18,7 +18,7 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
   let expectedLabel: Label;
   let expectedIpRange;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CrawlHostGroupConfigDetailsComponent],
       imports: [

@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {EntityDetailsComponent} from './entity-details.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../../../commons/material.module';
@@ -14,7 +14,7 @@ describe('EntityDetailsComponent', () => {
   let component: EntityDetailsComponent;
   let fixture: ComponentFixture<EntityDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [EntityDetailsComponent, MetaComponent, LabelsComponent],
       imports: [

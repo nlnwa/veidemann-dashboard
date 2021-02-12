@@ -1,4 +1,4 @@
-import {async} from '@angular/core/testing';
+import { waitForAsync } from '@angular/core/testing';
 import {createSimilarDomainRegExpString, SIMILAR_URL, VALID_URL} from './patterns';
 
 // valid and invalid urls taken from https://gist.github.com/j3j5/8336b0224167636bed462950400ff2df
@@ -98,7 +98,7 @@ describe('Regular expression patterns', () => {
 
   describe('SIMILAR_URL', () => {
 
-    it('should catch domain group', async(() => {
+    it('should catch domain group', waitForAsync(() => {
       const url = 'https://www.behave.properly/with/a/path?and=query';
       const url1 = 'https://not.behave.properly/with/a/path?and=query';
 

@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {CrawlLogStatusComponent} from './crawl-log-status.component';
 
@@ -6,7 +6,7 @@ describe('CrawlLogStatusComponent', () => {
   let component: CrawlLogStatusComponent;
   let fixture: ComponentFixture<CrawlLogStatusComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CrawlLogStatusComponent ]
     })

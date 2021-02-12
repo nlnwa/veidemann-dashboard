@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
 import {SimpleChange} from '@angular/core';
 import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../../../shared/models';
@@ -18,7 +18,7 @@ describe('BrowserScriptDetailsComponent', () => {
   let expectedConfigObject: ConfigObject;
 
   // Async beforeEach needed when using external template
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [BrowserScriptDetailsComponent, BrowserScriptDirective],
       imports: [
