@@ -8,6 +8,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ActionDirective, ExtraDirective, FilterDirective, HighlightDirective, ShortcutDirective} from './directives';
 import {NgxFilesizeModule} from 'ngx-filesize';
 import {DurationFormatPipe} from './pipes/duration-format.pipe';
+import {UrlFormatPipe} from './pipes/url-format.pipe';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {DurationFormatPipe} from './pipes/duration-format.pipe';
     FilterDirective,
     DurationFormatPipe,
     HighlightDirective,
+    UrlFormatPipe,
   ],
   imports: [
     MaterialModule,
@@ -43,6 +45,7 @@ import {DurationFormatPipe} from './pipes/duration-format.pipe';
     NgxFilesizeModule,
     DurationFormatPipe,
     HighlightDirective,
+    UrlFormatPipe,
   ],
   providers: [DatePipe],
 })
