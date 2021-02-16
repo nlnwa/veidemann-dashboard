@@ -7,6 +7,8 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
@@ -1539,8 +1541,15 @@ proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.toObject = function(opt
 proto.veidemann.api.frontier.v1.CrawlHostGroup.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    politenessId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    queuedUriCount: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    minTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    maxTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    delayFactor: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
+    maxRetries: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    retryDelaySeconds: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    queuedUriCount: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    currentUriId: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    sessionToken: jspb.Message.getFieldWithDefault(msg, 9, ""),
+    fetchStartTimeStamp: (f = msg.getFetchStartTimeStamp()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1582,12 +1591,41 @@ proto.veidemann.api.frontier.v1.CrawlHostGroup.deserializeBinaryFromReader = fun
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setPolitenessId(value);
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMinTimeBetweenPageLoadMs(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMaxTimeBetweenPageLoadMs(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setDelayFactor(value);
       break;
     case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setMaxRetries(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setRetryDelaySeconds(value);
+      break;
+    case 7:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setQueuedUriCount(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCurrentUriId(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSessionToken(value);
+      break;
+    case 10:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setFetchStartTimeStamp(value);
       break;
     default:
       reader.skipField();
@@ -1625,18 +1663,68 @@ proto.veidemann.api.frontier.v1.CrawlHostGroup.serializeBinaryToWriter = functio
       f
     );
   }
-  f = message.getPolitenessId();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getMinTimeBetweenPageLoadMs();
+  if (f !== 0) {
+    writer.writeInt64(
       2,
+      f
+    );
+  }
+  f = message.getMaxTimeBetweenPageLoadMs();
+  if (f !== 0) {
+    writer.writeInt64(
+      3,
+      f
+    );
+  }
+  f = message.getDelayFactor();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      4,
+      f
+    );
+  }
+  f = message.getMaxRetries();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getRetryDelaySeconds();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
       f
     );
   }
   f = message.getQueuedUriCount();
   if (f !== 0) {
     writer.writeInt64(
-      5,
+      7,
       f
+    );
+  }
+  f = message.getCurrentUriId();
+  if (f.length > 0) {
+    writer.writeString(
+      8,
+      f
+    );
+  }
+  f = message.getSessionToken();
+  if (f.length > 0) {
+    writer.writeString(
+      9,
+      f
+    );
+  }
+  f = message.getFetchStartTimeStamp();
+  if (f != null) {
+    writer.writeMessage(
+      10,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
@@ -1661,28 +1749,64 @@ proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setId = function(value)
 
 
 /**
- * optional string politeness_id = 2;
- * @return {string}
- */
-proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getPolitenessId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
- */
-proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setPolitenessId = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
-};
-
-
-/**
- * optional int64 queued_uri_count = 5;
+ * optional int64 min_time_between_page_load_ms = 2;
  * @return {number}
  */
-proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getQueuedUriCount = function() {
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getMinTimeBetweenPageLoadMs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setMinTimeBetweenPageLoadMs = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int64 max_time_between_page_load_ms = 3;
+ * @return {number}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getMaxTimeBetweenPageLoadMs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setMaxTimeBetweenPageLoadMs = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional float delay_factor = 4;
+ * @return {number}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getDelayFactor = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 4, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setDelayFactor = function(value) {
+  return jspb.Message.setProto3FloatField(this, 4, value);
+};
+
+
+/**
+ * optional int32 max_retries = 5;
+ * @return {number}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getMaxRetries = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
@@ -1691,8 +1815,117 @@ proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getQueuedUriCount = fun
  * @param {number} value
  * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
  */
-proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setQueuedUriCount = function(value) {
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setMaxRetries = function(value) {
   return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional int32 retry_delay_seconds = 6;
+ * @return {number}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getRetryDelaySeconds = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setRetryDelaySeconds = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional int64 queued_uri_count = 7;
+ * @return {number}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getQueuedUriCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setQueuedUriCount = function(value) {
+  return jspb.Message.setProto3IntField(this, 7, value);
+};
+
+
+/**
+ * optional string current_uri_id = 8;
+ * @return {string}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getCurrentUriId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setCurrentUriId = function(value) {
+  return jspb.Message.setProto3StringField(this, 8, value);
+};
+
+
+/**
+ * optional string session_token = 9;
+ * @return {string}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getSessionToken = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setSessionToken = function(value) {
+  return jspb.Message.setProto3StringField(this, 9, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp fetch_start_time_stamp = 10;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.getFetchStartTimeStamp = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 10));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+*/
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.setFetchStartTimeStamp = function(value) {
+  return jspb.Message.setWrapperField(this, 10, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.veidemann.api.frontier.v1.CrawlHostGroup} returns this
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.clearFetchStartTimeStamp = function() {
+  return this.setFetchStartTimeStamp(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.veidemann.api.frontier.v1.CrawlHostGroup.prototype.hasFetchStartTimeStamp = function() {
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
