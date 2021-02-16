@@ -11,7 +11,8 @@
         <th i18n="@@crawlLogReportListRequestedUriHeaderCell"
             mat-header-cell *matHeaderCellDef>Requested URI
         </th>
-        <td mat-cell *matCellDef="let row"><span matTooltip="{{row.requestedUri}}">{{row.requestedUri | sedPipe}}</span>
+        <td mat-cell *matCellDef="let row">
+          <span (click)="$event.stopPropagation()" matTooltip="{{row.requestedUri}}"[innerHTML]="row.requestedUri | urlFormat: true"></span>
         </td>
       </ng-container>
 

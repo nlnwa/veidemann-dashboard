@@ -1,6 +1,13 @@
 <div *ngIf="configObject" fxLayout="row wrap" fxLayoutGap="16px" style="width: 100%;" class="preview-padding">
   <div fxFlex class="preview-meta-column">
-    <app-meta-preview [configObject]="configObject"></app-meta-preview>
+    <ng-container [ngSwitch]="configObject.kind">
+      <ng-container *ngSwitchCase="Kind.SEED">
+        <app-seed-meta-preview [configObject]="configObject"></app-seed-meta-preview>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <app-meta-preview [configObject]="configObject"></app-meta-preview>
+      </ng-container>
+    </ng-container>
   </div>
   <div fxFlex class="preview-details-column">
     <ng-container [ngSwitch]="configObject.kind">

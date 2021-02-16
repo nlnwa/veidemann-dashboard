@@ -1,7 +1,10 @@
 <table mat-table [dataSource]="resources" multiTemplateDataRows>
   <ng-container matColumnDef="uri">
     <th mat-header-cell *matHeaderCellDef>URI</th>
-    <td mat-cell *matCellDef="let row">{{row.uri}}</td>
+    <td mat-cell *matCellDef="let row">
+      <span [innerHTML]="row.uri | urlFormat"
+            (click)="$event.stopPropagation()"></span>
+    </td>
   </ng-container>
   <ng-container matColumnDef="discoveryPath">
     <th mat-header-cell *matHeaderCellDef>Discovery Path</th>
@@ -26,7 +29,7 @@
           <tbody>
           <tr class="mat-row">
             <td class="mat-cell">URI</td>
-            <td class="mat-cell">{{resource.uri}}</td>
+            <td class="mat-cell"><span [innerHTML]="resource.uri | urlFormat"></span></td>
           </tr>
           <tr class="mat-row">
             <td class="mat-cell">From cache</td>
