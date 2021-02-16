@@ -34,17 +34,15 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
   get canUpdate(): boolean {
     return this.form.valid && (
       this.form.dirty
-      || ((this.shouldAddSelector !== undefined && this.crawlHostGroupSelectorList.value.length)
-        || (this.shouldAddLabel !== undefined && this.labelList.value.length)
-        || (this.robotsPolicy.enabled && (this.allSelected || this.configObject.politenessConfig.robotsPolicy === undefined))
-      ));
+      || (this.shouldAddLabel !== undefined && this.labelList.value.length)
+      || (this.robotsPolicy.enabled && (this.allSelected || this.configObject.politenessConfig.robotsPolicy === undefined))
+    );
   }
 
   get canRevert(): boolean {
     return this.form.dirty
       || (this.robotsPolicy.enabled && this.configObject.politenessConfig.robotsPolicy === undefined)
-      || (this.shouldAddLabel !== undefined)
-      || (this.shouldAddSelector !== undefined);
+      || (this.shouldAddLabel !== undefined);
   }
 
   get labelList(): AbstractControl {
@@ -59,11 +57,6 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
     if (this.robotsPolicy.disabled) {
       this.robotsPolicy.enable();
     }
-  }
-
-  onToggleShouldAddSelector(shouldAdd: boolean): void {
-    this.shouldAddSelector = shouldAdd;
-    this.crawlHostGroupSelectorList.patchValue([]);
   }
 
   onUpdateLabels({add, labels}: { add: boolean, labels: Label[] }) {
@@ -85,27 +78,23 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
       robotsPolicy: '',
       minimumRobotsValidityDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       customRobots: null,
-      minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      crawlHostGroupSelectorList: '',
+      useHostname: {value: '', disabled: true},
     });
   }
 
   protected updateForm() {
+    if (this.configObject.politenessConfig.useHostname !== null && !this.allSelected) {
+      this.useHostname.enable();
+    } else {
+      this.useHostname.disable();
+    }
+
     this.form.setValue({
       labelList: this.configObject.meta.labelList,
       robotsPolicy: this.configObject.politenessConfig.robotsPolicy || RobotsPolicy.OBEY_ROBOTS,
       minimumRobotsValidityDurationS: this.configObject.politenessConfig.minimumRobotsValidityDurationS || '',
       customRobots: this.configObject.politenessConfig.customRobots,
-      minTimeBetweenPageLoadMs: this.configObject.politenessConfig.minTimeBetweenPageLoadMs || '',
-      maxTimeBetweenPageLoadMs: this.configObject.politenessConfig.maxTimeBetweenPageLoadMs || '',
-      delayFactor: this.configObject.politenessConfig.delayFactor || '',
-      maxRetries: this.configObject.politenessConfig.maxRetries || '',
-      retryDelaySeconds: this.configObject.politenessConfig.retryDelaySeconds || '',
-      crawlHostGroupSelectorList: [[]]
+      useHostname: this.configObject.politenessConfig.useHostname,
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -152,43 +141,9 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
       pathList.push('politenessConfig.minimumRobotsValidityDurationS');
     }
 
-    if (this.minTimeBetweenPageloadMs.dirty
-      && (this.allSelected
-        || formModel.minTimeBetweenPageLoadMs !== this.configObject.politenessConfig.minTimeBetweenPageLoadMs)) {
-      politenessConfig.minTimeBetweenPageLoadMs = formModel.minTimeBetweenPageLoadMs;
-      pathList.push('politenessConfig.minTimeBetweenPageLoadMs');
-    }
-
-    if (this.maxTimeBetweenPageloadMs.dirty
-      && (this.allSelected
-        || formModel.maxTimeBetweenPageLoadMs !== this.configObject.politenessConfig.maxTimeBetweenPageLoadMs)) {
-      politenessConfig.maxTimeBetweenPageLoadMs = formModel.maxTimeBetweenPageLoadMs;
-      pathList.push('politenessConfig.maxTimeBetweenPageLoadMs');
-    }
-
-    if (this.delayFactor.dirty && (this.allSelected || formModel.delayFactor !== this.configObject.politenessConfig.delayFactor)) {
-      politenessConfig.delayFactor = formModel.delayFactor;
-      pathList.push('politenessConfig.delayFactor');
-    }
-
-    if (this.maxRetries.dirty && (this.allSelected || formModel.maxRetries !== this.configObject.politenessConfig.maxRetries)) {
-      politenessConfig.maxRetries = formModel.maxRetries;
-      pathList.push('politenessConfig.maxRetries');
-    }
-
-    if (this.retryDelaySeconds.dirty
-      && (this.allSelected || formModel.retryDelaySeconds !== this.configObject.politenessConfig.retryDelaySeconds)) {
-      politenessConfig.retryDelaySeconds = formModel.retryDelaySeconds;
-      pathList.push('politenessConfig.retryDelaySeconds');
-    }
-
-    if (this.crawlHostGroupSelectorList.value.length && this.shouldAddSelector !== undefined) {
-      politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);
-      if (this.shouldAddSelector) {
-        pathList.push('politenessConfig.crawlHostGroupSelector+');
-      } else {
-        pathList.push('politenessConfig.crawlHostGroupSelector-');
-      }
+    if (this.useHostname.dirty && (this.allSelected || formModel.useHostname !== this.configObject.politenessConfig.useHostname)) {
+      politenessConfig.useHostname = formModel.useHostname;
+      pathList.push('politenessConfig.useHostname');
     }
 
     return {updateTemplate, pathList};

@@ -22,11 +22,6 @@
             </textarea>
       </mat-form-field>
 
-      <!--CrawlHostGroup Selector -->
-      <app-selector placeholder="CrawlHostGroup Selector" formControlName="crawlHostGroupSelectorList"
-                    [removable]="canEdit" i18n-placeholder="@@politenessconfigFormCrawlhostgroupSelectorPlaceholder">
-      </app-selector>
-
       <mat-label i18n="@@politenessconfigFormMinRobotsValidDurationLabel">Minimum robots validity</mat-label>
       <app-duration-picker formControlName="minimumRobotsValidityDurationS"
                            [unit]="UnitOfTime.SECOND"
@@ -37,57 +32,12 @@
         Must be a number.
       </mat-error>
 
-      <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
-      <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
-                           [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s:ms'">
-      </app-duration-picker>
-      <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
-                 i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
-        Must be a number.
-      </mat-error>
-
-      <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
-      <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
-                           [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s:ms'">
-      </app-duration-picker>
-      <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
-                 i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
-        Must be a number.
-      </mat-error>
-
-      <mat-form-field>
-        <input matInput
-               formControlName="delayFactor"
-               placeholder="Delay factor"
-               i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
-        <mat-error *ngIf="!delayFactor.valid"
-                   i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
-          Must be a number.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput
-               formControlName="maxRetries"
-               placeholder="Maximum retries"
-               i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
-        <mat-error *ngIf="!maxRetries.valid"
-                   i18n="@@politenessconfigFormMaxRetriesValidationError">
-          Must be a number.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-label i18n="politenessconfigFormRetryDelayLabel">Retry delay</mat-label>
-      <app-duration-picker formControlName="retryDelaySeconds"
-                           [unit]="UnitOfTime.SECOND"
-                           [durationGranularity]="'m:s'">
-      </app-duration-picker>
-      <mat-error *ngIf="!retryDelaySeconds.valid"
-                 i18n="@@politenessconfigFormRetryDelayValidationError">
-        Must be a number.
-      </mat-error>
+      <mat-checkbox formControlName="useHostname"
+                    labelPosition="after"
+                    i18n="@@politenessconfigFormUseHostnameLabel"
+                    color="accent">
+        Use hostname
+      </mat-checkbox>
     </div>
   </form>
 </mat-dialog-content>

@@ -3,24 +3,10 @@
   <textarea *ngIf="configObject.politenessConfig.robotsPolicy === RobotsPolicy.CUSTOM_ROBOTS"
             [value]="configObject.politenessConfig.customRobots">
   </textarea>
-  <mat-label><b>CrawlHostGroup selector: </b></mat-label>
-  <mat-chip-list>
-  <mat-chip *ngFor="let crawlHostGroupSelector of configObject.politenessConfig.crawlHostGroupSelectorList">
-    {{crawlHostGroupSelector}}
-  </mat-chip>
-  </mat-chip-list>
   <mat-label><b>Minimum robots validity: </b>
     {{configObject.politenessConfig.minimumRobotsValidityDurationS | durationFormat: 's'}}
   </mat-label>
-  <mat-label><b>Minimum time between page load: </b>
-    {{configObject.politenessConfig.minTimeBetweenPageLoadMs | durationFormat: 'ms'}}
-  </mat-label>
-  <mat-label><b>Maximum time between page load: </b>
-    {{configObject.politenessConfig.maxTimeBetweenPageLoadMs | durationFormat: 'ms'}}
-  </mat-label>
-  <mat-label><b>Delay factor: </b>{{configObject.politenessConfig.delayFactor}}</mat-label>
-  <mat-label><b>Maximum retries: </b>{{configObject.politenessConfig.maxRetries}}</mat-label>
-  <mat-label><b>Retry delay: </b>
-    {{configObject.politenessConfig.retryDelaySeconds | durationFormat: 's'}}
-  </mat-label>
+  <mat-checkbox [(ngModel)]="configObject.politenessConfig.useHostname" labelPosition="before" disabled="true">
+    Use hostname
+  </mat-checkbox>
 </div>

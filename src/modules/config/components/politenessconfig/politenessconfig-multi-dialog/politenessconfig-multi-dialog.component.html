@@ -6,35 +6,6 @@
       <app-label-multi [configObject]="configObject"
                        [allSelected]="allSelected"
                        (update)="onUpdateLabels($event)"></app-label-multi>
-      <h5 *ngIf="!allSelected">Common crawl host group selectors for the selected configurations:</h5>
-      <h5 *ngIf="allSelected">Crawl host group selectors:</h5>
-      <div fxlayout="row" fxLayoutGap="16px">
-        <mat-chip-list fxFlex>
-          <mat-chip *ngFor="let crawlHostGroupSelector of configObject.politenessConfig.crawlHostGroupSelectorList"
-                    [selectable]="false">
-            {{crawlHostGroupSelector}}
-          </mat-chip>
-        </mat-chip-list>
-        <div>
-          <mat-button-toggle-group
-            [value]="shouldAddSelector"
-            (valueChange)="onToggleShouldAddSelector($event)"
-            name="shouldAddSelector">
-            <mat-button-toggle [value]="true">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-              <mat-icon>remove</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
-      <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
-        <app-selector placeholder="CrawlHostGroup Selector" fxFlex formControlName="crawlHostGroupSelectorList"
-                      [removable]="canEdit"></app-selector>
-        <mat-hint *ngIf="shouldAddSelector">Enter crawl host group selectors to add</mat-hint>
-        <mat-hint *ngIf="!shouldAddSelector">Enter crawl host group selectors to remove</mat-hint>
-      </div>
     </div>
 
     <div fxFlex fxLayout="column">
@@ -75,57 +46,19 @@
         Must be a number.
       </mat-error>
 
-      <mat-label i18n="@@politenessconfigFormMinTimeBetweenPageloadLabel">Minimum time between page load</mat-label>
-      <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
-                           [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s'">
-      </app-duration-picker>
-      <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
-                 i18n="@@politenessconfigFormMinTimeBetweenPageloadValidationError">
-        Must be a number.
-      </mat-error>
-
-      <mat-label i18n="@@politenessconfigFormMaxTimeBetweenPageloadLabel">Maximum time between page load</mat-label>
-      <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
-                           [unit]="UnitOfTime.MILLISECOND"
-                           [durationGranularity]="'m:s'">
-      </app-duration-picker>
-      <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
-                 i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
-        Must be a number.
-      </mat-error>
-
-      <mat-form-field>
-        <input matInput
-               formControlName="delayFactor"
-               placeholder="Delay factor"
-               i18n-placeholder="@@politenessconfigFormDelayFactorPlaceholder">
-        <mat-error *ngIf="!delayFactor.valid"
-                   i18n="@@politenessconfigFormMaxTimeBetweenValidationError">
-          Must be a number.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput
-               formControlName="maxRetries"
-               placeholder="Maximum retries"
-               i18n-placeholder="@@politenessconfigFormMaxRetriesPlaceholder">
-        <mat-error *ngIf="!maxRetries.valid"
-                   i18n="@@politenessconfigFormMaxRetriesValidationError">
-          Must be a number.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-label i18n="politenessconfigFormRetryDelayLabel">Retry delay</mat-label>
-      <app-duration-picker formControlName="retryDelaySeconds"
-                           [unit]="UnitOfTime.SECOND"
-                           [durationGranularity]="'m:s'">
-      </app-duration-picker>
-      <mat-error *ngIf="!retryDelaySeconds.valid"
-                 i18n="@@politenessconfigFormRetryDelayValidationError">
-        Must be a number.
-      </mat-error>
+      <div (click)="useHostname.disabled ? useHostname.enable() : null">
+        <mat-checkbox formControlName="useHostname"
+                      labelPosition="after"
+                      i18n="@@politenesslconfigFormUseHostnameLabel"
+                      i18n-matTooltip="@@politenessconfigFormDisabledUseHostnameExplanation"
+                      color="accent"
+                      [matTooltip]="useHostname.disabled ?
+                        'Setting is not equal for all selected configurations.'
+                         +'Click here and set desired state to override all, '
+                         + 'or leave untouched to keep the configurations original value.' : null">
+          Use hostname
+        </mat-checkbox>
+      </div>
     </div>
   </mat-dialog-content>
 </form>
