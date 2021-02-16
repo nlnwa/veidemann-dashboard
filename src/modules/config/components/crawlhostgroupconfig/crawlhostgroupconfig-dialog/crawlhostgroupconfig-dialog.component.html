@@ -5,52 +5,108 @@
 <mat-dialog-content>
   <form [formGroup]="form">
     <app-meta formControlName="meta"></app-meta>
-    <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
-      <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
-      <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">
-        <div [formGroupName]="i"
-             fxLayout="row"
-             fxlayoutgap="16px">
-          <mat-form-field fxFlex>
-            <input matInput formControlName="ipFrom" placeholder="IP address"
-                   i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
-            <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
-            <mat-error *ngIf="!ipFromControl(i).valid"
-                       i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
-              A valid IP address is required.
-            </mat-error>
-          </mat-form-field>
+    <div fxLayout="column" fxLayoutGap="16px">
+      <mat-label i18n="@@crawlhostgroupconfigFormMinTimeBetweenPageloadLabel">
+        Minimum time between page load
+      </mat-label>
+      <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s:ms'">
+      </app-duration-picker>
+      <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
+                 i18n="@@crawlhostgroupconfigFormMinTimeBetweenPageloadValidationError">
+        Must be a number.
+      </mat-error>
 
-          <mat-form-field fxFlex>
-            <input matInput formControlName="ipTo" placeholder="IP address"
-                   i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
-            <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
-            <mat-error *ngIf="!ipToControl(i).valid"
-                       i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
-              A valid IP address is required.
-            </mat-error>
-          </mat-form-field>
+      <mat-label i18n="@@crawlhostgroupconfigFormMaxTimeBetweenPageloadLabel">
+        Maximum time between page load
+      </mat-label>
+      <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
+                           [unit]="UnitOfTime.MILLISECOND"
+                           [durationGranularity]="'m:s:ms'">
+      </app-duration-picker>
+      <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
+                 i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
+        Must be a number.
+      </mat-error>
 
-          <button mat-button
-                  (click)="onRemoveIpRange(i)"
-                  *ngIf="canEdit">
-            <mat-icon>remove_circle</mat-icon>
-            <span>REMOVE</span>
-          </button>
+      <mat-form-field>
+        <input matInput
+               formControlName="delayFactor"
+               placeholder="Delay factor"
+               i18n-placeholder="@@crawlhostgroupconfigFormDelayFactorPlaceholder">
+        <mat-error *ngIf="!delayFactor.valid"
+                   i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               formControlName="maxRetries"
+               placeholder="Maximum retries"
+               i18n-placeholder="@@crawlhostgroupconfigFormMaxRetriesPlaceholder">
+        <mat-error *ngIf="!maxRetries.valid"
+                   i18n="@@crawlhostgroupconfigFormMaxRetriesValidationError">
+          Must be a number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-label i18n="crawlhostgroupconfigFormRetryDelayLabel">Retry delay</mat-label>
+      <app-duration-picker formControlName="retryDelaySeconds"
+                           [unit]="UnitOfTime.SECOND"
+                           [durationGranularity]="'m:s'">
+      </app-duration-picker>
+      <mat-error *ngIf="!retryDelaySeconds.valid"
+                 i18n="@@crawlhostgroupconfigFormRetryDelayValidationError">
+        Must be a number.
+      </mat-error>
+      <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
+        <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
+        <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">
+          <div [formGroupName]="i"
+               fxLayout="row"
+               fxlayoutgap="16px">
+            <mat-form-field fxFlex>
+              <input matInput formControlName="ipFrom" placeholder="IP address"
+                     i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
+              <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
+              <mat-error *ngIf="!ipFromControl(i).valid"
+                         i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
+                A valid IP address is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex>
+              <input matInput formControlName="ipTo" placeholder="IP address"
+                     i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
+              <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
+              <mat-error *ngIf="!ipToControl(i).valid"
+                         i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">
+                A valid IP address is required.
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-button
+                    (click)="onRemoveIpRange(i)"
+                    *ngIf="canEdit">
+              <mat-icon>remove_circle</mat-icon>
+              <span>REMOVE</span>
+            </button>
+          </div>
+
+          <mat-error *ngIf="!isValidIpRange(ipFromControl(i).value, ipToControl(i).value)"
+                     i18n="@@crawlhostgroupconfigFormValidIpRangeError">
+            The IP range is not valid
+          </mat-error>
         </div>
 
-        <mat-error *ngIf="!isValidIpRange(ipFromControl(i).value, ipToControl(i).value)"
-                   i18n="@@crawlhostgroupconfigFormValidIpRangeError">
-          The IP range is not valid
-        </mat-error>
-      </div>
-
-      <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button">
-        <mat-icon>add_circle</mat-icon>
-        <span i18n="@@crawlhostgroupconfigFormAddIpRangeButton">ADD IP RANGE</span>
-      </button>
-    </fieldset>
-
+        <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button">
+          <mat-icon>add_circle</mat-icon>
+          <span i18n="@@crawlhostgroupconfigFormAddIpRangeButton">ADD IP RANGE</span>
+        </button>
+      </fieldset>
+    </div>
   </form>
 </mat-dialog-content>
 

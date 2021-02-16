@@ -21,6 +21,61 @@
         </mat-form-field>
       </div>
       <div fxFlex>
+        <mat-label i18n="@@crawlhostgroupconfigFormMinTimeBetweenPageloadLabel">
+          Minimum time between page load
+        </mat-label>
+        <app-duration-picker formControlName="minTimeBetweenPageLoadMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s:ms'">
+        </app-duration-picker>
+        <mat-error *ngIf="!minTimeBetweenPageloadMs.valid"
+                   i18n="@@crawlhostgroupconfigFormMinTimeBetweenPageloadValidationError">
+          Must be a number.
+        </mat-error>
+
+        <mat-label i18n="@@crawlhostgroupconfigFormMaxTimeBetweenPageloadLabel">
+          Maximum time between page load
+        </mat-label>
+        <app-duration-picker formControlName="maxTimeBetweenPageLoadMs"
+                             [unit]="UnitOfTime.MILLISECOND"
+                             [durationGranularity]="'m:s:ms'">
+        </app-duration-picker>
+        <mat-error *ngIf="!maxTimeBetweenPageloadMs.valid"
+                   i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
+          Must be a number.
+        </mat-error>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="delayFactor"
+                 placeholder="Delay factor"
+                 i18n-placeholder="@@crawlhostgroupconfigFormDelayFactorPlaceholder">
+          <mat-error *ngIf="!delayFactor.valid"
+                     i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
+            Must be a number.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 formControlName="maxRetries"
+                 placeholder="Maximum retries"
+                 i18n-placeholder="@@crawlhostgroupconfigFormMaxRetriesPlaceholder">
+          <mat-error *ngIf="!maxRetries.valid"
+                     i18n="@@crawlhostgroupconfigFormMaxRetriesValidationError">
+            Must be a number.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-label i18n="crawlhostgroupconfigFormRetryDelayLabel">Retry delay</mat-label>
+        <app-duration-picker formControlName="retryDelaySeconds"
+                             [unit]="UnitOfTime.SECOND"
+                             [durationGranularity]="'m:s'">
+        </app-duration-picker>
+        <mat-error *ngIf="!retryDelaySeconds.valid"
+                   i18n="@@crawlhostgroupconfigFormRetryDelayValidationError">
+          Must be a number.
+        </mat-error>
         <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
           <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
           <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">

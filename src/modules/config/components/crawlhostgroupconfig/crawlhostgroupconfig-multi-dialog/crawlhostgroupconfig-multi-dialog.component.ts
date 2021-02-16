@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {CrawlHostGroupConfigDetailsComponent} from '..';
-import {AbstractControl, FormBuilder} from '@angular/forms';
+import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
+import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-multi-dialog',
@@ -62,13 +63,23 @@ export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConf
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []}
+      labelList: {value: []},
+      minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
     });
   }
 
   protected updateForm() {
     this.form.setValue({
-      labelList: this.configObject.meta.labelList
+      labelList: this.configObject.meta.labelList,
+      minTimeBetweenPageLoadMs: this.configObject.crawlHostGroupConfig.minTimeBetweenPageLoadMs || '',
+      maxTimeBetweenPageLoadMs: this.configObject.crawlHostGroupConfig.maxTimeBetweenPageLoadMs || '',
+      delayFactor: this.configObject.crawlHostGroupConfig.delayFactor || '',
+      maxRetries: this.configObject.crawlHostGroupConfig.maxRetries || '',
+      retryDelaySeconds: this.configObject.crawlHostGroupConfig.retryDelaySeconds || '',
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -83,6 +94,37 @@ export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConf
     const updateTemplate = new ConfigObject({
       kind: Kind.CRAWLHOSTGROUPCONFIG,
     });
+    const crawlHostGroupConfig = updateTemplate.crawlHostGroupConfig;
+
+    if (this.minTimeBetweenPageloadMs.dirty
+      && (this.allSelected
+        || formModel.minTimeBetweenPageLoadMs !== this.configObject.crawlHostGroupConfig.minTimeBetweenPageLoadMs)) {
+      crawlHostGroupConfig.minTimeBetweenPageLoadMs = formModel.minTimeBetweenPageLoadMs;
+      pathList.push('crawlHostGroupConfig.minTimeBetweenPageLoadMs');
+    }
+
+    if (this.maxTimeBetweenPageloadMs.dirty
+      && (this.allSelected
+        || formModel.maxTimeBetweenPageLoadMs !== this.configObject.crawlHostGroupConfig.maxTimeBetweenPageLoadMs)) {
+      crawlHostGroupConfig.maxTimeBetweenPageLoadMs = formModel.maxTimeBetweenPageLoadMs;
+      pathList.push('crawlHostGroupConfig.maxTimeBetweenPageLoadMs');
+    }
+
+    if (this.delayFactor.dirty && (this.allSelected || formModel.delayFactor !== this.configObject.crawlHostGroupConfig.delayFactor)) {
+      crawlHostGroupConfig.delayFactor = formModel.delayFactor;
+      pathList.push('crawlHostGroupConfig.delayFactor');
+    }
+
+    if (this.maxRetries.dirty && (this.allSelected || formModel.maxRetries !== this.configObject.crawlHostGroupConfig.maxRetries)) {
+      crawlHostGroupConfig.maxRetries = formModel.maxRetries;
+      pathList.push('crawlHostGroupConfig.maxRetries');
+    }
+
+    if (this.retryDelaySeconds.dirty
+      && (this.allSelected || formModel.retryDelaySeconds !== this.configObject.crawlHostGroupConfig.retryDelaySeconds)) {
+      crawlHostGroupConfig.retryDelaySeconds = formModel.retryDelaySeconds;
+      pathList.push('crawlHostGroupConfig.retryDelaySeconds');
+    }
 
     if (this.labelList.value.length && this.shouldAddLabel !== undefined) {
       updateTemplate.meta.labelList = formModel.labelList;
