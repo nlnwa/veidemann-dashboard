@@ -1,0 +1,31 @@
+<p><strong>URL:</strong><span [innerHTML]="configObject.meta.name | urlFormat"
+                              matTooltip="Go to page in new tab" i18n-matTooltip="@@seedMetaPreviewUrlTooltip"></span>
+</p>
+<p><strong>Description:</strong> {{configObject.meta.description}}</p>
+<p><strong>Created:</strong> {{configObject.meta.created | date: 'medium'}} by {{configObject.meta.createdBy}}</p>
+<p><strong>Updated:</strong> {{configObject.meta.lastModified | date: 'medium'}} by {{configObject.meta.lastModifiedBy}}
+</p>
+<p><strong>ID:</strong> {{configObject.id}}
+  <button mat-button mat-icon-button (click)="copyIdToClipboard()">
+    <mat-icon matTooltip="copy ID to clipboard"
+              i18n-matTooltip="@@copyIdButtonTooltip"
+              matSuffix>content_copy
+    </mat-icon>
+  </button>
+</p>
+<p *ngIf="configObject.meta.labelList.length">
+  <mat-label>Labels</mat-label>
+  <mat-chip-list>
+    <mat-chip *ngFor="let label of configObject.meta.labelList">
+      {{label.key}}:{{label.value}}
+    </mat-chip>
+  </mat-chip-list>
+</p>
+<p *ngIf="configObject.meta.annotationList.length && canShowAnnotation">
+  <mat-label>Annotations</mat-label>
+  <mat-chip-list *ngIf="canShowAnnotation">
+    <mat-chip color="primary" selected *ngFor="let annotation of configObject.meta.annotationList">
+      {{annotation.key}}:{{annotation.value}}
+    </mat-chip>
+  </mat-chip-list>
+</p>
