@@ -14,6 +14,12 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 @include angular-material-theme($my-app-theme);
 
+
+/* DARK THEME */
+$ad-app-primary: mat-palette($mat-blue-gray,800);
+$angular-dark-theme: mat-dark-theme($ad-app-primary, $my-app-accent, $my-app-warn);
+@include angular-material-theme($angular-dark-theme);
+
 $primary: mat-color($my-app-primary);
 $accent: mat-color($my-app-accent);
 $warn: mat-color($my-app-warn);
