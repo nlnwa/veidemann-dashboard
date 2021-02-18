@@ -18,7 +18,7 @@
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell">{{pageLog.uri}}</td>
+          <td class="mat-cell"><span [innerHTML]="pageLog.uri | urlFormat"></span></td>
           <td class="mat-cell">{{pageLog.referrer}}</td>
           <td class="mat-cell">{{pageLog.collectionFinalName}}</td>
           <td class="mat-cell">{{pageLog.method}}</td>

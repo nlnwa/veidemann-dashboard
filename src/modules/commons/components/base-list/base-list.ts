@@ -15,13 +15,13 @@ import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sor
 import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
-import {ListItem} from '../../../../shared/models';
+import {Kind, ListItem} from '../../../../shared/models';
 
 
 @Directive()
 // tslint:disable-next-line:directive-class-suffix
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
-
+  readonly Kind = Kind;
   length$: BehaviorSubject<number>;
 
   @Input()
