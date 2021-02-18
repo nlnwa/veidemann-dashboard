@@ -32,6 +32,13 @@
         <td mat-cell *matCellDef="let row">{{CrawlExecutionState[row.state]}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="errorCode">
+        <th i18n="@@crawlExecutionReportListErrorCodeHeaderCell"
+            mat-header-cell *matHeaderCellDef>Error
+        </th>
+        <td mat-cell *matCellDef="let row">{{row?.error?.code}}</td>
+      </ng-container>
+
       <ng-container matColumnDef="queueCount">
         <th i18n="@@crawlExecutionReportListQueueCountHeaderCell" mat-header-cell *matHeaderCellDef>Queue
         </th>
