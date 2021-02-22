@@ -20,6 +20,7 @@ import {Ability, PureAbility} from '@casl/ability';
 import { HomeComponent } from './components/home/home.component';
 import {HealthCheckComponent} from './components/health-check/health-check.component';
 import {HealthCheckStatusComponent} from './components/health-check/health-check-status/health-check-status.component';
+import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 
 @NgModule({
@@ -36,15 +37,16 @@ import {HealthCheckStatusComponent} from './components/health-check/health-check
     HealthCheckStatusComponent,
   ],
   entryComponents: [ErrorDialogComponent, CrawlerStatusDialogComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    CommonsModule,
-    CoreModule,
-    AbilityModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        CommonsModule,
+        CoreModule,
+        AbilityModule,
+        KeyboardShortcutsModule.forRoot()
+    ],
   providers: [
     {provide: Ability, useValue: new Ability()},
     {provide: PureAbility, useExisting: Ability}

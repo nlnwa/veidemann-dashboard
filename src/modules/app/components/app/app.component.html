@@ -1,4 +1,7 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
+  <ng-keyboard-shortcuts-help [key]="'?'"
+                              [closeKey]="'escape'"
+                              [title]="'Keyboard shortcuts'"></ng-keyboard-shortcuts-help>
   <mat-toolbar class="main-toolbar" color="primary">
     <a routerLink="/"><img border="0" class="veidemann_logo" src="assets/logo/veidemann_horizontal_white.png"></a>
 

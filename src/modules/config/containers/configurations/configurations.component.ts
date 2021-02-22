@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationStart, Params, Router, RouterEvent} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -27,6 +27,7 @@ import {ConfigQuery, distinctUntilArrayChanged, Sort} from '../../../../shared/f
 import {KindService, OptionsService} from '../../services';
 import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '../../func';
 import {ReferrerError} from '../../../../shared/error';
+import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 @Component({
   selector: 'app-configurations',
@@ -34,8 +35,9 @@ import {ReferrerError} from '../../../../shared/error';
   styleUrls: ['./configurations.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigurationsComponent implements OnInit, OnDestroy {
+export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Kind = Kind;
+  shortcuts: ShortcutInput[] = [];
 
   length$: Observable<number>;
   pageSize$: Observable<number>;
@@ -308,6 +310,62 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
       }));
   }
 
+  ngAfterViewInit() {
+    this.shortcuts.push(
+      {
+        key: 'shift + e',
+        label: 'Configurations actions',
+        description: 'Edit selected configuration',
+        command: (event: ShortcutEventOutput) => {
+          if (this.configObject$.value !== null) {
+            this.onEdit(this.configObject$.value);
+          }
+        }
+      },
+      {
+        key: 'shift + c',
+        label: 'Configurations actions',
+        description: 'Clone selected configuration',
+        command: (event: ShortcutEventOutput) => {
+          if (this.configObject$.value !== null) {
+            this.onClone(this.configObject$.value);
+          }
+        }
+      },
+      {
+        key: 'shift + n',
+        label: 'Configurations actions',
+        description: 'Create new configuration',
+        command: (event: ShortcutEventOutput) => {
+          if (this.kind !== null && this.kind !== Kind.SEED) {
+            this.onCreateConfigWithDialog();
+          }
+        }
+      },
+      {
+        key: 'shift + s',
+        label: 'Configurations actions',
+        description: 'Create new  seed for entity',
+        command: (event: ShortcutEventOutput) => {
+          if (this.configObject$.value !== null && this.configObject$.value.kind === Kind.CRAWLENTITY) {
+            this.onCreateSeedFromEntity(this.configObject$.value);
+          }
+        }
+      },
+      {
+        key: 'shift + d',
+        label: 'Configurations actions',
+        description: 'Show details for selected configuration',
+        command: (event: ShortcutEventOutput) => {
+          console.log('shift + n pressed, should configure new config');
+          if (this.configObject$.value !== null) {
+            this.onShowDetails(this.configObject$.value);
+          }
+        }
+      },
+    );
+  }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -377,6 +435,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onEdit(configObject: ConfigObject) {
+    console.log('onEdit');
     this.onCreateConfigWithDialog(configObject);
   }
 
@@ -391,6 +450,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
   }
 
   onUpdateConfig(configObject: ConfigObject) {
+    console.log('onUpdateConfig');
     this.configService.update(configObject)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {

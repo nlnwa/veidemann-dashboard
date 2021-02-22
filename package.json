@@ -46,6 +46,7 @@
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "nano-editor": "^1.2.4",
+    "ng-keyboard-shortcuts": "^10.1.17",
     "ng2-charts": "^2.4.2",
     "ngx-filesize": "^2.0.16",
     "prismjs": "^1.23.0",
