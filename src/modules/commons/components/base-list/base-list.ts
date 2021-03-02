@@ -1,7 +1,10 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   ContentChildren,
   Directive,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -16,11 +19,12 @@ import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
 import {Kind, ListItem} from '../../../../shared/models';
+import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Directive()
 // tslint:disable-next-line:directive-class-suffix
-export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
+export abstract class BaseListComponent<T extends ListItem> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;
   length$: BehaviorSubject<number>;
 
@@ -86,6 +90,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   page: EventEmitter<PageEvent>;
 
   @ViewChild(MatSort, {static: true}) matSort: MatSort;
+  @ViewChild('baseLis') baseLiftRef: ElementRef;
 
   @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
   @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
@@ -98,7 +103,11 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   isAllInPageSelected$: Observable<boolean>;
   selectedRow: T;
 
-  protected constructor() {
+  // Keyboard navigation
+  selectedRowIndex: number = null;
+  shortcuts: ShortcutInput[] = [];
+
+  protected constructor(private ref?: ChangeDetectorRef) {
     this.sort = new EventEmitter<Sort>();
     this.selectedChange = new EventEmitter<T[]>();
     this.selectAll = new EventEmitter<void>();
@@ -119,10 +128,51 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     }
   }
 
+  ngAfterViewInit() {
+    this.shortcuts.push(
+      {
+        key: 'shift + down',
+        label: 'List navigation',
+        description: 'Select row below',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowDown'});
+          this.onArrowNavigate(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + up',
+        label: 'List navigation',
+        description: 'Select row above',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowUp'});
+          this.onArrowNavigate(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + enter',
+        label: 'List navigation',
+        description: 'Show preview for selected row',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'Enter'});
+          this.onArrowNavigate(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + escape',
+        label: 'List navigation',
+        description: 'Stop keyboard list navigation',
+        command: (event: ShortcutEventOutput) => {
+          console.log('shift + esc pressed');
+          this.selectedRowIndex = null;
+        }
+      });
+  }
+
   reset() {
     this.selection.clear();
     this.selectedRow = null;
     this.allSelected = false;
+    this.selectedRowIndex = null;
   }
 
   onSortChange(sort: Sort) {
@@ -130,10 +180,15 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.sort.emit(sort);
   }
 
-  onRowClick(item: T) {
+  onRowClick(item: T, index: number, expand?: boolean) {
+    // TODO: Move expanded row into center of view
+    // item.scrollIntoView({behavior: 'smooth'});
+    this.selectedRowIndex = index;
     this.allSelected = false;
+    if (expand) {
     this.selectedRow = this.selectedRow?.id === item.id ? null : item;
     this.rowClick.emit(this.selectedRow);
+    }
   }
 
   onMasterCheckboxToggle(checked: boolean) {
@@ -172,6 +227,48 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   onPage(pageEvent: PageEvent) {
     this.reset();
     this.page.emit(pageEvent);
+  }
+
+  onArrowNavigate(event: KeyboardEvent) {
+    // TODO: Highlight row when navigating, without expanding row
+    let itemsInPage: number = null;
+    this.dataSource.connect(null).pipe(first())
+      .subscribe(rows => {
+        itemsInPage = rows.length;
+      });
+
+    if (event.key === 'ArrowDown') {
+      if (this.selectedRowIndex !== null) {
+        if (this.selectedRowIndex + 1 <= itemsInPage - 1) {
+          this.selectedRowIndex += 1;
+          this.selectedRow = null; // collapse any open preview when navigating
+          this.selectRowByIndex(this.selectedRowIndex);
+        }
+      } else {
+        this.selectedRowIndex = 0;
+        this.selectRowByIndex(0);
+      }
+    }
+    if (event.key === 'ArrowUp') {
+      if (this.selectedRowIndex !== null) {
+        if (this.selectedRowIndex - 1 >= 0) {
+          this.selectedRowIndex -= 1;
+          this.selectedRow = null; // collapse any open preview when navigating
+          this.selectRowByIndex(this.selectedRowIndex);
+        }
+      }
+    }
+    if (event.key === 'Enter') {
+      this.selectRowByIndex(this.selectedRowIndex, true);
+    }
+  }
+
+  selectRowByIndex(index: any, expand?: boolean): void {
+    this.dataSource.connect(null)
+      .pipe(first())
+      .subscribe(rows => {
+        this.onRowClick(rows[index], index, expand);
+      });
   }
 
   isChecked(item: T): boolean {
