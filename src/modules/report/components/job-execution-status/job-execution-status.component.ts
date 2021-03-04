@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from '../../../../shared/models/report';
+import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from '../../../../shared/models/report';
 
 @Component({
   selector: 'app-job-execution-status',
@@ -9,6 +9,7 @@ import {ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from '../../../
 })
 export class JobExecutionStatusComponent {
   readonly JobExecutionState = JobExecutionState;
+  readonly CrawlExecutionState = CrawlExecutionState;
   readonly ExtraStatusCodes = ExtraStatusCodes;
 
   @Input()
