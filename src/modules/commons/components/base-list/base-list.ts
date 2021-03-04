@@ -1,10 +1,8 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   ContentChildren,
   Directive,
-  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -90,7 +88,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   page: EventEmitter<PageEvent>;
 
   @ViewChild(MatSort, {static: true}) matSort: MatSort;
-  @ViewChild('baseLis') baseLiftRef: ElementRef;
 
   @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
   @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
@@ -107,7 +104,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   selectedRowIndex: number = null;
   shortcuts: ShortcutInput[] = [];
 
-  protected constructor(private ref?: ChangeDetectorRef) {
+  protected constructor() {
     this.sort = new EventEmitter<Sort>();
     this.selectedChange = new EventEmitter<T[]>();
     this.selectAll = new EventEmitter<void>();
@@ -129,6 +126,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   ngAfterViewInit() {
+
     this.shortcuts.push(
       {
         key: 'shift + down',
@@ -136,7 +134,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         description: 'Select row below',
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowDown'});
-          this.onArrowNavigate(keyboardEvent);
+          this.onKeyboardEvent(keyboardEvent);
         }
       },
       {
@@ -145,7 +143,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         description: 'Select row above',
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowUp'});
-          this.onArrowNavigate(keyboardEvent);
+          this.onKeyboardEvent(keyboardEvent);
         }
       },
       {
@@ -154,7 +152,25 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         description: 'Show preview for selected row',
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'Enter'});
-          this.onArrowNavigate(keyboardEvent);
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + s',
+        label: 'List navigation',
+        description: 'Toggle checkbox for selected row',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'S'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + a',
+        label: 'List navigation',
+        description: 'Select all in page',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'A'});
+          this.onKeyboardEvent(keyboardEvent);
         }
       },
       {
@@ -186,8 +202,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.selectedRowIndex = index;
     this.allSelected = false;
     if (expand) {
-    this.selectedRow = this.selectedRow?.id === item.id ? null : item;
-    this.rowClick.emit(this.selectedRow);
+      this.selectedRow = this.selectedRow?.id === item.id ? null : item;
+      this.rowClick.emit(this.selectedRow);
     }
   }
 
@@ -229,7 +245,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.page.emit(pageEvent);
   }
 
-  onArrowNavigate(event: KeyboardEvent) {
+  onKeyboardEvent(event: KeyboardEvent) {
     // TODO: Highlight row when navigating, without expanding row
     let itemsInPage: number = null;
     this.dataSource.connect(null).pipe(first())
@@ -237,29 +253,48 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         itemsInPage = rows.length;
       });
 
-    if (event.key === 'ArrowDown') {
-      if (this.selectedRowIndex !== null) {
-        if (this.selectedRowIndex + 1 <= itemsInPage - 1) {
-          this.selectedRowIndex += 1;
-          this.selectedRow = null; // collapse any open preview when navigating
-          this.selectRowByIndex(this.selectedRowIndex);
+    switch (event.key) {
+
+      case 'ArrowDown':
+        if (this.selectedRowIndex !== null) {
+          if (this.selectedRowIndex + 1 <= itemsInPage - 1) {
+            this.selectedRowIndex += 1;
+            this.selectedRow = null; // collapse any open preview when navigating
+            this.selectRowByIndex(this.selectedRowIndex);
+          }
+        } else {
+          this.selectedRowIndex = 0;
+          this.selectRowByIndex(0);
         }
-      } else {
-        this.selectedRowIndex = 0;
-        this.selectRowByIndex(0);
-      }
-    }
-    if (event.key === 'ArrowUp') {
-      if (this.selectedRowIndex !== null) {
-        if (this.selectedRowIndex - 1 >= 0) {
-          this.selectedRowIndex -= 1;
-          this.selectedRow = null; // collapse any open preview when navigating
-          this.selectRowByIndex(this.selectedRowIndex);
+        break;
+
+      case 'ArrowUp':
+        if (this.selectedRowIndex !== null) {
+          if (this.selectedRowIndex - 1 >= 0) {
+            this.selectedRowIndex -= 1;
+            this.selectedRow = null; // collapse any open preview when navigating
+            this.selectRowByIndex(this.selectedRowIndex);
+          }
         }
-      }
-    }
-    if (event.key === 'Enter') {
-      this.selectRowByIndex(this.selectedRowIndex, true);
+        break;
+
+      case 'S' :
+        if (this.selectedRowIndex !== null) {
+          this.dataSource.connect(null)
+            .pipe(first())
+            .subscribe(rows => {
+              this.onCheckboxToggle(rows[this.selectedRowIndex]);
+            });
+        }
+        break;
+
+      case 'A':
+        this.onMasterCheckboxToggle(true);
+        break;
+
+      case 'Enter' :
+        this.selectRowByIndex(this.selectedRowIndex, true);
+        break;
     }
   }
 

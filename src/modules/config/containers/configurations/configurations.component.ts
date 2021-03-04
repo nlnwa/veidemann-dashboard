@@ -319,6 +319,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
         command: (event: ShortcutEventOutput) => {
           if (this.configObject$.value !== null) {
             this.onEdit(this.configObject$.value);
+          } else if (this.selectedConfigs.length > 1) {
+            this.onEditSelected();
           }
         }
       },
@@ -435,7 +437,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   onEdit(configObject: ConfigObject) {
-    console.log('onEdit');
     this.onCreateConfigWithDialog(configObject);
   }
 
@@ -450,7 +451,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   onUpdateConfig(configObject: ConfigObject) {
-    console.log('onUpdateConfig');
     this.configService.update(configObject)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(newConfig => {
