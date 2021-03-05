@@ -359,9 +359,20 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
         label: 'Configurations actions',
         description: 'Show details for selected configuration',
         command: (event: ShortcutEventOutput) => {
-          console.log('shift + n pressed, should configure new config');
           if (this.configObject$.value !== null) {
             this.onShowDetails(this.configObject$.value);
+          }
+        }
+      },
+      {
+        key: 'shift + del',
+        label: 'Configurations actions',
+        description: 'Delete configuration',
+        command: (event: ShortcutEventOutput) => {
+          if (this.configObject$.value !== null && this.selectedConfigs.length === 0) {
+            this.onDeleteConfig(this.configObject$.value);
+          } else if (this.selectedConfigs.length > 0) {
+            this.onDeleteSelectedConfigs();
           }
         }
       },

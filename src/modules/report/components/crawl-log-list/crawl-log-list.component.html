@@ -1,3 +1,4 @@
+<ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
 <div fxLayout="column" class="container">
   <div fxFlex class="scroll">
     <table mat-table [dataSource]="dataSource"
@@ -87,9 +88,10 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
           class="item-row"
-          (click)="onRowClick(row)"
+          (click)="onRowClick(row, i, true)"
+          [class.highlight]="selectedRowIndex == i || null"
           [class.row-checked]="isChecked(row)"
           [class.row-selected]="isSelected(row)"
           [class.row-disabled]="isDisabled(row)">

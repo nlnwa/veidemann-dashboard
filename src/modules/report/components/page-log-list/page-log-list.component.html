@@ -47,12 +47,12 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
           class="item-row"
           [class.row-selected]="isSelected(row)"
           [class.row-checked]="isChecked(row)"
           [class.row-disabled]="isDisabled(row)"
-          (click)="onRowClick(row)"></tr>
+          (click)="onRowClick(row, i, true)"></tr>
     </table>
   </div>
   <mat-paginator
