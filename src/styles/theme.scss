@@ -21,6 +21,11 @@ $accent: mat-color($my-app-accent);
 $warn: mat-color($my-app-warn);
 $highlight: mat-color(map-get($my-app-theme, background), 'hover');
 
+.formattedUri {
+  text-decoration: none;
+  color: mat-color($my-app-primary);
+}
+
 @media (prefers-color-scheme: light) {
   @include angular-material-theme($my-app-theme);
 }

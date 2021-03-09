@@ -15,9 +15,9 @@ export class UrlFormatPipe implements PipeTransform {
 
     if (stripQueryParams) {
       const urlStripped = new SedPipe().transform(url);
-      anchor = `<a href="${url}" target="_blank">${urlStripped}</a> `;
+      anchor = `<a class="formattedUri" href="${url}" target="_blank">${urlStripped}</a> `;
     } else {
-      anchor = `<a href="${url}" target="_blank">${url}</a> `;
+      anchor = `<a class="formattedUri" href="${url}" target="_blank">${url}</a> `;
     }
     return this.domSanitizer.bypassSecurityTrustHtml(anchor);
   }
