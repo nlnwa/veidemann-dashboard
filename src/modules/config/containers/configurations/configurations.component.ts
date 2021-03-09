@@ -180,10 +180,10 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
     );
 
     const sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : '') as SortDirection));
+      map(sort => (sort ? sort.direction : 'asc') as SortDirection));
 
     const sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : ''));
+      map(sort => sort ? sort.active : 'name'));
 
     const pageSize$ = queryParam$.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),

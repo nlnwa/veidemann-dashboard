@@ -10,7 +10,7 @@ import {
   rotationPolicies,
   subCollectionTypes
 } from '../../../shared/models';
-import {map, tap, toArray} from 'rxjs/operators';
+import {map, toArray} from 'rxjs/operators';
 import {ConfigApiService} from '../../core/services';
 import {combineLatest, Observable, of} from 'rxjs';
 import {ConfigOptions, ConfigPath} from '../func';
@@ -30,10 +30,12 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
       case Kind.CRAWLJOB:
         const crawlScheduleConfig$ = this.backendService.list(createListRequest(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(
           toArray(),
+          map(crawlScheduleConfig => crawlScheduleConfig.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
         );
 
         const crawlConfig$ = this.backendService.list(createListRequest(Kind.CRAWLCONFIG.valueOf())).pipe(
           toArray(),
+          map(crawlConfigs => crawlConfigs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
         );
 
         const scopeScript$ = this.backendService.list(createListRequest(Kind.BROWSERSCRIPT.valueOf(),
@@ -41,7 +43,8 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
           new FieldMask().addPaths('browserScript.browserScriptType')
         ))
           .pipe(
-            toArray()
+            toArray(),
+            map(scopeScripts => scopeScripts.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
           );
 
         return combineLatest([crawlScheduleConfig$, crawlConfig$, scopeScript$]).pipe(
@@ -52,19 +55,27 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
       case Kind.CRAWLCONFIG:
         const collection$ = this.backendService.list(createListRequest(Kind.COLLECTION.valueOf())).pipe(
           toArray(),
+          map(collections => collections.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
         );
         const browserConfig$ = this.backendService.list(createListRequest(Kind.BROWSERCONFIG.valueOf())).pipe(
           toArray(),
+          map(browserConfigs => browserConfigs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
         );
         const politenessConfig$ = this.backendService.list(createListRequest(Kind.POLITENESSCONFIG.valueOf())).pipe(
           toArray(),
+          map(politessConfigs => politessConfigs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
         );
         return combineLatest([collection$, browserConfig$, politenessConfig$]).pipe(
-          map(([collections, browserConfigs, politenessConfigs]) => ({collections, browserConfigs, politenessConfigs})));
+          map(([collections, browserConfigs, politenessConfigs]) => ({
+            collections,
+            browserConfigs,
+            politenessConfigs
+          })));
 
       case Kind.BROWSERCONFIG:
         return this.backendService.list(createListRequest(Kind.BROWSERSCRIPT.valueOf())).pipe(
           toArray(),
+          map(browserScripts => browserScripts.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
           map(browserScripts => ({browserScripts}))
         );
 
@@ -80,13 +91,15 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
       case Kind.SEED:
         return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
           toArray(),
-          map(crawlJobs => ({crawlJobs}))
+          map(jobs => jobs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
+          map(crawlJobs => ({crawlJobs})),
         );
 
       case Kind.CRAWLENTITY:
         return this.backendService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(
           toArray(),
-          map(crawlJobs => ({crawlJobs}))
+          map(jobs => jobs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
+          map(crawlJobs => ({crawlJobs})),
         );
 
       case Kind.BROWSERSCRIPT:
@@ -96,5 +109,4 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
         return of({});
     }
   }
-
 }
