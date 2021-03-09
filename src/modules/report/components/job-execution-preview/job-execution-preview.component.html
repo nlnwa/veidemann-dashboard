@@ -32,7 +32,8 @@
                 [chartType]="pieChartType"
                 [options]="pieChartOptions"
                 [plugins]="pieChartPlugins"
-                [legend]="pieChartLegend">
+                [legend]="pieChartLegend"
+                (chartClick)="onGoToExecutionWithState($event)">
         </canvas>
       </mat-card-content>
     </mat-card>
