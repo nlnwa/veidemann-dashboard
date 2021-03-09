@@ -26,6 +26,10 @@ a {
   color: mat-color($my-app-primary);
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 @media (prefers-color-scheme: light) {
   @include angular-material-theme($my-app-theme);
 }
