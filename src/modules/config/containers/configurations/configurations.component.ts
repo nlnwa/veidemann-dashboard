@@ -644,7 +644,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy {
                     queryParams: {
                       job_execution_id: runCrawlReply.jobExecutionId,
                       seed_id: configObject.id,
-                      watch: true
                     }
                   }
                 ).catch(error => this.errorService.dispatch(error));
