@@ -21,12 +21,12 @@ $accent: mat-color($my-app-accent);
 $warn: mat-color($my-app-warn);
 $highlight: mat-color(map-get($my-app-theme, background), 'hover');
 
-a {
+.formattedUri {
   text-decoration: none;
   color: mat-color($my-app-primary);
 }
 
-a:hover {
+.formattedUri:hover {
   text-decoration: underline;
 }
 

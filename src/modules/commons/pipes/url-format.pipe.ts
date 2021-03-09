@@ -12,13 +12,13 @@ export class UrlFormatPipe implements PipeTransform {
 
   transform(url: string, stripQueryParams?: boolean): SafeHtml {
     let anchor = ``;
+    let urlText = url;
 
     if (stripQueryParams) {
-      const urlStripped = new SedPipe().transform(url);
-      anchor = `<a href="${url}" target="_blank">${urlStripped}</a> `;
-    } else {
-      anchor = `<a href="${url}" target="_blank">${url}</a> `;
+      urlText = new SedPipe().transform(url);
     }
+
+    anchor = `<a class="formattedUri" href="${url}" target="_blank">${urlText}</a> `;
     return this.domSanitizer.bypassSecurityTrustHtml(anchor);
   }
 
