@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components';
 import {CrawlLog} from '../../../../shared/models/report';
 import {ListDataSource} from '../../../../shared/models';
@@ -39,7 +39,7 @@ export class CrawlLogListComponent extends BaseListComponent<CrawlLog> {
   displayedColumns: string[] =
     ['requestedUri', 'timestamp', 'statusCode', 'discoveryPath', 'contentType', 'extra', 'action'];
 
-  constructor() {
-    super();
+  constructor(protected cdr: ChangeDetectorRef) {
+    super(cdr);
   }
 }

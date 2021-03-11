@@ -1,11 +1,13 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   ContentChildren,
   Directive,
   EventEmitter,
   Input,
   OnChanges,
+  Optional,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -104,7 +106,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   selectedRowIndex: number = null;
   shortcuts: ShortcutInput[] = [];
 
-  protected constructor() {
+  protected constructor(@Optional() protected cdr?: ChangeDetectorRef) {
     this.sort = new EventEmitter<Sort>();
     this.selectedChange = new EventEmitter<T[]>();
     this.selectAll = new EventEmitter<void>();
@@ -132,6 +134,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         key: 'shift + down',
         label: 'List navigation',
         description: 'Select row below',
+        preventDefault: true,
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowDown'});
           this.onKeyboardEvent(keyboardEvent);
@@ -141,6 +144,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         key: 'shift + up',
         label: 'List navigation',
         description: 'Select row above',
+        preventDefault: true,
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowUp'});
           this.onKeyboardEvent(keyboardEvent);
@@ -178,8 +182,8 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         label: 'List navigation',
         description: 'Stop keyboard list navigation',
         command: (event: ShortcutEventOutput) => {
-          console.log('shift + esc pressed');
           this.selectedRowIndex = null;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -196,15 +200,11 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.sort.emit(sort);
   }
 
-  onRowClick(item: T, index: number, expand?: boolean) {
-    // TODO: Move expanded row into center of view
-    // item.scrollIntoView({behavior: 'smooth'});
-    this.selectedRowIndex = index;
+  onRowClick(item: T) {
     this.allSelected = false;
-    if (expand) {
-      this.selectedRow = this.selectedRow?.id === item.id ? null : item;
-      this.rowClick.emit(this.selectedRow);
-    }
+    this.selectedRowIndex = null;
+    this.selectedRow = this.selectedRow?.id === item.id ? null : item;
+    this.rowClick.emit(this.selectedRow);
   }
 
   onMasterCheckboxToggle(checked: boolean) {
@@ -246,7 +246,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   onKeyboardEvent(event: KeyboardEvent) {
-    // TODO: Highlight row when navigating, without expanding row
     let itemsInPage: number = null;
     this.dataSource.connect(null).pipe(first())
       .subscribe(rows => {
@@ -266,6 +265,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
           this.selectedRowIndex = 0;
           this.selectRowByIndex(0);
         }
+        this.cdr.markForCheck();
         break;
 
       case 'ArrowUp':
@@ -276,6 +276,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
             this.selectRowByIndex(this.selectedRowIndex);
           }
         }
+        this.cdr.markForCheck();
         break;
 
       case 'S' :
@@ -294,15 +295,30 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
       case 'Enter' :
         this.selectRowByIndex(this.selectedRowIndex, true);
+        this.cdr.markForCheck();
         break;
     }
   }
+
 
   selectRowByIndex(index: any, expand?: boolean): void {
     this.dataSource.connect(null)
       .pipe(first())
       .subscribe(rows => {
-        this.onRowClick(rows[index], index, expand);
+        this.selectedRowIndex = index;
+        this.allSelected = false;
+        const rowElement = document.getElementById('row' + index.toString());
+        rowElement.scrollIntoView({behavior: 'smooth', block: 'end'});
+        if (expand) {
+          this.selectedRow = this.selectedRow?.id === rows[index].id ? null : rows[index];
+          this.rowClick.emit(this.selectedRow);
+          setTimeout(() => {
+            const expandedRowElement = document.getElementById('expandedPreviewRow' + index.toString());
+            if (expandedRowElement !== null) {
+              expandedRowElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+          }, 250);
+        }
       });
   }
 

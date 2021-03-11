@@ -70,7 +70,8 @@
       <!-- Expanded Content Column -->
       <ng-container matColumnDef="expandedPreview">
         <td mat-cell
-            [class.preview-cell]="row === selectedRow" *matCellDef="let row"
+            id="{{'expandedPreviewRow' + i}}"
+            [class.preview-cell]="row === selectedRow" *matCellDef="let row; let i = dataIndex"
             [attr.colspan]="displayedColumns.length">
           <div [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
             <app-job-execution-preview *ngIf="row === selectedRow"
@@ -82,11 +83,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
           class="item-row"
+          id="{{'row' + i}}"
           [class.row-selected]="isSelected(row)"
           [class.row-checked]="isChecked(row)"
           [class.row-disabled]="isDisabled(row)"
-          [class.highlight]="selectedRowIndex == i || null"
-          (click)="onRowClick(row, i, true)">
+          [class.highlight]="selectedRowIndex == i"
+          (click)="onRowClick(row)">
       </tr>
       <tr mat-row *matRowDef="let row; columns: ['expandedPreview']"
           class="preview-row"></tr>
