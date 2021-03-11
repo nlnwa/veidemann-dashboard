@@ -63,8 +63,8 @@ export class ConfigNavListComponent extends NavigationListComponent implements A
       {
         key: 'c o',
         label: 'Configurations',
-        description: 'Show entity view',
-        command: (output: ShortcutEventOutput) => this.router.navigate(['/config/entity'])
+        description: 'Show collection view',
+        command: (output: ShortcutEventOutput) => this.router.navigate(['/config/collection'])
       },
       {
         key: 'c b',

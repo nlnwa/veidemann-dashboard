@@ -345,7 +345,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
         }
       },
       {
-        key: 'shift + s',
+        key: 'shift + f',
         label: 'Configurations actions',
         description: 'Create new  seed for entity',
         command: (event: ShortcutEventOutput) => {
