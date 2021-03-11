@@ -182,10 +182,10 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : '') as SortDirection));
+      map(sort => (sort ? sort.direction : 'asc') as SortDirection));
 
     const sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : ''));
+      map(sort => sort ? sort.active : 'name'));
 
     const pageSize$ = queryParam$.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
@@ -715,7 +715,6 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
                     queryParams: {
                       job_execution_id: runCrawlReply.jobExecutionId,
                       seed_id: configObject.id,
-                      watch: true
                     }
                   }
                 ).catch(error => this.errorService.dispatch(error));

@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from 'src/shared/models';
+import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from 'src/shared/models';
 import {durationBetweenDates} from '../../../../shared/func';
 import {ChartOptions, ChartType} from 'chart.js';
 import {Label} from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import {ActivatedRoute, Router} from '@angular/router';
 
 
 @Component({
@@ -13,6 +14,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 })
 export class JobExecutionPreviewComponent implements OnInit {
   readonly JobExecutionState = JobExecutionState;
+  readonly CrawlExecutionState = CrawlExecutionState;
   readonly ExtraStatusCodes = ExtraStatusCodes;
 
   @Input()
@@ -57,9 +59,8 @@ export class JobExecutionPreviewComponent implements OnInit {
   ];
   public stateMapPieChartData: number[];
 
-  constructor() {
+  constructor(private router: Router, private route: ActivatedRoute) {
   }
-
 
 
   ngOnInit() {
@@ -70,7 +71,6 @@ export class JobExecutionPreviewComponent implements OnInit {
       this.jobExecutionStatus.documentsOutOfScope,
       this.jobExecutionStatus.documentsRetried
     ];
-
 
 
     const state = this.getExecMap(this.jobExecutionStatus.executionsStateMap);
@@ -135,5 +135,23 @@ export class JobExecutionPreviewComponent implements OnInit {
       datasource.push({key, value});
     }
     return datasource;
+  }
+
+  onGoToExecutionWithState(event: any) {
+    if (event.active.length > 0) {
+      const chart = event.active[0]._chart;
+      const activePoints = chart.getElementAtEvent(event.event);
+      if (activePoints.length > 0) {
+        const clickedElementIndex = activePoints[0]._index;
+        const label = chart.data.labels[clickedElementIndex];
+        this.router.navigate(['report', 'crawlexecution'],
+          {
+            queryParams: {
+              state: CrawlExecutionState[label], job_id: this.jobExecutionStatus.jobId,
+              job_execution_id: this.jobExecutionStatus.id
+            }
+          });
+      }
+    }
   }
 }

@@ -18,8 +18,9 @@
         <tbody>
         <tr class="mat-row">
           <td class="mat-cell">
-            <a [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
-            </td>
+            <a
+              [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
+          </td>
           <td class="mat-cell">{{JobExecutionState[jobExecutionStatus.state]}}</td>
         </tr>
         </tbody>
@@ -83,7 +84,11 @@
             <th i18n="@@crawlJobExecutionReportJobExecutionStateHeaderCell"
                 mat-header-cell *matHeaderCellDef>State
             </th>
-            <td mat-cell *matCellDef="let execution">{{execution.key}}</td>
+            <td mat-cell *matCellDef="let execution">
+              <a [routerLink]="['/report', 'crawlexecution']"
+                 [queryParams]="{state: CrawlExecutionState[execution.key], job_id: jobExecutionStatus.jobId,
+                 job_execution_id: jobExecutionStatus.id}">{{execution.key}}</a>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="count">

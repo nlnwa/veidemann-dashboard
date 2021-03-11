@@ -20,7 +20,6 @@ import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '
 import {DeleteDialogComponent, Parcel} from '../../components';
 import {KindService, OptionsService} from '../../services';
 import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';
-import {RunningCrawlDialogComponent} from '../../components/running-crawl-dialog/running-crawl-dialog.component';
 import {ConfigService} from '../../../commons/services';
 import {ConfigQuery} from '../../../../shared/func';
 import {ConfigDialogData, dialogByKind} from '../../func';
@@ -256,13 +255,23 @@ export class ConfigurationComponent implements OnDestroy {
       .subscribe(runCrawlRequest => {
         if (runCrawlRequest) {
           this.controllerApiService.runCrawl(runCrawlRequest)
-            .pipe(filter(_ => !!_))
             .subscribe(runCrawlReply => {
-              const dialogReference = this.dialog.open(RunningCrawlDialogComponent, {
-                disableClose: false,
-                autoFocus: true,
-                data: {runCrawlRequest, runCrawlReply, configObject}
-              });
+              if (configObject.kind === Kind.SEED) {
+                this.router.navigate(
+                  ['report', 'crawlexecution'],
+                  {
+                    queryParams: {
+                      job_execution_id: runCrawlReply.jobExecutionId,
+                      seed_id: configObject.id,
+                    }
+                  }
+                ).catch(error => this.errorService.dispatch(error));
+              } else {
+                this.router.navigate(
+                  ['report', 'jobexecution', runCrawlReply.jobExecutionId],
+                  {queryParams: {watch: true}}
+                ).catch(error => this.errorService.dispatch(error));
+              }
             });
         }
       });

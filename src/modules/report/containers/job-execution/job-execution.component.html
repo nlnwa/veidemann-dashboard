@@ -26,7 +26,7 @@
         <a mat-menu-item
            *ngIf="'read' | able: 'crawlexecution'"
            [routerLink]="['/report', 'crawlexecution']"
-           [queryParams]="{job_execution_id: row.id}"
+           [queryParams]="{job_id: row.jobId, job_execution_id: row.id}"
            i18n="@@reportListActionButtonGoToCrawlExecution">
           <mat-icon>hdr_weak</mat-icon>
           Go to crawl execution

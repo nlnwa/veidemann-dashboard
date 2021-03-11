@@ -24,6 +24,7 @@ export class OptionsResolver implements Resolve<ConfigOptions> {
     listRequest.setKind(Kind.CRAWLJOB.valueOf());
     return this.backendService.list(listRequest).pipe(
       toArray(),
+      map(crawlJobs => crawlJobs.sort((a, b) => a.meta.name.localeCompare(b.meta.name))),
       map(crawlJobs => ({crawlJobs}))
     );
   }
