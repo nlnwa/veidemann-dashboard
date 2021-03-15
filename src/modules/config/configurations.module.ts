@@ -92,6 +92,7 @@ import {RoleMappingMultiDialogComponent} from './components/rolemapping/rolemapp
 import {LabelMultiComponent} from './components/label/label-multi/label-multi.component';
 import {AbilityModule} from '@casl/angular';
 import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
+import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 @NgModule({
   declarations: [
@@ -200,6 +201,7 @@ import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-previ
     ConfigurationsRoutingModule,
     ReportModule,
     AbilityModule,
+    KeyboardShortcutsModule,
   ],
   exports: [],
   providers: [

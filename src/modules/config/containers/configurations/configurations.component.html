@@ -1,4 +1,5 @@
 <div fxLayout="column" class="container">
+  <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div fxFlex fxLayout="row" class="container no-scroll">
     <div fxLayout="column" class="scroll">
@@ -61,7 +62,9 @@
                          (selectedChange)="onSelectedChange($event)"
                          (selectAll)="onSelectAll()"
                          (sort)="onSort($event)"
-                         (page)="onPage($event)">
+                         (page)="onPage($event)"
+                         (rowClick)="onRowClick($event)"
+        >
 
           <button mat-icon-button
                   *ngIf="!isAllSelected && ('update' | able: Kind[kind])"

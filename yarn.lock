@@ -6084,6 +6084,13 @@ next-tick@~1.0.0:
   resolved "https://registry.npmjs.org/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
+ng-keyboard-shortcuts@^10.1.17:
+  version "10.1.17"
+  resolved "https://registry.npmjs.org/ng-keyboard-shortcuts/-/ng-keyboard-shortcuts-10.1.17.tgz#e31b72632ccb75daca8aae0ddd8fbc63a51f6054"
+  integrity sha512-uJ71+qMyt3kd6xsIv674uRgHPNcxkNxDMYhHLJor3eyi8kWJIRMok4UdIA4b7WtQ7+Pv3iWB6aO/HOzLRONZxw==
+  dependencies:
+    tslib "^2.0.0"
+
 ng2-charts@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/ng2-charts/-/ng2-charts-2.4.2.tgz#6b2d0a1a66911247c2e8c3d8602ba9aa7339bf22"

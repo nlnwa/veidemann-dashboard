@@ -1,10 +1,13 @@
 import {DataSource, SelectionModel} from '@angular/cdk/collections';
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   ContentChildren,
   Directive,
   EventEmitter,
   Input,
   OnChanges,
+  Optional,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -16,11 +19,12 @@ import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from '../../directives';
 import {Kind, ListItem} from '../../../../shared/models';
+import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Directive()
 // tslint:disable-next-line:directive-class-suffix
-export abstract class BaseListComponent<T extends ListItem> implements OnChanges {
+export abstract class BaseListComponent<T extends ListItem> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;
   length$: BehaviorSubject<number>;
 
@@ -98,7 +102,11 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   isAllInPageSelected$: Observable<boolean>;
   selectedRow: T;
 
-  protected constructor() {
+  // Keyboard navigation
+  selectedRowIndex: number = null;
+  shortcuts: ShortcutInput[] = [];
+
+  protected constructor(@Optional() protected cdr?: ChangeDetectorRef) {
     this.sort = new EventEmitter<Sort>();
     this.selectedChange = new EventEmitter<T[]>();
     this.selectAll = new EventEmitter<void>();
@@ -119,10 +127,72 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     }
   }
 
+  ngAfterViewInit() {
+
+    this.shortcuts.push(
+      {
+        key: 'shift + down',
+        label: 'List navigation',
+        description: 'Select row below',
+        preventDefault: true,
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowDown'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + up',
+        label: 'List navigation',
+        description: 'Select row above',
+        preventDefault: true,
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowUp'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + enter',
+        label: 'List navigation',
+        description: 'Show preview for selected row',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'Enter'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + s',
+        label: 'List navigation',
+        description: 'Toggle checkbox for selected row',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'S'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + a',
+        label: 'List navigation',
+        description: 'Select all in page',
+        command: (event: ShortcutEventOutput) => {
+          const keyboardEvent = new KeyboardEvent('keydown', {key: 'A'});
+          this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + escape',
+        label: 'List navigation',
+        description: 'Stop keyboard list navigation',
+        command: (event: ShortcutEventOutput) => {
+          this.selectedRowIndex = null;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
   reset() {
     this.selection.clear();
     this.selectedRow = null;
     this.allSelected = false;
+    this.selectedRowIndex = null;
   }
 
   onSortChange(sort: Sort) {
@@ -132,6 +202,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
 
   onRowClick(item: T) {
     this.allSelected = false;
+    this.selectedRowIndex = null;
     this.selectedRow = this.selectedRow?.id === item.id ? null : item;
     this.rowClick.emit(this.selectedRow);
   }
@@ -172,6 +243,83 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   onPage(pageEvent: PageEvent) {
     this.reset();
     this.page.emit(pageEvent);
+  }
+
+  onKeyboardEvent(event: KeyboardEvent) {
+    let itemsInPage: number = null;
+    this.dataSource.connect(null).pipe(first())
+      .subscribe(rows => {
+        itemsInPage = rows.length;
+      });
+
+    switch (event.key) {
+
+      case 'ArrowDown':
+        if (this.selectedRowIndex !== null) {
+          if (this.selectedRowIndex + 1 <= itemsInPage - 1) {
+            this.selectedRowIndex += 1;
+            this.selectedRow = null; // collapse any open preview when navigating
+            this.selectRowByIndex(this.selectedRowIndex);
+          }
+        } else {
+          this.selectedRowIndex = 0;
+          this.selectRowByIndex(0);
+        }
+        this.cdr.markForCheck();
+        break;
+
+      case 'ArrowUp':
+        if (this.selectedRowIndex !== null) {
+          if (this.selectedRowIndex - 1 >= 0) {
+            this.selectedRowIndex -= 1;
+            this.selectedRow = null; // collapse any open preview when navigating
+            this.selectRowByIndex(this.selectedRowIndex);
+          }
+        }
+        this.cdr.markForCheck();
+        break;
+
+      case 'S' :
+        if (this.selectedRowIndex !== null) {
+          this.dataSource.connect(null)
+            .pipe(first())
+            .subscribe(rows => {
+              this.onCheckboxToggle(rows[this.selectedRowIndex]);
+            });
+        }
+        break;
+
+      case 'A':
+        this.onMasterCheckboxToggle(true);
+        break;
+
+      case 'Enter' :
+        this.selectRowByIndex(this.selectedRowIndex, true);
+        this.cdr.markForCheck();
+        break;
+    }
+  }
+
+
+  selectRowByIndex(index: any, expand?: boolean): void {
+    this.dataSource.connect(null)
+      .pipe(first())
+      .subscribe(rows => {
+        this.selectedRowIndex = index;
+        this.allSelected = false;
+        const rowElement = document.getElementById('row' + index.toString());
+        rowElement.scrollIntoView({behavior: 'smooth', block: 'end'});
+        if (expand) {
+          this.selectedRow = this.selectedRow?.id === rows[index].id ? null : rows[index];
+          this.rowClick.emit(this.selectedRow);
+          setTimeout(() => {
+            const expandedRowElement = document.getElementById('expandedPreviewRow' + index.toString());
+            if (expandedRowElement !== null) {
+              expandedRowElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+          }, 250);
+        }
+      });
   }
 
   isChecked(item: T): boolean {

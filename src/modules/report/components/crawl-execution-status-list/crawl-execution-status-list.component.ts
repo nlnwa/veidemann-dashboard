@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components';
 import {CrawlExecutionState, crawlExecutionStates, CrawlExecutionStatus, ListDataSource} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
@@ -38,7 +38,7 @@ export class CrawlExecutionStatusListComponent extends BaseListComponent<CrawlEx
 
   displayedColumns: string[] = ['seedId', 'jobId', 'state', 'errorCode', 'queueCount', 'startTime', 'endTime', 'extra', 'action'];
 
-  constructor() {
-    super();
+  constructor(protected cdr: ChangeDetectorRef) {
+    super(cdr);
   }
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components/base-list/base-list';
 import {ListDataSource, PageLog} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
@@ -26,7 +26,7 @@ export class PageLogListComponent extends BaseListComponent<PageLog> {
 
   displayedColumns: string[] = ['uri', 'nrOfResources', 'nrOfOutlinks', 'extra', 'action'];
 
-  constructor() {
-    super();
+  constructor(protected cdr: ChangeDetectorRef) {
+    super(cdr);
   }
 }

@@ -79,4 +79,9 @@ tr.item-row.row-selected td {
   text-align: right;
 }
 
+// highlight row when navigating with keyboard
+tr.item-row.highlight{
+ background-color: $dark-focused !important;
+}
+
 

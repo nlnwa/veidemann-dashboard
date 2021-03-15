@@ -1,10 +1,19 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 
 import {Kind} from '../../../../shared/models';
 import {ConfigQuery} from '../../../../shared/func';
 import {ConfigOptions} from '../../func';
 import {QueryComponent} from '../../../commons/components';
+import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Component({
@@ -15,14 +24,32 @@ import {QueryComponent} from '../../../commons/components';
 })
 export class ConfigQueryComponent extends QueryComponent<ConfigQuery> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;
+  shortcuts: ShortcutInput[] = [];
 
   term: string;
 
   @Input()
   options: ConfigOptions;
 
+  @ViewChild('search') searchElement: ElementRef;
+
   constructor(protected fb: FormBuilder) {
     super(fb);
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this.shortcuts.push(
+      {
+        key: 'shift + l',
+        label: 'Query',
+        description: 'Focus query search input',
+        command: (output: ShortcutEventOutput) => {
+          event.preventDefault();
+          this.searchElement.nativeElement.focus();
+        }
+      },
+    );
   }
 
   onQuery(query: ConfigQuery) {
