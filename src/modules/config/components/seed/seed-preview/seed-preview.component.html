@@ -13,7 +13,7 @@
     <tr *ngFor="let execution of ( configObject | getCrawlExecutionStatus: 3 | toArray| async) ">
       <ng-container *ngIf="execution">
         <td>
-          <a [routerLink]="['/report/crawlexecution/'+execution?.id]"
+          <a class="formattedUri" [routerLink]="['/report/crawlexecution/'+execution?.id]"
              matTooltip="Show crawlexecution report">
             {{execution.jobId | getJobNamePipe | async}}</a>
         </td>
