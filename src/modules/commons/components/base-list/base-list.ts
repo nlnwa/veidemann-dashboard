@@ -13,7 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {PageEvent} from '@angular/material/paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort, MatSortHeader, Sort, SortDirection} from '@angular/material/sort';
 import {first, map, shareReplay} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
@@ -90,6 +90,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   page: EventEmitter<PageEvent>;
 
   @ViewChild(MatSort, {static: true}) matSort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @ContentChildren(ActionDirective, {read: TemplateRef, descendants: true}) actionButtonTemplates;
   @ContentChildren(ExtraDirective, {read: TemplateRef, descendants: true}) extraTemplates;
@@ -133,7 +134,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
       {
         key: 'shift + down',
         label: 'List navigation',
-        description: 'Select row below',
+        description: 'Navigate to row below',
         preventDefault: true,
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowDown'});
@@ -143,11 +144,29 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
       {
         key: 'shift + up',
         label: 'List navigation',
-        description: 'Select row above',
+        description: 'Navigate to row above',
         preventDefault: true,
         command: (event: ShortcutEventOutput) => {
           const keyboardEvent = new KeyboardEvent('keydown', {key: 'ArrowUp'});
           this.onKeyboardEvent(keyboardEvent);
+        }
+      },
+      {
+        key: 'shift + right',
+        label: 'List navigation',
+        description: 'Get next page',
+        preventDefault: true,
+        command: (event: ShortcutEventOutput) => {
+          this.paginator.nextPage();
+        }
+      },
+      {
+        key: 'shift + left',
+        label: 'List navigation',
+        description: 'Get previous page',
+        preventDefault: true,
+        command: (event: ShortcutEventOutput) => {
+          this.paginator.previousPage();
         }
       },
       {
@@ -278,7 +297,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
         }
         this.cdr.markForCheck();
         break;
-
       case 'S' :
         if (this.selectedRowIndex !== null) {
           this.dataSource.connect(null)
