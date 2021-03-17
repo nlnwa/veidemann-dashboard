@@ -71,3 +71,7 @@ html, body {
 .formattedUri:hover {
   text-decoration: underline;
 }
+
+tr.item-row.row-disabled td a.formattedUri {
+  color: $warn;
+}
