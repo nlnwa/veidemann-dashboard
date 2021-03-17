@@ -79,28 +79,8 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
     return this.form.get('minimumRobotsValidityDurationS');
   }
 
-  get minTimeBetweenPageloadMs(): AbstractControl {
-    return this.form.get('minTimeBetweenPageLoadMs');
-  }
-
-  get maxTimeBetweenPageloadMs(): AbstractControl {
-    return this.form.get('maxTimeBetweenPageLoadMs');
-  }
-
-  get delayFactor(): AbstractControl {
-    return this.form.get('delayFactor');
-  }
-
-  get maxRetries(): AbstractControl {
-    return this.form.get('maxRetries');
-  }
-
-  get retryDelaySeconds(): AbstractControl {
-    return this.form.get('retryDelaySeconds');
-  }
-
-  get crawlHostGroupSelectorList(): AbstractControl {
-    return this.form.get('crawlHostGroupSelectorList');
+  get useHostname(): AbstractControl {
+    return this.form.get('useHostname');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -135,12 +115,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
       robotsPolicy: RobotsPolicy.OBEY_ROBOTS,
       minimumRobotsValidityDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       customRobots: '',
-      minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delayFactor: ['', [Validators.pattern(DECIMAL_NUMBER_OR_EMPTY_STRING)]],
-      maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      crawlHostGroupSelectorList: [],
+      useHostname: '',
       meta: new Meta(),
     });
   }
@@ -152,18 +127,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
       robotsPolicy: this.configObject.politenessConfig.robotsPolicy || RobotsPolicy.OBEY_ROBOTS,
       minimumRobotsValidityDurationS: this.configObject.politenessConfig.minimumRobotsValidityDurationS || '',
       customRobots: this.configObject.politenessConfig.customRobots,
-      minTimeBetweenPageLoadMs: this.configObject.politenessConfig.minTimeBetweenPageLoadMs || '',
-      maxTimeBetweenPageLoadMs: this.configObject.politenessConfig.maxTimeBetweenPageLoadMs || '',
-      delayFactor: this.configObject.politenessConfig.delayFactor || '',
-      maxRetries: this.configObject.politenessConfig.maxRetries || '',
-      retryDelaySeconds: this.configObject.politenessConfig.retryDelaySeconds || '',
-      crawlHostGroupSelectorList: this.configObject.politenessConfig.crawlHostGroupSelectorList
-        .map(selector => {
-          const parts = selector.split(':', 2);
-          const key = parts.shift();
-          const value = parts.join(':');
-          return new Label({key, value});
-        })
+      useHostname: this.configObject.politenessConfig.useHostname || '',
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -185,12 +149,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
     politenessConfig.robotsPolicy = formModel.robotsPolicy;
     politenessConfig.minimumRobotsValidityDurationS = parseInt(formModel.minimumRobotsValidityDurationS, 10) || 0;
     politenessConfig.customRobots = formModel.customRobots;
-    politenessConfig.minTimeBetweenPageLoadMs = parseInt(formModel.minTimeBetweenPageLoadMs, 10) || 0;
-    politenessConfig.maxTimeBetweenPageLoadMs = parseInt(formModel.maxTimeBetweenPageLoadMs, 10) || 0;
-    politenessConfig.delayFactor = parseFloat(formModel.delayFactor) || 0;
-    politenessConfig.maxRetries = parseInt(formModel.maxRetries, 10) || 0;
-    politenessConfig.retryDelaySeconds = parseInt(formModel.retryDelaySeconds, 10) || 0;
-    politenessConfig.crawlHostGroupSelectorList = formModel.crawlHostGroupSelectorList.map(label => label.key + ':' + label.value);
+    politenessConfig.useHostname = formModel.useHostname;
 
     configObject.politenessConfig = politenessConfig;
 

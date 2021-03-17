@@ -1,9 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
 import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../../shared/models';
 import {IpRange} from '../../../../../shared/models/config/ip-range.model';
+import {DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import { UnitOfTime } from 'src/shared/models/duration/unit-time.model';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
@@ -12,6 +14,7 @@ import {IpRange} from '../../../../../shared/models/config/ip-range.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
+  readonly UnitOfTime = UnitOfTime;
 
   @Input()
   configObject: ConfigObject;
@@ -67,6 +70,26 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     return this.form.get('ipRangeList') as FormArray;
   }
 
+  get minTimeBetweenPageloadMs(): AbstractControl {
+    return this.form.get('minTimeBetweenPageLoadMs');
+  }
+
+  get maxTimeBetweenPageloadMs(): AbstractControl {
+    return this.form.get('maxTimeBetweenPageLoadMs');
+  }
+
+  get delayFactor(): AbstractControl {
+    return this.form.get('delayFactor');
+  }
+
+  get maxRetries(): AbstractControl {
+    return this.form.get('maxRetries');
+  }
+
+  get retryDelaySeconds(): AbstractControl {
+    return this.form.get('retryDelaySeconds');
+  }
+
   ipFromControl(index: number): AbstractControl {
     return this.form.get(['ipRangeList', index, 'ipFrom']);
   }
@@ -120,6 +143,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     this.form = this.fb.group({
       id: {value: ''},
       ipRangeList: this.fb.array([]),
+      minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(DECIMAL_NUMBER_OR_EMPTY_STRING)]],
+      maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       meta: new Meta(),
     });
   }
@@ -134,6 +162,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     }
     this.form.patchValue({
       id: this.configObject.id,
+      minTimeBetweenPageLoadMs: this.configObject.crawlHostGroupConfig.minTimeBetweenPageLoadMs || '',
+      maxTimeBetweenPageLoadMs: this.configObject.crawlHostGroupConfig.maxTimeBetweenPageLoadMs || '',
+      delayFactor: this.configObject.crawlHostGroupConfig.delayFactor || '',
+      maxRetries: this.configObject.crawlHostGroupConfig.maxRetries || '',
+      retryDelaySeconds: this.configObject.crawlHostGroupConfig.retryDelaySeconds || '',
       meta: this.configObject.meta,
     });
     this.form.setControl('ipRangeList', ipRangeFGArray);
@@ -155,6 +188,11 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     const crawlHostGroupConfig = new CrawlHostGroupConfig();
     crawlHostGroupConfig.ipRangeList = formModel.ipRangeList
       .map(ipRange => new IpRange({ipFrom: ipRange.ipFrom, ipTo: ipRange.ipTo}));
+    crawlHostGroupConfig.minTimeBetweenPageLoadMs = parseInt(formModel.minTimeBetweenPageLoadMs, 10) || 0;
+    crawlHostGroupConfig.maxTimeBetweenPageLoadMs = parseInt(formModel.maxTimeBetweenPageLoadMs, 10) || 0;
+    crawlHostGroupConfig.delayFactor = parseFloat(formModel.delayFactor) || 0;
+    crawlHostGroupConfig.maxRetries = parseInt(formModel.maxRetries, 10) || 0;
+    crawlHostGroupConfig.retryDelaySeconds = parseInt(formModel.retryDelaySeconds, 10) || 0;
 
     configObject.meta = formModel.meta;
     configObject.crawlHostGroupConfig = crawlHostGroupConfig;

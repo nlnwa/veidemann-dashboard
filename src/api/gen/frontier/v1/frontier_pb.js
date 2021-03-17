@@ -7,6 +7,8 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
@@ -631,7 +633,8 @@ proto.veidemann.api.frontier.v1.PageHarvest.toObject = function(includeInstance,
     requestnextpage: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
     metrics: (f = msg.getMetrics()) && proto.veidemann.api.frontier.v1.PageHarvest.Metrics.toObject(includeInstance, f),
     outlink: (f = msg.getOutlink()) && frontier_v1_resources_pb.QueuedUri.toObject(includeInstance, f),
-    error: (f = msg.getError()) && commons_v1_resources_pb.Error.toObject(includeInstance, f)
+    error: (f = msg.getError()) && commons_v1_resources_pb.Error.toObject(includeInstance, f),
+    sessionToken: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -686,6 +689,10 @@ proto.veidemann.api.frontier.v1.PageHarvest.deserializeBinaryFromReader = functi
       var value = new commons_v1_resources_pb.Error;
       reader.readMessage(value,commons_v1_resources_pb.Error.deserializeBinaryFromReader);
       msg.setError(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSessionToken(value);
       break;
     default:
       reader.skipField();
@@ -745,6 +752,13 @@ proto.veidemann.api.frontier.v1.PageHarvest.serializeBinaryToWriter = function(m
       4,
       f,
       commons_v1_resources_pb.Error.serializeBinaryToWriter
+    );
+  }
+  f = message.getSessionToken();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
     );
   }
 };
@@ -1057,6 +1071,24 @@ proto.veidemann.api.frontier.v1.PageHarvest.prototype.hasError = function() {
 };
 
 
+/**
+ * optional string session_token = 5;
+ * @return {string}
+ */
+proto.veidemann.api.frontier.v1.PageHarvest.prototype.getSessionToken = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.frontier.v1.PageHarvest} returns this
+ */
+proto.veidemann.api.frontier.v1.PageHarvest.prototype.setSessionToken = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
 
 
 
@@ -1090,7 +1122,8 @@ proto.veidemann.api.frontier.v1.PageHarvestSpec.prototype.toObject = function(op
 proto.veidemann.api.frontier.v1.PageHarvestSpec.toObject = function(includeInstance, msg) {
   var f, obj = {
     queuedUri: (f = msg.getQueuedUri()) && frontier_v1_resources_pb.QueuedUri.toObject(includeInstance, f),
-    crawlConfig: (f = msg.getCrawlConfig()) && config_v1_resources_pb.ConfigObject.toObject(includeInstance, f)
+    crawlConfig: (f = msg.getCrawlConfig()) && config_v1_resources_pb.ConfigObject.toObject(includeInstance, f),
+    sessionToken: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -1137,6 +1170,10 @@ proto.veidemann.api.frontier.v1.PageHarvestSpec.deserializeBinaryFromReader = fu
       reader.readMessage(value,config_v1_resources_pb.ConfigObject.deserializeBinaryFromReader);
       msg.setCrawlConfig(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSessionToken(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1180,6 +1217,13 @@ proto.veidemann.api.frontier.v1.PageHarvestSpec.serializeBinaryToWriter = functi
       2,
       f,
       config_v1_resources_pb.ConfigObject.serializeBinaryToWriter
+    );
+  }
+  f = message.getSessionToken();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
     );
   }
 };
@@ -1256,6 +1300,24 @@ proto.veidemann.api.frontier.v1.PageHarvestSpec.prototype.clearCrawlConfig = fun
  */
 proto.veidemann.api.frontier.v1.PageHarvestSpec.prototype.hasCrawlConfig = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional string session_token = 3;
+ * @return {string}
+ */
+proto.veidemann.api.frontier.v1.PageHarvestSpec.prototype.getSessionToken = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.veidemann.api.frontier.v1.PageHarvestSpec} returns this
+ */
+proto.veidemann.api.frontier.v1.PageHarvestSpec.prototype.setSessionToken = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

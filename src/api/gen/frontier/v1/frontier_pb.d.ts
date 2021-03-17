@@ -80,6 +80,9 @@ export class PageHarvest extends jspb.Message {
   hasError(): boolean;
   clearError(): PageHarvest;
 
+  getSessionToken(): string;
+  setSessionToken(value: string): PageHarvest;
+
   getMsgCase(): PageHarvest.MsgCase;
 
   serializeBinary(): Uint8Array;
@@ -96,6 +99,7 @@ export namespace PageHarvest {
     metrics?: PageHarvest.Metrics.AsObject,
     outlink?: frontier_v1_resources_pb.QueuedUri.AsObject,
     error?: commons_v1_resources_pb.Error.AsObject,
+    sessionToken: string,
   }
 
   export class Metrics extends jspb.Message {
@@ -121,7 +125,7 @@ export namespace PageHarvest {
   }
 
 
-  export enum MsgCase { 
+  export enum MsgCase {
     MSG_NOT_SET = 0,
     REQUESTNEXTPAGE = 1,
     METRICS = 2,
@@ -141,6 +145,9 @@ export class PageHarvestSpec extends jspb.Message {
   hasCrawlConfig(): boolean;
   clearCrawlConfig(): PageHarvestSpec;
 
+  getSessionToken(): string;
+  setSessionToken(value: string): PageHarvestSpec;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PageHarvestSpec.AsObject;
   static toObject(includeInstance: boolean, msg: PageHarvestSpec): PageHarvestSpec.AsObject;
@@ -153,6 +160,7 @@ export namespace PageHarvestSpec {
   export type AsObject = {
     queuedUri?: frontier_v1_resources_pb.QueuedUri.AsObject,
     crawlConfig?: config_v1_resources_pb.ConfigObject.AsObject,
+    sessionToken: string,
   }
 }
 

@@ -7,6 +7,8 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
@@ -330,7 +332,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.veidemann.api.config.v1.PolitenessConfig = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, proto.veidemann.api.config.v1.PolitenessConfig.repeatedFields_, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
 goog.inherits(proto.veidemann.api.config.v1.PolitenessConfig, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -4269,13 +4271,6 @@ proto.veidemann.api.config.v1.BrowserConfig.prototype.setMaxInactivityTimeMs = f
 
 
 
-/**
- * List of repeated fields within this message type.
- * @private {!Array<number>}
- * @const
- */
-proto.veidemann.api.config.v1.PolitenessConfig.repeatedFields_ = [9];
-
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -4310,12 +4305,6 @@ proto.veidemann.api.config.v1.PolitenessConfig.toObject = function(includeInstan
     robotsPolicy: jspb.Message.getFieldWithDefault(msg, 3, 0),
     minimumRobotsValidityDurationS: jspb.Message.getFieldWithDefault(msg, 11, 0),
     customRobots: jspb.Message.getFieldWithDefault(msg, 20, ""),
-    minTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    maxTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    delayFactor: jspb.Message.getFloatingPointFieldWithDefault(msg, 6, 0.0),
-    maxRetries: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    retryDelaySeconds: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    crawlHostGroupSelectorList: (f = jspb.Message.getRepeatedField(msg, 9)) == null ? undefined : f,
     useHostname: jspb.Message.getBooleanFieldWithDefault(msg, 10, false)
   };
 
@@ -4364,30 +4353,6 @@ proto.veidemann.api.config.v1.PolitenessConfig.deserializeBinaryFromReader = fun
     case 20:
       var value = /** @type {string} */ (reader.readString());
       msg.setCustomRobots(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setMinTimeBetweenPageLoadMs(value);
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setMaxTimeBetweenPageLoadMs(value);
-      break;
-    case 6:
-      var value = /** @type {number} */ (reader.readFloat());
-      msg.setDelayFactor(value);
-      break;
-    case 7:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setMaxRetries(value);
-      break;
-    case 8:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setRetryDelaySeconds(value);
-      break;
-    case 9:
-      var value = /** @type {string} */ (reader.readString());
-      msg.addCrawlHostGroupSelector(value);
       break;
     case 10:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -4440,48 +4405,6 @@ proto.veidemann.api.config.v1.PolitenessConfig.serializeBinaryToWriter = functio
   if (f.length > 0) {
     writer.writeString(
       20,
-      f
-    );
-  }
-  f = message.getMinTimeBetweenPageLoadMs();
-  if (f !== 0) {
-    writer.writeInt64(
-      4,
-      f
-    );
-  }
-  f = message.getMaxTimeBetweenPageLoadMs();
-  if (f !== 0) {
-    writer.writeInt64(
-      5,
-      f
-    );
-  }
-  f = message.getDelayFactor();
-  if (f !== 0.0) {
-    writer.writeFloat(
-      6,
-      f
-    );
-  }
-  f = message.getMaxRetries();
-  if (f !== 0) {
-    writer.writeInt32(
-      7,
-      f
-    );
-  }
-  f = message.getRetryDelaySeconds();
-  if (f !== 0) {
-    writer.writeInt32(
-      8,
-      f
-    );
-  }
-  f = message.getCrawlHostGroupSelectorList();
-  if (f.length > 0) {
-    writer.writeRepeatedString(
-      9,
       f
     );
   }
@@ -4559,133 +4482,6 @@ proto.veidemann.api.config.v1.PolitenessConfig.prototype.getCustomRobots = funct
  */
 proto.veidemann.api.config.v1.PolitenessConfig.prototype.setCustomRobots = function(value) {
   return jspb.Message.setProto3StringField(this, 20, value);
-};
-
-
-/**
- * optional int64 min_time_between_page_load_ms = 4;
- * @return {number}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getMinTimeBetweenPageLoadMs = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setMinTimeBetweenPageLoadMs = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
-};
-
-
-/**
- * optional int64 max_time_between_page_load_ms = 5;
- * @return {number}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getMaxTimeBetweenPageLoadMs = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setMaxTimeBetweenPageLoadMs = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
-};
-
-
-/**
- * optional float delay_factor = 6;
- * @return {number}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getDelayFactor = function() {
-  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 6, 0.0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setDelayFactor = function(value) {
-  return jspb.Message.setProto3FloatField(this, 6, value);
-};
-
-
-/**
- * optional int32 max_retries = 7;
- * @return {number}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getMaxRetries = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setMaxRetries = function(value) {
-  return jspb.Message.setProto3IntField(this, 7, value);
-};
-
-
-/**
- * optional int32 retry_delay_seconds = 8;
- * @return {number}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getRetryDelaySeconds = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setRetryDelaySeconds = function(value) {
-  return jspb.Message.setProto3IntField(this, 8, value);
-};
-
-
-/**
- * repeated string crawl_host_group_selector = 9;
- * @return {!Array<string>}
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.getCrawlHostGroupSelectorList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 9));
-};
-
-
-/**
- * @param {!Array<string>} value
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.setCrawlHostGroupSelectorList = function(value) {
-  return jspb.Message.setField(this, 9, value || []);
-};
-
-
-/**
- * @param {string} value
- * @param {number=} opt_index
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.addCrawlHostGroupSelector = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 9, value, opt_index);
-};
-
-
-/**
- * Clears the list making it empty but non-null.
- * @return {!proto.veidemann.api.config.v1.PolitenessConfig} returns this
- */
-proto.veidemann.api.config.v1.PolitenessConfig.prototype.clearCrawlHostGroupSelectorList = function() {
-  return this.setCrawlHostGroupSelectorList([]);
 };
 
 
@@ -4975,7 +4771,12 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.toObject = function
 proto.veidemann.api.config.v1.CrawlHostGroupConfig.toObject = function(includeInstance, msg) {
   var f, obj = {
     ipRangeList: jspb.Message.toObjectList(msg.getIpRangeList(),
-    proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.toObject, includeInstance)
+    proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.toObject, includeInstance),
+    minTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    maxTimeBetweenPageLoadMs: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    delayFactor: jspb.Message.getFloatingPointFieldWithDefault(msg, 6, 0.0),
+    maxRetries: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    retryDelaySeconds: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -5017,6 +4818,26 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.deserializeBinaryFromReader =
       reader.readMessage(value,proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.deserializeBinaryFromReader);
       msg.addIpRange(value);
       break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMinTimeBetweenPageLoadMs(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMaxTimeBetweenPageLoadMs(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setDelayFactor(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setMaxRetries(value);
+      break;
+    case 8:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setRetryDelaySeconds(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -5052,6 +4873,41 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.serializeBinaryToWriter = fun
       3,
       f,
       proto.veidemann.api.config.v1.CrawlHostGroupConfig.IpRange.serializeBinaryToWriter
+    );
+  }
+  f = message.getMinTimeBetweenPageLoadMs();
+  if (f !== 0) {
+    writer.writeInt64(
+      4,
+      f
+    );
+  }
+  f = message.getMaxTimeBetweenPageLoadMs();
+  if (f !== 0) {
+    writer.writeInt64(
+      5,
+      f
+    );
+  }
+  f = message.getDelayFactor();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      6,
+      f
+    );
+  }
+  f = message.getMaxRetries();
+  if (f !== 0) {
+    writer.writeInt32(
+      7,
+      f
+    );
+  }
+  f = message.getRetryDelaySeconds();
+  if (f !== 0) {
+    writer.writeInt32(
+      8,
+      f
     );
   }
 };
@@ -5252,6 +5108,96 @@ proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.addIpRange = functi
  */
 proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.clearIpRangeList = function() {
   return this.setIpRangeList([]);
+};
+
+
+/**
+ * optional int64 min_time_between_page_load_ms = 4;
+ * @return {number}
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.getMinTimeBetweenPageLoadMs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.config.v1.CrawlHostGroupConfig} returns this
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.setMinTimeBetweenPageLoadMs = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int64 max_time_between_page_load_ms = 5;
+ * @return {number}
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.getMaxTimeBetweenPageLoadMs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.config.v1.CrawlHostGroupConfig} returns this
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.setMaxTimeBetweenPageLoadMs = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional float delay_factor = 6;
+ * @return {number}
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.getDelayFactor = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 6, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.config.v1.CrawlHostGroupConfig} returns this
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.setDelayFactor = function(value) {
+  return jspb.Message.setProto3FloatField(this, 6, value);
+};
+
+
+/**
+ * optional int32 max_retries = 7;
+ * @return {number}
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.getMaxRetries = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.config.v1.CrawlHostGroupConfig} returns this
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.setMaxRetries = function(value) {
+  return jspb.Message.setProto3IntField(this, 7, value);
+};
+
+
+/**
+ * optional int32 retry_delay_seconds = 8;
+ * @return {number}
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.getRetryDelaySeconds = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.veidemann.api.config.v1.CrawlHostGroupConfig} returns this
+ */
+proto.veidemann.api.config.v1.CrawlHostGroupConfig.prototype.setRetryDelaySeconds = function(value) {
+  return jspb.Message.setProto3IntField(this, 8, value);
 };
 
 
@@ -5556,8 +5502,10 @@ proto.veidemann.api.config.v1.RoleMapping.deserializeBinaryFromReader = function
       msg.setGroup(value);
       break;
     case 4:
-      var value = /** @type {!Array<!proto.veidemann.api.config.v1.Role>} */ (reader.readPackedEnum());
-      msg.setRoleList(value);
+      var values = /** @type {!Array<!proto.veidemann.api.config.v1.Role>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addRole(values[i]);
+      }
       break;
     default:
       reader.skipField();

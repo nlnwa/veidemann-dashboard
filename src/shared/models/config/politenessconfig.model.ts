@@ -1,6 +1,6 @@
 import {PolitenessConfigProto} from '../../../api';
 import {ConfigObject} from './configobject.model';
-import {intersectString, isNumeric} from '../../func';
+import {isNumeric} from '../../func';
 
 export enum RobotsPolicy {
   OBEY_ROBOTS,
@@ -18,50 +18,30 @@ export class PolitenessConfig {
   robotsPolicy?: RobotsPolicy;
   customRobots?: string;
   minimumRobotsValidityDurationS?: number;
-  minTimeBetweenPageLoadMs?: number; // int64
-  maxTimeBetweenPageLoadMs?: number; // int64
-  delayFactor?: number;
-  maxRetries?: number;
-  retryDelaySeconds?: number;
-  crawlHostGroupSelectorList?: string [];
+  useHostname: boolean;
 
   constructor({
                 robotsPolicy = RobotsPolicy.OBEY_ROBOTS,
                 customRobots = '',
                 minimumRobotsValidityDurationS = 0,
-                minTimeBetweenPageLoadMs = 0,
-                maxTimeBetweenPageLoadMs = 0,
-                delayFactor = 0,
-                maxRetries = 0,
-                retryDelaySeconds = 0,
-                crawlHostGroupSelectorList = []
+                useHostname = false,
               }: Partial<PolitenessConfig> = {}) {
     this.robotsPolicy = robotsPolicy;
     this.customRobots = customRobots;
     this.minimumRobotsValidityDurationS = minimumRobotsValidityDurationS;
-    this.minTimeBetweenPageLoadMs = minTimeBetweenPageLoadMs;
-    this.maxTimeBetweenPageLoadMs = maxTimeBetweenPageLoadMs;
-    this.delayFactor = delayFactor;
-    this.maxRetries = maxRetries;
-    this.retryDelaySeconds = retryDelaySeconds;
-    this.crawlHostGroupSelectorList = crawlHostGroupSelectorList ? [...crawlHostGroupSelectorList] : [];
+    this.useHostname = useHostname;
   }
 
   static fromProto(proto: PolitenessConfigProto): PolitenessConfig {
     // a small hack, see https://github.com/grpc/grpc/issues/2227
-    const delayFactor = parseFloat(proto.getDelayFactor().toPrecision(5));
     return new PolitenessConfig({
       robotsPolicy: proto.getRobotsPolicy(),
       customRobots: proto.getCustomRobots(),
       minimumRobotsValidityDurationS: proto.getMinimumRobotsValidityDurationS(),
-      minTimeBetweenPageLoadMs: proto.getMinTimeBetweenPageLoadMs(),
-      maxTimeBetweenPageLoadMs: proto.getMaxTimeBetweenPageLoadMs(),
-      delayFactor,
-      maxRetries: proto.getMaxRetries(),
-      retryDelaySeconds: proto.getRetryDelaySeconds(),
-      crawlHostGroupSelectorList: proto.getCrawlHostGroupSelectorList()
+      useHostname: proto.getUseHostname()
     });
   }
+
 
   static toProto(politenessConfig: PolitenessConfig): PolitenessConfigProto {
     const proto = new PolitenessConfigProto();
@@ -69,13 +49,7 @@ export class PolitenessConfig {
     proto.setRobotsPolicy(politenessConfig.robotsPolicy);
     proto.setCustomRobots(politenessConfig.customRobots);
     proto.setMinimumRobotsValidityDurationS(politenessConfig.minimumRobotsValidityDurationS);
-    proto.setMinTimeBetweenPageLoadMs(politenessConfig.minTimeBetweenPageLoadMs);
-    proto.setMaxTimeBetweenPageLoadMs(politenessConfig.maxTimeBetweenPageLoadMs);
-    proto.setDelayFactor(politenessConfig.delayFactor);
-    proto.setMaxRetries(politenessConfig.maxRetries);
-    proto.setDelayFactor(politenessConfig.delayFactor);
-    proto.setRetryDelaySeconds(politenessConfig.retryDelaySeconds);
-    proto.setCrawlHostGroupSelectorList(politenessConfig.crawlHostGroupSelectorList);
+    proto.setUseHostname(politenessConfig.useHostname);
 
     return proto;
   }
@@ -89,23 +63,11 @@ export class PolitenessConfig {
     const equalMinRobotsValidity = configObjects.every(
       (cfg: ConfigObject) => cfg.politenessConfig.minimumRobotsValidityDurationS === compareObj.minimumRobotsValidityDurationS);
 
-    const equalMinTimeBetweenPageload = configObjects.every(
-      (cfg: ConfigObject) => cfg.politenessConfig.minTimeBetweenPageLoadMs === compareObj.minTimeBetweenPageLoadMs);
-
-    const equalMaxTimeBetweenPageload = configObjects.every(
-      (cfg: ConfigObject) => cfg.politenessConfig.maxTimeBetweenPageLoadMs === compareObj.maxTimeBetweenPageLoadMs);
-
-    const equalDelayFactor = configObjects.every(
-      (cfg: ConfigObject) => cfg.politenessConfig.delayFactor === compareObj.delayFactor);
-
-    const equalMaxRetries = configObjects.every(
-      (cfg: ConfigObject) => cfg.politenessConfig.maxRetries === compareObj.maxRetries);
-
-    const equalRetryDelay = configObjects.every(
-      (cfg: ConfigObject) => cfg.politenessConfig.retryDelaySeconds === compareObj.retryDelaySeconds);
-
     const equalCustomRobot = configObjects.every(
       (cfg: ConfigObject) => cfg.politenessConfig.customRobots === compareObj.customRobots);
+
+    const equalUseHostname = configObjects.every(
+      (cfg: ConfigObject) => cfg.politenessConfig.useHostname === compareObj.useHostname);
 
     if (equalRobotsPolicy) {
       politenessConfig.robotsPolicy = compareObj.robotsPolicy;
@@ -122,35 +84,11 @@ export class PolitenessConfig {
     } else {
       politenessConfig.minimumRobotsValidityDurationS = null;
     }
-    if (equalMinTimeBetweenPageload) {
-      politenessConfig.minTimeBetweenPageLoadMs = compareObj.minTimeBetweenPageLoadMs;
+    if (equalUseHostname) {
+      politenessConfig.useHostname = compareObj.useHostname;
     } else {
-      politenessConfig.minTimeBetweenPageLoadMs = null;
+      politenessConfig.useHostname = undefined;
     }
-    if (equalMaxTimeBetweenPageload) {
-      politenessConfig.maxTimeBetweenPageLoadMs = compareObj.maxTimeBetweenPageLoadMs;
-    } else {
-      politenessConfig.maxTimeBetweenPageLoadMs = null;
-    }
-    if (equalDelayFactor) {
-      politenessConfig.delayFactor = compareObj.delayFactor;
-    } else {
-      politenessConfig.delayFactor = null;
-    }
-    if (equalMaxRetries) {
-      politenessConfig.maxRetries = compareObj.maxRetries;
-    } else {
-      politenessConfig.maxRetries = null;
-    }
-    if (equalRetryDelay) {
-      politenessConfig.retryDelaySeconds = compareObj.retryDelaySeconds;
-    } else {
-      politenessConfig.retryDelaySeconds = null;
-    }
-
-    politenessConfig.crawlHostGroupSelectorList = configObjects
-      .map(c => c.politenessConfig.crawlHostGroupSelectorList)
-      .reduce(intersectString);
 
     return politenessConfig;
   }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
@@ -8,7 +8,7 @@ import {ConfigObject} from '../../../../../shared/models/config';
 })
 export class CrawlhostgroupconfigPreviewComponent {
   @Input()
-  configObject: ConfigObject
+  configObject: ConfigObject;
 
   constructor() {
   }

@@ -102,7 +102,7 @@ export namespace ConfigObject {
     collection?: Collection.AsObject,
   }
 
-  export enum SpecCase { 
+  export enum SpecCase {
     SPEC_NOT_SET = 0,
     CRAWL_ENTITY = 5,
     SEED = 6,
@@ -504,26 +504,6 @@ export class PolitenessConfig extends jspb.Message {
   getCustomRobots(): string;
   setCustomRobots(value: string): PolitenessConfig;
 
-  getMinTimeBetweenPageLoadMs(): number;
-  setMinTimeBetweenPageLoadMs(value: number): PolitenessConfig;
-
-  getMaxTimeBetweenPageLoadMs(): number;
-  setMaxTimeBetweenPageLoadMs(value: number): PolitenessConfig;
-
-  getDelayFactor(): number;
-  setDelayFactor(value: number): PolitenessConfig;
-
-  getMaxRetries(): number;
-  setMaxRetries(value: number): PolitenessConfig;
-
-  getRetryDelaySeconds(): number;
-  setRetryDelaySeconds(value: number): PolitenessConfig;
-
-  getCrawlHostGroupSelectorList(): Array<string>;
-  setCrawlHostGroupSelectorList(value: Array<string>): PolitenessConfig;
-  clearCrawlHostGroupSelectorList(): PolitenessConfig;
-  addCrawlHostGroupSelector(value: string, index?: number): PolitenessConfig;
-
   getUseHostname(): boolean;
   setUseHostname(value: boolean): PolitenessConfig;
 
@@ -540,16 +520,10 @@ export namespace PolitenessConfig {
     robotsPolicy: PolitenessConfig.RobotsPolicy,
     minimumRobotsValidityDurationS: number,
     customRobots: string,
-    minTimeBetweenPageLoadMs: number,
-    maxTimeBetweenPageLoadMs: number,
-    delayFactor: number,
-    maxRetries: number,
-    retryDelaySeconds: number,
-    crawlHostGroupSelectorList: Array<string>,
     useHostname: boolean,
   }
 
-  export enum RobotsPolicy { 
+  export enum RobotsPolicy {
     OBEY_ROBOTS = 0,
     IGNORE_ROBOTS = 1,
     CUSTOM_ROBOTS = 2,
@@ -587,7 +561,7 @@ export namespace BrowserScript {
     browserScriptType: BrowserScript.BrowserScriptType,
   }
 
-  export enum BrowserScriptType { 
+  export enum BrowserScriptType {
     UNDEFINED = 0,
     EXTRACT_OUTLINKS = 1,
     REPLACEMENT = 2,
@@ -603,6 +577,21 @@ export class CrawlHostGroupConfig extends jspb.Message {
   clearIpRangeList(): CrawlHostGroupConfig;
   addIpRange(value?: CrawlHostGroupConfig.IpRange, index?: number): CrawlHostGroupConfig.IpRange;
 
+  getMinTimeBetweenPageLoadMs(): number;
+  setMinTimeBetweenPageLoadMs(value: number): CrawlHostGroupConfig;
+
+  getMaxTimeBetweenPageLoadMs(): number;
+  setMaxTimeBetweenPageLoadMs(value: number): CrawlHostGroupConfig;
+
+  getDelayFactor(): number;
+  setDelayFactor(value: number): CrawlHostGroupConfig;
+
+  getMaxRetries(): number;
+  setMaxRetries(value: number): CrawlHostGroupConfig;
+
+  getRetryDelaySeconds(): number;
+  setRetryDelaySeconds(value: number): CrawlHostGroupConfig;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlHostGroupConfig.AsObject;
   static toObject(includeInstance: boolean, msg: CrawlHostGroupConfig): CrawlHostGroupConfig.AsObject;
@@ -614,6 +603,11 @@ export class CrawlHostGroupConfig extends jspb.Message {
 export namespace CrawlHostGroupConfig {
   export type AsObject = {
     ipRangeList: Array<CrawlHostGroupConfig.IpRange.AsObject>,
+    minTimeBetweenPageLoadMs: number,
+    maxTimeBetweenPageLoadMs: number,
+    delayFactor: number,
+    maxRetries: number,
+    retryDelaySeconds: number,
   }
 
   export class IpRange extends jspb.Message {
@@ -699,7 +693,7 @@ export namespace RoleMapping {
     roleList: Array<Role>,
   }
 
-  export enum EmailOrGroupCase { 
+  export enum EmailOrGroupCase {
     EMAIL_OR_GROUP_NOT_SET = 0,
     API_KEY = 1,
     EMAIL = 2,
@@ -765,7 +759,7 @@ export namespace Collection {
   }
 
 
-  export enum RotationPolicy { 
+  export enum RotationPolicy {
     NONE = 0,
     HOURLY = 1,
     DAILY = 2,
@@ -773,7 +767,7 @@ export namespace Collection {
     YEARLY = 4,
   }
 
-  export enum SubCollectionType { 
+  export enum SubCollectionType {
     UNDEFINED = 0,
     SCREENSHOT = 1,
     DNS = 2,
@@ -822,7 +816,7 @@ export namespace LogLevels {
   }
 
 
-  export enum Level { 
+  export enum Level {
     UNDEFINED = 0,
     ALL = 1,
     TRACE = 2,
@@ -835,7 +829,7 @@ export namespace LogLevels {
   }
 }
 
-export enum Kind { 
+export enum Kind {
   UNDEFINED = 0,
   CRAWLENTITY = 5,
   SEED = 6,
@@ -849,7 +843,7 @@ export enum Kind {
   ROLEMAPPING = 14,
   COLLECTION = 15,
 }
-export enum Role { 
+export enum Role {
   ANY_USER = 0,
   ANY = 1,
   ADMIN = 2,

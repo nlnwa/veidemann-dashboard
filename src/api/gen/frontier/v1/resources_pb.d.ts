@@ -175,11 +175,34 @@ export class CrawlHostGroup extends jspb.Message {
   getId(): string;
   setId(value: string): CrawlHostGroup;
 
-  getPolitenessId(): string;
-  setPolitenessId(value: string): CrawlHostGroup;
+  getMinTimeBetweenPageLoadMs(): number;
+  setMinTimeBetweenPageLoadMs(value: number): CrawlHostGroup;
+
+  getMaxTimeBetweenPageLoadMs(): number;
+  setMaxTimeBetweenPageLoadMs(value: number): CrawlHostGroup;
+
+  getDelayFactor(): number;
+  setDelayFactor(value: number): CrawlHostGroup;
+
+  getMaxRetries(): number;
+  setMaxRetries(value: number): CrawlHostGroup;
+
+  getRetryDelaySeconds(): number;
+  setRetryDelaySeconds(value: number): CrawlHostGroup;
 
   getQueuedUriCount(): number;
   setQueuedUriCount(value: number): CrawlHostGroup;
+
+  getCurrentUriId(): string;
+  setCurrentUriId(value: string): CrawlHostGroup;
+
+  getSessionToken(): string;
+  setSessionToken(value: string): CrawlHostGroup;
+
+  getFetchStartTimeStamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setFetchStartTimeStamp(value?: google_protobuf_timestamp_pb.Timestamp): CrawlHostGroup;
+  hasFetchStartTimeStamp(): boolean;
+  clearFetchStartTimeStamp(): CrawlHostGroup;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CrawlHostGroup.AsObject;
@@ -192,8 +215,15 @@ export class CrawlHostGroup extends jspb.Message {
 export namespace CrawlHostGroup {
   export type AsObject = {
     id: string,
-    politenessId: string,
+    minTimeBetweenPageLoadMs: number,
+    maxTimeBetweenPageLoadMs: number,
+    delayFactor: number,
+    maxRetries: number,
+    retryDelaySeconds: number,
     queuedUriCount: number,
+    currentUriId: string,
+    sessionToken: string,
+    fetchStartTimeStamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
@@ -294,7 +324,7 @@ export namespace CrawlExecutionStatus {
     error?: commons_v1_resources_pb.Error.AsObject,
   }
 
-  export enum State { 
+  export enum State {
     UNDEFINED = 0,
     CREATED = 1,
     FETCHING = 2,
@@ -457,7 +487,7 @@ export namespace JobExecutionStatus {
     error?: commons_v1_resources_pb.Error.AsObject,
   }
 
-  export enum State { 
+  export enum State {
     UNDEFINED = 0,
     CREATED = 1,
     RUNNING = 2,
