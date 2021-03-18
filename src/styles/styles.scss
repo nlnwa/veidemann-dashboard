@@ -62,3 +62,16 @@ html, body {
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
+
+.formattedUri {
+  text-decoration: none;
+  color: mat-color($my-app-primary);
+}
+
+.formattedUri:hover {
+  text-decoration: underline;
+}
+
+tr.item-row.row-disabled td a.formattedUri {
+  color: $warn;
+}
