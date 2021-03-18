@@ -1,4 +1,10 @@
-<div class="content-padding">
-  <app-job-execution-status *ngIf="item$ | async as jobExecutionStatus"
-                            [jobExecutionStatus]="jobExecutionStatus"></app-job-execution-status>
+<div class="container" *ngIf="item$ | async as jobExecutionStatus">
+  <div fxLayout="row">
+    <app-job-execution-shortcuts [jobExecutionStatus]="jobExecutionStatus"
+                                 (abortJobExecution)="onAbortJobExecution($event)">
+    </app-job-execution-shortcuts>
+    <div class="content-padding" fxFlex>
+      <app-job-execution-status [jobExecutionStatus]="jobExecutionStatus"></app-job-execution-status>
+    </div>
+  </div>
 </div>

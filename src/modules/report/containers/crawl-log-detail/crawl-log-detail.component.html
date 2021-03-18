@@ -1,4 +1,8 @@
-<div class="content-padding">
-  <app-crawl-log-status *ngIf="item$ | async as crawlLog"
-                        [crawlLog]="crawlLog"></app-crawl-log-status>
+<div class="container" *ngIf="item$ | async as crawlLog">
+  <div fxLayout="row">
+    <app-crawl-log-shortcuts [crawlLog]="crawlLog"></app-crawl-log-shortcuts>
+    <div class="content-padding" fxFlex>
+      <app-crawl-log-status [crawlLog]="crawlLog"></app-crawl-log-status>
+    </div>
+  </div>
 </div>
