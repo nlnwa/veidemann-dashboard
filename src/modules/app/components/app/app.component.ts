@@ -141,19 +141,19 @@ export class AppComponent implements OnInit, AfterViewInit{
         key: 'r c',
         label: 'Reports',
         description: 'Show crawlexecution reports',
-        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/jobexecution'])
+        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/crawlexecution'])
       },
       {
         key: 'r p',
         label: 'Reports',
         description: 'Show pagelog reports',
-        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/jobexecution'])
+        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/pagelog'])
       },
       {
         key: 'r c l',
         label: 'Reports',
         description: 'Show crawllog reports',
-        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/jobexecution'])
+        command: (output: ShortcutEventOutput) => this.router.navigate(['/report/crawllog'])
       }
     );
   }
