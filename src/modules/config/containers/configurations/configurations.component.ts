@@ -182,10 +182,10 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const sortDirection$ = sort$.pipe(
-      map(sort => (sort ? sort.direction : 'asc') as SortDirection));
+      map(sort => (sort ? sort.direction : '') as SortDirection));
 
     const sortActive$ = sort$.pipe(
-      map(sort => sort ? sort.active : 'name'));
+      map(sort => sort ? sort.active : ''));
 
     const pageSize$ = queryParam$.pipe(
       map(({pageSize}) => parseInt(pageSize, 10) || 25),
