@@ -21,7 +21,7 @@
 </mat-nav-list>
 <mat-nav-list *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING">
   <h2 mat-subheader>Actions</h2>
-      <a mat-menu-item
+      <a mat-list-item
          *ngIf="'abort' | able: 'jobexecution'"
          (click)="onAbortJobExecution(jobExecutionStatus)"
          i18n="@@reportListActionButtonAbortCrawlExecution">
