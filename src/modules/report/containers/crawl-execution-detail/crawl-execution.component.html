@@ -1,4 +1,10 @@
-<div class="content-padding">
-  <app-crawl-execution-status *ngIf="item$ | async as crawlExecutionStatus"
-                              [crawlExecutionStatus]="crawlExecutionStatus"></app-crawl-execution-status>
+<div class="container" *ngIf="item$ | async as crawlExecutionStatus">
+  <div fxLayout="row">
+    <app-crawl-execution-shortcuts [crawlExecutionStatus]="crawlExecutionStatus"
+                                   (abortCrawlExecution)="onAbortCrawlExecution($event)">
+    </app-crawl-execution-shortcuts>
+    <div class="content-padding" fxFlex>
+      <app-crawl-execution-status [crawlExecutionStatus]="crawlExecutionStatus"></app-crawl-execution-status>
+    </div>
+  </div>
 </div>

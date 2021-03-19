@@ -1,0 +1,17 @@
+<mat-nav-list>
+  <h2 mat-subheader>Actions</h2>
+  <a mat-list-item
+     *ngIf="'read' | able: 'jobexecution'"
+     [routerLink]="['/report', 'jobexecution', pageLog.jobExecutionId]"
+     i18n="@@reportListActionButtonGoToJobExecution">
+    <mat-icon mat-list-icon>hdr_strong</mat-icon>
+    Go to job execution
+  </a>
+  <a mat-list-item
+     *ngIf="'read' | able: 'crawlexecution'"
+     [routerLink]="['/report', 'crawlexecution', pageLog.executionId]"
+     i18n="@@reportListActionButtonGoToCrawlExecution">
+    <mat-icon mat-list-icon>hdr_weak</mat-icon>
+    Go to crawl execution
+  </a>
+</mat-nav-list>

@@ -2,10 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {JobExecutionService} from '../../services';
 import {DetailDirective} from '../../directives';
-import {JobExecutionStatus} from '../../../../shared/models/report';
+import {JobExecutionState, JobExecutionStatus} from '../../../../shared/models/report';
 import {combineLatest, merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeWhile} from 'rxjs/operators';
 import {Detail} from '../../../../shared/func';
+import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
+import {ControllerApiService, SnackBarService} from '../../../core';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-crawl-log-detail',
@@ -13,11 +16,15 @@ import {Detail} from '../../../../shared/func';
   styleUrls: ['./job-execution-detail.component.css']
 })
 export class JobExecutionDetailComponent extends DetailDirective<JobExecutionStatus> implements OnInit {
+readonly JobExecutionState = JobExecutionState;
 
   protected query$: Observable<Detail>;
 
   constructor(protected route: ActivatedRoute,
-              protected service: JobExecutionService) {
+              protected service: JobExecutionService,
+              protected controllerApiService: ControllerApiService,
+              protected dialog: MatDialog,
+              protected snackBarService: SnackBarService) {
     super(route, service);
   }
 
@@ -37,5 +44,24 @@ export class JobExecutionDetailComponent extends DetailDirective<JobExecutionSta
     );
 
     this.item$ = merge(item$, watchedItem$);
+  }
+
+  onAbortJobExecution(jobExecutionStatus: JobExecutionStatus) {
+    const dialogRef = this.dialog.open(AbortCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {jobExecutionStatus}
+    });
+    dialogRef.afterClosed()
+      .subscribe(executionId => {
+        if (executionId) {
+          this.controllerApiService.abortJobExecution(executionId).subscribe(jobExecStatus => {
+            if (jobExecStatus.state === JobExecutionState.ABORTED_MANUAL) {
+              this.snackBarService.openSnackBar('Job aborted');
+              this.reload.next();
+            }
+          });
+        }
+      });
   }
 }

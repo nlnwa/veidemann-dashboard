@@ -47,6 +47,10 @@ import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log
 import {AbilityModule} from '@casl/angular';
 import {ExecutionQueueCountPipe} from './pipe/execution-queue-count.pipe';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
+import { CrawlExecutionShortcutsComponent } from './components/crawl-execution-shortcuts/crawl-execution-shortcuts.component';
+import { JobExecutionShortcutsComponent } from './components/job-execution-shortcuts/job-execution-shortcuts.component';
+import { PageLogShortcutsComponent } from './components/page-log-shortcuts/page-log-shortcuts.component';
+import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
 
 
 @NgModule({
@@ -86,6 +90,10 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     JobExecutionPreviewComponent,
     CrawlExecutionPreviewComponent,
     CrawlLogPreviewComponent,
+    CrawlExecutionShortcutsComponent,
+    JobExecutionShortcutsComponent,
+    PageLogShortcutsComponent,
+    CrawlLogShortcutsComponent,
   ],
     imports: [
         CommonsModule,

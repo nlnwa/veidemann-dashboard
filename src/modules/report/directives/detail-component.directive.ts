@@ -1,7 +1,7 @@
 import {Directive, OnInit} from '@angular/core';
-import {combineLatest, Observable} from 'rxjs';
+import {combineLatest, Observable, Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {debounceTime, distinctUntilChanged, map, share} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, share, startWith} from 'rxjs/operators';
 import {Getter} from '../../../shared/directives';
 import {ListItem} from '../../../shared/models';
 
@@ -11,10 +11,15 @@ export abstract class DetailDirective<T extends ListItem> implements OnInit {
 
   protected query$: Observable<any>;
 
+  protected reload$: Observable<void>;
+  protected reload: Subject<void>;
+
   item$: Observable<T>;
 
   protected constructor(protected route: ActivatedRoute,
                         protected service: Getter<T>) {
+    this.reload = new Subject<void>();
+    this.reload$ = this.reload.asObservable();
   }
 
   ngOnInit(): void {
@@ -35,7 +40,7 @@ export abstract class DetailDirective<T extends ListItem> implements OnInit {
       map(({watch}) => watch === 'true'),
       distinctUntilChanged());
 
-    this.query$ = combineLatest([id$, watch$])
+    this.query$ = combineLatest([id$, watch$, this.reload$.pipe(startWith(null as string))])
       .pipe(
         map(([id, watch]) => ({id, watch})),
         share(),
