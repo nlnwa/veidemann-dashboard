@@ -23,6 +23,8 @@ import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-cra
 import {ConfigService} from '../../../commons/services';
 import {ConfigQuery} from '../../../../shared/func';
 import {ConfigDialogData, dialogByKind} from '../../func';
+import {RouterExtraService} from '../../services/router-extra.service';
+import {Location} from '@angular/common';
 
 export interface ConfigOptions {
   rotationPolicies?: RotationPolicy[];
@@ -79,7 +81,9 @@ export class ConfigurationComponent implements OnDestroy {
               private route: ActivatedRoute,
               private kindService: KindService,
               private optionsService: OptionsService,
-              private controllerApiService: ControllerApiService) {
+              private controllerApiService: ControllerApiService,
+              private routerExtraService: RouterExtraService,
+              private location: Location) {
     this.configObject = new Subject();
 
     this.options$ = this.optionsService.options$.pipe(
@@ -209,7 +213,8 @@ export class ConfigurationComponent implements OnDestroy {
       autoFocus: true,
       data: {configObject},
     });
-
+    const previousUrl = this.routerExtraService.getPreviousUrl();
+    const currentUrl = this.routerExtraService.getCurrentUrl();
     dialogRef.afterClosed()
       .pipe(
         filter(result => !!result),
@@ -217,9 +222,13 @@ export class ConfigurationComponent implements OnDestroy {
         filter(deleted => !!deleted)
       )
       .subscribe(() => {
-        this.router.navigate(['../'], {
-          relativeTo: this.route,
-        }).catch(error => this.errorService.dispatch(error));
+        if (previousUrl !== currentUrl) {
+          this.location.back();
+        } else {
+          this.router.navigate(['../'], {
+            relativeTo: this.route,
+          }).catch(error => this.errorService.dispatch(error));
+        }
         this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
       });
   }

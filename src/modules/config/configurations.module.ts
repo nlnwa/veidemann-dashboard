@@ -93,6 +93,7 @@ import {LabelMultiComponent} from './components/label/label-multi/label-multi.co
 import {AbilityModule} from '@casl/angular';
 import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
+import {RouterExtraService} from './services/router-extra.service';
 
 @NgModule({
   declarations: [
@@ -210,6 +211,7 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     KindService,
     OptionsService,
     LabelService,
+    RouterExtraService,
   ]
 })
 export class ConfigurationsModule {
