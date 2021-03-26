@@ -26,7 +26,7 @@ import {
   PageLogStatusComponent,
   ResourceComponent,
 } from './components';
-import {JobNamePipe, SeedNamePipe} from './pipe';
+import {JobExecutionFetchPipe, JobNamePipe, SeedNamePipe} from './pipe';
 import {
   QueryCrawlExecutionStatusDirective,
   QueryCrawlLogDirective,
@@ -51,6 +51,7 @@ import { CrawlExecutionShortcutsComponent } from './components/crawl-execution-s
 import { JobExecutionShortcutsComponent } from './components/job-execution-shortcuts/job-execution-shortcuts.component';
 import { PageLogShortcutsComponent } from './components/page-log-shortcuts/page-log-shortcuts.component';
 import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
+import { CrawlExecutionFetchPipe } from './pipe/crawlexecution-fetch.pipe';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/cra
     SeedNamePipe,
     SedPipe,
     ExecutionQueueCountPipe,
+    JobExecutionFetchPipe,
     PageLogQueryComponent,
     QueryPageLogDirective,
     JobExecutionDetailComponent,
@@ -94,6 +96,7 @@ import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/cra
     JobExecutionShortcutsComponent,
     PageLogShortcutsComponent,
     CrawlLogShortcutsComponent,
+    CrawlExecutionFetchPipe,
   ],
     imports: [
         CommonsModule,
