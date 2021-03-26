@@ -113,7 +113,8 @@
             [attr.colspan]="displayedColumns.length">
           <div [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
             <app-crawl-execution-preview *ngIf="row === selectedRow"
-                                         [crawlExecutionStatus]="row"></app-crawl-execution-preview>
+                                         [crawlExecutionStatus]="row | getLatestCrawlExecutionPipe | async">
+            </app-crawl-execution-preview>
           </div>
         </td>
       </ng-container>
