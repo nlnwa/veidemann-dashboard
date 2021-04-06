@@ -67,7 +67,7 @@ export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: {value: [], disabled: false},
       collectionRefId: '',
       browserConfigRefId: '',
       politenessRefId: '',

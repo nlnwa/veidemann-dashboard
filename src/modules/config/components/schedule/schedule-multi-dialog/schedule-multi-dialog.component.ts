@@ -100,7 +100,7 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: {value: [], disabled: false},
       validFrom: '',
       validTo: '',
     });

@@ -141,7 +141,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       ipRangeList: this.fb.array([]),
       minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],

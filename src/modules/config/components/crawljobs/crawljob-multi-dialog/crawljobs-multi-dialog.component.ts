@@ -71,7 +71,7 @@ export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent imple
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: {value: [], disabled: false},
       scheduleRef: this.fb.group({
         id: '',
         kind: Kind.CRAWLSCHEDULECONFIG,

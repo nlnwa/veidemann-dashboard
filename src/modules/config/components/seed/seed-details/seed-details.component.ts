@@ -157,13 +157,13 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       disabled: '',
       entityRef: this.fb.group({
         kind: '',
         id: '',
       }, {validator: configRefIdRequired}),
-      jobRefListId: {value: []},
+      jobRefListId: {value: [], disabled: false},
       meta: new Meta(),
     });
   }

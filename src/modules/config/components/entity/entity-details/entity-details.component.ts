@@ -86,7 +86,7 @@ export class EntityDetailsComponent implements OnChanges {
 
   protected createForm() {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       meta: new Meta(),
     });
   }
