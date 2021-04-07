@@ -63,7 +63,7 @@ export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConf
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: {value: [], disabled: false},
       minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],

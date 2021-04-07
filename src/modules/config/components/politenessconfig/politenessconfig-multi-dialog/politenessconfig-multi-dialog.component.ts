@@ -74,7 +74,7 @@ export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetail
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []},
+      labelList: {value: [], disabled: false},
       robotsPolicy: '',
       minimumRobotsValidityDurationS: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       customRobots: null,

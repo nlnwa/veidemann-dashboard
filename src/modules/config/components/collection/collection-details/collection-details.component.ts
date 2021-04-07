@@ -1,5 +1,13 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Collection, ConfigObject, Kind, Meta, RotationPolicy, SubCollection, SubCollectionType} from '../../../../../shared/models';
+import {
+  Collection,
+  ConfigObject,
+  Kind,
+  Meta,
+  RotationPolicy,
+  SubCollection,
+  SubCollectionType
+} from '../../../../../shared/models';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 
@@ -73,7 +81,7 @@ export class CollectionDetailsComponent implements OnChanges {
   }
 
   get validFileSize(): boolean {
-    if (this.fileSize.value === 0 ) {
+    if (this.fileSize.value === 0) {
       return false;
     }
     return true;
@@ -116,7 +124,7 @@ export class CollectionDetailsComponent implements OnChanges {
 
   protected createForm(): void {
     this.form = this.fb.group({
-      id: {value: ''},
+      id: '',
       collectionDedupPolicy: '',
       fileRotationPolicy: '',
       compress: '',

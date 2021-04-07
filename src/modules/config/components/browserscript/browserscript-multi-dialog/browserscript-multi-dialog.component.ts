@@ -59,7 +59,7 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []}
+      labelList: {value: [], disabled: false}
     });
   }
 

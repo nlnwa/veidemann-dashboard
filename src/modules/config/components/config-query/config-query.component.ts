@@ -68,8 +68,8 @@ export class ConfigQueryComponent extends QueryComponent<ConfigQuery> implements
       collectionId: '',
       browserConfigId: '',
       politenessId: '',
-      crawlJobIdList: {value: []},
-      scriptIdList: {value: []},
+      crawlJobIdList: {value: [], disabled: false},
+      scriptIdList: {value: [], disabled: false},
       disabled: false,
     });
   }

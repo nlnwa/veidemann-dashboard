@@ -47,7 +47,7 @@ export class EntityMultiDialogComponent extends EntityDetailsComponent implement
 
   protected createForm() {
     this.form = this.fb.group({
-      labelList: {value: []}
+      labelList: {value: [], disabled: false}
     });
   }
 
