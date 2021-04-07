@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from 'src/shared/models';
 import {durationBetweenDates} from '../../../../shared/func';
 import {ChartOptions, ChartType} from 'chart.js';
@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './job-execution-preview.component.html',
   styleUrls: ['./job-execution-preview.component.css']
 })
-export class JobExecutionPreviewComponent implements OnInit {
+export class JobExecutionPreviewComponent implements OnChanges {
   readonly JobExecutionState = JobExecutionState;
   readonly CrawlExecutionState = CrawlExecutionState;
   readonly ExtraStatusCodes = ExtraStatusCodes;
@@ -63,66 +63,69 @@ export class JobExecutionPreviewComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-    this.pieChartData = [
-      this.jobExecutionStatus.documentsCrawled,
-      this.jobExecutionStatus.documentsDenied,
-      this.jobExecutionStatus.documentsFailed,
-      this.jobExecutionStatus.documentsOutOfScope,
-      this.jobExecutionStatus.documentsRetried
-    ];
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.jobExecutionStatus) {
+      if (this.jobExecutionStatus) {
+        this.pieChartData = [
+          this.jobExecutionStatus.documentsCrawled,
+          this.jobExecutionStatus.documentsDenied,
+          this.jobExecutionStatus.documentsFailed,
+          this.jobExecutionStatus.documentsOutOfScope,
+          this.jobExecutionStatus.documentsRetried
+        ];
 
 
-    const state = this.getExecMap(this.jobExecutionStatus.executionsStateMap);
-    let abortedManualCount = 0;
-    let abortedSizeCount = 0;
-    let abortedTimeOutCount = 0;
-    let createdCount = 0;
-    let diedCount = 0;
-    let fetchingCount = 0;
-    let finishedCount = 0;
-    let sleepingCount = 0;
-    let undefinedCount = 0;
-    let unrecognizedCount = 0;
+        const state = this.getExecMap(this.jobExecutionStatus.executionsStateMap);
+        let abortedManualCount = 0;
+        let abortedSizeCount = 0;
+        let abortedTimeOutCount = 0;
+        let createdCount = 0;
+        let diedCount = 0;
+        let fetchingCount = 0;
+        let finishedCount = 0;
+        let sleepingCount = 0;
+        let undefinedCount = 0;
+        let unrecognizedCount = 0;
 
-    for (const i of state) {
-      if (i.key === 'ABORTED_MANUAL') {
-        abortedManualCount = i.value;
-      }
-      if (i.key === 'ABORTED_SIZE') {
-        abortedSizeCount = i.value;
-      }
-      if (i.key === 'ABORTED_TIMEOUT') {
-        abortedTimeOutCount = i.value;
-      }
-      if (i.key === 'CREATED') {
-        createdCount = i.value;
-      }
-      if (i.key === 'DIED') {
-        diedCount = i.value;
-      }
-      if (i.key === 'FETCHING') {
-        fetchingCount = i.value;
-      }
-      if (i.key === 'FINISHED') {
-        finishedCount = i.value;
-      }
-      if (i.key === 'SLEEPING') {
-        sleepingCount = i.value;
-      }
-      if (i.key === 'UNDEFINED') {
-        undefinedCount = i.value;
-      }
-      if (i.key === 'UNRECOGNIZED') {
-        unrecognizedCount = i.value;
+        for (const i of state) {
+          if (i.key === 'ABORTED_MANUAL') {
+            abortedManualCount = i.value;
+          }
+          if (i.key === 'ABORTED_SIZE') {
+            abortedSizeCount = i.value;
+          }
+          if (i.key === 'ABORTED_TIMEOUT') {
+            abortedTimeOutCount = i.value;
+          }
+          if (i.key === 'CREATED') {
+            createdCount = i.value;
+          }
+          if (i.key === 'DIED') {
+            diedCount = i.value;
+          }
+          if (i.key === 'FETCHING') {
+            fetchingCount = i.value;
+          }
+          if (i.key === 'FINISHED') {
+            finishedCount = i.value;
+          }
+          if (i.key === 'SLEEPING') {
+            sleepingCount = i.value;
+          }
+          if (i.key === 'UNDEFINED') {
+            undefinedCount = i.value;
+          }
+          if (i.key === 'UNRECOGNIZED') {
+            unrecognizedCount = i.value;
+          }
+        }
+
+        this.stateMapPieChartData = [
+          abortedManualCount, abortedSizeCount, abortedTimeOutCount, createdCount,
+          diedCount, fetchingCount, finishedCount, sleepingCount, undefinedCount, unrecognizedCount
+        ];
       }
     }
-
-    this.stateMapPieChartData = [
-      abortedManualCount, abortedSizeCount, abortedTimeOutCount, createdCount,
-      diedCount, fetchingCount, finishedCount, sleepingCount, undefinedCount, unrecognizedCount
-    ];
-
   }
 
   getDuration(startTime: string, endTime: string): string {

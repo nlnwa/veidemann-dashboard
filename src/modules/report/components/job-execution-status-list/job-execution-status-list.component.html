@@ -75,7 +75,8 @@
             [attr.colspan]="displayedColumns.length">
           <div [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
             <app-job-execution-preview *ngIf="row === selectedRow"
-                                       [jobExecutionStatus]="row"></app-job-execution-preview>
+                                       [jobExecutionStatus]="row | getLatestJobExecutionPipe | async">
+            </app-job-execution-preview>
           </div>
         </td>
       </ng-container>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, CrawlExecutionStatus, ExtraStatusCodes} from '../../../../shared/models/report';
 import {durationBetweenDates} from '../../../../shared/func';
 import {ChartOptions} from 'chart.js';
@@ -10,7 +10,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
   templateUrl: './crawl-execution-preview.component.html',
   styleUrls: ['./crawl-execution-preview.component.css']
 })
-export class CrawlExecutionPreviewComponent implements OnInit {
+export class CrawlExecutionPreviewComponent implements OnChanges {
   readonly CrawlExecutionState = CrawlExecutionState;
   readonly ExtraStatusCodes = ExtraStatusCodes;
 
@@ -50,14 +50,18 @@ export class CrawlExecutionPreviewComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void {
-    this.documentsPieChartData = [
-      this.crawlExecutionStatus.documentsCrawled,
-      this.crawlExecutionStatus.documentsDenied,
-      this.crawlExecutionStatus.documentsFailed,
-      this.crawlExecutionStatus.documentsOutOfScope,
-      this.crawlExecutionStatus.documentsRetried
-    ];
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.crawlExecutionStatus) {
+      if (this.crawlExecutionStatus) {
+        this.documentsPieChartData = [
+          this.crawlExecutionStatus.documentsCrawled,
+          this.crawlExecutionStatus.documentsDenied,
+          this.crawlExecutionStatus.documentsFailed,
+          this.crawlExecutionStatus.documentsOutOfScope,
+          this.crawlExecutionStatus.documentsRetried
+        ];
+      }
+    }
   }
 
   getDuration(startTime: string, endTime: string): string {
