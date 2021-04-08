@@ -75,3 +75,7 @@ html, body {
 tr.item-row.row-disabled td a.formattedUri {
   color: $warn;
 }
+
+tr.resource-row.row-error td a.formattedUri {
+  color: $warn;
+}
