@@ -17,20 +17,41 @@ export class CrawlExecutionPreviewComponent implements OnChanges {
   @Input()
   crawlExecutionStatus: CrawlExecutionStatus;
 
+  executionDocumentsColors = [
+    {
+      backgroundColor: [
+        '#009E73', // Crawled
+        '#D55E00', // Denied
+        '#920000', // Failed
+        '#F0E442', // Out of scope
+        '#56B4E9', // Retried
+      ]
+    }
+  ];
 
   documentsPieChartLabels: Label[] = ['Crawled', 'Denied', 'Failed', 'Out of scope', 'Retried'];
   documentsPieChartData: number[];
   documentsPieChartPlugins = [pluginDataLabels];
+
   documentsPieChartOptions: ChartOptions = {
+    rotation: 15,
     responsive: true,
+    elements: {
+      arc: {
+        borderWidth: 0
+      }
+    },
     legend: {
-      position: 'bottom',
+      position: 'right',
       labels: {
-        fontSize: 8
+        fontColor: (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? '#FFFFFF' : '#000000',
+        fontSize: 12,
+        filter: (legendItem, data) => data.datasets[0].data[legendItem.index] !== 0,
       },
     },
     plugins: {
       datalabels: {
+        color: '#000000',
         formatter: (value, ctx) => {
           const label = ctx.chart.data.labels[ctx.dataIndex];
           if (ctx.dataset.data[ctx.dataIndex] > 0) {
@@ -40,11 +61,7 @@ export class CrawlExecutionPreviewComponent implements OnChanges {
           }
         }
       }
-    },
-    showLines: true,
-    spanGaps: true,
-    cutoutPercentage: 1,
-    rotation: 15
+    }
   };
 
   constructor() {
