@@ -4,3 +4,10 @@
   white-space: nowrap;
   max-width: 30em;
 }
+
+.mat-column-discoveryPath {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 10em;
+}

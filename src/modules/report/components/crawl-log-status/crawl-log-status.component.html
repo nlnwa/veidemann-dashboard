@@ -15,7 +15,7 @@
         </thead>
         <tbody>
         <tr class="mat-row">
-          <td class="mat-cell"><span [innerHTML]="crawlLog.requestedUri | urlFormat"></span></td>
+          <td class="mat-cell requestedUri"><span [innerHTML]="crawlLog.requestedUri | urlFormat"></span></td>
           <td class="mat-cell"><span [innerHTML]="crawlLog.referrer | urlFormat"></span></td>
         </tr>
         </tbody>
@@ -30,7 +30,7 @@
         <tbody>
         <tr class="mat-row">
           <td class="mat-cell"><span [innerHTML]="crawlLog.responseUri | urlFormat"></span></td>
-          <td class="mat-cell">{{crawlLog.discoveryPath}}</td>
+          <td class="mat-cell discoveryPath">{{crawlLog.discoveryPath}}</td>
         </tr>
         </tbody>
       </table>
