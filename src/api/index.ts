@@ -44,10 +44,6 @@ export {
 } from './gen/config/v1/config_grpc_web_pb';
 
 export {
-  FieldMask,
-} from './gen/commons/v1/resources_pb';
-
-export {
   EventObject as EventObjectProto,
   EventRef as EventRefProto,
   Activity as ActivityProto,
@@ -89,8 +85,6 @@ export {
 } from './gen/report/v1/report_grpc_web_pb';
 
 export {
-  PageLogListRequest,
-  CrawlLogListRequest,
   JobExecutionsListRequest,
   CrawlExecutionsListRequest,
   ExecuteDbQueryRequest,
@@ -100,14 +94,27 @@ export {
 export {
   JobExecutionStatus as JobExecutionStatusProto,
   CrawlExecutionStatus as CrawlExecutionStatusProto,
-  PageLog as PageLogProto,
-  CrawlLog as CrawlLogProto,
 } from './gen/frontier/v1/resources_pb';
-
-export {
-  Error as ErrorProto
-} from './gen/commons/v1/resources_pb';
 
 export {
   CountResponse as CountResponseProto
 } from './gen/frontier/v1/frontier_pb';
+
+export {
+  LogPromiseClient
+} from './gen/log/v1/log_grpc_web_pb';
+
+export {
+  PageLogListRequest,
+  CrawlLogListRequest,
+} from './gen/log/v1/log_pb';
+
+export {
+  PageLog as PageLogProto,
+  CrawlLog as CrawlLogProto,
+} from './gen/log/v1/resources_pb';
+
+export {
+  FieldMask,
+  Error as ErrorProto
+} from './gen/commons/v1/resources_pb';
