@@ -7,4 +7,18 @@ export const MonacoConfig: NgxMonacoEditorConfig = {
 };
 
 export function monacoOnLoad() {
+  console.log((window as any).monaco);
+
+  monaco.languages.register({
+    id: 'json',
+    extensions: ['.json', '.bowerrc', '.jshintrc', '.jscsrc', '.eslintrc', '.babelrc'],
+    aliases: ['JSON', 'json'],
+    mimetypes: ['application/json'],
+  });
+
+  monaco.languages.register({
+    id: 'python',
+    extensions: ['.py'],
+    aliases: ['python'],
+  });
 }

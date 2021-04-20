@@ -16,5 +16,9 @@
       </mat-select>
     </mat-form-field>
   </mat-toolbar>
-  <ngx-monaco-editor class=editor [options]="editorOptions" [(ngModel)]="value"></ngx-monaco-editor>
+  <ngx-monaco-editor class=editor
+                     [options]="editorOptions"
+                     [(ngModel)]="value"
+                     (onInit)="monacoOnInit($event)">
+  </ngx-monaco-editor>
 </mat-card>
