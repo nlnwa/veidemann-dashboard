@@ -2,6 +2,7 @@ import * as jspb from 'google-protobuf'
 
 import * as commons_v1_resources_pb from '../../commons/v1/resources_pb';
 import * as frontier_v1_resources_pb from '../../frontier/v1/resources_pb';
+import * as log_v1_resources_pb from '../../log/v1/resources_pb';
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
 
 
@@ -11,8 +12,8 @@ export class CrawlLogListRequest extends jspb.Message {
   clearWarcIdList(): CrawlLogListRequest;
   addWarcId(value: string, index?: number): CrawlLogListRequest;
 
-  getQueryTemplate(): frontier_v1_resources_pb.CrawlLog | undefined;
-  setQueryTemplate(value?: frontier_v1_resources_pb.CrawlLog): CrawlLogListRequest;
+  getQueryTemplate(): log_v1_resources_pb.CrawlLog | undefined;
+  setQueryTemplate(value?: log_v1_resources_pb.CrawlLog): CrawlLogListRequest;
   hasQueryTemplate(): boolean;
   clearQueryTemplate(): CrawlLogListRequest;
 
@@ -52,7 +53,7 @@ export class CrawlLogListRequest extends jspb.Message {
 export namespace CrawlLogListRequest {
   export type AsObject = {
     warcIdList: Array<string>,
-    queryTemplate?: frontier_v1_resources_pb.CrawlLog.AsObject,
+    queryTemplate?: log_v1_resources_pb.CrawlLog.AsObject,
     queryMask?: commons_v1_resources_pb.FieldMask.AsObject,
     returnedFieldsMask?: commons_v1_resources_pb.FieldMask.AsObject,
     orderByPath: string,
@@ -69,8 +70,8 @@ export class PageLogListRequest extends jspb.Message {
   clearWarcIdList(): PageLogListRequest;
   addWarcId(value: string, index?: number): PageLogListRequest;
 
-  getQueryTemplate(): frontier_v1_resources_pb.PageLog | undefined;
-  setQueryTemplate(value?: frontier_v1_resources_pb.PageLog): PageLogListRequest;
+  getQueryTemplate(): log_v1_resources_pb.PageLog | undefined;
+  setQueryTemplate(value?: log_v1_resources_pb.PageLog): PageLogListRequest;
   hasQueryTemplate(): boolean;
   clearQueryTemplate(): PageLogListRequest;
 
@@ -110,7 +111,7 @@ export class PageLogListRequest extends jspb.Message {
 export namespace PageLogListRequest {
   export type AsObject = {
     warcIdList: Array<string>,
-    queryTemplate?: frontier_v1_resources_pb.PageLog.AsObject,
+    queryTemplate?: log_v1_resources_pb.PageLog.AsObject,
     queryMask?: commons_v1_resources_pb.FieldMask.AsObject,
     returnedFieldsMask?: commons_v1_resources_pb.FieldMask.AsObject,
     orderByPath: string,

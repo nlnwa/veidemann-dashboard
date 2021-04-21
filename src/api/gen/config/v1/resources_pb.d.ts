@@ -102,7 +102,7 @@ export namespace ConfigObject {
     collection?: Collection.AsObject,
   }
 
-  export enum SpecCase {
+  export enum SpecCase { 
     SPEC_NOT_SET = 0,
     CRAWL_ENTITY = 5,
     SEED = 6,
@@ -523,7 +523,7 @@ export namespace PolitenessConfig {
     useHostname: boolean,
   }
 
-  export enum RobotsPolicy {
+  export enum RobotsPolicy { 
     OBEY_ROBOTS = 0,
     IGNORE_ROBOTS = 1,
     CUSTOM_ROBOTS = 2,
@@ -561,7 +561,7 @@ export namespace BrowserScript {
     browserScriptType: BrowserScript.BrowserScriptType,
   }
 
-  export enum BrowserScriptType {
+  export enum BrowserScriptType { 
     UNDEFINED = 0,
     EXTRACT_OUTLINKS = 1,
     REPLACEMENT = 2,
@@ -693,7 +693,7 @@ export namespace RoleMapping {
     roleList: Array<Role>,
   }
 
-  export enum EmailOrGroupCase {
+  export enum EmailOrGroupCase { 
     EMAIL_OR_GROUP_NOT_SET = 0,
     API_KEY = 1,
     EMAIL = 2,
@@ -759,7 +759,7 @@ export namespace Collection {
   }
 
 
-  export enum RotationPolicy {
+  export enum RotationPolicy { 
     NONE = 0,
     HOURLY = 1,
     DAILY = 2,
@@ -767,7 +767,7 @@ export namespace Collection {
     YEARLY = 4,
   }
 
-  export enum SubCollectionType {
+  export enum SubCollectionType { 
     UNDEFINED = 0,
     SCREENSHOT = 1,
     DNS = 2,
@@ -816,7 +816,7 @@ export namespace LogLevels {
   }
 
 
-  export enum Level {
+  export enum Level { 
     UNDEFINED = 0,
     ALL = 1,
     TRACE = 2,
@@ -829,7 +829,7 @@ export namespace LogLevels {
   }
 }
 
-export enum Kind {
+export enum Kind { 
   UNDEFINED = 0,
   CRAWLENTITY = 5,
   SEED = 6,
@@ -843,7 +843,7 @@ export enum Kind {
   ROLEMAPPING = 14,
   COLLECTION = 15,
 }
-export enum Role {
+export enum Role { 
   ANY_USER = 0,
   ANY = 1,
   ADMIN = 2,

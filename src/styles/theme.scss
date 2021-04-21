@@ -13,7 +13,7 @@ $my-app-warn: mat-palette($mat-red);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 /* DARK THEME */
-$ad-app-primary: mat-palette($mat-blue-gray,800);
+$ad-app-primary: mat-palette($mat-blue-gray, 800);
 $angular-dark-theme: mat-dark-theme($ad-app-primary, $my-app-accent, $my-app-warn);
 
 $primary: mat-color($my-app-primary);

@@ -125,7 +125,7 @@ export namespace PageHarvest {
   }
 
 
-  export enum MsgCase {
+  export enum MsgCase { 
     MSG_NOT_SET = 0,
     REQUESTNEXTPAGE = 1,
     METRICS = 2,

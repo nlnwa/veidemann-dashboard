@@ -20,6 +20,8 @@ var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js')
 
 var frontier_v1_resources_pb = require('../../frontier/v1/resources_pb.js')
 
+var log_v1_resources_pb = require('../../log/v1/resources_pb.js')
+
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.veidemann = {};
@@ -83,13 +85,13 @@ proto.veidemann.api.report.v1.ReportPromiseClient =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.frontier.v1.CrawlLog>}
+ *   !proto.veidemann.api.log.v1.CrawlLog>}
  */
 const methodDescriptor_Report_ListCrawlLogs = new grpc.web.MethodDescriptor(
   '/veidemann.api.report.v1.Report/ListCrawlLogs',
   grpc.web.MethodType.SERVER_STREAMING,
   proto.veidemann.api.report.v1.CrawlLogListRequest,
-  frontier_v1_resources_pb.CrawlLog,
+  log_v1_resources_pb.CrawlLog,
   /**
    * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
    * @return {!Uint8Array}
@@ -97,7 +99,7 @@ const methodDescriptor_Report_ListCrawlLogs = new grpc.web.MethodDescriptor(
   function(request) {
     return request.serializeBinary();
   },
-  frontier_v1_resources_pb.CrawlLog.deserializeBinary
+  log_v1_resources_pb.CrawlLog.deserializeBinary
 );
 
 
@@ -105,10 +107,10 @@ const methodDescriptor_Report_ListCrawlLogs = new grpc.web.MethodDescriptor(
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.frontier.v1.CrawlLog>}
+ *   !proto.veidemann.api.log.v1.CrawlLog>}
  */
 const methodInfo_Report_ListCrawlLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.CrawlLog,
+  log_v1_resources_pb.CrawlLog,
   /**
    * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
    * @return {!Uint8Array}
@@ -116,7 +118,7 @@ const methodInfo_Report_ListCrawlLogs = new grpc.web.AbstractClientBase.MethodIn
   function(request) {
     return request.serializeBinary();
   },
-  frontier_v1_resources_pb.CrawlLog.deserializeBinary
+  log_v1_resources_pb.CrawlLog.deserializeBinary
 );
 
 
@@ -124,7 +126,7 @@ const methodInfo_Report_ListCrawlLogs = new grpc.web.AbstractClientBase.MethodIn
  * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CrawlLog>}
+ * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
  *     The XHR Node Readable Stream
  */
 proto.veidemann.api.report.v1.ReportClient.prototype.listCrawlLogs =
@@ -141,7 +143,7 @@ proto.veidemann.api.report.v1.ReportClient.prototype.listCrawlLogs =
  * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CrawlLog>}
+ * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
  *     The XHR Node Readable Stream
  */
 proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listCrawlLogs =
@@ -157,94 +159,14 @@ proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listCrawlLogs =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.report.v1.ListCountResponse>}
- */
-const methodDescriptor_Report_CountCrawlLogs = new grpc.web.MethodDescriptor(
-  '/veidemann.api.report.v1.Report/CountCrawlLogs',
-  grpc.web.MethodType.UNARY,
-  proto.veidemann.api.report.v1.CrawlLogListRequest,
-  proto.veidemann.api.report.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.report.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.report.v1.ListCountResponse>}
- */
-const methodInfo_Report_CountCrawlLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.report.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.report.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.report.v1.ListCountResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.report.v1.ListCountResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportClient.prototype.countCrawlLogs =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/veidemann.api.report.v1.Report/CountCrawlLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_CountCrawlLogs,
-      callback);
-};
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.veidemann.api.report.v1.ListCountResponse>}
- *     Promise that resolves to the response
- */
-proto.veidemann.api.report.v1.ReportPromiseClient.prototype.countCrawlLogs =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/veidemann.api.report.v1.Report/CountCrawlLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_CountCrawlLogs);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.frontier.v1.PageLog>}
+ *   !proto.veidemann.api.log.v1.PageLog>}
  */
 const methodDescriptor_Report_ListPageLogs = new grpc.web.MethodDescriptor(
   '/veidemann.api.report.v1.Report/ListPageLogs',
   grpc.web.MethodType.SERVER_STREAMING,
   proto.veidemann.api.report.v1.PageLogListRequest,
-  frontier_v1_resources_pb.PageLog,
+  log_v1_resources_pb.PageLog,
   /**
    * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
    * @return {!Uint8Array}
@@ -252,7 +174,7 @@ const methodDescriptor_Report_ListPageLogs = new grpc.web.MethodDescriptor(
   function(request) {
     return request.serializeBinary();
   },
-  frontier_v1_resources_pb.PageLog.deserializeBinary
+  log_v1_resources_pb.PageLog.deserializeBinary
 );
 
 
@@ -260,10 +182,10 @@ const methodDescriptor_Report_ListPageLogs = new grpc.web.MethodDescriptor(
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.frontier.v1.PageLog>}
+ *   !proto.veidemann.api.log.v1.PageLog>}
  */
 const methodInfo_Report_ListPageLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.PageLog,
+  log_v1_resources_pb.PageLog,
   /**
    * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
    * @return {!Uint8Array}
@@ -271,7 +193,7 @@ const methodInfo_Report_ListPageLogs = new grpc.web.AbstractClientBase.MethodInf
   function(request) {
     return request.serializeBinary();
   },
-  frontier_v1_resources_pb.PageLog.deserializeBinary
+  log_v1_resources_pb.PageLog.deserializeBinary
 );
 
 
@@ -279,7 +201,7 @@ const methodInfo_Report_ListPageLogs = new grpc.web.AbstractClientBase.MethodInf
  * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.PageLog>}
+ * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
  *     The XHR Node Readable Stream
  */
 proto.veidemann.api.report.v1.ReportClient.prototype.listPageLogs =
@@ -296,7 +218,7 @@ proto.veidemann.api.report.v1.ReportClient.prototype.listPageLogs =
  * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.PageLog>}
+ * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
  *     The XHR Node Readable Stream
  */
 proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listPageLogs =
@@ -306,86 +228,6 @@ proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listPageLogs =
       request,
       metadata || {},
       methodDescriptor_Report_ListPageLogs);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.report.v1.ListCountResponse>}
- */
-const methodDescriptor_Report_CountPageLogs = new grpc.web.MethodDescriptor(
-  '/veidemann.api.report.v1.Report/CountPageLogs',
-  grpc.web.MethodType.UNARY,
-  proto.veidemann.api.report.v1.PageLogListRequest,
-  proto.veidemann.api.report.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.report.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.report.v1.ListCountResponse>}
- */
-const methodInfo_Report_CountPageLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.report.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.report.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.report.v1.ListCountResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.report.v1.ListCountResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportClient.prototype.countPageLogs =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/veidemann.api.report.v1.Report/CountPageLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_CountPageLogs,
-      callback);
-};
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.veidemann.api.report.v1.ListCountResponse>}
- *     Promise that resolves to the response
- */
-proto.veidemann.api.report.v1.ReportPromiseClient.prototype.countPageLogs =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/veidemann.api.report.v1.Report/CountPageLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_CountPageLogs);
 };
 
 

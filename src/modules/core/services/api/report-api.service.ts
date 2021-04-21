@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {EMPTY, from, Observable, Observer, of} from 'rxjs';
-import {catchError, defaultIfEmpty, first, map} from 'rxjs/operators';
+import {EMPTY, Observable, Observer} from 'rxjs';
+import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
@@ -8,16 +8,12 @@ import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
   CrawlExecutionStatusProto,
-  CrawlLogListRequest,
-  CrawlLogProto,
   FieldMask,
   JobExecutionsListRequest,
   JobExecutionStatusProto,
-  PageLogListRequest,
-  PageLogProto,
   ReportPromiseClient
 } from '../../../../api';
-import {CrawlExecutionStatus, CrawlLog, JobExecutionStatus, PageLog} from '../../../../shared/models';
+import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models';
 
 
 @Injectable({
@@ -61,57 +57,6 @@ export class ReportApiService {
       return () => stream.cancel();
     }).pipe(
       map(CrawlExecutionStatus.fromProto),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return EMPTY;
-      })
-    );
-  }
-
-  countPageLogs(listRequest: PageLogListRequest): Observable<number> {
-    const metadata = this.authService.metadata;
-
-    return from(this.reportClient.countPageLogs(listRequest, metadata))
-      .pipe(
-        map(listCountResponse => listCountResponse.getCount()),
-        first(),
-        catchError(error => {
-          this.errorService.dispatch(error);
-          return EMPTY;
-        })
-      );
-  }
-
-  listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
-    const metadata = this.authService.metadata;
-
-    return new Observable((observer: Observer<PageLogProto>) => {
-      const stream = this.reportClient.listPageLogs(listRequest, metadata)
-        .on('data', data => observer.next(data))
-        .on('error', error => observer.error(error))
-        .on('end', () => observer.complete());
-      return () => stream.cancel();
-    }).pipe(
-      map(PageLog.fromProto),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return EMPTY;
-      })
-    );
-  }
-
-
-  listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
-    const metadata = this.authService.metadata;
-
-    return new Observable((observer: Observer<CrawlLogProto>) => {
-      const stream = this.reportClient.listCrawlLogs(listRequest, metadata)
-        .on('data', data => observer.next(data))
-        .on('error', error => observer.error(error))
-        .on('end', () => observer.complete());
-      return () => stream.cancel();
-    }).pipe(
-      map(CrawlLog.fromProto),
       catchError(error => {
         this.errorService.dispatch(error);
         return EMPTY;

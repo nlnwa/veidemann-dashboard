@@ -1,4 +1,4 @@
-import {ApiError} from './api-error.model';
+import {ApiError} from '../commons/api-error.model';
 import {CrawlLogProto} from '../../../api';
 import {fromTimestampProto, toTimestampProto} from '../../func';
 import {fromRethinkTimeStamp} from '../../func/rethinkdb';

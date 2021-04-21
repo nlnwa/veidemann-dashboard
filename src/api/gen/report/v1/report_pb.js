@@ -2,6 +2,7 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
@@ -18,6 +19,8 @@ var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js');
 goog.object.extend(proto, commons_v1_resources_pb);
 var frontier_v1_resources_pb = require('../../frontier/v1/resources_pb.js');
 goog.object.extend(proto, frontier_v1_resources_pb);
+var log_v1_resources_pb = require('../../log/v1/resources_pb.js');
+goog.object.extend(proto, log_v1_resources_pb);
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol('proto.veidemann.api.report.v1.CrawlExecutionsListRequest', null, global);
@@ -214,7 +217,7 @@ proto.veidemann.api.report.v1.CrawlLogListRequest.prototype.toObject = function(
 proto.veidemann.api.report.v1.CrawlLogListRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     warcIdList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f,
-    queryTemplate: (f = msg.getQueryTemplate()) && frontier_v1_resources_pb.CrawlLog.toObject(includeInstance, f),
+    queryTemplate: (f = msg.getQueryTemplate()) && log_v1_resources_pb.CrawlLog.toObject(includeInstance, f),
     queryMask: (f = msg.getQueryMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     returnedFieldsMask: (f = msg.getReturnedFieldsMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     orderByPath: jspb.Message.getFieldWithDefault(msg, 8, ""),
@@ -263,8 +266,8 @@ proto.veidemann.api.report.v1.CrawlLogListRequest.deserializeBinaryFromReader = 
       msg.addWarcId(value);
       break;
     case 5:
-      var value = new frontier_v1_resources_pb.CrawlLog;
-      reader.readMessage(value,frontier_v1_resources_pb.CrawlLog.deserializeBinaryFromReader);
+      var value = new log_v1_resources_pb.CrawlLog;
+      reader.readMessage(value,log_v1_resources_pb.CrawlLog.deserializeBinaryFromReader);
       msg.setQueryTemplate(value);
       break;
     case 6:
@@ -338,7 +341,7 @@ proto.veidemann.api.report.v1.CrawlLogListRequest.serializeBinaryToWriter = func
     writer.writeMessage(
       5,
       f,
-      frontier_v1_resources_pb.CrawlLog.serializeBinaryToWriter
+      log_v1_resources_pb.CrawlLog.serializeBinaryToWriter
     );
   }
   f = message.getQueryMask();
@@ -433,17 +436,17 @@ proto.veidemann.api.report.v1.CrawlLogListRequest.prototype.clearWarcIdList = fu
 
 
 /**
- * optional veidemann.api.frontier.v1.CrawlLog query_template = 5;
- * @return {?proto.veidemann.api.frontier.v1.CrawlLog}
+ * optional veidemann.api.log.v1.CrawlLog query_template = 5;
+ * @return {?proto.veidemann.api.log.v1.CrawlLog}
  */
 proto.veidemann.api.report.v1.CrawlLogListRequest.prototype.getQueryTemplate = function() {
-  return /** @type{?proto.veidemann.api.frontier.v1.CrawlLog} */ (
-    jspb.Message.getWrapperField(this, frontier_v1_resources_pb.CrawlLog, 5));
+  return /** @type{?proto.veidemann.api.log.v1.CrawlLog} */ (
+    jspb.Message.getWrapperField(this, log_v1_resources_pb.CrawlLog, 5));
 };
 
 
 /**
- * @param {?proto.veidemann.api.frontier.v1.CrawlLog|undefined} value
+ * @param {?proto.veidemann.api.log.v1.CrawlLog|undefined} value
  * @return {!proto.veidemann.api.report.v1.CrawlLogListRequest} returns this
 */
 proto.veidemann.api.report.v1.CrawlLogListRequest.prototype.setQueryTemplate = function(value) {
@@ -673,7 +676,7 @@ proto.veidemann.api.report.v1.PageLogListRequest.prototype.toObject = function(o
 proto.veidemann.api.report.v1.PageLogListRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     warcIdList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f,
-    queryTemplate: (f = msg.getQueryTemplate()) && frontier_v1_resources_pb.PageLog.toObject(includeInstance, f),
+    queryTemplate: (f = msg.getQueryTemplate()) && log_v1_resources_pb.PageLog.toObject(includeInstance, f),
     queryMask: (f = msg.getQueryMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     returnedFieldsMask: (f = msg.getReturnedFieldsMask()) && commons_v1_resources_pb.FieldMask.toObject(includeInstance, f),
     orderByPath: jspb.Message.getFieldWithDefault(msg, 8, ""),
@@ -722,8 +725,8 @@ proto.veidemann.api.report.v1.PageLogListRequest.deserializeBinaryFromReader = f
       msg.addWarcId(value);
       break;
     case 5:
-      var value = new frontier_v1_resources_pb.PageLog;
-      reader.readMessage(value,frontier_v1_resources_pb.PageLog.deserializeBinaryFromReader);
+      var value = new log_v1_resources_pb.PageLog;
+      reader.readMessage(value,log_v1_resources_pb.PageLog.deserializeBinaryFromReader);
       msg.setQueryTemplate(value);
       break;
     case 6:
@@ -797,7 +800,7 @@ proto.veidemann.api.report.v1.PageLogListRequest.serializeBinaryToWriter = funct
     writer.writeMessage(
       5,
       f,
-      frontier_v1_resources_pb.PageLog.serializeBinaryToWriter
+      log_v1_resources_pb.PageLog.serializeBinaryToWriter
     );
   }
   f = message.getQueryMask();
@@ -892,17 +895,17 @@ proto.veidemann.api.report.v1.PageLogListRequest.prototype.clearWarcIdList = fun
 
 
 /**
- * optional veidemann.api.frontier.v1.PageLog query_template = 5;
- * @return {?proto.veidemann.api.frontier.v1.PageLog}
+ * optional veidemann.api.log.v1.PageLog query_template = 5;
+ * @return {?proto.veidemann.api.log.v1.PageLog}
  */
 proto.veidemann.api.report.v1.PageLogListRequest.prototype.getQueryTemplate = function() {
-  return /** @type{?proto.veidemann.api.frontier.v1.PageLog} */ (
-    jspb.Message.getWrapperField(this, frontier_v1_resources_pb.PageLog, 5));
+  return /** @type{?proto.veidemann.api.log.v1.PageLog} */ (
+    jspb.Message.getWrapperField(this, log_v1_resources_pb.PageLog, 5));
 };
 
 
 /**
- * @param {?proto.veidemann.api.frontier.v1.PageLog|undefined} value
+ * @param {?proto.veidemann.api.log.v1.PageLog|undefined} value
  * @return {!proto.veidemann.api.report.v1.PageLogListRequest} returns this
 */
 proto.veidemann.api.report.v1.PageLogListRequest.prototype.setQueryTemplate = function(value) {

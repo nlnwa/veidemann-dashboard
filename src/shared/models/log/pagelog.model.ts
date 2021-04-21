@@ -1,6 +1,6 @@
 import {Resource} from './resource.model';
 import {PageLogProto} from '../../../api';
-import {ApiError} from './api-error.model';
+import {ApiError} from '../commons/api-error.model';
 
 export class PageLog {
   id: string;
@@ -64,7 +64,7 @@ export class PageLog {
         fromCache: resourceProto.getFromCache(),
         renderable: resourceProto.getRenderable(),
         resourceType: resourceProto.getResourceType(),
-        mimeType: resourceProto.getMimeType(),
+        mimeType: resourceProto.getContentType(),
         statusCode: resourceProto.getStatusCode(),
         discoveryPath: resourceProto.getDiscoveryPath(),
         warcId: resourceProto.getWarcId(),

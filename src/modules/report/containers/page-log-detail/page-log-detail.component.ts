@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PageLogService} from '../../services';
 import {DetailDirective} from '../../directives';
-import {PageLog} from '../../../../shared/models/report';
+import {PageLog} from '../../../../shared/models/log';
 import {Observable} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 

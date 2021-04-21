@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {CrawlLog} from '../../../../shared/models/report';
+import {CrawlLog} from '../../../../shared/models/log';
 
 @Component({
   selector: 'app-crawl-log-preview',
