@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ReportApiService} from '../../core/services';
+import {LogApiService} from '../../core/services';
 import {Observable} from 'rxjs';
-import {CrawlLog} from '../../../shared/models/report';
-import {CrawlLogListRequest} from '../../../api/gen/report/v1/report_pb';
-import {FieldMask} from '../../../api';
+import {CrawlLog} from '../../../shared/models/log';
+import {FieldMask, CrawlLogListRequest} from '../../../api';
 import {LoadingService} from '../../../shared/services';
 import {Detail, Page, Sort, Watch} from '../../../shared/func';
 import {Getter, Searcher} from '../../../shared/directives';
@@ -19,7 +18,7 @@ export interface CrawlLogQuery extends Page, Sort, Watch {
 export class CrawlLogService extends LoadingService
   implements Getter<CrawlLog>, Searcher<CrawlLogQuery, CrawlLog> {
 
-  constructor(private reportApiService: ReportApiService) {
+  constructor(private logApiService: LogApiService) {
     super();
   }
 
@@ -62,10 +61,10 @@ export class CrawlLogService extends LoadingService
   get(query: Detail): Observable<CrawlLog> {
     const listRequest = new CrawlLogListRequest();
     listRequest.addWarcId(query.id);
-    return this.reportApiService.listCrawlLogs(listRequest);
+    return this.logApiService.listCrawlLogs(listRequest);
   }
 
   search(query: CrawlLogQuery): Observable<CrawlLog> {
-    return this.load(this.reportApiService.listCrawlLogs(CrawlLogService.getListRequest(query)));
+    return this.load(this.logApiService.listCrawlLogs(CrawlLogService.getListRequest(query)));
   }
 }

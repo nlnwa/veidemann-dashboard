@@ -1,7 +1,7 @@
 import {JobExecutionStatusProto} from '../../../api';
 import {fromTimestampProto, isNumeric} from '../../func';
 import {ExtraStatusCodes} from './extrastatuscodes.model';
-import {ApiError} from './api-error.model';
+import {ApiError} from '../commons/api-error.model';
 
 export enum JobExecutionState {
   UNDEFINED = 0,

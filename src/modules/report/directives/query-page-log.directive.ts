@@ -1,7 +1,7 @@
 import {Directive, Inject} from '@angular/core';
 import {BASE_LIST, QueryDirective} from '../../../shared/directives';
 import {PageLogQuery, PageLogService} from '../services';
-import {PageLog} from '../../../shared/models/report';
+import {PageLog} from '../../../shared/models/log';
 import {BaseList, ListDataSource} from '../../../shared/models';
 import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -18,24 +18,8 @@ export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog>
   onInit(): void {
     super.onInit();
 
-    // real counting only when executionId is present
+    // fake counting
     this.query$.pipe(
-      distinctUntilChanged((a: PageLogQuery, b: PageLogQuery) =>
-        // only count when these query parameters change
-        (
-          a.uri === b.uri
-          && a.executionId === b.executionId
-          && a.jobExecutionId === b.jobExecutionId
-        )
-      ),
-      filter(query => !!query.executionId),
-      switchMap(query => this.service.count(query)),
-      takeUntil(this.ngUnsubscribe),
-    ).subscribe(length => this.baseList.length = length);
-
-    // fake counting otherwise
-    this.query$.pipe(
-      filter(query => !query.executionId),
       switchMap(query => this.dataSource.connect(null).pipe(
         map(v => (query.pageIndex + 1) * query.pageSize + (v.length % query.pageSize === 0 ? 1 : 0)) )
       ),

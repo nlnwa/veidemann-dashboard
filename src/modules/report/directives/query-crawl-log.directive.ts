@@ -1,7 +1,7 @@
 import {Directive, Inject} from '@angular/core';
 import {BASE_LIST, QueryDirective} from '../../../shared/directives';
 import {CrawlLogQuery, CrawlLogService} from '../services';
-import {CrawlLog} from '../../../shared/models/report';
+import {CrawlLog} from '../../../shared/models/log';
 import {BaseList, ListDataSource} from '../../../shared/models';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
 

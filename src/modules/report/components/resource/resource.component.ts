@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Resource} from '../../../../shared/models/report/resource.model';
+import {Resource} from '../../../../shared/models/log/resource.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {AppConfigService} from '../../../core/services';
 

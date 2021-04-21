@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {combineLatest, Observable} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
-import {ListItem} from '../../../../shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService, ErrorService} from '../../../core/services';
 import {CrawlLogQuery, CrawlLogService} from '../../services';

@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {CrawlLog, ExtraStatusCodes} from '../../../../shared/models/report';
+import {ExtraStatusCodes} from '../../../../shared/models/report';
+import {CrawlLog} from '../../../../shared/models/log';
 
 @Component({
   selector: 'app-crawl-log-status',

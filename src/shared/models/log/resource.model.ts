@@ -1,4 +1,4 @@
-import {ApiError} from './api-error.model';
+import {ApiError} from '../commons/api-error.model';
 import {PageLogProto} from '../../../api';
 
 export class Resource {
@@ -46,7 +46,7 @@ export class Resource {
       fromCache: proto.getFromCache(),
       renderable: proto.getRenderable(),
       resourceType: proto.getResourceType(),
-      mimeType: proto.getMimeType(),
+      mimeType: proto.getContentType(),
       statusCode: proto.getStatusCode(),
       discoveryPath: proto.getDiscoveryPath(),
       warcId: proto.getWarcId(),
@@ -62,7 +62,7 @@ export class Resource {
     proto.setFromCache(resource.fromCache);
     proto.setRenderable(resource.renderable);
     proto.setResourceType(resource.resourceType);
-    proto.setMimeType(resource.mimeType);
+    proto.setContentType(resource.mimeType);
     proto.setStatusCode(resource.statusCode);
     proto.setDiscoveryPath(resource.discoveryPath);
     proto.setWarcId(resource.warcId);

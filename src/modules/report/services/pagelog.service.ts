@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ConfigObject} from '../../../shared/models/config';
-import {ReportApiService} from '../../core/services';
+import {LogApiService} from '../../core/services';
 import {Observable} from 'rxjs';
-import {PageLog} from '../../../shared/models/report';
+import {PageLog} from '../../../shared/models/log';
 import {FieldMask, PageLogListRequest} from '../../../api';
 import {LoadingService} from '../../../shared/services';
 import {Detail, Page, Sort, Watch} from '../../../shared/func';
@@ -21,7 +21,7 @@ export interface PageLogQuery extends Page, Sort, Watch {
 export class PageLogService extends LoadingService implements Getter<PageLog> {
   private readonly cache: Map<string, ConfigObject>;
 
-  constructor(private reportApiService: ReportApiService) {
+  constructor(private logApiService: LogApiService) {
     super();
     this.cache = new Map();
   }
@@ -29,16 +29,11 @@ export class PageLogService extends LoadingService implements Getter<PageLog> {
   get(query: Detail): Observable<PageLog> {
     const listRequest = new PageLogListRequest();
     listRequest.addWarcId(query.id);
-    return this.reportApiService.listPageLogs(listRequest);
+    return this.logApiService.listPageLogs(listRequest);
   }
 
   search(query: PageLogQuery): Observable<PageLog> {
-    return this.load(this.reportApiService.listPageLogs(this.getListRequest(query)));
-  }
-
-  count(query: PageLogQuery): Observable<number> {
-    const request = this.getListRequest(query);
-    return this.reportApiService.countPageLogs(request);
+    return this.load(this.logApiService.listPageLogs(this.getListRequest(query)));
   }
 
   private getListRequest(query: PageLogQuery): PageLogListRequest {

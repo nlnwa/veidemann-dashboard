@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CrawlLogService} from '../../services';
 import {DetailDirective} from '../../directives';
-import {CrawlLog} from '../../../../shared/models/report';
+import {CrawlLog} from '../../../../shared/models';
 import {Observable} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 

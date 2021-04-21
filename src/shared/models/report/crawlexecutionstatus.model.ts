@@ -1,7 +1,7 @@
 import {CrawlExecutionStatusProto} from '../../../api';
 import {fromTimestampProto, isNumeric, toTimestampProto} from '../../func';
 import {ExtraStatusCodes} from './extrastatuscodes.model';
-import {ApiError} from './api-error.model';
+import {ApiError} from '../commons/api-error.model';
 import {fromRethinkTimeStamp} from '../../func/rethinkdb';
 
 export enum CrawlExecutionState {

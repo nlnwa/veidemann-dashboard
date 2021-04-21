@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input} from '@angular/core';
 import {BaseListComponent} from '../../../commons/components';
-import {CrawlLog} from '../../../../shared/models/report';
+import {CrawlLog} from '../../../../shared/models/log';
 import {ListDataSource} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
 import {animate, state, style, transition, trigger} from '@angular/animations';

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
-import {EMPTY, from, Observable, of} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
+import {EMPTY, from, Observable} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 
 import {ControllerPromiseClient} from '../../../../api';
@@ -12,7 +12,7 @@ import {Role} from '../../../../shared/models/config';
 import {ExecutionId, RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 import {ApplicationErrorHandler} from '../error.handler';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models/report';
-import {CountResponse} from '../../../../shared/models/report/countresponse.model';
+import {CountResponse} from '../../../../shared/models';
 
 
 @Injectable({
