@@ -10,7 +10,7 @@
                       [pageSize]="pageSize$ | async"
                       [sortDirection]="sortDirection$ | async"
                       [sortActive]="sortActive$ | async"
-                      (rowClick)="onRowClick($event)"
+                      (rowClick)="onShowDetails($event)"
                       (sort)="onSort($event)"
                       (page)="onPage($event)">
       <ng-container *appAction="let row">

@@ -10,7 +10,10 @@ import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 import {BASE_LIST} from '../../../../shared/directives';
-import {PageLogListComponent} from '../../components';
+import {PageLogListComponent, PageLogStatusComponent} from '../../components';
+import {PageLog} from '../../../../shared/models';
+import {MatDialog} from '@angular/material/dialog';
+import {PageLogDialogComponent} from '../../components/page-log-dialog/page-log-dialog.component';
 
 @Component({
   selector: 'app-pagelog',
@@ -41,6 +44,7 @@ export class PageLogComponent implements OnInit {
               private fb: FormBuilder,
               private pageLogService: PageLogService,
               private errorService: ErrorService,
+              private dialog: MatDialog,
               public appConfigService: AppConfigService) {
   }
 
@@ -125,12 +129,10 @@ export class PageLogComponent implements OnInit {
     this.query$ = query$;
   }
 
-  onRowClick(item: ListItem) {
-    if (item !== null) {
-      this.router.navigate([item.id], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
-    }
+  onShowDetails(pagelog: PageLog){
+    const dialogRef = this.dialog.open(PageLogDialogComponent, {
+      data: {pagelog},
+    });
   }
 
   onSort(sort: Sort) {
