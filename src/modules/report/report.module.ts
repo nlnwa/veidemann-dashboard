@@ -52,7 +52,6 @@ import { JobExecutionShortcutsComponent } from './components/job-execution-short
 import { PageLogShortcutsComponent } from './components/page-log-shortcuts/page-log-shortcuts.component';
 import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
 import { CrawlExecutionFetchPipe } from './pipe/crawlexecution-fetch.pipe';
-import { PageLogDialogComponent } from './components/page-log-dialog/page-log-dialog.component';
 
 
 @NgModule({
@@ -98,7 +97,6 @@ import { PageLogDialogComponent } from './components/page-log-dialog/page-log-di
     PageLogShortcutsComponent,
     CrawlLogShortcutsComponent,
     CrawlExecutionFetchPipe,
-    PageLogDialogComponent,
   ],
     imports: [
         CommonsModule,
