@@ -8,11 +8,7 @@ import {environment} from '../../../../environments/environment';
 })
 
 export class AboutDialogComponent {
-
+ readonly environment = environment;
   constructor() {
-  }
-
-  get dashBoardversion(): string {
-    return environment.version;
   }
 }
