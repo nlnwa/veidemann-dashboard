@@ -6,7 +6,6 @@ import {ControllerApiService, ErrorService} from '../../../core/services';
 import {CrawlerStatusDialogComponent} from '..';
 import {MatDialog} from '@angular/material/dialog';
 import {JobExecutionStatus} from '../../../../shared/models/report';
-import {Health, HealthApiService} from '../../../core/services/api/health-api.service';
 
 @Component({
   selector: 'app-home',
@@ -16,16 +15,12 @@ import {Health, HealthApiService} from '../../../core/services/api/health-api.se
 export class HomeComponent implements OnInit {
 
   updateRunStatus: Subject<void> = new Subject();
-  updateHealthStatus: Subject<void> = new Subject();
   runStatus$: Observable<RunStatus>;
   runningCrawls$: Observable<JobExecutionStatus>;
-  healthStatus: Health;
-  healthStatus$: Observable<Health>;
 
   constructor(private errorService: ErrorService,
               private controllerApiService: ControllerApiService,
-              private dialog: MatDialog,
-              private healthApiService: HealthApiService) {
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -36,16 +31,6 @@ export class HomeComponent implements OnInit {
         return throwError(error);
       })
     );
-    this.healthStatus$ = merge(this.updateHealthStatus, timer(0, 30000)).pipe(
-      mergeMap(() => this.healthApiService.get()),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return throwError(error);
-      })
-    );
-
-    // this.showHealth();
-
   }
 
   onChangeRunStatus(shouldPause: boolean) {
@@ -65,9 +50,5 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  showHealth() {
-    this.healthApiService.get()
-      .subscribe((data: Health) => this.healthStatus = { ...data});
-  }
 
 }
