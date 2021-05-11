@@ -1,28 +1,15 @@
-.crawlerRunningButton {
+.crawlerRunning {
   color: forestgreen;
-  float: left;
-  font-size: 2.0em;
-  margin-top: -0.1em;
-  padding-top: 0.5em;
 }
 
-.crawlerRunningButton .mat-icon {
-  vertical-align: top;
-  font-size: 1.25em;
-  color: black;
-}
-
-.crawlerPausedButton {
+.crawlerPaused {
   color: darkred;
-  float: left;
-  font-size: 2.0em;
-  margin-top: -0.1em;
-  padding-top: 0.5em;
 }
 
-.crawlerPausedButton .mat-icon {
-  vertical-align: top;
-  font-size: 1.25em;
-  color: black;
+.crawlerPausing {
+  color: darkorange;
 }
 
+.mat-card {
+  text-align: center;
+}
