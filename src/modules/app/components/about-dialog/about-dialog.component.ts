@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../core/services';
-import {DeploymentVersions} from '../../../../shared/models/deployment-versions.model';
 
 @Component({
   selector: 'app-about-dialog',
@@ -10,10 +8,8 @@ import {DeploymentVersions} from '../../../../shared/models/deployment-versions.
 })
 
 export class AboutDialogComponent {
-  versions: DeploymentVersions
 
-  constructor(private appConfig: AppConfigService) {
-    this.versions = appConfig.versions;
+  constructor() {
   }
 
   get dashBoardversion(): string {
