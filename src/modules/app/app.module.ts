@@ -18,8 +18,6 @@ import {
 import {AbilityModule} from '@casl/angular';
 import {Ability, PureAbility} from '@casl/ability';
 import { HomeComponent } from './components/home/home.component';
-import {HealthCheckComponent} from './components/health-check/health-check.component';
-import {HealthCheckStatusComponent} from './components/health-check/health-check-status/health-check-status.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 
@@ -33,8 +31,6 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     CrawlerStatusComponent,
     AboutDialogComponent,
     HomeComponent,
-    HealthCheckComponent,
-    HealthCheckStatusComponent,
   ],
   entryComponents: [ErrorDialogComponent, CrawlerStatusDialogComponent],
     imports: [
