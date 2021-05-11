@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {merge, Observable, Subject, throwError, timer} from 'rxjs';
-import {RunStatus} from '../../../../shared/models/controller';
-import {catchError, mergeMap} from 'rxjs/operators';
+import {Observable, Subject, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {ControllerApiService, ErrorService} from '../../../core/services';
 import {CrawlerStatusDialogComponent} from '..';
 import {MatDialog} from '@angular/material/dialog';
-import {JobExecutionStatus} from '../../../../shared/models/report';
+import {CrawlerStatus} from '../../../../shared/models/controller/controller.model';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +14,7 @@ import {JobExecutionStatus} from '../../../../shared/models/report';
 export class HomeComponent implements OnInit {
 
   updateRunStatus: Subject<void> = new Subject();
-  runStatus$: Observable<RunStatus>;
-  runningCrawls$: Observable<JobExecutionStatus>;
+  crawlerStatus$: Observable<CrawlerStatus>;
 
   constructor(private errorService: ErrorService,
               private controllerApiService: ControllerApiService,
@@ -24,13 +22,13 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.runStatus$ = merge(this.updateRunStatus, timer(0, 30000)).pipe(
-      mergeMap(() => this.controllerApiService.getRunStatus()),
+    this.crawlerStatus$ = this.controllerApiService.getCrawlerStatus().pipe(
       catchError(error => {
         this.errorService.dispatch(error);
         return throwError(error);
       })
     );
+    this.updateRunStatus.next();
   }
 
   onChangeRunStatus(shouldPause: boolean) {

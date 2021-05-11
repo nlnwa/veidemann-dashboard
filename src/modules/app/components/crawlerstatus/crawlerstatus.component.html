@@ -1,37 +1,46 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      Crawler status
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
+<div *ngIf="crawlerStatus" fxLayout="row" fxLayoutGap="16px">
+  <mat-card>
+    <h2>Crawler status</h2>
+    <mat-card-content>
+      <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.RUNNING">
+        <h1 class="crawlerRunning">RUNNING</h1>
+        <button mat-raised-button
+                *ngIf="'update' | able: 'crawlerStatus'"
+                matTooltip="Pause crawler"
+                i18n-matTooltip="@@crawlerStatusPauseCrawlerButtonTooltip"
+                (click)="onPauseCrawler(true)">
+          PAUSE
+          <mat-icon>pause</mat-icon>
+        </button>
+      </div>
 
-    <div fxLayout="row" *ngIf="runStatus === RunStatus.RUNNING">
-      <p class="crawlerRunningButton">RUNNING<p>
-      <button mat-icon-button class="crawlerRunningButton"
-             *ngIf="'update' | able: 'crawlerStatus'"
-              matTooltip="Pause crawler"
-              i18n-matTooltip="@@crawlerStatusPauseCrawlerButtonTooltip"
-              (click)="onPauseCrawler(true)">
-        <mat-icon>pause</mat-icon>
-      </button>
-    </div>
+      <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.PAUSE_REQUESTED">
+        <h1 class="crawlerPausing" i18n="@@crawlerStatusPauseRequestedTitle">
+          IS PAUSING
+        </h1>
+      </div>
 
-    <div fxLayout="row" *ngIf="runStatus === RunStatus.PAUSE_REQUESTED">
-      <h1 i18n="@@crawlerStatusPauseRequestedTitle" style="color: darkorange">
-        IS PAUSING
-      </h1>
-    </div>
+      <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.PAUSED">
+        <h1 class="crawlerPaused">PAUSED</h1>
+        <button mat-raised-button
+                *ngIf="'update' | able: 'crawlerStatus'"
+                matTooltip="Unpause crawler"
+                i18n-matTooltip="@@crawlerStatusUnpauseCrawlerButtonTooltip"
+                (click)="onPauseCrawler(false)">
+          UNPAUSE
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-    <div fxLayout="row" *ngIf="runStatus === RunStatus.PAUSED">
-      <p class="crawlerPausedButton">PAUSED</p>
-      <button mat-icon-button class="crawlerPausedButton"
-              *ngIf="'update' | able: 'crawlerStatus'"
-              matTooltip="Unpause crawler"
-              i18n-matTooltip="@@crawlerStatusUnpauseCrawlerButtonTooltip"
-              (click)="onPauseCrawler(false)">
-        <mat-icon >play_arrow</mat-icon>
-      </button>
-    </div>
-  </mat-card-content>
-</mat-card>
+  <mat-card>
+    <h2>Total queue size</h2>
+    <h1>{{ crawlerStatus.queueSize }}</h1>
+  </mat-card>
+
+  <mat-card>
+    <h2>Busy crawlhost groups</h2>
+    <h1>{{ crawlerStatus.busyCrawlHostGroupCount }}</h1>
+  </mat-card>
+</div>

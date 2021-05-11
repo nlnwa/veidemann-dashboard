@@ -2,7 +2,7 @@
   <div fxLayout="row wrap" fxLayoutGap="16px">
     <div fxLayout="column" fxLayoutGap="16px">
       <app-crawlerstatus *ngIf="'read' | able: 'crawlerStatus'"
-                         [runStatus]="runStatus$ | async"
+                         [crawlerStatus]="crawlerStatus$ | async"
                          (change)="onChangeRunStatus($event)"></app-crawlerstatus>
     </div>
   </div>
