@@ -18,15 +18,5 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
-  },
-  "/health": {
-    "target": {
-      "host": "veidemann.local",
-      "protocol": "https:",
-      "port": 443
-    },
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "info"
   }
 }

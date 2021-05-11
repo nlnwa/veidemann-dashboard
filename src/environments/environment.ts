@@ -3,16 +3,10 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-import {DeploymentVersions} from '../shared/models/deployment-versions.model';
-
 export const environment = {
   production: false,
   version: 'DEV',
-  versions: new DeploymentVersions({
-    veidemann: 'DEV'
-  }),
   configUrl: '/veidemann/assets/config/environment.json',
-  versionUrl: '/veidemann/assets/versions.json',
   grpcWebUrl: '/grpc-web',
   authConfig: {
 
