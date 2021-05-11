@@ -72,7 +72,7 @@ export {
   RoleList,
   RunCrawlReply as RunCrawlReplyProto,
   RunStatus,
-  CrawlerStatus,
+  CrawlerStatus as CrawlerStatusProto,
   RunCrawlRequest as RunCrawlRequestProto,
 } from './gen/controller/v1/controller_pb';
 

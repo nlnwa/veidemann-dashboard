@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {RunStatus} from '../../../../shared/models/controller';
+import {CrawlerStatus} from '../../../../shared/models/controller/controller.model';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class CrawlerStatusComponent {
   readonly RunStatus = RunStatus;
 
   @Input()
-  runStatus: RunStatus;
+  crawlerStatus: CrawlerStatus;
 
   @Output()
   change: EventEmitter<boolean> = new EventEmitter<boolean>();

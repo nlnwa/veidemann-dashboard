@@ -1,4 +1,29 @@
-import {ExecutionIdProto, RunCrawlReplyProto, RunCrawlRequestProto} from '../../../api';
+import {CrawlerStatusProto, ExecutionIdProto, RunCrawlReplyProto, RunCrawlRequestProto} from '../../../api';
+
+export class CrawlerStatus {
+  runStatus: RunStatus;
+  busyCrawlHostGroupCount: number;
+  queueSize: number;
+
+  constructor({
+                runStatus = 0,
+                busyCrawlHostGroupCount = 0,
+                queueSize = 0,
+              }: Partial<CrawlerStatus> = {}) {
+    this.runStatus = runStatus;
+    this.busyCrawlHostGroupCount = busyCrawlHostGroupCount;
+    this.queueSize = queueSize;
+  }
+
+  static fromProto(proto: CrawlerStatusProto): CrawlerStatus {
+    return new CrawlerStatus({
+      queueSize: proto.getQueuesize(),
+      busyCrawlHostGroupCount: proto.getBusycrawlhostgroupcount(),
+      runStatus: proto.getRunstatus().valueOf() as RunStatus
+    });
+  }
+}
+
 
 export enum RunStatus {
   RUNNING = 0,
@@ -60,9 +85,9 @@ export class ExecutionId {
   id: string;
 
   constructor({
-    id = ''
+                id = ''
               }: Partial<ExecutionId> = {}) {
-    this.id =  id;
+    this.id = id;
   }
 
   static fromProto(proto: ExecutionIdProto): ExecutionId {

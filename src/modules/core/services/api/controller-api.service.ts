@@ -7,9 +7,13 @@ import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 import {ControllerPromiseClient} from '../../../../api';
 import {AuthService} from '../auth';
 import {AppConfigService} from '../app.config.service';
-import {RunStatus} from '../../../../shared/models/controller';
 import {Role} from '../../../../shared/models/config';
-import {ExecutionId, RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
+import {
+  CrawlerStatus,
+  ExecutionId,
+  RunCrawlReply,
+  RunCrawlRequest
+} from '../../../../shared/models/controller/controller.model';
 import {ApplicationErrorHandler} from '../error.handler';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models/report';
 import {CountResponse} from '../../../../shared/models';
@@ -38,9 +42,9 @@ export class ControllerApiService {
       .then(roleList => roleList.getRoleList());
   }
 
-  getRunStatus(): Observable<RunStatus> {
+  getCrawlerStatus(): Observable<CrawlerStatus> {
     return from(this.controllerPromiseClient.status(new Empty(), this.authService.metadata))
-      .pipe(map(status => status.getRunstatus()));
+      .pipe(map(CrawlerStatus.fromProto));
   }
 
   pauseCrawler(): void {
