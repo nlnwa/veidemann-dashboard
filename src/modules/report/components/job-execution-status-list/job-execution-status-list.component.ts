@@ -38,7 +38,7 @@ export class JobExecutionStatusListComponent extends BaseListComponent<JobExecut
   @Input()
   sortActive = 'startTime';
 
-  displayedColumns: string[] = ['jobId', 'state', 'startTime', 'endTime', 'extra', 'action'];
+  displayedColumns: string[] = ['jobId', 'state', 'desiredState', 'startTime', 'endTime', 'extra', 'action'];
 
   constructor(protected cdr: ChangeDetectorRef) {
     super(cdr);

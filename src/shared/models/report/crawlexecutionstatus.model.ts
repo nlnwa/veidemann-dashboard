@@ -47,6 +47,7 @@ export class CrawlExecutionStatus {
   currentUriIdList: string[];
   jobExecutionId: string;
   error: ApiError;
+  desiredState: CrawlExecutionState;
 
   constructor({
                 id = '',
@@ -66,7 +67,8 @@ export class CrawlExecutionStatus {
                 createdTime = '',
                 currentUriIdList = [],
                 jobExecutionId = '',
-                error = new ApiError()
+                error = new ApiError(),
+                desiredState = CrawlExecutionState.UNDEFINED,
               }: Partial<CrawlExecutionStatus> = {}) {
     this.id = id;
     this.jobId = jobId;
@@ -86,6 +88,7 @@ export class CrawlExecutionStatus {
     this.currentUriIdList = currentUriIdList;
     this.jobExecutionId = jobExecutionId;
     this.error = error;
+    this.desiredState = desiredState;
   }
 
   /**
@@ -129,7 +132,8 @@ export class CrawlExecutionStatus {
       createdTime: fromTimestampProto(proto.getCreatedTime()),
       currentUriIdList: proto.getCurrentUriIdList(),
       jobExecutionId: proto.getJobExecutionId(),
-      error: ApiError.fromProto(proto.getError())
+      error: ApiError.fromProto(proto.getError()),
+      desiredState: CrawlExecutionState[CrawlExecutionState[proto.getDesiredState()]]
     });
     return crawlExecutionStatus;
   }
@@ -153,6 +157,7 @@ export class CrawlExecutionStatus {
     proto.setCreatedTime(toTimestampProto(crawlExecutionStatus.createdTime));
     proto.setCurrentUriIdList(crawlExecutionStatus.currentUriIdList);
     proto.setJobExecutionId(crawlExecutionStatus.jobExecutionId);
+    proto.setDesiredState(crawlExecutionStatus.desiredState.valueOf());
     return proto;
   }
 }

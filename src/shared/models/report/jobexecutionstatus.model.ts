@@ -37,6 +37,7 @@ export class JobExecutionStatus {
   documentsRetried: number;
   documentsDenied: number;
   error: ApiError;
+  desiredState: JobExecutionState;
 
   constructor({
                 id = '',
@@ -52,7 +53,8 @@ export class JobExecutionStatus {
                 documentsOutOfScope = 0,
                 documentsRetried = 0,
                 documentsDenied = 0,
-                error = new ApiError()
+                error = new ApiError(),
+                desiredState = JobExecutionState.UNDEFINED
               }: Partial<JobExecutionStatus> = {}) {
     this.id = id;
     this.jobId = jobId;
@@ -68,6 +70,7 @@ export class JobExecutionStatus {
     this.documentsRetried = documentsRetried;
     this.documentsDenied = documentsDenied;
     this.error = error;
+    this.desiredState = desiredState;
   }
 
   static fromProto(proto: JobExecutionStatusProto): JobExecutionStatus {
@@ -86,7 +89,8 @@ export class JobExecutionStatus {
       documentsOutOfScope: proto.getDocumentsOutOfScope(),
       documentsRetried: proto.getDocumentsRetried(),
       documentsDenied: proto.getDocumentsDenied(),
-      error: ApiError.fromProto(proto.getError())
+      error: ApiError.fromProto(proto.getError()),
+      desiredState: JobExecutionState[JobExecutionState[proto.getDesiredState()]]
     });
   }
 
@@ -102,6 +106,7 @@ export class JobExecutionStatus {
     proto.setDocumentsOutOfScope(jobExecutionStatus.documentsOutOfScope);
     proto.setDocumentsRetried(jobExecutionStatus.documentsRetried);
     proto.setDocumentsDenied(jobExecutionStatus.documentsDenied);
+    proto.setDesiredState(jobExecutionStatus.desiredState.valueOf());
 
     return proto;
   }

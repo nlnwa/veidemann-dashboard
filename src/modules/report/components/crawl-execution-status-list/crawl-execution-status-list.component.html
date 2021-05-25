@@ -33,6 +33,15 @@
         <td mat-cell *matCellDef="let row">{{CrawlExecutionState[row.state]}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="desiredState">
+        <th i18n="@@crawlExecutionReportListDesiredStateHeaderCell"
+            mat-header-cell *matHeaderCellDef mat-sort-header>Desired state
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{CrawlExecutionState[row.desiredState] !== 'UNDEFINED' ? CrawlExecutionState[row.desiredState] : ''}}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="errorCode">
         <th i18n="@@crawlExecutionReportListErrorCodeHeaderCell"
             mat-header-cell *matHeaderCellDef>Error
