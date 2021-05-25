@@ -6,7 +6,10 @@
 <!--  <p>Add annotation <mat-chip>scope_altSeed:{{alternativeSeed}}</mat-chip> for seed:-->
 <!--    <a [routerLink]="['/config','seed', configObject.id]">{{configObject.meta.name}}</a></p>-->
 
-  <p>seed has following scope_altSeed annotation: {{altSeedAnnotation}}</p>
+<!--  <p>seed has following scope_altSeed annotation: {{altSeedAnnotation}}</p>-->
+  <div *ngIf="eventObject | getSeedConfig | async as seed">
+    <p>{{seed.meta.name}}</p>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="accent"

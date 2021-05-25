@@ -17,8 +17,6 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
               public dialogRef: MatDialogRef<EventAlternativeSeedDialogComponent>) {
     super(configService);
     this.eventObject = this.data.eventObject;
-    // this.configObject = this.data.configObject;
-
   }
 
   ngOnInit(): void {

@@ -1,17 +1,16 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Annotation, ConfigObject, ConfigRef, EventObject, Kind} from '../../../../shared/models';
+import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {DetailDirective} from '../../../report/directives';
 import {Observable, Subject} from 'rxjs';
-import {filter, map, mergeMap, takeUntil} from 'rxjs/operators';
+import {map, mergeMap, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
-import {EventAlternativeSeedDialogComponent} from '../event-types/event-alternative-seed/event-alternative-seed-dialog/event-alternative-seed-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfigService} from '../../../commons/services';
-import {EventDialogData} from '../event-dialog/event-dialog.component';
+
 
 @Component({
   selector: 'app-event-details',
@@ -23,6 +22,7 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   readonly States = States;
   readonly Severity = Severity;
   readonly Severities = Severities;
+  readonly EventType = EventType;
 
   private ngUnsubscribe = new Subject();
 
@@ -77,9 +77,9 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
     this.item$.subscribe(event => {
       this.eventObject = event;
-      console.log('eventObject oninit details: ', this.eventObject);
       this.updateForm();
-      if (this.eventObject.type === 'Alternative seed') {
+      if (this.eventObject.type === EventType.altSeed) {
+        console.log('type er alternative seed');
         const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
         this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
           .subscribe(seedObj => {
