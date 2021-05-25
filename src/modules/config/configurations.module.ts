@@ -48,6 +48,7 @@ import {
   JobExecutionStatusPipe,
   PolitenessConfigNamePipe,
   ScriptAnnotationsPipe,
+  SeedConfigPipe,
 } from './pipe';
 
 import {ConfigService} from '../commons/services';
@@ -181,6 +182,7 @@ import {RouterExtraService} from './services/router-extra.service';
     EntityNamePipe,
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
+    SeedConfigPipe,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
@@ -203,7 +205,10 @@ import {RouterExtraService} from './services/router-extra.service';
     ReportModule,
     KeyboardShortcutsModule,
   ],
-  exports: [],
+  exports: [
+    AnnotationComponent,
+    SeedConfigPipe
+  ],
   providers: [
     OptionsResolver,
     ConfigService,

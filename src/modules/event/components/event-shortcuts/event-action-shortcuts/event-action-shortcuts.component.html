@@ -1,0 +1,21 @@
+<mat-nav-list *ngIf="eventObject">
+  <h2 mat-subheader>Actions</h2>
+  <ng-container [ngSwitch]="eventObject.type">
+
+    <ng-container>
+      <a mat-list-item (click)="onAssignToMe()" matTooltip="Assign this event to me">
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        Assign to me
+      </a>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Alternative seed'">
+      <a mat-list-item (click)="onAddAlternativeSeed()"
+         matTooltip="Add alternative url for seed to scope annotation">
+        <mat-icon mat-list-icon>add_circle</mat-icon>
+        Add alternative url
+      </a>
+    </ng-container>
+
+  </ng-container>
+</mat-nav-list>

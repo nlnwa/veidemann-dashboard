@@ -1,14 +1,16 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {EventDetailsComponent} from '../../containers/event-details/event-details.component';
+import {EventDetailsComponent} from '../event-details/event-details.component';
 import {FormBuilder} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {EventObject} from '../../../../shared/models';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ConfigObject, ConfigRef, EventObject, Kind} from '../../../../shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
+import {ConfigService} from '../../../commons/services';
 
 export interface EventDialogData {
   eventObject: EventObject;
+  configObject?: ConfigObject;
 }
 
 @Component({
@@ -21,15 +23,16 @@ export class EventDialogComponent extends EventDetailsComponent implements OnIni
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
+              protected eventService: EventService,
+              protected configService: ConfigService,
               protected route: ActivatedRoute,
-              protected service: EventService,
               protected errorService: ErrorService,
               protected router: Router,
+              protected dialog: MatDialog,
               protected snackBarService: SnackBarService,
               @Inject(MAT_DIALOG_DATA) public data: EventDialogData,
               public dialogRef: MatDialogRef<EventDetailsComponent>) {
-    super(fb, authService, route, service, errorService, router, snackBarService);
-    this.createForm();
+    super(fb, authService, eventService, configService, route, errorService, router, dialog, snackBarService);
     this.eventObject = this.data.eventObject;
   }
 
@@ -39,6 +42,11 @@ export class EventDialogComponent extends EventDetailsComponent implements OnIni
 
   onDialogClose(): EventObject {
     return this.prepareSave();
+  }
+
+  getConfigRef(): ConfigRef {
+    const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
+    return new ConfigRef({kind: Kind.SEED, id: seedId});
   }
 
 }

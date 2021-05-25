@@ -6,7 +6,7 @@ import {EventListRequest, EventSaveRequest, EventUpdateRequest, FieldMask, ListR
 import {EventObject} from '../../../shared/models';
 import {LoadingService} from '../../../shared/services';
 import {Getter} from '../../../shared/directives';
-import {Severity, State} from '../../../shared/models/event/event.model';
+import {EventRef, Severity, State} from '../../../shared/models/event/event.model';
 import {AuthService} from '../../core';
 
 export interface EventQuery extends Page {
@@ -30,9 +30,9 @@ export class EventService extends LoadingService implements Getter<EventObject> 
     this.cache = new Map();
   }
 
-  get(query: Detail): Observable<EventObject> {
+  get(eventRef: EventRef): Observable<EventObject> {
     const listRequest = new EventListRequest();
-    listRequest.addId(query.id);
+    listRequest.addId(eventRef.id);
     return this.eventHandlerApiService.list(listRequest);
   }
 

@@ -10,3 +10,4 @@ export * from './politeness-config-name.pipe';
 export * from './browser-script-name.pipe';
 export * from './entity-name.pipe';
 export * from './script-annotations.pipe';
+export * from './seed-config.pipe';

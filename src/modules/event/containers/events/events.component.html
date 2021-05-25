@@ -1,0 +1,49 @@
+<div fxLayout="column" class="container">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+  <div fxFlex fxLayout="row" class="container no-scroll">
+    <div fxLayout="column" class="scroll content-padding">
+      <app-event-query [query]="query$ | async"
+                       (queryChange)="onQueryChange($event)">
+      </app-event-query>
+    </div>
+    <div fxFlex fxLayout="column">
+      <app-event-list fxFlex
+                      appQueryEvent
+                      [query]="query$ | async"
+                      [length]="length$ | async"
+                      [pageIndex]="pageIndex$ | async"
+                      [pageSize]="pageSize$ | async"
+                      (sort)="onSort($event)"
+                      (page)="onPage($event)"
+                      (rowClick)="onRowClick($event)">
+        <ng-container *appShortcut="let row"></ng-container>
+        <ng-container *appFilter="let row"></ng-container>
+        <ng-container *appAction="let row">
+          <button *ngIf="canEdit(row)" mat-menu-item (click)="onEdit(row)"
+                  i18n="@@configListActionButtonEditConfig">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <a mat-menu-item
+             (click)="onAssignToMe(row)" i18n="@@eventListActionButtonAssignToMe">
+            <mat-icon>account_circle</mat-icon>
+            Assign to me
+          </a>
+          <button *ngIf="canEdit(row)" mat-menu-item (click)="onAddAlternativeUrl(row)"
+                  i18n="@@eventListActionButtonAddAlternativeSeed">
+            <mat-icon>add</mat-icon>
+            Add alternative URL to seed
+          </button>
+        </ng-container>
+        <ng-container *appAction="let row">
+          <button mat-menu-item
+                  i18n="@@eventListActionButtonShowEventDetails"
+                  (click)="onShowDetails(row)">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+            Show details
+          </button>
+        </ng-container>
+      </app-event-list>
+    </div>
+  </div>
+</div>

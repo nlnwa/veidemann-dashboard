@@ -1,0 +1,25 @@
+<div *ngIf="eventObject && configObject">
+  <h3>Alternative seed</h3>
+  <p>Potentially alternative url found during crawl of seed:
+    <a [routerLink]="['/config','seed', configObject.id]">{{configObject.meta.name}}</a>
+  </p>
+
+  <span fxLayout="row">
+    <p>{{configObject.meta.name}}</p>
+    <mat-icon matTooltip="Discovery path: {{discoveryPath}}"
+              matTooltipPosition="above"
+              i18n-matTooltip="@@alternativeSeedEventDiscoveryPathTooltip">arrow_forward</mat-icon>
+    <i>{{alternativeSeed}}</i>
+  </span>
+
+  <div fxLayout="column">
+    <mat-chip-list *ngIf="configObject.meta.annotationList">
+      <mat-chip *ngFor="let annotation of configObject.meta.annotationList">
+        {{annotation.key}}:{{annotation.value}}
+      </mat-chip>
+      <mat-chip style="background: green"
+                matTooltip="Want to add this Url to scope_altSeed">{{alternativeSeed}}</mat-chip>
+    </mat-chip-list>
+  </div>
+
+</div>

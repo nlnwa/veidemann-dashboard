@@ -1,21 +1,30 @@
-<div class="content-padding" fxLayout="column" fxLayoutGap="16px" *ngIf="event">
-  <div fxFlex fxLayout="row">
+<div class="content-padding" fxLayout="column" fxLayoutGap="16px" *ngIf="eventObject">
+  <div fxFlex fxLayout="row" fxLayoutGap="16px">
     <div fxLayout="column">
-      <mat-list *ngIf="event.labelList.length">
+      <mat-list *ngIf="eventObject.labelList.length">
         <h3 matSubheader>Labels</h3>
       <mat-chip-list>
-        <mat-chip *ngFor="let label of event.labelList">{{label}}</mat-chip>
+        <mat-chip *ngFor="let label of eventObject.labelList">{{label}}</mat-chip>
       </mat-chip-list>
       </mat-list>
-      <mat-list *ngIf="event.dataList.length">
-        <h3 matSubheader>Data</h3>
-        <ng-container *ngFor="let data of event.dataList">
-          <mat-list-item>{{data.key}}:{{data.value}}</mat-list-item>
+      <div [ngSwitch]="eventObject.type">
+        <ng-container *ngSwitchCase="'Alternative seed'">
+          <app-event-alternative-seed [eventObject]="eventObject"
+                                      [configObject]=" eventObject | getSeedConfig | async ">
+          </app-event-alternative-seed>
         </ng-container>
-      </mat-list>
+        <ng-container *ngSwitchDefault>
+          <mat-list *ngIf="eventObject.dataList.length">
+            <h3 matSubheader>Data</h3>
+            <ng-container *ngFor="let data of eventObject.dataList">
+              <mat-list-item>{{data.key}}:{{data.value}}</mat-list-item>
+            </ng-container>
+          </mat-list>
+        </ng-container>
+      </div>
     </div>
     <div fxFlex fxLayout="column">
-      <app-event-activity [activities]="event.activityList"></app-event-activity>
+      <app-event-activity [activities]="eventObject.activityList"></app-event-activity>
     </div>
   </div>
 </div>

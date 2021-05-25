@@ -1,13 +1,17 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {EventObject} from '../../../../shared/models';
+import {Annotation, ConfigObject, ConfigRef, EventObject, Kind} from '../../../../shared/models';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {DetailDirective} from '../../../report/directives';
 import {Observable, Subject} from 'rxjs';
-import {map, mergeMap, takeUntil} from 'rxjs/operators';
+import {filter, map, mergeMap, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
+import {EventAlternativeSeedDialogComponent} from '../event-types/event-alternative-seed/event-alternative-seed-dialog/event-alternative-seed-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfigService} from '../../../commons/services';
+import {EventDialogData} from '../event-dialog/event-dialog.component';
 
 @Component({
   selector: 'app-event-details',
@@ -27,14 +31,18 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
   form: FormGroup;
 
+  seed: ConfigObject;
+
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
+              protected eventService: EventService,
+              protected configService: ConfigService,
               protected route: ActivatedRoute,
-              protected service: EventService,
               protected errorService: ErrorService,
               protected router: Router,
+              protected dialog: MatDialog,
               protected snackBarService: SnackBarService) {
-    super(route, service);
+    super(route, eventService);
     this.createForm();
   }
 
@@ -69,8 +77,19 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
     this.item$.subscribe(event => {
       this.eventObject = event;
+      console.log('eventObject oninit details: ', this.eventObject);
       this.updateForm();
+      if (this.eventObject.type === 'Alternative seed') {
+        const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
+        this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
+          .subscribe(seedObj => {
+            console.log('funnet seed i details: ', seedObj);
+            this.seed = seedObj;
+            console.log('this.seed: ', this.seed);
+          });
+      }
     });
+
   }
 
   ngOnDestroy(): void {
@@ -79,7 +98,7 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   }
 
   onUpdate(): void {
-    this.service.save(this.prepareSave())
+    this.eventService.save(this.prepareSave())
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(update => {
         this.eventObject = update;
@@ -89,7 +108,7 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   }
 
   onDelete(eventObject: EventObject): void {
-    this.service.delete(eventObject).subscribe(() => {
+    this.eventService.delete(eventObject).subscribe(() => {
       this.router.navigate(['../'], {
         relativeTo: this.route,
       }).catch(error => this.errorService.dispatch(error));
@@ -100,6 +119,36 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   onRevert() {
     this.updateForm();
   }
+
+    //   }
+    //     this.configService.updateWithTemplate(updateTemplate, pathList, [this.seedId])
+    //       .pipe(takeUntil(this.ngUnsubscribe))
+    //       .subscribe(added => {
+    //         alert('Annotations added');
+    //       });
+    //  }
+    // }
+ // }
+
+  // onCreateDialogByEventType(eventObject: EventObject) {
+  //   const data: EventDialogData = {eventObject};
+  //   const eventType = this.getDialogByEventType(eventObject);
+  //   const dialogRef = this.dialog.open(eventType, {data});
+  //
+  //   dialogRef.afterClosed()
+  //   .subscribe((eventObj: EventObject) => {
+  //     console.log(eventObj);
+  //   });
+  // }
+
+  // getDialogByEventType(event: EventObject) {
+  //   switch (event.type) {
+  //     case 'Alternative seed':
+  //       return EventAlternativeSeedDialogComponent;
+  //   }
+  // }
+
+
 
   protected createForm() {
     this.form = this.fb.group({

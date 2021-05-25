@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>
+  <ng-container i18n="@@eventAltertnativeSeedDialogTitle">Alternative seed</ng-container>
+</h2>
+
+<mat-dialog-content *ngIf="eventObject">
+<!--  <p>Add annotation <mat-chip>scope_altSeed:{{alternativeSeed}}</mat-chip> for seed:-->
+<!--    <a [routerLink]="['/config','seed', configObject.id]">{{configObject.meta.name}}</a></p>-->
+
+  <p>seed has following scope_altSeed annotation: {{altSeedAnnotation}}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="accent"
+          [mat-dialog-close]="onAddAnnotation(true)"
+          matTooltip="Add annotation to seed and set event status to closed">
+   ADD AND CLOSE
+  </button>
+  <button mat-button
+          [mat-dialog-close]="onAddAnnotation(false)"
+          matTooltip="Add annotation but keep event status">ADD</button>
+  <button mat-button mat-dialog-close i18n="@@commonButtonCancel">CANCEL</button>
+</mat-dialog-actions>

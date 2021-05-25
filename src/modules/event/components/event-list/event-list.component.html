@@ -8,30 +8,30 @@
            (matSortChange)="onSortChange($event)"
            multiTemplateDataRows  >
 
-      <ng-coontainer matColumnDef="type">
+      <ng-container matColumnDef="type">
         <th i18n="@@EventTypeHeaderCell" mat-header-cell  mat-sort-header *matHeaderCellDef>Type</th>
         <td mat-cell *matCellDef="let row">{{row.type}}</td>
-      </ng-coontainer>
+      </ng-container>
 
-      <ng-coontainer matColumnDef="source">
+      <ng-container matColumnDef="source">
         <th i18n="@@EventSourceHeaderCell" mat-header-cell mat-sort-header *matHeaderCellDef>Source</th>
         <td mat-cell *matCellDef="let row">{{row.source}}</td>
-      </ng-coontainer>
+      </ng-container>
 
-      <ng-coontainer matColumnDef="state">
+      <ng-container matColumnDef="state">
         <th i18n="@@EventStateHeaderCell" mat-header-cell mat-sort-header *matHeaderCellDef>State</th>
         <td mat-cell *matCellDef="let row">{{State[row.state]}}</td>
-      </ng-coontainer>
+      </ng-container>
 
-      <ng-coontainer matColumnDef="severity">
+      <ng-container matColumnDef="severity">
         <th i18n="@@EventSeverityHeaderCell" mat-header-cell mat-sort-header *matHeaderCellDef>Severity</th>
         <td mat-cell *matCellDef="let row">{{Severity[row.severity]}}</td>
-      </ng-coontainer>
+      </ng-container>
 
-      <ng-coontainer matColumnDef="assignee">
+      <ng-container matColumnDef="assignee">
         <th i18n="@@EventAssigneeHeaderCell" mat-header-cell mat-sort-header *matHeaderCellDef>Assignee</th>
         <td mat-cell *matCellDef="let row">{{row.assignee}}</td>
-      </ng-coontainer>
+      </ng-container>
 
       <ng-container matColumnDef="extra">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -69,7 +69,7 @@
         <td mat-cell [class.expanded-preview-cell]="row === selectedRow" *matCellDef="let row"
             [attr.colspan]="displayedColumns.length">
           <div [@detailExpand]="row === selectedRow ? 'expanded' : 'collapsed'">
-            <app-event-preview *ngIf="row === selectedRow" [event]="row"></app-event-preview>
+            <app-event-preview *ngIf="row === selectedRow" [eventObject]="row"></app-event-preview>
           </div>
         </td>
       </ng-container>
