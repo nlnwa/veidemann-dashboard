@@ -20,6 +20,8 @@ $primary: mat.get-color-from-palette($my-app-primary);
 $accent: mat.get-color-from-palette($my-app-accent);
 $warn: mat.get-color-from-palette($my-app-warn);
 $highlight: mat.get-color-from-palette(map-get($my-app-theme, background), 'hover');
+$dark-focused: rgba(black, 0.12);
+
 
 @media (prefers-color-scheme: light) {
   @include mat.all-component-themes($my-app-theme);
