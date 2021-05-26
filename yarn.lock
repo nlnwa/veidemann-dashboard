@@ -128,12 +128,12 @@
   dependencies:
     tslib "^2.1.0"
 
-"@angular/cdk@~11.2.0":
-  version "11.2.0"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-11.2.0.tgz#4f0d8e9865d29ee1b2ab3ce7be9a7af0a87b0ef4"
-  integrity sha512-25k1giKAJ7DPzJBZfAVZmw/VfR4pZUaZnhgVAMwIdGPl5SaXJEW3e2znGlhzwkuQsiBgrSKfMgJmwKSyUbe2tg==
+"@angular/cdk@~12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-12.0.1.tgz#81df17ae37066bd3e5475777a7f51a94e15d3cbc"
+  integrity sha512-fO77bM0LWZeHkg+o23ZYGaZbth5DbaGDHrHVq+ygPA+wjmSDs12w2vIXQ6KpruGdP+28tAdpvZDMfD56N7xTbg==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.1.0"
   optionalDependencies:
     parse5 "^5.0.0"
 
@@ -242,19 +242,19 @@
     glob "7.1.7"
     yargs "^16.2.0"
 
-"@angular/material-moment-adapter@~11.2.0":
-  version "11.2.0"
-  resolved "https://registry.npmjs.org/@angular/material-moment-adapter/-/material-moment-adapter-11.2.0.tgz#50b14afb24794a63263de164e6c45c2f14836a29"
-  integrity sha512-dm9/aH9Yct5yqQhjN7R+Zj2VWmb8dF9LlHWwUFmhT7nSM5W+D4pK0KFEfRfwNZyV9AJkZ3C2YmjspOcJLlOFZw==
+"@angular/material-moment-adapter@~12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npmjs.org/@angular/material-moment-adapter/-/material-moment-adapter-12.0.1.tgz#704a1add18ebf44fbdfbbeec487c1b33cfb20584"
+  integrity sha512-1rCzVLBCapKQMlTIcc3kQ3mXgUelTI3fAq4lBxm8lV4YhkiNH6EjIuO2hUsJEUQxixj0bKQnLmZNfkZf+4E28w==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.1.0"
 
-"@angular/material@~11.2.0":
-  version "11.2.0"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-11.2.0.tgz#a5843f2964366daebab9edf2b0a3d6dcad451f5d"
-  integrity sha512-duTQdHtzdZ3KWn90JcN+eI0oNwr7E7JGEOp7tZ9XOtqty0h158SJUCYSuDxhFOqyAgaY41enNPHdB2c4Xz0iBQ==
+"@angular/material@~12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npmjs.org/@angular/material/-/material-12.0.1.tgz#2056cc7b08f05a061c46a8d94eb0dac7acf8dfc9"
+  integrity sha512-Sevy/ssBuidSbpixUH8SvBXpHn+rKYfDao2YTgQxBJugIun9mnV0QqlzVG2gkdVYCesqEgZJRe3k7QXq7E+vlw==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.1.0"
 
 "@angular/platform-browser-dynamic@~12.0.1":
   version "12.0.1"
@@ -4113,11 +4113,6 @@ grpc-web@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/grpc-web/-/grpc-web-1.2.1.tgz#860051d705bf5baa7b81fcbd14030060bf16b7b9"
   integrity sha512-ibBaJPzfMVuLPgaST9w0kZl60s+SnkPBQp6QKdpEr85tpc1gXW2QDqSne9xiyiym0logDfdUSm4aX5h9YBA2mw==
-
-hammerjs@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.npmjs.org/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
-  integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
 
 handle-thing@^2.0.0:
   version "2.0.1"
