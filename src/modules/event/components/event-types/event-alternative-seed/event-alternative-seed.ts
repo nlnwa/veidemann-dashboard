@@ -46,9 +46,9 @@ export class EventAlternativeSeedComponent implements OnInit, OnDestroy {
   }
 
   // onAddAlternativeSeed() {
-  //   const altSeedAnnotation = new Annotation({key: 'scope_altSeed', value: this.alternativeSeed});
+  //   const eventAltSeed = new Annotation({key: 'scope_altSeed', value: this.alternativeSeed});
   //   const updateTemplate = new ConfigObject({kind: Kind.SEED});
-  //   updateTemplate.meta.annotationList = [altSeedAnnotation];
+  //   updateTemplate.meta.annotationList = [eventAltSeed];
   //   const pathList = ['meta.annotation+'];
   //
   //   const altSeedAnnotations = this.seed.meta.annotationList.find(annotation => annotation.key === 'scope_altSeed').value;

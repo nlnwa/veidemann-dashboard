@@ -144,9 +144,9 @@ export class EventComponent implements OnInit, OnDestroy {
     // this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
     //   .subscribe(seedObj => seed = seedObj);
 
-    //  const altSeedAnnotation = new Annotation({key: 'scope_altSeed', value: alternativeSeed});
+    //  const eventAltSeed = new Annotation({key: 'scope_altSeed', value: alternativeSeed});
     //  const updateTemplate = new ConfigObject({kind: Kind.SEED});
-    //  updateTemplate.meta.annotationList = [altSeedAnnotation];
+    //  updateTemplate.meta.annotationList = [eventAltSeed];
     //  const pathList = ['meta.annotation+'];
 
     // if (this.seed.meta.annotationList.length > 0) {

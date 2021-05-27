@@ -20,11 +20,17 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
   }
 
   ngOnInit(): void {
-    console.log('seedId: ', this.seedId);
+    console.log('this.eventObject: ', this.eventObject);
   }
 
-  get altSeedAnnotation(): string {
-    return this.SeedAnnotations.find(data => data.key === 'scope_altSeed').value;
+  get eventAltSeed() {
+    return this.eventObject.dataList.find(({key}) => key === 'Alternative Url');
+  }
+
+  getAltSeedAnnotationChange(configObject: ConfigObject) {
+    const altSeedAnnotation = this.existingAltSeedAnnotation(configObject);
+    altSeedAnnotation.add(this.eventAltSeed);
+    return altSeedAnnotation;
   }
 
   existingAltSeedAnnotation(configObject: ConfigObject): any {
@@ -33,6 +39,7 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
   }
 
   onAddAnnotation(closeEvent: boolean): any {
+
     return {closeEvent};
   }
 

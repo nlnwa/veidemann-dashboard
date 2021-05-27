@@ -3,29 +3,30 @@
 </h2>
 
 <mat-dialog-content *ngIf="eventObject">
-  <p>Add annotation <mat-chip>scope_altSeed:{{alternativeSeed}}</mat-chip> for seed:
-
   <div *ngIf="eventObject | getSeedConfig | async as seed">
-      <a [routerLink]="['/config','seed', configObject.id]">{{seed.meta.name}}</a>
-  <div *ngIf="existingAltSeedAnnotation(seed)">
-    <p>Want to add the following alternative seed to existing scope_altSeed annotation: </p>
-
-  </div>
-  <div *ngIf="!existingAltSeedAnnotation(seed)">
-    <p> Want to add the following annotation:</p>
-  </div>
-
-    <div></div>
+    <p>Found an alternative URL during crawl for seed</p><a [routerLink]="['/config','seed', seed.id]">{{seed.meta.name}}</a>
+    <ng-container *ngIf="seed">
+      <ng-container *ngIf="existingAltSeedAnnotation(seed)">
+        <p>Want to add the alternative URL to existing scope_altSeed annotation: </p>
+        <mat-chip>{{existingAltSeedAnnotation(seed)}}</mat-chip>
+        <mat-chip>{{eventAltSeed}}</mat-chip>
+      </ng-container>
+      <ng-container *ngIf="!existingAltSeedAnnotation(seed)">
+        <p> Want to add annotation:</p>
+        <mat-chip>scope_altSeed:{{eventAltSeed.value}}</mat-chip>
+      </ng-container>
+    </ng-container>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="accent"
           [mat-dialog-close]="onAddAnnotation(true)"
-          matTooltip="Add annotation to seed and set event status to closed">
-   ADD AND CLOSE
+          matTooltip="Add annotation to seed and close event">
+    ADD AND CLOSE
   </button>
   <button mat-button
           [mat-dialog-close]="onAddAnnotation(false)"
-          matTooltip="Add annotation but keep event status">ADD</button>
+          matTooltip="Add annotation but keep event open">ADD
+  </button>
   <button mat-button mat-dialog-close i18n="@@commonButtonCancel">CANCEL</button>
 </mat-dialog-actions>
