@@ -3,12 +3,19 @@
 </h2>
 
 <mat-dialog-content *ngIf="eventObject">
-<!--  <p>Add annotation <mat-chip>scope_altSeed:{{alternativeSeed}}</mat-chip> for seed:-->
-<!--    <a [routerLink]="['/config','seed', configObject.id]">{{configObject.meta.name}}</a></p>-->
+  <p>Add annotation <mat-chip>scope_altSeed:{{alternativeSeed}}</mat-chip> for seed:
 
-<!--  <p>seed has following scope_altSeed annotation: {{altSeedAnnotation}}</p>-->
   <div *ngIf="eventObject | getSeedConfig | async as seed">
-    <p>{{seed.meta.name}}</p>
+      <a [routerLink]="['/config','seed', configObject.id]">{{seed.meta.name}}</a>
+  <div *ngIf="existingAltSeedAnnotation(seed)">
+    <p>Want to add the following alternative seed to existing scope_altSeed annotation: </p>
+
+  </div>
+  <div *ngIf="!existingAltSeedAnnotation(seed)">
+    <p> Want to add the following annotation:</p>
+  </div>
+
+    <div></div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

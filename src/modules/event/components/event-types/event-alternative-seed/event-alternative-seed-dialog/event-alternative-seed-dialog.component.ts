@@ -3,7 +3,7 @@ import {EventAlternativeSeedComponent} from '../event-alternative-seed';
 import {ConfigService} from '../../../../../commons/services';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EventDialogData} from '../../../event-dialog/event-dialog.component';
-import {Annotation} from '../../../../../../shared/models';
+import {Annotation, ConfigObject} from '../../../../../../shared/models';
 
 @Component({
   selector: 'app-event-alternative-seed-dialog',
@@ -25,6 +25,11 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
 
   get altSeedAnnotation(): string {
     return this.SeedAnnotations.find(data => data.key === 'scope_altSeed').value;
+  }
+
+  existingAltSeedAnnotation(configObject: ConfigObject): any {
+    return configObject.meta.annotationList.find(
+      ({key}) => key === 'scope_altSeed');
   }
 
   onAddAnnotation(closeEvent: boolean): any {

@@ -3,7 +3,7 @@ import {EventDetailsComponent} from '../event-details/event-details.component';
 import {FormBuilder} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ConfigObject, ConfigRef, EventObject, Kind} from '../../../../shared/models';
+import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {ConfigService} from '../../../commons/services';
@@ -20,6 +20,7 @@ export interface EventDialogData {
 })
 
 export class EventDialogComponent extends EventDetailsComponent implements OnInit {
+  readonly EventType = EventType;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -43,10 +44,4 @@ export class EventDialogComponent extends EventDetailsComponent implements OnIni
   onDialogClose(): EventObject {
     return this.prepareSave();
   }
-
-  getConfigRef(): ConfigRef {
-    const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
-    return new ConfigRef({kind: Kind.SEED, id: seedId});
-  }
-
 }

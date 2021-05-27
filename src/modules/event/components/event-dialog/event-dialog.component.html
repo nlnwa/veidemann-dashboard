@@ -45,7 +45,7 @@
           </mat-chip-list>
         </mat-list>
         <div [ngSwitch]="eventObject.type">
-          <ng-container *ngSwitchCase="'Alternative seed'">
+          <ng-container *ngSwitchCase="EventType.altSeed">
             <app-event-alternative-seed [eventObject]="eventObject"
                                         [configObject]="eventObject | getSeedConfig | async">
             </app-event-alternative-seed>
