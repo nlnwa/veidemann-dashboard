@@ -158,7 +158,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
       distinctUntilChanged());
 
     const disabled$ = queryParam$.pipe(
-      map(({disabled}) => disabled),
+      map(({disabled}) => disabled === null ? null : disabled === 'true'),
       distinctUntilChanged());
 
     const crawlJobIdList$ = queryParam$.pipe(
@@ -502,7 +502,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
       collection_id: value.collectionId || null,
       browser_config_id: value.browserConfigId || null,
       politeness_id: value.politenessId || null,
-      disabled: value.disabled || null,
+      disabled: value.disabled === null ? null : value.disabled,
       crawl_job_id: value.crawlJobIdList.length ? value.crawlJobIdList : null,
       script_id: value.scriptIdList.length ? value.scriptIdList : null,
       q: value.term || null
