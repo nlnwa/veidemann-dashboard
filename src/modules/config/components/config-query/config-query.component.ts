@@ -70,7 +70,7 @@ export class ConfigQueryComponent extends QueryComponent<ConfigQuery> implements
       politenessId: '',
       crawlJobIdList: {value: [], disabled: false},
       scriptIdList: {value: [], disabled: false},
-      disabled: false,
+      disabled: {value: null, disabled: false},
     });
   }
 

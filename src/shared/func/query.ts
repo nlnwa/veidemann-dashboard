@@ -31,7 +31,7 @@ export interface ConfigQuery extends Sort, Page {
   collectionId: string;
   browserConfigId: string;
   politenessId: string;
-  disabled: boolean;
+  disabled: boolean | null;
   crawlJobIdList: string[];
   scriptIdList: string[];
   term: string;
