@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import './theme';
 
 html, body, app-root, mat-sidenav-container {
@@ -65,7 +66,7 @@ html, body {
 
 .formattedUri {
   text-decoration: none;
-  color: mat-color($my-app-primary);
+  color: mat.get-color-from-palette($my-app-primary);
 }
 
 .formattedUri:hover {
