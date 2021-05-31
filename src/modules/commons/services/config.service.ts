@@ -193,7 +193,7 @@ export class ConfigService
           fieldMask.addPaths('seed.jobRef');
           queryTemplate.seed.jobRefList = query.crawlJobIdList.map(id => new ConfigRef({id, kind: Kind.CRAWLJOB}));
         }
-        if (query.disabled) {
+        if (query.disabled !== null) {
           fieldMask.addPaths('seed.disabled');
           queryTemplate.seed.disabled = query.disabled;
         }
