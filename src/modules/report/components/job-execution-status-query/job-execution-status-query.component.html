@@ -17,17 +17,17 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
+    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
            placeholder="From" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeFromPlaceholder">
     <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
+    <ngx-mat-datetime-picker #startTimeFromDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo"
+    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo"
            placeholder="To" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeToPlaceholder">
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #startTimeToDatePicker></mat-datepicker>
+    <ngx-mat-datetime-picker #startTimeToDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-checkbox labelPosition="after" formControlName="watch"

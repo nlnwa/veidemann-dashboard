@@ -24,11 +24,13 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {NgxMatDatetimePickerModule, NgxMatTimepickerModule} from '@angular-material-components/datetime-picker';
+import {NgxMatMomentModule} from '@angular-material-components/moment-adapter';
 
 const modules = [
   MatTabsModule,
@@ -61,11 +63,17 @@ const modules = [
   MatAutocompleteModule,
   MatTreeModule,
   MatProgressSpinnerModule,
+  NgxMatDatetimePickerModule,
+  NgxMatTimepickerModule,
+  NgxMatMomentModule,
 ];
 
 @NgModule({
   imports: modules,
-  exports: modules
+  exports: modules,
+  providers: [
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: 'no-NO'}
+  ]
 })
 export class MaterialModule {
 }
