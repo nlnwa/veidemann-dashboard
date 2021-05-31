@@ -3,30 +3,42 @@
 </h2>
 
 <mat-dialog-content *ngIf="eventObject">
-  <div *ngIf="eventObject | getSeedConfig | async as seed">
-    <p>Found an alternative URL during crawl for seed</p><a [routerLink]="['/config','seed', seed.id]">{{seed.meta.name}}</a>
-    <ng-container *ngIf="seed">
-      <ng-container *ngIf="existingAltSeedAnnotation(seed)">
+  <div *ngIf="configObject">
+    <p>Found an alternative URL during crawl for seed</p><a [routerLink]="['/config','seed', configObject.id]">
+    {{configObject.meta.name}}</a>
+    <ng-container *ngIf="existingAltSeedAnnotation">
+      <ng-container *ngIf="!annotationInList">
         <p>Want to add the alternative URL to existing scope_altSeed annotation: </p>
-        <mat-chip>{{existingAltSeedAnnotation(seed)}}</mat-chip>
-        <mat-chip>{{eventAltSeed}}</mat-chip>
+        <mat-chip>{{existingAltSeedAnnotation.key}}:{{existingAltSeedAnnotation.value}}</mat-chip>
+        <mat-chip>{{eventAltSeed.value}}</mat-chip>
       </ng-container>
-      <ng-container *ngIf="!existingAltSeedAnnotation(seed)">
-        <p> Want to add annotation:</p>
-        <mat-chip>scope_altSeed:{{eventAltSeed.value}}</mat-chip>
+      <ng-container *ngIf="annotationInList">
+        <p>Har denne i listen fra før. Lukk event</p>
       </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!existingAltSeedAnnotation">
+      <p> Want to add annotation:</p>
+      <mat-chip-list>
+        <mat-chip style="background-color: green">scope_altSeed:{{eventAltSeed.value}}</mat-chip>
+      </mat-chip-list>
     </ng-container>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions *ngIf="configObject">
   <button mat-raised-button color="accent"
-          [mat-dialog-close]="onAddAnnotation(true)"
-          matTooltip="Add annotation to seed and close event">
-    ADD AND CLOSE
+          matTooltip="Add annotation to seed and close event"
+          *ngIf="!annotationInList"
+          (click)="onAdd(true)">ADD AND CLOSE
   </button>
   <button mat-button
-          [mat-dialog-close]="onAddAnnotation(false)"
-          matTooltip="Add annotation but keep event open">ADD
+          matTooltip="Add annotation but keep event open"
+          *ngIf="!annotationInList"
+          (click)="onAdd(false)">ADD
+  </button>
+  <button mat-raised-button color="accent"
+          matTooltip="Close event"
+          *ngIf="annotationInList"
+          (click)="onCloseEvent()">CLOSE
   </button>
   <button mat-button mat-dialog-close i18n="@@commonButtonCancel">CANCEL</button>
 </mat-dialog-actions>
