@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
-import {ConfigObject, EventObject, Kind} from '../../../../shared/models';
+import {ConfigObject, EventObject, EventType, Kind} from '../../../../shared/models';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {EventQuery, EventService} from '../../services/event.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -32,9 +32,9 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   readonly Kind = Kind;
   readonly State = State;
+  readonly EventType = EventType;
 
   private eventObject: Subject<EventObject>;
-  eventObject$: Observable<EventObject>;
 
   private ngUnsubscribe = new Subject();
   private reload: Subject<void>;
@@ -193,7 +193,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  canEdit(configObject: ConfigObject): boolean {
+  canEdit(): boolean {
     return this.authService.canUpdate('event');
   }
 
@@ -226,10 +226,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         severity: query.severity || null
       },
     }).catch(error => this.errorService.dispatch(error));
-  }
-
-  onRowClick(eventObject: EventObject) {
-    console.log('rowclick');
   }
 
   onEdit(eventObject: EventObject) {
@@ -270,7 +266,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         }
         if (result.closeEvent) {
           eventObject.state = State.CLOSED;
-          console.log('will updateEvent with eventObject: ', eventObject);
           this.onUpdateEvent(eventObject);
         }
       });
@@ -279,13 +274,21 @@ export class EventsComponent implements OnInit, OnDestroy {
   onAssignToMe(event: EventObject) {
     const eventObject = event;
     const user = this.authService.email;
-    console.log('user: ', user);
     eventObject.assignee = user;
     this.eventService.save(eventObject)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(update => {
         this.reload.next();
         this.snackBarService.openSnackBar('Assigned to user: ' + user);
+      });
+  }
+
+  onCloseEvent(event: EventObject) {
+    event.state = State.CLOSED;
+    this.eventService.save(event).pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(update => {
+        this.reload.next();
+        this.snackBarService.openSnackBar('Event closed');
       });
   }
 

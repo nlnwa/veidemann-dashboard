@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EventHandlerApiService} from '../../core/services/api/event-handler-api.service';
-import {Detail, Page} from '../../../shared/func';
+import {Page} from '../../../shared/func';
 import {Observable} from 'rxjs';
 import {EventListRequest, EventSaveRequest, EventUpdateRequest, FieldMask, ListRequest} from '../../../api';
 import {EventObject} from '../../../shared/models';
@@ -64,21 +64,14 @@ export class EventService extends LoadingService implements Getter<EventObject> 
     }
 
     if (query.state) {
-      console.log('1.service state: ', query.state);
-      queryTemplate.state = query.state;
+      queryTemplate.state = query.state.valueOf();
       fieldMask.addPaths('state');
     }
 
-    // if (query.assignedToMe) {
-    //   queryTemplate.assignee = this.authService.email;
-    //   fieldMask.addPaths('assignee');
-    // }
-
-    // if (query.severity) {
-    //   console.log('service severity: ', query.severity);
-    //   queryTemplate.severity = query.severity;
-    //   fieldMask.addPaths('severity');
-    // }
+    if (query.severity) {
+      queryTemplate.severity = query.severity.valueOf();
+      fieldMask.addPaths('severity');
+    }
 
     if (fieldMask.getPathsList().length > 0) {
       listRequest.setQueryTemplate(EventObject.toProto(queryTemplate));

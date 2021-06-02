@@ -169,7 +169,7 @@ export class EventObject {
     proto.setId(eventObject.id);
     proto.setAssignee(eventObject.assignee);
     proto.setSeverity(eventObject.severity);
-    proto.setState(eventObject.state);
+    proto.setState(eventObject.state.valueOf());
     proto.setSource(eventObject.source);
     proto.setType(eventObject.type);
     proto.setDataList(eventObject.dataList.map(data => {

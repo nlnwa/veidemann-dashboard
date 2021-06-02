@@ -1,19 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
-import {Annotation, ConfigObject, EventObject, Kind} from '../../../../shared/models';
+import {ConfigObject, EventObject, Kind} from '../../../../shared/models';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {EventService} from '../../services/event.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {DeleteDialogComponent} from '../../../config/components';
 import {RouterExtraService} from '../../../config/services/router-extra.service';
 import {Location} from '@angular/common';
-import {Detail} from '../../../../shared/func';
-import {DetailDirective} from '../../../report/directives/detail-component.directive';
-import {EventRef} from '../../../../shared/models/event/event.model';
+import {EventRef, State} from '../../../../shared/models/event/event.model';
 import {EventDialogData} from '../../components/event-dialog/event-dialog.component';
 import {EventAlternativeSeedDialogComponent} from '../../components/event-types/event-alternative-seed/event-alternative-seed-dialog/event-alternative-seed-dialog.component';
+import {ConfigService} from '../../../commons/services';
 
 @Component({
   selector: 'app-event',
@@ -21,6 +20,8 @@ import {EventAlternativeSeedDialogComponent} from '../../components/event-types/
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit, OnDestroy {
+  readonly State = State;
+
   private ngUnsubscribe = new Subject();
 
   private eventObject: Subject<EventObject>;
@@ -34,6 +35,7 @@ export class EventComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private eventService: EventService,
+              private configService: ConfigService,
               private snackBarService: SnackBarService,
               private errorService: ErrorService,
               private router: Router,
@@ -126,7 +128,6 @@ export class EventComponent implements OnInit, OnDestroy {
   onAssignToMe(event: EventObject) {
     const eventObject = event;
     const user = this.authService.email;
-    console.log('user: ', user);
     eventObject.assignee = user;
     this.eventService.save(eventObject)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -137,34 +138,23 @@ export class EventComponent implements OnInit, OnDestroy {
   }
 
   onAddAlternativeSeed(eventObject: EventObject) {
-    //  const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
-    //  const alternativeSeed = this.eventObject.dataList.find(eventData => eventData.key === 'Alternative Url').value;
-
-    // let seed: ConfigObject;
-    // this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
-    //   .subscribe(seedObj => seed = seedObj);
-
-    //  const eventAltSeed = new Annotation({key: 'scope_altSeed', value: alternativeSeed});
-    //  const updateTemplate = new ConfigObject({kind: Kind.SEED});
-    //  updateTemplate.meta.annotationList = [eventAltSeed];
-    //  const pathList = ['meta.annotation+'];
-
-    // if (this.seed.meta.annotationList.length > 0) {
-    //   const altSeedAnnotations = this.seed.meta.annotationList.find(annotation => annotation.key === 'scope_altSeed').value;
-    // }
-
-    // console.log('this.seed onAddAlternativeSeed: ', this.seed);
-
     const data: EventDialogData = {eventObject};
     const dialogRef = this.dialog.open(EventAlternativeSeedDialogComponent, {data});
 
     dialogRef.afterClosed()
       .subscribe(result => {
-        if (result) {
-
-          console.log('result dialog close: ', result);
+        if (result.annotation) {
+          const updateTemplate = new ConfigObject({kind: Kind.SEED});
+          updateTemplate.meta.annotationList = [result.annotation];
+          const pathList = ['meta.annotation+'];
+          this.configService.updateWithTemplate(updateTemplate, pathList, [result.id]).subscribe(update => {
+            this.snackBarService.openSnackBar('Annotation added to seed');
+          });
+        }
+        if (result.closeEvent) {
+          eventObject.state = State.CLOSED;
+          this.onUpdateEvent(eventObject);
         }
       });
   }
-
 }

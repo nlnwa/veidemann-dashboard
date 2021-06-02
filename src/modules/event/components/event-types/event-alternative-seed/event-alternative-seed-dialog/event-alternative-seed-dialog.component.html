@@ -6,39 +6,46 @@
   <div *ngIf="configObject">
     <p>Found an alternative URL during crawl for seed</p><a [routerLink]="['/config','seed', configObject.id]">
     {{configObject.meta.name}}</a>
-    <ng-container *ngIf="existingAltSeedAnnotation">
-      <ng-container *ngIf="!annotationInList">
-        <p>Want to add the alternative URL to existing scope_altSeed annotation: </p>
-        <mat-chip>{{existingAltSeedAnnotation.key}}:{{existingAltSeedAnnotation.value}}</mat-chip>
-        <mat-chip>{{eventAltSeed.value}}</mat-chip>
-      </ng-container>
-      <ng-container *ngIf="annotationInList">
-        <p>Har denne i listen fra før. Lukk event</p>
-      </ng-container>
-    </ng-container>
-    <ng-container *ngIf="!existingAltSeedAnnotation">
-      <p> Want to add annotation:</p>
+
+    <ng-container *ngIf="!seedAltSeedAnnotation">
+      <h4> Want to add annotation:</h4>
       <mat-chip-list>
-        <mat-chip style="background-color: green">scope_altSeed:{{eventAltSeed.value}}</mat-chip>
+        <mat-chip style="background-color: green">scope_altSeed:{{eventAltSeed}}</mat-chip>
+      </mat-chip-list>
+    </ng-container>
+    <ng-container *ngIf="seedAltSeedAnnotation && !annotationExistsInList()">
+      <h4>Want to add the alternative URL to existing scope_altSeed annotation: </h4>
+      <mat-chip-list>
+        <mat-chip>{{seedAltSeedAnnotation.key}}:{{seedAltSeedAnnotation.value}}</mat-chip>
+        <mat-chip style="background-color: green">{{eventAltSeed}}</mat-chip>
+      </mat-chip-list>
+    </ng-container>
+    <ng-container *ngIf="seedAltSeedAnnotation && annotationExistsInList()">
+      <h4>URL already exists in seeds scope_altSeed annotation</h4>
+      <mat-chip-list>
+        <mat-chip>{{seedAltSeedAnnotation.key}}:{{seedAltSeedAnnotation.value}}</mat-chip>
       </mat-chip-list>
     </ng-container>
   </div>
+
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="configObject">
   <button mat-raised-button color="accent"
+          *ngIf="!annotationExistsInList()"
           matTooltip="Add annotation to seed and close event"
-          *ngIf="!annotationInList"
           (click)="onAdd(true)">ADD AND CLOSE
   </button>
   <button mat-button
+          *ngIf="!annotationExistsInList()"
           matTooltip="Add annotation but keep event open"
-          *ngIf="!annotationInList"
           (click)="onAdd(false)">ADD
   </button>
   <button mat-raised-button color="accent"
+          *ngIf="annotationExistsInList()"
           matTooltip="Close event"
-          *ngIf="annotationInList"
           (click)="onCloseEvent()">CLOSE
   </button>
-  <button mat-button mat-dialog-close i18n="@@commonButtonCancel">CANCEL</button>
+  <button mat-button
+          mat-dialog-close i18n="@@commonButtonCancel">CANCEL
+  </button>
 </mat-dialog-actions>

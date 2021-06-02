@@ -41,6 +41,7 @@ export class EventHandlerApiService {
   }
 
   list(listRequest: EventListRequest): Observable<EventObject> {
+    console.log('on list eventhandler api service: ', listRequest.toObject());
     return new Observable((observer: Observer<EventObjectProto>) => {
       const stream = this.eventHandlerPromiseClient.listEventObjects(listRequest, this.authService.metadata)
         .on('data', (data) =>  observer.next(data))

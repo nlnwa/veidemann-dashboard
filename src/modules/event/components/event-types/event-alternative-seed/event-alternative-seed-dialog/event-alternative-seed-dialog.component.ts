@@ -5,7 +5,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EventDialogData} from '../../../event-dialog/event-dialog.component';
 import {Annotation, ConfigObject} from '../../../../../../shared/models';
 import {SeedConfigPipe} from '../../../../../config/pipe';
-import {BehaviorSubject, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-event-alternative-seed-dialog',
@@ -16,7 +15,6 @@ import {BehaviorSubject, Observable} from 'rxjs';
 
 })
 export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedComponent implements OnInit {
-  configObject$: BehaviorSubject<ConfigObject>;
   configObject: ConfigObject;
 
   constructor(protected configService: ConfigService,
@@ -32,51 +30,51 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
 
 
   ngOnInit(): void {
-    console.log('this.eventObject: ', this.eventObject);
   }
 
-  get eventAltSeed() {
-    return this.eventObject.dataList.find(({key}) => key === 'Alternative Url');
-  }
+  // get eventAltSeed() {
+  //   return this.eventObject.dataList.find(({key}) => key === 'Alternative Url');
+  // }
 
-  get existingAltSeedAnnotation() {
-    return this.configObject.meta.annotationList.find(
-      ({key}) => key === 'scope_altSeed');
-  }
+  // get seedAltSeedAnnotation() {
+  //   return this.configObject.meta.annotationList.find(({key}) => key === 'scope_altSeed');
+  // }
 
-  get annotationInList() {
-    const eventAnnotation = this.eventAltSeed.value;
-    const seedAnnotations = this.existingAltSeedAnnotation.value.split(' ');
-    if (seedAnnotations !== undefined) {
-      return seedAnnotations.find(value => eventAnnotation === value);
-    } else {
-      return true;
-    }
-  }
+  // get seedAnnotations() {
+  //   return this.configObject.meta.annotationList;
+  // }
 
   getAltSeedAnnotationChange() {
     let annotation: Annotation;
-    const altSeedAnnotation = this.existingAltSeedAnnotation;
+    const altSeedAnnotation = this.seedAltSeedAnnotation !== undefined ? this.seedAltSeedAnnotation.value : undefined;
     const eventAltSeedAnnotation = this.eventAltSeed;
 
-    if (altSeedAnnotation) {
+    if (altSeedAnnotation !== undefined) {
       annotation = {
         key: 'scope_altSeed',
-        value: altSeedAnnotation + ' ' + eventAltSeedAnnotation.value
+        value: altSeedAnnotation + ' ' + eventAltSeedAnnotation
       };
       return annotation;
     } else {
       annotation = {
         key: 'scope_altSeed',
-        value: eventAltSeedAnnotation.value
+        value: eventAltSeedAnnotation
       };
       return annotation;
     }
   }
 
+  // existsInSeedAnnotationList() {
+  //   const seedAltSeedAnnotation = this.seedAltSeedAnnotation !== undefined
+  //     ? this.seedAltSeedAnnotation.value.split(' ') : [''];
+  //   const eventAltSeed = this.eventAltSeed;
+  //   return seedAltSeedAnnotation.find(url => eventAltSeed === url) !== undefined ? true : false;
+  // }
+
   onAdd(closeEvent: boolean): any {
     const annotation = this.getAltSeedAnnotationChange();
-    this.dialogRef.close({closeEvent, annotation});
+    const id = this.configObject.id;
+    this.dialogRef.close({closeEvent, annotation, id});
   }
 
   onCloseEvent() {

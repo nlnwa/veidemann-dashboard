@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Annotation, ConfigObject, EventObject} from '../../../../../shared/models';
+import {ConfigObject, EventObject} from '../../../../../shared/models';
 import {ConfigService} from '../../../../commons/services';
 import {Subject} from 'rxjs';
 
@@ -11,20 +11,19 @@ import {Subject} from 'rxjs';
 
 export class EventAlternativeSeedComponent implements OnInit, OnDestroy {
 
+  @Input() eventObject: EventObject;
+  @Input() configObject: ConfigObject;
+
   private ngUnsubscribe = new Subject();
 
   constructor(protected configService: ConfigService) {
   }
 
-  @Input() eventObject: EventObject;
-  @Input() configObject: ConfigObject;
-
-
   get seedId(): string {
     return this.eventObject.dataList.find(data => data.key === 'SeedId').value;
   }
 
-  get alternativeSeed(): string {
+  get eventAltSeed(): string {
     return this.eventObject.dataList.find(data => data.key === 'Alternative Url').value;
   }
 
@@ -32,37 +31,22 @@ export class EventAlternativeSeedComponent implements OnInit, OnDestroy {
     return this.eventObject.dataList.find(data => data.key === 'Discovery path').value;
   }
 
-  get SeedAnnotations(): Annotation[] {
-    return this.configObject.meta.annotationList;
+  get seedAltSeedAnnotation() {
+    return this.configObject.meta.annotationList.find(({key}) => key === 'scope_altSeed');
+  }
+
+  annotationExistsInList() {
+    const eventAltSeed = this.eventAltSeed;
+    const seedAltSeedAnnotations = this.seedAltSeedAnnotation !== undefined
+      ? this.seedAltSeedAnnotation.value.split(' ') : [''];
+    return seedAltSeedAnnotations.find(url => eventAltSeed === url) !== undefined ? true : false;
   }
 
   ngOnInit() {
-    console.log('alternativeSeed component onInit configObject: ', this.configObject);
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
-  // onAddAlternativeSeed() {
-  //   const eventAltSeed = new Annotation({key: 'scope_altSeed', value: this.alternativeSeed});
-  //   const updateTemplate = new ConfigObject({kind: Kind.SEED});
-  //   updateTemplate.meta.annotationList = [eventAltSeed];
-  //   const pathList = ['meta.annotation+'];
-  //
-  //   const altSeedAnnotations = this.seed.meta.annotationList.find(annotation => annotation.key === 'scope_altSeed').value;
-  //
-  //   if (altSeedAnnotations) {
-  //     const annotations = altSeedAnnotations.split(' ');
-  //     if (annotations.indexOf(this.alternativeSeed) === -1) {
-  //       this.configService.updateWithTemplate(updateTemplate, pathList, [this.seedId])
-  //         .pipe(takeUntil(this.ngUnsubscribe))
-  //         .subscribe(added => {
-  //           alert('Annotations added');
-  //         });
-  //     }
-  //   }
-  // }
-
 }

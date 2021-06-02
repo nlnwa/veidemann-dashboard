@@ -29,7 +29,6 @@ export class EventActivityComponent implements OnInit {
   }
 
   onRowClick(item: any) {
-    console.log('rowClick activity: ', item);
     if (item.id === this.selectedRow?.id) {
       this.selectedRow = null;
     } else {

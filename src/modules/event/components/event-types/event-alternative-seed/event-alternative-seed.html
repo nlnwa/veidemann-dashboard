@@ -9,17 +9,24 @@
     <mat-icon matTooltip="Discovery path: {{discoveryPath}}"
               matTooltipPosition="above"
               i18n-matTooltip="@@alternativeSeedEventDiscoveryPathTooltip">arrow_forward</mat-icon>
-    <i>{{alternativeSeed}}</i>
+    <i>{{eventAltSeed}}</i>
   </span>
 
-  <div fxLayout="column">
+  <div fxLayout="column" *ngIf="!annotationExistsInList()">
+    <mat-chip-list>
+      <mat-chip *ngIf="seedAltSeedAnnotation as annotation">
+        {{annotation.key}}:{{annotation.value}}
+      </mat-chip>
+      <mat-chip style="background: green"
+                matTooltip="Want to add this Url to scope_altSeed">{{eventAltSeed}}</mat-chip>
+    </mat-chip-list>
+  </div>
+  <div fxLayout="column" *ngIf="annotationExistsInList()">
+    <h4>Annotation already exists for seed.</h4>
     <mat-chip-list *ngIf="configObject.meta.annotationList">
       <mat-chip *ngFor="let annotation of configObject.meta.annotationList">
         {{annotation.key}}:{{annotation.value}}
       </mat-chip>
-      <mat-chip style="background: green"
-                matTooltip="Want to add this Url to scope_altSeed">{{alternativeSeed}}</mat-chip>
     </mat-chip-list>
   </div>
-
 </div>

@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {DetailDirective} from '../../../report/directives';
 import {Observable, Subject} from 'rxjs';
-import {map, mergeMap, takeUntil} from 'rxjs/operators';
+import {map, mergeMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
@@ -28,6 +28,12 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
   @Input()
   eventObject: EventObject;
+
+  @Output()
+  update = new EventEmitter<EventObject>();
+
+  @Output()
+  delete = new EventEmitter<EventObject>();
 
   form: FormGroup;
 
@@ -79,13 +85,10 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
       this.eventObject = event;
       this.updateForm();
       if (this.eventObject.type === EventType.altSeed) {
-        console.log('type er alternative seed');
         const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
         this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
           .subscribe(seedObj => {
-            console.log('funnet seed i details: ', seedObj);
             this.seed = seedObj;
-            console.log('this.seed: ', this.seed);
           });
       }
     });
@@ -97,59 +100,6 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
     this.ngUnsubscribe.complete();
   }
 
-  onUpdate(): void {
-    this.eventService.save(this.prepareSave())
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(update => {
-        this.eventObject = update;
-        this.updateForm();
-        this.snackBarService.openSnackBar($localize`:@snackBarMessage.updated:Updated`);
-      });
-  }
-
-  onDelete(eventObject: EventObject): void {
-    this.eventService.delete(eventObject).subscribe(() => {
-      this.router.navigate(['../'], {
-        relativeTo: this.route,
-      }).catch(error => this.errorService.dispatch(error));
-      this.snackBarService.openSnackBar($localize`:@snackBarMessage.deleted:Deleted`);
-    });
-  }
-
-  onRevert() {
-    this.updateForm();
-  }
-
-    //   }
-    //     this.configService.updateWithTemplate(updateTemplate, pathList, [this.seedId])
-    //       .pipe(takeUntil(this.ngUnsubscribe))
-    //       .subscribe(added => {
-    //         alert('Annotations added');
-    //       });
-    //  }
-    // }
- // }
-
-  // onCreateDialogByEventType(eventObject: EventObject) {
-  //   const data: EventDialogData = {eventObject};
-  //   const eventType = this.getDialogByEventType(eventObject);
-  //   const dialogRef = this.dialog.open(eventType, {data});
-  //
-  //   dialogRef.afterClosed()
-  //   .subscribe((eventObj: EventObject) => {
-  //     console.log(eventObj);
-  //   });
-  // }
-
-  // getDialogByEventType(event: EventObject) {
-  //   switch (event.type) {
-  //     case 'Alternative seed':
-  //       return EventAlternativeSeedDialogComponent;
-  //   }
-  // }
-
-
-
   protected createForm() {
     this.form = this.fb.group({
       id: '',
@@ -158,6 +108,7 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
       state: '',
       assignee: '',
       severity: '',
+      // labelList: [],
     });
   }
 
@@ -169,6 +120,7 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
       state: this.eventObject.state,
       assignee: this.eventObject.assignee,
       severity: this.eventObject.severity,
+      // labelList: this.eventObject.labelList || [],
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -190,5 +142,17 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
     eventObject.dataList = this.eventObject.dataList;
     eventObject.labelList = this.eventObject.labelList;
     return eventObject;
+  }
+
+  onUpdate(): void {
+    this.update.emit(this.prepareSave());
+  }
+
+  onDelete(): void {
+    this.delete.emit(this.eventObject);
+  }
+
+  onRevert() {
+    this.updateForm();
   }
 }

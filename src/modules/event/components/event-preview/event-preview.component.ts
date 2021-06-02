@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ConfigObject, ConfigRef, EventObject, Kind} from '../../../../shared/models';
+import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
 import {Severity, State, ChangeType} from 'src/shared/models/event/event.model';
 import {ConfigService} from '../../../commons/services';
 
@@ -11,6 +11,7 @@ import {ConfigService} from '../../../commons/services';
 export class EventPreviewComponent implements OnInit {
   readonly Severity = Severity;
   readonly State = State;
+  readonly EventType = EventType;
   readonly ChangeType = ChangeType;
 
   @Input()
@@ -22,20 +23,5 @@ export class EventPreviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // if (this.eventObject.type === 'Alternative seed') {
-    //   console.log('got type alternative seed, should fetch seed');
-    //   const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
-    //   this.configService.get(new ConfigRef({kind: Kind.SEED, id: seedId}))
-    //     .subscribe(seedObj => {
-    //       console.log('funnet seed i details: ', seedObj);
-    //       this.seed = seedObj;
-    //       console.log('this.seed: ', this.seed);
-    //     });
-    // }
-  }
-
-  getConfigRef(): ConfigRef {
-    const seedId = this.eventObject.dataList.find(eventData => eventData.key === 'SeedId').value;
-    return new ConfigRef({kind: Kind.SEED, id: seedId});
   }
 }

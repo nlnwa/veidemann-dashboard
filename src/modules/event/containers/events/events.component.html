@@ -14,8 +14,7 @@
                       [pageIndex]="pageIndex$ | async"
                       [pageSize]="pageSize$ | async"
                       (sort)="onSort($event)"
-                      (page)="onPage($event)"
-                      (rowClick)="onRowClick($event)">
+                      (page)="onPage($event)">
         <ng-container *appShortcut="let row"></ng-container>
         <ng-container *appFilter="let row"></ng-container>
         <ng-container *appAction="let row">
@@ -24,24 +23,29 @@
             <mat-icon>edit</mat-icon>
             Edit
           </button>
-          <a mat-menu-item
-             (click)="onAssignToMe(row)" i18n="@@eventListActionButtonAssignToMe">
+          <button mat-menu-item
+                  (click)="onAssignToMe(row)" i18n="@@eventListActionButtonAssignToMe">
             <mat-icon>account_circle</mat-icon>
             Assign to me
-          </a>
-          <button *ngIf="canEdit(row)" mat-menu-item (click)="onAddAlternativeUrl(row)"
-                  i18n="@@eventListActionButtonAddAlternativeSeed">
-            <mat-icon>add</mat-icon>
-            Add alternative URL to seed
           </button>
-        </ng-container>
-        <ng-container *appAction="let row">
+          <button mat-menu-item *ngIf="row.state !== State.CLOSED"
+                  (click)="onCloseEvent(row)" i18n="@@eventListActionButtonCloseEvent">
+            <mat-icon>done_outline</mat-icon>
+            Close event
+          </button>
           <button mat-menu-item
                   i18n="@@eventListActionButtonShowEventDetails"
                   (click)="onShowDetails(row)">
             <mat-icon>keyboard_arrow_right</mat-icon>
             Show details
           </button>
+          <ng-container *ngIf="EventType.altSeed">
+            <button *ngIf="canEdit(row)" mat-menu-item (click)="onAddAlternativeUrl(row)"
+                    i18n="@@eventListActionButtonAddAlternativeSeed">
+              <mat-icon>add</mat-icon>
+              Add alternative URL to seed
+            </button>
+          </ng-container>
         </ng-container>
       </app-event-list>
     </div>
