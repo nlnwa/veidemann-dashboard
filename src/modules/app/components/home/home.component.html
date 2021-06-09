@@ -1,9 +1,12 @@
-<div class="container content-padding"*ngIf="'read' | able: 'home'">
+<div class="container content-padding" *ngIf="'read' | able: 'home'">
   <div fxLayout="row wrap" fxLayoutGap="16px">
     <div fxLayout="column" fxLayoutGap="16px">
       <app-crawlerstatus *ngIf="'read' | able: 'crawlerStatus'"
                          [crawlerStatus]="crawlerStatus$ | async"
                          (change)="onChangeRunStatus($event)"></app-crawlerstatus>
+    </div>
+    <div fxFlex style="max-height: 500px; max-width:100%" fxLayout="column">
+      <app-schedule-overview></app-schedule-overview>
     </div>
   </div>
 </div>
