@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {ConfigObject, EventObject, EventType, Kind} from '../../../../shared/models';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
@@ -26,7 +26,8 @@ import {ConfigService} from '../../../commons/services';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.css']
+  styleUrls: ['./events.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventsComponent implements OnInit, OnDestroy {
 
@@ -37,6 +38,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   private eventObject: Subject<EventObject>;
 
   private ngUnsubscribe = new Subject();
+
   private reload: Subject<void>;
   private recount: Subject<void>;
 
@@ -129,9 +131,9 @@ export class EventsComponent implements OnInit, OnDestroy {
     const sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
 
-    const init$ = of(null).pipe(
-      distinctUntilChanged(),
-    );
+    // const init$ = of(null).pipe(
+    //   distinctUntilChanged(),
+    // );
 
     const query$: Observable<EventQuery> = combineLatest([
       assignee$,
@@ -142,8 +144,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       sortDirection$,
       pageIndex$,
       pageSize$,
-      init$,
-      this.reload.pipe(startWith(null as object))
+      // init$,
+      this.reload.pipe(startWith(null as string))
     ]).pipe(
       debounceTime<any>(0),
       map(([
@@ -222,8 +224,8 @@ export class EventsComponent implements OnInit, OnDestroy {
         s: query.pageSize || null,
         assignee: query.assignee || null,
         source: query.source || null,
-        state: query.state || null,
-        severity: query.severity || null
+        state: State[query.state] || null,
+        severity: Severity[query.severity] || null
       },
     }).catch(error => this.errorService.dispatch(error));
   }
@@ -256,19 +258,18 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed()
       .subscribe(result => {
-        if (result.annotation) {
-          const updateTemplate = new ConfigObject({kind: Kind.SEED});
-          updateTemplate.meta.annotationList = [result.annotation];
-          const pathList = ['meta.annotation+'];
-          this.configService.updateWithTemplate(updateTemplate, pathList, [result.id]).subscribe(update => {
-            this.snackBarService.openSnackBar('Annotation added to seed');
-          });
+        if (result.configObject) {
+          this.configService.save(result.configObject)
+            .subscribe(update => {
+              this.snackBarService.openSnackBar('Annotation added to seed');
+            });
         }
         if (result.closeEvent) {
           eventObject.state = State.CLOSED;
           this.onUpdateEvent(eventObject);
         }
       });
+    this.reload.next();
   }
 
   onAssignToMe(event: EventObject) {

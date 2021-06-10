@@ -1,16 +1,17 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {QueryComponent} from '../../../commons/components';
 import {EventQuery} from '../../services/event.service';
 import {FormBuilder} from '@angular/forms';
-import {Severity, Severities, State, States} from 'src/shared/models/event/event.model';
+import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
 import {AuthService} from '../../../core';
 
 @Component({
   selector: 'app-event-query',
   templateUrl: './event-query.component.html',
-  styleUrls: ['./event-query.component.css']
+  styleUrls: ['./event-query.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventQueryComponent extends QueryComponent<EventQuery> {
+export class EventQueryComponent extends QueryComponent<EventQuery>  {
   readonly Severity = Severity;
   readonly Severities = Severities;
   readonly State = State;
@@ -23,8 +24,8 @@ export class EventQueryComponent extends QueryComponent<EventQuery> {
   protected createForm() {
     this.form = this.fb.group({
       assignee: '',
-      state: '',
-      severity: '',
+      state: null,
+      severity: null,
       source: '',
       assignedToMe: false
     });

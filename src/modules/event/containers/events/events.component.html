@@ -18,7 +18,7 @@
         <ng-container *appShortcut="let row"></ng-container>
         <ng-container *appFilter="let row"></ng-container>
         <ng-container *appAction="let row">
-          <button *ngIf="canEdit(row)" mat-menu-item (click)="onEdit(row)"
+          <button *ngIf="canEdit()" mat-menu-item (click)="onEdit(row)"
                   i18n="@@configListActionButtonEditConfig">
             <mat-icon>edit</mat-icon>
             Edit
@@ -40,7 +40,7 @@
             Show details
           </button>
           <ng-container *ngIf="EventType.altSeed">
-            <button *ngIf="canEdit(row)" mat-menu-item (click)="onAddAlternativeUrl(row)"
+            <button *ngIf="canEdit()" mat-menu-item (click)="onAddAlternativeUrl(row)"
                     i18n="@@eventListActionButtonAddAlternativeSeed">
               <mat-icon>add</mat-icon>
               Add alternative URL to seed

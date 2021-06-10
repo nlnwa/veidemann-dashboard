@@ -128,16 +128,26 @@ export class EventObject {
   severity: Severity;
   labelList?: string[];
 
-  constructor(eventObject: EventObject | any = {}) {
-    this.id = eventObject.id || '';
-    this.type = eventObject.type || '';
-    this.source = eventObject.source || '';
-    this.state = eventObject.state;
-    this.assignee = eventObject.assignee || '';
-    this.activityList = eventObject.activityList || [];
-    this.dataList = eventObject.dataList || [];
-    this.severity = eventObject.severity;
-    this.labelList = eventObject.labelList || [];
+  constructor({
+                id = '',
+                type = '',
+                source = '',
+                state = State.NEW,
+                assignee = '',
+                activityList = [],
+                dataList = [],
+                severity = Severity.INFO,
+                labelList = [],
+              }: Partial<EventObject> = {}) {
+    this.id = id;
+    this.type = type;
+    this.source = source;
+    this.state = state;
+    this.assignee = assignee;
+    this.activityList = activityList ? activityList.map(activity => new Activity(activity)) : [];
+    this.dataList = dataList;
+    this.severity = severity;
+    this.labelList = labelList;
   }
 
   static fromProto(proto: EventObjectProto): EventObject {
@@ -145,7 +155,7 @@ export class EventObject {
       id: proto.getId(),
       type: proto.getType(),
       source: proto.getSource(),
-      state: proto.getState(),
+      state: State[State[proto.getState()]],
       assignee: proto.getAssignee(),
       activityList: proto.getActivityList().map(activity => new Activity({
         modifiedTime: fromTimestampProto(activity.getModifiedTime()),
@@ -159,7 +169,7 @@ export class EventObject {
         comment: activity.getComment()
       })),
       dataList: proto.getDataList().map(data => new Data({key: data.getKey(), value: data.getValue()})),
-      severity: proto.getSeverity(),
+      severity: Severity[Severity[proto.getSeverity()]],
       labelList: proto.getLabelList()
     });
   }
@@ -168,7 +178,7 @@ export class EventObject {
     const proto = new EventObjectProto();
     proto.setId(eventObject.id);
     proto.setAssignee(eventObject.assignee);
-    proto.setSeverity(eventObject.severity);
+    proto.setSeverity(eventObject.severity.valueOf());
     proto.setState(eventObject.state.valueOf());
     proto.setSource(eventObject.source);
     proto.setType(eventObject.type);

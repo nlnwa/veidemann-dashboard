@@ -28,21 +28,8 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
     });
   }
 
-
   ngOnInit(): void {
   }
-
-  // get eventAltSeed() {
-  //   return this.eventObject.dataList.find(({key}) => key === 'Alternative Url');
-  // }
-
-  // get seedAltSeedAnnotation() {
-  //   return this.configObject.meta.annotationList.find(({key}) => key === 'scope_altSeed');
-  // }
-
-  // get seedAnnotations() {
-  //   return this.configObject.meta.annotationList;
-  // }
 
   getAltSeedAnnotationChange() {
     let annotation: Annotation;
@@ -64,17 +51,18 @@ export class EventAlternativeSeedDialogComponent extends EventAlternativeSeedCom
     }
   }
 
-  // existsInSeedAnnotationList() {
-  //   const seedAltSeedAnnotation = this.seedAltSeedAnnotation !== undefined
-  //     ? this.seedAltSeedAnnotation.value.split(' ') : [''];
-  //   const eventAltSeed = this.eventAltSeed;
-  //   return seedAltSeedAnnotation.find(url => eventAltSeed === url) !== undefined ? true : false;
-  // }
-
   onAdd(closeEvent: boolean): any {
     const annotation = this.getAltSeedAnnotationChange();
-    const id = this.configObject.id;
-    this.dialogRef.close({closeEvent, annotation, id});
+    const configObject = this.configObject;
+
+    const index = configObject.meta.annotationList.findIndex((a) => a.key === 'scope_altSeed');
+    if (index !== -1) {
+      configObject.meta.annotationList[index] = annotation;
+    } else {
+      configObject.meta.annotationList.push(annotation);
+    }
+
+    this.dialogRef.close({closeEvent, configObject});
   }
 
   onCloseEvent() {
