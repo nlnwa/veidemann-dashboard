@@ -143,7 +143,7 @@ export class AuthService {
   }
 
   updateAbility() {
-    const {can, rules} = new AbilityBuilder<Ability>();
+    const {can, rules} = new AbilityBuilder(Ability);
 
     const operatorConfigs = [Kind[Kind.CRAWLENTITY], Kind[Kind.SEED], Kind[Kind.CRAWLJOB], Kind[Kind.CRAWLCONFIG],
       Kind[Kind.CRAWLSCHEDULECONFIG], Kind[Kind.BROWSERCONFIG], Kind[Kind.POLITENESSCONFIG], Kind[Kind.BROWSERSCRIPT],
