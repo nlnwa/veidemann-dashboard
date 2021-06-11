@@ -1190,17 +1190,17 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
-"@casl/ability@^4.1.6":
-  version "4.1.6"
-  resolved "https://registry.npmjs.org/@casl/ability/-/ability-4.1.6.tgz#89f263903adfc9316cedff329ad615564662448a"
-  integrity sha512-ZI30fRacHKCCrWJn1pmxx/+IKUkoycVNz+Mge9EeIH+esDT7nydgWbitVPnlBAbxQXz5eybPAvfPSg3WOa2izw==
+"@casl/ability@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/@casl/ability/-/ability-5.3.1.tgz#20480924cc7f70e08dfba8c1b8808f20b81b9a6a"
+  integrity sha512-wke2zAJDBKs1VtYPNDz06KyvqOgU0PBLd9kmHpGC9YLxDt9J749riX/8Vc42hxod92m7BENhOW5Yp73ICYVUbg==
   dependencies:
-    sift "^13.0.0"
+    "@ucast/mongo2js" "^1.3.0"
 
-"@casl/angular@^4.1.6":
-  version "4.1.6"
-  resolved "https://registry.npmjs.org/@casl/angular/-/angular-4.1.6.tgz#8dd67a3f5e3659063ee58a6e1cd29212209f8e1c"
-  integrity sha512-fB+tdW+r4dDBn63WPn49eAaN8J1b3E4XtFIiHBufiWXofSw+k+5OEr0CCTam9XUdPwhulyl0In3rEnUx9bsD/Q==
+"@casl/angular@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@casl/angular/-/angular-6.0.0.tgz#ad06e6335e103740f6cef1a671fa9b44a50e14c0"
+  integrity sha512-NVKPUPOx5sqSimxMxCgV8Gi2+2yCWNABeFSDtfgX+J1hkp34anYqee9eXWB+4zvnEjIKKvukWIiSKHyZsDtGgg==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -1461,6 +1461,34 @@
   version "0.1.30"
   resolved "https://registry.npmjs.org/@types/xmldom/-/xmldom-0.1.30.tgz#d36d9a7d64af4693d3b18d5dc02ce432a95be12e"
   integrity sha512-edqgAFXMEtVvaBZ3YnhamvmrHjoYpuxETmnb0lbTZmf/dXpAsO9ZKotUO4K2rn2SIZBDFCMOuA7fOe0H6dRZcA==
+
+"@ucast/core@^1.0.0", "@ucast/core@^1.4.1", "@ucast/core@^1.6.1":
+  version "1.10.0"
+  resolved "https://registry.npmjs.org/@ucast/core/-/core-1.10.0.tgz#a9c3a1fd3ce6197698c2e64e7c58246b721f5aa1"
+  integrity sha512-utMIzLxgsj1VkPTN9Yzt9EaCPWYdF33Pe6fxhsK/jEiMf8M0w/cM4K3Ywc3tZSBn/Cc2YQsx7pVYe8I2NWrBRg==
+
+"@ucast/js@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@ucast/js/-/js-3.0.1.tgz#679e4d17771c55cfa4b342abe33a4e5ded32c530"
+  integrity sha512-sabiuYsM5VUg4EaCwlDxnqcrHPFvbZcXvBu+P/o4pqK2q046RLTdo0bM7iVCn5Ro4HpCiRv3QzxtW8epcluY1g==
+  dependencies:
+    "@ucast/core" "^1.0.0"
+
+"@ucast/mongo2js@^1.3.0":
+  version "1.3.2"
+  resolved "https://registry.npmjs.org/@ucast/mongo2js/-/mongo2js-1.3.2.tgz#e2d4f1e2f7b181aa58ff8830c20e799c6997a1b1"
+  integrity sha512-KNOEs61wxo4VJkVGqwP2a03TKuLx9fLMQgW5HD8Th/mrcuP1SspS4W+kUQD+wB1AA5pOn65hzlHUw5wZBwme0Q==
+  dependencies:
+    "@ucast/core" "^1.6.1"
+    "@ucast/js" "^3.0.0"
+    "@ucast/mongo" "^2.4.0"
+
+"@ucast/mongo@^2.4.0":
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/@ucast/mongo/-/mongo-2.4.1.tgz#da18b9dc962128313f399b3a77e81af7dfc2c3c3"
+  integrity sha512-l/hc3TxjWO9inBrgM5iMCAcsIeV2DToppRlabQa5xB/6uHYtCXfm3TPaJgr8TU1OFxqPlaXEnNQhaV0sVHGsoQ==
+  dependencies:
+    "@ucast/core" "^1.4.1"
 
 "@webassemblyjs/ast@1.11.0":
   version "1.11.0"
@@ -7379,11 +7407,6 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
-
-sift@^13.0.0:
-  version "13.5.4"
-  resolved "https://registry.npmjs.org/sift/-/sift-13.5.4.tgz#7b2a67f724c8b2fca121fcfdef4011bb1ea4e3ef"
-  integrity sha512-J/d0r/MJlD7vG3j6FZI3/KnN+MxEmPUx2nyKNawysbl2ktisEnAWI5j0AgHM19p4xFA2vDXve4i8TQYYfi9O6Q==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"
