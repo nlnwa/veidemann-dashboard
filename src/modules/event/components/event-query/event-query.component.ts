@@ -11,7 +11,7 @@ import {AuthService} from '../../../core';
   styleUrls: ['./event-query.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventQueryComponent extends QueryComponent<EventQuery>  {
+export class EventQueryComponent extends QueryComponent<EventQuery> {
   readonly Severity = Severity;
   readonly Severities = Severities;
   readonly State = State;
@@ -43,5 +43,4 @@ export class EventQueryComponent extends QueryComponent<EventQuery>  {
       });
     }
   }
-
 }

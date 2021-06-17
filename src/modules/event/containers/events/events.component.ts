@@ -30,14 +30,12 @@ import {ConfigService} from '../../../commons/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventsComponent implements OnInit, OnDestroy {
-
-  readonly Kind = Kind;
   readonly State = State;
   readonly EventType = EventType;
 
   private eventObject: Subject<EventObject>;
 
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe: Subject<void>;
 
   private reload: Subject<void>;
   private recount: Subject<void>;
@@ -62,7 +60,6 @@ export class EventsComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router) {
     this.eventObject = new Subject();
-
     this.ngUnsubscribe = new Subject<void>();
     this.reload = new Subject();
     this.recount = new Subject();

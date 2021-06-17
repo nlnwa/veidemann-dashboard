@@ -63,13 +63,13 @@ export class EventService extends LoadingService implements Getter<EventObject> 
       fieldMask.addPaths('source');
     }
 
-    if (query.state) {
-      queryTemplate.state = query.state.valueOf();
+    if (query.state !== undefined) {
+      queryTemplate.state = query.state;
       fieldMask.addPaths('state');
     }
 
-    if (query.severity) {
-      queryTemplate.severity = query.severity.valueOf();
+    if (query.severity !== undefined) {
+      queryTemplate.severity = query.severity;
       fieldMask.addPaths('severity');
     }
 

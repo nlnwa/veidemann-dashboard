@@ -178,8 +178,8 @@ export class EventObject {
     const proto = new EventObjectProto();
     proto.setId(eventObject.id);
     proto.setAssignee(eventObject.assignee);
-    proto.setSeverity(eventObject.severity.valueOf());
-    proto.setState(eventObject.state.valueOf());
+    proto.setSeverity(eventObject.severity);
+    proto.setState(eventObject.state);
     proto.setSource(eventObject.source);
     proto.setType(eventObject.type);
     proto.setDataList(eventObject.dataList.map(data => {
