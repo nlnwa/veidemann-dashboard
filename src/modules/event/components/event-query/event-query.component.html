@@ -16,8 +16,7 @@
   <mat-form-field>
     <mat-select placeholder="Severity"  formControlName="severity"
                 i18n-placeholder="@@eventHandlerQueryFilterSeverityPlaceholder">
-      <mat-option [value]="null"></mat-option>
-      <mat-option *ngFor="let severity of Severities" [value]="severity">
+      <mat-option *ngFor="let severity of Severities" [value]="severity.toString(10)">
         {{Severity[severity]}}
       </mat-option>
     </mat-select>
@@ -25,9 +24,7 @@
   <mat-form-field>
     <mat-select placeholder="State" formControlName="state"
                 i18n-placeholder="@@eventHandlerQueryFilterStatePlaceholder">
-      <mat-option [value]="null">
-      </mat-option>
-      <mat-option *ngFor="let state of States" [value]="state">
+      <mat-option *ngFor="let state of States" [value]="state.toString(10)">
         {{State[state]}}
       </mat-option>
     </mat-select>

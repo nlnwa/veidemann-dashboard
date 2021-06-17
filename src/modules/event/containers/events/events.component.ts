@@ -30,12 +30,13 @@ import {ConfigService} from '../../../commons/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventsComponent implements OnInit, OnDestroy {
+  readonly Kind = Kind;
   readonly State = State;
   readonly EventType = EventType;
 
   private eventObject: Subject<EventObject>;
 
-  private ngUnsubscribe: Subject<void>;
+  private ngUnsubscribe = new Subject();
 
   private reload: Subject<void>;
   private recount: Subject<void>;
