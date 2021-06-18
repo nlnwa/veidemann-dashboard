@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ConfigObject, ConfigRef, EventObject, EventType, Kind, Label} from '../../../../shared/models';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService, ErrorService, SnackBarService} from '../../../core';
 import {DetailDirective} from '../../../report/directives';
 import {Observable, Subject} from 'rxjs';
@@ -10,6 +10,8 @@ import {EventService} from '../../services/event.service';
 import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfigService} from '../../../commons/services';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material/chips';
 
 
 @Component({
@@ -17,7 +19,8 @@ import {ConfigService} from '../../../commons/services';
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css']
 })
-export class EventDetailsComponent extends DetailDirective<EventObject> implements OnInit, OnDestroy {
+export class EventDetailsComponent extends DetailDirective<EventObject> implements OnInit, OnDestroy, OnChanges {
+
   readonly State = State;
   readonly States = States;
   readonly Severity = Severity;
@@ -25,6 +28,8 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   readonly EventType = EventType;
 
   private ngUnsubscribe = new Subject();
+
+  private selectedLabelIndex = -1;
 
   @Input()
   eventObject: EventObject;
@@ -36,6 +41,11 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
   delete = new EventEmitter<EventObject>();
 
   form: FormGroup;
+
+  labelForm: FormGroup;
+  labelControl = new FormControl();
+  removable = true;
+  labelInputSeparators: number[] = [ENTER, COMMA];
 
   seed: ConfigObject;
 
@@ -50,6 +60,10 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
               protected snackBarService: SnackBarService) {
     super(route, eventService);
     this.createForm();
+  }
+
+  get labelList(): string[] {
+    return this.form.get('labelList').value;
   }
 
   get canEdit(): boolean {
@@ -70,6 +84,10 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
   get canRevert(): boolean {
     return this.form.dirty;
+  }
+
+  get canUpdateLabel(): boolean {
+    return this.labelForm.get('label').valid && this.labelForm.get('label').dirty;
   }
 
   ngOnInit(): void {
@@ -100,6 +118,16 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
     this.ngUnsubscribe.complete();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.eventObject) {
+      if (this.eventObject) {
+        this.updateForm();
+      } else {
+        this.form.reset();
+      }
+    }
+  }
+
   protected createForm() {
     this.form = this.fb.group({
       id: '',
@@ -108,8 +136,12 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
       state: '',
       assignee: '',
       severity: '',
-      // labelList: [],
+      labelList: [''],
     });
+    this.labelForm = this.fb.group({
+      label: '',
+    });
+    this.labelForm.disable();
   }
 
   protected updateForm() {
@@ -120,10 +152,13 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
       state: this.eventObject.state,
       assignee: this.eventObject.assignee,
       severity: this.eventObject.severity,
-      // labelList: this.eventObject.labelList || [],
+      labelList: this.eventObject.labelList || [''],
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();
+    if (!this.canEdit) {
+      this.form.disable();
+    }
   }
 
   protected prepareSave(): EventObject {
@@ -140,8 +175,17 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
     eventObject.severity = formModel.severity;
     eventObject.assignee = formModel.assignee;
     eventObject.dataList = this.eventObject.dataList;
-    eventObject.labelList = this.eventObject.labelList;
+    eventObject.labelList = formModel.labelList;
     return eventObject;
+  }
+
+  onRemoveLabel(label: string): void {
+    const index = this.labelList.indexOf(label);
+
+    if (index >= 0) {
+      this.labelList.splice(index, 1);
+      this.form.markAsDirty();
+    }
   }
 
   onUpdate(): void {
@@ -154,5 +198,48 @@ export class EventDetailsComponent extends DetailDirective<EventObject> implemen
 
   onRevert() {
     this.updateForm();
+  }
+
+  onAddLabel(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+
+    if (value === '') {
+      return;
+    }
+    if (this.findLabelIndex(value) > -1) {
+      input.value = '';
+      return;
+    }
+    this.labelList.push(value);
+    this.form.markAsDirty();
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  onUpdateLabel(label: string): void {
+    label = label.trim();
+    this.labelList.splice(this.selectedLabelIndex, 1);
+    this.labelList.push(label);
+    this.labelForm.disable();
+    this.form.markAsDirty();
+  }
+
+  onClickLabel(label: string) {
+    this.selectedLabelIndex = this.findLabelIndex(label);
+    this.labelForm.enable();
+    this.labelForm.reset({label});
+  }
+
+  onAbortLabelEdit(): void {
+    this.labelForm.disable();
+  }
+
+  private findLabelIndex(label: string): number {
+    return this.labelList.findIndex((l) => {
+      return l === label;
+    });
   }
 }

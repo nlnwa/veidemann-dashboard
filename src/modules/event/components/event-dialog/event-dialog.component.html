@@ -38,12 +38,49 @@
                  i18n-placeholder="@@eventDetailsAssigneePlaceholder"
                  formControlName="assignee">
         </mat-form-field>
-        <mat-list *ngIf="eventObject.labelList.length">
-          <h3 matSubheader>Labels</h3>
-          <mat-chip-list>
-            <mat-chip *ngFor="let label of eventObject.labelList">{{label}}</mat-chip>
+        <mat-form-field>
+          <mat-chip-list #chipList fxLayout="row wrap" fxLayoutGap="8px">
+            <mat-chip *ngFor="let label of labelList"
+                      [selectable]="canUpdate"
+                      [removable]="removable"
+                      (removed)="onRemoveLabel(label)"
+                      (click)="onClickLabel(label)">
+              {{label}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input matInput
+                   [formControl]="labelControl"
+                   placeholder="Label"
+                   i18n-placeholder="@@eventLabelInputPlaceholder"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="labelInputSeparators"
+                   (matChipInputTokenEnd)="onAddLabel($event)">
           </mat-chip-list>
-        </mat-list>
+        </mat-form-field>
+        <form [formGroup]="labelForm" *ngIf="labelForm.enabled">
+          <mat-card class="label-form">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>edit</mat-icon>
+              <mat-card-title i18n="@@eventLabelEditCardTitle">Edit label</mat-card-title>
+            </mat-card-header>
+            <mat-card-content fxLayout="row" fxLayoutGap="16px">
+              <mat-form-field fxFlex>
+                <input #labelEdit matInput placeholder="Label" formControlName="label"
+                       i18n-placeholder="@@eventEditLabelInputPlaceholder">
+              </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="accent"
+                      *ngIf="canUpdateLabel"
+                      (click)="onUpdateLabel(labelEdit.value)"
+                      i18n="@@commonButtonOk">OK
+              </button>
+              <button i18n="@@commonButtonCancel" mat-button (click)="onAbortLabelEdit()">
+                CANCEL
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
         <div [ngSwitch]="eventObject.type">
           <ng-container *ngSwitchCase="EventType.altSeed">
             <app-event-alternative-seed [eventObject]="eventObject"
