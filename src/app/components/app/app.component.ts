@@ -8,6 +8,7 @@ import {AuthService, GuardService} from '../../../modules/core/services/auth';
 import {MatDialog} from '@angular/material/dialog';
 import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
+import { State } from 'src/shared/models/event/event.model';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit{
   isModuleLoading$: Observable<boolean>;
   private moduleLoadSemaphore = 0;
   shortcuts: ShortcutInput[] = [];
+  readonly State = State;
 
   constructor(private appInitializer: AppInitializerService,
               private authService: AuthService,

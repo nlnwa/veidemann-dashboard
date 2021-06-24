@@ -78,8 +78,16 @@
        [routerLink]="['/event']"
        routerLinkActive
        #event="routerLinkActive"
-       [active]="event.isActive">
-      <span i18n="@@mainMenuEvent">EVENT</span>
+       [active]="event.isActive"
+       matTooltip="Events assigned to me: {{ State.OPEN | eventCount: undefined: this.authService.email | async}}"
+       matTooltipPosition="after"
+    >
+      <span i18n="@@mainMenuEvent">EVENT</span><span
+      matBadge="{{State.NEW | eventCount | async}}"
+      matBadgePosition="above after"
+      matBadgeSize="small"
+      matBadgeOverlap="false"
+      matTooltip="Test"></span>
     </a>
   </nav>
 
