@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Resource} from '../../../../shared/models/log/resource.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {AppConfigService} from '../../../core/services';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-resource',
@@ -16,16 +17,22 @@ import {AppConfigService} from '../../../core/services';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ResourceComponent {
+export class ResourceComponent implements OnInit {
 
   @Input()
   resources: Resource[];
 
+  displayedColumns: string[] = ['uri', 'discoveryPath'];
+  expandedResource: Resource | null;
+  dataSource = new MatTableDataSource<Resource>();
+
   constructor(public appConfigService: AppConfigService) {
   }
 
-  displayedColumns: string[] = ['uri', 'discoveryPath'];
-  expandedResource: Resource | null;
+
+  ngOnInit() {
+    this.dataSource = new MatTableDataSource<Resource>(this.resources);
+  }
 
   hasError(resource: Resource): boolean {
     // @ts-ignore
@@ -34,5 +41,10 @@ export class ResourceComponent {
     } else {
       return false;
     }
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
