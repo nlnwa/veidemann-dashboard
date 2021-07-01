@@ -162,6 +162,9 @@ export class JobExecutionPreviewComponent implements OnChanges {
   }
 
   getDuration(startTime: string, endTime: string): string {
+    if (!endTime) {
+      endTime = new Date().toUTCString();
+    }
     return durationBetweenDates(startTime, endTime);
   }
 
