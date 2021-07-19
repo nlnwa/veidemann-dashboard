@@ -19,24 +19,4 @@ export class ConfigQueryDirective extends QueryDirective<ConfigQuery, ConfigObje
               @Inject(BASE_LIST) private baseList: ConfigListComponent) {
     super(configService, baseList, new ListDataSource<ConfigObject>());
   }
-
-  protected onInit(): void {
-    this.query$.pipe(
-      switchMap(query => this.service.search(query).pipe(
-        filter(c => {
-          if (query.disabled !== null) {
-            switch (c.kind) {
-              case Kind.SEED:
-                return query.disabled ? c.seed?.disabled : !c.seed?.disabled;
-              case Kind.CRAWLJOB:
-                return query.disabled ? c.crawlJob?.disabled : !c.crawlJob?.disabled;
-            }
-          } else {
-            return true;
-          }
-        }),
-      )),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(item => this.dataSource.add(item));
-  }
 }
