@@ -26,30 +26,13 @@
     <mat-card style="max-width: 50%; min-width: 45%">
       <mat-card-title>State overview</mat-card-title>
       <mat-card-content>
-        <canvas baseChart
-                [data]="stateMapPieChartData"
-                [labels]="stateMapPieChartLabels"
-                [chartType]="pieChartType"
-                [options]="pieChartOptions"
-                [plugins]="pieChartPlugins"
-                [legend]="pieChartLegend"
-                [colors]="executionStateColors"
-                (chartClick)="onGoToExecutionWithState($event)">
-        </canvas>
+        <div echarts  [options]="executionStatesChartOptions"  (chartClick)="onGoToExecutionWithState($event)" style="height: 400px"></div>
       </mat-card-content>
     </mat-card>
     <mat-card style="max-width: 50%; min-width: 45%">
       <mat-card-title>Documents</mat-card-title>
       <mat-card-content>
-        <canvas baseChart
-                [data]="pieChartData"
-                [labels]="pieChartLabels"
-                [chartType]="pieChartType"
-                [options]="pieChartOptions"
-                [plugins]="pieChartPlugins"
-                [legend]="pieChartLegend"
-                [colors]="executionDocumentsColors">
-        </canvas>
+        <div echarts  [options]="documentsChartOptions" style="height: 400px"></div>
       </mat-card-content>
     </mat-card>
   </div>

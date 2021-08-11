@@ -31,15 +31,7 @@
     <mat-card style="max-width: 100%">
       <h1>Documents</h1>
       <mat-card-content>
-        <canvas baseChart
-                [data]="documentsPieChartData"
-                [labels]="documentsPieChartLabels"
-                [chartType]="'pie'"
-                [options]="documentsPieChartOptions"
-                [plugins]="[documentsPieChartPlugins]"
-                [legend]="true"
-                [colors]="executionDocumentsColors">
-        </canvas>
+        <div echarts  [options]="documentsChartOptions" style="height: 400px"></div>
       </mat-card-content>
     </mat-card>
   </div>

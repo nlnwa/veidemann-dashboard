@@ -1,9 +1,14 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, CrawlExecutionStatus, ExtraStatusCodes} from '../../../../shared/models/report';
 import {durationBetweenDates} from '../../../../shared/func';
-import {ChartOptions} from 'chart.js';
-import {Label} from 'ng2-charts';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+
+export enum CrawlExecutionStatusColors {
+  CRAWLED = '#009E73',
+  DENIED = '#D55E00',
+  FAILED = '#920000',
+  RETRIED = '#56B4E9',
+  OUT_OF_SCOPE = '#F0E442'
+}
 
 @Component({
   selector: 'app-crawl-execution-preview',
@@ -17,52 +22,7 @@ export class CrawlExecutionPreviewComponent implements OnChanges {
   @Input()
   crawlExecutionStatus: CrawlExecutionStatus;
 
-  executionDocumentsColors = [
-    {
-      backgroundColor: [
-        '#009E73', // Crawled
-        '#D55E00', // Denied
-        '#920000', // Failed
-        '#F0E442', // Out of scope
-        '#56B4E9', // Retried
-      ]
-    }
-  ];
-
-  documentsPieChartLabels: Label[] = ['Crawled', 'Denied', 'Failed', 'Out of scope', 'Retried'];
-  documentsPieChartData: number[];
-  documentsPieChartPlugins = [pluginDataLabels];
-
-  documentsPieChartOptions: ChartOptions = {
-    rotation: 15,
-    responsive: true,
-    elements: {
-      arc: {
-        borderWidth: 0
-      }
-    },
-    legend: {
-      position: 'right',
-      labels: {
-        fontColor: (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? '#FFFFFF' : '#000000',
-        fontSize: 12,
-        filter: (legendItem, data) => data.datasets[0].data[legendItem.index] !== 0,
-      },
-    },
-    plugins: {
-      datalabels: {
-        color: '#000000',
-        formatter: (value, ctx) => {
-          const label = ctx.chart.data.labels[ctx.dataIndex];
-          if (ctx.dataset.data[ctx.dataIndex] > 0) {
-            return ctx.dataset.data[ctx.dataIndex];
-          } else {
-            return ''; // retun empty if the data for label is empty
-          }
-        }
-      }
-    }
-  };
+  documentsChartOptions: any;
 
   constructor() {
   }
@@ -70,18 +30,83 @@ export class CrawlExecutionPreviewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.crawlExecutionStatus) {
       if (this.crawlExecutionStatus) {
-        this.documentsPieChartData = [
-          this.crawlExecutionStatus.documentsCrawled,
-          this.crawlExecutionStatus.documentsDenied,
-          this.crawlExecutionStatus.documentsFailed,
-          this.crawlExecutionStatus.documentsOutOfScope,
-          this.crawlExecutionStatus.documentsRetried
-        ];
+        this.setDocumentsChartOptions();
       }
     }
   }
 
+  setDocumentsChartOptions() {
+    this.documentsChartOptions = {
+      legend: {
+        top: 'bottom',
+        textStyle: {
+          color: (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? '#FFFFFF' : '#000000'
+        }
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          saveAsImage: {show: true},
+          dataView: {show: true}
+        },
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: [25, 150],
+          center: ['50%', '50%'],
+          roseType: 'area',
+          label: {
+            show: true,
+            position: 'inner',
+            bleedMargin: 0,
+            color: '#000000',
+            fontSize: 16,
+            formatter(params) {
+              return params.value;
+            },
+          },
+          data: this.getDocuments()
+        }
+      ]
+    };
+  }
+
   getDuration(startTime: string, endTime: string): string {
     return durationBetweenDates(startTime, endTime);
+  }
+
+  getDocuments() {
+    const status = this.crawlExecutionStatus;
+    const docs = [
+      {
+        name: 'Crawled',
+        value: status.documentsCrawled,
+        itemStyle: {color: CrawlExecutionStatusColors.CRAWLED}
+      },
+      {
+        name: 'Denied',
+        value: status.documentsDenied,
+        itemStyle: {color: CrawlExecutionStatusColors.DENIED}
+      },
+      {
+        name: 'Failed',
+        value: status.documentsFailed,
+        itemStyle: {color: CrawlExecutionStatusColors.FAILED}
+      }, {
+        name: 'Out of scope',
+        value: status.documentsOutOfScope,
+        itemStyle: {color: CrawlExecutionStatusColors.OUT_OF_SCOPE}
+      },
+      {
+        name: 'Retried',
+        value: status.documentsRetried,
+        itemStyle: {color: CrawlExecutionStatusColors.RETRIED}
+      }
+    ];
+    return docs.filter(doc => (doc.value > 0));
   }
 }
