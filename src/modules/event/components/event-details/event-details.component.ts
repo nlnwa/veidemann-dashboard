@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {ConfigObject, ConfigRef, EventObject, EventType, Kind, Label} from '../../../../shared/models';
+import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {AuthService, ErrorService, SnackBarService} from '../../../core';
+import {AuthService, ErrorService, SnackBarService} from '../../../core/services';
 import {DetailDirective} from '../../../report/directives';
 import {Observable, Subject} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';

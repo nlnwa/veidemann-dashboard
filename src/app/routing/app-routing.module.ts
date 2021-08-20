@@ -26,7 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'event',
-    loadChildren: () => import('../../event/event.module').then(m => m.EventModule),
+    loadChildren: () => import('../../modules/event/event.module').then(m => m.EventModule),
     canActivate: [GuardService]
   },
 ];

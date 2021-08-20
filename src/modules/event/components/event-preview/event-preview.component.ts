@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
-import {Severity, State, ChangeType} from 'src/shared/models/event/event.model';
+import {ConfigObject, EventObject, EventType} from '../../../../shared/models';
+import {ChangeType, Severity, State} from 'src/shared/models/event/event.model';
 import {ConfigService} from '../../../commons/services';
 
 @Component({

@@ -3,7 +3,7 @@ import {QueryComponent} from '../../../commons/components';
 import {EventQuery} from '../../services/event.service';
 import {FormBuilder} from '@angular/forms';
 import {Severities, Severity, State, States} from 'src/shared/models/event/event.model';
-import {AuthService} from '../../../core';
+import {AuthService} from '../../../core/services';
 
 @Component({
   selector: 'app-event-query',

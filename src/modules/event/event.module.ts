@@ -19,7 +19,6 @@ import { EventFilterShortcutsComponent } from './components/event-shortcuts/even
 import { EventAlternativeSeedDialogComponent } from './components/event-types/event-alternative-seed/event-alternative-seed-dialog/event-alternative-seed-dialog.component';
 import { EventsComponent } from './containers/events/events.component';
 import { EventComponent } from './containers/event/event.component';
-import { EventCountPipe } from './pipe/event-count.pipe';
 
 
 @NgModule({
@@ -39,7 +38,6 @@ import { EventCountPipe } from './pipe/event-count.pipe';
     EventAlternativeSeedDialogComponent,
     EventsComponent,
     EventComponent,
-    EventCountPipe,
   ],
   imports: [
     CommonModule,
@@ -47,9 +45,7 @@ import { EventCountPipe } from './pipe/event-count.pipe';
     CommonsModule,
     ConfigurationsModule
   ],
-  exports: [
-    EventCountPipe
-  ],
+  exports: [],
   providers: [ConfigService]
 })
 export class EventModule {

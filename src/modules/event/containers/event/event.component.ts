@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {ConfigObject, EventObject, Kind} from '../../../../shared/models';
-import {AuthService, ErrorService, SnackBarService} from '../../../core';
+import {AuthService, ErrorService, SnackBarService} from '../../../core/services';
 import {EventService} from '../../services/event.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';

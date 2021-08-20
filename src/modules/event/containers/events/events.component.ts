@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, Observable, of, Subject} from 'rxjs';
-import {ConfigObject, EventObject, EventType, Kind} from '../../../../shared/models';
-import {AuthService, ErrorService, SnackBarService} from '../../../core';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {EventObject, EventType, Kind} from '../../../../shared/models';
+import {AuthService, ErrorService, SnackBarService} from '../../../core/services';
 import {EventQuery, EventService} from '../../services/event.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Sort, SortDirection} from '@angular/material/sort';

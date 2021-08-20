@@ -7,7 +7,7 @@ import {EventObject} from '../../../shared/models';
 import {LoadingService} from '../../../shared/services';
 import {Getter} from '../../../shared/directives';
 import {EventRef, Severity, State} from '../../../shared/models/event/event.model';
-import {AuthService} from '../../core';
+import {AuthService} from '../../core/services';
 
 export interface EventQuery extends Page {
   assignee: string;

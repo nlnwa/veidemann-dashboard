@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {EventDetailsComponent} from '../event-details/event-details.component';
 import {FormBuilder} from '@angular/forms';
-import {AuthService, ErrorService, SnackBarService} from '../../../core';
+import {AuthService, ErrorService, SnackBarService} from '../../../core/services';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ConfigObject, ConfigRef, EventObject, EventType, Kind} from '../../../../shared/models';
+import {ConfigObject, EventObject, EventType} from '../../../../shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {ConfigService} from '../../../commons/services';

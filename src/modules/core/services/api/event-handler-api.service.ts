@@ -7,7 +7,7 @@ import {
   EventUpdateRequest, ListLabelRequest
 } from '../../../../api';
 import {AuthService} from '../auth';
-import {AppConfigService} from '../app.config.service';
+import {AppConfig} from '../../models/app-config.model';
 import {ErrorService} from '../error.service';
 import {EMPTY, from, Observable, Observer} from 'rxjs';
 import {EventObject} from '../../../../shared/models';
@@ -24,7 +24,7 @@ export class EventHandlerApiService {
   private eventHandlerPromiseClient: EventHandlerPromiseClient;
 
   constructor(private authService: AuthService,
-              appConfigService: AppConfigService,
+              appConfigService: AppConfig,
               private errorService: ErrorService) {
     this.eventHandlerPromiseClient = new EventHandlerPromiseClient(appConfigService.grpcWebUrl, null, null);
   }

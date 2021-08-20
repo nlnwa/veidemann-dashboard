@@ -10,6 +10,7 @@ import {NgxFilesizeModule} from 'ngx-filesize';
 import {DurationFormatPipe} from './pipes/duration-format.pipe';
 import {UrlFormatPipe} from './pipes/url-format.pipe';
 import {AbilityModule} from '@casl/angular';
+import {EventCountPipe} from './pipes/event-count.pipe';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {AbilityModule} from '@casl/angular';
     DurationFormatPipe,
     HighlightDirective,
     UrlFormatPipe,
+    EventCountPipe,
   ],
   imports: [
     MaterialModule,
@@ -49,6 +51,7 @@ import {AbilityModule} from '@casl/angular';
     HighlightDirective,
     UrlFormatPipe,
     AbilityModule,
+    EventCountPipe,
   ],
   providers: [
     DatePipe,
