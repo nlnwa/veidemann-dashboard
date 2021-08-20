@@ -6,14 +6,14 @@ import {OAuthService} from 'angular-oauth2-oidc';
 
 import {LogLevels} from '../../../shared/models';
 import {ConfigPromiseClient} from '../../../api';
-import {AppConfigService} from '../../core/services';
+import {AppConfig} from '../../core/models';
 
 @Injectable()
 export class LogService {
   private configPromiseClient: ConfigPromiseClient;
 
   constructor(private oauthService: OAuthService,
-              private appConfig: AppConfigService) {
+              private appConfig: AppConfig) {
     this.configPromiseClient = new ConfigPromiseClient(appConfig.grpcWebUrl, null, null);
   }
 

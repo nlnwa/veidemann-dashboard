@@ -47,11 +47,11 @@ import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log
 import {AbilityModule} from '@casl/angular';
 import {ExecutionQueueCountPipe} from './pipe/execution-queue-count.pipe';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
-import { CrawlExecutionShortcutsComponent } from './components/crawl-execution-shortcuts/crawl-execution-shortcuts.component';
-import { JobExecutionShortcutsComponent } from './components/job-execution-shortcuts/job-execution-shortcuts.component';
-import { PageLogShortcutsComponent } from './components/page-log-shortcuts/page-log-shortcuts.component';
-import { CrawlLogShortcutsComponent } from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
-import { CrawlExecutionFetchPipe } from './pipe/crawlexecution-fetch.pipe';
+import {CrawlExecutionShortcutsComponent} from './components/crawl-execution-shortcuts/crawl-execution-shortcuts.component';
+import {JobExecutionShortcutsComponent} from './components/job-execution-shortcuts/job-execution-shortcuts.component';
+import {PageLogShortcutsComponent} from './components/page-log-shortcuts/page-log-shortcuts.component';
+import {CrawlLogShortcutsComponent} from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
+import {CrawlExecutionFetchPipe} from './pipe/crawlexecution-fetch.pipe';
 
 
 @NgModule({
@@ -98,13 +98,13 @@ import { CrawlExecutionFetchPipe } from './pipe/crawlexecution-fetch.pipe';
     CrawlLogShortcutsComponent,
     CrawlExecutionFetchPipe,
   ],
-    imports: [
-        CommonsModule,
-        ReportRoutingModule,
-        ChartsModule,
-        AbilityModule,
-        KeyboardShortcutsModule,
-    ],
+  imports: [
+    CommonsModule,
+    ReportRoutingModule,
+    ChartsModule,
+    AbilityModule,
+    KeyboardShortcutsModule,
+  ],
   exports: [
     JobNamePipe,
     SeedNamePipe

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {ControllerApiService, ErrorService} from '../../../core/services';
-import {CrawlerStatusDialogComponent} from '..';
+import {ControllerApiService, ErrorService} from '../../../modules/core/services';
+import {CrawlerStatusDialogComponent} from '../index';
 import {MatDialog} from '@angular/material/dialog';
-import {CrawlerStatus} from '../../../../shared/models/controller/controller.model';
+import {CrawlerStatus} from '../../../shared/models/controller/controller.model';
 
 @Component({
   selector: 'app-home',

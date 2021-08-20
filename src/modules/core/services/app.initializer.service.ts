@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
 import {ControllerApiService} from './api/controller-api.service';
 import {AuthService} from './auth';
-import {AppConfigService} from './app.config.service';
+import {AppConfig} from '../models/app-config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +12,15 @@ export class AppInitializerService {
 
   error: Error;
 
-  constructor(private appConfig: AppConfigService,
+  constructor(private appConfig: AppConfig,
               private oAuthService: OAuthService,
               private authService: AuthService,
-              private controllerService: ControllerApiService) {
+              private controllerApiService: ControllerApiService) {
   }
 
-  /**
-   * NB! Preloading of dynamic configuration (initialize AppConfigService) is done in main.ts
-   */
   async init() {
     try {
-      const issuer = await this.controllerService.getOpenIdConnectIssuer();
+      const issuer = await this.controllerApiService.getOpenIdConnectIssuer();
 
       if (issuer) {
         this.appConfig.authConfig.issuer = issuer;
@@ -33,7 +30,7 @@ export class AppInitializerService {
           this.oAuthService.logOut(true);
         }
       }
-      this.authService.roles = await this.controllerService.getRolesForActiveUser();
+      this.authService.roles = await this.controllerApiService.getRolesForActiveUser();
       this.authService.updateAbility();
     } catch (error) {
       this.error = error;

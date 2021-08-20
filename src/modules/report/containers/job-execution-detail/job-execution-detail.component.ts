@@ -7,7 +7,7 @@ import {combineLatest, merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeWhile} from 'rxjs/operators';
 import {Detail} from '../../../../shared/func';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
-import {ControllerApiService, SnackBarService} from '../../../core';
+import {ControllerApiService, SnackBarService} from '../../../core/services';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({

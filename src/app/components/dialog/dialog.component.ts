@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
-import {ErrorService} from '../../../core/services';
+import {ErrorService} from '../../../modules/core/services';
 
 
 @Component({

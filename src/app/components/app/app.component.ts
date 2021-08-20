@@ -3,8 +3,8 @@ import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, Router
 
 import {Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
-import {AppInitializerService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services/';
-import {AuthService, GuardService} from '../../../core/services/auth';
+import {AppInitializerService, ControllerApiService, ErrorService, SnackBarService} from '../../../modules/core/services';
+import {AuthService, GuardService} from '../../../modules/core/services/auth';
 import {MatDialog} from '@angular/material/dialog';
 import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';

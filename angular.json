@@ -3,7 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "veidemann-web": {
+    "veidemann-dashboard": {
+      "schematics": {
+        "@schematics/angular:component": {
+          "prefix": "app",
+          "style": "css"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "app"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -11,8 +20,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "baseHref": "/veidemann/",
-            "deployUrl": "/veidemann/",
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -76,14 +83,13 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "veidemann-web:build"
+            "browserTarget": "veidemann-dashboard:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "veidemann-web:build:production"
+              "browserTarget": "veidemann-dashboard:build:production"
             },
             "development": {
-              "servePath": "/veidemann/",
               "ssl": true,
               "proxyConfig": "proxy.conf.json"
             }
@@ -92,7 +98,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "veidemann-web:build"
+            "browserTarget": "veidemann-dashboard:build"
           }
         },
         "test": {
@@ -130,16 +136,7 @@
       }
     }
   },
-  "defaultProject": "veidemann-web",
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "style": "css"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
-    }
-  },
+  "defaultProject": "veidemann-dashboard",
   "cli": {
     "packageManager": "yarn"
   }

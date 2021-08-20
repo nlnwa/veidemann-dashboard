@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {combineLatest, Observable} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService, ErrorService} from '../../../core/services';
+import {ErrorService} from '../../../core/services';
 import {CrawlLogQuery, CrawlLogService} from '../../services';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {PageEvent} from '@angular/material/paginator';
@@ -30,8 +30,7 @@ export class CrawlLogComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private crawlLogService: CrawlLogService,
-              private errorService: ErrorService,
-              public appConfigService: AppConfigService) {
+              private errorService: ErrorService) {
   }
 
   ngOnInit(): void {

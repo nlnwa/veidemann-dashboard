@@ -1,4 +1,3 @@
-export {AppConfigService} from './app.config.service';
 export {ConfigApiService} from './api/config-api.service';
 export {ApplicationErrorHandler} from './error.handler';
 export {ErrorService} from './error.service';

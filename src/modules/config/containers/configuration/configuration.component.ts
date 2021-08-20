@@ -16,7 +16,7 @@ import {
   Seed,
   SubCollectionType
 } from '../../../../shared/models';
-import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
+import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {DeleteDialogComponent, Parcel} from '../../components';
 import {KindService, OptionsService} from '../../services';
 import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';

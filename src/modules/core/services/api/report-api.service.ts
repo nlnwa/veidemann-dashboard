@@ -3,7 +3,6 @@ import {EMPTY, Observable, Observer} from 'rxjs';
 import {catchError, defaultIfEmpty, map} from 'rxjs/operators';
 
 import {AuthService} from '../auth';
-import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {
   CrawlExecutionsListRequest,
@@ -14,6 +13,7 @@ import {
   ReportPromiseClient
 } from '../../../../api';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models';
+import {AppConfig} from '../../models/app-config.model';
 
 
 @Injectable({
@@ -24,9 +24,9 @@ export class ReportApiService {
   private reportClient: ReportPromiseClient;
 
   constructor(private authService: AuthService,
-              appConfigService: AppConfigService,
+              private appConfig: AppConfig,
               private errorService: ErrorService) {
-    this.reportClient = new ReportPromiseClient(appConfigService.grpcWebUrl, null, null);
+    this.reportClient = new ReportPromiseClient(appConfig.grpcWebUrl, null, null);
   }
 
   listJobExecutions(listRequest: JobExecutionsListRequest): Observable<JobExecutionStatus> {

@@ -7,11 +7,11 @@ import {
   PageLogProto,
 } from '../../../../api';
 import {AuthService} from '../auth';
-import {AppConfigService} from '../app.config.service';
 import {ErrorService} from '../error.service';
 import {EMPTY, Observable, Observer} from 'rxjs';
 import {CrawlLog, PageLog} from '../../../../shared/models';
 import {catchError, map} from 'rxjs/operators';
+import {AppConfig} from '../../models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class LogApiService {
   private logClient: LogPromiseClient;
 
   constructor(private authService: AuthService,
-              appConfigService: AppConfigService,
+              appConfigService: AppConfig,
               private errorService: ErrorService) {
     this.logClient = new LogPromiseClient(appConfigService.grpcWebUrl, null, null);
   }

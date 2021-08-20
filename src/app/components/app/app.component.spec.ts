@@ -1,14 +1,13 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import {AppComponent} from './app.component';
-import {MaterialModule} from '../../../commons/material.module';
-import {DialogComponent, TimeComponent} from '..';
+import {MaterialModule} from '../../../modules/commons/material.module';
+import {DialogComponent, TimeComponent} from '../index';
 import {RouterTestingModule} from '@angular/router/testing';
-import {AppInitializerService} from '../../../core/services/app.initializer.service';
-import {AuthService, GuardService} from '../../../core/services/auth';
-import {ErrorService, SnackBarService} from '../../../core/services';
+import {AppInitializerService} from '../../../modules/core/services/app.initializer.service';
+import {AuthService, GuardService} from '../../../modules/core/services/auth';
+import {ErrorService, SnackBarService} from '../../../modules/core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogRef} from '@angular/material';
-import {AppConfig} from '../../../core/models/app-config.model';
+import {AppConfig} from '../../../modules/core/models/app-config.model';
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -48,12 +47,6 @@ describe('AppComponent', () => {
         {
           provide: ErrorService,
           useValue: {}
-        },
-        {
-          provide: MatDialogRef,
-          useValue: {
-            close: () => {}
-          }
         }
       ]
     }).compileComponents();

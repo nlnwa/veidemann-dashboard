@@ -9,6 +9,7 @@ import {ActionDirective, ExtraDirective, FilterDirective, HighlightDirective, Sh
 import {NgxFilesizeModule} from 'ngx-filesize';
 import {DurationFormatPipe} from './pipes/duration-format.pipe';
 import {UrlFormatPipe} from './pipes/url-format.pipe';
+import {AbilityModule} from '@casl/angular';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import {UrlFormatPipe} from './pipes/url-format.pipe';
     RouterModule,
     DragDropModule,
     NgxFilesizeModule,
+    AbilityModule,
   ],
   exports: [
     CommonModule,
@@ -46,8 +48,11 @@ import {UrlFormatPipe} from './pipes/url-format.pipe';
     DurationFormatPipe,
     HighlightDirective,
     UrlFormatPipe,
+    AbilityModule,
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+  ],
 })
 export class CommonsModule {
 }

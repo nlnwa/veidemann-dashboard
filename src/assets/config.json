@@ -1,0 +1,13 @@
+{
+  "grpcWebUrl": "/grpc-web",
+  "authConfig": {
+    "issuer": "",
+    "redirectUri": "https://localhost:4200/",
+    "requestAccessToken": false,
+    "oidc": true,
+    "responseType": "id_token",
+    "clientId": "veidemann-dashboard",
+    "scope": "openid profile email groups offline_access audience:server:client_id:veidemann-api",
+    "requireHttps": true
+  }
+}

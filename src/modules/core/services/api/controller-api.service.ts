@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 import {EMPTY, from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -6,7 +6,6 @@ import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 
 import {ControllerPromiseClient} from '../../../../api';
 import {AuthService} from '../auth';
-import {AppConfigService} from '../app.config.service';
 import {Role} from '../../../../shared/models/config';
 import {
   CrawlerStatus,
@@ -17,6 +16,7 @@ import {
 import {ApplicationErrorHandler} from '../error.handler';
 import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/models/report';
 import {CountResponse} from '../../../../shared/models';
+import {AppConfig} from '../../models/app-config.model';
 
 
 @Injectable({
@@ -27,7 +27,7 @@ export class ControllerApiService {
   private controllerPromiseClient: ControllerPromiseClient;
 
   constructor(private authService: AuthService,
-              private appConfig: AppConfigService,
+              private appConfig: AppConfig,
               private errorHandler: ApplicationErrorHandler) {
     this.controllerPromiseClient = new ControllerPromiseClient(appConfig.grpcWebUrl, null, null);
   }
