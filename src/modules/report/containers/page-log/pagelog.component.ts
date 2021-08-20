@@ -5,7 +5,7 @@ import {ListDataSource, ListItem} from '../../../../shared/models/list-datasourc
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
-import {AppConfigService, ErrorService} from '../../../core/services';
+import {ErrorService} from '../../../core/services';
 import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
@@ -40,8 +40,7 @@ export class PageLogComponent implements OnInit {
               private router: Router,
               private fb: FormBuilder,
               private pageLogService: PageLogService,
-              private errorService: ErrorService,
-              public appConfigService: AppConfigService) {
+              private errorService: ErrorService) {
   }
 
   ngOnInit(): void {

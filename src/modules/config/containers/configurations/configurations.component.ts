@@ -18,7 +18,7 @@ import {
 } from 'rxjs/operators';
 
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
-import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core';
+import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {DeleteDialogComponent, DeleteMultiDialogComponent, Parcel, RunCrawlDialogComponent} from '../../components';
 import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';

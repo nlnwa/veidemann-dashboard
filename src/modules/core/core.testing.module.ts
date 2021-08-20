@@ -1,8 +1,9 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 
-import {AppConfigService, AuthService, ConfigApiService, ErrorService, GuardService, SnackBarService} from './services';
+import {AuthService, ConfigApiService, ErrorService, GuardService, SnackBarService} from './services';
 import {AppInitializerService} from './services/app.initializer.service';
 import {of} from 'rxjs';
+import {AppConfig} from './models';
 
 
 @NgModule()
@@ -12,7 +13,7 @@ export class CoreTestingModule {
       ngModule: CoreTestingModule,
       providers: [
         {
-          provide: AppConfigService,
+          provide: AppConfig,
           useValue: {}
         },
         {
@@ -24,10 +25,6 @@ export class CoreTestingModule {
           useValue: {
             list: () => of(null)
           }
-        },
-        {
-          provide: AppConfigService,
-          useValue: {}
         },
         {
           provide: GuardService,

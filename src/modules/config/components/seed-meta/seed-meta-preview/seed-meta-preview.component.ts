@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ConfigObject} from '../../../../../shared/models';
-import {AuthService, SnackBarService} from '../../../../core';
+import {AuthService, SnackBarService} from '../../../../core/services';
 
 @Component({
   selector: 'app-seed-meta-preview',

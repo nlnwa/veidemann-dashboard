@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {Resource} from '../../../../shared/models/log/resource.model';
+import {Resource} from '../../../../shared/models';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {AppConfigService} from '../../../core/services';
 import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
@@ -26,7 +25,7 @@ export class ResourceComponent implements OnInit {
   expandedResource: Resource | null;
   dataSource = new MatTableDataSource<Resource>();
 
-  constructor(public appConfigService: AppConfigService) {
+  constructor() {
   }
 
 
@@ -35,12 +34,7 @@ export class ResourceComponent implements OnInit {
   }
 
   hasError(resource: Resource): boolean {
-    // @ts-ignore
-    if (resource?.error) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!resource?.error;
   }
 
   applyFilter(event: Event) {

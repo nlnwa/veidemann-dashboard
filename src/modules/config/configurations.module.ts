@@ -201,7 +201,6 @@ import {RouterExtraService} from './services/router-extra.service';
     CommonsModule,
     ConfigurationsRoutingModule,
     ReportModule,
-    AbilityModule,
     KeyboardShortcutsModule,
   ],
   exports: [],

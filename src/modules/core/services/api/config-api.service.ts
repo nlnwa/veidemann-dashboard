@@ -14,9 +14,9 @@ import {
   UpdateRequest
 } from '../../../../api';
 import {AuthService} from '../auth';
-import {AppConfigService} from '../app.config.service';
 import {Annotation, ConfigObject, ConfigRef} from '../../../../shared/models/config';
 import {ApplicationErrorHandler} from '../error.handler';
+import {AppConfig} from '../../models/app-config.model';
 
 const catchConfigError = (errorService: ErrorHandler, returnValue: any) =>
   catchError(error => {
@@ -32,7 +32,7 @@ export class ConfigApiService {
   private configPromiseClient: ConfigPromiseClient;
 
   constructor(protected authService: AuthService,
-              private appConfig: AppConfigService,
+              private appConfig: AppConfig,
               private errorHandler: ApplicationErrorHandler) {
     this.configPromiseClient = new ConfigPromiseClient(appConfig.grpcWebUrl, null, null);
   }

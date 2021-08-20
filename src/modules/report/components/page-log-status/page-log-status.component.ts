@@ -1,11 +1,10 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {PageLog} from '../../../../shared/models/log';
+import {PageLog} from '../../../../shared/models';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {AppConfigService} from '../../../core/services';
 
 interface UriNode {
-  name: string
+  name: string;
   url: URL;
   children: UriNode[];
 }
@@ -44,7 +43,7 @@ export class PageLogStatusComponent implements OnChanges {
   @Input()
   pageLog: PageLog;
 
-  constructor(public appConfigService: AppConfigService) {
+  constructor() {
   }
 
   hasChild = (_: number, node: UriFlatNode) => node.expandable;
@@ -65,7 +64,7 @@ export class PageLogStatusComponent implements OnChanges {
         path.reduce((r, name, i) => {
           if (!r[name]) {
             r[name] = {result: []};
-            r.result.push({name, url: new URL(path.slice(0, i + 1).join('/')), children: r[name].result})
+            r.result.push({name, url: new URL(path.slice(0, i + 1).join('/')), children: r[name].result});
           }
           return r[name];
         }, level);
