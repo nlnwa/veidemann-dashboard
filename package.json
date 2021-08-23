@@ -12,7 +12,7 @@
     "lint": "ng lint",
     "clean": "rm -rf dist",
     "test:once": "ng test --sourcemaps=false --single-run",
-    "build:docker": "docker build --build-arg BASE_HREF=${BASE_HREF:-/},VERSION=$(git describe --tags --always) -t ${IMAGE:-veidemann-dashboard} .",
+    "build:docker": "docker build --build-arg BASE_HREF=${BASE_HREF:-/} --build-arg VERSION=$(git describe --tags --always) -t ${IMAGE:-veidemann-dashboard} .",
     "extract-i18n": "ng xi18n --output-path src/locale --locale no && xliffmerge --profile xliffmerge.json no en"
   },
   "dependencies": {
