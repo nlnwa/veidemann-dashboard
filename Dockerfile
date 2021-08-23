@@ -1,6 +1,6 @@
 FROM node:14-alpine as build
 
-ARG BASE_HREF=/veidemann
+ARG BASE_HREF=/veidemann/
 ARG VERSION
 
 # Install git because git dependency in package.json
@@ -9,7 +9,7 @@ RUN apk add --update --no-cache git gettext
 
 COPY package.json yarn.lock .yarnrc /usr/src/app/
 WORKDIR /usr/src/app
-RUN yarn install --non-interactive --frozen-lockfile --prefer-offline
+RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . .
 
