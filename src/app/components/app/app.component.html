@@ -1,9 +1,15 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
   <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
-  <ng-keyboard-shortcuts-help [key]="'?'"
-                              [closeKey]="'escape'"
-                              [title]="'Keyboard shortcuts'"></ng-keyboard-shortcuts-help>
-
+  <ng-keyboard-shortcuts-help
+    class="keys"
+    [keyDescription]="'Show this menu'"
+    [keyLabel]="'General'"
+    [key]="'shift + h'"
+    [closeKeyDescription]="'Hide this help menu'"
+    [closeKeyLabel]="'General'"
+    [closeKey]="'escape'"
+    [title]="'Keyboard shortcuts'">
+  </ng-keyboard-shortcuts-help>
   <mat-toolbar class="main-toolbar mat-primary">
     <a routerLink="/"><img class="veidemann_logo" src="assets/logo/veidemann_horizontal_white.png"></a>
 
@@ -13,7 +19,9 @@
 
     <span fxFlex></span>
 
-    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu"><mat-icon>help</mat-icon></a>
+    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu">
+      <mat-icon>help</mat-icon>
+    </a>
     <mat-menu #helpMenu="matMenu">
       <a mat-menu-item
          target="_blank"
