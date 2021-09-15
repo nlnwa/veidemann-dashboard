@@ -19,12 +19,14 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {AppConfig} from './models/app-config.model';
 import {Ability, PureAbility} from '@casl/ability';
+import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
 @NgModule({
   imports: [
     OAuthModule.forRoot(),
+    KeyboardShortcutsModule.forRoot(),
   ],
   providers: [
     OAuthService,

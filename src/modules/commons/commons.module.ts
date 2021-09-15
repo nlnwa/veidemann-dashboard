@@ -10,6 +10,7 @@ import {NgxFilesizeModule} from 'ngx-filesize';
 import {DurationFormatPipe} from './pipes/duration-format.pipe';
 import {UrlFormatPipe} from './pipes/url-format.pipe';
 import {AbilityModule} from '@casl/angular';
+import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {AbilityModule} from '@casl/angular';
     DragDropModule,
     NgxFilesizeModule,
     AbilityModule,
+    KeyboardShortcutsModule,
   ],
   exports: [
     CommonModule,
@@ -49,6 +51,7 @@ import {AbilityModule} from '@casl/angular';
     HighlightDirective,
     UrlFormatPipe,
     AbilityModule,
+    KeyboardShortcutsModule,
   ],
   providers: [
     DatePipe,

@@ -103,7 +103,6 @@ import {CrawlExecutionFetchPipe} from './pipe/crawlexecution-fetch.pipe';
     ReportRoutingModule,
     ChartsModule,
     AbilityModule,
-    KeyboardShortcutsModule,
   ],
   exports: [
     JobNamePipe,
