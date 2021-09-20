@@ -50,7 +50,7 @@
     "ng-keyboard-shortcuts": "^10.1.17",
     "ng2-charts": "^2.4.2",
     "ngx-filesize": "^2.0.16",
-    "prismjs": "^1.24.1",
+    "prismjs": "^1.25.0",
     "rxjs": "~6.6.7",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
