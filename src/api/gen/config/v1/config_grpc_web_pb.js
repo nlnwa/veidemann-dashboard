@@ -30,7 +30,7 @@ proto.veidemann.api.config.v1 = require('./config_pb.js');
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -38,7 +38,7 @@ proto.veidemann.api.config.v1 = require('./config_pb.js');
 proto.veidemann.api.config.v1.ConfigClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -56,7 +56,7 @@ proto.veidemann.api.config.v1.ConfigClient =
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -64,7 +64,7 @@ proto.veidemann.api.config.v1.ConfigClient =
 proto.veidemann.api.config.v1.ConfigPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -102,30 +102,11 @@ const methodDescriptor_Config_GetConfigObject = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.ConfigRef,
- *   !proto.veidemann.api.config.v1.ConfigObject>}
- */
-const methodInfo_Config_GetConfigObject = new grpc.web.AbstractClientBase.MethodInfo(
-  config_v1_resources_pb.ConfigObject,
-  /**
-   * @param {!proto.veidemann.api.config.v1.ConfigRef} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  config_v1_resources_pb.ConfigObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.ConfigRef} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.ConfigObject)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.ConfigObject)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.ConfigObject>|undefined}
  *     The XHR Node Readable Stream
@@ -144,7 +125,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getConfigObject =
 /**
  * @param {!proto.veidemann.api.config.v1.ConfigRef} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ConfigObject>}
  *     Promise that resolves to the response
@@ -182,27 +163,8 @@ const methodDescriptor_Config_ListConfigObjects = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.ListRequest,
- *   !proto.veidemann.api.config.v1.ConfigObject>}
- */
-const methodInfo_Config_ListConfigObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  config_v1_resources_pb.ConfigObject,
-  /**
-   * @param {!proto.veidemann.api.config.v1.ListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  config_v1_resources_pb.ConfigObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.ListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.ConfigObject>}
  *     The XHR Node Readable Stream
@@ -219,7 +181,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.listConfigObjects =
 
 /**
  * @param {!proto.veidemann.api.config.v1.ListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.ConfigObject>}
  *     The XHR Node Readable Stream
@@ -257,30 +219,11 @@ const methodDescriptor_Config_CountConfigObjects = new grpc.web.MethodDescriptor
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.ListRequest,
- *   !proto.veidemann.api.config.v1.ListCountResponse>}
- */
-const methodInfo_Config_CountConfigObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.config.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.config.v1.ListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.config.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.ListRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.ListCountResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.ListCountResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.ListCountResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -299,7 +242,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.countConfigObjects =
 /**
  * @param {!proto.veidemann.api.config.v1.ListRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ListCountResponse>}
  *     Promise that resolves to the response
@@ -337,30 +280,11 @@ const methodDescriptor_Config_SaveConfigObject = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.ConfigObject,
- *   !proto.veidemann.api.config.v1.ConfigObject>}
- */
-const methodInfo_Config_SaveConfigObject = new grpc.web.AbstractClientBase.MethodInfo(
-  config_v1_resources_pb.ConfigObject,
-  /**
-   * @param {!proto.veidemann.api.config.v1.ConfigObject} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  config_v1_resources_pb.ConfigObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.ConfigObject} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.ConfigObject)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.ConfigObject)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.ConfigObject>|undefined}
  *     The XHR Node Readable Stream
@@ -379,7 +303,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.saveConfigObject =
 /**
  * @param {!proto.veidemann.api.config.v1.ConfigObject} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.ConfigObject>}
  *     Promise that resolves to the response
@@ -417,30 +341,11 @@ const methodDescriptor_Config_UpdateConfigObjects = new grpc.web.MethodDescripto
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.UpdateRequest,
- *   !proto.veidemann.api.config.v1.UpdateResponse>}
- */
-const methodInfo_Config_UpdateConfigObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.config.v1.UpdateResponse,
-  /**
-   * @param {!proto.veidemann.api.config.v1.UpdateRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.config.v1.UpdateResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.UpdateRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.UpdateResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.UpdateResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.UpdateResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -459,7 +364,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.updateConfigObjects =
 /**
  * @param {!proto.veidemann.api.config.v1.UpdateRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.UpdateResponse>}
  *     Promise that resolves to the response
@@ -497,30 +402,11 @@ const methodDescriptor_Config_DeleteConfigObject = new grpc.web.MethodDescriptor
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.ConfigObject,
- *   !proto.veidemann.api.config.v1.DeleteResponse>}
- */
-const methodInfo_Config_DeleteConfigObject = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.config.v1.DeleteResponse,
-  /**
-   * @param {!proto.veidemann.api.config.v1.ConfigObject} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.config.v1.DeleteResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.ConfigObject} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.DeleteResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.DeleteResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.DeleteResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -539,7 +425,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.deleteConfigObject =
 /**
  * @param {!proto.veidemann.api.config.v1.ConfigObject} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.DeleteResponse>}
  *     Promise that resolves to the response
@@ -577,30 +463,11 @@ const methodDescriptor_Config_GetLabelKeys = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.GetLabelKeysRequest,
- *   !proto.veidemann.api.config.v1.LabelKeysResponse>}
- */
-const methodInfo_Config_GetLabelKeys = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.config.v1.LabelKeysResponse,
-  /**
-   * @param {!proto.veidemann.api.config.v1.GetLabelKeysRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.config.v1.LabelKeysResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.GetLabelKeysRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.LabelKeysResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.LabelKeysResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.LabelKeysResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -619,7 +486,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getLabelKeys =
 /**
  * @param {!proto.veidemann.api.config.v1.GetLabelKeysRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.LabelKeysResponse>}
  *     Promise that resolves to the response
@@ -657,30 +524,11 @@ const methodDescriptor_Config_GetLogConfig = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.veidemann.api.config.v1.LogLevels>}
- */
-const methodInfo_Config_GetLogConfig = new grpc.web.AbstractClientBase.MethodInfo(
-  config_v1_resources_pb.LogLevels,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  config_v1_resources_pb.LogLevels.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.LogLevels)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.LogLevels)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.LogLevels>|undefined}
  *     The XHR Node Readable Stream
@@ -699,7 +547,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getLogConfig =
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.LogLevels>}
  *     Promise that resolves to the response
@@ -737,30 +585,11 @@ const methodDescriptor_Config_SaveLogConfig = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.LogLevels,
- *   !proto.veidemann.api.config.v1.LogLevels>}
- */
-const methodInfo_Config_SaveLogConfig = new grpc.web.AbstractClientBase.MethodInfo(
-  config_v1_resources_pb.LogLevels,
-  /**
-   * @param {!proto.veidemann.api.config.v1.LogLevels} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  config_v1_resources_pb.LogLevels.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.LogLevels} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.LogLevels)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.LogLevels)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.LogLevels>|undefined}
  *     The XHR Node Readable Stream
@@ -779,7 +608,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.saveLogConfig =
 /**
  * @param {!proto.veidemann.api.config.v1.LogLevels} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.LogLevels>}
  *     Promise that resolves to the response
@@ -817,30 +646,11 @@ const methodDescriptor_Config_GetScriptAnnotations = new grpc.web.MethodDescript
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.config.v1.GetScriptAnnotationsRequest,
- *   !proto.veidemann.api.config.v1.GetScriptAnnotationsResponse>}
- */
-const methodInfo_Config_GetScriptAnnotations = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.config.v1.GetScriptAnnotationsResponse,
-  /**
-   * @param {!proto.veidemann.api.config.v1.GetScriptAnnotationsRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.config.v1.GetScriptAnnotationsResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.config.v1.GetScriptAnnotationsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.config.v1.GetScriptAnnotationsResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.config.v1.GetScriptAnnotationsResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.config.v1.GetScriptAnnotationsResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -859,7 +669,7 @@ proto.veidemann.api.config.v1.ConfigClient.prototype.getScriptAnnotations =
 /**
  * @param {!proto.veidemann.api.config.v1.GetScriptAnnotationsRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.config.v1.GetScriptAnnotationsResponse>}
  *     Promise that resolves to the response

@@ -13,7 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js');
 goog.object.extend(proto, commons_v1_resources_pb);
@@ -580,14 +586,13 @@ proto.veidemann.api.frontier.v1.CrawlExecutionId.prototype.setId = function(valu
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.veidemann.api.frontier.v1.PageHarvest.oneofGroups_ = [[1,2,3,4]];
+proto.veidemann.api.frontier.v1.PageHarvest.oneofGroups_ = [[2,3,4]];
 
 /**
  * @enum {number}
  */
 proto.veidemann.api.frontier.v1.PageHarvest.MsgCase = {
   MSG_NOT_SET: 0,
-  REQUESTNEXTPAGE: 1,
   METRICS: 2,
   OUTLINK: 3,
   ERROR: 4
@@ -631,7 +636,6 @@ proto.veidemann.api.frontier.v1.PageHarvest.prototype.toObject = function(opt_in
  */
 proto.veidemann.api.frontier.v1.PageHarvest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    requestnextpage: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
     metrics: (f = msg.getMetrics()) && proto.veidemann.api.frontier.v1.PageHarvest.Metrics.toObject(includeInstance, f),
     outlink: (f = msg.getOutlink()) && frontier_v1_resources_pb.QueuedUri.toObject(includeInstance, f),
     error: (f = msg.getError()) && commons_v1_resources_pb.Error.toObject(includeInstance, f),
@@ -672,10 +676,6 @@ proto.veidemann.api.frontier.v1.PageHarvest.deserializeBinaryFromReader = functi
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setRequestnextpage(value);
-      break;
     case 2:
       var value = new proto.veidemann.api.frontier.v1.PageHarvest.Metrics;
       reader.readMessage(value,proto.veidemann.api.frontier.v1.PageHarvest.Metrics.deserializeBinaryFromReader);
@@ -724,13 +724,6 @@ proto.veidemann.api.frontier.v1.PageHarvest.prototype.serializeBinary = function
  */
 proto.veidemann.api.frontier.v1.PageHarvest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 1));
-  if (f != null) {
-    writer.writeBool(
-      1,
-      f
-    );
-  }
   f = message.getMetrics();
   if (f != null) {
     writer.writeMessage(
@@ -922,42 +915,6 @@ proto.veidemann.api.frontier.v1.PageHarvest.Metrics.prototype.getBytesDownloaded
  */
 proto.veidemann.api.frontier.v1.PageHarvest.Metrics.prototype.setBytesDownloaded = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional bool requestNextPage = 1;
- * @return {boolean}
- */
-proto.veidemann.api.frontier.v1.PageHarvest.prototype.getRequestnextpage = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.veidemann.api.frontier.v1.PageHarvest} returns this
- */
-proto.veidemann.api.frontier.v1.PageHarvest.prototype.setRequestnextpage = function(value) {
-  return jspb.Message.setOneofField(this, 1, proto.veidemann.api.frontier.v1.PageHarvest.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.veidemann.api.frontier.v1.PageHarvest} returns this
- */
-proto.veidemann.api.frontier.v1.PageHarvest.prototype.clearRequestnextpage = function() {
-  return jspb.Message.setOneofField(this, 1, proto.veidemann.api.frontier.v1.PageHarvest.oneofGroups_[0], undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.veidemann.api.frontier.v1.PageHarvest.prototype.hasRequestnextpage = function() {
-  return jspb.Message.getField(this, 1) != null;
 };
 
 

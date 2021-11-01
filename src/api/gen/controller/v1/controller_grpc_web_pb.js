@@ -34,7 +34,7 @@ proto.veidemann.api.controller.v1 = require('./controller_pb.js');
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -42,7 +42,7 @@ proto.veidemann.api.controller.v1 = require('./controller_pb.js');
 proto.veidemann.api.controller.v1.ControllerClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -60,7 +60,7 @@ proto.veidemann.api.controller.v1.ControllerClient =
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -68,7 +68,7 @@ proto.veidemann.api.controller.v1.ControllerClient =
 proto.veidemann.api.controller.v1.ControllerPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -106,30 +106,11 @@ const methodDescriptor_Controller_GetRolesForActiveUser = new grpc.web.MethodDes
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.veidemann.api.controller.v1.RoleList>}
- */
-const methodInfo_Controller_GetRolesForActiveUser = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.controller.v1.RoleList,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.controller.v1.RoleList.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.controller.v1.RoleList)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.controller.v1.RoleList)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.controller.v1.RoleList>|undefined}
  *     The XHR Node Readable Stream
@@ -148,7 +129,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.getRolesForActiveUs
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.controller.v1.RoleList>}
  *     Promise that resolves to the response
@@ -186,30 +167,11 @@ const methodDescriptor_Controller_RunCrawl = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.controller.v1.RunCrawlRequest,
- *   !proto.veidemann.api.controller.v1.RunCrawlReply>}
- */
-const methodInfo_Controller_RunCrawl = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.controller.v1.RunCrawlReply,
-  /**
-   * @param {!proto.veidemann.api.controller.v1.RunCrawlRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.controller.v1.RunCrawlReply.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.controller.v1.RunCrawlRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.controller.v1.RunCrawlReply)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.controller.v1.RunCrawlReply)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.controller.v1.RunCrawlReply>|undefined}
  *     The XHR Node Readable Stream
@@ -228,7 +190,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.runCrawl =
 /**
  * @param {!proto.veidemann.api.controller.v1.RunCrawlRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.controller.v1.RunCrawlReply>}
  *     Promise that resolves to the response
@@ -266,30 +228,11 @@ const methodDescriptor_Controller_AbortCrawlExecution = new grpc.web.MethodDescr
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.controller.v1.ExecutionId,
- *   !proto.veidemann.api.frontier.v1.CrawlExecutionStatus>}
- */
-const methodInfo_Controller_AbortCrawlExecution = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.CrawlExecutionStatus,
-  /**
-   * @param {!proto.veidemann.api.controller.v1.ExecutionId} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_resources_pb.CrawlExecutionStatus.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.controller.v1.ExecutionId} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.frontier.v1.CrawlExecutionStatus)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.frontier.v1.CrawlExecutionStatus)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CrawlExecutionStatus>|undefined}
  *     The XHR Node Readable Stream
@@ -308,7 +251,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.abortCrawlExecution
 /**
  * @param {!proto.veidemann.api.controller.v1.ExecutionId} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.frontier.v1.CrawlExecutionStatus>}
  *     Promise that resolves to the response
@@ -346,30 +289,11 @@ const methodDescriptor_Controller_AbortJobExecution = new grpc.web.MethodDescrip
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.controller.v1.ExecutionId,
- *   !proto.veidemann.api.frontier.v1.JobExecutionStatus>}
- */
-const methodInfo_Controller_AbortJobExecution = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.JobExecutionStatus,
-  /**
-   * @param {!proto.veidemann.api.controller.v1.ExecutionId} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_resources_pb.JobExecutionStatus.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.controller.v1.ExecutionId} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.frontier.v1.JobExecutionStatus)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.frontier.v1.JobExecutionStatus)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.JobExecutionStatus>|undefined}
  *     The XHR Node Readable Stream
@@ -388,7 +312,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.abortJobExecution =
 /**
  * @param {!proto.veidemann.api.controller.v1.ExecutionId} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.frontier.v1.JobExecutionStatus>}
  *     Promise that resolves to the response
@@ -426,30 +350,11 @@ const methodDescriptor_Controller_GetOpenIdConnectIssuer = new grpc.web.MethodDe
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply>}
- */
-const methodInfo_Controller_GetOpenIdConnectIssuer = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply>|undefined}
  *     The XHR Node Readable Stream
@@ -468,7 +373,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.getOpenIdConnectIss
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.controller.v1.OpenIdConnectIssuerReply>}
  *     Promise that resolves to the response
@@ -506,30 +411,11 @@ const methodDescriptor_Controller_PauseCrawler = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.google.protobuf.Empty>}
- */
-const methodInfo_Controller_PauseCrawler = new grpc.web.AbstractClientBase.MethodInfo(
-  google_protobuf_empty_pb.Empty,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  google_protobuf_empty_pb.Empty.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.google.protobuf.Empty)}
+ * @param {function(?grpc.web.RpcError, ?proto.google.protobuf.Empty)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.google.protobuf.Empty>|undefined}
  *     The XHR Node Readable Stream
@@ -548,7 +434,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.pauseCrawler =
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.google.protobuf.Empty>}
  *     Promise that resolves to the response
@@ -586,30 +472,11 @@ const methodDescriptor_Controller_UnPauseCrawler = new grpc.web.MethodDescriptor
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.google.protobuf.Empty>}
- */
-const methodInfo_Controller_UnPauseCrawler = new grpc.web.AbstractClientBase.MethodInfo(
-  google_protobuf_empty_pb.Empty,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  google_protobuf_empty_pb.Empty.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.google.protobuf.Empty)}
+ * @param {function(?grpc.web.RpcError, ?proto.google.protobuf.Empty)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.google.protobuf.Empty>|undefined}
  *     The XHR Node Readable Stream
@@ -628,7 +495,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.unPauseCrawler =
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.google.protobuf.Empty>}
  *     Promise that resolves to the response
@@ -666,30 +533,11 @@ const methodDescriptor_Controller_Status = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.google.protobuf.Empty,
- *   !proto.veidemann.api.controller.v1.CrawlerStatus>}
- */
-const methodInfo_Controller_Status = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.controller.v1.CrawlerStatus,
-  /**
-   * @param {!proto.google.protobuf.Empty} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.controller.v1.CrawlerStatus.deserializeBinary
-);
-
-
-/**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.controller.v1.CrawlerStatus)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.controller.v1.CrawlerStatus)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.controller.v1.CrawlerStatus>|undefined}
  *     The XHR Node Readable Stream
@@ -708,7 +556,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.status =
 /**
  * @param {!proto.google.protobuf.Empty} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.controller.v1.CrawlerStatus>}
  *     Promise that resolves to the response
@@ -746,30 +594,11 @@ const methodDescriptor_Controller_QueueCountForCrawlExecution = new grpc.web.Met
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.frontier.v1.CrawlExecutionId,
- *   !proto.veidemann.api.frontier.v1.CountResponse>}
- */
-const methodInfo_Controller_QueueCountForCrawlExecution = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_frontier_pb.CountResponse,
-  /**
-   * @param {!proto.veidemann.api.frontier.v1.CrawlExecutionId} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_frontier_pb.CountResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.frontier.v1.CrawlExecutionId} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.frontier.v1.CountResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.frontier.v1.CountResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CountResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -788,7 +617,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.queueCountForCrawlE
 /**
  * @param {!proto.veidemann.api.frontier.v1.CrawlExecutionId} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.frontier.v1.CountResponse>}
  *     Promise that resolves to the response
@@ -826,30 +655,11 @@ const methodDescriptor_Controller_QueueCountForCrawlHostGroup = new grpc.web.Met
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.frontier.v1.CrawlHostGroup,
- *   !proto.veidemann.api.frontier.v1.CountResponse>}
- */
-const methodInfo_Controller_QueueCountForCrawlHostGroup = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_frontier_pb.CountResponse,
-  /**
-   * @param {!proto.veidemann.api.frontier.v1.CrawlHostGroup} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_frontier_pb.CountResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.frontier.v1.CrawlHostGroup} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.frontier.v1.CountResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.frontier.v1.CountResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CountResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -868,7 +678,7 @@ proto.veidemann.api.controller.v1.ControllerClient.prototype.queueCountForCrawlH
 /**
  * @param {!proto.veidemann.api.frontier.v1.CrawlHostGroup} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.frontier.v1.CountResponse>}
  *     Promise that resolves to the response

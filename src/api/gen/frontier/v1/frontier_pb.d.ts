@@ -62,9 +62,6 @@ export namespace CrawlExecutionId {
 }
 
 export class PageHarvest extends jspb.Message {
-  getRequestnextpage(): boolean;
-  setRequestnextpage(value: boolean): PageHarvest;
-
   getMetrics(): PageHarvest.Metrics | undefined;
   setMetrics(value?: PageHarvest.Metrics): PageHarvest;
   hasMetrics(): boolean;
@@ -95,7 +92,6 @@ export class PageHarvest extends jspb.Message {
 
 export namespace PageHarvest {
   export type AsObject = {
-    requestnextpage: boolean,
     metrics?: PageHarvest.Metrics.AsObject,
     outlink?: frontier_v1_resources_pb.QueuedUri.AsObject,
     error?: commons_v1_resources_pb.Error.AsObject,
@@ -127,7 +123,6 @@ export namespace PageHarvest {
 
   export enum MsgCase { 
     MSG_NOT_SET = 0,
-    REQUESTNEXTPAGE = 1,
     METRICS = 2,
     OUTLINK = 3,
     ERROR = 4,

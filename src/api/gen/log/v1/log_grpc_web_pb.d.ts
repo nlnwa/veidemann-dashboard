@@ -1,7 +1,7 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as log_v1_resources_pb from '../../log/v1/resources_pb';
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
+import * as log_v1_resources_pb from '../../log/v1/resources_pb';
 import * as log_v1_log_pb from '../../log/v1/log_pb';
 
 

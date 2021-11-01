@@ -30,7 +30,7 @@ proto.veidemann.api.log.v1 = require('./log_pb.js');
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -38,7 +38,7 @@ proto.veidemann.api.log.v1 = require('./log_pb.js');
 proto.veidemann.api.log.v1.LogClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -56,7 +56,7 @@ proto.veidemann.api.log.v1.LogClient =
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -64,7 +64,7 @@ proto.veidemann.api.log.v1.LogClient =
 proto.veidemann.api.log.v1.LogPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -102,27 +102,8 @@ const methodDescriptor_Log_ListCrawlLogs = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.log.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.log.v1.CrawlLog>}
- */
-const methodInfo_Log_ListCrawlLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  log_v1_resources_pb.CrawlLog,
-  /**
-   * @param {!proto.veidemann.api.log.v1.CrawlLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.CrawlLog.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.log.v1.CrawlLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
  *     The XHR Node Readable Stream
@@ -139,7 +120,7 @@ proto.veidemann.api.log.v1.LogClient.prototype.listCrawlLogs =
 
 /**
  * @param {!proto.veidemann.api.log.v1.CrawlLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
  *     The XHR Node Readable Stream
@@ -177,27 +158,8 @@ const methodDescriptor_Log_ListPageLogs = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.log.v1.PageLogListRequest,
- *   !proto.veidemann.api.log.v1.PageLog>}
- */
-const methodInfo_Log_ListPageLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  log_v1_resources_pb.PageLog,
-  /**
-   * @param {!proto.veidemann.api.log.v1.PageLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.PageLog.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.log.v1.PageLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
  *     The XHR Node Readable Stream
@@ -214,7 +176,7 @@ proto.veidemann.api.log.v1.LogClient.prototype.listPageLogs =
 
 /**
  * @param {!proto.veidemann.api.log.v1.PageLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
  *     The XHR Node Readable Stream
