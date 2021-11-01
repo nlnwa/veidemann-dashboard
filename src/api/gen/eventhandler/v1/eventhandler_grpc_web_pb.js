@@ -28,7 +28,7 @@ proto.veidemann.api.eventhandler.v1 = require('./eventhandler_pb.js');
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -36,7 +36,7 @@ proto.veidemann.api.eventhandler.v1 = require('./eventhandler_pb.js');
 proto.veidemann.api.eventhandler.v1.EventHandlerClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -54,7 +54,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient =
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -62,7 +62,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient =
 proto.veidemann.api.eventhandler.v1.EventHandlerPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -100,30 +100,11 @@ const methodDescriptor_EventHandler_GetEventObject = new grpc.web.MethodDescript
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.EventRef,
- *   !proto.veidemann.api.eventhandler.v1.EventObject>}
- */
-const methodInfo_EventHandler_GetEventObject = new grpc.web.AbstractClientBase.MethodInfo(
-  eventhandler_v1_resources_pb.EventObject,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.EventRef} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  eventhandler_v1_resources_pb.EventObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.EventRef} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.EventObject)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.EventObject)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.EventObject>|undefined}
  *     The XHR Node Readable Stream
@@ -142,7 +123,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.getEventObject 
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.EventRef} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.EventObject>}
  *     Promise that resolves to the response
@@ -180,27 +161,8 @@ const methodDescriptor_EventHandler_ListEventObjects = new grpc.web.MethodDescri
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.ListRequest,
- *   !proto.veidemann.api.eventhandler.v1.EventObject>}
- */
-const methodInfo_EventHandler_ListEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  eventhandler_v1_resources_pb.EventObject,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  eventhandler_v1_resources_pb.EventObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.EventObject>}
  *     The XHR Node Readable Stream
@@ -217,7 +179,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.listEventObject
 
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.EventObject>}
  *     The XHR Node Readable Stream
@@ -255,30 +217,11 @@ const methodDescriptor_EventHandler_CountEventObjects = new grpc.web.MethodDescr
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.ListRequest,
- *   !proto.veidemann.api.eventhandler.v1.ListCountResponse>}
- */
-const methodInfo_EventHandler_CountEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.eventhandler.v1.ListCountResponse,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.eventhandler.v1.ListCountResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.ListCountResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.ListCountResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.ListCountResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -297,7 +240,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.countEventObjec
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.ListRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.ListCountResponse>}
  *     Promise that resolves to the response
@@ -335,30 +278,11 @@ const methodDescriptor_EventHandler_SaveEventObject = new grpc.web.MethodDescrip
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.SaveRequest,
- *   !proto.veidemann.api.eventhandler.v1.EventObject>}
- */
-const methodInfo_EventHandler_SaveEventObject = new grpc.web.AbstractClientBase.MethodInfo(
-  eventhandler_v1_resources_pb.EventObject,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  eventhandler_v1_resources_pb.EventObject.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.EventObject)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.EventObject)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.EventObject>|undefined}
  *     The XHR Node Readable Stream
@@ -377,7 +301,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.saveEventObject
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.SaveRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.EventObject>}
  *     Promise that resolves to the response
@@ -415,30 +339,11 @@ const methodDescriptor_EventHandler_UpdateEventObjects = new grpc.web.MethodDesc
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.UpdateRequest,
- *   !proto.veidemann.api.eventhandler.v1.UpdateResponse>}
- */
-const methodInfo_EventHandler_UpdateEventObjects = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.eventhandler.v1.UpdateResponse,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.eventhandler.v1.UpdateResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.UpdateResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.UpdateResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.UpdateResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -457,7 +362,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.updateEventObje
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.UpdateRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.UpdateResponse>}
  *     Promise that resolves to the response
@@ -495,30 +400,11 @@ const methodDescriptor_EventHandler_DeleteEventObject = new grpc.web.MethodDescr
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.EventObject,
- *   !proto.veidemann.api.eventhandler.v1.DeleteResponse>}
- */
-const methodInfo_EventHandler_DeleteEventObject = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.eventhandler.v1.DeleteResponse,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.EventObject} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.eventhandler.v1.DeleteResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.EventObject} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.DeleteResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.DeleteResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.DeleteResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -537,7 +423,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.deleteEventObje
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.EventObject} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.DeleteResponse>}
  *     Promise that resolves to the response
@@ -575,30 +461,11 @@ const methodDescriptor_EventHandler_ListLabels = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.eventhandler.v1.ListLabelRequest,
- *   !proto.veidemann.api.eventhandler.v1.ListLabelResponse>}
- */
-const methodInfo_EventHandler_ListLabels = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.eventhandler.v1.ListLabelResponse,
-  /**
-   * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.eventhandler.v1.ListLabelResponse.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.veidemann.api.eventhandler.v1.ListLabelResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.veidemann.api.eventhandler.v1.ListLabelResponse)}
  *     callback The callback function(error, response)
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.eventhandler.v1.ListLabelResponse>|undefined}
  *     The XHR Node Readable Stream
@@ -617,7 +484,7 @@ proto.veidemann.api.eventhandler.v1.EventHandlerClient.prototype.listLabels =
 /**
  * @param {!proto.veidemann.api.eventhandler.v1.ListLabelRequest} request The
  *     request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.veidemann.api.eventhandler.v1.ListLabelResponse>}
  *     Promise that resolves to the response

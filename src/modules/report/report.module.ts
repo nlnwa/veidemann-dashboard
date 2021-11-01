@@ -41,17 +41,16 @@ import {SedPipe} from './pipe/sed.pipe';
 import {PageLogDetailComponent} from './containers/page-log-detail/page-log-detail.component';
 import {AbortCrawlDialogComponent} from './components/abort-crawl-dialog/abort-crawl-dialog.component';
 import {JobExecutionPreviewComponent} from './components/job-execution-preview/job-execution-preview.component';
-import {ChartsModule} from 'ng2-charts';
 import {CrawlExecutionPreviewComponent} from './components/crawl-execution-preview/crawl-execution-preview.component';
 import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log-preview.component';
 import {AbilityModule} from '@casl/angular';
 import {ExecutionQueueCountPipe} from './pipe/execution-queue-count.pipe';
-import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 import {CrawlExecutionShortcutsComponent} from './components/crawl-execution-shortcuts/crawl-execution-shortcuts.component';
 import {JobExecutionShortcutsComponent} from './components/job-execution-shortcuts/job-execution-shortcuts.component';
 import {PageLogShortcutsComponent} from './components/page-log-shortcuts/page-log-shortcuts.component';
 import {CrawlLogShortcutsComponent} from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
 import {CrawlExecutionFetchPipe} from './pipe/crawlexecution-fetch.pipe';
+import {NgxEchartsModule} from 'ngx-echarts';
 
 
 @NgModule({
@@ -101,9 +100,11 @@ import {CrawlExecutionFetchPipe} from './pipe/crawlexecution-fetch.pipe';
   imports: [
     CommonsModule,
     ReportRoutingModule,
-    ChartsModule,
     AbilityModule,
-  ],
+    NgxEchartsModule.forRoot({
+        echarts: () => import('echarts'),
+      }),
+    ],
   exports: [
     JobNamePipe,
     SeedNamePipe

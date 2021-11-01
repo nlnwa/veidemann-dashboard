@@ -20,8 +20,6 @@ var commons_v1_resources_pb = require('../../commons/v1/resources_pb.js')
 
 var frontier_v1_resources_pb = require('../../frontier/v1/resources_pb.js')
 
-var log_v1_resources_pb = require('../../log/v1/resources_pb.js')
-
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.veidemann = {};
@@ -32,7 +30,7 @@ proto.veidemann.api.report.v1 = require('./report_pb.js');
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -40,7 +38,7 @@ proto.veidemann.api.report.v1 = require('./report_pb.js');
 proto.veidemann.api.report.v1.ReportClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -58,7 +56,7 @@ proto.veidemann.api.report.v1.ReportClient =
 /**
  * @param {string} hostname
  * @param {?Object} credentials
- * @param {?Object} options
+ * @param {?grpc.web.ClientOptions} options
  * @constructor
  * @struct
  * @final
@@ -66,7 +64,7 @@ proto.veidemann.api.report.v1.ReportClient =
 proto.veidemann.api.report.v1.ReportPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -78,156 +76,6 @@ proto.veidemann.api.report.v1.ReportPromiseClient =
    */
   this.hostname_ = hostname;
 
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.log.v1.CrawlLog>}
- */
-const methodDescriptor_Report_ListCrawlLogs = new grpc.web.MethodDescriptor(
-  '/veidemann.api.report.v1.Report/ListCrawlLogs',
-  grpc.web.MethodType.SERVER_STREAMING,
-  proto.veidemann.api.report.v1.CrawlLogListRequest,
-  log_v1_resources_pb.CrawlLog,
-  /**
-   * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.CrawlLog.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.CrawlLogListRequest,
- *   !proto.veidemann.api.log.v1.CrawlLog>}
- */
-const methodInfo_Report_ListCrawlLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  log_v1_resources_pb.CrawlLog,
-  /**
-   * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.CrawlLog.deserializeBinary
-);
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportClient.prototype.listCrawlLogs =
-    function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
-      '/veidemann.api.report.v1.Report/ListCrawlLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_ListCrawlLogs);
-};
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.CrawlLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.CrawlLog>}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listCrawlLogs =
-    function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
-      '/veidemann.api.report.v1.Report/ListCrawlLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_ListCrawlLogs);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.log.v1.PageLog>}
- */
-const methodDescriptor_Report_ListPageLogs = new grpc.web.MethodDescriptor(
-  '/veidemann.api.report.v1.Report/ListPageLogs',
-  grpc.web.MethodType.SERVER_STREAMING,
-  proto.veidemann.api.report.v1.PageLogListRequest,
-  log_v1_resources_pb.PageLog,
-  /**
-   * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.PageLog.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.PageLogListRequest,
- *   !proto.veidemann.api.log.v1.PageLog>}
- */
-const methodInfo_Report_ListPageLogs = new grpc.web.AbstractClientBase.MethodInfo(
-  log_v1_resources_pb.PageLog,
-  /**
-   * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  log_v1_resources_pb.PageLog.deserializeBinary
-);
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportClient.prototype.listPageLogs =
-    function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
-      '/veidemann.api.report.v1.Report/ListPageLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_ListPageLogs);
-};
-
-
-/**
- * @param {!proto.veidemann.api.report.v1.PageLogListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.log.v1.PageLog>}
- *     The XHR Node Readable Stream
- */
-proto.veidemann.api.report.v1.ReportPromiseClient.prototype.listPageLogs =
-    function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
-      '/veidemann.api.report.v1.Report/ListPageLogs',
-      request,
-      metadata || {},
-      methodDescriptor_Report_ListPageLogs);
 };
 
 
@@ -254,27 +102,8 @@ const methodDescriptor_Report_ExecuteDbQuery = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.ExecuteDbQueryRequest,
- *   !proto.veidemann.api.report.v1.ExecuteDbQueryReply>}
- */
-const methodInfo_Report_ExecuteDbQuery = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.veidemann.api.report.v1.ExecuteDbQueryReply,
-  /**
-   * @param {!proto.veidemann.api.report.v1.ExecuteDbQueryRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.veidemann.api.report.v1.ExecuteDbQueryReply.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.report.v1.ExecuteDbQueryRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.report.v1.ExecuteDbQueryReply>}
  *     The XHR Node Readable Stream
@@ -291,7 +120,7 @@ proto.veidemann.api.report.v1.ReportClient.prototype.executeDbQuery =
 
 /**
  * @param {!proto.veidemann.api.report.v1.ExecuteDbQueryRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.report.v1.ExecuteDbQueryReply>}
  *     The XHR Node Readable Stream
@@ -329,27 +158,8 @@ const methodDescriptor_Report_ListExecutions = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.CrawlExecutionsListRequest,
- *   !proto.veidemann.api.frontier.v1.CrawlExecutionStatus>}
- */
-const methodInfo_Report_ListExecutions = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.CrawlExecutionStatus,
-  /**
-   * @param {!proto.veidemann.api.report.v1.CrawlExecutionsListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_resources_pb.CrawlExecutionStatus.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.report.v1.CrawlExecutionsListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CrawlExecutionStatus>}
  *     The XHR Node Readable Stream
@@ -366,7 +176,7 @@ proto.veidemann.api.report.v1.ReportClient.prototype.listExecutions =
 
 /**
  * @param {!proto.veidemann.api.report.v1.CrawlExecutionsListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.CrawlExecutionStatus>}
  *     The XHR Node Readable Stream
@@ -404,27 +214,8 @@ const methodDescriptor_Report_ListJobExecutions = new grpc.web.MethodDescriptor(
 
 
 /**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.veidemann.api.report.v1.JobExecutionsListRequest,
- *   !proto.veidemann.api.frontier.v1.JobExecutionStatus>}
- */
-const methodInfo_Report_ListJobExecutions = new grpc.web.AbstractClientBase.MethodInfo(
-  frontier_v1_resources_pb.JobExecutionStatus,
-  /**
-   * @param {!proto.veidemann.api.report.v1.JobExecutionsListRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  frontier_v1_resources_pb.JobExecutionStatus.deserializeBinary
-);
-
-
-/**
  * @param {!proto.veidemann.api.report.v1.JobExecutionsListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.JobExecutionStatus>}
  *     The XHR Node Readable Stream
@@ -441,7 +232,7 @@ proto.veidemann.api.report.v1.ReportClient.prototype.listJobExecutions =
 
 /**
  * @param {!proto.veidemann.api.report.v1.JobExecutionsListRequest} request The request proto
- * @param {?Object<string, string>} metadata User defined
+ * @param {?Object<string, string>=} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.veidemann.api.frontier.v1.JobExecutionStatus>}
  *     The XHR Node Readable Stream
