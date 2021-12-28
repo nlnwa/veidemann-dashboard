@@ -6,7 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
-import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {ANY_DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-multi-dialog',
@@ -66,7 +66,7 @@ export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConf
       labelList: {value: [], disabled: false},
       minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delayFactor: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(ANY_DECIMAL_NUMBER_OR_EMPTY_STRING)]],
       maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
     });
