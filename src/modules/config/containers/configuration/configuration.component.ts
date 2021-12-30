@@ -261,9 +261,9 @@ export class ConfigurationComponent implements OnDestroy {
       data: {configObject, jobRefId: null, crawlJobs}
     });
     dialogRef.afterClosed()
-      .subscribe(runCrawlRequest => {
-        if (runCrawlRequest) {
-          this.controllerApiService.runCrawl(runCrawlRequest)
+      .subscribe(result => {
+        if (result.runCrawlRequest) {
+          this.controllerApiService.runCrawl(result.runCrawlRequest)
             .subscribe(runCrawlReply => {
               if (configObject.kind === Kind.SEED) {
                 this.router.navigate(
