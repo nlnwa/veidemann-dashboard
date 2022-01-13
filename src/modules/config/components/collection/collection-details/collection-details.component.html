@@ -27,7 +27,8 @@
         <mat-form-field>
           <mat-select placeholder="Deduplication policy"
                       formControlName="collectionDedupPolicy"
-                      i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder">
+                      i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder"
+                      data-testid="collectionDedupPolicy">
             <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -35,7 +36,8 @@
         <mat-form-field>
           <mat-select placeholder="File rotation policy"
                       formControlName="fileRotationPolicy"
-                      i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder">
+                      i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder"
+                      data-testid="fileRotationPolicy">
             <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -60,14 +62,15 @@
                [formGroupName]="i"
                fxLayout="row"
                fxLayoutGap="16px">
-            <mat-form-field fxFlex>
+            <mat-form-field fxFlex data-testid="subCollectionName">
               <input matInput formControlName="name" placeholder="Name"
                      i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
             </mat-form-field>
             <mat-form-field>
               <mat-select placeholder="Subcollection type"
                           formControlName="type"
-                          i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder">
+                          i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder"
+                          data-testid="subCollectionType">
                 <mat-option *ngFor="let type of subCollectionTypes"
                             [value]="type">{{SubCollectionType[type]}}</mat-option>
               </mat-select>
@@ -81,7 +84,10 @@
             </button>
           </div>
 
-          <button mat-stroked-button (click)="onAddSubCollection()" *ngIf="canEdit">
+          <button mat-stroked-button
+                  data-testid="addSubCollectionButton"
+                  (click)="onAddSubCollection()"
+                  *ngIf="canEdit" >
             <mat-icon>add_circle</mat-icon>&nbsp;
             <span i18n="@@collectionFormAddSubcollectionButton">ADD SUBCOLLECTION</span>
           </button>

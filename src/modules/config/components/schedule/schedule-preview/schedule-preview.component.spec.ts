@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { SchedulePreviewComponent } from './schedule-preview.component';
+import {SchedulePreviewComponent} from './schedule-preview.component';
+import {ConfigObject, Kind} from '../../../../../shared/models';
+import {MatLabel} from '@angular/material/form-field';
 
 describe('SchedulePreviewComponent', () => {
   let component: SchedulePreviewComponent;
@@ -8,7 +10,9 @@ describe('SchedulePreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SchedulePreviewComponent ]
+      imports: [],
+      declarations: [ SchedulePreviewComponent , MatLabel],
+      providers: []
     })
     .compileComponents();
   }));
@@ -16,6 +20,7 @@ describe('SchedulePreviewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SchedulePreviewComponent);
     component = fixture.componentInstance;
+    component.configObject = new ConfigObject({kind: Kind.CRAWLSCHEDULECONFIG});
     fixture.detectChanges();
   });
 

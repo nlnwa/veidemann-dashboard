@@ -1,25 +1,50 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {CrawlerStatusComponent} from './crawlerstatus.component';
+import {MatCardModule} from '@angular/material/card';
+import {createComponentFactory, Spectator} from '@ngneat/spectator';
+import {CoreTestingModule} from '../../../modules/core/core.testing.module';
+import {AbilityModule} from '@casl/angular';
+import {RunStatus} from '../../../shared/models';
 
-import { CrawlerstatusComponent } from './crawlerstatus.component';
 
-describe('CrawlerstatusComponent', () => {
-  let component: CrawlerstatusComponent;
-  let fixture: ComponentFixture<CrawlerstatusComponent>;
+describe('CrawlerStatusComponent', () => {
+  // let spectator: Spectator<CrawlerStatusComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CrawlerstatusComponent ]
-    })
-    .compileComponents();
-  }));
+  const createComponent = createComponentFactory(
+    {
+      component: CrawlerStatusComponent,
+      imports: [CoreTestingModule.forRoot(), MatCardModule, AbilityModule],
+      providers: []
+    });
+  // tslint:disable-next-line:no-shadowed-variable
+  // const RunStatus = RunStatus;
+  //
+  // beforeEach(() => spectator = createComponent());
+  //
+  // it('should create', () => {
+  //   expect(spectator.component).toBeTruthy();
+  // });
+  //
+  // it('should show RUNNING status in html', () => {
+  //   spectator.setInput('crawlerStatus', RunStatus.RUNNING);
+  //   const list = spectator.queryAll('.crawlerRunningButton');
+  //   expect(list).not.toBeNull();
+  //   expect(list).toHaveText('RUNNING');
+  // });
+  //
+  // it('should show PAUSED status in html', () => {
+  //   spectator.setInput('crawlerStatus', RunStatus.PAUSED);
+  //   const list = spectator.queryAll('.crawlerPausedButton');
+  //   expect(list).not.toBeNull();
+  //   expect(list).toHaveText('PAUSED');
+  // });
+  //
+  //
+  // it('should show PAUSE_REQUESTED in html', () => {
+  //   spectator.setInput('crawlerStatus', RunStatus.PAUSE_REQUESTED);
+  //   // FIXME: Fragile testing based on generic selector
+  //   const list = spectator.queryAll('h1');
+  //   expect(list).not.toBeNull();
+  //   expect(list).toHaveText('IS PAUSING');
+  // });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CrawlerstatusComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

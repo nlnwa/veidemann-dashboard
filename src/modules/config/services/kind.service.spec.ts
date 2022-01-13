@@ -1,16 +1,20 @@
-import { TestBed } from '@angular/core/testing';
-
-import { KindService } from './kind.service';
+import {KindService} from './kind.service';
+import {createServiceFactory, SpectatorService} from '@ngneat/spectator';
+import {LabelService} from './label.service';
 
 describe('KindService', () => {
-  let service: KindService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(KindService);
+  let spectator: SpectatorService<KindService>;
+  const createService = createServiceFactory({
+    imports: [],
+    service: KindService,
+    providers: [
+      {provide: LabelService, useValue: {}}
+      ]
   });
 
+  beforeEach(() => spectator = createService());
+
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(spectator.service).toBeTruthy();
   });
 });

@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SnackBarService} from '../../../core/services';
-import {AuthService} from '../../../core/services/auth';
+import {AuthService, SnackBarService} from '../../../core/services';
 import {Level, LogLevel, LogLevels} from '../../../../shared/models';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';

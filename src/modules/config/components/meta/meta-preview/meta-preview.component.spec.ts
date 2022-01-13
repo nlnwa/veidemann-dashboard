@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { MetaPreviewComponent } from './meta-preview.component';
+import {MetaPreviewComponent} from './meta-preview.component';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {ConfigObject} from '../../../../../shared/models/config';
+import {MatIconModule} from '@angular/material/icon';
 
 describe('MetaPreviewComponent', () => {
   let component: MetaPreviewComponent;
@@ -8,14 +11,17 @@ describe('MetaPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MetaPreviewComponent ]
+      imports: [MatIconModule, CoreTestingModule.forRoot()],
+      declarations: [MetaPreviewComponent],
+      providers: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetaPreviewComponent);
     component = fixture.componentInstance;
+    component.configObject = new ConfigObject();
     fixture.detectChanges();
   });
 

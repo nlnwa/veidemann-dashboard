@@ -1,33 +1,91 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserScriptDetailsComponent} from './browserscript-details.component';
 import {SimpleChange} from '@angular/core';
-import {BrowserScript, ConfigObject, Kind, Label, Meta} from '../../../../../shared/models';
+import {
+  Annotation,
+  BrowserScript,
+  browserScriptTypes,
+  ConfigObject,
+  Kind,
+  Label,
+  Meta
+} from '../../../../../shared/models';
 import {RouterTestingModule} from '@angular/router/testing';
-import {CommonsModule} from '../../../../commons/commons.module';
+import {CommonsModule} from '../../../../commons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {BrowserScriptDirective} from './browserscript.directive';
-import {FormGroup} from '@angular/forms';
-import {LabelService} from '../../../services/label.service';
+import {LabelService} from '../../../services';
 import {of} from 'rxjs';
+import {AuthService} from '../../../../core/services/auth';
+import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
+import {AbilityModule} from '@casl/angular';
+import {HarnessLoader} from '@angular/cdk/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
+import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+
+
+const exampleBrowserScript: ConfigObject = {
+  id: 'configObject_id',
+  apiVersion: 'v1',
+  kind: Kind.BROWSERSCRIPT,
+  meta: new Meta({
+    name: 'Example BrowserScript',
+    createdBy: 'test',
+    created: '01.01.1970',
+    lastModified: '01.01.2021',
+    lastModifiedBy: 'test',
+    description: 'This is an example BrowserScript',
+    labelList: [new Label({key: 'test', value: 'label'})],
+    annotationList: [new Annotation({key: 'test', value: 'annotation'})]
+  }),
+  browserScript: new BrowserScript({
+    script: 'console.log(\'test\')',
+    urlRegexpList: [],
+    browserScriptType: null
+  })
+};
 
 describe('BrowserScriptDetailsComponent', () => {
   let component: BrowserScriptDetailsComponent;
   let fixture: ComponentFixture<BrowserScriptDetailsComponent>;
-  let expectedLabel: Label;
-  let expectedConfigObject: ConfigObject;
+  let loader: HarnessLoader;
+
+  let saveButton: MatButtonHarness;
+  let updateButton: MatButtonHarness;
+  let revertButton: MatButtonHarness;
+  let deleteButton: MatButtonHarness;
+
+  let scriptTypeSelect: MatSelectHarness;
+  // let urlRegexList: MatChipListHarness;
+
 
   // Async beforeEach needed when using external template
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowserScriptDetailsComponent, BrowserScriptDirective],
       imports: [
+        AbilityModule,
         RouterTestingModule,
         CommonsModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot()
       ],
+      declarations: [
+        BrowserScriptDetailsComponent,
+        BrowserScriptDirective,
+        MetaComponent,
+        LabelComponent,
+        AnnotationComponent
+      ],
       providers: [
+        {
+          provide: AuthService,
+          useValue: {
+            canUpdate: () => true,
+            canDelete: () => true,
+          }
+        },
         {
           provide: LabelService,
           useValue: {
@@ -39,120 +97,68 @@ describe('BrowserScriptDetailsComponent', () => {
       .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(BrowserScriptDetailsComponent);
+    loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
-
-    expectedLabel = new Label({
-      key: 'Test',
-      value: 'test',
-    });
-
-    expectedConfigObject = new ConfigObject({
-      id: '1000',
-      apiVersion: 'v1',
-      kind: Kind.BROWSERSCRIPT,
-      browserScript: {
-        script: 'var test=5; console.log(test)'
-      },
-      meta: new Meta({
-        name: 'Test',
-        description: 'Dette er en test',
-        created: '1511964561',
-        createdBy: 'admin',
-        lastModified: '1511964561',
-        lastModifiedBy: 'admin',
-        labelList: [expectedLabel]
-      })
-    });
-
-    component.configObject = expectedConfigObject;
-
+    component.configObject = new ConfigObject(exampleBrowserScript);
+    component.browserScriptTypes = browserScriptTypes;
     component.ngOnChanges({
       configObject: new SimpleChange(null, component.configObject, null)
     });
-
     fixture.detectChanges();
+
+    scriptTypeSelect = await loader.getHarness<MatSelectHarness>(MatSelectHarness);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a defined component', () => {
-    expect(component).toBeDefined();
-  });
-
-  it('should have the correct data from @Input ', () => {
-    expect(component.configObject.id).toEqual('1000');
-    expect(component.configObject.browserScript.script).toEqual('var test=5; console.log(test)');
-    expect(component.configObject.meta.name).toEqual('Test');
-    expect(component.configObject.meta.description).toEqual('Dette er en test');
-    expect(component.configObject.meta.labelList).toEqual([expectedLabel]);
-  });
-
-  it('should create a "FormGroup"', () => {
-    expect(component.form instanceof FormGroup).toBe(true);
-  });
-
-  it('should have a valid form', () => {
-    expect(component.form.valid).toBe(true);
-  });
-
-  it('Form should not be valid after removing a required field', () => {
-    component.form.patchValue({
-      meta: {
-        name: '',
-      }
-    });
-    expect(component.form.valid).toBe(false);
-  });
-
-
-  it('Should update correct data', (done) => {
-    // Update the form with an invalid value
-    component.form.patchValue({
-      meta: {
-        ...expectedConfigObject.meta,
-        name: 'E',
-      }
+  describe('Creating a new browserscript', () => {
+    beforeEach(async () => {
+      component.configObject.id = '';
+      component.ngOnChanges({
+        configObject: new SimpleChange(null, component.configObject, null)
+      });
+      fixture.detectChanges();
+      saveButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'SAVE'}));
     });
 
-    expect(component.form.valid).toBe(false);
-
-    component.form.patchValue({
-      meta: {
-        ...expectedConfigObject.meta,
-        name: 'Endret navn',
-      }
+    it('show save button when creating a new config if form is valid', async () => {
+      expect(await saveButton.isDisabled()).toBeFalsy();
+      expect(component.canSave).toBeTruthy();
     });
-    expect(component.form.valid).toBe(true);
-
-    component.update.subscribe((value: ConfigObject) => {
-      expect(value.id).toBe(expectedConfigObject.id);
-      expect(value.browserScript).toEqual(expectedConfigObject.browserScript);
-      expect(value.meta.name).toBe('Endret navn');
-      expect(value.meta.description).toBe(expectedConfigObject.meta.description);
-      expect(value.meta.labelList).toEqual(expectedConfigObject.meta.labelList);
-      done();
-    });
-
-    component.onUpdate();
-  });
-
-  it('Should save correct data', (done) => {
-    expect(component.form.valid).toBe(true);
-
-    component.save.subscribe((value: ConfigObject) => {
-      expect(value.id).toBe(expectedConfigObject.id);
-      expect(value.browserScript).toEqual(expectedConfigObject.browserScript);
-      expect(value.meta).toEqual(expectedConfigObject.meta);
-      done();
-    });
-
-    component.onSave();
 
   });
 
+  describe('Updating a browserscript', () => {
+    beforeEach(async () => {
+      fixture.detectChanges();
+      updateButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'UPDATE'}));
+      deleteButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'DELETE'}));
+      revertButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'REVERT'}));
+    });
+
+    it('update button should be active if form is updated and valid', async () => {
+      expect(await updateButton.isDisabled()).toBeTruthy();
+      expect(component.canUpdate).toBeFalsy();
+      await scriptTypeSelect.open();
+      const scriptTypeOptions = await scriptTypeSelect.getOptions({text: 'REPLACEMENT'});
+      await scriptTypeOptions[0].click();
+
+      fixture.detectChanges();
+
+      expect(await updateButton.isDisabled()).toBeFalsy();
+      expect(component.canUpdate).toBeTruthy();
+    });
+
+    it('script type dropdown should be filled with all script type options', async () => {
+      await scriptTypeSelect.open();
+      const scriptTypeOptions = await scriptTypeSelect.getOptions();
+      await scriptTypeSelect.close();
+      expect(scriptTypeOptions.length).toEqual(6);
+    });
+  });
 });
 

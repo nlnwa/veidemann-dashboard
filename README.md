@@ -36,6 +36,9 @@ $ git clone https://github.com/nlnwa/veidemann-dashboard.git
 # install dependencies
 $ yarn
 
+# run tests
+ng test
+
 # start development server
 $ yarn start \
 --ssl \

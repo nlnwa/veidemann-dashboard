@@ -1,14 +1,16 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {MetaComponent} from './meta.component';
-import {MaterialModule} from '../../../commons/material.module';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {LabelsComponent} from '../../../commons/components';
 import {DatePipe} from '@angular/common';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {LabelService} from '../../services/label.service';
+import {LabelService} from '../../services';
 import {of} from 'rxjs';
+import {CoreTestingModule} from '../../../core/core.testing.module';
+import {CommonsModule} from '../../../commons';
+import {LabelComponent} from '../label/label.component';
+import {AnnotationComponent} from '../annotation/annotation.component';
+import {AbilityModule} from '@casl/angular';
+import {AuthService} from '../../../core/services';
 
 describe('MetaComponent', () => {
   let component: MetaComponent;
@@ -16,16 +18,21 @@ describe('MetaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MetaComponent, LabelsComponent],
+      declarations: [MetaComponent, LabelComponent, AnnotationComponent],
       imports: [
-        MaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DragDropModule,
+        AbilityModule,
+        CoreTestingModule.forRoot(),
+        CommonsModule,
         NoopAnimationsModule
       ],
       providers: [
         DatePipe,
+        {
+          provide: AuthService,
+          useValue: {
+            canUpdate: () => true,
+          }
+        },
         {
           provide: LabelService,
           useValue: {
@@ -45,5 +52,29 @@ describe('MetaComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('form field name is valid if it contains 2 or more characters', () => {
+    const name = component.form.controls.name;
+    name.setValue('a');
+    fixture.detectChanges();
+    expect(name.status === 'INVALID').toBeTruthy();
+    name.setValue('ab');
+    fixture.detectChanges();
+    expect(name.status === 'VALID').toBeTruthy();
+  });
+
+  it ('form is not valid if required fields are missing', () => {
+    const name = component.form.controls.name;
+    name.markAsTouched();
+    fixture.detectChanges();
+    expect(component.form.status === 'INVALID').toBeTruthy();
+  });
+
+  it('form is valid if required fields are set', () => {
+    const name = component.form.controls.name;
+    name.setValue('Test');
+    fixture.detectChanges();
+    expect(component.form.status === 'VALID').toBeTruthy();
   });
 });

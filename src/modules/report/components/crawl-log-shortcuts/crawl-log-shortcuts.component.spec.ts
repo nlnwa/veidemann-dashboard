@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CrawlLogShortcutsComponent } from './crawl-log-shortcuts.component';
+import {AbilityModule} from '@casl/angular';
+import {CoreTestingModule} from '../../../core/core.testing.module';
 
 describe('CrawlLogShortcutsComponent', () => {
   let component: CrawlLogShortcutsComponent;
@@ -8,7 +10,8 @@ describe('CrawlLogShortcutsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrawlLogShortcutsComponent ]
+      declarations: [ CrawlLogShortcutsComponent ],
+      imports: [CoreTestingModule.forRoot(), AbilityModule]
     })
     .compileComponents();
   });

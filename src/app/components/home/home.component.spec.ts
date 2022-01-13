@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {HomeComponent} from './home.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {AbilityModule} from '@casl/angular';
+import {CoreTestingModule} from '../../../modules/core/core.testing.module';
 
-import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -8,9 +11,12 @@ describe('HomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      imports: [CoreTestingModule.forRoot(), MatDialogModule, AbilityModule],
+      providers: [
+      ],
+      declarations: [HomeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

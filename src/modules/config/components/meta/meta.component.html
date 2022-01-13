@@ -2,7 +2,7 @@
 
   <mat-form-field [hideRequiredMarker]="nameInput.value.length >= 2">
     <input matInput #nameInput formControlName="name" placeholder="Name"
-           i18n-placeholder="@@metaNameInputPlaceholder" required>
+           i18n-placeholder="@@metaNameInputPlaceholder" required data-testid="name">
     <mat-hint i18n="@@metaNameInputLengthHinht" *ngIf="nameInput.value.length < 2">Minimum 2 characters</mat-hint>
     <mat-error
       i18n="@@metaNameRequiredError">

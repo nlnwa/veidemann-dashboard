@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { AbortCrawlDialogComponent } from './abort-crawl-dialog.component';
+import {AbortCrawlDialogComponent} from './abort-crawl-dialog.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CommonsModule} from '../../../commons';
 
 describe('AbortCrawlDialogComponent', () => {
   let component: AbortCrawlDialogComponent;
@@ -8,9 +10,14 @@ describe('AbortCrawlDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AbortCrawlDialogComponent ]
+      imports: [CommonsModule],
+      declarations: [AbortCrawlDialogComponent],
+      providers: [
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: MatDialogRef, useValue: {}}
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

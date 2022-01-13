@@ -132,7 +132,7 @@ export class BrowserConfigDetailsComponent implements OnChanges {
     this.form = this.fb.group(
       {
         id: '',
-        userAgent: ['', [Validators.minLength(1)]],
+        userAgent: ['', [Validators.minLength(2)]], // minlength validator needed?
         windowWidth: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         windowHeight: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
         pageLoadTimeoutMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
