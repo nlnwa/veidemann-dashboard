@@ -4,7 +4,11 @@ import {AuthService} from '../../../../core/services/auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
 import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../../shared/models';
 import {IpRange} from '../../../../../shared/models/config/ip-range.model';
-import {DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
+import {
+  ANY_DECIMAL_NUMBER_OR_EMPTY_STRING,
+  DECIMAL_NUMBER_OR_EMPTY_STRING,
+  NUMBER_OR_EMPTY_STRING
+} from '../../../../../shared/validation/patterns';
 import { UnitOfTime } from 'src/shared/models/duration/unit-time.model';
 
 @Component({
@@ -145,7 +149,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
       ipRangeList: this.fb.array([]),
       minTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       maxTimeBetweenPageLoadMs: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
-      delayFactor: ['', [Validators.pattern(DECIMAL_NUMBER_OR_EMPTY_STRING)]],
+      delayFactor: ['', [Validators.pattern(ANY_DECIMAL_NUMBER_OR_EMPTY_STRING)]],
       maxRetries: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       retryDelaySeconds: ['', [Validators.pattern(NUMBER_OR_EMPTY_STRING)]],
       meta: new Meta(),
