@@ -1,4 +1,4 @@
-import { waitForAsync } from '@angular/core/testing';
+import {waitForAsync} from '@angular/core/testing';
 import {createSimilarDomainRegExpString, SIMILAR_URL, VALID_URL} from './patterns';
 
 // valid and invalid urls taken from https://gist.github.com/j3j5/8336b0224167636bed462950400ff2df
@@ -90,9 +90,10 @@ describe('Regular expression patterns', () => {
     });
 
     // TODO excluded becase we use a simple VALID_URL pattern that fails the test for a number of invalid url's
-    xit('should not match invalid urls', () => {
-      invalidUrls.forEach(invalidUrl => expect(invalidUrl).not.toMatch(VALID_URL));
-    });
+    // FIXME: If we dont use the pattern, it should be removed, makes code harder to read
+    //   xit('should not match invalid urls', () => {
+    //     invalidUrls.forEach(invalidUrl => expect(invalidUrl).not.toMatch(VALID_URL));
+    //   });
   });
 
 

@@ -1,25 +1,31 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
-import { AboutDialogComponent } from './about-dialog.component';
+import {AboutDialogComponent} from './about-dialog.component';
+import {CommonsModule} from '../../../modules/commons';
+import {createComponentFactory, Spectator} from '@ngneat/spectator';
 
 describe('AboutDialogComponent', () => {
-  let component: AboutDialogComponent;
-  let fixture: ComponentFixture<AboutDialogComponent>;
+  let spectator: Spectator<AboutDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AboutDialogComponent ]
-    })
-    .compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AboutDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  const createComponent = createComponentFactory(
+    {
+      component: AboutDialogComponent,
+      imports: [CommonsModule],
+    });
+
+  beforeEach(() => spectator = createComponent());
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
+
+  // it('should use dashboard-version from environment', () => {
+  //   expect(spectator.component.dashBoardversion).toBe('DEV');
+  // });
+  //
+  // it('should show Veidemann-frontier in deployment-version-list ', () => {
+  //   const list = spectator.queryAll('.deployment-version-list li');
+  //   expect(list).not.toBeNull();
+  //   expect(list).toHaveText('Veidemann-frontier');
+  // });
+
 });

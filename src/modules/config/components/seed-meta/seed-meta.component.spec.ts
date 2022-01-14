@@ -1,16 +1,15 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {SeedMetaComponent} from './seed-meta.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MaterialModule} from '../../../commons/material.module';
 import {RouterTestingModule} from '@angular/router/testing';
-import {DatePipe} from '@angular/common';
-import {ConfigApiService} from '../../../core/services';
+import {AuthService, ConfigApiService} from '../../../core/services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {LabelService} from '../../services/label.service';
+import {LabelService} from '../../services';
 import {of} from 'rxjs';
-import {LabelComponent} from '..';
+import {AnnotationComponent, LabelComponent} from '..';
+import {CoreTestingModule} from '../../../core/core.testing.module';
+import {AbilityModule} from '@casl/angular';
+import {CommonsModule} from '../../../commons';
 
 describe('SeedMetaComponent', () => {
   let component: SeedMetaComponent;
@@ -18,17 +17,19 @@ describe('SeedMetaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SeedMetaComponent, LabelComponent],
+      declarations: [SeedMetaComponent, LabelComponent, AnnotationComponent],
       imports: [
-        MaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
+        CommonsModule,
+        CoreTestingModule.forRoot(),
         RouterTestingModule,
-        DragDropModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        AbilityModule
       ],
       providers: [
-        DatePipe,
+        {
+          provide: AuthService,
+          useValue: {canUpdate: () => true}
+        },
         {
           provide: ConfigApiService,
           useValue: {}

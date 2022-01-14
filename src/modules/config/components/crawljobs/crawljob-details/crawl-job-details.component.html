@@ -46,7 +46,8 @@
           <ng-container formGroupName="scheduleRef">
             <mat-form-field>
               <mat-select placeholder="Schedule" formControlName="id"
-                          i18n-placeholder="@@crawljobDetailsFormScheduleDropdownPlaceholder">
+                          i18n-placeholder="@@crawljobDetailsFormScheduleDropdownPlaceholder"
+                          data-testid="scheduleRef">
                 <mat-option [value]="">None</mat-option>
                 <mat-option *ngFor="let option of crawlScheduleConfigs"
                             [value]="option.id">{{option.meta.name}}</mat-option>
@@ -58,7 +59,8 @@
           <ng-container formGroupName="crawlConfigRef">
             <mat-form-field>
               <mat-select placeholder="CrawlConfig" formControlName="id"
-                          required i18n-placeholder="@@crawljobDetailsFormCrawlconfigDropdownPlaceholder">
+                          required i18n-placeholder="@@crawljobDetailsFormCrawlconfigDropdownPlaceholder"
+                          data-testid="crawlConfigRef">
                 <mat-option *ngFor="let option of crawlConfigs"
                             [value]="option.id">{{option.meta.name}}</mat-option>
               </mat-select>
@@ -71,7 +73,8 @@
           <ng-container formGroupName="scopeScriptRef">
             <mat-form-field>
               <mat-select placeholder="Scope script" formControlName="id" required
-                          i18n-placeholder="@@crawlJobDetailsFormScopeScriptDropdownPlaceholder">
+                          i18n-placeholder="@@crawlJobDetailsFormScopeScriptDropdownPlaceholder"
+                          data-testid="scopeScriptRef">
                 <mat-option>None</mat-option>
                 <mat-option *ngFor="let option of scopeScripts"
                             [value]="option.id">{{option.meta.name}}</mat-option>

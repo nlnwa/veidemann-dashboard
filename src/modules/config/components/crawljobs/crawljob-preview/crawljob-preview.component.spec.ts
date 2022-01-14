@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
-import { CrawljobPreviewComponent } from './crawljob-preview.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {CrawljobPreviewComponent} from './crawljob-preview.component';
+import {ConfigurationsModule} from '../../../configurations.module';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {ConfigObject, Kind} from '../../../../../shared/models';
+import {AuthService} from '../../../../core/services';
 
 describe('CrawljobPreviewComponent', () => {
   let component: CrawljobPreviewComponent;
@@ -8,7 +11,9 @@ describe('CrawljobPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawljobPreviewComponent ]
+      imports: [ConfigurationsModule, CoreTestingModule.forRoot()],
+      declarations: [ CrawljobPreviewComponent ],
+      providers: [{provider: AuthService, useValue: {}}]
     })
     .compileComponents();
   }));
@@ -16,6 +21,7 @@ describe('CrawljobPreviewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CrawljobPreviewComponent);
     component = fixture.componentInstance;
+    component.configObject = new ConfigObject({kind: Kind.CRAWLJOB});
     fixture.detectChanges();
   });
 

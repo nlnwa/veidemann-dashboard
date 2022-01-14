@@ -126,6 +126,7 @@
   },
   "defaultProject": "veidemann-dashboard",
   "cli": {
+    "analytics": false,
     "packageManager": "yarn"
   }
 }

@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { JobExecutionShortcutsComponent } from './job-execution-shortcuts.component';
+import {JobExecutionShortcutsComponent} from './job-execution-shortcuts.component';
+import {CoreTestingModule} from '../../../core/core.testing.module';
+import {AbilityModule} from '@casl/angular';
+import {JobExecutionStatus} from '../../../../shared/models';
 
 describe('JobExecutionShortcutsComponent', () => {
   let component: JobExecutionShortcutsComponent;
@@ -8,14 +11,16 @@ describe('JobExecutionShortcutsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ JobExecutionShortcutsComponent ]
+      declarations: [JobExecutionShortcutsComponent],
+      imports: [CoreTestingModule.forRoot(), AbilityModule]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(JobExecutionShortcutsComponent);
     component = fixture.componentInstance;
+    component.jobExecutionStatus = new JobExecutionStatus();
     fixture.detectChanges();
   });
 

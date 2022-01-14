@@ -1,20 +1,48 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CrawljobsMultiDialogComponent } from './crawljobs-multi-dialog.component';
+import {CrawlJobMultiDialogComponent} from './crawljobs-multi-dialog.component';
+import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ConfigDialogData} from '../../../func';
+import {ConfigObject, Kind} from '../../../../../shared/models';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {FilesizeInputComponent} from '../../filesize-input/filesize-input.component';
+import {DurationPickerComponent} from '../../durationpicker/duration-picker';
+import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
+import {FormBuilder} from '@angular/forms';
+import {CommonsModule} from '../../../../commons';
+import {LabelService} from '../../../services';
+import {AuthService} from '../../../../core/services';
 
-describe('CrawljobsMultiDialogComponent', () => {
-  let component: CrawljobsMultiDialogComponent;
-  let fixture: ComponentFixture<CrawljobsMultiDialogComponent>;
+describe('CrawlJobMultiDialogComponent', () => {
+  let component: CrawlJobMultiDialogComponent;
+  let fixture: ComponentFixture<CrawlJobMultiDialogComponent>;
+
+  const MY_CONF: ConfigDialogData = {
+    configObject: new ConfigObject({kind: Kind.CRAWLJOB}),
+    options: {}
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawljobsMultiDialogComponent ]
+      imports: [CommonsModule, NoopAnimationsModule, CoreTestingModule.forRoot()],
+      declarations: [CrawlJobMultiDialogComponent,
+        FilesizeInputComponent,
+        DurationPickerComponent,
+        LabelMultiComponent],
+      providers: [
+        FormBuilder,
+        {provide: LabelService, useValue: {}},
+        {provide: AuthService, useValue: {canUpdate: () => true}},
+        {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
+        {provide: MatDialogRef, useValue: {}},
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrawljobsMultiDialogComponent);
+    fixture = TestBed.createComponent(CrawlJobMultiDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

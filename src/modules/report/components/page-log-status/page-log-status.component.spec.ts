@@ -1,20 +1,23 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {PagelogStatusComponent} from './page-log-status.component';
+import {PageLogStatusComponent} from './page-log-status.component';
+import {CoreTestingModule} from '../../../core/core.testing.module';
 
-describe('PagelogStatusComponent', () => {
-  let component: PagelogStatusComponent;
-  let fixture: ComponentFixture<PagelogStatusComponent>;
+describe('PageLogStatusComponent', () => {
+  let component: PageLogStatusComponent;
+  let fixture: ComponentFixture<PageLogStatusComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PagelogStatusComponent ]
+      imports: [CoreTestingModule.forRoot()],
+      declarations: [ PageLogStatusComponent ],
+      providers: []
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PagelogStatusComponent);
+    fixture = TestBed.createComponent(PageLogStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

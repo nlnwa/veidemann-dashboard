@@ -24,35 +24,40 @@
         </mat-form-field>
       </div>
       <div fxFlex fxLayout="column">
-        <mat-form-field>
+        <mat-form-field data-testid="userAgent">
           <input matInput formControlName="userAgent" placeholder="User agent"
-                 i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
+                 i18n-placeholder="@@browserconfigFormUserAgentPlaceholder"
+          >
           <mat-error *ngIf="!userAgent.valid"
-                     i18n="@@browserconfigFormUserAgentRequiredError">
-            Must contain at least 1 character.
+                     i18n="@@browserconfigFormUserAgentRequiredError"
+                     data-testid="userAgentError">
+            Must contain at least 2 characters.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field data-testid="windowWidth">
           <input matInput formControlName="windowWidth" placeholder="Window width"
                  i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
           <mat-error *ngIf="!windowWidth.valid"
-                     i18n="@@browserconfigFormWindowWidthRequiredError">
+                     i18n="@@browserconfigFormWindowWidthRequiredError"
+                     data-testid="windowWidth-error">
             Must be a number.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field data-testid="windowHeight">
           <input matInput formControlName="windowHeight" placeholder="Window height"
                  i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
           <mat-error *ngIf="!windowHeight.valid"
-                     i18n="@@browserconfigFormWindowHeightRequiredError">
+                     i18n="@@browserconfigFormWindowHeightRequiredError"
+                     data-testid="windowHeightError">
             Must be a number.
           </mat-error>
         </mat-form-field>
 
         <mat-label i18n="@@browserconfigFormPageLoadTimeoutLabel">Page load timeout</mat-label>
         <app-duration-picker formControlName="pageLoadTimeoutMs"
+                             data-testid="pageLoadTimeoutMs"
                              [unit]="UnitOfTime.MILLISECOND"
                              [durationGranularity]="'m:s:ms'">
 
@@ -64,6 +69,7 @@
 
         <mat-label i18n="@@browserconfigFormSleepAfterPageLoadLabel">Max inactivity time</mat-label>
         <app-duration-picker formControlName="maxInactivityTimeMs"
+                             data-testid="maxInactivityTimeMs"
                              [unit]="UnitOfTime.MILLISECOND"
                              [durationGranularity]="'m:s:ms'">
         </app-duration-picker>
@@ -74,7 +80,8 @@
 
         <mat-form-field>
           <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
-                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder"
+                      data-testid="browserScriptsDropdown">
             <mat-option *ngFor="let browserScript of browserScripts"
                         [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
           </mat-select>
@@ -91,20 +98,23 @@
               [disabled]="!canSave"
               *ngIf="showSave"
               (click)="onSave()"
-              i18n="@@commonButtonSave">
+              i18n="@@commonButtonSave"
+              data-testid="buttonSave">
         SAVE
       </button>
       <button mat-raised-button color="accent"
               *ngIf="!showSave"
               [disabled]="!canUpdate"
               (click)="onUpdate()"
-              i18n="@@commonButtonSave">
+              i18n="@@commonButtonSave"
+              data-testid="buttonUpdate">
         UPDATE
       </button>
       <button mat-button
               (click)="onRevert()"
               [disabled]="!canRevert"
-              i18n="@@commonButtonRevert">
+              i18n="@@commonButtonRevert"
+              data-testid="buttonRevert">
         REVERT
       </button>
       <span fxFlex></span>

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LabelMultiComponent } from './label-multi.component';
+import {LabelService} from '../../../services';
+import {ConfigObject} from '../../../../../shared/models/config';
+import {MaterialModule} from '../../../../commons/material.module';
 
 describe('LabelMultiComponent', () => {
   let component: LabelMultiComponent;
@@ -8,7 +11,14 @@ describe('LabelMultiComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LabelMultiComponent ]
+      imports: [MaterialModule],
+      declarations: [ LabelMultiComponent ],
+      providers: [
+        {
+          provide: LabelService,
+          useValue: {}
+        }
+      ]
     })
     .compileComponents();
   }));
@@ -16,6 +26,7 @@ describe('LabelMultiComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LabelMultiComponent);
     component = fixture.componentInstance;
+    component.configObject = new ConfigObject();
     fixture.detectChanges();
   });
 

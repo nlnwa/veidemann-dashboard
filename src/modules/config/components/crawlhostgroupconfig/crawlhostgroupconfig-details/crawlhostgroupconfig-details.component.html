@@ -45,7 +45,7 @@
           Must be a number.
         </mat-error>
 
-        <mat-form-field>
+        <mat-form-field data-testid="delayFactor">
           <input matInput
                  formControlName="delayFactor"
                  placeholder="Delay factor"
@@ -78,11 +78,12 @@
         </mat-error>
         <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
           <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
-          <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index">
+          <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index"
+               data-testid="ipRangeList">
             <div [formGroupName]="i"
                  fxLayout="row"
                  fxlayoutgap="16px">
-              <mat-form-field fxFlex>
+              <mat-form-field fxFlex data-testid="ipRangeFrom">
                 <input matInput formControlName="ipFrom" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
                 <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
@@ -92,7 +93,7 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field fxFlex>
+              <mat-form-field fxFlex data-testid="ipRangeTo">
                 <input matInput formControlName="ipTo" placeholder="IP address"
                        i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
                 <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
@@ -104,19 +105,22 @@
 
               <button mat-button
                       (click)="onRemoveIpRange(i)"
-                      *ngIf="canEdit">
+                      *ngIf="canEdit"
+                      data-testid="removeIpRangeButton">
                 <mat-icon>remove_circle</mat-icon>
                 <span>REMOVE</span>
               </button>
             </div>
 
             <mat-error *ngIf="!isValidIpRange(ipFromControl(i).value, ipToControl(i).value)"
-                       i18n="@@crawlhostgroupconfigFormValidIpRangeError">
+                       i18n="@@crawlhostgroupconfigFormValidIpRangeError"
+                       data-testid="ipRangeInvalidError">
               The IP range is not valid
             </mat-error>
           </div>
 
-          <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button">
+          <button mat-stroked-button (click)="onAddIpRange()" *ngIf="canEdit" class="ip-range-add-button"
+                  data-testid="addIpRangeButton">
             <mat-icon>add_circle</mat-icon>
             <span i18n="@@crawlhostgroupconfigFormAddIpRangeButton">ADD IP RANGE</span>
           </button>
