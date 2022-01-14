@@ -28,6 +28,7 @@ import {KindService, OptionsService} from '../../services';
 import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '../../func';
 import {ReferrerError} from '../../../../shared/error';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
+import {RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 
 @Component({
   selector: 'app-configurations',
@@ -704,9 +705,9 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     });
 
     dialogRef.afterClosed()
-      .subscribe(runCrawlRequest => {
-        if (runCrawlRequest) {
-          this.controllerApiService.runCrawl(runCrawlRequest)
+      .subscribe(result => {
+        if (result.runCrawlRequest) {
+          this.controllerApiService.runCrawl(result.runCrawlRequest)
             .subscribe(runCrawlReply => {
               if (configObject.kind === Kind.SEED) {
                 this.router.navigate(
@@ -725,6 +726,53 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
                 ).catch(error => this.errorService.dispatch(error));
               }
             });
+        }
+      });
+  }
+
+  onRunCrawlSelected(configObjects: ConfigObject[]) {
+    const crawlJobs = this.options.crawlJobs;
+    const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
+      disableClose: true,
+      autoFocus: true,
+      data: {configObject: configObjects[0], jobRefId: null, crawlJobs, numberOfSeeds: configObjects.length}
+    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          if (result.crawlMultiple) {
+            let started = 0;
+            for (const seed of this.selectedConfigs) {
+              this.controllerApiService.runCrawl(
+                new RunCrawlRequest({seedId: seed.id, jobId: result.runCrawlRequest.jobId})
+              ).subscribe(runCrawlReply => {
+                started++;
+                if (started === this.selectedConfigs.length) {
+                  this.router.navigate(['report', 'crawlexecution'],
+                    {
+                      queryParams: {
+                        job_id: result.runCrawlRequest.jobId,
+                        job_execution_id: runCrawlReply.jobExecutionId,
+                      }
+                    }
+                  ).catch(error => this.errorService.dispatch(error));
+                }
+              });
+            }
+          } else {
+            this.controllerApiService.runCrawl(result.runCrawlRequest)
+              .subscribe(runCrawlReply => {
+                this.router.navigate(
+                  ['report', 'crawlexecution'],
+                  {
+                    queryParams: {
+                      job_execution_id: runCrawlReply.jobExecutionId,
+                      seed_id: configObjects[0].id,
+                    }
+                  }
+                ).catch(error => this.errorService.dispatch(error));
+              });
+          }
         }
       });
   }

@@ -15,6 +15,7 @@ export class RunCrawlDialogComponent {
   runCrawlReply: RunCrawlReply;
   configObject: ConfigObject;
   crawlJobs: ConfigObject[];
+  numberOfSeeds: number;
   jobRefId: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,6 +23,9 @@ export class RunCrawlDialogComponent {
     this.runCrawlReply = data.runCrawlReply;
     this.configObject = data.configObject;
     this.crawlJobs = data.crawlJobs;
+    if (this.configObject.kind === Kind.SEED) {
+      this.numberOfSeeds = data.numberOfSeeds ? data.numberOfSeeds : 1;
+    }
   }
 
   get kind(): Kind {
@@ -30,12 +34,16 @@ export class RunCrawlDialogComponent {
 
   onRunCrawl() {
     const runCrawlRequest = new RunCrawlRequest();
+    let crawlMultiple = false;
     if (this.kind === Kind.SEED) {
       runCrawlRequest.seedId = this.configObject.id;
       runCrawlRequest.jobId = this.jobRefId;
+      if (this.numberOfSeeds > 1) {
+        crawlMultiple = true;
+      }
     } else if (this.kind === Kind.CRAWLJOB) {
       runCrawlRequest.jobId = this.configObject.id;
     }
-    this.dialogRef.close(runCrawlRequest);
+    this.dialogRef.close({runCrawlRequest, crawlMultiple});
   }
 }

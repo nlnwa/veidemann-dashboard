@@ -6,13 +6,22 @@
     </span>
   </ng-container>
   <ng-container *ngIf="kind === Kind.SEED">
+    <div *ngIf="numberOfSeeds === 1">
       <span i18n="@@runCrawlDialogRunSeedCrawlConfirmationText">
         Are you sure you want to start crawling:<strong>{{configObject.meta.name}}</strong>?
       </span>
     <p i18n="@@runCrawlDialogRunSeedSelectCrawljobText">
       Select a crawljob to harvest the seed:
     </p>
-
+    </div>
+    <div *ngIf="numberOfSeeds > 1">
+      <span i18n="@@runCrawlDialogRunSeedsCrawlConfirmationText">
+        Are you sure you want to start crawling <strong>{{numberOfSeeds}}</strong> seeds?
+      </span>
+      <p i18n="@@runCrawlDialogRunSeedsSelectCrawljobText">
+        Select a crawljob to harvest the seeds:
+      </p>
+    </div>
       <mat-form-field>
         <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
                     [(ngModel)]="jobRefId">
