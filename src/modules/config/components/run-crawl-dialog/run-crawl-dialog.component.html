@@ -1,21 +1,23 @@
 <h1 mat-dialog-title i18n="@@runCrawlDialogTitle">Run crawl</h1>
 <div mat-dialog-content>
   <ng-container *ngIf="kind === Kind.CRAWLJOB">
-    <span i18n="@@runCrawlDialogRunConfirmationText">
-      Are you sure you want to start the crawljob: <strong>{{configObject.meta.name}}</strong>?
+    <span i18n="@@runCrawlDialogRunConfirmationText" data-testid="run_crawljob_dialog_text">
+      Are you sure you want to start the crawljob:
+      <strong>{{configObject.meta.name}}</strong>?
     </span>
   </ng-container>
   <ng-container *ngIf="kind === Kind.SEED">
     <div *ngIf="numberOfSeeds === 1">
-      <span i18n="@@runCrawlDialogRunSeedCrawlConfirmationText">
-        Are you sure you want to start crawling:<strong>{{configObject.meta.name}}</strong>?
+      <span i18n="@@runCrawlDialogRunSeedCrawlConfirmationText" data-testid="run_seed_dialog_text">
+        Are you sure you want to start crawling:
+        <strong>{{configObject.meta.name}}</strong>?
       </span>
     <p i18n="@@runCrawlDialogRunSeedSelectCrawljobText">
       Select a crawljob to harvest the seed:
     </p>
     </div>
     <div *ngIf="numberOfSeeds > 1">
-      <span i18n="@@runCrawlDialogRunSeedsCrawlConfirmationText">
+      <span i18n="@@runCrawlDialogRunSeedsCrawlConfirmationText" data-testid="run_multiple_seeds_dialog_text">
         Are you sure you want to start crawling <strong>{{numberOfSeeds}}</strong> seeds?
       </span>
       <p i18n="@@runCrawlDialogRunSeedsSelectCrawljobText">
@@ -24,6 +26,7 @@
     </div>
       <mat-form-field>
         <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
+                    data-testid="run_crawl_dialog_crawljob_select"
                     [(ngModel)]="jobRefId">
           <mat-option *ngFor="let crawlJob of crawlJobs"
                       [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
@@ -41,6 +44,7 @@
           mat-raised-button
           color="primary"
           i18n="@@commonButtonRun"
+          data-testid="runCrawlButton"
           (click)="onRunCrawl()">RUN
   </button>
 </div>
