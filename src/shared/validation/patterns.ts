@@ -1,7 +1,7 @@
-export const VALID_URL_PATTERN = [
-  '(http|https)(://)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)',
-  '|(http|https)(://)([^www.][a-z0-9-]+[.]{1}[A-z]+.+)'
-].join('');
+// export const VALID_URL_PATTERN = [
+//   '(http|https)(://)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)',
+//   '|(http|https)(://)([^www.][a-z0-9-]+[.]{1}[A-z]+.+)'
+// ].join('');
 
 export const VALID_IP_PATTERN = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
 
@@ -45,9 +45,9 @@ export const DECIMAL_NUMBER_OR_EMPTY_STRING = /^((\d+\.?|\.(?=\d))?\d+)$/;
 
 export const NO_COLON = /^[^:]*$/;
 
-export const VALID_URL = /^https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$/;
+export const VALID_URL = /(?:^https?:\/\/)?(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$/;
 
-export const MULTI_VALID_URL = /\S*(https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$)+\S*/;
+export const MULTI_VALID_URL = /\S*((?:^https?:\/\/)?(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$)+\S*/;
 
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 

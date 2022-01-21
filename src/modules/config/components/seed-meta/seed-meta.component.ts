@@ -77,6 +77,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   protected updateForm(meta: Meta): void {
+    console.log('updateForm: ', meta);
     if (meta.created) {
       this.name.clearValidators();
       this.name.clearAsyncValidators();
@@ -131,6 +132,10 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    console.log('validate function called');
+    console.log('regex: ', VALID_URL);
+    console.log('form value: ', control.value.name);
+    console.log('match', control.value.name.match(VALID_URL));
     return (this.name.pending
         ? this.name.statusChanges.pipe(
           map(state => state === 'VALID' ? null : this.name.errors),
