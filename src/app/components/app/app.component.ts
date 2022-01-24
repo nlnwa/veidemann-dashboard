@@ -8,6 +8,7 @@ import {AuthService, GuardService} from '../../../modules/core/services/auth';
 import {MatDialog} from '@angular/material/dialog';
 import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
+import {ScheduleOverviewComponent} from '../schedule-overview/schedule-overview.component';
 
 @Component({
   selector: 'app-root',
@@ -182,5 +183,9 @@ export class AppComponent implements OnInit, AfterViewInit{
 
   onAbout() {
     this.dialog.open(AboutDialogComponent);
+  }
+
+  onShowJobSchedule() {
+    const dialogRef = this.dialog.open(ScheduleOverviewComponent);
   }
 }

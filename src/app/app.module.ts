@@ -16,7 +16,20 @@ import {
   TimeComponent,
 } from './components';
 import {HomeComponent} from './components/home/home.component';
+import {ScheduleEventDialogComponent} from './components/schedule-event-dialog/schedule-event-dialog.component';
+import {ScheduleOverviewComponent} from './components/schedule-overview/schedule-overview.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+
+// register FullCalendar plugins
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  timeGridPlugin,
+  interactionPlugin
+]);
 
 @NgModule({
   declarations: [
@@ -28,10 +41,13 @@ import {HomeComponent} from './components/home/home.component';
     CrawlerStatusComponent,
     AboutDialogComponent,
     HomeComponent,
+    ScheduleEventDialogComponent,
+    ScheduleOverviewComponent
   ],
   entryComponents: [
     ErrorDialogComponent,
-    CrawlerStatusDialogComponent
+    CrawlerStatusDialogComponent,
+    ScheduleOverviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +56,7 @@ import {HomeComponent} from './components/home/home.component';
     AppRoutingModule,
     CommonsModule,
     CoreModule,
+    FullCalendarModule,
   ],
   bootstrap: [AppComponent]
 })
