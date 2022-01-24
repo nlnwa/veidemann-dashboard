@@ -23,16 +23,16 @@
       The field is required
     </mat-error>
 
-    <mat-error *ngIf="name.hasError('pattern')" i18n="@@seedMetaUrlPatternError">
-      Contains an invalid formatted URL
-    </mat-error>
-
     <mat-error *ngIf="name.hasError('seedExistsOnEntity')" i18n="@@seedMetaUrlAlreadyExistOnEntityError">
       URL with the same domain already exists for this entity
     </mat-error>
 
     <mat-error *ngIf="name.hasError('seedExists')" i18n="@@seedMetaUrlAlreadyExistsError">
       URL with the same domain already exists for another entity
+    </mat-error>
+
+    <mat-error *ngIf="name.hasError('invalidUrl')">
+      Contains invalid URL(s): {{name.errors.invalidUrl.join(', ')}}
     </mat-error>
 
     <mat-progress-bar matHint mode="indeterminate" *ngIf="this.name.pending"></mat-progress-bar>

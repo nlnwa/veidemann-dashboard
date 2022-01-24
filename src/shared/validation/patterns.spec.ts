@@ -1,5 +1,5 @@
 import {waitForAsync} from '@angular/core/testing';
-import {createSimilarDomainRegExpString, isValidUrl, MULTI_VALID_URL, SIMILAR_URL} from './patterns';
+import {createSimilarDomainRegExpString, isValidUrl, SIMILAR_URL} from './patterns';
 
 // valid and invalid urls taken from https://gist.github.com/j3j5/8336b0224167636bed462950400ff2df
 const validUrls = [
@@ -69,7 +69,7 @@ const invalidUrls = [
   'http://3628126748',
 ];
 
-fdescribe('Regular expression patterns', () => {
+describe('Regular expression patterns', () => {
 
   describe('isValidURL', () => {
     it('should match valid urls', () => {
@@ -78,12 +78,6 @@ fdescribe('Regular expression patterns', () => {
 
     it('should fail invalid urls', () => {
       invalidUrls.forEach(url => expect(isValidUrl(url)).toBeFalsy());
-    });
-  });
-
-  describe('MULTI_VALID_URL', () => {
-    it('should match valid urls', () => {
-      console.log(validUrls.join(' ').match(MULTI_VALID_URL));
     });
   });
 

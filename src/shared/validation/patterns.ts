@@ -46,8 +46,6 @@ export const VALID_SCHEME = /^https?$|^s?ftp$/;
 
 export const VALID_AUTHORITY = /^(?:[\S]+\.)?[\S]+\.[\S][\S]+/;
 
-export const MULTI_VALID_URL = /\s*(?:(?:https?:\/\/)?(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+)  +\S*\s*/;
-
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
 export const FILESIZE_PATTERN = [
@@ -67,7 +65,6 @@ export const createSimilarDomainRegExpString = url => {
     return null;
   }
 };
-
 
 export function isValidUrl(url: string): boolean {
   const g = url.match(VALID_URL);

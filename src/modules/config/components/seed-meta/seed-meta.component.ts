@@ -23,8 +23,8 @@ import {MetaComponent} from '../meta/meta.component';
 import {ConfigApiService} from '../../../core/services';
 import {Observable, of} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
-import {MULTI_VALID_URL, VALID_URL} from '../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, Meta} from '../../../../shared/models';
+import {validUrlValidator} from './seed-urlvalidation';
 
 export interface Parcel {
   seed: ConfigObject | ConfigObject[];
@@ -76,22 +76,12 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     super.createForm();
   }
 
-  protected updateForm(meta: Meta): void {
-    console.log('updateForm: ', meta);
-    if (meta.created) {
-      this.name.clearValidators();
-      this.name.clearAsyncValidators();
-      this.name.setValidators(Validators.compose([
-        Validators.required,
-        Validators.pattern(VALID_URL)
-      ]));
-    } else {
-      this.name.clearValidators();
-      this.name.clearAsyncValidators();
-      this.name.setValidators(Validators.compose([
-        Validators.required,
-        Validators.pattern(MULTI_VALID_URL)
-      ]));
+ updateForm(meta: Meta): void {
+    console.log('updateForm');
+    this.name.clearValidators();
+    this.name.clearAsyncValidators();
+    this.name.setValidators(Validators.compose([Validators.required, validUrlValidator]));
+    if (!meta.created) {
       this.name.setAsyncValidators(this.asyncUrlValidator(this.entityRef));
     }
     super.updateForm(meta);
@@ -132,10 +122,6 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    console.log('validate function called');
-    console.log('regex: ', VALID_URL);
-    console.log('form value: ', control.value.name);
-    console.log('match', control.value.name.match(VALID_URL));
     return (this.name.pending
         ? this.name.statusChanges.pipe(
           map(state => state === 'VALID' ? null : this.name.errors),
