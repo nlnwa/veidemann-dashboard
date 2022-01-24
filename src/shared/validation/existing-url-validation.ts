@@ -30,7 +30,7 @@ export class SeedUrlValidator {
         return of({missingEntityRef: true});
       }
       // split input urls by whitespace
-      const urls: string = control.value.split(/\s+/).filter(url => !!url);
+      const urls: string[] = control.value.split(/\s+/).filter(url => !!url);
       return from(urls).pipe(
         map(url => seedWithMatchingUrl(url)),
         filter(_ => !!_),

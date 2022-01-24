@@ -75,7 +75,9 @@ export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlV
 
   ngAfterViewInit() {
     this.form.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((value) => {
-      this.onChange(new Meta(value));
+      if (this.onChange) {
+        this.onChange(new Meta(value));
+      }
     });
   }
 

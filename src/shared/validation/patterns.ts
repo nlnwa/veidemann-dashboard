@@ -1,8 +1,3 @@
-export const VALID_URL_PATTERN = [
-  '(http|https)(://)([w]{3}[.]{1})([a-z0-9-]+[.]{1}[A-z]+)',
-  '|(http|https)(://)([^www.][a-z0-9-]+[.]{1}[A-z]+.+)'
-].join('');
-
 export const VALID_IP_PATTERN = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
 
 export const VALID_CRON_MONTH_PATTERN = [
@@ -45,9 +40,11 @@ export const DECIMAL_NUMBER_OR_EMPTY_STRING = /^((\d+\.?|\.(?=\d))?\d+)$/;
 
 export const NO_COLON = /^[^:]*$/;
 
-export const VALID_URL = /^https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$/;
+export const VALID_URL = /^(([^:/?#]+):\/\/)?([^/?#]+)([^?#]*)(\?([^#]*))?(#(.*))?/;
 
-export const MULTI_VALID_URL = /\S*(https?:\/\/(?:[\S]+\.)?(?:[\S]+)\.[\S][\S]+$)+\S*/;
+export const VALID_SCHEME = /^https?$|^s?ftp$/;
+
+export const VALID_AUTHORITY = /^(?:[\S]+\.)?[\S]+\.[\S][\S]+/;
 
 export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
@@ -68,3 +65,19 @@ export const createSimilarDomainRegExpString = url => {
     return null;
   }
 };
+
+export function isValidUrl(url: string): boolean {
+  const g = url.match(VALID_URL);
+  if (g === null) {
+    return false;
+  }
+  const scheme = g[2];
+  const authority = g[3];
+  const path = g[4];
+  const query = g[6];
+  const isValidQuery = query === undefined ? true : query.indexOf(' ') === -1;
+  const isValidScheme = scheme !== undefined ? VALID_SCHEME.test(scheme) : true;
+  const isValidAuthority = VALID_AUTHORITY.test(authority);
+  const isValidPath = path !== '' ? path.charAt(0) === '/' : true;
+  return isValidScheme && isValidAuthority && isValidPath && isValidQuery;
+}
