@@ -1,9 +1,3 @@
-<div class="container">
-  <div fxLayout="column" *ngIf="loading">
-    <mat-progress-bar></mat-progress-bar>
-    <p>... Loading scheduled jobs</p>
-  </div>
-  <mat-dialog-content>
-    <full-calendar *ngIf="!loading" fxFlex [options]="calendarOptions" #scheduleCalendar></full-calendar>
-  </mat-dialog-content>
-</div>
+<mat-dialog-content class="mat-typography">
+  <full-calendar class="calendar" [options]="calendarOptions" #scheduleCalendar></full-calendar>
+</mat-dialog-content>

@@ -186,6 +186,12 @@ export class AppComponent implements OnInit, AfterViewInit{
   }
 
   onShowJobSchedule() {
-    const dialogRef = this.dialog.open(ScheduleOverviewComponent);
+    const dialogRef = this.dialog.open(ScheduleOverviewComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      autoFocus: true,
+    });
   }
 }

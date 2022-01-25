@@ -1,4 +1,12 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {CalendarOptions, EventClickArg, FullCalendarComponent} from '@fullcalendar/angular';
 import {forkJoin, Subject} from 'rxjs';
 import {ConfigObject, Kind} from '../../../shared/models';
@@ -24,7 +32,8 @@ interface ScheduledJob {
   selector: 'app-schedule-overview',
   templateUrl: './schedule-overview.component.html',
   styleUrls: ['./schedule-overview.component.css'],
-  providers: [ConfigApiService]
+  providers: [ConfigApiService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private crawlJobs: ConfigObject[];
@@ -32,12 +41,10 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private viewDate: Date = new Date();
   private ngUnsubscribe: Subject<void>;
 
-  loading = true;
-
   @ViewChild('scheduleCalendar') calendar: FullCalendarComponent;
 
   calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
+    initialView: 'timeGridDay',
     eventClick: this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
     headerToolbar: {
@@ -70,7 +77,8 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
 
   constructor(private errorService: ErrorService,
               private configApiService: ConfigApiService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private cdr: ChangeDetectorRef) {
 
     this.ngUnsubscribe = new Subject<void>();
   }
@@ -91,7 +99,6 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
           this.crawlJobs = jobs.filter(configObject => configObject.crawlJob.disabled === false)
             .sort((a, b) => a.meta.name.localeCompare(b.meta.name));
           this.crawlSchedules = schedules;
-          this.loading = false;
           this.updateCalendar();
         },
         error => {
@@ -103,6 +110,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private updateCalendar() {
     const scheduledJobs = this.getScheduledJobs();
     const events = [];
+    const bc = colorScales.mode('rgb').colors(scheduledJobs.length);
     for (const [index, job] of scheduledJobs.entries()) {
       for (const interval of job.executionDates) {
         events.push({
@@ -110,12 +118,13 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
           start: interval.start,
           end: interval.end,
           crawlJobId: job.id,
-          backgroundColor: colorScales.mode('rgb').colors(index),
+          backgroundColor: bc[index],
         });
       }
     }
     this.calendarOptions.events = events;
-    this.calendar.ngDoCheck();
+    this.cdr.markForCheck();
+    this.calendar.getApi().updateSize();
   }
 
   private getScheduledJobs(): ScheduledJob[] {
