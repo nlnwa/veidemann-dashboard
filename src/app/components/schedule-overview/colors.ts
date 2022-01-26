@@ -159,10 +159,7 @@ const w3cx11 = {
 };
 
 export const colorScales = chroma.scale([
-  w3cx11.cornflowerblue,
-  w3cx11.seagreen,
-  w3cx11.crimson,
-  w3cx11.orangered,
-  w3cx11.deeppink
+  w3cx11.darkseagreen,
+  w3cx11.slateblue
 ]);
 

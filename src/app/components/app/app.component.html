@@ -15,7 +15,12 @@
 
     <span fxFlex></span>
 
-    <app-time (click)="onShowJobSchedule()"></app-time>
+    <button class="time"
+            mat-flat-button
+            matTooltip="Click to show overview of scheduled crawljobs"
+            i18n-matTooltip="@@mainToolbarScheduledCrawljobsButtonTooltip">
+      <app-time (click)="onShowJobSchedule()"></app-time>
+    </button>
 
     <span fxFlex></span>
 

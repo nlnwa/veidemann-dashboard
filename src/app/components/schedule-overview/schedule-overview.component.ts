@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CalendarOptions, EventClickArg, FullCalendarComponent} from '@fullcalendar/angular';
 import {forkJoin, Subject} from 'rxjs';
 import {ConfigObject, Kind} from '../../../shared/models';
@@ -41,10 +33,12 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private viewDate: Date = new Date();
   private ngUnsubscribe: Subject<void>;
 
+  readyToLoad = false;
+
   @ViewChild('scheduleCalendar') calendar: FullCalendarComponent;
 
   calendarOptions: CalendarOptions = {
-    initialView: 'timeGridDay',
+    initialView: 'dayGridMonth',
     eventClick: this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
     headerToolbar: {
@@ -99,7 +93,9 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
           this.crawlJobs = jobs.filter(configObject => configObject.crawlJob.disabled === false)
             .sort((a, b) => a.meta.name.localeCompare(b.meta.name));
           this.crawlSchedules = schedules;
-          this.updateCalendar();
+          setTimeout(() => {
+            this.updateCalendar();
+          }, 1000);
         },
         error => {
           this.errorService.dispatch(error);
@@ -124,7 +120,6 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     }
     this.calendarOptions.events = events;
     this.cdr.markForCheck();
-    this.calendar.getApi().updateSize();
   }
 
   private getScheduledJobs(): ScheduledJob[] {
