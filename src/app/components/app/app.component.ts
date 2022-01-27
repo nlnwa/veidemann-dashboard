@@ -8,6 +8,7 @@ import {AuthService, GuardService} from '../../../modules/core/services/auth';
 import {MatDialog} from '@angular/material/dialog';
 import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
+import {ScheduleOverviewComponent} from '../schedule-overview/schedule-overview.component';
 
 @Component({
   selector: 'app-root',
@@ -182,5 +183,16 @@ export class AppComponent implements OnInit, AfterViewInit{
 
   onAbout() {
     this.dialog.open(AboutDialogComponent);
+  }
+
+  onShowJobSchedule() {
+    this.dialog.open(ScheduleOverviewComponent, {
+      maxWidth: '95vw',
+      maxHeight: '95vh',
+      height: '95%',
+      width: '95%',
+      autoFocus: true,
+      panelClass: 'calendar'
+    });
   }
 }

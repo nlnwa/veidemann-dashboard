@@ -1,0 +1,11 @@
+.mat-dialog-content {
+  max-height: 100%;
+}
+
+:host ::ng-deep .calendar .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
+  color: black;
+}
+
+:host ::ng-deep .calendar .fc-daygrid-day-top {
+  flex-direction: row;
+}

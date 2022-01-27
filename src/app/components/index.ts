@@ -5,3 +5,5 @@ export {TimeComponent} from './time/time.component';
 export {CrawlerStatusDialogComponent} from './crawlerstatus-dialog/crawlerstatus-dialog.component';
 export {CrawlerStatusComponent} from './crawlerstatus/crawlerstatus.component';
 export {AboutDialogComponent} from './about-dialog/about-dialog.component';
+export {ScheduleOverviewComponent} from './schedule-overview/schedule-overview.component';
+export {ScheduleEventDialogComponent} from './schedule-event-dialog/schedule-event-dialog.component';

@@ -54,7 +54,14 @@
     "prismjs": "^1.25.0",
     "rxjs": "~6.6.7",
     "tslib": "^2.3.1",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "@fullcalendar/angular": "^5.10.1",
+    "@fullcalendar/daygrid": "^5.10.1",
+    "@fullcalendar/interaction": "^5.10.1",
+    "@fullcalendar/timegrid": "^5.10.1",
+    "cron-parser": "^4.2.1",
+    "moment-timezone": "^0.5.34",
+    "chroma-js": "^2.1.2"
   },
   "resolutions": {
     "minimist": "~1.2.5"
