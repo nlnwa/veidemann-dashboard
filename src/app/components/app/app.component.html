@@ -11,11 +11,11 @@
     [title]="'Keyboard shortcuts'">
   </ng-keyboard-shortcuts-help>
   <mat-toolbar class="main-toolbar mat-primary">
-    <a routerLink="/"><img class="veidemann_logo" src="assets/logo/veidemann_horizontal_white.png"></a>
+    <a routerLink="/"><img class="veidemann_logo" alt="Veidemann" src="assets/logo/veidemann_horizontal_white.png"></a>
 
     <span fxFlex></span>
 
-    <button class="time"
+    <button color="primary"
             mat-flat-button
             matTooltip="Click to show overview of scheduled crawljobs"
             i18n-matTooltip="@@mainToolbarScheduledCrawljobsButtonTooltip">
@@ -37,7 +37,6 @@
     </mat-menu>
 
     <button color="primary"
-            mat-button
             mat-flat-button
             (click)="onLogin()"
             *ngIf="!isLoggedIn">
@@ -46,7 +45,6 @@
     </button>
 
     <button color="primary"
-            mat-button
             mat-flat-button
             matTooltip="{{name}}"
             (click)="onLogout()"

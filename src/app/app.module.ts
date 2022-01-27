@@ -28,7 +28,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
   timeGridPlugin,
-  interactionPlugin
+  interactionPlugin,
 ]);
 
 @NgModule({

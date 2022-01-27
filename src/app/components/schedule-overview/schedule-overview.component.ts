@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {CalendarOptions, EventClickArg, FullCalendarComponent} from '@fullcalendar/angular';
 import {forkJoin, Subject} from 'rxjs';
 import {ConfigObject, Kind} from '../../../shared/models';
@@ -10,6 +18,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
 import * as moment from 'moment-timezone';
 import {colorScales} from './colors';
+import {DateClickArg} from '@fullcalendar/interaction';
 
 interface ScheduledJob {
   crawlJobName: string;
@@ -26,6 +35,7 @@ interface ScheduledJob {
   styleUrls: ['./schedule-overview.component.css'],
   providers: [ConfigApiService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private crawlJobs: ConfigObject[];
@@ -34,40 +44,9 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void>;
 
   readyToLoad = false;
+  calendarOptions: CalendarOptions;
 
   @ViewChild('scheduleCalendar') calendar: FullCalendarComponent;
-
-  calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    eventClick: this.onEventClick.bind(this),
-    dateClick: this.onDateClick.bind(this),
-    headerToolbar: {
-      start: 'today,prev,next',
-      center: 'title',
-      end: 'dayGridMonth,timeGridWeek,timeGridDay'
-    },
-    customButtons: {
-      prev: {
-        text: '<',
-        click: this.onPrevious.bind(this)
-      },
-      next: {
-        text: '>',
-        click: this.onNext.bind(this)
-      },
-      today: {
-        text: 'today',
-        click: this.onToday.bind(this)
-      }
-    },
-    height: 'auto',
-    locale: 'NO-nb',
-    validRange: (nowDate) => {
-      return {
-        start: new Date(nowDate.getFullYear(), nowDate.getMonth(), 1)
-      };
-    }
-  };
 
   constructor(private errorService: ErrorService,
               private configApiService: ConfigApiService,
@@ -75,6 +54,38 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
               private cdr: ChangeDetectorRef) {
 
     this.ngUnsubscribe = new Subject<void>();
+
+    this.calendarOptions = {
+      eventClick: this.onEventClick.bind(this),
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        start: 'today,prev,next',
+        center: 'title',
+        end: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      customButtons: {
+        prev: {
+          text: '<',
+          click: this.onPrevious.bind(this)
+        },
+        next: {
+          text: '>',
+          click: this.onNext.bind(this)
+        },
+        today: {
+          text: 'today',
+          click: this.onToday.bind(this)
+        }
+      },
+      dateClick: this.onDateClick.bind(this),
+      height: 'auto',
+      locale: 'NO-nb',
+      validRange: (nowDate) => {
+        return {
+          start: new Date(nowDate.getFullYear(), nowDate.getMonth(), 1)
+        };
+      }
+    };
   }
 
   ngOnDestroy() {
@@ -83,6 +94,8 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+
     forkJoin([
       this.configApiService.list(createListRequest(Kind.CRAWLJOB.valueOf())).pipe(toArray()),
       this.configApiService.list(createListRequest(Kind.CRAWLSCHEDULECONFIG.valueOf())).pipe(toArray()),
@@ -95,7 +108,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
           this.crawlSchedules = schedules;
           setTimeout(() => {
             this.updateCalendar();
-          }, 1000);
+          }, 150);
         },
         error => {
           this.errorService.dispatch(error);
@@ -183,7 +196,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
         }
       }
     } catch (error) {
-      console.log('error', error.message);
+      this.errorService.dispatch(error);
     }
     try {
       const interval2 = cronParser.parseExpression(cron, prevOptions);
@@ -202,7 +215,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
         }
       }
     } catch (err) {
-      console.log('Error: ', err.message);
+      this.errorService.dispatch(err);
     }
     return schedule;
   }
@@ -248,7 +261,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onDateClick(cal: any) {
+  private onDateClick(cal: DateClickArg) {
     this.calendar.getApi().changeView('timeGridDay');
     this.calendar.getApi().gotoDate(cal.date);
   }
