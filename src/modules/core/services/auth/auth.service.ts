@@ -167,6 +167,7 @@ export class AuthService {
       can('runCrawl', [Kind[Kind.SEED], Kind[Kind.CRAWLJOB]]);
       can('abort', ['jobexecution', 'crawlexecution']);
       can(['read', 'update'], 'logconfig');
+      can('read', 'scheduleOverview');
     }
 
     if (this.isCurator()) {
@@ -178,6 +179,7 @@ export class AuthService {
       can(['read', 'update'], 'annotation');
       can('read', 'configs');
       can('read', reports);
+      can('read', 'scheduleOverview');
     }
 
     if (this.isConsultant()) {
