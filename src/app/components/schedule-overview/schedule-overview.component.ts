@@ -16,7 +16,8 @@ import {takeUntil, toArray} from 'rxjs/operators';
 import * as cronParser from 'cron-parser';
 import {MatDialog} from '@angular/material/dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
-import * as moment from 'moment-timezone';
+import * as momentTimezone from 'moment-timezone';
+import * as moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
 
@@ -27,6 +28,11 @@ interface ScheduledJob {
     start: string,
     end: string,
   }[];
+}
+
+interface ScheduleValidRange {
+  validFrom: string;
+  validTo: string;
 }
 
 @Component({
@@ -151,7 +157,13 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       if (cronExpression === '') {
         continue;
       }
-      const schedule = this.getScheduleFromCron(cronExpression, job.crawlJob.limits.maxDurationS);
+      const validRange: ScheduleValidRange = {
+        validFrom: crawlSchedule.crawlScheduleConfig.validFrom,
+        validTo: crawlSchedule.crawlScheduleConfig.validTo
+      };
+
+      const schedule = this.getScheduleFromCron(cronExpression, validRange, job.crawlJob.limits.maxDurationS);
+
       scheduledJobs.push({
         crawlJobName: job.meta.name,
         id: job.id,
@@ -161,13 +173,14 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     return scheduledJobs;
   }
 
-  private getScheduleFromCron(cron: string, duration: number): { start: string, end: string }[] {
+  private getScheduleFromCron(cron: string, validRange: ScheduleValidRange, duration: number): { start: string, end: string }[] {
+    const checkRange = validRange.validFrom || validRange.validTo ? true : false;
     const options = {
       startDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1),
       endDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1),
       utc: true,
       iterator: true,
-      tz: moment.tz.guess(),
+      tz: momentTimezone.tz.guess(),
     };
 
     const prevOptions = {
@@ -175,7 +188,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       endDate: this.viewDate,
       iterator: true,
       utc: true,
-      tz: moment.tz.guess(),
+      tz: momentTimezone.tz.guess(),
     };
 
     const schedule = [];
@@ -185,12 +198,17 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       while (true) {
         try {
           const obj = interval.next();
-          schedule.push({
+          if (checkRange) {
             // @ts-ignore
-            start: obj.value.toISOString(),
-            // @ts-ignore
-            end: this.addDuration(obj.value, duration),
-          });
+            if (this.isDateInRange(obj.value.toISOString(), validRange)) {
+              schedule.push({
+                // @ts-ignore
+                start: obj.value.toISOString(),
+                // @ts-ignore
+                end: this.addDuration(obj.value, duration),
+              });
+            }
+          }
         } catch (e) {
           break;
         }
@@ -204,12 +222,17 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       while (true) {
         try {
           const obj = interval2.prev();
-          schedule.push({
+          if (checkRange) {
             // @ts-ignore
-            start: obj.value.toISOString(),
-            // @ts-ignore
-            end: this.addDuration(obj.value, duration),
-          });
+            if (this.isDateInRange(obj.value.toISOString(), validRange)) {
+              schedule.push({
+                // @ts-ignore
+                start: obj.value.toISOString(),
+                // @ts-ignore
+                end: this.addDuration(obj.value, duration),
+              });
+            }
+          }
         } catch (e) {
           break;
         }
@@ -264,5 +287,12 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private onDateClick(cal: DateClickArg) {
     this.calendar.getApi().changeView('timeGridDay');
     this.calendar.getApi().gotoDate(cal.date);
+  }
+
+  private isDateInRange(startDate: string, validRange: ScheduleValidRange) {
+    const eventStart = moment(startDate);
+    const validFrom = validRange.validFrom ? moment(validRange.validFrom) : moment().startOf('year');
+    const validTo = validRange.validTo ? moment(validRange.validTo) : moment().endOf('year');
+    return moment(eventStart).isBetween(validFrom, validTo);
   }
 }

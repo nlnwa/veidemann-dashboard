@@ -15,7 +15,8 @@
 
     <span fxFlex></span>
 
-    <button color="primary"
+    <button *ngIf="'read' | able: 'report'"
+            color="primary"
             mat-flat-button
             matTooltip="Click to show overview of scheduled crawljobs"
             i18n-matTooltip="@@mainToolbarScheduledCrawljobsButtonTooltip"
