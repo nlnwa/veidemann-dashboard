@@ -28,6 +28,9 @@ import {SimpleChange} from '@angular/core';
 import {MatCheckboxHarness} from '@angular/material/checkbox/testing';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
+import {CollectionMetaComponent} from '../../collection-meta/collection-meta.component';
+import {MatInputHarness} from '@angular/material/input/testing';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 const exampleCollection: ConfigObject = {
   id: 'configObject_id',
@@ -69,7 +72,7 @@ describe('CollectionDetailsComponent', () => {
   let subCollectionTypeSelect: MatSelectHarness;
 
   let subCollectionNameFormfield: MatFormFieldHarness;
-  let subCollectionNameInput: any;
+  let subCollectionNameInput: MatInputHarness;
 
 
   beforeEach(waitForAsync(() => {
@@ -83,7 +86,7 @@ describe('CollectionDetailsComponent', () => {
       ],
       declarations: [
         CollectionDetailsComponent,
-        MetaComponent,
+        CollectionMetaComponent,
         FilesizeInputComponent,
         LabelComponent,
         AnnotationComponent
@@ -159,7 +162,7 @@ describe('CollectionDetailsComponent', () => {
     });
   });
 
-  describe('Updating a collection', () => {
+  fdescribe('Updating a collection', () => {
 
     beforeEach(async () => {
       fixture.detectChanges();
@@ -222,7 +225,7 @@ describe('CollectionDetailsComponent', () => {
         .with({selector: '[data-testid="subCollectionType"]'}));
       subCollectionNameFormfield = await loader.getHarness<MatFormFieldHarness>(MatFormFieldHarness
         .with({selector: '[data-testid="subCollectionName"]'}));
-      subCollectionNameInput = await subCollectionNameFormfield.getControl();
+      subCollectionNameInput = (await subCollectionNameFormfield.getControl()) as MatInputHarness;
       expect(await subCollectionNameInput.getValue()).toEqual('');
       expect(await subCollectionTypeSelect.getValueText()).toEqual('UNDEFINED');
     });
@@ -235,6 +238,36 @@ describe('CollectionDetailsComponent', () => {
       const subCollectionTypesOptions = await subCollectionTypeSelect.getOptions();
       await subCollectionTypeSelect.close();
       expect(subCollectionTypesOptions.length).toEqual(3);
+    });
+
+    it('SubCollection name field should validate', async () => {
+      await addSubCollectionButton.click();
+      subCollectionNameFormfield = await loader.getHarness<MatFormFieldHarness>(MatFormFieldHarness
+        .with({selector: '[data-testid="subCollectionName"]'}));
+      subCollectionNameInput = (await subCollectionNameFormfield.getControl()) as MatInputHarness;
+      await subCollectionNameInput.setValue('');
+      await subCollectionNameInput.blur();
+      expect(await subCollectionNameFormfield.isControlValid()).toBeFalsy();
+      expect(await subCollectionNameFormfield.getTextErrors()).toContain('The field is required');
+      expect(component.canUpdate).toBeFalsy();
+
+      await subCollectionNameInput.setValue('a');
+      await subCollectionNameInput.blur();
+      expect(await subCollectionNameFormfield.isControlValid()).toBeFalsy();
+      expect(await subCollectionNameFormfield.getTextHints()).toContain('Minimum 2 characters');
+      expect(component.canUpdate).toBeFalsy();
+
+      await subCollectionNameInput.setValue('invalid-collection');
+      await subCollectionNameInput.blur();
+      expect(await subCollectionNameFormfield.isControlValid()).toBeFalsy();
+      expect(await subCollectionNameFormfield.getTextErrors())
+        .toContain('Invalid name. (Valid characters are A-Z a-z 0-9 _)');
+      expect(component.canUpdate).toBeFalsy();
+
+      await subCollectionNameInput.setValue('valid_collection');
+      await subCollectionNameInput.blur();
+      expect(await subCollectionNameFormfield.isControlValid()).toBeTruthy();
+      expect(component.canUpdate).toBeTruthy();
     });
 
     /** Testing revert button */
