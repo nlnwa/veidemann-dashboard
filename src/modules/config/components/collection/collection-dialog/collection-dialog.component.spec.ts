@@ -14,6 +14,7 @@ import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
+import {CollectionMetaComponent} from '../../collection-meta/collection-meta.component';
 
 describe('CollectionDialogComponent', () => {
   let component: CollectionDialogComponent;
@@ -31,7 +32,7 @@ describe('CollectionDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, CoreTestingModule.forRoot(), MatDialogModule, MatIconModule, NoopAnimationsModule, AbilityModule],
-      declarations: [ CollectionDialogComponent, MetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
+      declarations: [ CollectionDialogComponent, CollectionMetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
       providers: [FormBuilder,
         {
           provide: LabelService,
