@@ -162,7 +162,7 @@ describe('CollectionDetailsComponent', () => {
     });
   });
 
-  fdescribe('Updating a collection', () => {
+  describe('Updating a collection', () => {
 
     beforeEach(async () => {
       fixture.detectChanges();
