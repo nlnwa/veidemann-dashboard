@@ -94,6 +94,7 @@ import {AbilityModule} from '@casl/angular';
 import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 import {RouterExtraService} from './services/router-extra.service';
+import { CollectionMetaComponent } from './components/collection-meta/collection-meta.component';
 
 @NgModule({
   declarations: [
@@ -181,6 +182,7 @@ import {RouterExtraService} from './services/router-extra.service';
     EntityNamePipe,
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
+    CollectionMetaComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,

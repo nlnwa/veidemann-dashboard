@@ -1,0 +1,66 @@
+<div [formGroup]="form" fxLayout="column">
+
+  <mat-form-field data-testid="name">
+    <input matInput
+           #nameInput
+           formControlName="name"
+           placeholder="Name"
+           i18n-placeholder="@@metaNameInputPlaceholder"
+           required
+           data-testid="name">
+    <mat-hint i18n="@@metaNameInputLengthHinht" *ngIf="nameInput.value.length < 2">Minimum 2 characters</mat-hint>
+    <mat-error
+      *ngIf="name.hasError('required')"
+      i18n="@@metaNameRequiredError">
+      Name is required.
+    </mat-error>
+    <mat-error
+      *ngIf="name.hasError('pattern')"
+      i18n="@@collectionMetaNamePatternError">
+      Invalid name. (Valid characters are A-Z a-z 0-9 _)
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Description"
+              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
+    </textarea>
+  </mat-form-field>
+
+  <app-labels [removable]="editable" formControlName="labelList"></app-labels>
+  <app-annotation [removable]="editable" formControlName="annotationList"></app-annotation>
+
+  <ng-container>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+      <mat-form-field fxFlex *ngIf="created.value">
+        <input matInput
+               formControlName="created"
+               placeholder="Created"
+               i18n-placeholder="@@metaCreatedInputPlaceholder">
+      </mat-form-field>
+
+      <mat-form-field fxFlex *ngIf="createdBy.value">
+        <input matInput
+               formControlName="createdBy"
+               placeholder="Created by"
+               i18n-placeholder="@@metaCreatedByInputPlaceholder">
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
+      <mat-form-field fxFlex *ngIf="lastModified.value">
+        <input matInput
+               formControlName=lastModified
+               placeholder="Last modified"
+               i18n-placeholder="@@metaLastModifiedInputPlaceholder">
+      </mat-form-field>
+
+      <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
+        <input matInput
+               formControlName="lastModifiedBy"
+               placeholder="Last modified by"
+               i18n-placeholder="@@metaLastModifiedByInputPlaceholder">
+      </mat-form-field>
+    </div>
+  </ng-container>
+</div>

@@ -1,5 +1,5 @@
 import {waitForAsync} from '@angular/core/testing';
-import {createSimilarDomainRegExpString, isValidUrl, SIMILAR_URL} from './patterns';
+import {createSimilarDomainRegExpString, isValidUrl, SIMILAR_URL, VALID_COLLECTION_NAME} from './patterns';
 
 // valid and invalid urls taken from https://gist.github.com/j3j5/8336b0224167636bed462950400ff2df
 const validUrls = [
@@ -69,46 +69,71 @@ const invalidUrls = [
   'http://3628126748',
 ];
 
+const validCollectionNames = [
+  'Nettaviser_2022',
+  'Test_collection_',
+  'V4lidN4m3_01_01_2022',
+  'Årsrapporter_næringsliv_2021'
+];
+
+const invalidCollectionNames = [
+  'Nettaviser-2022',
+  'Test collection',
+  'inv4lid?collection?',
+  'invalid@example',
+];
+
 describe('Regular expression patterns', () => {
 
-  describe('isValidURL', () => {
-    it('should match valid urls', () => {
-      validUrls.forEach(url => expect(isValidUrl(url)).toBeTruthy());
+  describe('URL patterns', () => {
+    describe('isValidURL', () => {
+      it('should match valid urls', () => {
+        validUrls.forEach(url => expect(isValidUrl(url)).toBeTruthy());
+      });
+
+      it('should fail invalid urls', () => {
+        invalidUrls.forEach(url => expect(isValidUrl(url)).toBeFalsy());
+      });
     });
 
-    it('should fail invalid urls', () => {
-      invalidUrls.forEach(url => expect(isValidUrl(url)).toBeFalsy());
+    describe('SIMILAR_URL', () => {
+
+      it('should catch domain group', waitForAsync(() => {
+        const url = 'https://www.behave.properly/with/a/path?and=query';
+        const url1 = 'https://not.behave.properly/with/a/path?and=query';
+
+        const expected = 'behave.properly';
+        const actual = url.match(SIMILAR_URL)[1];
+
+        expect(actual).toBe(expected);
+
+        const expected1 = 'not.behave.properly';
+        const actual1 = url1.match(SIMILAR_URL)[1];
+
+        expect(actual1).toBe(expected1);
+      }));
+    });
+
+    describe('createSimilarUrlRegExpString', () => {
+
+      it('should create a regular expression that matches on similar domains', () => {
+        const urlFromDatabase = 'https://behave.properly/with/a/path?and=query';
+        const url = 'https://www.behave.properly/with/a/path?and=query';
+
+        const regexp = new RegExp(createSimilarDomainRegExpString(url));
+
+        expect(urlFromDatabase).toMatch(regexp);
+      });
     });
   });
 
-  describe('SIMILAR_URL', () => {
+  describe('Collection name pattern', () => {
+    it('should match valid collection names', () => {
+      validCollectionNames.forEach(name => expect(name.match(VALID_COLLECTION_NAME).length > 0).toBeTruthy());
+    });
 
-    it('should catch domain group', waitForAsync(() => {
-      const url = 'https://www.behave.properly/with/a/path?and=query';
-      const url1 = 'https://not.behave.properly/with/a/path?and=query';
-
-      const expected = 'behave.properly';
-      const actual = url.match(SIMILAR_URL)[1];
-
-      expect(actual).toBe(expected);
-
-      const expected1 = 'not.behave.properly';
-      const actual1 = url1.match(SIMILAR_URL)[1];
-
-      expect(actual1).toBe(expected1);
-    }));
-  });
-
-  describe('createSimilarUrlRegExpString', () => {
-
-    it('should create a regular expression that matches on similar domains', () => {
-      const urlFromDatabase = 'https://behave.properly/with/a/path?and=query';
-      const url = 'https://www.behave.properly/with/a/path?and=query';
-
-      const regexp = new RegExp(createSimilarDomainRegExpString(url));
-
-      expect(urlFromDatabase).toMatch(regexp);
+    it('should fail invalid collection names', () => {
+      invalidCollectionNames.forEach(name => expect(name.match(VALID_COLLECTION_NAME)).toBeNull());
     });
   });
-
 });

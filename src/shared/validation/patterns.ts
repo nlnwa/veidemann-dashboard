@@ -53,6 +53,9 @@ export const FILESIZE_PATTERN = [
   /(b|bit|bits|B|Byte|Bytes|bytes|Kb|k|K|kb|KB|KiB|Ki|ki|Mb|m|M|mb|MB|MiB|Mi|mi|Gb|g|G|gb|GB|GiB|Gi|gi|Tb|t|T|tb|TB|TiB|Ti|ti|)\s*$/
 ].map(r => r.source).join('');
 
+// TODO: Include æøå ?
+export const VALID_COLLECTION_NAME = /^[ÆØÅæøåa-zA-Z0-9_]+$/;
+
 // see https://stackoverflow.com/a/6969486 for explanation
 export const escapeStringForUseInRegexp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
