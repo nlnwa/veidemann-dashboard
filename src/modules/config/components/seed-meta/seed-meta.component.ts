@@ -77,7 +77,6 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
  updateForm(meta: Meta): void {
-    console.log('updateForm');
     this.name.clearValidators();
     this.name.clearAsyncValidators();
     this.name.setValidators(Validators.compose([Validators.required, validUrlValidator]));
