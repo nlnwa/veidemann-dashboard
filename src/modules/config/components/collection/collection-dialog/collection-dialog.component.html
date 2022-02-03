@@ -40,9 +40,25 @@
            [formGroupName]="i"
            fxLayout="row"
            fxLayoutGap="16px">
-        <mat-form-field fxFlex>
-          <input matInput formControlName="name" placeholder="Name"
+        <mat-form-field  [hideRequiredMarker]="subCollectionNameInput.value.length >= 2" fxFlex
+                         data-testid="subCollectionName">
+          <input matInput  #subCollectionNameInput formControlName="name" placeholder="Name"
                  i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
+          <mat-hint *ngIf="subCollectionNameInput.value.length < 2" i18n="@@subCollectionNameInputLengthHint">
+            Minimum 2 characters
+          </mat-hint>
+
+          <mat-error
+            *ngIf="getSubCollectionName(i).hasError('required')"
+            i18n="@@seedMetaUrlRequiredError">
+            The field is required
+          </mat-error>
+
+          <mat-error
+            *ngIf="getSubCollectionName(i).hasError('pattern')"
+            i18n="@@seedMetaUrlRequiredError">
+            Invalid name. (Valid characters are A-Z a-z 0-9 _)
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-select placeholder="Subcollection type"
