@@ -261,7 +261,7 @@ describe('CollectionDetailsComponent', () => {
       await subCollectionNameInput.blur();
       expect(await subCollectionNameFormfield.isControlValid()).toBeFalsy();
       expect(await subCollectionNameFormfield.getTextErrors())
-        .toContain('Invalid name. (Valid characters are A-Z a-z 0-9 _)');
+        .toContain('Invalid name. (Valid characters are A-Å a-å 0-9 _)');
       expect(component.canUpdate).toBeFalsy();
 
       await subCollectionNameInput.setValue('valid_collection');

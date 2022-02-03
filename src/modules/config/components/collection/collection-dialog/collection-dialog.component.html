@@ -50,14 +50,14 @@
 
           <mat-error
             *ngIf="getSubCollectionName(i).hasError('required')"
-            i18n="@@seedMetaUrlRequiredError">
+            i18n="@@collectionMetaSubcollectionNameRequiredError">
             The field is required
           </mat-error>
 
           <mat-error
             *ngIf="getSubCollectionName(i).hasError('pattern')"
-            i18n="@@seedMetaUrlRequiredError">
-            Invalid name. (Valid characters are A-Z a-z 0-9 _)
+            i18n="@@collectionMetaSubcollectionNamePatternError">
+            Invalid name. (Valid characters are A-Å a-å 0-9 _)
           </mat-error>
         </mat-form-field>
         <mat-form-field>

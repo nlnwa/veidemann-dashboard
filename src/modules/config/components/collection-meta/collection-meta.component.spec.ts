@@ -96,7 +96,7 @@ describe('CollectionMetaComponent', () => {
     await nameInput.setValue('invalid-collection');
     await nameInput.blur();
     expect(await nameFormField.isControlValid()).toBeFalsy();
-    expect(await nameFormField.getTextErrors()).toContain('Invalid name. (Valid characters are A-Z a-z 0-9 _)');
+    expect(await nameFormField.getTextErrors()).toContain('Invalid name. (Valid characters are A-Å a-å 0-9 _)');
 
     await nameInput.setValue('valid_collection');
     await nameInput.blur();
