@@ -46,7 +46,7 @@ export const VALID_SCHEME = /^https?$|^s?ftp$/;
 
 export const VALID_AUTHORITY = /^(?:[\S]+\.)?[\S]+\.[\S][\S]+/;
 
-export const SIMILAR_URL = /https?:\/\/(?:www\.)?([^\t\n\f\r /]+)\S*/;
+export const SIMILAR_URL = /(?:https?:\/\/)?(?:www\.)?([^\t\n\f\r /]+)\S*/;
 
 export const FILESIZE_PATTERN = [
   /^[0-9]*\.?[0-9]+\s*/,

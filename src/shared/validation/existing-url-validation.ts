@@ -25,33 +25,34 @@ export class SeedUrlValidator {
    * the url's from the control already exists
    */
   static createBackendValidator(configApiService: ConfigApiService) {
-    return (entityRef: ConfigRef) => (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (!entityRef) {
-        return of({missingEntityRef: true});
-      }
-      // split input urls by whitespace
-      const urls: string[] = control.value.split(/\s+/).filter(url => !!url);
-      return from(urls).pipe(
-        map(url => seedWithMatchingUrl(url)),
-        filter(_ => !!_),
-        mergeMap(request => configApiService.list(request)),
-        toArray(),
-        map((seeds: ConfigObject[]) => {
-          if (seeds.length === 0) {
-            return null;
-          }
-          const seedsOnSameDomain = seeds.filter(seed => seed.seed.entityRef.id === entityRef.id);
-          const seedsOnOtherDomain = seeds.filter(seed => seed.seed.entityRef.id !== entityRef.id);
-          const validationErrors = Object.assign({},
-            seedsOnOtherDomain.length ? {seedExists: seedsOnOtherDomain} : {},
-            seedsOnSameDomain.length ? {seedExistsOnEntity: seedsOnSameDomain} : {});
-          return validationErrors;
-        }),
-        catchError((error) => {
-          console.error(error);
-          return of(null);
-        })
-      );
+    return (entityRef: ConfigRef) => {
+      return (control: AbstractControl): Observable<ValidationErrors | null> => {
+        if (!entityRef) {
+          return of({missingEntityRef: true});
+        }
+        // split input urls by whitespace
+        const urls: string[] = control.value.split(/\s+/).filter(url => !!url);
+        return from(urls).pipe(
+          map(url => seedWithMatchingUrl(url)),
+          filter(_ => !!_),
+          mergeMap(request => configApiService.list(request)),
+          toArray(),
+          map((seeds: ConfigObject[]) => {
+            if (seeds.length === 0) {
+              return null;
+            }
+            const seedsOnSameDomain = seeds.filter(seed => seed.seed.entityRef.id === entityRef.id);
+            const seedsOnOtherDomain = seeds.filter(seed => seed.seed.entityRef.id !== entityRef.id);
+            const validationErrors = Object.assign({},
+              seedsOnOtherDomain.length ? {seedExists: seedsOnOtherDomain} : {},
+              seedsOnSameDomain.length ? {seedExistsOnEntity: seedsOnSameDomain} : {});
+            return validationErrors;
+          }),
+          catchError((error) => {
+            return of(null);
+          })
+        );
+      };
     };
   }
 }

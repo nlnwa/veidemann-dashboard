@@ -76,7 +76,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     super.createForm();
   }
 
- updateForm(meta: Meta): void {
+  updateForm(meta: Meta): void {
     this.name.clearValidators();
     this.name.clearAsyncValidators();
     this.name.setValidators(Validators.compose([Validators.required, validUrlValidator]));
@@ -129,7 +129,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
           ? of(null)
           : of(this.name.errors)
     ).pipe(
-    first() // must ensure the observable returned is completed
+      first() // must ensure the observable returned is completed
     );
   }
 }
