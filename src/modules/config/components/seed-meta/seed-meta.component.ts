@@ -76,8 +76,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     super.createForm();
   }
 
- updateForm(meta: Meta): void {
-    console.log('updateForm');
+  updateForm(meta: Meta): void {
     this.name.clearValidators();
     this.name.clearAsyncValidators();
     this.name.setValidators(Validators.compose([Validators.required, validUrlValidator]));
@@ -87,6 +86,11 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     super.updateForm(meta);
   }
 
+  /** /
+   *  Removing url from input where entity already has the same or similar url.
+   *  Need to update method to support url like nb.no to be removed when entity already has http(s)://www.nb.no.
+   *  Currently, http(s)://www.nb.no won't match nb.no. and therefore not be removed from input.
+   */
   onRemoveExistingUrl(seed: ConfigObject) {
     const value = this.name.value.replace(seed.meta.name, '').trim();
     this.name.setValue(value);
@@ -130,7 +134,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
           ? of(null)
           : of(this.name.errors)
     ).pipe(
-    first() // must ensure the observable returned is completed
+      first() // must ensure the observable returned is completed
     );
   }
 }
