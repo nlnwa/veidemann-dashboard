@@ -87,8 +87,17 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   onRemoveExistingUrl(seed: ConfigObject) {
-    const value = this.name.value.replace(seed.meta.name, '').trim();
-    this.name.setValue(value);
+    let value = '';
+    const match = this.name.value.search(seed.meta.name) > 0;
+    if (match) {
+      value = this.name.value.replace(seed.meta.name, '').trim();
+      this.name.setValue(value);
+    } else {
+      const url = new URL(seed.meta.name);
+      const domain = url.hostname.replace('www.', '');
+      value = this.name.value.replace(domain, '').trim();
+      this.name.setValue(value);
+    }
     if (!value) {
       this.form.markAsPristine();
       this.form.markAsUntouched();
