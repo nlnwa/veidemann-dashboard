@@ -10,6 +10,7 @@ import {
 } from '../../../../../shared/models';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
+import {VALID_COLLECTION_NAME} from '../../../../../shared/validation/patterns';
 
 
 @Component({
@@ -19,29 +20,6 @@ import {AuthService} from '../../../../core/services/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionDetailsComponent implements OnChanges {
-  readonly RotationPolicy = RotationPolicy;
-  readonly SubCollectionType = SubCollectionType;
-
-  @Input()
-  configObject: ConfigObject;
-
-  @Input()
-  rotationPolicies: RotationPolicy[] = [];
-
-  @Input()
-  subCollectionTypes: SubCollectionType[] = [];
-
-  @Output()
-  save = new EventEmitter<ConfigObject>();
-
-  @Output()
-  update = new EventEmitter<ConfigObject>();
-
-  // noinspection ReservedWordAsName
-  @Output()
-  delete = new EventEmitter<ConfigObject>();
-
-  form: FormGroup;
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
@@ -87,6 +65,30 @@ export class CollectionDetailsComponent implements OnChanges {
     return true;
   }
 
+  readonly RotationPolicy = RotationPolicy;
+  readonly SubCollectionType = SubCollectionType;
+
+  @Input()
+  configObject: ConfigObject;
+
+  @Input()
+  rotationPolicies: RotationPolicy[] = [];
+
+  @Input()
+  subCollectionTypes: SubCollectionType[] = [];
+
+  @Output()
+  save = new EventEmitter<ConfigObject>();
+
+  @Output()
+  update = new EventEmitter<ConfigObject>();
+
+  // noinspection ReservedWordAsName
+  @Output()
+  delete = new EventEmitter<ConfigObject>();
+
+  form: FormGroup;
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.configObject) {
       if (this.configObject) {
@@ -120,6 +122,10 @@ export class CollectionDetailsComponent implements OnChanges {
   onRemoveSubCollection(index: number) {
     this.subCollectionControlArray.removeAt(index);
     this.form.markAsDirty();
+  }
+
+  getSubCollectionName(index: number): AbstractControl {
+    return this.form.get(['subCollectionsList', index, 'name']);
   }
 
   protected createForm(): void {
@@ -179,9 +185,8 @@ export class CollectionDetailsComponent implements OnChanges {
 
   private initSubCollection() {
     return this.fb.group({
-      name: '',
+      name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(VALID_COLLECTION_NAME)]],
       type: SubCollectionType.UNDEFINED,
     });
   }
-
 }

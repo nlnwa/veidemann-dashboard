@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {CollectionDetailsComponent} from '..';
 import {FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
@@ -9,7 +9,8 @@ import {ConfigObject} from '../../../../../shared/models/config';
 @Component({
   selector: 'app-collection-dialog',
   templateUrl: './collection-dialog.component.html',
-  styleUrls: ['./collection-dialog.component.css']
+  styleUrls: ['./collection-dialog.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionDialogComponent extends CollectionDetailsComponent implements OnInit {
 
