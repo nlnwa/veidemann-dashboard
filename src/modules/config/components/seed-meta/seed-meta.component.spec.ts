@@ -287,7 +287,7 @@ fdescribe('SeedMetaComponent', () => {
         expect(await nameInput.getValue()).toBe('');
       });
 
-      it('should remove all duplicate seed from input by clicking button', async () => {
+      fit('should remove all duplicate seed from input by clicking button', async () => {
         configApiServiceSpy.list.and.returnValue(of(exampleMatchingSeeds[0], exampleMatchingSeeds[1]));
         component.entityRef = exampleMatchingSeeds[0].seed.entityRef;
         component.updateForm(new Meta());
@@ -313,7 +313,7 @@ fdescribe('SeedMetaComponent', () => {
 
         const removeAllDupButton = await seedExistsOnEntityList.getItems(
           {text: 'Remove all from list'});
-
+        console.log('input before clicking remove all duplcates button: ', await nameInput.getValue());
         await removeAllDupButton[0].click();
         // TODO: Same here, should be two values passed to method.
         expect(component.onRemoveExistingUrls)
@@ -321,13 +321,16 @@ fdescribe('SeedMetaComponent', () => {
             [exampleMatchingSeeds[0], exampleMatchingSeeds[1], exampleMatchingSeeds[0],
               exampleMatchingSeeds[1], exampleMatchingSeeds[0], exampleMatchingSeeds[1]]
           );
+        await nameInput.blur();
         fixture.detectChanges();
         await fixture.whenStable();
+        console.log('await nameInput,getValue() ', await nameInput.getValue());
+        console.log('formfield: ', component.name);
         expect(await nameInput.getValue()).toBe('http://historiewiki.no');
         // TODO: still has errors even if the url are removed from input.
         //  (existing-url-validation createBackend() still return validationErrors even if duplicate url is removed)
-        // expect(await nameFormField.hasErrors()).toBeFalsy();
-        // expect(await nameFormField.isControlValid()).toBeTruthy();
+        expect(await nameFormField.hasErrors()).toBeFalsy();
+        expect(await nameFormField.isControlValid()).toBeTruthy();
       });
     });
 
