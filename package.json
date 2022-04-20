@@ -44,7 +44,7 @@
     "hammerjs": "^2.0.8",
     "ip-address": "^6.4.0",
     "minimist": "^1.2.6",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
     "nano-editor": "^1.2.4",
     "ng-keyboard-shortcuts": "^10.1.17",
