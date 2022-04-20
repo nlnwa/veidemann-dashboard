@@ -43,7 +43,7 @@
     "grpc-web": "^1.3.0",
     "hammerjs": "^2.0.8",
     "ip-address": "^6.4.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "nano-editor": "^1.2.4",
