@@ -14,7 +14,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
   readonly BrowserScriptType = BrowserScriptType;
 
   @Input()
-  browserScriptTypes: BrowserScriptType[]=[];
+  browserScriptTypes: BrowserScriptType[] = [];
 
   @Input()
   configObject: ConfigObject;

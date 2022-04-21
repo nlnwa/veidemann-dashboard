@@ -95,6 +95,8 @@ import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-previ
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 import {RouterExtraService} from './services/router-extra.service';
 import { CollectionMetaComponent } from './components/collection-meta/collection-meta.component';
+import {EditorComponent} from './components/browserscript/monaco-editor/editor.component';
+import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
 
 @NgModule({
   declarations: [
@@ -183,6 +185,7 @@ import { CollectionMetaComponent } from './components/collection-meta/collection
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
     CollectionMetaComponent,
+    EditorComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
@@ -203,6 +206,7 @@ import { CollectionMetaComponent } from './components/collection-meta/collection
     CommonsModule,
     ConfigurationsRoutingModule,
     ReportModule,
+    MonacoEditorModule,
   ],
   exports: [],
   providers: [

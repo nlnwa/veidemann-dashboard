@@ -1,3 +1,4 @@
+<form [formGroup]="form">
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>web_asset</mat-icon>
@@ -10,7 +11,7 @@
     </mat-card-subtitle>
   </mat-card-header>
 
-  <form [formGroup]="form">
+
 
     <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
@@ -23,7 +24,7 @@
                  i18n-placeholder="@@configIdPlaceholder">
         </mat-form-field>
       </div>
-      <div fxLayout="column" fxFlex>
+      <div fxFlex fxLayout="column">
         <mat-form-field>
           <mat-select placeholder="Choose type"
                       formControlName="browserScriptType"
@@ -31,15 +32,11 @@
             <mat-option *ngFor="let type of browserScriptTypes" [value]="type">{{BrowserScriptType[type]}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <fieldset style="border: 0px;">
-          <legend>{{name}}</legend>
-
-          <div appScriptEditor #editor formControlName="script"></div>
-          <mat-error *ngIf="editor.value === ''"
-                     i18n="@@browserscriptFormScriptRequiredError">
-            Script is required.
-          </mat-error>
-        </fieldset>
+        <app-monaco-editor [configObject]="configObject"
+                           formControlName="script"
+                           style="margin-top: 24px"
+                           fxFlex>
+        </app-monaco-editor>
         <mat-form-field>
           <mat-chip-list #chipList>
             <mat-chip *ngFor="let regex of urlRegexpList"
@@ -85,7 +82,7 @@
         </form>
       </div>
     </mat-card-content>
-  </form>
+
 
   <mat-card-actions *ngIf="canEdit">
     <button mat-raised-button color="accent"
@@ -117,3 +114,4 @@
     </button>
   </mat-card-actions>
 </mat-card>
+</form>
