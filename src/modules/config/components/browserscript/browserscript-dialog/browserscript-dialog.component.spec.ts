@@ -15,6 +15,7 @@ import {AnnotationComponent} from '../../annotation/annotation.component';
 import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
+import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
 
 
 describe('BrowserScriptDialogComponent', () => {
@@ -28,7 +29,13 @@ describe('BrowserScriptDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AbilityModule, CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
+      imports: [
+        AbilityModule,
+        CoreTestingModule.forRoot(),
+        CommonsModule,
+        MonacoEditorModule,
+        NoopAnimationsModule
+      ],
       providers: [
         {
           provide: LabelService,
@@ -50,7 +57,7 @@ describe('BrowserScriptDialogComponent', () => {
           provide: MatDialogRef,
           useValue: {}
         }
-        ],
+      ],
       declarations: [BrowserScriptDialogComponent, MetaComponent, BrowserScriptDirective, LabelComponent, AnnotationComponent]
     })
       .compileComponents();

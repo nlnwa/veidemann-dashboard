@@ -1,19 +1,18 @@
 <form [formGroup]="form">
-<mat-card>
-  <mat-card-header>
-    <mat-icon mat-card-avatar>web_asset</mat-icon>
-    <mat-card-title>
-      <span i18n="@@browserscriptDetailsCardTitle">Browserscript</span>
-    </mat-card-title>
-    <mat-card-subtitle>
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>web_asset</mat-icon>
+      <mat-card-title>
+        <span i18n="@@browserscriptDetailsCardTitle">Browserscript</span>
+      </mat-card-title>
+      <mat-card-subtitle>
         <span *ngIf="showSave"
               i18n="@@commonConfigDetailsCardSubtitle"> New (unsaved)</span>
-    </mat-card-subtitle>
-  </mat-card-header>
+      </mat-card-subtitle>
+    </mat-card-header>
 
 
-
-    <mat-card-content fxLayout="row wrap" fxLayoutGap="24px">
+    <mat-card-content fxLayout="column" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="!showSave">
@@ -32,11 +31,6 @@
             <mat-option *ngFor="let type of browserScriptTypes" [value]="type">{{BrowserScriptType[type]}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <app-monaco-editor [configObject]="configObject"
-                           formControlName="script"
-                           style="margin-top: 24px"
-                           fxFlex>
-        </app-monaco-editor>
         <mat-form-field>
           <mat-chip-list #chipList>
             <mat-chip *ngFor="let regex of urlRegexpList"
@@ -56,7 +50,7 @@
                    (matChipInputTokenEnd)="onSaveRegexp($event);">
           </mat-chip-list>
         </mat-form-field>
-        <form [formGroup]="regexpForm" *ngIf="regexpForm.enabled">
+        <form [formGroup]="regexpForm" fxFlex *ngIf="regexpForm.enabled">
           <mat-card class="label-form">
             <mat-card-header>
               <mat-icon mat-card-avatar>edit</mat-icon>
@@ -80,38 +74,44 @@
             </mat-card-actions>
           </mat-card>
         </form>
+          <ngx-monaco-editor class="editor"
+                             formControlName="script"
+                             [options]="editorOptions"
+                             (init)="initEditor($event)">
+          </ngx-monaco-editor>
+          <mat-error *ngIf="!script.valid">{{script.errors?.monaco?.value}}</mat-error>
       </div>
     </mat-card-content>
 
 
-  <mat-card-actions *ngIf="canEdit">
-    <button mat-raised-button color="accent"
-            [disabled]="!canSave"
-            *ngIf="showSave"
-            (click)="onSave()"
-            i18n="@@commonButtonSave">
-      SAVE
-    </button>
-    <button mat-raised-button color="accent"
-            *ngIf="!showSave"
-            [disabled]="!canUpdate"
-            (click)="onUpdate()"
-            i18n="@@commonButtonSave">
-      UPDATE
-    </button>
-    <button mat-button
-            (click)="onRevert()"
-            [disabled]="!form.dirty"
-            i18n="@@commonButtonRevert">
-      REVERT
-    </button>
-    <span fxFlex></span>
-    <button mat-button
-            *ngIf="!showSave && canDelete"
-            (click)="onDelete()"
-            i18n="@@commonButtonDelete">
-      DELETE
-    </button>
-  </mat-card-actions>
-</mat-card>
+    <mat-card-actions *ngIf="canEdit">
+      <button mat-raised-button color="accent"
+              [disabled]="!canSave"
+              *ngIf="showSave"
+              (click)="onSave()"
+              i18n="@@commonButtonSave">
+        SAVE
+      </button>
+      <button mat-raised-button color="accent"
+              *ngIf="!showSave"
+              [disabled]="!canUpdate"
+              (click)="onUpdate()"
+              i18n="@@commonButtonSave">
+        UPDATE
+      </button>
+      <button mat-button
+              (click)="onRevert()"
+              [disabled]="!form.dirty"
+              i18n="@@commonButtonRevert">
+        REVERT
+      </button>
+      <span fxFlex></span>
+      <button mat-button
+              *ngIf="!showSave && canDelete"
+              (click)="onDelete()"
+              i18n="@@commonButtonDelete">
+        DELETE
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </form>

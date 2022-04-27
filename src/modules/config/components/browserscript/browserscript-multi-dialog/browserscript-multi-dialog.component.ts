@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {BrowserScriptDetailsComponent} from '..';
 import {AbstractControl, FormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
+import {MonacoEditorLoaderService} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-browserscript-multi-dialog',
@@ -22,8 +23,10 @@ export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsCompo
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
               @Inject(MAT_DIALOG_DATA) public data: ConfigDialogData,
-              public dialogRef: MatDialogRef<BrowserScriptMultiDialogComponent>) {
-    super(fb, authService);
+              public dialogRef: MatDialogRef<BrowserScriptMultiDialogComponent>,
+              protected cdr: ChangeDetectorRef,
+              protected mls: MonacoEditorLoaderService) {
+    super(fb, authService, cdr, mls);
     this.configObject = this.data.configObject;
     this.allSelected = this.data.allSelected;
   }

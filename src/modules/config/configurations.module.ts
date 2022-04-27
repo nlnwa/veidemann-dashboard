@@ -90,12 +90,9 @@ import {BrowserScriptMultiDialogComponent} from './components/browserscript/brow
 import {PolitenessConfigMultiDialogComponent} from './components/politenessconfig/politenessconfig-multi-dialog/politenessconfig-multi-dialog.component';
 import {RoleMappingMultiDialogComponent} from './components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
 import {LabelMultiComponent} from './components/label/label-multi/label-multi.component';
-import {AbilityModule} from '@casl/angular';
-import { SeedMetaPreviewComponent } from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
-import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
+import {SeedMetaPreviewComponent} from './components/seed-meta/seed-meta-preview/seed-meta-preview.component';
 import {RouterExtraService} from './services/router-extra.service';
-import { CollectionMetaComponent } from './components/collection-meta/collection-meta.component';
-import {EditorComponent} from './components/browserscript/monaco-editor/editor.component';
+import {CollectionMetaComponent} from './components/collection-meta/collection-meta.component';
 import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
 
 @NgModule({
@@ -185,7 +182,6 @@ import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
     CollectionMetaComponent,
-    EditorComponent,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,

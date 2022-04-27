@@ -2,7 +2,7 @@
   <ng-container i18n="@@browserscriptDetailsCardTitle">BrowserScript</ng-container>
 </h2>
 <mat-dialog-content>
-  <form [formGroup]="form">
+  <form [formGroup]="form" fxLayout="column">
     <app-meta formControlName="meta"></app-meta>
 
     <mat-form-field>
@@ -12,15 +12,7 @@
         <mat-option *ngFor="let type of browserScriptTypes" [value]="type">{{BrowserScriptType[type]}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <fieldset style="border: 0px;">
-      <legend>{{name}}</legend>
 
-      <div appScriptEditor #editor formControlName="script"></div>
-      <mat-error *ngIf="editor.value === ''"
-                 i18n="@@browserscriptFormScriptRequiredError">
-        Script is required.
-      </mat-error>
-    </fieldset>
     <mat-form-field>
       <mat-chip-list #chipList>
         <mat-chip *ngFor="let regex of urlRegexpList"
@@ -40,29 +32,38 @@
                (matChipInputTokenEnd)="onSaveRegexp($event);">
       </mat-chip-list>
     </mat-form-field>
-  </form>
-  <form [formGroup]="regexpForm" *ngIf="regexpForm.enabled">
-    <mat-card class="label-form">
-      <mat-card-header>
-        <mat-icon mat-card-avatar>edit</mat-icon>
-        <mat-card-title i18n="@@browserscriptRegexpEditFormTitle">Edit the expression</mat-card-title>
-      </mat-card-header>
-      <mat-card-content fxLayout="row" fxLayoutGap="16px">
-        <mat-form-field fxFlex>
-          <input #regexpEdit matInput placeholder="Regexp" formControlName="regexp"
-                 i18n-placeholder="@@browserscriptRegexpEditFormInputPlaceholder">
-        </mat-form-field>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="accent" *ngIf="canUpdateRegex"
-                (click)="onUpdateRegexp(regexpEdit.value)" i18n="@@commonButtonOk">
-          OK
-        </button>
-        <button i18n="@@commonButtonCancel" mat-button (click)="onAbort()">
-          CANCEL
-        </button>
-      </mat-card-actions>
-    </mat-card>
+    <form [formGroup]="regexpForm" *ngIf="regexpForm.enabled">
+      <mat-card class="label-form">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>edit</mat-icon>
+          <mat-card-title i18n="@@browserscriptRegexpEditFormTitle">Edit the expression</mat-card-title>
+        </mat-card-header>
+        <mat-card-content fxLayout="row" fxLayoutGap="16px">
+          <mat-form-field fxFlex>
+            <input #regexpEdit matInput placeholder="Regexp" formControlName="regexp"
+                   i18n-placeholder="@@browserscriptRegexpEditFormInputPlaceholder">
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="accent" *ngIf="canUpdateRegex"
+                  (click)="onUpdateRegexp(regexpEdit.value)" i18n="@@commonButtonOk">
+            OK
+          </button>
+          <button i18n="@@commonButtonCancel" mat-button (click)="onAbort()">
+            CANCEL
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+    <ngx-monaco-editor fxFlex #editor class="editor"
+                       formControlName="script"
+                       [options]="editorOptions"
+                       (init)="initEditor($event)">
+    </ngx-monaco-editor>
+    <mat-error *ngIf="editor.value === ''"
+               i18n="@@browserscriptFormScriptRequiredError">
+      Script is required.
+    </mat-error>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="canEdit">
