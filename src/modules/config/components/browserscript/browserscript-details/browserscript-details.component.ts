@@ -1,20 +1,23 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validator} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, BrowserScriptType, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
+import {MonacoEditorConstructionOptions, MonacoEditorLoaderService, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
+import {filter, take} from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-browserscript-details',
   templateUrl: './browserscript-details.component.html',
+  styleUrls: ['./browserscript-details.component.scss']
 })
 export class BrowserScriptDetailsComponent implements OnChanges {
   readonly BrowserScriptType = BrowserScriptType;
 
   @Input()
-  browserScriptTypes: BrowserScriptType[]=[];
+  browserScriptTypes: BrowserScriptType[] = [];
 
   @Input()
   configObject: ConfigObject;
@@ -38,8 +41,16 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   labelInputSeparators = [ENTER, COMMA];
 
+  editorOptions: MonacoEditorConstructionOptions = {
+    theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'vs-dark' : 'vs',
+    language: 'javascript',
+    roundedSelection: true,
+  };
+
   constructor(protected fb: FormBuilder,
-              protected authService: AuthService) {
+              protected authService: AuthService,
+              protected cdr: ChangeDetectorRef,
+              protected mls: MonacoEditorLoaderService) {
     this.createForm();
   }
 
@@ -71,6 +82,10 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     return this.form.get('meta').value.name;
   }
 
+  get script(): AbstractControl {
+    return this.form.get('script');
+  }
+
   get urlRegexpList(): string[] {
     return this.form.get('urlRegexpList').value;
   }
@@ -83,6 +98,12 @@ export class BrowserScriptDetailsComponent implements OnChanges {
         this.form.reset();
       }
     }
+  }
+
+  initEditor(editor: MonacoStandaloneCodeEditor) {
+    editor.onDidChangeModelDecorations(() => {
+      this.cdr.markForCheck();
+    });
   }
 
   onSave() {
