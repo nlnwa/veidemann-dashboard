@@ -59,6 +59,9 @@ export function toTimestampProto(timestamp: string): any {
 }
 
 export function durationBetweenDates(startTime: string, endTime: string): string {
+  if (endTime === '') {
+    return 'N/A';
+  }
   const start = moment(startTime);
   const end = moment(endTime);
   return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});

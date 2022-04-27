@@ -148,11 +148,14 @@ export class JobExecutionPreviewComponent implements OnChanges {
     }
   }
 
-  getDuration(startTime: string, endTime: string): string {
-    if (!endTime) {
-      endTime = new Date().toUTCString();
+  getDuration(jobExec: JobExecutionStatus): string {
+    let endTime = jobExec.endTime;
+    if (!jobExec.endTime) {
+      if (jobExec.state === JobExecutionState.RUNNING || JobExecutionState.CREATED) {
+        endTime = new Date().toISOString();
+      }
     }
-    return durationBetweenDates(startTime, endTime);
+    return durationBetweenDates(jobExec.startTime, endTime);
   }
 
   getExecMap(executionStateMap: Map<string, number>) {

@@ -3,7 +3,7 @@
   <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
     <mat-card>
       <h2>Duration</h2>
-      <h1>{{getDuration(jobExecutionStatus.startTime, jobExecutionStatus.endTime)}}</h1>
+      <h1>{{getDuration(jobExecutionStatus)}}</h1>
     </mat-card>
 
     <mat-card *ngIf="jobExecutionStatus.urisCrawled">
