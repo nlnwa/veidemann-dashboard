@@ -44,11 +44,10 @@ jobs:
 
       - uses: docker/build-push-action@v2
         name: Build and push image
-        run: "ls"
         with:
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-          context: ../../docs/
+          context: "{{defaultContext}}:docs"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
