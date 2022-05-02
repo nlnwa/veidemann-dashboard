@@ -4,8 +4,6 @@ name: Test
 
 on:
   pull_request:
-    paths-ignore:
-      - docs/**
 
 jobs:
   build:
@@ -35,3 +33,37 @@ jobs:
 
       - name: Test
         run: yarn test -- --watch=false --browsers=ChromeHeadless
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: docker/metadata-action@v3
+        name: Extract metadata (tags, labels) and establish version
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-docs
+          tags: |
+            type=semver,pattern={{version}}
+            type=ref,event=branch
+            type=ref,event=pr
+
+      - name: Log in to the container registry (${{ env.REGISTRY }})
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v2
+        name: Build and push image
+        with:
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+          context: docs
+          push: ${{event.github != 'pull_request'}}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
