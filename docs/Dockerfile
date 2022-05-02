@@ -27,3 +27,4 @@ FROM nginx:stable-alpine
 LABEL maintainer="nettarkivet@nb.no"
 
 COPY --from=build /usr/share/site/out /usr/share/nginx/html/
+COPY --from=build /usr/share/site/nginx/default.conf /etc/nginx/conf.d/
