@@ -25,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - uses: docker/metadata-action@v3
         name: Extract metadata (tags, labels) and establish version
         id: meta
@@ -47,7 +50,7 @@ jobs:
         with:
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-          context: "{{defaultContext}}:docs"
+          context: docs
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
