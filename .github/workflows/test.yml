@@ -2,7 +2,10 @@
 # It should run tests as well.
 name: Test
 
-on: [pull_request]
+on:
+  push:
+    paths-ignore:
+      - docs/**
 
 jobs:
   build:
