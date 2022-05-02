@@ -47,7 +47,7 @@ jobs:
         with:
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-          context: docs
+          context: docs/
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
