@@ -47,16 +47,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-docs
           tags: |
-            type=semver,pattern={{version}}
-            type=ref,event=branch
             type=ref,event=pr
-
-      - name: Log in to the container registry (${{ env.REGISTRY }})
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: docker/build-push-action@v2
         name: Build and push image
@@ -64,6 +55,5 @@ jobs:
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
           context: docs
-          push: ${{event.github != 'pull_request'}}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
