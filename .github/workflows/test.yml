@@ -2,7 +2,8 @@
 # It should run tests as well.
 name: Test
 
-on: [pull_request]
+on:
+  pull_request:
 
 jobs:
   build:
@@ -32,3 +33,27 @@ jobs:
 
       - name: Test
         run: yarn test -- --watch=false --browsers=ChromeHeadless
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: docker/metadata-action@v3
+        name: Extract metadata (tags, labels) and establish version
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-docs
+          tags: |
+            type=ref,event=pr
+
+      - uses: docker/build-push-action@v2
+        name: Build and push image
+        with:
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+          context: docs
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

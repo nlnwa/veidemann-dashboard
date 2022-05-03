@@ -3,7 +3,7 @@ FROM alpine:latest as build
 # install git
 RUN apk add --no-cache git
 
-ARG HUGO_VERSION=0.63.1
+ARG HUGO_VERSION=0.98.0
 ARG HUGO_BINARY=hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
 ARG SITE_DIR='/usr/share/site'
 
@@ -27,3 +27,4 @@ FROM nginx:stable-alpine
 LABEL maintainer="nettarkivet@nb.no"
 
 COPY --from=build /usr/share/site/out /usr/share/nginx/html/
+COPY --from=build /usr/share/site/nginx/default.conf /etc/nginx/conf.d/
