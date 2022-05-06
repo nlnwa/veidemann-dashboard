@@ -37,7 +37,8 @@ export class CoreTestingModule {
           provide: AuthService,
           useValue: {
             isAdmin: () => true,
-            isCurator: () => true
+            isCurator: () => true,
+            canUpdate: () => true,
           }
         },
         {

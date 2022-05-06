@@ -76,7 +76,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
     super.createForm();
   }
 
- updateForm(meta: Meta): void {
+  updateForm(meta: Meta): void {
     this.name.clearValidators();
     this.name.clearAsyncValidators();
     this.name.setValidators(Validators.compose([Validators.required, validUrlValidator]));
@@ -87,8 +87,23 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   onRemoveExistingUrl(seed: ConfigObject) {
-    const value = this.name.value.replace(seed.meta.name, '').trim();
-    this.name.setValue(value);
+    let value = '';
+    const match = this.name.value.includes(seed.meta.name) > 0;
+    if (match) {
+      value = this.name.value.replace(seed.meta.name, '').trim();
+      this.name.setValue(value);
+    } else {
+      const url = new URL(seed.meta.name);
+      const domain = url.hostname.replace('www.', '');
+      const urls = this.name.value.trim().split(/\s+/);
+      const expression = new RegExp(`.*(${domain}).*`);
+      const found = urls.findIndex(u => expression.test(u));
+      if (found > -1) {
+        urls.splice(found, 1);
+      }
+      value = urls.toString();
+      this.name.setValue(value);
+    }
     if (!value) {
       this.form.markAsPristine();
       this.form.markAsUntouched();
@@ -96,11 +111,20 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   onRemoveExistingUrls(seeds: ConfigObject[]) {
-    const replaced = seeds.reduce((acc, seed) => acc.replace(seed.meta.name, '')
-      .trim()
-      .replace(/\s{2,}/, ' \n'), this.name.value);
-    this.name.setValue(replaced);
-    if (!replaced) {
+    const urls = this.name.value.trim().split(/\s+/);
+    for (const seed of seeds) {
+      const url = new URL(seed.meta.name);
+      const domain = url.hostname.replace('www.', '');
+      const expression = new RegExp(`.*(${domain}).*`);
+      const found = urls.findIndex(u => expression.test(u));
+      if (found > -1) {
+        urls.splice(found, 1);
+      }
+    }
+    const value = urls.toString();
+    this.name.setValue(value);
+
+    if (!value) {
       this.form.markAsPristine();
       this.form.markAsUntouched();
     }
@@ -129,7 +153,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
           ? of(null)
           : of(this.name.errors)
     ).pipe(
-    first() // must ensure the observable returned is completed
+      first() // must ensure the observable returned is completed
     );
   }
 }
