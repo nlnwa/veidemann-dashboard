@@ -80,3 +80,7 @@ tr.item-row.row-disabled td a.formattedUri {
 tr.resource-row.row-error td a.formattedUri {
   color: $warn;
 }
+
+.disabledJob .mat-list-item-content {
+  color: $warn
+}
