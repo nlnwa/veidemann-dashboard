@@ -9,8 +9,9 @@
       <ng-container *ngIf="configObject.seed.jobRefList.length > 0 && ('read' | able: Kind[Kind.CRAWLJOB])">
         <h2 mat-subheader>Crawljobs</h2>
         <ng-container *ngFor="let crawlJob of configObject.seed.jobRefList">
-          <a mat-list-item
-             [routerLink]="['/config/crawljobs/' + crawlJob.id]">
+          <a mat-list-item class="disabledJob"
+             [routerLink]="['/config/crawljobs/' + crawlJob.id]"
+             [ngClass]='{"disabledJob": crawlJob.id | getCrawlJobDisabledStatus | async}'>
             <mat-icon mat-list-icon>work</mat-icon>
             {{ crawlJob.id | getJobNamePipe | async }}
           </a>

@@ -48,6 +48,7 @@ import {
   JobExecutionStatusPipe,
   PolitenessConfigNamePipe,
   ScriptAnnotationsPipe,
+  CrawlJobDisabledStatusPipe,
 } from './pipe';
 
 import {ConfigService} from '../commons/services';
@@ -182,6 +183,7 @@ import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
     ScriptAnnotationComponent,
     SeedMetaPreviewComponent,
     CollectionMetaComponent,
+    CrawlJobDisabledStatusPipe,
   ],
   entryComponents: [
     DeleteMultiDialogComponent,
