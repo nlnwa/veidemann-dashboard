@@ -194,7 +194,6 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     const schedule = [];
     try {
       const interval = cronParser.parseExpression(cron, options);
-
       while (true) {
         try {
           const obj = interval.next();
@@ -208,6 +207,13 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
                 end: this.addDuration(obj.value, duration),
               });
             }
+          } else {
+            schedule.push({
+              // @ts-ignore
+              start: obj.value.toISOString(),
+              // @ts-ignore
+              end: this.addDuration(obj.value, duration),
+            });
           }
         } catch (e) {
           break;
@@ -232,6 +238,13 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
                 end: this.addDuration(obj.value, duration),
               });
             }
+          } else {
+            schedule.push({
+              // @ts-ignore
+              start: obj.value.toISOString(),
+              // @ts-ignore
+              end: this.addDuration(obj.value, duration),
+            });
           }
         } catch (e) {
           break;
