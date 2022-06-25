@@ -4383,9 +4383,9 @@ jsprim@^1.2.2:
     verror "1.10.0"
 
 jsrsasign@^10.3.0:
-  version "10.5.1"
-  resolved "https://registry.npmjs.org/jsrsasign/-/jsrsasign-10.5.1.tgz"
-  integrity sha512-yW0fq87KNZFw4Pn5ySllXs3ztZAROQZczEheKZTqmiNpCe/Xj9r5NhuAQ7MXTOyEZGJ/+MPHGTsfbgPFaLpwHQ==
+  version "10.5.25"
+  resolved "https://registry.npmjs.org/jsrsasign/-/jsrsasign-10.5.25.tgz#8eb3f943718d73f2dd3d85f587f241a5316b835a"
+  integrity sha512-N7zxHaCwYvFlXsybq4p4RxRwn4AbEq3cEiyjbCrWmwA7g8aS4LTKDJ9AJmsXxwtYesYx0imJ+ITtkyyxLCgeIg==
 
 karma-chrome-launcher@~3.1.0:
   version "3.1.0"
