@@ -101,7 +101,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
       if (found > -1) {
         urls.splice(found, 1);
       }
-      value = urls.toString();
+      value = urls.join('\n');
       this.name.setValue(value);
     }
     if (!value) {
@@ -111,7 +111,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
   }
 
   onRemoveExistingUrls(seeds: ConfigObject[]) {
-    const urls = this.name.value.trim().split(/\s+/);
+    const urls: string[] = this.name.value.trim().split(/\s+/);
     for (const seed of seeds) {
       const url = new URL(seed.meta.name);
       const domain = url.hostname.replace('www.', '');
@@ -121,7 +121,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
         urls.splice(found, 1);
       }
     }
-    const value = urls.toString();
+    const value: string = urls.join('\n');
     this.name.setValue(value);
 
     if (!value) {
