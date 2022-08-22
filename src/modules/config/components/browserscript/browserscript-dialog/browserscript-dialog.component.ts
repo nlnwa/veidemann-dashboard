@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {BrowserScriptDetailsComponent} from '..';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
@@ -14,7 +14,7 @@ import {MonacoEditorLoaderService} from '@materia-ui/ngx-monaco-editor';
 })
 export class BrowserScriptDialogComponent extends BrowserScriptDetailsComponent implements OnInit {
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService,
               @Inject(MAT_DIALOG_DATA) public data: ConfigDialogData,
               public dialogRef: MatDialogRef<BrowserScriptDialogComponent>,

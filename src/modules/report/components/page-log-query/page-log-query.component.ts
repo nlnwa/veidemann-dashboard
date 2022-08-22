@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {QueryComponent} from '../../../commons/components';
 import {PageLogQuery} from '../../services';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-page-log-query',
@@ -10,7 +10,7 @@ import {FormBuilder} from '@angular/forms';
 })
 export class PageLogQueryComponent extends QueryComponent<PageLogQuery> {
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     super(fb);
   }
 

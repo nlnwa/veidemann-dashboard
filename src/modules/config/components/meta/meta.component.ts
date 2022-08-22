@@ -4,8 +4,8 @@ import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -29,7 +29,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor, Validator {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   // ControlValueAccessor callbacks
   onChange: (meta: Meta) => void;
@@ -37,7 +37,7 @@ export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlV
 
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected datePipe: DatePipe) {
   }
 

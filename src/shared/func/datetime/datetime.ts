@@ -44,7 +44,7 @@ export function fromTimestampProto(proto: any): string {
   }
 }
 
-/* tslint:disable:no-bitwise */
+/* eslint-disable no-bitwise */
 export function toTimestampProto(timestamp: string): any {
   if (timestamp) {
     const date = new Date(timestamp);
@@ -64,14 +64,17 @@ export function durationBetweenDates(startTime: string, endTime: string): string
   }
   const start = moment(startTime);
   const end = moment(endTime);
+  // @ts-ignore
   return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
 }
 
 export function timeToDuration(time: number, unit: string) {
   if (unit === 'ms') {
+    // @ts-ignore
     return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]', {trim: 'both'});
   }
   if (unit === 's') {
+    // @ts-ignore
      return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
   }
 

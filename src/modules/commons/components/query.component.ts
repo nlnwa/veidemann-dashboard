@@ -8,15 +8,15 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {isValidDate} from '../../../shared/func';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnDestroy {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   private subscription: Subscription;
 
@@ -26,7 +26,7 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
   @Output()
   queryChange: EventEmitter<Partial<T>>;
 
-  protected constructor(protected fb: FormBuilder) {
+  protected constructor(protected fb: UntypedFormBuilder) {
     this.subscription = Subscription.EMPTY;
     this.queryChange = new EventEmitter<Partial<T>>();
     this.createForm();

@@ -1,7 +1,7 @@
 import {ScheduleDialogComponent} from './schedule-dialog.component';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {createComponentFactory, Spectator} from '@ngneat/spectator';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {CommonsModule} from '../../../../commons';
@@ -25,7 +25,7 @@ describe('ScheduleDialogComponent', () => {
       component: ScheduleDialogComponent,
       declarations: [MetaComponent, LabelComponent, AnnotationComponent],
       imports: [AbilityModule, CoreTestingModule.forRoot(), MatDialogModule, CommonsModule],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {
           provide: LabelService,
           useValue: {

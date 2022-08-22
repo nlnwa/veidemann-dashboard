@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../../../../../shared/validation';
 import {ConfigObject, Kind, Meta, Role, RoleMapping} from '../../../../../shared/models';
 
@@ -28,11 +28,11 @@ export class RoleMappingDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   selectedType = '';
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     this.createForm();
   }
 

@@ -1,4 +1,4 @@
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import * as ipaddress from 'ip-address';
 
 export class CrawlHostGroupConfigIpValidation {
@@ -33,7 +33,7 @@ export class CrawlHostGroupConfigIpValidation {
    * Custom validator
    */
 
-  static ipAddressValidator(control: FormControl) {
+  static ipAddressValidator(control: UntypedFormControl) {
     const ip = control.value;
     if (!CrawlHostGroupConfigIpValidation.isValidIp(ip)) {
       return {ipAddressValidator: true};

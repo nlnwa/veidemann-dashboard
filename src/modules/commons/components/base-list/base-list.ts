@@ -23,7 +23,7 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;
   length$: BehaviorSubject<number>;
@@ -54,7 +54,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   @Input()
   multiSelect = true;
 
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _dataSource: DataSource<T>;
 
   @Input()

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, Kind, Label, Meta, PolitenessConfig, RobotsPolicy} from '../../../../../shared/models';
@@ -31,10 +31,10 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }

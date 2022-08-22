@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CrawlLogQuery} from '../../services';
 import {QueryComponent} from '../../../commons/components';
 
@@ -10,7 +10,7 @@ import {QueryComponent} from '../../../commons/components';
 })
 export class CrawlLogQueryComponent extends QueryComponent<CrawlLogQuery> {
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     super(fb);
   }
 

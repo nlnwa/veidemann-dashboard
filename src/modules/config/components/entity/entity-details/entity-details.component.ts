@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, Kind, Meta} from '../../../../../shared/models';
 
@@ -27,9 +27,9 @@ export class EntityDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }

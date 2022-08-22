@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService, SnackBarService} from '../../../core/services';
 import {Level, LogLevel, LogLevels} from '../../../../shared/models';
 import {takeUntil} from 'rxjs/operators';
@@ -18,14 +18,14 @@ export class LoglevelComponent implements OnInit, OnDestroy {
   readonly Level = Level;
   readonly levelOptions: Level[];
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   logLevels: LogLevels = new LogLevels();
   addOrRemoved = false;
 
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(private logService: LogService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private snackBarService: SnackBarService,
               private authService: AuthService,
               private cdr: ChangeDetectorRef,
@@ -46,8 +46,8 @@ export class LoglevelComponent implements OnInit, OnDestroy {
     return this.authService.canUpdate('logconfig');
   }
 
-  get logLevelList(): FormArray {
-    return this.form.get('logLevelList') as FormArray;
+  get logLevelList(): UntypedFormArray {
+    return this.form.get('logLevelList') as UntypedFormArray;
   }
 
   ngOnInit() {
@@ -108,7 +108,7 @@ export class LoglevelComponent implements OnInit, OnDestroy {
     return new LogLevels(this.form.value);
   }
 
-  private createLogLevel(logLevel: LogLevel = new LogLevel({level: Level.INFO})): FormGroup {
+  private createLogLevel(logLevel: LogLevel = new LogLevel({level: Level.INFO})): UntypedFormGroup {
     return this.fb.group({
       logger: [logLevel.logger, [Validators.required, Validators.minLength(1)]],
       level: [logLevel.level, [Validators.required, Validators.minLength(1)]]

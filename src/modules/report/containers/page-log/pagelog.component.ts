@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {combineLatest, Observable, of} from 'rxjs';
 import {ListDataSource, ListItem} from '../../../../shared/models/list-datasource';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -38,7 +38,7 @@ export class PageLogComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private pageLogService: PageLogService,
               private errorService: ErrorService) {
   }

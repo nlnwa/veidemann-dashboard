@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject} from '../../../../../shared/models';
 import {SeedDetailsComponent} from '..';
@@ -14,7 +14,7 @@ import {ConfigDialogData} from '../../../func';
 export class SeedDialogComponent extends SeedDetailsComponent implements OnInit {
   crawlJobs: ConfigObject[];
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService,
               @Inject(MAT_DIALOG_DATA) private data: ConfigDialogData,
               public dialogRef: MatDialogRef<SeedDialogComponent>) {

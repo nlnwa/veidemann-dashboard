@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {BrowserConfigDetailsComponent} from '..';
-import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
@@ -26,7 +26,7 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
 
   @ViewChild(LabelMultiComponent) labelMulti: LabelMultiComponent;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService,
               @Inject(MAT_DIALOG_DATA) public data: ConfigDialogData,
               public dialogRef: MatDialogRef<BrowserConfigMultiDialogComponent>) {

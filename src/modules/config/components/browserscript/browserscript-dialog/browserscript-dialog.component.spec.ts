@@ -15,8 +15,8 @@ import {AnnotationComponent} from '../../annotation/annotation.component';
 import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
-import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
-
+import {MonacoEditorComponent} from '@materia-ui/ngx-monaco-editor';
+import {MockComponent} from 'ng-mocks';
 
 describe('BrowserScriptDialogComponent', () => {
   let component: BrowserScriptDialogComponent;
@@ -33,7 +33,6 @@ describe('BrowserScriptDialogComponent', () => {
         AbilityModule,
         CoreTestingModule.forRoot(),
         CommonsModule,
-        MonacoEditorModule,
         NoopAnimationsModule
       ],
       providers: [
@@ -58,7 +57,7 @@ describe('BrowserScriptDialogComponent', () => {
           useValue: {}
         }
       ],
-      declarations: [BrowserScriptDialogComponent, MetaComponent, BrowserScriptDirective, LabelComponent, AnnotationComponent]
+      declarations: [BrowserScriptDialogComponent, MetaComponent, BrowserScriptDirective, LabelComponent, AnnotationComponent, MockComponent(MonacoEditorComponent)]
     })
       .compileComponents();
   }));

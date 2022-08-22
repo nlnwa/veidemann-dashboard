@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {AbstractControl, ControlValueAccessor, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../../../../shared/validation/patterns';
@@ -25,13 +25,13 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
 
   private fetchLabelKeys: Subject<void>;
 
-  control = new FormControl();
+  control = new UntypedFormControl();
 
   // ControlValueAccessor callback functions
   onChange: (labels: Label[]) => void;
   onTouched: (labels: Label[]) => void;
 
-  labelForm: FormGroup;
+  labelForm: UntypedFormGroup;
   labelInputSeparators = [ENTER, COMMA];
 
   disabled = false;
@@ -52,7 +52,7 @@ export class LabelComponent implements ControlValueAccessor, OnInit {
 
   @ViewChild('chipInput', {static: true}) chipInputControl: ElementRef;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected cdr: ChangeDetectorRef,
               protected labelService: LabelService) {
     this.createForm();

@@ -7,7 +7,7 @@ import {
   OnChanges,
   ViewChild
 } from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 
 import {Kind} from '../../../../shared/models';
 import {ConfigQuery} from '../../../../shared/func';
@@ -33,7 +33,7 @@ export class ConfigQueryComponent extends QueryComponent<ConfigQuery> implements
 
   @ViewChild('search') searchElement: ElementRef;
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     super(fb);
   }
 

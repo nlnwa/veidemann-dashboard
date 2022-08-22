@@ -2,8 +2,8 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Input, On
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -54,13 +54,13 @@ const incrementBases = {
 export class FilesizeInputComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
 
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     this.createForm();
   }
 
   @Input() placeholder: string;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   // ControlValueAccessor callbacks

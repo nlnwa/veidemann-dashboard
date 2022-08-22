@@ -24,7 +24,8 @@ import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
+import {MonacoEditorComponent, MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
+import {MockComponent} from 'ng-mocks';
 
 
 const exampleBrowserScript: ConfigObject = {
@@ -70,7 +71,6 @@ describe('BrowserScriptDetailsComponent', () => {
         RouterTestingModule,
         CommonsModule,
         NoopAnimationsModule,
-        MonacoEditorModule,
         CoreTestingModule.forRoot()
       ],
       declarations: [
@@ -79,6 +79,7 @@ describe('BrowserScriptDetailsComponent', () => {
         MetaComponent,
         LabelComponent,
         AnnotationComponent,
+        MockComponent(MonacoEditorComponent)
       ],
       providers: [
         {

@@ -12,7 +12,7 @@ import {DatePipe} from '@angular/common';
 import {
   AbstractControl,
   AsyncValidator,
-  FormBuilder,
+  UntypedFormBuilder,
   NG_ASYNC_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -51,7 +51,7 @@ export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
 
   private asyncUrlValidator: (entityRef: ConfigRef) => (control: AbstractControl) => Observable<ValidationErrors | null>;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef,
               private configApiService: ConfigApiService) {

@@ -51,7 +51,7 @@ export interface ConfigOptions {
 export class ConfigurationComponent implements OnDestroy {
   readonly Kind = Kind;
 
-  private ngUnsubscribe = new Subject();
+  private ngUnsubscribe = new Subject<void>();
 
   private configObject: Subject<ConfigObject>;
   configObject$: Observable<ConfigObject>;

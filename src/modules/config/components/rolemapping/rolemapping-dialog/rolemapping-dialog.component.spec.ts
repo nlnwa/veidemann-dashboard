@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {RoleMappingDialogComponent} from './rolemapping-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
@@ -24,7 +24,7 @@ describe('RoleMappingDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
       declarations: [ RoleMappingDialogComponent, MatError ],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
         {provide: MatDialogRef, useValue: {}}
       ]

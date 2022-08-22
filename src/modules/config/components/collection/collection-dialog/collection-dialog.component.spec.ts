@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CollectionDialogComponent } from './collection-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
@@ -33,7 +33,7 @@ describe('CollectionDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, CoreTestingModule.forRoot(), MatDialogModule, MatIconModule, NoopAnimationsModule, AbilityModule],
       declarations: [ CollectionDialogComponent, CollectionMetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {
           provide: LabelService,
           useValue: {

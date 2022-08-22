@@ -12,7 +12,7 @@
     </mat-card-header>
 
 
-    <mat-card-content fxLayout="column" fxLayoutGap="24px">
+    <mat-card-content fxLayout="row" fxLayoutGap="24px">
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="!showSave">
@@ -75,6 +75,7 @@
           </mat-card>
         </form>
           <ngx-monaco-editor class="editor"
+                             fxFlex
                              formControlName="script"
                              [options]="editorOptions"
                              (init)="initEditor($event)">

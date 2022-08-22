@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {BrowserConfigDialogComponent} from './browserconfig-dialog.component';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {UntypedFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {AnnotationComponent, DurationPickerComponent, LabelComponent, MetaComponent, SelectorComponent} from '../..';
@@ -35,7 +35,7 @@ describe('BrowserConfigDialogComponent', () => {
         CommonsModule,
         NoopAnimationsModule,
         MatDialogModule, ReactiveFormsModule],
-      providers: [FormBuilder, DatePipe,
+      providers: [UntypedFormBuilder, DatePipe,
         {
           provide: LabelService,
           useValue: {

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {UntypedFormBuilder, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Label} from '../../../../shared/models';
 import {LabelService} from '../../services/label.service';
 import {LabelComponent} from '../label/label.component';
@@ -14,7 +14,7 @@ import {LabelComponent} from '../label/label.component';
 })
 export class SelectorComponent extends LabelComponent implements OnInit {
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected cdr: ChangeDetectorRef,
               protected labelService: LabelService) {
     super(fb, cdr, labelService);

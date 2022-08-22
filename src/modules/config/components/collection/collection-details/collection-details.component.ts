@@ -8,7 +8,7 @@ import {
   SubCollection,
   SubCollectionType
 } from '../../../../../shared/models';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {VALID_COLLECTION_NAME} from '../../../../../shared/validation/patterns';
 
@@ -21,7 +21,7 @@ import {VALID_COLLECTION_NAME} from '../../../../../shared/validation/patterns';
 })
 export class CollectionDetailsComponent implements OnChanges {
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }
@@ -54,8 +54,8 @@ export class CollectionDetailsComponent implements OnChanges {
     return this.form.get('fileSize');
   }
 
-  get subCollectionControlArray(): FormArray {
-    return this.form.get('subCollectionsList') as FormArray;
+  get subCollectionControlArray(): UntypedFormArray {
+    return this.form.get('subCollectionsList') as UntypedFormArray;
   }
 
   get validFileSize(): boolean {
@@ -87,7 +87,7 @@ export class CollectionDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.configObject) {
@@ -141,9 +141,9 @@ export class CollectionDetailsComponent implements OnChanges {
   }
 
   protected updateForm(): void {
-    const subCollectionsFG: FormGroup[] = this.configObject.collection.subCollectionsList
+    const subCollectionsFG: UntypedFormGroup[] = this.configObject.collection.subCollectionsList
       .map(subCollectionsList => this.fb.group(subCollectionsList));
-    const subCollectionsFGArray: FormArray = this.fb.array(subCollectionsFG);
+    const subCollectionsFGArray: UntypedFormArray = this.fb.array(subCollectionsFG);
 
     this.form.patchValue({
       id: this.configObject.id,
