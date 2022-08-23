@@ -6,7 +6,7 @@ import {JobExecutionState, JobExecutionStatus, Kind} from 'src/shared/models';
   templateUrl: './job-execution-shortcuts.component.html',
   styleUrls: ['./job-execution-shortcuts.component.css']
 })
-export class JobExecutionShortcutsComponent implements OnInit {
+export class JobExecutionShortcutsComponent {
   readonly Kind = Kind;
   readonly JobExecutionState = JobExecutionState;
 
@@ -16,9 +16,6 @@ export class JobExecutionShortcutsComponent implements OnInit {
   abortJobExecution = new EventEmitter<JobExecutionStatus>();
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   onAbortJobExecution(jobExecutionStatus: JobExecutionStatus) {

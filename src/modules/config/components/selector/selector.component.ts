@@ -20,6 +20,7 @@ export class SelectorComponent extends LabelComponent implements OnInit {
     super(fb, cdr, labelService);
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     // prevent fetching label by not calling super();
   }

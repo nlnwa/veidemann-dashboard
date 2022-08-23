@@ -7,7 +7,7 @@ import {Observable, Subject} from 'rxjs';
   templateUrl: './crawl-execution-shortcuts.component.html',
   styleUrls: ['./crawl-execution-shortcuts.component.css']
 })
-export class CrawlExecutionShortcutsComponent implements OnInit {
+export class CrawlExecutionShortcutsComponent {
   readonly Kind = Kind;
 
   private reload$: Observable<void>;
@@ -22,9 +22,6 @@ export class CrawlExecutionShortcutsComponent implements OnInit {
   constructor() {
     this.reload = new Subject<void>();
     this.reload$ = this.reload.asObservable();
-  }
-
-  ngOnInit(): void {
   }
 
   onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus){

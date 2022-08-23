@@ -93,7 +93,7 @@
           class="item-row"
           id="{{'row' + i}}"
           (click)="onRowClick(row)"
-          [class.highlight]="selectedRowIndex == i"
+          [class.highlight]="selectedRowIndex === i"
           [class.row-checked]="isChecked(row)"
           [class.row-selected]="isSelected(row)"
           [class.row-disabled]="isDisabled(row)">

@@ -6,17 +6,13 @@ import {ConfigObject, RotationPolicy, SubCollectionType} from '../../../../../sh
   templateUrl: './collection-preview.component.html',
   styleUrls: ['./collection-preview.component.css']
 })
-export class CollectionPreviewComponent implements OnInit {
-readonly RotationPolicy = RotationPolicy;
-readonly SubCollectionType = SubCollectionType;
+export class CollectionPreviewComponent {
+  readonly RotationPolicy = RotationPolicy;
+  readonly SubCollectionType = SubCollectionType;
 
-@Input()
-configObject: ConfigObject;
+  @Input()
+  configObject: ConfigObject;
 
-
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
   }
-
 }

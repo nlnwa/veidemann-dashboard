@@ -5,7 +5,7 @@ import {ConfigObject, Kind} from '../../../../../shared/models/config';
   selector: 'app-action-shortcut',
   templateUrl: './action-shortcut.component.html',
 })
-export class ActionShortcutComponent implements OnInit {
+export class ActionShortcutComponent {
   readonly Kind = Kind;
 
   @Input()
@@ -22,9 +22,6 @@ export class ActionShortcutComponent implements OnInit {
 
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   onClone() {

@@ -30,7 +30,7 @@
           <mat-checkbox #masterCheckbox (change)="onMasterCheckboxToggle(masterCheckbox.checked)"
                         class="checkbox-padding"
                         [checked]="isAllInPageSelected$ | async"
-                        [indeterminate]="selection.hasValue() && !(isAllInPageSelected$ | async)">
+                        [indeterminate]="selection.hasValue() && (isAllInPageSelected$ | async) === false">
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row" class="checkbox-padding">

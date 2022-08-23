@@ -37,7 +37,7 @@
                         *ngIf="multiSelect"
                         (change)="onMasterCheckboxToggle(masterCheckbox.checked)"
                         [checked]="isAllInPageSelected$ | async"
-                        [indeterminate]="selection.hasValue() && !(isAllInPageSelected$ | async)">
+                        [indeterminate]="selection.hasValue() && (isAllInPageSelected$ | async) === false">
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row" class="checkbox-padding">
@@ -120,7 +120,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
           class="item-row"
           id="{{'row' + i}}"
-          [class.highlight]="selectedRowIndex == i"
+          [class.highlight]="selectedRowIndex === i"
           (click)="onRowClick(row)"
           [class.row-checked]="isChecked(row)"
           [class.row-selected]="isSelected(row)"

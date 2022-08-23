@@ -135,7 +135,7 @@
           [class.row-selected]="isSelected(row)"
           [class.row-checked]="isChecked(row)"
           [class.row-disabled]="isDisabled(row)"
-          [class.highlight]="selectedRowIndex == i || null"
+          [class.highlight]="selectedRowIndex === i || null"
           (click)="onRowClick(row)"></tr>
       <tr mat-row *matRowDef="let row; columns: ['expandedPreview']" class="preview-row"></tr>
     </table>

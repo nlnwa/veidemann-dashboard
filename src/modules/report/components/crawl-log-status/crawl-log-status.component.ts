@@ -8,7 +8,7 @@ import {CrawlLog} from '../../../../shared/models/log';
   styleUrls: ['./crawl-log-status.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CrawlLogStatusComponent implements OnInit {
+export class CrawlLogStatusComponent {
   readonly ExtraStatusCodes = ExtraStatusCodes;
 
   @Input()
@@ -16,8 +16,4 @@ export class CrawlLogStatusComponent implements OnInit {
 
   constructor() {
   }
-
-  ngOnInit(): void {
-  }
-
 }
