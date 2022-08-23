@@ -15,8 +15,8 @@ export class SubCollection {
   name: string;
 
   constructor({
-    type = SubCollectionType.UNDEFINED,
-    name = ''
+                type = SubCollectionType.UNDEFINED,
+                name = ''
               }: Partial<SubCollection> = {}) {
     this.type = type;
     this.name = name;

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ShortcutListComponent } from './shortcut-list.component';
+import {ShortcutListComponent} from './shortcut-list.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
@@ -16,15 +16,17 @@ describe('ShortcutListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShortcutListComponent, EntityNamePipe ],
+      declarations: [ShortcutListComponent, EntityNamePipe],
       imports: [AbilityModule, CoreTestingModule.forRoot(), RouterTestingModule, CommonsModule],
       providers: [
-        {provide: ConfigService, useValue: {
-          get: () => of(null)
-          }}
+        {
+          provide: ConfigService, useValue: {
+            get: () => of(null)
+          }
+        }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

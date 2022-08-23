@@ -85,13 +85,13 @@
             </mat-form-field>
             <input type="hidden" formControlName="kind">
           </ng-container>
-            <ng-container *ngIf="this.configObject.id | getScriptAnnotations | async as scriptAnnotations">
-              <mat-label *ngIf="scriptAnnotations.length > 0">Script annotations</mat-label>
-              <ng-container>
-                <app-script-annotation
-                  [annotations]="scriptAnnotations"></app-script-annotation>
-              </ng-container>
+          <ng-container *ngIf="this.configObject.id | getScriptAnnotations | async as scriptAnnotations">
+            <mat-label *ngIf="scriptAnnotations.length > 0">Script annotations</mat-label>
+            <ng-container>
+              <app-script-annotation
+                [annotations]="scriptAnnotations"></app-script-annotation>
             </ng-container>
+          </ng-container>
         </div>
       </div>
     </mat-card-content>

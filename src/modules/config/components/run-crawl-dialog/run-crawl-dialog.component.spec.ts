@@ -49,8 +49,7 @@ const exampleCrawljobToCrawl = {
     meta: new Meta({
       name: 'Example Crawljob'
     }),
-    crawlJob: new CrawlJob({
-    }),
+    crawlJob: new CrawlJob({}),
   }),
   crawlJobs: exampleCrawljobs,
 };

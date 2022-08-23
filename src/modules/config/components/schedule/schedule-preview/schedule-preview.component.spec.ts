@@ -11,10 +11,10 @@ describe('SchedulePreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [ SchedulePreviewComponent , MatLabel],
+      declarations: [SchedulePreviewComponent, MatLabel],
       providers: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,13 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from '@angular/forms';
 import {Annotation, Label} from '../../../../shared/models/config';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {map, startWith} from 'rxjs/operators';
@@ -19,13 +27,13 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
 
   @Input() removable = true;
 
-  control = new FormControl();
+  control = new UntypedFormControl();
 
   // ControlValueAccessor callback functions
   onChange: (annotations: Annotation[]) => void;
   onTouched: (annotations: Annotation[]) => void;
 
-  annotationForm: FormGroup;
+  annotationForm: UntypedFormGroup;
   annotationInputSeparators = [ENTER, COMMA];
 
   disabled = false;
@@ -39,8 +47,8 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
 
   @ViewChild('chipInput') chipInputControl: ElementRef;
 
-  constructor(protected fb: FormBuilder,
-              protected  cdr: ChangeDetectorRef,
+  constructor(protected fb: UntypedFormBuilder,
+              protected cdr: ChangeDetectorRef,
               protected authService: AuthService) {
     this.createForm();
   }
@@ -187,7 +195,7 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
       value: ['', Validators.required]
     });
     this.annotationForm.disable();
-    if (!this.canEdit){
+    if (!this.canEdit) {
       this.setDisabledState(true);
     }
 

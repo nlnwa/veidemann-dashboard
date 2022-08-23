@@ -1,5 +1,5 @@
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
-import { CrawlerStatusDialogComponent } from './crawlerstatus-dialog.component';
+import {CrawlerStatusDialogComponent} from './crawlerstatus-dialog.component';
 import {createComponentFactory, Spectator} from '@ngneat/spectator';
 
 describe('CrawlerStatusDialogComponent', () => {
@@ -9,7 +9,7 @@ describe('CrawlerStatusDialogComponent', () => {
     {
       component: CrawlerStatusDialogComponent,
       imports: [MatDialogModule],
-      providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }]
+      providers: [{provide: MAT_DIALOG_DATA, useValue: {}}]
     });
 
   beforeEach(() => spectator = createComponent());

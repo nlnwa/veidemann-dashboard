@@ -18,21 +18,22 @@
     <mat-card *ngIf="jobExecutionStatus.error as error">
       <h2>Error</h2>
       <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>
-             <h4 class="monospace">{{error.msg}}</h4>
-             <p class="monospace">{{error.detail}}</p>
+      <h4 class="monospace">{{error.msg}}</h4>
+      <p class="monospace">{{error.detail}}</p>
     </mat-card>
   </div>
   <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
     <mat-card style="max-width: 50%; min-width: 45%">
       <mat-card-title>State overview</mat-card-title>
       <mat-card-content>
-        <div echarts  [options]="executionStatesChartOptions"  (chartClick)="onGoToExecutionWithState($event)" style="height: 400px"></div>
+        <div echarts [options]="executionStatesChartOptions" (chartClick)="onGoToExecutionWithState($event)"
+             style="height: 400px"></div>
       </mat-card-content>
     </mat-card>
     <mat-card style="max-width: 50%; min-width: 45%">
       <mat-card-title>Documents</mat-card-title>
       <mat-card-content>
-        <div echarts  [options]="documentsChartOptions" style="height: 400px"></div>
+        <div echarts [options]="documentsChartOptions" style="height: 400px"></div>
       </mat-card-content>
     </mat-card>
   </div>

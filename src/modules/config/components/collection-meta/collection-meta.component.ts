@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit} from '@angular/core';
 import {MetaComponent} from '../meta/meta.component';
 import {DatePipe} from '@angular/common';
-import {FormBuilder, Validators, NG_VALUE_ACCESSOR, AbstractControl, ValidationErrors} from '@angular/forms';
+import {UntypedFormBuilder, Validators, NG_VALUE_ACCESSOR, AbstractControl, ValidationErrors} from '@angular/forms';
 import {Meta} from '../../../../shared/models';
 import {VALID_COLLECTION_NAME} from '../../../../shared/validation/patterns';
 import {Observable, of} from 'rxjs';
@@ -18,7 +18,7 @@ import {first, map, tap} from 'rxjs/operators';
 })
 export class CollectionMetaComponent extends MetaComponent {
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected datePipe: DatePipe,
               private cdr: ChangeDetectorRef) {
     super(fb, datePipe);

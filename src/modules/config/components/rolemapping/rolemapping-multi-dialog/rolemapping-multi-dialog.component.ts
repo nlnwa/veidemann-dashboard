@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {RoleMappingDetailsComponent} from '..';
-import {FormBuilder, Validators} from '@angular/forms';
+import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {CustomValidators} from '../../../../../shared/validation';
@@ -15,7 +15,7 @@ export class RoleMappingMultiDialogComponent extends RoleMappingDetailsComponent
 
   allSelected = false;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: ConfigDialogData,
               public dialogRef: MatDialogRef<RoleMappingMultiDialogComponent>) {
     super(fb);

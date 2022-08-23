@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CrawlExecutionStatusQuery} from '../../services';
 import {QueryComponent} from '../../../commons/components';
 import {ConfigObject} from '../../../../shared/models/config';
@@ -18,7 +18,7 @@ export class CrawlExecutionStatusQueryComponent extends QueryComponent<CrawlExec
   @Input()
   crawlJobOptions: ConfigObject[];
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     super(fb);
   }
 

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { BrowserscriptPreviewComponent } from './browserscript-preview.component';
+import {BrowserscriptPreviewComponent} from './browserscript-preview.component';
 import {CommonsModule} from '../../../../commons';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 
@@ -11,10 +11,10 @@ describe('BrowserscriptPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule],
-      declarations: [ BrowserscriptPreviewComponent ],
+      declarations: [BrowserscriptPreviewComponent],
       providers: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

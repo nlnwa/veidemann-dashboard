@@ -16,9 +16,9 @@ export class CrawlerStatusComponent {
   crawlerStatus: CrawlerStatus;
 
   @Output()
-  change: EventEmitter<boolean> = new EventEmitter<boolean>();
+  changeRunStatus: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   onPauseCrawler(shouldPause: boolean) {
-    this.change.emit(shouldPause);
+    this.changeRunStatus.emit(shouldPause);
   }
 }

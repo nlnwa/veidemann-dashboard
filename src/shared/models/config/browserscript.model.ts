@@ -3,12 +3,12 @@ import {ConfigObject} from './configobject.model';
 import {isNumeric} from '../../func';
 
 export enum BrowserScriptType {
-  UNDEFINED= 0,
+  UNDEFINED = 0,
   EXTRACT_OUTLINKS = 1,
   REPLACEMENT = 2,
   ON_LOAD = 3,
   ON_NEW_DOCUMENT = 4,
-  SCOPE_CHECK= 5,
+  SCOPE_CHECK = 5,
 }
 
 export const browserScriptTypes = Object.keys(BrowserScriptType).filter(p => !isNumeric(p)).map(key => BrowserScriptType[key]);
@@ -41,7 +41,7 @@ export class BrowserScript {
     const compareObj: BrowserScript = configObjects[0].browserScript;
 
     const equalBrowserScriptType = configObjects.every(
-      (cfg: ConfigObject) => cfg.browserScript.browserScriptType === compareObj.browserScriptType)
+      (cfg: ConfigObject) => cfg.browserScript.browserScriptType === compareObj.browserScriptType);
     const equalScript = configObjects.every((cfg: ConfigObject) => cfg.browserScript.script === compareObj.script);
 
     if (equalScript) {

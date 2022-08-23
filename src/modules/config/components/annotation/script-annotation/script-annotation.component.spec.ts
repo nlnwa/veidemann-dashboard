@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services/auth';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
@@ -13,7 +13,7 @@ describe('ScriptAnnotationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), AbilityModule],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {
           provide: AuthService,
           useValue: {
@@ -21,10 +21,10 @@ describe('ScriptAnnotationComponent', () => {
             canUpdate: () => true,
           }
         }
-          ],
-      declarations: [ ScriptAnnotationComponent ]
+      ],
+      declarations: [ScriptAnnotationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

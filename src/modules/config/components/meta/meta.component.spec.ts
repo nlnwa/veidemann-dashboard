@@ -64,7 +64,7 @@ describe('MetaComponent', () => {
     expect(name.status === 'VALID').toBeTruthy();
   });
 
-  it ('form is not valid if required fields are missing', () => {
+  it('form is not valid if required fields are missing', () => {
     const name = component.form.controls.name;
     name.markAsTouched();
     fixture.detectChanges();

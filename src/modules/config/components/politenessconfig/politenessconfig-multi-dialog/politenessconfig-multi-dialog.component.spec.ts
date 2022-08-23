@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {PolitenessConfigMultiDialogComponent} from './politenessconfig-multi-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
@@ -29,7 +29,7 @@ describe('PolitenessConfigMultiDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
       declarations: [PolitenessConfigMultiDialogComponent, DurationPickerComponent, MatLabel, LabelMultiComponent],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {provide: LabelService, useValue: {}},
         {provide: AuthService, useValue: {canUpdate: () => true}},
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},

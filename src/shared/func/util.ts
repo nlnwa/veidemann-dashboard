@@ -2,8 +2,7 @@ export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-export
-// this is a direct translation to code of the spec
+export // this is a direct translation to code of the spec
 // @see https://github.com/benjamingr/RegExp.escape
 function escapeRegex(S) {
   // 1. let str be ToString(S).

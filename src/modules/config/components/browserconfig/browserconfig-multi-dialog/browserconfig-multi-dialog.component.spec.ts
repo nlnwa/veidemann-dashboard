@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserConfigMultiDialogComponent } from './browserconfig-multi-dialog.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {BrowserConfigMultiDialogComponent} from './browserconfig-multi-dialog.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {DurationPickerComponent} from '../..';
@@ -26,7 +26,7 @@ describe('BrowserConfigMultiDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, NoopAnimationsModule],
-      declarations: [ BrowserConfigMultiDialogComponent, DurationPickerComponent, LabelMultiComponent],
+      declarations: [BrowserConfigMultiDialogComponent, DurationPickerComponent, LabelMultiComponent],
       providers: [
         {provide: LabelService, useValue: {}},
         {
@@ -36,7 +36,7 @@ describe('BrowserConfigMultiDialogComponent', () => {
             canUpdate: () => true,
           }
         },
-        { provide: MAT_DIALOG_DATA, useValue: MY_CONF},
+        {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
         {
           provide: MatDialogRef,
           useValue: {
@@ -45,7 +45,7 @@ describe('BrowserConfigMultiDialogComponent', () => {
           }
         }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

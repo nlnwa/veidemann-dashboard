@@ -2,8 +2,8 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, forward
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
-  FormGroup, NG_VALIDATORS,
+  UntypedFormBuilder,
+  UntypedFormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validators
@@ -42,7 +42,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   readonly UnitOfTime = UnitOfTime;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   // ControlValueAccessor callbacks
@@ -56,7 +56,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   showDays = false;
 
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     this.createForm();
   }
 
@@ -181,7 +181,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   durationToSeconds(duration: Duration): number {
     const seconds = (
-      duration.days * (24 * 3600)) +
+        duration.days * (24 * 3600)) +
       (duration.hours * 3600) +
       (duration.minutes * 60) +
       duration.seconds;

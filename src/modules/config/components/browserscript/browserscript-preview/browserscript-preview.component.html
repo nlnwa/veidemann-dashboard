@@ -1,10 +1,10 @@
 <p><strong>Script type:</strong> {{BrowserScriptType[configObject.browserScript.browserScriptType]}}</p>
-  <mat-label>{{configObject.meta.name}}</mat-label>
-  <!-- Important to keep whats inside pre on the following lines, on the same line -->
-  <pre appHighlight><code
-    class="line-numbers match-braces"
-    [class.language-py]="language === 'star'"
-    [class.language-js]="language === 'js'">{{ configObject.browserScript.script }}</code></pre>
+<mat-label>{{configObject.meta.name}}</mat-label>
+<!-- Important to keep whats inside pre on the following lines, on the same line -->
+<pre appHighlight><code
+  class="line-numbers match-braces"
+  [class.language-py]="language === 'star'"
+  [class.language-js]="language === 'js'">{{ configObject.browserScript.script }}</code></pre>
 <ng-container *ngIf="configObject.browserScript.urlRegexpList.length">
   <mat-label>URL regexp</mat-label>
   <mat-chip-list>

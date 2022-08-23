@@ -7,7 +7,7 @@ import {ConfigObject, RobotsPolicy} from '../../../../../shared/models/config';
   styleUrls: ['./politenessconfig-preview.component.css']
 })
 export class PolitenessconfigPreviewComponent {
-readonly RobotsPolicy = RobotsPolicy;
+  readonly RobotsPolicy = RobotsPolicy;
 
   @Input()
   configObject: ConfigObject;

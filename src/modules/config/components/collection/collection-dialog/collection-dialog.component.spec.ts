@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CollectionDialogComponent } from './collection-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {CollectionDialogComponent} from './collection-dialog.component';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
@@ -32,23 +32,25 @@ describe('CollectionDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, CoreTestingModule.forRoot(), MatDialogModule, MatIconModule, NoopAnimationsModule, AbilityModule],
-      declarations: [ CollectionDialogComponent, CollectionMetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
-      providers: [FormBuilder,
+      declarations: [CollectionDialogComponent, CollectionMetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
+      providers: [UntypedFormBuilder,
         {
           provide: LabelService,
           useValue: {
             getLabelKeys: () => of([])
           }
         },
-        {provide: AuthService, useValue: {
-          canEdit: () => true,
-          canUpdate: () => true
-          }},
+        {
+          provide: AuthService, useValue: {
+            canEdit: () => true,
+            canUpdate: () => true
+          }
+        },
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
         {provide: MatDialogRef, useValue: {}},
-        ]
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

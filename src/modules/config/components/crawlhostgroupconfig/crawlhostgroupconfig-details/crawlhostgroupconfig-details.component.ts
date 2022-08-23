@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {CrawlHostGroupConfigIpValidation} from './crawlhostgroupconfig-ipvalidation';
 import {ConfigObject, CrawlHostGroupConfig, Kind, Meta} from '../../../../../shared/models';
@@ -9,7 +9,7 @@ import {
   DECIMAL_NUMBER_OR_EMPTY_STRING,
   NUMBER_OR_EMPTY_STRING
 } from '../../../../../shared/validation/patterns';
-import { UnitOfTime } from 'src/shared/models/duration/unit-time.model';
+import {UnitOfTime} from 'src/shared/models/duration/unit-time.model';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',
@@ -32,9 +32,9 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   @Output()
   delete = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }
@@ -70,8 +70,8 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
     return this.form.get('meta').value.name;
   }
 
-  get ipRangeControlArray(): FormArray {
-    return this.form.get('ipRangeList') as FormArray;
+  get ipRangeControlArray(): UntypedFormArray {
+    return this.form.get('ipRangeList') as UntypedFormArray;
   }
 
   get minTimeBetweenPageloadMs(): AbstractControl {
@@ -157,10 +157,10 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   }
 
   protected updateForm() {
-    const ipRangeFG: FormGroup[] = this.configObject.crawlHostGroupConfig.ipRangeList
+    const ipRangeFG: UntypedFormGroup[] = this.configObject.crawlHostGroupConfig.ipRangeList
       .map(ipRangeList => this.fb.group(ipRangeList));
 
-    const ipRangeFGArray: FormArray = this.fb.array(ipRangeFG);
+    const ipRangeFGArray: UntypedFormArray = this.fb.array(ipRangeFG);
     if (this.form.disabled) {
       ipRangeFGArray.disable();
     }

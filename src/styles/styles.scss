@@ -22,7 +22,7 @@ html, body {
 }
 
 // floating action button
-.action-button.mat-fab{
+.action-button.mat-fab {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
@@ -56,6 +56,7 @@ html, body {
 .monospace {
   font-family: monospace;
 }
+
 .tooltip-overflow {
   word-wrap: break-word;
   white-space: unset;

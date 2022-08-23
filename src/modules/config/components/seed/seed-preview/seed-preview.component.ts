@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ConfigObject} from '../../../../../shared/models/config';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import { CrawlExecutionState } from 'src/shared/models';
+import {CrawlExecutionState} from 'src/shared/models';
 import {AuthService, SnackBarService} from '../../../../core/services';
 
 

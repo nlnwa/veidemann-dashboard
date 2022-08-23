@@ -6,14 +6,10 @@ import {PageLog} from '../../../../shared/models';
   templateUrl: './page-log-shortcuts.component.html',
   styleUrls: ['./page-log-shortcuts.component.css']
 })
-export class PageLogShortcutsComponent implements OnInit {
+export class PageLogShortcutsComponent {
 
   @Input() pageLog: PageLog;
 
   constructor() {
   }
-
-  ngOnInit(): void {
-  }
-
 }

@@ -3,7 +3,7 @@ import {JobExecutionStatusQuery} from '../../services';
 import {QueryComponent} from '../../../commons/components';
 import {JobExecutionState, jobExecutionStates} from '../../../../shared/models/report';
 import {ConfigObject} from '../../../../shared/models/config';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-job-execution-status-query',
@@ -18,7 +18,7 @@ export class JobExecutionStatusQueryComponent extends QueryComponent<JobExecutio
   @Input()
   crawlJobOptions: ConfigObject[];
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     super(fb);
   }
 

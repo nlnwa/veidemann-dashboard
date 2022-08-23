@@ -6,13 +6,10 @@ import {CrawlLog} from '../../../../shared/models';
   templateUrl: './crawl-log-shortcuts.component.html',
   styleUrls: ['./crawl-log-shortcuts.component.css']
 })
-export class CrawlLogShortcutsComponent implements OnInit {
+export class CrawlLogShortcutsComponent {
 
   @Input() crawlLog: CrawlLog;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
   }
-
 }

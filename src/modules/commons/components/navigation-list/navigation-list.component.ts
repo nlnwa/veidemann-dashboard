@@ -2,7 +2,7 @@ import {Directive} from '@angular/core';
 import {AuthService} from '../../../core/services/auth';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class NavigationListComponent {
 
   protected constructor(protected authService: AuthService) {

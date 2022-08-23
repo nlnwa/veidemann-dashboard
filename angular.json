@@ -39,7 +39,11 @@
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "node_modules/prismjs/plugins/match-braces/prism-match-braces.css",
-              "node_modules/nano-editor/src/style.css"
+              "node_modules/nano-editor/src/style.css",
+              "node_modules/nano-editor/lib/style.css",
+              "node_modules/@fullcalendar/common/main.css",
+              "node_modules/@fullcalendar/daygrid/main.css",
+              "node_modules/@fullcalendar/timegrid/main.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
@@ -119,7 +123,11 @@
               "src/styles/theme.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/nano-editor/src/style.css"
+              "node_modules/nano-editor/src/style.css",
+              "node_modules/nano-editor/lib/style.css",
+              "node_modules/@fullcalendar/common/main.css",
+              "node_modules/@fullcalendar/daygrid/main.css",
+              "node_modules/@fullcalendar/timegrid/main.css"
             ],
             "assets": [
               "src/assets",
@@ -130,13 +138,25 @@
               }
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "veidemann-dashboard",
   "cli": {
     "analytics": false,
-    "packageManager": "yarn"
+    "packageManager": "yarn",
+    "schematicCollections": [
+      "@angular-eslint/schematics",
+      "@angular-eslint/schematics"
+    ]
   }
 }

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { JobExecutionPreviewComponent } from './job-execution-preview.component';
+import {JobExecutionPreviewComponent} from './job-execution-preview.component';
 import {JobExecutionStatus} from '../../../../shared/models';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ActivatedRoute} from '@angular/router';
@@ -13,14 +13,14 @@ describe('JobExecutionPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ JobExecutionPreviewComponent ],
-      imports: [ CommonsModule, NgxEchartsModule, RouterTestingModule],
+      declarations: [JobExecutionPreviewComponent],
+      imports: [CommonsModule, NgxEchartsModule, RouterTestingModule],
       providers: [
         {provide: NGX_ECHARTS_CONFIG, useValue: {}},
         {provide: ActivatedRoute, useValue: {}}
-        ]
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

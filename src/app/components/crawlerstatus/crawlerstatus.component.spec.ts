@@ -15,7 +15,7 @@ describe('CrawlerStatusComponent', () => {
       imports: [CoreTestingModule.forRoot(), MatCardModule, AbilityModule],
       providers: []
     });
-  // tslint:disable-next-line:no-shadowed-variable
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   // const RunStatus = RunStatus;
   //
   // beforeEach(() => spectator = createComponent());

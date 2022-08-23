@@ -44,11 +44,6 @@ FullCalendarModule.registerPlugins([
     ScheduleEventDialogComponent,
     ScheduleOverviewComponent
   ],
-  entryComponents: [
-    ErrorDialogComponent,
-    CrawlerStatusDialogComponent,
-    ScheduleOverviewComponent,
-  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

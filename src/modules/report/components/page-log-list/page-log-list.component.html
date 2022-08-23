@@ -54,7 +54,7 @@
           [class.row-selected]="isSelected(row)"
           [class.row-checked]="isChecked(row)"
           [class.row-disabled]="isDisabled(row)"
-          [class.highlight]="selectedRowIndex == i"
+          [class.highlight]="selectedRowIndex === i"
           (click)="onRowClick(row)"></tr>
     </table>
   </div>

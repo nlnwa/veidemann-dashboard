@@ -6,15 +6,11 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
   templateUrl: './schedule-event-dialog.component.html',
   styleUrls: ['./schedule-event-dialog.component.css']
 })
-export class ScheduleEventDialogComponent implements OnInit {
+export class ScheduleEventDialogComponent {
 
   calendarEvent: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.calendarEvent = data;
   }
-
-  ngOnInit(): void {
-  }
-
 }

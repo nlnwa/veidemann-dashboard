@@ -5,7 +5,7 @@ import {ConfigOptions} from '../func';
 
 @Injectable()
 export class OptionsService {
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _options: BehaviorSubject<ConfigOptions>;
   options$: Observable<ConfigOptions>;
 

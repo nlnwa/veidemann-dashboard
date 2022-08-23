@@ -2,8 +2,8 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Input, On
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -54,13 +54,13 @@ const incrementBases = {
 export class FilesizeInputComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
 
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: UntypedFormBuilder) {
     this.createForm();
   }
 
   @Input() placeholder: string;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   // ControlValueAccessor callbacks
@@ -116,7 +116,9 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
   }
 
   bytesToHumanReadable(bytes: number, decimals = 2): string {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
 
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
@@ -148,7 +150,9 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
       this.fileSize.setErrors({invalidSize: {valid: false, size}});
     }
 
-    if (unit === '') return Math.round(Number(amount));
+    if (unit === '') {
+      return Math.round(Number(amount));
+    }
 
     for (const increment of incrementBases['2']) {
       if ((increment[0] as string[]).some(validUnit)) {

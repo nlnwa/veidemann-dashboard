@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {PolitenessConfigDialogComponent} from './politenessconfig-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
@@ -39,7 +39,7 @@ describe('PolitenessConfigDialogComponent', () => {
         LabelComponent,
         MetaComponent,
         AnnotationComponent],
-      providers: [FormBuilder,
+      providers: [UntypedFormBuilder,
         {
           provide: LabelService,
           useValue: {

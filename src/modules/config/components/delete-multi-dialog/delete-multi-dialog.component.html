@@ -21,7 +21,7 @@
   <button mat-raised-button
           color="warn"
           i18n="@@commonButtonDelete"
-          [disabled]="data.numberOfConfigs != numberOfConfigs"
-          [mat-dialog-close]="data.numberOfConfigs == numberOfConfigs">DELETE
+          [disabled]="data.numberOfConfigs !== numberOfConfigs"
+          [mat-dialog-close]="data.numberOfConfigs === numberOfConfigs">DELETE
   </button>
 </div>

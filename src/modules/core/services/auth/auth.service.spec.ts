@@ -10,7 +10,7 @@ describe('AuthService', () => {
       imports: [CoreTestingModule.forRoot(), AbilityModule],
       providers: [AuthService,
         {provide: OAuthService, useValue: {}}
-        ]
+      ]
     });
   });
 

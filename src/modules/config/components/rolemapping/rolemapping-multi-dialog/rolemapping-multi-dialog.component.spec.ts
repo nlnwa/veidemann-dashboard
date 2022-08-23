@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { RoleMappingMultiDialogComponent } from './rolemapping-multi-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {RoleMappingMultiDialogComponent} from './rolemapping-multi-dialog.component';
+import {UntypedFormBuilder} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -20,13 +20,13 @@ describe('RoleMappingMultiDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, NoopAnimationsModule],
-      declarations: [ RoleMappingMultiDialogComponent ],
-      providers: [FormBuilder,
+      declarations: [RoleMappingMultiDialogComponent],
+      providers: [UntypedFormBuilder,
         {provide: MatDialogRef, useValue: {}},
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF}
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

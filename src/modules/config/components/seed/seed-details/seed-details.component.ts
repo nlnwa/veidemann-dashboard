@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 
 
 import {AuthService} from '../../../../core/services/auth';
@@ -49,13 +49,13 @@ export class SeedDetailsComponent implements OnChanges, OnDestroy {
   @Output()
   runCrawl = new EventEmitter<ConfigObject>();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   ngUnsubscribe = new Subject<void>();
 
   entityIdReadonly = true;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }

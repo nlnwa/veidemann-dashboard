@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {LabelComponent} from './label.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';

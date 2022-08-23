@@ -1,4 +1,4 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import {TestBed, waitForAsync} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {MaterialModule} from '../../../modules/commons/material.module';
 import {DialogComponent, TimeComponent} from '../index';

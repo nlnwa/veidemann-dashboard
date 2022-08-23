@@ -7,7 +7,7 @@ import {Kind} from '../../../shared/models';
 @Injectable()
 export class LabelService {
 
-  // tslint:disable-next-line:variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _kind: Kind;
 
   constructor(private configService: ConfigApiService) {

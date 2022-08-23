@@ -10,7 +10,7 @@ describe('ReportApiService', () => {
       imports: [CoreTestingModule.forRoot(), AbilityModule],
       providers: [ReportApiService,
         {provide: HttpClient, useValue: {}}
-        ]
+      ]
     });
   });
 

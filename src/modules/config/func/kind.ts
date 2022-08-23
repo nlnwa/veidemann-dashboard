@@ -7,7 +7,9 @@ import {BrowserConfigDialogComponent} from '../components/browserconfig/browserc
 import {BrowserScriptDialogComponent} from '../components/browserscript/browserscript-dialog/browserscript-dialog.component';
 import {CollectionDialogComponent} from '../components/collection/collection-dialog/collection-dialog.component';
 import {CrawlConfigDialogComponent} from '../components/crawlconfig/crawlconfig-dialog/crawlconfig-dialog.component';
-import {CrawlHostGroupConfigDialogComponent} from '../components/crawlhostgroupconfig/crawlhostgroupconfig-dialog/crawlhostgroupconfig-dialog.component';
+import {
+  CrawlHostGroupConfigDialogComponent
+} from '../components/crawlhostgroupconfig/crawlhostgroupconfig-dialog/crawlhostgroupconfig-dialog.component';
 import {CrawlJobDialogComponent} from '../components/crawljobs/crawljob-dialog/crawljob-dialog.component';
 import {PolitenessConfigDialogComponent} from '../components/politenessconfig/politenessconfig-dialog/politenessconfig-dialog.component';
 import {RoleMappingDialogComponent} from '../components/rolemapping/rolemapping-dialog/rolemapping-dialog.component';
@@ -16,11 +18,19 @@ import {EntityMultiDialogComponent} from '../components/entity/entity-multi-dial
 import {SeedMultiDialogComponent} from '../components/seed/seed-multi-dialog/seed-multi-dialog.component';
 import {CrawlJobMultiDialogComponent} from '../components/crawljobs/crawljob-multi-dialog/crawljobs-multi-dialog.component';
 import {CrawlConfigMultiDialogComponent} from '../components/crawlconfig/crawlconfig-multi-dialog/crawlconfig-multi-dialog.component';
-import {BrowserScriptMultiDialogComponent} from '../components/browserscript/browserscript-multi-dialog/browserscript-multi-dialog.component';
-import {PolitenessConfigMultiDialogComponent} from '../components/politenessconfig/politenessconfig-multi-dialog/politenessconfig-multi-dialog.component';
-import {CrawlHostGroupConfigMultiDialogComponent} from '../components/crawlhostgroupconfig/crawlhostgroupconfig-multi-dialog/crawlhostgroupconfig-multi-dialog.component';
+import {
+  BrowserScriptMultiDialogComponent
+} from '../components/browserscript/browserscript-multi-dialog/browserscript-multi-dialog.component';
+import {
+  PolitenessConfigMultiDialogComponent
+} from '../components/politenessconfig/politenessconfig-multi-dialog/politenessconfig-multi-dialog.component';
+import {
+  CrawlHostGroupConfigMultiDialogComponent
+} from '../components/crawlhostgroupconfig/crawlhostgroupconfig-multi-dialog/crawlhostgroupconfig-multi-dialog.component';
 import {ScheduleMultiDialogComponent} from '../components/schedule/schedule-multi-dialog/schedule-multi-dialog.component';
-import {BrowserConfigMultiDialogComponent} from '../components/browserconfig/browserconfig-multi-dialog/browserconfig-multi-dialog.component';
+import {
+  BrowserConfigMultiDialogComponent
+} from '../components/browserconfig/browserconfig-multi-dialog/browserconfig-multi-dialog.component';
 import {RoleMappingMultiDialogComponent} from '../components/rolemapping/rolemapping-multi-dialog/rolemapping-multi-dialog.component';
 
 export interface ConfigDialogData {

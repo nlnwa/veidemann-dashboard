@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { BrowserconfigPreviewComponent } from './browserconfig-preview.component';
+import {BrowserconfigPreviewComponent} from './browserconfig-preview.component';
 import {CommonsModule} from '../../../../commons';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ShortcutListComponent} from '../../shortcut/shortcut-list/shortcut-list.component';
@@ -14,10 +14,10 @@ describe('BrowserconfigPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule, CoreTestingModule.forRoot(), AbilityModule],
-      declarations: [ BrowserconfigPreviewComponent, ShortcutListComponent ],
+      declarations: [BrowserconfigPreviewComponent, ShortcutListComponent],
       providers: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

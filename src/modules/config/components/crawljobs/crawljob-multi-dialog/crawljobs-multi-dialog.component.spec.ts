@@ -9,7 +9,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {FilesizeInputComponent} from '../../filesize-input/filesize-input.component';
 import {DurationPickerComponent} from '../../durationpicker/duration-picker';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {CommonsModule} from '../../../../commons';
 import {LabelService} from '../../../services';
 import {AuthService} from '../../../../core/services';
@@ -31,7 +31,7 @@ describe('CrawlJobMultiDialogComponent', () => {
         DurationPickerComponent,
         LabelMultiComponent],
       providers: [
-        FormBuilder,
+        UntypedFormBuilder,
         {provide: LabelService, useValue: {}},
         {provide: AuthService, useValue: {canUpdate: () => true}},
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},

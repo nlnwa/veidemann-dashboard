@@ -8,7 +8,8 @@
          (click)="onCreateSeed()"
          matTooltip="Create a new seed with reference to the entity"
          i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">
-        <mat-icon mat-list-icon>add_circle</mat-icon>Create Seed
+        <mat-icon mat-list-icon>add_circle</mat-icon>
+        Create Seed
       </a>
     </ng-container>
 
@@ -16,7 +17,8 @@
       <a mat-list-item
          *ngIf="'runCrawl' | able: Kind[Kind.SEED]"
          (click)="onRunCrawl()">
-        <mat-icon mat-list-icon>play_arrow</mat-icon>Crawl seed
+        <mat-icon mat-list-icon>play_arrow</mat-icon>
+        Crawl seed
       </a>
     </ng-container>
 
@@ -24,7 +26,8 @@
       <a mat-list-item
          *ngIf="'runCrawl' | able: Kind[Kind.CRAWLJOB]"
          (click)="onRunCrawl()">
-        <mat-icon mat-list-icon>play_arrow</mat-icon>Run crawljob
+        <mat-icon mat-list-icon>play_arrow</mat-icon>
+        Run crawljob
       </a>
     </ng-container>
 
@@ -32,6 +35,7 @@
   <a mat-list-item
      *ngIf="'create' | able: Kind[this.configObject.kind]"
      (click)="onClone()">
-    <mat-icon mat-list-icon>file_copy</mat-icon>Clone
+    <mat-icon mat-list-icon>file_copy</mat-icon>
+    Clone
   </a>
 </mat-nav-list>

@@ -1,11 +1,19 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validator} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+import {AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, BrowserScriptType, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {MonacoEditorConstructionOptions, MonacoEditorLoaderService, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
-import {filter, take} from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,10 +41,10 @@ export class BrowserScriptDetailsComponent implements OnChanges {
 
   private selectedRegexpIndex = -1;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
-  regexpForm: FormGroup;
-  control = new FormControl();
+  regexpForm: UntypedFormGroup;
+  control = new UntypedFormControl();
   removable = true;
 
   labelInputSeparators = [ENTER, COMMA];
@@ -47,7 +55,7 @@ export class BrowserScriptDetailsComponent implements OnChanges {
     roundedSelection: true,
   };
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected fb: UntypedFormBuilder,
               protected authService: AuthService,
               protected cdr: ChangeDetectorRef,
               protected mls: MonacoEditorLoaderService) {

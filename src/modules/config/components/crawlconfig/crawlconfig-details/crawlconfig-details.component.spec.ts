@@ -163,7 +163,7 @@ describe('CrawlConfigDetailsComponent', () => {
       deleteButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'DELETE'}));
       revertButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'REVERT'}));
 
-      screenshotCheckbox = await loader.getHarness<MatCheckboxHarness>(MatCheckboxHarness.with({label: 'Create screenshot'}))
+      screenshotCheckbox = await loader.getHarness<MatCheckboxHarness>(MatCheckboxHarness.with({label: 'Create screenshot'}));
     });
 
     it('update button should be active if form is updated and valid', async () => {

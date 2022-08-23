@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { SeedPreviewComponent } from './seed-preview.component';
+import {SeedPreviewComponent} from './seed-preview.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MatDialogModule} from '@angular/material/dialog';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
@@ -12,9 +12,9 @@ describe('SeedPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), RouterTestingModule, MatDialogModule],
-      declarations: [ SeedPreviewComponent ]
+      declarations: [SeedPreviewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

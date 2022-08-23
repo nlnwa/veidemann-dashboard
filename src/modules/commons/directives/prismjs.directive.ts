@@ -3,6 +3,7 @@ import {AfterViewChecked, Directive, ElementRef, NgZone} from '@angular/core';
 import * as Prism from 'prismjs';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-python';
+
 // import 'prismjs/plugins/match-braces/prism-match-braces';
 
 @Directive({

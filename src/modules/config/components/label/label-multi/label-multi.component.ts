@@ -6,7 +6,7 @@ import {combineLatest, Observable, Subject} from 'rxjs';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {map, startWith, switchMap} from 'rxjs/operators';
 import {LabelService} from '../../../services/label.service';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-label-multi',
@@ -25,7 +25,7 @@ export class LabelMultiComponent implements OnInit {
 
   private fetchLabelKeys: Subject<void>;
 
-  control = new FormControl();
+  control = new UntypedFormControl();
 
   shouldAddLabel = undefined;
   labelInputSeparators = [ENTER];
@@ -69,7 +69,7 @@ export class LabelMultiComponent implements OnInit {
   }
 
   onAdd(event: MatChipInputEvent) {
-    if (event.input) {
+    if (event.chipInput) {
       event.input.value = '';
     }
 
@@ -119,7 +119,7 @@ export class LabelMultiComponent implements OnInit {
   }
 
   onDrop(event: CdkDragDrop<string[]>): void {
-    const label: MatChipInputEvent = {input: null, value: event.item.data};
+    const label: MatChipInputEvent = {input: undefined, chipInput: null, value: event.item.data};
     this.onAdd(label);
   }
 
