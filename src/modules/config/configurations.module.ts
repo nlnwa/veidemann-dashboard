@@ -8,7 +8,6 @@ import {
   AnnotationComponent,
   BrowserConfigDetailsComponent,
   BrowserScriptDetailsComponent,
-  BrowserScriptDirective,
   CollectionDetailsComponent,
   ConfigListComponent,
   ConfigQueryComponent,
@@ -42,13 +41,13 @@ import {
   CollectionNamePipe,
   CrawlConfigNamePipe,
   CrawlExecutionStatusPipe,
+  CrawlJobDisabledStatusPipe,
   CrawlScheduleNamePipe,
   EntityNamePipe,
   JobExecutionStatePipe,
   JobExecutionStatusPipe,
   PolitenessConfigNamePipe,
   ScriptAnnotationsPipe,
-  CrawlJobDisabledStatusPipe,
 } from './pipe';
 
 import {ConfigService} from '../commons/services';
@@ -120,7 +119,6 @@ import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
     PolitenessConfigDetailsComponent,
     BrowserScriptDetailsComponent,
     CrawlHostGroupConfigDetailsComponent,
-    BrowserScriptDirective,
     RoleMappingListComponent,
     RoleMappingDetailsComponent,
     CollectionDetailsComponent,

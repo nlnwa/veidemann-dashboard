@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {MaterialModule} from './material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {ActionDirective, ExtraDirective, FilterDirective, HighlightDirective, ShortcutDirective} from './directives';
+import {ActionDirective, ExtraDirective, FilterDirective, ShortcutDirective} from './directives';
 import {NgxFilesizeModule} from 'ngx-filesize';
 import {DurationFormatPipe} from './pipes/duration-format.pipe';
 import {UrlFormatPipe} from './pipes/url-format.pipe';
@@ -20,7 +20,6 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     ShortcutDirective,
     FilterDirective,
     DurationFormatPipe,
-    HighlightDirective,
     UrlFormatPipe,
   ],
   imports: [
@@ -48,7 +47,6 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     FilterDirective,
     NgxFilesizeModule,
     DurationFormatPipe,
-    HighlightDirective,
     UrlFormatPipe,
     AbilityModule,
     KeyboardShortcutsModule,
