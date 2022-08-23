@@ -181,7 +181,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
 
   durationToSeconds(duration: Duration): number {
     const seconds = (
-      duration.days * (24 * 3600)) +
+        duration.days * (24 * 3600)) +
       (duration.hours * 3600) +
       (duration.minutes * 60) +
       duration.seconds;

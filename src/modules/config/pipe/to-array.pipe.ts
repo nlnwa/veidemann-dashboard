@@ -9,7 +9,8 @@ export class ToArrayPipe implements PipeTransform {
 
   constructor() {
   }
-  transform <T>(configObject: Observable<T>): Observable<T[]> {
-    return configObject.pipe(toArray())
+
+  transform<T>(configObject: Observable<T>): Observable<T[]> {
+    return configObject.pipe(toArray());
   }
 }

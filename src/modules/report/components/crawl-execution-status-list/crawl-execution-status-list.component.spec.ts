@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {CrawlExecutionStatusListComponent} from './crawl-execution-status-list.component';
 
@@ -8,9 +8,9 @@ describe('CrawlExecutionStatusListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawlExecutionStatusListComponent ]
+      declarations: [CrawlExecutionStatusListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

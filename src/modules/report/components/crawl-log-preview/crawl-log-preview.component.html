@@ -1,7 +1,7 @@
 <div *ngIf="crawlLog" class="content-padding" fxFlex fxLayout="row wrap" fxLayoutGap="16px">
   <mat-card>
     <h2>Requested URI</h2>
-    <p style="word-break: break-all"><span [innerHTML]="crawlLog.requestedUri | urlFormat"></span> </p>
+    <p style="word-break: break-all"><span [innerHTML]="crawlLog.requestedUri | urlFormat"></span></p>
   </mat-card>
   <mat-card>
     <h2>Size</h2>

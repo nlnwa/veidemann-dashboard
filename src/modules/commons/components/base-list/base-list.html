@@ -54,7 +54,7 @@
         <td mat-cell *matCellDef="let row" matTooltip="{{row.meta.name}}"
             matTooltipClass="tooltip-overflow">
           <ng-container *ngIf="row.kind === Kind.SEED">
-          <span [innerHTML]="row.meta.name | urlFormat" (click)="$event.stopPropagation()"></span>
+            <span [innerHTML]="row.meta.name | urlFormat" (click)="$event.stopPropagation()"></span>
           </ng-container>
           <ng-container *ngIf="row.kind !== Kind.SEED">
             <span>{{row.meta.name}}</span>

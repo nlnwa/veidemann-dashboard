@@ -12,10 +12,10 @@ describe('CrawljobPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ConfigurationsModule, CoreTestingModule.forRoot()],
-      declarations: [ CrawljobPreviewComponent ],
+      declarations: [CrawljobPreviewComponent],
       providers: [{provider: AuthService, useValue: {}}]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

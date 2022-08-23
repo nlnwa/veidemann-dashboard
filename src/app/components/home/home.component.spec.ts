@@ -12,8 +12,7 @@ describe('HomeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), MatDialogModule, AbilityModule],
-      providers: [
-      ],
+      providers: [],
       declarations: [HomeComponent]
     })
       .compileComponents();

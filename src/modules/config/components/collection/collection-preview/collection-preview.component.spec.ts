@@ -11,10 +11,10 @@ describe('CollectionPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonsModule],
-      declarations: [ CollectionPreviewComponent ],
+      declarations: [CollectionPreviewComponent],
       providers: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

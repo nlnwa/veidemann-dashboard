@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CrawlLogPreviewComponent } from './crawl-log-preview.component';
+import {CrawlLogPreviewComponent} from './crawl-log-preview.component';
 
 describe('CrawlLogPreviewComponent', () => {
   let component: CrawlLogPreviewComponent;
@@ -8,9 +8,9 @@ describe('CrawlLogPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawlLogPreviewComponent ]
+      declarations: [CrawlLogPreviewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

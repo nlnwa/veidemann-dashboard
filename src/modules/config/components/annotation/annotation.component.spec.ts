@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { AnnotationComponent } from './annotation.component';
+import {AnnotationComponent} from './annotation.component';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../../core/services/auth';
 import {CoreTestingModule} from '../../../core/core.testing.module';
@@ -21,10 +21,10 @@ describe('AnnotationComponent', () => {
             canUpdate: () => true,
           }
         }
-          ],
-      declarations: [ AnnotationComponent ]
+      ],
+      declarations: [AnnotationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

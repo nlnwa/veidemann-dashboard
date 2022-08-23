@@ -21,7 +21,7 @@ export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog>
     // fake counting
     this.query$.pipe(
       switchMap(query => this.dataSource.connect(null).pipe(
-        map(v => (query.pageIndex + 1) * query.pageSize + (v.length % query.pageSize === 0 ? 1 : 0)) )
+        map(v => (query.pageIndex + 1) * query.pageSize + (v.length % query.pageSize === 0 ? 1 : 0)))
       ),
       takeUntil(this.ngUnsubscribe),
     ).subscribe(length => this.baseList.length = length);

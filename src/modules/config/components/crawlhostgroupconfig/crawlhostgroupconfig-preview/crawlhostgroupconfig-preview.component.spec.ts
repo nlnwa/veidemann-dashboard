@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { CrawlhostgroupconfigPreviewComponent } from './crawlhostgroupconfig-preview.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {CrawlhostgroupconfigPreviewComponent} from './crawlhostgroupconfig-preview.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {DurationFormatPipe} from '../../../../commons/pipes/duration-format.pipe';
 
@@ -9,9 +9,9 @@ describe('CrawlhostgroupconfigPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawlhostgroupconfigPreviewComponent, DurationFormatPipe ]
+      declarations: [CrawlhostgroupconfigPreviewComponent, DurationFormatPipe]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

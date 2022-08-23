@@ -6,7 +6,8 @@
          *ngIf="'read' | able: Kind[Kind.SEED]"
          [routerLink]="['../../seed']"
          [queryParams]="{entity_id: configObject.id}">
-        <mat-icon mat-list-icon>link</mat-icon>Go to seed list
+        <mat-icon mat-list-icon>link</mat-icon>
+        Go to seed list
       </a>
     </ng-container>
 
@@ -28,7 +29,8 @@
            [queryParams]="getJobRefListQueryParams(configObject)"
            matTooltip="Show seeds with the same crawljob"
            i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">
-          <mat-icon mat-list-icon>work</mat-icon>Filter by crawljob
+          <mat-icon mat-list-icon>work</mat-icon>
+          Filter by crawljob
         </a>
       </ng-container>
       <a mat-list-item
@@ -37,7 +39,8 @@
          [queryParams]="{entity_id: configObject.seed.entityRef.id}"
          matTooltip="Show seeds with the same entity"
          i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">
-        <mat-icon mat-list-icon>business</mat-icon>Filter by entity
+        <mat-icon mat-list-icon>business</mat-icon>
+        Filter by entity
       </a>
     </ng-container>
 
@@ -49,7 +52,8 @@
          [queryParams]="{job_id: configObject.id}"
          matTooltip="Go to jobexecutions for the crawljob"
          i18n-matTooltip="@@crawljobListJobExecutionShortcutActionButtonTooltip">
-        <mat-icon mat-list-icon>hdr_strong</mat-icon>Show jobexecutions
+        <mat-icon mat-list-icon>hdr_strong</mat-icon>
+        Show jobexecutions
       </a>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.SEED]"
@@ -57,7 +61,8 @@
          [queryParams]="{crawl_job_id: configObject.id}"
          matTooltip="Show seeds with reference to the crawljob"
          i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">
-        <mat-icon mat-list-icon>link</mat-icon>Show seeds
+        <mat-icon mat-list-icon>link</mat-icon>
+        Show seeds
       </a>
     </ng-container>
 
@@ -69,7 +74,8 @@
          [queryParams]="{schedule_id: configObject.id}"
          matTooltip="Show crawljobs with reference to the schedule"
          i18n-matTooltip="@@scheduleListShowCrawljobsWithScheduleActionButtonTooltip">
-        <mat-icon mat-list-icon>work</mat-icon>Show crawljobs
+        <mat-icon mat-list-icon>work</mat-icon>
+        Show crawljobs
       </a>
     </ng-container>
 
@@ -81,7 +87,8 @@
          [queryParams]="{crawl_config_id: configObject.id}"
          matTooltip="Show crawljobs with reference to the crawlconfig"
          i18n-matTooltip="@@crawlConfigListFilterCrawljobsWithCrawlconfigActionButtonTooltip">
-        <mat-icon mat-list-icon>work</mat-icon>Show crawljobs
+        <mat-icon mat-list-icon>work</mat-icon>
+        Show crawljobs
       </a>
     </ng-container>
 
@@ -93,7 +100,8 @@
          [queryParams]="{collection_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the collection"
          i18n-matTooltip="@@collectionListShowCrawlConfigsWitchCollectionRefActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>Show crawlconfigs
+        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+        Show crawlconfigs
       </a>
     </ng-container>
 
@@ -105,7 +113,8 @@
          [queryParams]="{browser_config_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the browserconfig"
          i18n-matTooltip="@@browserConfigListFilterCrawljobsWithBrowserconfigActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>Show crawlconfigs
+        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+        Show crawlconfigs
       </a>
     </ng-container>
 
@@ -117,7 +126,8 @@
          [queryParams]="{script_id: configObject.id}"
          matTooltip="Show browserconfigs with reference to the browserscript"
          i18n-matTooltip="@@browserscriptListFikterBrowserconfigsWithBrowserscriptActionButtonTooltip">
-        <mat-icon mat-list-icon>web</mat-icon>Show browserconfigs
+        <mat-icon mat-list-icon>web</mat-icon>
+        Show browserconfigs
       </a>
     </ng-container>
 
@@ -129,7 +139,8 @@
          [queryParams]="{politeness_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the politeness"
          i18n-matTooltip="@@politenessConfigListFilterCrawlconfigWithPolitenessActionButtonTooltip">
-        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>Show crawlconfigs
+        <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+        Show crawlconfigs
       </a>
     </ng-container>
   </ng-container>

@@ -6,57 +6,57 @@
   <form [formGroup]="form">
     <app-meta formControlName="meta"></app-meta>
     <div fxLayoutGap="16px">
-    <mat-form-field>
-      <mat-select placeholder="Collection" formControlName="collectionRefId"
-                  i18n-placeholder="@@crawlconfigFormCollectionDropdownPlaceholder">
-        <mat-option *ngFor="let option of collections"
-                    [value]="option.id">{{option.meta.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Collection" formControlName="collectionRefId"
+                    i18n-placeholder="@@crawlconfigFormCollectionDropdownPlaceholder">
+          <mat-option *ngFor="let option of collections"
+                      [value]="option.id">{{option.meta.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-select placeholder="BrowserConfig" formControlName="browserConfigRefId"
-                  i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
-        <mat-option *ngFor="let option of browserConfigs"
-                    [value]="option.id">{{option.meta.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="BrowserConfig" formControlName="browserConfigRefId"
+                    i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+          <mat-option *ngFor="let option of browserConfigs"
+                      [value]="option.id">{{option.meta.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-select placeholder="PolitenessConfig" formControlName="politenessRefId"
-                  i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
-        <mat-option *ngFor="let option of politenessConfigs"
-                    [value]="option.id">{{option.meta.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="PolitenessConfig" formControlName="politenessRefId"
+                    i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
+          <mat-option *ngFor="let option of politenessConfigs"
+                      [value]="option.id">{{option.meta.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput formControlName="minimumDnsTtlS" placeholder="DNS TTL"
-             i18n-placeholder="@@crawlconfigFormMinimumDnsTtlInputPlaceholder">
-      <mat-error *ngIf="!minDnsTtlSeconds.valid"
-                 i18n="@@crawlconfigFormMinDNSTTLValidationError">
-        Must be a number or empty
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="minimumDnsTtlS" placeholder="DNS TTL"
+               i18n-placeholder="@@crawlconfigFormMinimumDnsTtlInputPlaceholder">
+        <mat-error *ngIf="!minDnsTtlSeconds.valid"
+                   i18n="@@crawlconfigFormMinDNSTTLValidationError">
+          Must be a number or empty
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="priorityWeight"
-             placeholder="Priority weight"
-             i18n-placeholder="@@crawlconfigFormPriorityWeightInputPlaceholder">
-      <mat-error *ngIf="!priorityWeight.valid" i18n="@@crawlconfigFormPriorityWeightValidationError">
-        Must be a number or empty
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               formControlName="priorityWeight"
+               placeholder="Priority weight"
+               i18n-placeholder="@@crawlconfigFormPriorityWeightInputPlaceholder">
+        <mat-error *ngIf="!priorityWeight.valid" i18n="@@crawlconfigFormPriorityWeightValidationError">
+          Must be a number or empty
+        </mat-error>
+      </mat-form-field>
 
-    <ng-container formGroupName="extra">
-      <mat-checkbox formControlName="createScreenshot"
-                    labelPosition="after"
-                    i18n="@@crawlconfigFormCreateScreenshotLabel"
-                    color="accent">
-        Create screenshot
-      </mat-checkbox>
-    </ng-container>
+      <ng-container formGroupName="extra">
+        <mat-checkbox formControlName="createScreenshot"
+                      labelPosition="after"
+                      i18n="@@crawlconfigFormCreateScreenshotLabel"
+                      color="accent">
+          Create screenshot
+        </mat-checkbox>
+      </ng-container>
     </div>
   </form>
 </mat-dialog-content>

@@ -9,7 +9,7 @@ describe('KindService', () => {
     service: KindService,
     providers: [
       {provide: LabelService, useValue: {}}
-      ]
+    ]
   });
 
   beforeEach(() => spectator = createService());

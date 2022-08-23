@@ -16,7 +16,7 @@ import {MatDialog} from '@angular/material/dialog';
   styleUrls: ['./job-execution-detail.component.css']
 })
 export class JobExecutionDetailComponent extends DetailDirective<JobExecutionStatus> implements OnInit {
-readonly JobExecutionState = JobExecutionState;
+  readonly JobExecutionState = JobExecutionState;
 
   protected query$: Observable<Detail>;
 

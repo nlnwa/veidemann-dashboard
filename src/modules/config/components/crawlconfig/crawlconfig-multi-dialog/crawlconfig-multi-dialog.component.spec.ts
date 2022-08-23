@@ -23,7 +23,7 @@ describe('CrawlConfigMultiDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
-      declarations: [ CrawlConfigMultiDialogComponent, LabelMultiComponent ],
+      declarations: [CrawlConfigMultiDialogComponent, LabelMultiComponent],
       providers: [
         {provide: LabelService, useValue: {}},
         {provide: AuthService, useValue: {canUpdate: () => true}},
@@ -31,7 +31,7 @@ describe('CrawlConfigMultiDialogComponent', () => {
         {provide: MatDialogRef, useValue: {}},
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

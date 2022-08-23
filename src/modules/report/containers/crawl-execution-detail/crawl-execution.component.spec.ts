@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {CrawlExecutionDetailComponent} from './crawl-execution-detail.component';
 import {ActivatedRoute} from '@angular/router';
@@ -10,9 +10,9 @@ describe('CrawlExecutionComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ActivatedRoute],
-      declarations: [ CrawlExecutionDetailComponent ]
+      declarations: [CrawlExecutionDetailComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

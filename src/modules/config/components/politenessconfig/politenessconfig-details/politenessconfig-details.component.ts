@@ -56,7 +56,7 @@ export class PolitenessConfigDetailsComponent implements OnChanges {
   }
 
   get canUpdate(): boolean {
-   return (this.form.valid && this.form.dirty);
+    return (this.form.valid && this.form.dirty);
   }
 
   get canRevert(): boolean {

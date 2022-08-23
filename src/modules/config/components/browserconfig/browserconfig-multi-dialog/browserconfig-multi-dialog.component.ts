@@ -115,7 +115,7 @@ export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsCompo
       // headers: this.configObject.configObject.headers;
       commonScriptRefIdList: this.configObject.browserConfig.scriptRefList.map(ref => ref.id),
       scriptRefIdList: [],
-       scriptSelectorList: [[]],
+      scriptSelectorList: [[]],
     });
     this.form.markAsPristine();
     this.form.markAsUntouched();

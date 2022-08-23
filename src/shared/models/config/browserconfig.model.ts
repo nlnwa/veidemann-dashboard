@@ -114,8 +114,8 @@ export class BrowserConfig {
       .map(configObject => configObject.browserConfig.scriptRefList)
       .reduce((acc, curr) => acc.concat(curr), [])
       .filter(function({id}) {
-      return !this.has(id) && this.add(id);
-    }, new Set());
+        return !this.has(id) && this.add(id);
+      }, new Set());
   }
 
   static toProto(browserConfig: BrowserConfig): BrowserConfigProto {

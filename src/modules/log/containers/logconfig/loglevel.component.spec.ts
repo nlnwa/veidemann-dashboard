@@ -23,9 +23,11 @@ describe('LoglevelComponent', () => {
         CoreTestingModule.forRoot()
       ],
       providers: [
-        { provide: LogService, useValue: {
-          getLogConfig: () => of({logLevelList: [new LogLevel()]})
-          }},
+        {
+          provide: LogService, useValue: {
+            getLogConfig: () => of({logLevelList: [new LogLevel()]})
+          }
+        },
         {
           provide: AuthService, useValue: {
             canUpdate: () => true

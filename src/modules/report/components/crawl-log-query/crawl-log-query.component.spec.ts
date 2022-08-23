@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CrawlLogQueryComponent } from './crawl-log-query.component';
+import {CrawlLogQueryComponent} from './crawl-log-query.component';
 import {UntypedFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../../commons/material.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -12,10 +12,10 @@ describe('CrawlLogQueryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MaterialModule, NoopAnimationsModule, ReactiveFormsModule],
-      declarations: [ CrawlLogQueryComponent],
+      declarations: [CrawlLogQueryComponent],
       providers: [UntypedFormBuilder]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

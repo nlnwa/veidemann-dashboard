@@ -1,5 +1,13 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from '@angular/forms';
 import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../../../../shared/validation/patterns';

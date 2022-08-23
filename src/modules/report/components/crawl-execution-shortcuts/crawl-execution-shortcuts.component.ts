@@ -24,7 +24,7 @@ export class CrawlExecutionShortcutsComponent {
     this.reload$ = this.reload.asObservable();
   }
 
-  onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus){
+  onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus) {
     this.abortCrawlExecution.emit(crawlExecutionStatus);
   }
 

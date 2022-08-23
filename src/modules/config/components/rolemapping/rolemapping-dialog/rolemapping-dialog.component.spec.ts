@@ -23,13 +23,13 @@ describe('RoleMappingDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
-      declarations: [ RoleMappingDialogComponent, MatError ],
+      declarations: [RoleMappingDialogComponent, MatError],
       providers: [UntypedFormBuilder,
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
         {provide: MatDialogRef, useValue: {}}
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

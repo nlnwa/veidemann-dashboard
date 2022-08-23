@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { JobStatusComponent } from './job-status.component';
+import {JobStatusComponent} from './job-status.component';
 
 describe('JobStatusComponent', () => {
   let component: JobStatusComponent;
@@ -8,9 +8,9 @@ describe('JobStatusComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ JobStatusComponent ]
+      declarations: [JobStatusComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

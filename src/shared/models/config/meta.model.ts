@@ -61,7 +61,7 @@ export class Meta {
       a.setKey(annotation.key);
       a.setValue(annotation.value);
       return a;
-    }))
+    }));
 
     return proto;
   }

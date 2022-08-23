@@ -31,9 +31,11 @@ tr.item-row:hover {
 
 tr.preview-row {
   height: 0;
+
   td {
     border-bottom-width: 0;
   }
+
   td.preview-cell {
     border-bottom-width: 1px;
   }
@@ -54,7 +56,7 @@ tr.item-row td {
 }
 
 tr.item-row.row-selected td {
- // border-bottom-width: 1px;
+  // border-bottom-width: 1px;
 }
 
 .mat-column-name {
@@ -80,8 +82,8 @@ tr.item-row.row-selected td {
 }
 
 // highlight row when navigating with keyboard
-tr.item-row.highlight{
- background-color: $dark-focused !important;
+tr.item-row.highlight {
+  background-color: $dark-focused !important;
 }
 
 

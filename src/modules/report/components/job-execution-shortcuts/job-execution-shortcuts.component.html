@@ -1,31 +1,31 @@
 <mat-nav-list>
   <h2 mat-subheader>Shortcuts</h2>
-    <a mat-list-item
-       *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
-       [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]"
-       i18n="@@reportListActionButtonGoToCrawljob">
-      <mat-icon mat-list-icon>work</mat-icon>
-      Go to crawljob
-    </a>
+  <a mat-list-item
+     *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+     [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]"
+     i18n="@@reportListActionButtonGoToCrawljob">
+    <mat-icon mat-list-icon>work</mat-icon>
+    Go to crawljob
+  </a>
 </mat-nav-list>
 <mat-nav-list>
   <h2 mat-subheader>Filters</h2>
-    <a mat-list-item
-       *ngIf="'read' | able: 'crawlexecution'"
-       [routerLink]="['/report', 'crawlexecution']"
-       [queryParams]="{job_id: jobExecutionStatus.jobId, job_execution_id: jobExecutionStatus.id}"
-       i18n="@@reportListActionButtonGoToCrawlExecution">
-      <mat-icon mat-list-icon>hdr_weak</mat-icon>
-      Go to crawl execution
-    </a>
+  <a mat-list-item
+     *ngIf="'read' | able: 'crawlexecution'"
+     [routerLink]="['/report', 'crawlexecution']"
+     [queryParams]="{job_id: jobExecutionStatus.jobId, job_execution_id: jobExecutionStatus.id}"
+     i18n="@@reportListActionButtonGoToCrawlExecution">
+    <mat-icon mat-list-icon>hdr_weak</mat-icon>
+    Go to crawl execution
+  </a>
 </mat-nav-list>
 <mat-nav-list *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING">
   <h2 mat-subheader>Actions</h2>
-      <a mat-list-item
-         *ngIf="'abort' | able: 'jobexecution'"
-         (click)="onAbortJobExecution(jobExecutionStatus)"
-         i18n="@@reportListActionButtonAbortCrawlExecution">
-        <mat-icon mat-list-icon>cancel</mat-icon>
-        Abort crawl
-      </a>
+  <a mat-list-item
+     *ngIf="'abort' | able: 'jobexecution'"
+     (click)="onAbortJobExecution(jobExecutionStatus)"
+     i18n="@@reportListActionButtonAbortCrawlExecution">
+    <mat-icon mat-list-icon>cancel</mat-icon>
+    Abort crawl
+  </a>
 </mat-nav-list>

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {PageLogListComponent} from './page-log-list.component';
 
 
@@ -9,9 +9,9 @@ describe('PageLogListComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [ PageLogListComponent ]
+      declarations: [PageLogListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -102,9 +102,9 @@ import {NgxEchartsModule} from 'ngx-echarts';
     ReportRoutingModule,
     AbilityModule,
     NgxEchartsModule.forRoot({
-        echarts: () => import('echarts'),
-      }),
-    ],
+      echarts: () => import('echarts'),
+    }),
+  ],
   exports: [
     JobNamePipe,
     SeedNamePipe

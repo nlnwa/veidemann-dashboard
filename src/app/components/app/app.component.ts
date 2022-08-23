@@ -16,7 +16,7 @@ import {ScheduleOverviewComponent} from '../schedule-overview/schedule-overview.
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit, AfterViewInit{
+export class AppComponent implements OnInit, AfterViewInit {
 
   isModuleLoading$: Observable<boolean>;
   private moduleLoadSemaphore = 0;

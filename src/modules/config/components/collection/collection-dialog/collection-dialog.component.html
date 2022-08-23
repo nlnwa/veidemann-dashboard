@@ -40,9 +40,9 @@
            [formGroupName]="i"
            fxLayout="row"
            fxLayoutGap="16px">
-        <mat-form-field  [hideRequiredMarker]="subCollectionNameInput.value.length >= 2" fxFlex
-                         data-testid="subCollectionName">
-          <input matInput  #subCollectionNameInput formControlName="name" placeholder="Name"
+        <mat-form-field [hideRequiredMarker]="subCollectionNameInput.value.length >= 2" fxFlex
+                        data-testid="subCollectionName">
+          <input matInput #subCollectionNameInput formControlName="name" placeholder="Name"
                  i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
           <mat-hint *ngIf="subCollectionNameInput.value.length < 2" i18n="@@subCollectionNameInputLengthHint">
             Minimum 2 characters

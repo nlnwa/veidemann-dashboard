@@ -9,7 +9,7 @@ import {
   DECIMAL_NUMBER_OR_EMPTY_STRING,
   NUMBER_OR_EMPTY_STRING
 } from '../../../../../shared/validation/patterns';
-import { UnitOfTime } from 'src/shared/models/duration/unit-time.model';
+import {UnitOfTime} from 'src/shared/models/duration/unit-time.model';
 
 @Component({
   selector: 'app-crawlhostgroupconfig-details',

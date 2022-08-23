@@ -116,7 +116,9 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
   }
 
   bytesToHumanReadable(bytes: number, decimals = 2): string {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
 
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
@@ -148,7 +150,9 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
       this.fileSize.setErrors({invalidSize: {valid: false, size}});
     }
 
-    if (unit === '') return Math.round(Number(amount));
+    if (unit === '') {
+      return Math.round(Number(amount));
+    }
 
     for (const increment of incrementBases['2']) {
       if ((increment[0] as string[]).some(validUnit)) {

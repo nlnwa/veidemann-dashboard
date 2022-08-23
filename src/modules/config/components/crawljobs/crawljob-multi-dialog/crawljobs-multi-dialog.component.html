@@ -31,10 +31,10 @@
   <mat-dialog-content>
     <div fxLayout="row wrap" fxLayoutGap="24px">
       <div fxFlex fxLayout="column" fxLayoutGap="16px">
-          <app-label-multi [configObject]="configObject"
-                           [allSelected]="allSelected"
-                           (update)="onUpdateLabels($event)"></app-label-multi>
-        </div>
+        <app-label-multi [configObject]="configObject"
+                         [allSelected]="allSelected"
+                         (update)="onUpdateLabels($event)"></app-label-multi>
+      </div>
 
       <div fxFlex fxLayout="column">
         <ng-container formGroupName="limits">

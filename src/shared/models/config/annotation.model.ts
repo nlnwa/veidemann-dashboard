@@ -1,4 +1,4 @@
-import {Annotation as AnnotationProto} from '../../../api'
+import {Annotation as AnnotationProto} from '../../../api';
 
 export class Annotation {
   key: string;

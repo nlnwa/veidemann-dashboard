@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {CrawlLogComponent} from './crawl-log.component';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -12,12 +12,12 @@ describe('CrawlLogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(), RouterTestingModule],
-      declarations: [ CrawlLogComponent ],
+      declarations: [CrawlLogComponent],
       providers: [
         {provide: CrawlLogService, useValue: {}}
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

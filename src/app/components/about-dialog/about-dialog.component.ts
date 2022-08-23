@@ -8,7 +8,8 @@ import {environment} from '../../../environments/environment';
 })
 
 export class AboutDialogComponent {
- readonly environment = environment;
+  readonly environment = environment;
+
   constructor() {
   }
 }

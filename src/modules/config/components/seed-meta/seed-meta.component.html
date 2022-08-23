@@ -38,22 +38,22 @@
     <mat-progress-bar matHint mode="indeterminate" *ngIf="this.name.pending"></mat-progress-bar>
   </mat-form-field>
 
-    <mat-action-list *ngIf="name.hasError('seedExistsOnEntity')" dense data-testid="seedExistsOnEntityList">
-      <button mat-list-item
-              *ngIf="name.errors.seedExistsOnEntity?.length > 1"
-              (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
-        <mat-icon mat-list-icon>remove_circle</mat-icon>
-        <span i18n="@@seedMetaRemoveAlreadyExistingSeedsButton">Remove all from list</span>
-      </button>
+  <mat-action-list *ngIf="name.hasError('seedExistsOnEntity')" dense data-testid="seedExistsOnEntityList">
+    <button mat-list-item
+            *ngIf="name.errors.seedExistsOnEntity?.length > 1"
+            (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
+      <mat-icon mat-list-icon>remove_circle</mat-icon>
+      <span i18n="@@seedMetaRemoveAlreadyExistingSeedsButton">Remove all from list</span>
+    </button>
 
-      <button mat-list-item
-              *ngFor="let seed of name.errors.seedExistsOnEntity"
-              (click)="onRemoveExistingUrl(seed)"
-              matTooltip="Remove url from list" i18n-matTooltip="@@seedMetaRemoveSeedFromListTooltip">
-        <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
-        {{seed.meta.name}}
-      </button>
-    </mat-action-list>
+    <button mat-list-item
+            *ngFor="let seed of name.errors.seedExistsOnEntity"
+            (click)="onRemoveExistingUrl(seed)"
+            matTooltip="Remove url from list" i18n-matTooltip="@@seedMetaRemoveSeedFromListTooltip">
+      <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+      {{seed.meta.name}}
+    </button>
+  </mat-action-list>
 
   <mat-list *ngIf="name.hasError('seedExists') && entityRef.id" data-testid="seedExistsList">
     <mat-list-item *ngIf="name.errors.seedExists.length">

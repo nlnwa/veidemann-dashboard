@@ -32,28 +32,28 @@ FullCalendarModule.registerPlugins([
 ]);
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        ErrorDialogComponent,
-        DialogComponent,
-        TimeComponent,
-        CrawlerStatusDialogComponent,
-        CrawlerStatusComponent,
-        AboutDialogComponent,
-        HomeComponent,
-        ScheduleEventDialogComponent,
-        ScheduleOverviewComponent
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        CommonsModule,
-        CoreModule,
-        FullCalendarModule,
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    ErrorDialogComponent,
+    DialogComponent,
+    TimeComponent,
+    CrawlerStatusDialogComponent,
+    CrawlerStatusComponent,
+    AboutDialogComponent,
+    HomeComponent,
+    ScheduleEventDialogComponent,
+    ScheduleOverviewComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    CommonsModule,
+    CoreModule,
+    FullCalendarModule,
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

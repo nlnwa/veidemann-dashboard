@@ -13,7 +13,8 @@
             mat-header-cell *matHeaderCellDef>Requested URI
         </th>
         <td mat-cell *matCellDef="let row">
-          <span (click)="$event.stopPropagation()" matTooltip="{{row.requestedUri}}"[innerHTML]="row.requestedUri | urlFormat: true"></span>
+          <span (click)="$event.stopPropagation()" matTooltip="{{row.requestedUri}}"
+                [innerHTML]="row.requestedUri | urlFormat: true"></span>
         </td>
       </ng-container>
 

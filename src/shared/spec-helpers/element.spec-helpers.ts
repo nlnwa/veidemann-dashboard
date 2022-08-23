@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 
-import { DebugElement } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
+import {ComponentFixture} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
 
 /**
  * Spec helpers for working with the DOM
@@ -176,7 +176,7 @@ export function checkField<T>(
   testId: string,
   checked: boolean,
 ): void {
-  const { nativeElement } = findEl(fixture, testId);
+  const {nativeElement} = findEl(fixture, testId);
   nativeElement.checked = checked;
   // Dispatch a `change` fake event so Angular form bindings take notice of the change.
   dispatchFakeEvent(nativeElement, 'change');
@@ -191,9 +191,12 @@ export function checkField<T>(
  */
 export function makeClickEvent(target: EventTarget): Partial<MouseEvent> {
   return {
-    preventDefault(): void {},
-    stopPropagation(): void {},
-    stopImmediatePropagation(): void {},
+    preventDefault(): void {
+    },
+    stopPropagation(): void {
+    },
+    stopImmediatePropagation(): void {
+    },
     type: 'click',
     target,
     currentTarget: target,

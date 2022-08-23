@@ -75,7 +75,7 @@ export function timeToDuration(time: number, unit: string) {
   }
   if (unit === 's') {
     // @ts-ignore
-     return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
+    return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
   }
 
 }

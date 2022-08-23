@@ -12,9 +12,9 @@
         Are you sure you want to start crawling:
         <strong>{{configObject.meta.name}}</strong>?
       </span>
-    <p i18n="@@runCrawlDialogRunSeedSelectCrawljobText">
-      Select a crawljob to harvest the seed:
-    </p>
+      <p i18n="@@runCrawlDialogRunSeedSelectCrawljobText">
+        Select a crawljob to harvest the seed:
+      </p>
     </div>
     <div *ngIf="numberOfSeeds > 1">
       <span i18n="@@runCrawlDialogRunSeedsCrawlConfirmationText" data-testid="run_multiple_seeds_dialog_text">
@@ -24,14 +24,14 @@
         Select a crawljob to harvest the seeds:
       </p>
     </div>
-      <mat-form-field>
-        <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
-                    data-testid="run_crawl_dialog_crawljob_select"
-                    [(ngModel)]="jobRefId">
-          <mat-option *ngFor="let crawlJob of crawlJobs"
-                      [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
+                  data-testid="run_crawl_dialog_crawljob_select"
+                  [(ngModel)]="jobRefId">
+        <mat-option *ngFor="let crawlJob of crawlJobs"
+                    [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </ng-container>
 </div>
 

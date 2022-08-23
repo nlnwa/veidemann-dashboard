@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {UntypedFormBuilder} from '@angular/forms';
 import {AbilityModule} from '@casl/angular';
@@ -21,10 +21,10 @@ describe('ScriptAnnotationComponent', () => {
             canUpdate: () => true,
           }
         }
-          ],
-      declarations: [ ScriptAnnotationComponent ]
+      ],
+      declarations: [ScriptAnnotationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

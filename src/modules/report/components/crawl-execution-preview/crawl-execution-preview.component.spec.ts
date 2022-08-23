@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CrawlExecutionPreviewComponent } from './crawl-execution-preview.component';
+import {CrawlExecutionPreviewComponent} from './crawl-execution-preview.component';
 import {CrawlExecutionStatus} from '../../../../shared/models';
 import {NgxFilesizeModule} from 'ngx-filesize';
 import {MatCardModule} from '@angular/material/card';
@@ -14,7 +14,7 @@ describe('CrawlExecutionPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrawlExecutionPreviewComponent ],
+      declarations: [CrawlExecutionPreviewComponent],
       imports: [CoreTestingModule.forRoot(), NgxFilesizeModule, NgxEchartsModule, CommonsModule],
       providers: [
         {
@@ -23,7 +23,7 @@ describe('CrawlExecutionPreviewComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
