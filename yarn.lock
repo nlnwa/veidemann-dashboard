@@ -1325,10 +1325,10 @@
   dependencies:
     "@ucast/mongo2js" "^1.3.0"
 
-"@casl/angular@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/@casl/angular/-/angular-7.0.1.tgz#82a1e313459d38c499f756b3309f4d89c93a8542"
-  integrity sha512-mZ3j1TSJD+3KaP2YUjJ87KgWk5bgeIWQCo2gOUdu85xYkCv8jm3EwoD1TXErWoMoNDqjkeG5frd2bl3k4eTKYg==
+"@casl/angular@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@casl/angular/-/angular-8.0.0.tgz#04bc988fd1e96828af8b730942cba4b7a26e353e"
+  integrity sha512-fMMcqs/F3EmYgeQIjvZUqzb3p+gD9CCA2NothJVhNvfIRPUzaRO/kJsjllbpxHPbiQJuxB/gz685Jy0Cf1eUpw==
 
 "@colors/colors@1.5.0":
   version "1.5.0"
