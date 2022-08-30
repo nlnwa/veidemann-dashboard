@@ -1,22 +1,21 @@
 import {Directive, Inject} from '@angular/core';
-import {BASE_LIST, QueryDirective} from '../../../shared/directives';
+import {BASE_LIST, LoaderDirective} from '../../../shared/directives';
 import {CrawlLogQuery, CrawlLogService} from '../services';
-import {CrawlLog} from '../../../shared/models/log';
-import {BaseList, ListDataSource} from '../../../shared/models';
+import {BaseList, CrawlLog, ListDataSource} from '../../../shared/models';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 
 @Directive({
   selector: '[appQueryCrawlLog]'
 })
-export class QueryCrawlLogDirective extends QueryDirective<CrawlLogQuery, CrawlLog> {
+export class QueryCrawlLogDirective extends LoaderDirective<CrawlLogQuery, CrawlLog> {
   constructor(protected service: CrawlLogService,
               @Inject(BASE_LIST) protected baseList: BaseList<CrawlLog>) {
     super(service, baseList, new ListDataSource<CrawlLog>());
   }
 
-  onInit(): void {
-    super.onInit();
+  onLoad(): void {
+    super.onLoad();
 
     // fake counting
     this.query$.pipe(

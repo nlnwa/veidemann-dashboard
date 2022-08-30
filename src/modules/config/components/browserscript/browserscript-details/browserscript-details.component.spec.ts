@@ -8,7 +8,6 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
-import {AuthService} from '../../../../core/services/auth';
 import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
 import {AbilityModule} from '@casl/angular';
 import {HarnessLoader} from '@angular/cdk/testing';
@@ -17,6 +16,7 @@ import {MatSelectHarness} from '@angular/material/select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {MonacoEditorComponent} from '@materia-ui/ngx-monaco-editor';
 import {MockComponent} from 'ng-mocks';
+import {AuthService} from '../../../../core/services';
 
 
 const exampleBrowserScript: ConfigObject = {

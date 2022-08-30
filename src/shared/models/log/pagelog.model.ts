@@ -38,18 +38,6 @@ export class PageLog {
     this.outlink = outlink;
   }
 
-  /**
-   * A function that transforms the results. This function is called for each member of the object.
-   * If a member contains nested objects, the nested objects are transformed before the parent object is.
-   * @see JSON.parse
-   */
-  static reviver(key: string, value: any) {
-    switch (key) {
-      default:
-        return value;
-    }
-  }
-
   static fromProto(proto: PageLogProto): PageLog {
     return new PageLog({
       warcId: proto.getWarcId(),

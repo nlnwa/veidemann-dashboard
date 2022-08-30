@@ -1,7 +1,7 @@
-import {ApiError} from '../commons/api-error.model';
+import {ApiError} from '../commons';
 import {CrawlLogProto} from '../../../api';
-import {fromTimestampProto, toTimestampProto} from '../../func';
-import {fromRethinkTimeStamp} from '../../func/rethinkdb';
+import {unmarshalTimestamp, marshalTimestamp} from '../../func';
+import {fromRethinkTimeStamp} from '../../func';
 
 export class CrawlLog {
   id: string;
@@ -81,25 +81,10 @@ export class CrawlLog {
     this.method = method;
   }
 
-  /**
-   * A function that transforms the results. This function is called for each member of the object.
-   * If a member contains nested objects, the nested objects are transformed before the parent object is.
-   * @see JSON.parse
-   */
-  static reviver(key: string, value: any) {
-    switch (key) {
-      case 'timeStamp':
-      case 'fetchTimeStamp':
-        return fromRethinkTimeStamp(value);
-      default:
-        return value;
-    }
-  }
-
   static fromProto(proto: CrawlLogProto): CrawlLog {
     return new CrawlLog({
       warcId: proto.getWarcId(),
-      timeStamp: fromTimestampProto(proto.getTimeStamp()),
+      timeStamp: unmarshalTimestamp(proto.getTimeStamp()),
       statusCode: proto.getStatusCode(),
       size: proto.getSize(),
       requestedUri: proto.getRequestedUri(),
@@ -107,7 +92,7 @@ export class CrawlLog {
       discoveryPath: proto.getDiscoveryPath(),
       referrer: proto.getReferrer(),
       contentType: proto.getContentType(),
-      fetchTimeStamp: fromTimestampProto(proto.getFetchTimeStamp()),
+      fetchTimeStamp: unmarshalTimestamp(proto.getFetchTimeStamp()),
       fetchTimeMs: proto.getFetchTimeMs(),
       blockDigest: proto.getBlockDigest(),
       payloadDigest: proto.getPayloadDigest(),
@@ -127,7 +112,7 @@ export class CrawlLog {
   static toProto(crawlLog: CrawlLog): CrawlLogProto {
     const proto = new CrawlLogProto();
     proto.setWarcId(crawlLog.warcId);
-    proto.setTimeStamp(toTimestampProto(crawlLog.timeStamp));
+    proto.setTimeStamp(marshalTimestamp(crawlLog.timeStamp));
     proto.setStatusCode(crawlLog.statusCode);
     proto.setSize(crawlLog.size);
     proto.setRequestedUri(crawlLog.requestedUri);
@@ -135,7 +120,7 @@ export class CrawlLog {
     proto.setDiscoveryPath(crawlLog.discoveryPath);
     proto.setReferrer(crawlLog.referrer);
     proto.setContentType(crawlLog.contentType);
-    proto.setFetchTimeStamp(toTimestampProto(crawlLog.fetchTimeStamp));
+    proto.setFetchTimeStamp(marshalTimestamp(crawlLog.fetchTimeStamp));
     proto.setFetchTimeMs(crawlLog.fetchTimeMs);
     proto.setBlockDigest(crawlLog.blockDigest);
     proto.setPayloadDigest(crawlLog.payloadDigest);

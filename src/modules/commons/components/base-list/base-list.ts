@@ -23,7 +23,6 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Directive()
-// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class BaseListComponent<T extends ListItem> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;
   length$: BehaviorSubject<number>;
@@ -208,19 +207,23 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   reset() {
-    this.selection.clear();
+    // this.clearSelection();
     this.selectedRow = null;
     this.allSelected = false;
     this.selectedRowIndex = null;
   }
 
+  clearSelection() {
+    this.selection.clear();
+  }
+
   onSortChange(sort: Sort) {
-    this.reset();
+    // this.reset();
     this.sort.emit(sort);
   }
 
   onRowClick(item: T) {
-    this.allSelected = false;
+    // this.allSelected = false;
     this.selectedRowIndex = null;
     this.selectedRow = this.selectedRow?.id === item.id ? null : item;
     this.rowClick.emit(this.selectedRow);
@@ -255,12 +258,11 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   onDeselectAll() {
-    this.allSelected = false;
     this.onMasterCheckboxToggle(false);
   }
 
   onPage(pageEvent: PageEvent) {
-    this.reset();
+    // this.reset();
     this.page.emit(pageEvent);
   }
 
@@ -345,7 +347,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   isSelected(item: T): boolean {
-    return this.selectedRow ? this.selectedRow.id === item.id : false;
+    return this.selectedRow?.id === item.id;
   }
 
   isDisabled(_: T): boolean {

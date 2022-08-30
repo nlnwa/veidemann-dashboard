@@ -13,7 +13,7 @@ import {Duration} from '../../../../shared/models/duration/duration.model';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../shared/validation/patterns';
-import * as moment from 'moment';
+import {Duration as LuxonDuration} from 'luxon';
 
 @Component({
   selector: 'app-duration-picker',
@@ -149,24 +149,17 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   secondsToDuration(seconds: number): Duration {
-    const s = moment.duration(seconds, 'seconds');
-    return new Duration({
-      days: s.days(),
-      hours: s.hours(),
-      minutes: s.minutes(),
-      seconds: s.seconds(),
-      milliseconds: null,
-    });
+    return this.msToDuration(seconds * 1000);
   }
 
   msToDuration(milliseconds: number): Duration {
-    const ms = moment.duration(milliseconds);
+    const ms = LuxonDuration.fromMillis(milliseconds);
     return new Duration({
       days: null,
       hours: null,
-      minutes: ms.minutes(),
-      seconds: ms.seconds(),
-      milliseconds: ms.milliseconds(),
+      minutes: ms.minutes,
+      seconds: ms.seconds,
+      milliseconds: ms.milliseconds,
     });
   }
 
@@ -180,24 +173,14 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   durationToSeconds(duration: Duration): number {
-    const seconds = (
-        duration.days * (24 * 3600)) +
-      (duration.hours * 3600) +
-      (duration.minutes * 60) +
-      duration.seconds;
-    return seconds;
+    return (this.durationToMs(duration) % 60000) / 1000;
   }
 
-  durationToMs(duration: Duration) {
-    const ms = (
-      (duration.minutes * 60000) + (duration.seconds * 1000) + duration.milliseconds
-    );
-    return ms;
+  durationToMs(duration: Duration): number {
+    return LuxonDuration.fromDurationLike(duration).toMillis();
   }
 
   validate(ctrl): ValidationErrors | null {
     return this.form.valid ? null : {invalidForm: {valid: false, message: 'Feltene kan kun inneholde positive tall'}};
   }
-
-
 }

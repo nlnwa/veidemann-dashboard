@@ -1,5 +1,5 @@
-import {LogLevelsProto} from '../../../api';
 import {isNumeric} from '../../func';
+import {LogLevels as LogLevelsProto} from '../../../api/config/v1/resources_pb';
 
 export enum Level {
   UNDEFINED = 0,

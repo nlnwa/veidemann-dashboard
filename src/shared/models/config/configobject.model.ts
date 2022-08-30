@@ -1,5 +1,4 @@
-import {ConfigObjectProto} from '../../../api';
-import {intersectLabel} from '../../func/group-update/labels/common-labels';
+import {intersectLabel} from '../../func/common-labels';
 import {Collection} from './collection.model';
 import {CrawlEntity} from './crawlentity.model';
 import {Seed} from './seed.model';
@@ -14,7 +13,7 @@ import {RoleMapping} from './rolemapping.model';
 import {Kind} from './kind.model';
 import {Meta} from './meta.model';
 import {ConfigRef} from './configref.model';
-
+import {ConfigObject as ConfigObjectProto} from '../../../api/config/v1/resources_pb';
 
 export class ConfigObject {
   id: string;

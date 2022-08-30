@@ -1,24 +1,14 @@
-import {
-  AfterViewInit,
-  Directive,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import {AfterViewInit, Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {isValidDate} from '../../../shared/func';
+import {parseDateAndTime} from '../../../shared/func';
 
 @Directive()
-// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnDestroy {
 
   form: UntypedFormGroup;
 
-  private subscription: Subscription;
+  private formChanges: Subscription;
 
   @Input()
   query: Partial<T>;
@@ -27,13 +17,13 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
   queryChange: EventEmitter<Partial<T>>;
 
   protected constructor(protected fb: UntypedFormBuilder) {
-    this.subscription = Subscription.EMPTY;
+    this.formChanges = Subscription.EMPTY;
     this.queryChange = new EventEmitter<Partial<T>>();
     this.createForm();
   }
 
   ngAfterViewInit() {
-    this.subscription = this.form.valueChanges.subscribe(value => {
+    this.formChanges = this.form.valueChanges.subscribe(value => {
       this.onQuery(value);
     });
   }
@@ -49,7 +39,7 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.formChanges.unsubscribe();
   }
 
   onQuery(query: T) {
@@ -68,17 +58,9 @@ export abstract class QueryComponent<T> implements AfterViewInit, OnChanges, OnD
 
   protected transform(query: T): T {
     for (const [key, value] of Object.entries(query)) {
-
-      // match date values and convert to ISO string if valid
       if (value && key.match(/time/i)) {
-        const date = new Date(value);
-        if (isValidDate(date)) {
-          query[key] = date.toISOString();
-        } else {
-          query[key] = '';
-        }
+        query[key] = parseDateAndTime(value) ?? '';
       }
-
     }
     return query;
   }

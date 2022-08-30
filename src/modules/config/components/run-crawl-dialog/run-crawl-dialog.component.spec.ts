@@ -158,7 +158,7 @@ describe('RunCrawlDialogComponent', () => {
       await crawljobSelect.open();
       const options = await crawljobSelect.getOptions();
       await options[0].click();
-      expect(component.jobRefId).toEqual('configObject_id');
+      expect(component.jobId).toEqual('configObject_id');
       runButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'RUN'}));
       expect(await runButton.isDisabled()).toBeFalsy();
     });
@@ -205,7 +205,7 @@ describe('RunCrawlDialogComponent', () => {
       await crawljobSelect.open();
       const options = await crawljobSelect.getOptions();
       await options[0].click();
-      expect(component.jobRefId).toEqual('configObject_id');
+      expect(component.jobId).toEqual('configObject_id');
       runButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({text: 'RUN'}));
       expect(await runButton.isDisabled()).toBeFalsy();
     });

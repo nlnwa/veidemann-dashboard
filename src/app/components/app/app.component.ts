@@ -49,10 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       try {
         const url: URL = new URL(this.authService.requestedUri, 'http://localhost');
         const queryParams = {};
-        // @ts-ignore
-        for (const [key, value] of url.searchParams) {
-          queryParams[key] = value;
-        }
+        url.searchParams.forEach((value, key, parent) => queryParams[key] = value);
         const fragment = url.hash.substring(1) || null;
         const commands = url.pathname.split('/');
         this.router.navigate(commands, {queryParams, fragment, replaceUrl: true})

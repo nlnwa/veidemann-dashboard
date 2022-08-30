@@ -6,7 +6,7 @@
                                       [query]="query"
                                       (queryChange)="onQueryChange($event)"></app-crawl-execution-status-query>
     <app-crawl-execution-status-list fxFlex
-                                     appQueryCrawlExecutionStatus [query]="query"
+                                     appCrawlExecutionStatusLoader [query]="query"
                                      [pageIndex]="pageIndex$ | async"
                                      [pageSize]="pageSize$ | async"
                                      [sortDirection]="sortDirection$ | async"

@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from 'src/shared/models';
-import {durationBetweenDates} from '../../../../shared/func';
+import {duration} from '../../../../shared/func';
 import {Router} from '@angular/router';
 
 export enum JobExecutionStatusColor {
@@ -155,7 +155,7 @@ export class JobExecutionPreviewComponent implements OnChanges {
         endTime = new Date().toISOString();
       }
     }
-    return durationBetweenDates(jobExec.startTime, endTime);
+    return duration(jobExec.startTime, endTime);
   }
 
   getExecMap(executionStateMap: Map<string, number>) {

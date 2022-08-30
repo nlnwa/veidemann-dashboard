@@ -1,4 +1,4 @@
-import {ErrorProto} from '../../../api';
+import {Error as ErrorProto} from '../../../api/commons/v1/resources_pb';
 
 export class ApiError {
   code: number;

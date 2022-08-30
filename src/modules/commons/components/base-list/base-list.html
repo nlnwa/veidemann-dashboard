@@ -42,7 +42,7 @@
         </th>
         <td mat-cell *matCellDef="let row" class="checkbox-padding">
           <mat-checkbox *ngIf="multiSelect"
-                        [checked]="selection.isSelected(row)"
+                        [checked]="isChecked(row)"
                         (click)="$event.stopPropagation()"
                         (change)="onCheckboxToggle(row)">
           </mat-checkbox>

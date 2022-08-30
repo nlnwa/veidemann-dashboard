@@ -1,7 +1,7 @@
 import {ConfigObject} from './configobject.model';
 import {ApiKeyProto, RoleMappingProto} from '../../../api';
 import {Role} from './role.model';
-import {fromTimestampProto, toTimestampProto} from '../../func';
+import {unmarshalTimestamp, marshalTimestamp} from '../../func';
 
 export class RoleMapping {
   apiKey?: ApiKey;
@@ -81,14 +81,14 @@ export class ApiKey {
   static fromProto(proto: ApiKeyProto): ApiKey {
     return new ApiKey({
       token: proto.getToken(),
-      validUntil: fromTimestampProto(proto.getValiduntil()),
+      validUntil: unmarshalTimestamp(proto.getValiduntil()),
     });
   }
 
   static toProto(apiKey: ApiKey): ApiKeyProto {
     const proto = new ApiKeyProto();
     proto.setToken(apiKey.token);
-    proto.setValiduntil(toTimestampProto(apiKey.validUntil));
+    proto.setValiduntil(marshalTimestamp(apiKey.validUntil));
     return proto;
   }
 }

@@ -1,4 +1,9 @@
-import {CrawlerStatusProto, ExecutionIdProto, RunCrawlReplyProto, RunCrawlRequestProto} from '../../../api';
+import {ExecutionId as ExecutionIdProto} from '../../../api/controller/v1/resources_pb';
+import {
+  CrawlerStatus as CrawlerStatusProto,
+  RunCrawlReply as RunCrawlReplyProto,
+  RunCrawlRequest as RunCrawlRequestProto
+} from '../../../api/controller/v1/controller_pb';
 
 export class CrawlerStatus {
   runStatus: RunStatus;

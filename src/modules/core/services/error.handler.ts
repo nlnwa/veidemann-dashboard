@@ -17,7 +17,6 @@ export class ApplicationErrorHandler extends ErrorHandler {
   }
 
   handleError(error: any): void {
-    console.warn('error handler', error);
     if (error.code) {
       this.handleGrpcError(error);
       return;
@@ -29,10 +28,8 @@ export class ApplicationErrorHandler extends ErrorHandler {
       case ReferrerError:
         this.errorService.dispatch(error);
         break;
-      default:
-        console.error(error);
-        break;
     }
+    console.error(error);
   }
 
   handleGrpcError(error) {

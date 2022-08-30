@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ErrorHandler, OnDestroy} from '@angular/core';
 import {ActivatedRoute, NavigationStart, Router, RouterEvent} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -20,7 +20,7 @@ import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '
 import {DeleteDialogComponent, Parcel} from '../../components';
 import {KindService, OptionsService} from '../../services';
 import {RunCrawlDialogComponent} from '../../components/run-crawl-dialog/run-crawl-dialog.component';
-import {ConfigService} from '../../../commons/services';
+import {ConfigService, ControllerService} from '../../../commons/services';
 import {ConfigQuery} from '../../../../shared/func';
 import {ConfigDialogData, dialogByKind} from '../../func';
 import {RouterExtraService} from '../../services/router-extra.service';
@@ -75,13 +75,13 @@ export class ConfigurationComponent implements OnDestroy {
   constructor(private authService: AuthService,
               private dataService: ConfigService,
               private snackBarService: SnackBarService,
-              private errorService: ErrorService,
+              private errorService: ErrorHandler,
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
               private kindService: KindService,
               private optionsService: OptionsService,
-              private controllerApiService: ControllerApiService,
+              private controllerApiService: ControllerService,
               private routerExtraService: RouterExtraService,
               private location: Location) {
     this.configObject = new Subject();
@@ -258,10 +258,10 @@ export class ConfigurationComponent implements OnDestroy {
     const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
       disableClose: true,
       autoFocus: true,
-      data: {configObject, jobRefId: null, crawlJobs}
+      data: {configObject, crawlJobs}
     });
     dialogRef.afterClosed()
-      .subscribe(result => {
+      .subscribe(({jobId: string, seedId: string}) => {
         if (result.runCrawlRequest) {
           this.controllerApiService.runCrawl(result.runCrawlRequest)
             .subscribe(runCrawlReply => {

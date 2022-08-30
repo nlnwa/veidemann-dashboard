@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, CrawlExecutionStatus, ExtraStatusCodes} from '../../../../shared/models/report';
-import {durationBetweenDates} from '../../../../shared/func';
+import {duration} from '../../../../shared/func';
 
 export enum CrawlExecutionStatusColors {
   CRAWLED = '#009E73',
@@ -76,7 +76,7 @@ export class CrawlExecutionPreviewComponent implements OnChanges {
   }
 
   getDuration(startTime: string, endTime: string): string {
-    return durationBetweenDates(startTime, endTime);
+    return duration(startTime, endTime);
   }
 
   getDocuments() {

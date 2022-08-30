@@ -3,7 +3,7 @@ import {UntypedFormBuilder} from '@angular/forms';
 import {combineLatest, Observable, of} from 'rxjs';
 import {ListDataSource, ListItem} from '../../../../shared/models/list-datasource';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
+import {PageLogQuery, PageLogService} from '../../../core/services/pagelog.service';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {ErrorService} from '../../../core/services';
 import {SortDirection} from '@angular/material/sort';

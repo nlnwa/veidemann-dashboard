@@ -1,4 +1,4 @@
-import {Annotation as AnnotationProto} from '../../../api';
+import {Annotation as AnnotationProto} from '../../../api/config/v1/resources_pb';
 
 export class Annotation {
   key: string;

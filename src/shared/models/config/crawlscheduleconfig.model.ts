@@ -1,5 +1,5 @@
 import {CrawlScheduleConfigProto} from '../../../api';
-import {fromTimestampProto, toTimestampProto} from '../../func';
+import {unmarshalTimestamp, marshalTimestamp} from '../../func';
 import {ConfigObject} from './configobject.model';
 
 export class CrawlScheduleConfig {
@@ -20,8 +20,8 @@ export class CrawlScheduleConfig {
   static fromProto(proto: CrawlScheduleConfigProto): CrawlScheduleConfig {
     return new CrawlScheduleConfig({
       cronExpression: proto.getCronExpression(),
-      validFrom: fromTimestampProto(proto.getValidFrom()),
-      validTo: fromTimestampProto(proto.getValidTo())
+      validFrom: unmarshalTimestamp(proto.getValidFrom()),
+      validTo: unmarshalTimestamp(proto.getValidTo())
     });
   }
 
@@ -62,8 +62,8 @@ export class CrawlScheduleConfig {
   static toProto(crawlScheduleConfig: CrawlScheduleConfig): CrawlScheduleConfigProto {
     const proto = new CrawlScheduleConfigProto();
     proto.setCronExpression(crawlScheduleConfig.cronExpression);
-    proto.setValidFrom(toTimestampProto(crawlScheduleConfig.validFrom));
-    proto.setValidTo(toTimestampProto(crawlScheduleConfig.validTo));
+    proto.setValidFrom(marshalTimestamp(crawlScheduleConfig.validFrom));
+    proto.setValidTo(marshalTimestamp(crawlScheduleConfig.validTo));
     return proto;
   }
 }

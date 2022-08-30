@@ -3,7 +3,7 @@ import {from, Observable, of} from 'rxjs';
 import {catchError, filter, map, mergeMap, toArray} from 'rxjs/operators';
 import {ConfigObject, ConfigRef, Kind} from '../models';
 import {ConfigApiService} from '../../modules/core/services';
-import {ListRequest} from '../../api';
+import {ListRequest} from '../../api/config/v1/config_pb';
 import {createSimilarDomainRegExpString} from './patterns';
 import {createListRequest} from '../../modules/config/func/query';
 
@@ -36,6 +36,7 @@ export class SeedUrlValidator {
           map(url => seedWithMatchingUrl(url)),
           filter(_ => !!_),
           mergeMap(request => configApiService.list(request)),
+          map(ConfigObject.fromProto),
           toArray(),
           map((seeds: ConfigObject[]) => {
             if (seeds.length === 0) {

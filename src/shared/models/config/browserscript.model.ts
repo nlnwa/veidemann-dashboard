@@ -1,4 +1,4 @@
-import {BrowserScriptProto} from '../../../api';
+import {BrowserScript as BrowserScriptProto} from '../../../api/config/v1/resources_pb';
 import {ConfigObject} from './configobject.model';
 import {isNumeric} from '../../func';
 

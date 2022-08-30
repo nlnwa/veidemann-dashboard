@@ -1,14 +1,14 @@
 import {Directive, Host, Inject} from '@angular/core';
 import {BASE_LIST} from '../../../shared/directives';
 import {BaseList, JobExecutionStatus, ListDataSource} from '../../../shared/models';
-import {QueryWithPageLengthDirective} from './query-with-page-length.directive';
+import {LoadWithPageLengthDirective} from './load-with-page-length.directive';
 import {JobExecutionService, JobExecutionStatusQuery} from '../services';
 
 
 @Directive({
   selector: '[appQueryJobExecutionStatus]'
 })
-export class QueryJobExecutionStatusDirective extends QueryWithPageLengthDirective<JobExecutionStatusQuery, JobExecutionStatus> {
+export class QueryJobExecutionStatusDirective extends LoadWithPageLengthDirective<JobExecutionStatusQuery, JobExecutionStatus> {
 
   constructor(protected service: JobExecutionService,
               @Host() @Inject(BASE_LIST) protected baseList: BaseList<JobExecutionStatus>,
@@ -16,11 +16,11 @@ export class QueryJobExecutionStatusDirective extends QueryWithPageLengthDirecti
     super(service, baseList, dataSource);
   }
 
-  protected onQuery() {
+  protected onQuery(previous: JobExecutionStatusQuery, current: JobExecutionStatusQuery) {
     if (this.query.watch) {
       this.subject.next(this.query);
     } else {
-      super.onQuery();
+      super.onQuery(previous, current);
     }
   }
 }

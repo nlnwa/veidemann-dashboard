@@ -35,4 +35,15 @@ export class ConfigListComponent extends BaseListComponent<ConfigObject> {
   isDisabled(config: ConfigObject): boolean {
     return config?.crawlJob?.disabled || config?.seed?.disabled;
   }
+
+  reset() {
+    // this.selection.clear();
+    this.selectedRow = null;
+    this.allSelected = false;
+    this.selectedRowIndex = null;
+  }
+
+  clearSelection() {
+    this.selection.clear();
+  }
 }

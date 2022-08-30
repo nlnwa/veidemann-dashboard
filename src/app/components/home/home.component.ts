@@ -5,6 +5,7 @@ import {ControllerApiService, ErrorService} from '../../../modules/core/services
 import {CrawlerStatusDialogComponent} from '../index';
 import {MatDialog} from '@angular/material/dialog';
 import {CrawlerStatus} from '../../../shared/models/controller/controller.model';
+import {ControllerService} from '../../../modules/commons/services';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit {
   crawlerStatus$: Observable<CrawlerStatus>;
 
   constructor(private errorService: ErrorService,
-              private controllerApiService: ControllerApiService,
+              private controllerService: ControllerService,
               private dialog: MatDialog) {
   }
 

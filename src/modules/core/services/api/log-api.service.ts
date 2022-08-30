@@ -1,67 +1,42 @@
-import {Injectable} from '@angular/core';
-import {
-  CrawlLogListRequest,
-  CrawlLogProto,
-  LogPromiseClient,
-  PageLogListRequest,
-  PageLogProto,
-} from '../../../../api';
-import {AuthService} from '../auth';
-import {ErrorService} from '../error.service';
-import {EMPTY, Observable, Observer} from 'rxjs';
-import {CrawlLog, PageLog} from '../../../../shared/models';
-import {catchError, map} from 'rxjs/operators';
-import {AppConfig} from '../../models';
+import {Observable, Observer} from 'rxjs';
+import {Metadata} from 'grpc-web';
+import {MetadataInterceptor} from './interceptors';
+import {LogPromiseClient} from '../../../../api/log/v1/log_grpc_web_pb';
+import {CrawlLogListRequest, PageLogListRequest} from '../../../../api/log/v1/log_pb';
+import {CrawlLog, PageLog} from '../../../../api/log/v1/resources_pb';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class LogApiService {
 
-  private logClient: LogPromiseClient;
+  private client: LogPromiseClient;
 
-  constructor(private authService: AuthService,
-              appConfigService: AppConfig,
-              private errorService: ErrorService) {
-    this.logClient = new LogPromiseClient(appConfigService.grpcWebUrl, null, null);
+  constructor(private host: string,
+              private metadata?: Metadata) {
+    let options: { [p: string]: any };
+    if (metadata) {
+      const interceptor = new MetadataInterceptor(metadata);
+      options = {'streamInterceptors': [interceptor]};
+    }
+    this.client = new LogPromiseClient(host, null, options);
   }
 
 
   listPageLogs(listRequest: PageLogListRequest): Observable<PageLog> {
-    const metadata = this.authService.metadata;
-
-    return new Observable((observer: Observer<PageLogProto>) => {
-      const stream = this.logClient.listPageLogs(listRequest, metadata)
+    return new Observable((observer: Observer<PageLog>) => {
+      const stream = this.client.listPageLogs(listRequest)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
-    }).pipe(
-      map(PageLog.fromProto),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return EMPTY;
-      })
-    );
+    });
   }
-
 
   listCrawlLogs(listRequest: CrawlLogListRequest): Observable<CrawlLog> {
-    const metadata = this.authService.metadata;
-
-    return new Observable((observer: Observer<CrawlLogProto>) => {
-      const stream = this.logClient.listCrawlLogs(listRequest, metadata)
+    return new Observable((observer: Observer<CrawlLog>) => {
+      const stream = this.client.listCrawlLogs(listRequest)
         .on('data', data => observer.next(data))
         .on('error', error => observer.error(error))
         .on('end', () => observer.complete());
       return () => stream.cancel();
-    }).pipe(
-      map(CrawlLog.fromProto),
-      catchError(error => {
-        this.errorService.dispatch(error);
-        return EMPTY;
-      })
-    );
+    });
   }
-
 }

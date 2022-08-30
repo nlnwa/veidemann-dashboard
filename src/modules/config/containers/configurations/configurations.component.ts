@@ -22,7 +22,7 @@ import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '
 import {DeleteDialogComponent, DeleteMultiDialogComponent, Parcel, RunCrawlDialogComponent} from '../../components';
 import {PageEvent} from '@angular/material/paginator';
 import {SortDirection} from '@angular/material/sort';
-import {ConfigService} from '../../../commons/services';
+import {ConfigService, ControllerService} from '../../../commons/services';
 import {ConfigQuery, distinctUntilArrayChanged, Sort} from '../../../../shared/func';
 import {KindService, OptionsService} from '../../services';
 import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '../../func';
@@ -84,7 +84,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
-              private controllerApiService: ControllerApiService,
+              private controllerService: ControllerService,
               private kindService: KindService,
               private optionsService: OptionsService) {
 
@@ -164,11 +164,11 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
 
     const crawlJobIdList$ = queryParam$.pipe(
       map(({crawlJobIds}) => crawlJobIds),
-      distinctUntilArrayChanged);
+      distinctUntilArrayChanged());
 
     const scriptIdList$ = queryParam$.pipe(
       map(({scriptIds}) => scriptIds),
-      distinctUntilArrayChanged);
+      distinctUntilArrayChanged());
 
     const sort$: Observable<Sort> = queryParam$.pipe(
       map(({sort}) => {
@@ -216,9 +216,9 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
       sortActive$,
       pageIndex$,
       pageSize$,
-      this.reload.pipe(startWith(null as object))
+      this.reload.pipe(startWith(null))
     ]).pipe(
-      debounceTime<any>(0), // synchronize observables
+      debounceTime(0), // synchronize observables
       map(([
              kind,
              entityId,
@@ -257,7 +257,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     );
 
     const length$: Observable<number> = combineLatest([
-      this.recount.pipe(startWith(null as string)),
+      this.recount.pipe(startWith(null)),
       query$.pipe(distinctUntilChanged((a: ConfigQuery, b: ConfigQuery) =>
         // only count when these query parameters change
         (a.kind === b.kind
@@ -707,7 +707,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result.runCrawlRequest) {
-          this.controllerApiService.runCrawl(result.runCrawlRequest)
+          this.controllerService.runCrawl(result.runCrawlRequest)
             .subscribe(runCrawlReply => {
               if (configObject.kind === Kind.SEED) {
                 this.router.navigate(
@@ -735,7 +735,10 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     const dialogRef = this.dialog.open(RunCrawlDialogComponent, {
       disableClose: true,
       autoFocus: true,
-      data: {configObject: configObjects[0], jobRefId: null, crawlJobs, numberOfSeeds: configObjects.length}
+      data: {
+        configObjects: configObjects,
+        jobId: null, crawlJobs,
+      }
     });
     dialogRef.afterClosed()
       .subscribe(result => {
@@ -743,7 +746,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
           if (result.crawlMultiple) {
             let started = 0;
             for (const seed of this.selectedConfigs) {
-              this.controllerApiService.runCrawl(
+              this.controllerService.runCrawl(
                 new RunCrawlRequest({seedId: seed.id, jobId: result.runCrawlRequest.jobId})
               ).subscribe(runCrawlReply => {
                 started++;
@@ -760,7 +763,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
               });
             }
           } else {
-            this.controllerApiService.runCrawl(result.runCrawlRequest)
+            this.controllerService.runCrawl(result.runCrawlRequest)
               .subscribe(runCrawlReply => {
                 this.router.navigate(
                   ['report', 'crawlexecution'],

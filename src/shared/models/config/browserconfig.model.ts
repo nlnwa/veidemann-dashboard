@@ -1,4 +1,4 @@
-import {BrowserConfigProto} from '../../../api';
+import {BrowserConfig as BrowserConfigProto} from '../../../api/config/v1/resources_pb';
 import {intersectString} from '../../func';
 import {ConfigRef} from './configref.model';
 import {ConfigObject} from './configobject.model';

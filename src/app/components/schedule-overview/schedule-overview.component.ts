@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {CalendarOptions, EventClickArg, FullCalendarComponent} from '@fullcalendar/angular';
 import {forkJoin, Subject} from 'rxjs';
 import {ConfigObject, Kind} from '../../../shared/models';
@@ -14,12 +6,12 @@ import {ConfigApiService, ErrorService} from '../../../modules/core/services';
 import {createListRequest} from '../../../modules/config/func/query';
 import {takeUntil, toArray} from 'rxjs/operators';
 import * as cronParser from 'cron-parser';
+import {CronDate} from 'cron-parser';
 import {MatDialog} from '@angular/material/dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
-import * as momentTimezone from 'moment-timezone';
-import * as moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
+import {DateTime, Interval} from 'luxon';
 
 interface ScheduledJob {
   crawlJobName: string;
@@ -174,21 +166,17 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getScheduleFromCron(cron: string, validRange: ScheduleValidRange, duration: number): { start: string, end: string }[] {
-    const checkRange = validRange.validFrom || validRange.validTo ? true : false;
-    const options = {
+    const checkRange = !!(validRange.validFrom || validRange.validTo);
+    const options: cronParser.ParserOptions = {
       startDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1),
       endDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1),
       utc: true,
-      iterator: true,
-      tz: momentTimezone.tz.guess(),
     };
 
-    const prevOptions = {
+    const prevOptions: cronParser.ParserOptions<true> = {
       startDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1),
       endDate: this.viewDate,
-      iterator: true,
       utc: true,
-      tz: momentTimezone.tz.guess(),
     };
 
     const schedule = [];
@@ -198,13 +186,10 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
         try {
           const obj = interval.next();
           if (checkRange) {
-            // @ts-ignore
-            if (this.isDateInRange(obj.value.toISOString(), validRange)) {
+            if (this.isDateInRange(obj.toISOString(), validRange)) {
               schedule.push({
-                // @ts-ignore
-                start: obj.value.toISOString(),
-                // @ts-ignore
-                end: this.addDuration(obj.value, duration),
+                start: obj.toISOString(),
+                end: this.addDuration(obj, duration),
               });
             }
           } else {
@@ -268,8 +253,8 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     this.dialog.open(ScheduleEventDialogComponent, {data});
   }
 
-  private addDuration(timestamp: any, duration) {
-    const date = new Date(timestamp);
+  private addDuration(timestamp: CronDate, duration) {
+    const date = timestamp.toDate();
     date.setSeconds(date.getSeconds() + duration);
     return date.toISOString();
 
@@ -303,9 +288,10 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   }
 
   private isDateInRange(startDate: string, validRange: ScheduleValidRange) {
-    const eventStart = moment(startDate);
-    const validFrom = validRange.validFrom ? moment(validRange.validFrom) : moment().startOf('year');
-    const validTo = validRange.validTo ? moment(validRange.validTo) : moment().endOf('year');
-    return moment(eventStart).isBetween(validFrom, validTo);
+    const now = DateTime.now()
+    const eventStart = DateTime.fromISO(startDate);
+    const validFrom = validRange.validFrom ? DateTime.fromISO(validRange.validFrom) : now.startOf('year');
+    const validTo = validRange.validTo ? DateTime.fromISO(validRange.validTo) : now.endOf('year');
+    return Interval.fromDateTimes(validFrom, validTo).contains(eventStart);
   }
 }

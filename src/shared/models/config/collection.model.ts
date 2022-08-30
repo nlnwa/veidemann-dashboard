@@ -1,4 +1,4 @@
-import {Collection as CollectionProto} from '../../../api';
+import {Collection as CollectionProto} from '../../../api/config/v1/resources_pb';
 import {SubCollection} from './subcollection.model';
 import {isNumeric} from '../../func';
 

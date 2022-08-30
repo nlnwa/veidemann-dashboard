@@ -12,14 +12,15 @@ import {
   AppInitializerService,
   ApplicationErrorHandler,
   AuthService,
+  ConfigApiService,
   ControllerApiService,
   TokenInterceptor,
 } from './services';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {AppConfig} from './models/app-config.model';
+import {AppConfig} from './models';
 import {Ability, PureAbility} from '@casl/ability';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
+import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 
 registerLocaleData(localeNb, 'nb', localeNbExtra);
 
@@ -29,20 +30,30 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
     KeyboardShortcutsModule.forRoot(),
   ],
   providers: [
-    OAuthService,
+    AuthService,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInitializerService: AppInitializerService) => () => appInitializerService.init(),
-      deps: [AppInitializerService, AppConfig, OAuthService, ControllerApiService, AuthService],
+      useFactory: (appInitializerService: AppInitializerService) => appInitializerService.init,
+      deps: [AppInitializerService, AppConfig, OAuthService, AuthService],
       multi: true
+    },
+    {
+      provide: ConfigApiService,
+      useFactory: (appConfig: AppConfig, authService: AuthService) => new ConfigApiService(appConfig.grpcWebUrl, authService.metadata),
+      deps: [AppConfig, AuthService]
+    },
+    {
+      provide: ControllerApiService,
+      useFactory: (appConfig: AppConfig, authService: AuthService) => new ControllerApiService(appConfig.grpcWebUrl, authService.metadata),
+      deps: [AppConfig, AuthService]
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: ErrorHandler, useClass: ApplicationErrorHandler},
-    {provide: LOCALE_ID, useValue: 'nb'},
+    {provide: LOCALE_ID, useValue: 'nb-NO'},
     {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS},
     {provide: Ability, useValue: new Ability()},
     {provide: PureAbility, useExisting: Ability},
   ]

@@ -3,12 +3,11 @@ import {debounceTime, distinctUntilChanged, map, share, shareReplay, startWith} 
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
-import {JobExecutionState, jobExecutionStates, JobExecutionStatus} from '../../../../shared/models/report';
+import {ConfigObject, JobExecutionState, JobExecutionStatus, Kind} from '../../../../shared/models';
 import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
-import {ConfigObject, Kind} from '../../../../shared/models/config';
 import {MatDialog} from '@angular/material/dialog';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
 
@@ -20,7 +19,6 @@ import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobExecutionComponent implements OnInit {
-  readonly jobExecutionStates = jobExecutionStates;
   readonly JobExecutionState = JobExecutionState;
   readonly crawlJobOptions: ConfigObject[];
   readonly Kind = Kind;
@@ -68,26 +66,27 @@ export class JobExecutionComponent implements OnInit {
     );
 
     const watch$ = routeParam$.pipe(
-      map(({watch}) => watch),
+      map(({watch}) => !!watch),
       distinctUntilChanged());
 
     const jobId$ = routeParam$.pipe(
       map(({jobId}) => jobId),
       distinctUntilChanged());
 
-    const stateList$: Observable<JobExecutionState[]> = routeParam$.pipe(
+    const stateList$ = routeParam$.pipe(
       map(({stateList}) => stateList),
-      distinctUntilArrayChanged);
+      map(stateList => stateList.map<JobExecutionState>(state => JobExecutionState[state])),
+      distinctUntilArrayChanged());
 
     const startTimeTo$: Observable<string> = routeParam$.pipe(
       map(({startTimeTo}) => startTimeTo),
-      map(date => date && isValidDate(new Date(date)) ? date : null),
+      map(timestamp => isValidDate(timestamp) ? timestamp : null),
       distinctUntilChanged(),
     );
 
     const startTimeFrom$: Observable<string> = routeParam$.pipe(
       map(({startTimeFrom}) => startTimeFrom),
-      map(date => date && isValidDate(new Date(date)) ? date : null),
+      map(timestamp => isValidDate(timestamp) ? timestamp : null),
       distinctUntilChanged(),
     );
 
@@ -122,26 +121,16 @@ export class JobExecutionComponent implements OnInit {
     const sortActive$ = sort$.pipe(
       map(sort => sort ? sort.active : ''));
 
+    // TODO do we need this?
     const init$ = of(null);
 
     const query$: Observable<JobExecutionStatusQuery> = combineLatest([
       jobId$, stateList$, sortActive$, sortDirection$, pageIndex$, pageSize$, startTimeFrom$,
-      startTimeTo$, watch$, init$, this.reload$.pipe(startWith(null as string))
-
+      startTimeTo$, watch$, init$, this.reload$.pipe(startWith(null))
     ]).pipe(
-      debounceTime<any>(0),
-      map(([jobId, stateList, active, direction, pageIndex, pageSize, startTimeFrom,
-             startTimeTo, watch]) => ({
-        jobId,
-        stateList,
-        active,
-        direction,
-        pageIndex,
-        pageSize,
-        startTimeFrom,
-        startTimeTo,
-        watch,
-      })),
+      debounceTime(0),
+      map(([jobId, stateList, active, direction, pageIndex, pageSize, startTimeFrom, startTimeTo, watch]) =>
+        ({jobId, stateList, active, direction, pageIndex, pageSize, startTimeFrom, startTimeTo, watch})),
       share()
     );
 

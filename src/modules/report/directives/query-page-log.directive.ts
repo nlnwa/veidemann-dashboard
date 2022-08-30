@@ -1,22 +1,21 @@
 import {Directive, Inject} from '@angular/core';
-import {BASE_LIST, QueryDirective} from '../../../shared/directives';
+import {BASE_LIST, LoaderDirective} from '../../../shared/directives';
 import {PageLogQuery, PageLogService} from '../services';
-import {PageLog} from '../../../shared/models/log';
-import {BaseList, ListDataSource} from '../../../shared/models';
-import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {BaseList, ListDataSource, PageLog} from '../../../shared/models';
+import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 
 @Directive({
   selector: '[appQueryPageLog]'
 })
-export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog> {
+export class QueryPageLogDirective extends LoaderDirective<PageLogQuery, PageLog> {
   constructor(protected service: PageLogService,
               @Inject(BASE_LIST) protected baseList: BaseList<PageLog>) {
     super(service, baseList, new ListDataSource<PageLog>());
   }
 
-  onInit(): void {
-    super.onInit();
+  onLoad(): void {
+    super.onLoad();
 
     // fake counting
     this.query$.pipe(

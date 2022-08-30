@@ -2,7 +2,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {ControllerApiService} from '../../core/services';
 import {Observable} from 'rxjs';
 import {ExecutionId} from '../../../shared/models/controller/controller.model';
-import {CrawlExecutionState, CrawlExecutionStatus} from '../../../shared/models/report';
+import {CrawlExecutionState, CrawlExecutionStatus} from '../../../shared/models';
 import {first, map} from 'rxjs/operators';
 
 @Pipe({
@@ -15,8 +15,8 @@ export class ExecutionQueueCountPipe implements PipeTransform {
   transform(crawlExecutionStatus: CrawlExecutionStatus): Observable<number> {
     const activeStates = [CrawlExecutionState.CREATED, CrawlExecutionState.FETCHING, CrawlExecutionState.SLEEPING];
     if (activeStates.includes(crawlExecutionStatus.state)) {
-      const exectionId = new ExecutionId({id: crawlExecutionStatus.id});
-      return this.controllerApiService.queueCountForCrawlExecution(exectionId).pipe(
+      const executionId = new ExecutionId({id: crawlExecutionStatus.id});
+      return this.controllerApiService.queueCountForCrawlExecution(executionId).pipe(
         first(),
         map(countResponse => countResponse.count));
     }

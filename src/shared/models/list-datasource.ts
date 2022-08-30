@@ -7,6 +7,7 @@ export interface BaseList<T> {
   length: number;
 
   reset(): void;
+  clearSelection(): void;
 }
 
 export interface ListItem {

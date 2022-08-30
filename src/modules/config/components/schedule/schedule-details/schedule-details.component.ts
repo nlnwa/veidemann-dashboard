@@ -1,12 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 
-import {
-  ConfigObject,
-  CrawlScheduleConfig,
-  Kind,
-  Meta,
-} from '../../../../../shared/models';
+import {ConfigObject, CrawlScheduleConfig, Kind, Meta,} from '../../../../../shared/models';
 
 
 import {
@@ -17,8 +12,32 @@ import {
   VALID_CRON_MONTH_PATTERN
 } from '../../../../../shared/validation';
 
-import {AuthService} from '../../../../core/services/auth';
-import {DateTime} from '../../../../../shared/func';
+import {AuthService} from '../../../../core/services';
+import {DateTime} from 'luxon';
+import {asLocalTime} from '../../../../../shared/func';
+import {asUTC} from '../../../../../shared/func/datetime';
+
+
+/**
+ * Parse localized short form of a date string to ISO 8601 format.
+ *
+ * @see https://moment.github.io/luxon/#/formatting?id=table-of-tokens
+ *
+ * @param {string} dateString - A short form string representation that is locale dependent
+ * @param {boolean} startOfDay
+ * @returns {string} - ISO 8601-compliant string representation
+ */
+export function dateToUtc(dateString: string, startOfDay: boolean, locale: string): string {
+  const dt = DateTime.fromFormat(dateString, 'D', {locale: locale, zone: 'utc'});
+  if (!dt.isValid) {
+    return null;
+  }
+  if (startOfDay) {
+    return dt.startOf('day').toISO();
+  } else {
+    return dt.endOf('day').toISO();
+  }
+}
 
 
 @Component({
@@ -134,12 +153,8 @@ export class ScheduleDetailsComponent implements OnChanges {
     const [minute, hour, dom, month, dow] = this.configObject.crawlScheduleConfig.cronExpression.split(' ');
     this.form.setValue({
       id: this.configObject.id,
-      validFrom: this.configObject.crawlScheduleConfig.validFrom
-        ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validFrom)
-        : null,
-      validTo: this.configObject.crawlScheduleConfig.validTo
-        ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validTo)
-        : null,
+      validFrom: asLocalTime(this.configObject.crawlScheduleConfig.validFrom),
+      validTo: asLocalTime(this.configObject.crawlScheduleConfig.validTo),
       cronExpression: {
         minute: minute || '',
         hour: hour || '',
@@ -165,8 +180,8 @@ export class ScheduleDetailsComponent implements OnChanges {
     }
 
     const crawlScheduleConfig = new CrawlScheduleConfig();
-    const validFromUTC = DateTime.dateToUtc(formModel.validFrom, true);
-    const validToUTC = DateTime.dateToUtc(formModel.validTo, false);
+    const validFromUTC = asUTC(formModel.validFrom, true);
+    const validToUTC = asUTC(formModel.validTo, false);
 
     crawlScheduleConfig.validFrom = validFromUTC ? validFromUTC : null;
     crawlScheduleConfig.validTo = validToUTC ? validToUTC : null;

@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay, startWith} from 'rxjs/operators';
 
-import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
+import {distinctUntilArrayChanged, parseDateAndTime, Sort} from '../../../../shared/func';
 import {CrawlExecutionState, CrawlExecutionStatus} from '../../../../shared/models/report';
 import {ConfigObject, ListDataSource, ListItem, Kind} from '../../../../shared/models';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
@@ -94,9 +94,9 @@ export class CrawlExecutionComponent implements OnInit {
       map(({seedId}) => seedId),
       distinctUntilChanged());
 
-    const stateList$: Observable<CrawlExecutionState[]> = queryParam.pipe(
+    const stateList$ = queryParam.pipe(
       map(({stateList}) => stateList),
-      distinctUntilArrayChanged);
+      distinctUntilArrayChanged());
 
     const hasError$: Observable<boolean> = queryParam.pipe(
       map(({hasError}) => hasError === 'true'),
@@ -105,13 +105,13 @@ export class CrawlExecutionComponent implements OnInit {
 
     const startTimeTo$: Observable<string> = queryParam.pipe(
       map(({startTimeTo}) => startTimeTo),
-      map(date => date && isValidDate(new Date(date)) ? date : null),
+      map(date => date && parseDateAndTime(new Date(date)) ? date : null),
       distinctUntilChanged(),
     );
 
     const startTimeFrom$: Observable<string> = queryParam.pipe(
       map(({startTimeFrom}) => startTimeFrom),
-      map(date => date && isValidDate(new Date(date)) ? date : null),
+      map(date => date && parseDateAndTime(new Date(date)) ? date : null),
       distinctUntilChanged(),
     );
 

@@ -27,7 +27,7 @@
     <mat-form-field>
       <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
                   data-testid="run_crawl_dialog_crawljob_select"
-                  [(ngModel)]="jobRefId">
+                  [(ngModel)]="jobId">
         <mat-option *ngFor="let crawlJob of crawlJobs"
                     [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
       </mat-select>
@@ -40,7 +40,7 @@
           i18n="@@commonButtonCancel"
           mat-dialog-close>CANCEL
   </button>
-  <button *ngIf="kind === Kind.CRAWLJOB || kind === Kind.SEED && jobRefId"
+  <button *ngIf="kind === Kind.CRAWLJOB || kind === Kind.SEED && jobId"
           mat-raised-button
           color="primary"
           i18n="@@commonButtonRun"

@@ -1,1 +1,1 @@
-export * from './query.directive';
+export * from './loader.directive';

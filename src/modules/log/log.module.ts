@@ -1,9 +1,8 @@
 import {NgModule} from '@angular/core';
 import {LoglevelComponent} from './containers';
-import {CommonsModule} from '../commons/commons.module';
-import {LogResolver, LogService} from './services';
+import {LogResolver} from './services';
 import {LogRoutingModule} from './routing/log-routing.module';
-
+import {CommonsModule} from '../commons';
 
 @NgModule({
   declarations: [
@@ -15,7 +14,6 @@ import {LogRoutingModule} from './routing/log-routing.module';
   ],
   providers: [
     LogResolver,
-    LogService,
   ]
 })
 export class LogModule {

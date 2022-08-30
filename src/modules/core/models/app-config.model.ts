@@ -5,8 +5,6 @@ export class AppConfig {
   grpcWebUrl: string;
 
   constructor(json?: Partial<AppConfig>) {
-    if (json) {
-      Object.assign(this, json);
-    }
+    Object.assign(this, json ?? {});
   }
 }

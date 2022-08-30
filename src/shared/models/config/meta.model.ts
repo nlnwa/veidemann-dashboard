@@ -1,5 +1,6 @@
-import {Annotation as AnnotationProto, Label as LabelProto, MetaProto} from '../../../api';
-import {fromTimestampProto} from '../../func';
+import {Annotation as AnnotationProto, Label as LabelProto, Meta as MetaProto} from '../../../api/config/v1/resources_pb';
+
+import {unmarshalTimestamp} from '../../func';
 import {Label} from './label.model';
 import {Annotation} from './annotation.model';
 
@@ -37,9 +38,9 @@ export class Meta {
     return new Meta({
       name: proto.getName(),
       description: proto.getDescription(),
-      created: fromTimestampProto(proto.getCreated()),
+      created: unmarshalTimestamp(proto.getCreated()),
       createdBy: proto.getCreatedBy(),
-      lastModified: fromTimestampProto(proto.getLastModified()),
+      lastModified: unmarshalTimestamp(proto.getLastModified()),
       lastModifiedBy: proto.getLastModifiedBy(),
       labelList: proto.getLabelList().map(label => new Label({key: label.getKey(), value: label.getValue()})),
       annotationList: proto.getAnnotationList().map(annotation => new Annotation({key: annotation.getKey(), value: annotation.getValue()}))

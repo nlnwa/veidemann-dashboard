@@ -13,9 +13,9 @@ if (environment.production) {
 // load dynamic configuration pre bootstrap
 fetch('assets/config.json')
   .then(async response => {
-    const config = await response.json();
+    const appConfig = await response.json();
 
-    return platformBrowserDynamic([{provide: AppConfig, useValue: config}])
+    return platformBrowserDynamic([{provide: AppConfig, useValue: appConfig}])
       .bootstrapModule(AppModule)
       .catch(err => console.error(err));
   });

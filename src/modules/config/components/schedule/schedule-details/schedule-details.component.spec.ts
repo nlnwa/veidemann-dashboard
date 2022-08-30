@@ -20,7 +20,7 @@ import {
   MatDatepickerToggleHarness
 } from '@angular/material/datepicker/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
-import * as moment from 'moment';
+import {DateTime} from 'luxon';
 
 const exampleCrawlSchedule: ConfigObject = {
   id: 'configObject_id',
@@ -413,12 +413,13 @@ describe('ScheduleDetailsComponent', () => {
     await fromCal.selectCell(dates[0]);
     await validFromToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedFromDate = moment().add(1, 'M').month() + '/1/' + moment().year();
+    const now = DateTime.now()
+    const expectedFromDate = now.plus({months: 1}).month + '/1/' + now.year;
     expect(await validFrom.getValue()).toEqual(expectedFromDate);
     expect(component.canUpdate).toBeTruthy();
     fixture.detectChanges();
     component.onUpdate();
-    const expectedTimestamp = moment().startOf('month').format('YYYY-MM-DD') + 'T00:00:00.000Z';
+    const expectedTimestamp = now.startOf('month').toFormat('YYYY-MM-DD') + 'T00:00:00.000Z';
     expect(update.crawlScheduleConfig.validFrom).toBe(expectedTimestamp);
   });
 
@@ -460,11 +461,12 @@ describe('ScheduleDetailsComponent', () => {
     await toCal.selectCell({text: (daysInMonth.length).toString()});
     await validToToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedToDate = moment().add(1, 'M').month() + '/' + daysInMonth.length + '/' + moment().year();
+    const now = DateTime.now()
+    const expectedToDate = now.plus({months: 1}).month + '/' + daysInMonth.length + '/' + now.year;
     expect(await validTo.getValue()).toEqual(expectedToDate);
     expect(component.canUpdate).toBeTruthy();
     component.onUpdate();
-    const expectedTimestamp = moment().endOf('month').format('YYYY-MM-DD') + 'T23:59:59.999Z';
+    const expectedTimestamp = now.endOf('month').toFormat('YYYY-MM-DD') + 'T23:59:59.999Z';
     expect(update.crawlScheduleConfig.validTo).toBe(expectedTimestamp);
   });
 

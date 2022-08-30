@@ -1,8 +1,6 @@
 import {CrawlExecutionStatusProto} from '../../../api';
-import {fromTimestampProto, isNumeric, toTimestampProto} from '../../func';
-import {ExtraStatusCodes} from './extrastatuscodes.model';
-import {ApiError} from '../commons/api-error.model';
-import {fromRethinkTimeStamp} from '../../func/rethinkdb';
+import {isNumeric, marshalTimestamp, unmarshalTimestamp} from '../../func';
+import {ApiError} from '../commons';
 
 export enum CrawlExecutionState {
   UNDEFINED = 0,
@@ -91,36 +89,14 @@ export class CrawlExecutionStatus {
     this.desiredState = desiredState;
   }
 
-  /**
-   * A function that transforms the results. This function is called for each member of the object.
-   * If a member contains nested objects, the nested objects are transformed before the parent object is.
-   * @see JSON.parse
-   */
-  static reviver(key: string, value: any) {
-    switch (key) {
-      case 'state':
-        return CrawlExecutionState[value];
-      case 'startTime':
-      case 'endTime':
-      case 'lastChangeTime':
-      case 'createdTime':
-        return fromRethinkTimeStamp(value);
-      default:
-        return value;
-    }
-  }
-
   static fromProto(proto: CrawlExecutionStatusProto): CrawlExecutionStatus {
-    const extraStatusCodes = ExtraStatusCodes;
-    const state = CrawlExecutionState;
-
-    const crawlExecutionStatus = new CrawlExecutionStatus({
+    return new CrawlExecutionStatus({
       id: proto.getId(),
       jobId: proto.getJobId(),
       seedId: proto.getSeedId(),
       state: CrawlExecutionState[CrawlExecutionState[proto.getState()]],
-      startTime: fromTimestampProto(proto.getStartTime()),
-      endTime: fromTimestampProto(proto.getEndTime()),
+      startTime: unmarshalTimestamp(proto.getStartTime()),
+      endTime: unmarshalTimestamp(proto.getEndTime()),
       documentsCrawled: proto.getDocumentsCrawled(),
       bytesCrawled: proto.getBytesCrawled(),
       urisCrawled: proto.getUrisCrawled(),
@@ -128,14 +104,13 @@ export class CrawlExecutionStatus {
       documentsOutOfScope: proto.getDocumentsOutOfScope(),
       documentsRetried: proto.getDocumentsRetried(),
       documentsDenied: proto.getDocumentsDenied(),
-      lastChangeTime: fromTimestampProto(proto.getLastChangeTime()),
-      createdTime: fromTimestampProto(proto.getCreatedTime()),
+      lastChangeTime: unmarshalTimestamp(proto.getLastChangeTime()),
+      createdTime: unmarshalTimestamp(proto.getCreatedTime()),
       currentUriIdList: proto.getCurrentUriIdList(),
       jobExecutionId: proto.getJobExecutionId(),
       error: ApiError.fromProto(proto.getError()),
       desiredState: CrawlExecutionState[CrawlExecutionState[proto.getDesiredState()]]
     });
-    return crawlExecutionStatus;
   }
 
   static toProto(crawlExecutionStatus: CrawlExecutionStatus): CrawlExecutionStatusProto {
@@ -144,8 +119,8 @@ export class CrawlExecutionStatus {
     proto.setJobId(crawlExecutionStatus.jobId);
     proto.setSeedId(crawlExecutionStatus.seedId);
     proto.setState(crawlExecutionStatus.state.valueOf());
-    proto.setStartTime(toTimestampProto(crawlExecutionStatus.startTime));
-    proto.setEndTime(toTimestampProto(crawlExecutionStatus.endTime));
+    proto.setStartTime(marshalTimestamp(crawlExecutionStatus.startTime));
+    proto.setEndTime(marshalTimestamp(crawlExecutionStatus.endTime));
     proto.setDocumentsCrawled(crawlExecutionStatus.documentsCrawled);
     proto.setBytesCrawled(crawlExecutionStatus.bytesCrawled);
     proto.setUrisCrawled(crawlExecutionStatus.urisCrawled);
@@ -153,8 +128,8 @@ export class CrawlExecutionStatus {
     proto.setDocumentsOutOfScope(crawlExecutionStatus.documentsOutOfScope);
     proto.setDocumentsRetried(crawlExecutionStatus.documentsRetried);
     proto.setDocumentsDenied(crawlExecutionStatus.documentsDenied);
-    proto.setLastChangeTime(toTimestampProto(crawlExecutionStatus.lastChangeTime));
-    proto.setCreatedTime(toTimestampProto(crawlExecutionStatus.createdTime));
+    proto.setLastChangeTime(marshalTimestamp(crawlExecutionStatus.lastChangeTime));
+    proto.setCreatedTime(marshalTimestamp(crawlExecutionStatus.createdTime));
     proto.setCurrentUriIdList(crawlExecutionStatus.currentUriIdList);
     proto.setJobExecutionId(crawlExecutionStatus.jobExecutionId);
     proto.setDesiredState(crawlExecutionStatus.desiredState.valueOf());

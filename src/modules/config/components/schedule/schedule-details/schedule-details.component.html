@@ -67,7 +67,7 @@
           <div fxLayout="row wrap" fxLayoutGap="24px">
             <mat-form-field data-testid="validFrom">
               <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                     placeholder="Valid from" i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
+                     placeholder="Valid from start of day" i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
                      data-testid="validFromInput">
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"
                                      data-testid="validFromToggle"></mat-datepicker-toggle>
@@ -76,7 +76,7 @@
 
             <mat-form-field data-testid="validTo">
               <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
-                     placeholder="Valid to" i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
+                     placeholder="Valid to end of day" i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
                      data-testid="validToInput">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"
                                      data-testid="validToToggle"></mat-datepicker-toggle>

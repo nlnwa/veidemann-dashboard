@@ -5,7 +5,7 @@ import {AuthService} from '../../../../core/services/auth';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
-import {DateTime} from '../../../../../shared/func';
+import {adjustTime, dateToUtc} from '../../../../../shared/func';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
@@ -110,10 +110,10 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
     this.form.setValue({
       labelList: this.configObject.meta.labelList,
       validFrom: this.configObject.crawlScheduleConfig.validFrom
-        ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validFrom)
+        ? adjustTime(this.configObject.crawlScheduleConfig.validFrom)
         : null,
       validTo: this.configObject.crawlScheduleConfig.validTo
-        ? DateTime.adjustTime(this.configObject.crawlScheduleConfig.validTo)
+        ? adjustTime(this.configObject.crawlScheduleConfig.validTo)
         : null,
     });
     this.form.markAsPristine();
@@ -143,12 +143,12 @@ export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent imple
     // BUG in backend sets date to 1.1.1970 when validFrom/validTo is empty
 
     if (this.validFrom.dirty && (this.allSelected || formModel.validFrom !== this.configObject.crawlScheduleConfig.validFrom)) {
-      crawlScheduleConfig.validFrom = formModel.validFrom ? DateTime.dateToUtc(formModel.validFrom, true) : null;
+      crawlScheduleConfig.validFrom = formModel.validFrom ? dateToUtc(formModel.validFrom, true) : null;
       pathList.push('crawlScheduleConfig.validFrom');
     }
 
     if (this.validTo.dirty && (this.allSelected || formModel.validTo !== this.configObject.crawlScheduleConfig.validTo)) {
-      crawlScheduleConfig.validTo = formModel.validTo ? DateTime.dateToUtc(formModel.validTo, false) : null;
+      crawlScheduleConfig.validTo = formModel.validTo ? dateToUtc(formModel.validTo, false) : null;
       pathList.push('crawlScheduleConfig.validTo');
     }
 

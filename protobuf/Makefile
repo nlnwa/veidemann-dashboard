@@ -7,7 +7,7 @@ PROTOC=tools/bin/protoc
 PROTOC_GEN_GRPC_WEB=tools/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64
 
 GRPC_WEB_IMPORT_STYLE=commonjs+dts
-OUT=../src/api/gen
+OUT=../src/api
 
 .PHONY: all
 .PHONY: clean

@@ -1,5 +1,5 @@
 import {JobExecutionStatusProto} from '../../../api';
-import {fromTimestampProto, isNumeric} from '../../func';
+import {unmarshalTimestamp, isNumeric} from '../../func';
 import {ExtraStatusCodes} from './extrastatuscodes.model';
 import {ApiError} from '../commons/api-error.model';
 
@@ -80,8 +80,8 @@ export class JobExecutionStatus {
       jobId: proto.getJobId(),
       state: JobExecutionState[JobExecutionState[proto.getState()]],
       executionsStateMap: new Map(proto.getExecutionsStateMap().toArray()),
-      startTime: fromTimestampProto(proto.getStartTime()),
-      endTime: fromTimestampProto(proto.getEndTime()),
+      startTime: unmarshalTimestamp(proto.getStartTime()),
+      endTime: unmarshalTimestamp(proto.getEndTime()),
       documentsCrawled: proto.getDocumentsCrawled(),
       bytesCrawled: proto.getBytesCrawled(),
       urisCrawled: proto.getUrisCrawled(),

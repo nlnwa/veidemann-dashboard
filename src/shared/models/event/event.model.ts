@@ -1,5 +1,5 @@
 import {ActivityProto, DataProto, EventObjectProto} from '../../../api';
-import {fromTimestampProto, intersectString} from '../../func';
+import {unmarshalTimestamp, intersectString} from '../../func';
 
 export enum State {
   NEW = 0,
@@ -113,7 +113,7 @@ export class EventObject {
       state: proto.getState(),
       assignee: proto.getAssignee(),
       activityList: proto.getActivityList().map(activity => new Activity({
-        modifiedTime: fromTimestampProto(activity.getModifiedTime()),
+        modifiedTime: unmarshalTimestamp(activity.getModifiedTime()),
         modifiedBy: activity.getModifiedBy(),
         description: activity.getDescriptionList().map(change => new Change({
           type: ChangeType[change.getType()] as any as ChangeType,
