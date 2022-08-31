@@ -54,7 +54,7 @@
     "minimist": "^1.2.6",
     "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.34",
+    "moment-timezone": "^0.5.35",
     "monaco-editor": "^0.33.0",
     "nano-editor": "^1.2.4",
     "ng-keyboard-shortcuts": "^13.0.8",
