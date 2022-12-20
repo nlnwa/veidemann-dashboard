@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationStart, Params, Router, RouterEvent} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {
@@ -20,7 +20,7 @@ import {
 import {ConfigObject, ConfigRef, Kind, Seed} from '../../../../shared/models';
 import {AuthService, ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {DeleteDialogComponent, DeleteMultiDialogComponent, Parcel, RunCrawlDialogComponent} from '../../components';
-import {PageEvent} from '@angular/material/paginator';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {SortDirection} from '@angular/material/sort';
 import {ConfigService} from '../../../commons/services';
 import {ConfigQuery, distinctUntilArrayChanged, Sort} from '../../../../shared/func';

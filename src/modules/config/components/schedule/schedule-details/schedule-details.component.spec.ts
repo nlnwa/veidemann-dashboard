@@ -11,7 +11,7 @@ import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {SimpleChange} from '@angular/core';
 import {
@@ -19,7 +19,7 @@ import {
   MatDatepickerInputHarness,
   MatDatepickerToggleHarness
 } from '@angular/material/datepicker/testing';
-import {MatFormFieldHarness} from '@angular/material/form-field/testing';
+import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
 import * as moment from 'moment';
 
 const exampleCrawlSchedule: ConfigObject = {

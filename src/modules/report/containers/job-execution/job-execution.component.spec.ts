@@ -5,7 +5,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {JobExecutionService} from '../../services';
 
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ActivatedRoute} from '@angular/router';
 import {of} from 'rxjs';
 

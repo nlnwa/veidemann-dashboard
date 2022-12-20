@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {CrawlJobDetailsComponent} from '..';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ConfigDialogData} from '../../../func';
 import {BrowserScriptType, ConfigObject} from '../../../../../shared/models/config';
 

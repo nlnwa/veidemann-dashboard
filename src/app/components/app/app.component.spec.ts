@@ -5,7 +5,7 @@ import {DialogComponent, TimeComponent} from '../index';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppInitializerService} from '../../../modules/core/services/app.initializer.service';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {CoreTestingModule} from '../../../modules/core/core.testing.module';
 
 describe('AppComponent', () => {

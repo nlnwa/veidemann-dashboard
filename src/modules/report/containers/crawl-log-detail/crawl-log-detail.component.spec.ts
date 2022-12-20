@@ -4,7 +4,7 @@ import {CrawlLogDetailComponent} from './crawl-log-detail.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CrawlLogService} from '../../services';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 describe('CrawlLogDetailComponent', () => {
   let component: CrawlLogDetailComponent;

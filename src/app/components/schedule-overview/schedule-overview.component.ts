@@ -14,7 +14,7 @@ import {ConfigApiService, ErrorService} from '../../../modules/core/services';
 import {createListRequest} from '../../../modules/config/func/query';
 import {takeUntil, toArray} from 'rxjs/operators';
 import * as cronParser from 'cron-parser';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';

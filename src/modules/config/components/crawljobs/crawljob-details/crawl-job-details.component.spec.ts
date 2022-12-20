@@ -30,13 +30,13 @@ import {
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
 import {CrawlLimitsConfig} from '../../../../../shared/models/config/crawljob.model';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {SimpleChange} from '@angular/core';
-import {MatSlideToggleHarness} from '@angular/material/slide-toggle/testing';
+import {MatLegacySlideToggleHarness as MatSlideToggleHarness} from '@angular/material/legacy-slide-toggle/testing';
 import {ExtraConfig} from '../../../../../shared/models/config/crawlconfig.model';
-import {MatSelectHarness} from '@angular/material/select/testing';
+import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
 import {MockComponent, MockPipe} from 'ng-mocks';
 import {ScriptAnnotationsPipe} from '../../../pipe';
 

@@ -12,8 +12,8 @@ import {CrawlExecutionService, CrawlExecutionStatusQuery} from '../../services';
 import {BASE_LIST} from '../../../../shared/directives';
 import {CrawlExecutionStatusListComponent} from '../../components';
 import {SortDirection} from '@angular/material/sort';
-import {PageEvent} from '@angular/material/paginator';
-import {MatDialog} from '@angular/material/dialog';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
 
 

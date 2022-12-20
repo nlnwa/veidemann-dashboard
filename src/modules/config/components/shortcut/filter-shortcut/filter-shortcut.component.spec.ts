@@ -4,7 +4,7 @@ import {FilterShortcutComponent} from './filter-shortcut.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AbilityModule} from '@casl/angular';
-import {MatListModule} from '@angular/material/list';
+import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 
 describe('FilterShortcutComponent', () => {
   let component: FilterShortcutComponent;

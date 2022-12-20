@@ -2,7 +2,7 @@ import {CrawlconfigPreviewComponent} from './crawlconfig-preview.component';
 import {DurationFormatPipe} from '../../../../commons/pipes/duration-format.pipe';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
 
 describe('CrawlconfigPreviewComponent', () => {
   let component: CrawlconfigPreviewComponent;

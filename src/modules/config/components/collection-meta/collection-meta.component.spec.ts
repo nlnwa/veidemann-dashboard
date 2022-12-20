@@ -2,8 +2,8 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {CollectionMetaComponent} from './collection-meta.component';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatFormFieldHarness} from '@angular/material/form-field/testing';
-import {MatInputHarness} from '@angular/material/input/testing';
+import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
+import {MatLegacyInputHarness as MatInputHarness} from '@angular/material/legacy-input/testing';
 import {ReactiveFormsModule, Validators} from '@angular/forms';
 import {MaterialModule} from '../../../commons/material.module';
 import {RouterTestingModule} from '@angular/router/testing';

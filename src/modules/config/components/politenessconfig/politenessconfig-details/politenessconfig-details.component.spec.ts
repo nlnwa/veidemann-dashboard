@@ -20,12 +20,12 @@ import {AnnotationComponent, DurationPickerComponent, LabelComponent, MetaCompon
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
-import {MatCheckboxHarness} from '@angular/material/checkbox/testing';
-import {MatSelectHarness} from '@angular/material/select/testing';
+import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
+import {MatLegacyCheckboxHarness as MatCheckboxHarness} from '@angular/material/legacy-checkbox/testing';
+import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {SimpleChange} from '@angular/core';
-import {MatFormFieldHarness} from '@angular/material/form-field/testing';
+import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
 import {By} from '@angular/platform-browser';
 
 

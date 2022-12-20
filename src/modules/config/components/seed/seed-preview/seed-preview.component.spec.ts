@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {SeedPreviewComponent} from './seed-preview.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 
 describe('SeedPreviewComponent', () => {

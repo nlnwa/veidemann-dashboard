@@ -10,7 +10,7 @@ import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {SimpleChange} from '@angular/core';
 import {CommonsModule} from '../../../../commons';

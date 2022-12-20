@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserConfigMultiDialogComponent} from './browserconfig-multi-dialog.component';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {DurationPickerComponent} from '../..';
 import {ConfigDialogData} from '../../../func';

@@ -1,5 +1,5 @@
 import {CrawlerStatusComponent} from './crawlerstatus.component';
-import {MatCardModule} from '@angular/material/card';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {createComponentFactory, Spectator} from '@ngneat/spectator';
 import {CoreTestingModule} from '../../../modules/core/core.testing.module';
 import {AbilityModule} from '@casl/angular';

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild, ViewChild
 import {BrowserConfigDetailsComponent} from '..';
 import {AbstractControl, UntypedFormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ConfigDialogData} from '../../../func';
 import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models/config';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';

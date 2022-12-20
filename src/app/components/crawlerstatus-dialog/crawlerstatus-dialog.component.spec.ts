@@ -1,4 +1,4 @@
-import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {CrawlerStatusDialogComponent} from './crawlerstatus-dialog.component';
 import {createComponentFactory, Spectator} from '@ngneat/spectator';
 

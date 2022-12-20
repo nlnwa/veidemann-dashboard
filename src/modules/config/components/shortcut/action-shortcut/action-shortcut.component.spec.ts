@@ -3,7 +3,7 @@ import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatListModule} from '@angular/material/list';
+import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 
 describe('ActionShortcutComponent', () => {
   let component: ActionShortcutComponent;

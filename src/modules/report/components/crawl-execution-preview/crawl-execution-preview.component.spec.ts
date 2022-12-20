@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {CrawlExecutionPreviewComponent} from './crawl-execution-preview.component';
 import {CrawlExecutionStatus} from '../../../../shared/models';
 import {NgxFilesizeModule} from 'ngx-filesize';
-import {MatCardModule} from '@angular/material/card';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {NGX_ECHARTS_CONFIG, NgxEchartsModule} from 'ngx-echarts';
 import {CommonsModule} from '../../../commons';
 import {CoreTestingModule} from '../../../core/core.testing.module';

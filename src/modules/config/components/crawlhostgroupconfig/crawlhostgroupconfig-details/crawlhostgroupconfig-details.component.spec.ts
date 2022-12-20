@@ -12,10 +12,10 @@ import {AnnotationComponent, DurationPickerComponent, LabelComponent, MetaCompon
 import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {By} from '@angular/platform-browser';
-import {MatFormFieldHarness} from '@angular/material/form-field/testing';
+import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
 
 const exampleCrawlHostGroupConfig: ConfigObject = {
   id: 'configObject_id',

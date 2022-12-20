@@ -12,7 +12,7 @@ import {AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGrou
 import {AuthService} from '../../../../core/services/auth';
 import {BrowserScript, BrowserScriptType, ConfigObject, Kind, Meta} from '../../../../../shared/models';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
+import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
 import {MonacoEditorConstructionOptions, MonacoEditorLoaderService, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
 
 @Component({

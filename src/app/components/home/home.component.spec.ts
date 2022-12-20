@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {HomeComponent} from './home.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../modules/core/core.testing.module';
 

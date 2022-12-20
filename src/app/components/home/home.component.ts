@@ -3,7 +3,7 @@ import {Observable, Subject, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {ControllerApiService, ErrorService} from '../../../modules/core/services';
 import {CrawlerStatusDialogComponent} from '../index';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {CrawlerStatus} from '../../../shared/models/controller/controller.model';
 
 @Component({

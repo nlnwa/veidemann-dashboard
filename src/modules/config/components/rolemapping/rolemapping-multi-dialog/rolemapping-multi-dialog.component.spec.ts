@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {RoleMappingMultiDialogComponent} from './rolemapping-multi-dialog.component';
 import {UntypedFormBuilder} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CommonsModule} from '../../../../commons';

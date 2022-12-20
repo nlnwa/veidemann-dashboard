@@ -3,8 +3,8 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {PolitenessconfigPreviewComponent} from './politenessconfig-preview.component';
 import {DurationFormatPipe} from '../../../../commons/pipes/duration-format.pipe';
 import {ConfigObject, Kind} from '../../../../../shared/models';
-import {MatLabel} from '@angular/material/form-field';
-import {MatChipList} from '@angular/material/chips';
+import {MatLegacyLabel as MatLabel} from '@angular/material/legacy-form-field';
+import {MatLegacyChipList as MatChipList} from '@angular/material/legacy-chips';
 
 describe('PolitenessconfigPreviewComponent', () => {
   let component: PolitenessconfigPreviewComponent;

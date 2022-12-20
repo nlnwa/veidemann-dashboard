@@ -7,7 +7,7 @@ import {PageLogQuery, PageLogService} from '../../services/pagelog.service';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {ErrorService} from '../../../core/services';
 import {SortDirection} from '@angular/material/sort';
-import {PageEvent} from '@angular/material/paginator';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {Sort} from '../../../../shared/func';
 import {BASE_LIST} from '../../../../shared/directives';
 import {PageLogListComponent} from '../../components';
