@@ -1,3 +1,7 @@
 mat-label {
   margin-top: 16px;
 }
+
+.editor {
+  max-height: 300px;
+}

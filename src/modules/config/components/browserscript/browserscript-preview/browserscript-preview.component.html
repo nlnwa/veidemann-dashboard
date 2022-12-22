@@ -1,15 +1,21 @@
-<p><strong>Script type:</strong> {{BrowserScriptType[configObject.browserScript.browserScriptType]}}</p>
-<mat-label>{{configObject.meta.name}}</mat-label>
-<!-- Important to keep whats inside pre on the following lines, on the same line -->
-<pre appHighlight><code
-  class="line-numbers match-braces"
-  [class.language-py]="language === 'star'"
-  [class.language-js]="language === 'js'">{{ configObject.browserScript.script }}</code></pre>
-<ng-container *ngIf="configObject.browserScript.urlRegexpList.length">
-  <mat-label>URL regexp</mat-label>
-  <mat-chip-list>
-    <mat-chip color="warn" *ngFor="let regex of configObject.browserScript.urlRegexpList">
-      {{regex}}
-    </mat-chip>
-  </mat-chip-list>
-</ng-container>
+<div fxLayout="column" fxFlex>
+  <p><strong>Script type:</strong> {{BrowserScriptType[configObject.browserScript.browserScriptType]}}</p>
+
+  <ngx-monaco-editor class="editor"
+                     fxFlex
+                     fxLayout="row"
+                     fxFlexFill
+                     [(ngModel)]="configObject.browserScript.script"
+                     [options]="editorOptions"
+                     (init)="initEditor($event)">
+  </ngx-monaco-editor>
+
+  <ng-container *ngIf="configObject.browserScript.urlRegexpList.length">
+    <mat-label>URL regexp</mat-label>
+    <mat-chip-list>
+      <mat-chip color="warn" *ngFor="let regex of configObject.browserScript.urlRegexpList">
+        {{regex}}
+      </mat-chip>
+    </mat-chip-list>
+  </ng-container>
+</div>

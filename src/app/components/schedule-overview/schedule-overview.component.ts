@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {CalendarOptions, EventClickArg, FullCalendarComponent} from '@fullcalendar/angular';
+import {FullCalendarComponent} from '@fullcalendar/angular';
 import {forkJoin, Subject} from 'rxjs';
 import {ConfigObject, Kind} from '../../../shared/models';
 import {ConfigApiService, ErrorService} from '../../../modules/core/services';
@@ -20,6 +20,7 @@ import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
+import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 
 interface ScheduledJob {
   crawlJobName: string;
