@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorService} from '../../../core/services';
 import {CrawlLogQuery, CrawlLogService} from '../../services';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 
 @Component({

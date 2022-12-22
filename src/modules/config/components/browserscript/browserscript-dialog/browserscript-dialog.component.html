@@ -14,15 +14,15 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-chip-list #chipList>
-        <mat-chip *ngFor="let regex of urlRegexpList"
+      <mat-chip-grid #chipList>
+        <mat-chip-row *ngFor="let regex of urlRegexpList"
                   [selectable]="canUpdate"
                   [removable]="removable"
                   (removed)="onRemoveRegex(regex)"
                   (click)="onClickRegex(regex)">
           {{regex}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
+        </mat-chip-row>
         <input matInput
                [formControl]="control"
                placeholder="URL regexp"
@@ -30,10 +30,10 @@
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
                (matChipInputTokenEnd)="onSaveRegexp($event);">
-      </mat-chip-list>
+      </mat-chip-grid>
     </mat-form-field>
     <form [formGroup]="regexpForm" *ngIf="regexpForm.enabled">
-      <mat-card class="label-form">
+      <mat-card appearance="outlined" class="label-form">
         <mat-card-header>
           <mat-icon mat-card-avatar>edit</mat-icon>
           <mat-card-title i18n="@@browserscriptRegexpEditFormTitle">Edit the expression</mat-card-title>

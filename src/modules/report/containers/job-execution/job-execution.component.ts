@@ -4,12 +4,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Observable, of, Subject} from 'rxjs';
 import {SortDirection} from '@angular/material/sort';
 import {JobExecutionState, jobExecutionStates, JobExecutionStatus} from '../../../../shared/models/report';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {PageEvent} from '@angular/material/paginator';
 import {JobExecutionService, JobExecutionStatusQuery} from '../../services';
 import {ControllerApiService, ErrorService, SnackBarService} from '../../../core/services';
 import {distinctUntilArrayChanged, isValidDate, Sort} from '../../../../shared/func';
 import {ConfigObject, Kind} from '../../../../shared/models/config';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
 
 

@@ -26,9 +26,9 @@ import {MockComponent} from 'ng-mocks';
 import {SimpleChange} from '@angular/core';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
-import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
-import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
+import {MatFormFieldHarness} from '@angular/material/form-field/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
 
 const exampleBrowserConfig: ConfigObject = {
   id: 'configObject_id',

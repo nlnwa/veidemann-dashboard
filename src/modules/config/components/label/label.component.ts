@@ -13,7 +13,7 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {NO_COLON} from '../../../../shared/validation/patterns';
 import {Label} from '../../../../shared/models';
 import {map, startWith, switchMap} from 'rxjs/operators';
-import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {LabelService} from '../../services/label.service';
 
 

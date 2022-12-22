@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {SeedMultiDialogComponent} from './seed-multi-dialog.component';
 import {AuthService} from '../../../../core/services/auth';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {ConfigObject, Kind, Meta} from '../../../../../shared/models/config';
 import {ConfigDialogData} from '../../../func';

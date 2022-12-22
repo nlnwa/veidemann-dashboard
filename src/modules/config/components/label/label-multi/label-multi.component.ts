@@ -1,7 +1,7 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ConfigObject, Label} from '../../../../../shared/models/config';
 import {ENTER} from '@angular/cdk/keycodes';
-import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {map, startWith, switchMap} from 'rxjs/operators';

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, NavigationStart, Router, RouterEvent} from '@angular/router';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';

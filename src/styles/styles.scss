@@ -13,7 +13,7 @@ html, body {
 }
 
 // increase font size for tooltip
-.mat-tooltip {
+.mat-mdc-tooltip {
   font-size: 0.8rem !important;
 }
 
@@ -22,14 +22,14 @@ html, body {
 }
 
 // floating action button
-.action-button.mat-fab {
+.action-button.mat-mdc-fab {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
   z-index: 100;
 }
 
-.action-button-secondary.mat-fab {
+.action-button-secondary.mat-mdc-fab {
   position: fixed;
   bottom: 5.5rem;
   right: 1rem;
@@ -82,6 +82,7 @@ tr.resource-row.row-error td a.formattedUri {
   color: $warn;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
 .disabledJob .mat-list-item-content {
   color: $warn
 }

@@ -7,7 +7,7 @@ import {combineLatest, merge, Observable, Subject} from 'rxjs';
 import {filter, map, mergeMap, startWith, switchMap, takeWhile} from 'rxjs/operators';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
 import {ControllerApiService, SnackBarService} from '../../../core/services';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-crawl-execution',

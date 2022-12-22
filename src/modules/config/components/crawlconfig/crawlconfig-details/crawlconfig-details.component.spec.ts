@@ -15,12 +15,12 @@ import {HarnessLoader} from '@angular/cdk/testing';
 import {ExtraConfig} from '../../../../../shared/models/config/crawlconfig.model';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {SimpleChange} from '@angular/core';
-import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
-import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatFormFieldHarness} from '@angular/material/form-field/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../../../commons/material.module';
 import {RouterTestingModule} from '@angular/router/testing';
-import {MatLegacyCheckboxHarness as MatCheckboxHarness} from '@angular/material/legacy-checkbox/testing';
+import {MatCheckboxHarness} from '@angular/material/checkbox/testing';
 
 const exampleCrawlConfig: ConfigObject = {
   id: 'configObject_id',

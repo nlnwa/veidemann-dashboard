@@ -12,10 +12,10 @@
 
   <ng-container *ngIf="configObject.browserScript.urlRegexpList.length">
     <mat-label>URL regexp</mat-label>
-    <mat-chip-list>
-      <mat-chip color="warn" *ngFor="let regex of configObject.browserScript.urlRegexpList">
+    <mat-chip-listbox>
+      <mat-chip-option color="warn" *ngFor="let regex of configObject.browserScript.urlRegexpList">
         {{regex}}
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-option>
+    </mat-chip-listbox>
   </ng-container>
 </div>

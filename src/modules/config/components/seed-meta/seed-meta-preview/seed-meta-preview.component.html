@@ -15,17 +15,17 @@
 </p>
 <p *ngIf="configObject.meta.labelList.length">
   <mat-label>Labels</mat-label>
-  <mat-chip-list>
-    <mat-chip *ngFor="let label of configObject.meta.labelList">
+  <mat-chip-listbox>
+    <mat-chip-option *ngFor="let label of configObject.meta.labelList">
       {{label.key}}:{{label.value}}
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
 </p>
 <p *ngIf="configObject.meta.annotationList.length && canShowAnnotation">
   <mat-label>Annotations</mat-label>
-  <mat-chip-list *ngIf="canShowAnnotation">
-    <mat-chip color="primary" selected *ngFor="let annotation of configObject.meta.annotationList">
+  <mat-chip-listbox *ngIf="canShowAnnotation">
+    <mat-chip-option color="primary" selected *ngFor="let annotation of configObject.meta.annotationList">
       {{annotation.key}}:{{annotation.value}}
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
 </p>

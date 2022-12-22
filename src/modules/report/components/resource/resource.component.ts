@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Resource} from '../../../../shared/models';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-resource',

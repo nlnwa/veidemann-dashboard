@@ -10,15 +10,15 @@ import {CoreTestingModule} from '../../../core/core.testing.module';
 import {AbilityModule} from '@casl/angular';
 import {CommonsModule} from '../../../commons';
 import {HarnessLoader} from '@angular/cdk/testing';
-import {MatLegacyFormFieldHarness as MatFormFieldHarness} from '@angular/material/legacy-form-field/testing';
+import {MatFormFieldHarness} from '@angular/material/form-field/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../../commons/material.module';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
-import {MatLegacyInputHarness as MatInputHarness} from '@angular/material/legacy-input/testing';
+import {MatInputHarness} from '@angular/material/input/testing';
 import {ConfigObject, ConfigRef, Kind, Meta, Seed} from '../../../../shared/models';
-import {MatLegacyActionListHarness as MatActionListHarness, MatLegacyListHarness as MatListHarness} from '@angular/material/legacy-list/testing';
-import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
+import {MatActionListHarness, MatListHarness} from '@angular/material/list/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 
 const exampleMatchingSeeds: ConfigObject[] = [

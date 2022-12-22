@@ -2,15 +2,15 @@
   <a mat-list-item [routerLink]="['/config', 'entity', id]">
     <mat-icon mat-list-icon>business</mat-icon>
     {{name}}
-    <mat-chip-list *ngIf="labels.length > 0"
+    <mat-chip-listbox *ngIf="labels.length > 0"
                    [disabled]="true" fxLayout="row wrap" fxLayoutGap="8px">
-      <mat-chip *ngFor="let label of labels"
+      <mat-chip-option *ngFor="let label of labels"
                 [selectable]="false"
                 [disabled]="true"
                 [removable]="false">
         {{label.key + ':' + label.value}}
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-option>
+    </mat-chip-listbox>
   </a>
 </mat-nav-list>
 

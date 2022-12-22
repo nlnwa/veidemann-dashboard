@@ -49,11 +49,11 @@
       <h5 *ngIf="!allSelected">Common script selectors for the selected configs:</h5>
       <h5 *ngIf="allSelected">Script selectors:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
-        <mat-chip-list fxFlex>
-          <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList" [selectable]="false">
+        <mat-chip-listbox fxFlex>
+          <mat-chip-option *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList" [selectable]="false">
             {{scriptSelector}}
-          </mat-chip>
-        </mat-chip-list>
+          </mat-chip-option>
+        </mat-chip-listbox>
         <div>
           <mat-button-toggle-group
             [value]="shouldAddSelector"

@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {RunCrawlDialogComponent} from './run-crawl-dialog.component';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ConfigObject, CrawlJob, Kind, Meta} from '../../../../shared/models';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {HarnessLoader} from '@angular/cdk/testing';
@@ -10,8 +10,8 @@ import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {CommonsModule} from '../../../commons';
 import {MaterialModule} from '../../../commons/material.module';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {MatLegacyButtonHarness as MatButtonHarness} from '@angular/material/legacy-button/testing';
-import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
+import {MatButtonHarness} from '@angular/material/button/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {By} from '@angular/platform-browser';
 

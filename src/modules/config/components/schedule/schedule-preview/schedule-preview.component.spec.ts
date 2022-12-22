@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {SchedulePreviewComponent} from './schedule-preview.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
-import {MatLegacyLabel as MatLabel} from '@angular/material/legacy-form-field';
+import {MatLabel} from '@angular/material/form-field';
 
 describe('SchedulePreviewComponent', () => {
   let component: SchedulePreviewComponent;

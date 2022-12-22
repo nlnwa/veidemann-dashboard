@@ -1,10 +1,10 @@
 <div fxLayout="column">
   <form>
     <mat-form-field>
-      <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList
+      <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList
                      (cdkDropListDropped)="onDrop($event)">
         <ng-container *ngFor="let group of groups$ | async">
-          <mat-chip *ngFor="let value of group.values"
+          <mat-chip-row *ngFor="let value of group.values"
                     [selectable]="canUpdate"
                     [removable]="removable"
                     (removed)="onRemoveLabel(group.key, value)"
@@ -13,7 +13,7 @@
                     [cdkDragData]="group.key + ':' + value">
             {{group.key + ':' + value}}
             <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
-          </mat-chip>
+          </mat-chip-row>
         </ng-container>
         <input #chipInput
                matInput
@@ -23,7 +23,7 @@
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
                (matChipInputTokenEnd)="onSave($event);"
                [matAutocomplete]="auto"/>
-      </mat-chip-list>
+      </mat-chip-grid>
     </mat-form-field>
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteOptionSelected($event)">
@@ -32,7 +32,7 @@
   </form>
 
   <form [formGroup]="labelForm" *ngIf="canUpdate && labelForm.enabled">
-    <mat-card class="label-form">
+    <mat-card appearance="outlined" class="label-form">
       <mat-card-header>
         <mat-icon mat-card-avatar>label</mat-icon>
         <mat-card-title i18n="@@labelEditCardTitle">Edit label</mat-card-title>
