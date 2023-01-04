@@ -5,14 +5,16 @@
                      (cdkDropListDropped)="onDrop($event)">
         <ng-container *ngFor="let group of groups$ | async">
           <mat-chip-row *ngFor="let value of group.values"
-                    [selectable]="canUpdate"
-                    [removable]="removable"
-                    (removed)="onRemoveLabel(group.key, value)"
-                    (click)="onClickLabel(group.key, value)"
-                    cdkDrag
-                    [cdkDragData]="group.key + ':' + value">
+                        [removable]="removable"
+                        (removed)="onRemoveLabel(group.key, value)"
+                        (click)="onClickLabel(group.key, value)"
+                        cdkDrag
+                        [cdkDragData]="group.key + ':' + value">
+            <mat-chip-option [selectable]="canUpdate"></mat-chip-option>
             {{group.key + ':' + value}}
-            <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
+            <button matChipRemove *ngIf="removable && !disabled" aria-label="'remove label ' + group + ':' + value">
+              <mat-icon>cancel</mat-icon>
+            </button>
           </mat-chip-row>
         </ng-container>
         <input #chipInput

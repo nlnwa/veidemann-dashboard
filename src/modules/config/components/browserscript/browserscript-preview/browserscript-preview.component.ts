@@ -34,7 +34,6 @@ export class BrowserscriptPreviewComponent implements OnInit {
   }
 
   initEditor(editor: MonacoStandaloneCodeEditor) {
-    console.log('init editor called');
     editor.onDidChangeModelDecorations(() => {
       this.cdr.markForCheck();
     });

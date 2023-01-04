@@ -68,8 +68,7 @@
               (click)="onMoveSeedToCurrentEntity(seed)"
               matTooltip="Move seed to this entity"
               i18n-matTooltip="@@seedMetaMoveExistingSeedToEntityButtonTooltip"
-              data-testid="seedExistsListMoveSeedToEntityButton"
-      >
+              data-testid="seedExistsListMoveSeedToEntityButton">
         <mat-icon mat-list-icon>swap_horiz</mat-icon>
       </button>
 
@@ -80,6 +79,7 @@
       </button>
 
       <a matTooltip="Go to entity with existing seed"
+         mat-list-item
          i18n-matTooltip="@@seedMetaGoToEntityWithExistingSeedButtonTooltip"
          [routerLink]="['config','seed']"
          [queryParams]="{entity_id: seed.seed.entityRef.id}">

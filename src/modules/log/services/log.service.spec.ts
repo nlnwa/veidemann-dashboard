@@ -10,7 +10,6 @@ describe('LogService', () => {
       imports: [
         CoreTestingModule.forRoot(),
         HttpClientTestingModule,
-        OAuthService
       ],
       providers: [
         LogService
@@ -18,8 +17,8 @@ describe('LogService', () => {
     });
   });
 
-  // it('should be created', () => {
-  //   const service: LogService = TestBed.get(LogService);
-  //   expect(service).toBeTruthy();
-  // });
+  it('should be created', () => {
+    const service: LogService = TestBed.inject(LogService);
+    expect(service).toBeTruthy();
+  });
 });

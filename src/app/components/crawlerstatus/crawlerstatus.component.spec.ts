@@ -7,7 +7,7 @@ import {RunStatus} from '../../../shared/models';
 
 
 describe('CrawlerStatusComponent', () => {
-  // let spectator: Spectator<CrawlerStatusComponent>;
+   let spectator: Spectator<CrawlerStatusComponent>;
 
   const createComponent = createComponentFactory(
     {
@@ -18,11 +18,11 @@ describe('CrawlerStatusComponent', () => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   // const RunStatus = RunStatus;
   //
-  // beforeEach(() => spectator = createComponent());
+   beforeEach(() => spectator = createComponent());
   //
-  // it('should create', () => {
-  //   expect(spectator.component).toBeTruthy();
-  // });
+  it('should create', () => {
+    expect(spectator.component).toBeTruthy();
+  });
   //
   // it('should show RUNNING status in html', () => {
   //   spectator.setInput('crawlerStatus', RunStatus.RUNNING);

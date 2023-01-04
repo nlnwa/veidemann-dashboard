@@ -244,8 +244,12 @@ describe('SeedMetaComponent', () => {
           .with({selector: '[data-testid="seedExistsList"]'}));
 
         const items = await seedExistsList.getItems();
-        expect(items.length).toEqual(2);
-        expect(await items[1].getText()).toEqual('https://www.bokhylla.no');
+        console.log('items: ', items);
+        expect(items.length).toEqual(3);
+        console.log('get title: ', (await  items[1].getTitle()));
+        console.log('get Type: ', (await  items[1].getType()));
+        console.log('get Fulltext: ', (await  items[1].getFullText()));
+        expect(await items[1].getTitle()).toEqual('https://www.bokhylla.no');
 
         const moveSeedToEntityButton = await items[1].getHarness<MatButtonHarness>(MatButtonHarness
           .with({selector: '[data-testid="seedExistsListMoveSeedToEntityButton"]'}));

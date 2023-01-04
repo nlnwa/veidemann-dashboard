@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import "src/styles/theme";
 
 table {
@@ -21,7 +22,7 @@ table {
 
 // set different text color when row is disabled
 tr.item-row.row-disabled td {
-  color: $warn;
+  color: mat.get-color-from-palette($my-app-warn);;
 }
 
 tr.item-row:hover {

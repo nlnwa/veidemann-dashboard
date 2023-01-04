@@ -9,12 +9,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 
 import {FullCalendarModule} from '@fullcalendar/angular';
 
-// register FullCalendar plugins
-FullCalendarModule.registerPlugins([
-  interactionPlugin,
-  dayGridPlugin,
-  timeGridPlugin,
-]);
+// // register FullCalendar plugins
+// FullCalendarModule.registerPlugins([
+//   interactionPlugin,
+//   dayGridPlugin,
+//   timeGridPlugin,
+// ]);
 
 describe('ScheduleOverviewComponent', () => {
   let component: ScheduleOverviewComponent;

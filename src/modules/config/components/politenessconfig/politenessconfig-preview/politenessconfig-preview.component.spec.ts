@@ -4,7 +4,7 @@ import {PolitenessconfigPreviewComponent} from './politenessconfig-preview.compo
 import {DurationFormatPipe} from '../../../../commons/pipes/duration-format.pipe';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {MatLabel} from '@angular/material/form-field';
-import {MatChipList} from '@angular/material/chips';
+import {MatChipListbox} from '@angular/material/chips';
 
 describe('PolitenessconfigPreviewComponent', () => {
   let component: PolitenessconfigPreviewComponent;
@@ -13,7 +13,7 @@ describe('PolitenessconfigPreviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [],
-      declarations: [PolitenessconfigPreviewComponent, DurationFormatPipe, MatLabel, MatChipList],
+      declarations: [PolitenessconfigPreviewComponent, DurationFormatPipe, MatLabel, MatChipListbox],
       providers: []
     })
       .compileComponents();
