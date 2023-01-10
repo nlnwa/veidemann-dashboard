@@ -1,5 +1,5 @@
 {
-  "grpcWebUrl": "/grpc-web",
+  "grpcWebUrl": "/veidemann/api",
   "authConfig": {
     "issuer": "",
     "redirectUri": "https://localhost:4200/",
