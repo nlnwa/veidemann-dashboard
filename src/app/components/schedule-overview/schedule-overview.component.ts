@@ -21,6 +21,9 @@ import * as moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
 import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 interface ScheduledJob {
   crawlJobName: string;
@@ -65,6 +68,11 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
     this.calendarOptions = {
       eventClick: this.onEventClick.bind(this),
       initialView: 'dayGridMonth',
+      plugins: [
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin
+      ],
       headerToolbar: {
         start: 'today,prev,next',
         center: 'title',
