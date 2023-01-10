@@ -1,5 +1,5 @@
 {
-  "/grpc-web": {
+  "/veidemann/api": {
     "target": {
       "host": "veidemann.test",
       "protocol": "https:",
