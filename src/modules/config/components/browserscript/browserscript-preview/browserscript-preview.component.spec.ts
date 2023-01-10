@@ -3,8 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserscriptPreviewComponent} from './browserscript-preview.component';
 import {CommonsModule} from '../../../../commons';
 import {ConfigObject, Kind} from '../../../../../shared/models';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
-import {forwardRef} from '@angular/core';
+import {MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
 
 describe('BrowserscriptPreviewComponent', () => {
   let component: BrowserscriptPreviewComponent;
@@ -12,7 +11,7 @@ describe('BrowserscriptPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule],
+      imports: [CommonsModule, MonacoEditorModule],
       declarations: [BrowserscriptPreviewComponent],
       providers: []
     })

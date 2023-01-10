@@ -4,6 +4,7 @@ import {ConfigurationsModule} from '../../../configurations.module';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {AuthService} from '../../../../core/services';
+import {CommonsModule} from '../../../../commons';
 
 describe('CrawljobPreviewComponent', () => {
   let component: CrawljobPreviewComponent;
@@ -11,7 +12,7 @@ describe('CrawljobPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ConfigurationsModule, CoreTestingModule.forRoot()],
+      imports: [CommonsModule, ConfigurationsModule, CoreTestingModule.forRoot()],
       declarations: [CrawljobPreviewComponent],
       providers: [{provider: AuthService, useValue: {}}]
     })

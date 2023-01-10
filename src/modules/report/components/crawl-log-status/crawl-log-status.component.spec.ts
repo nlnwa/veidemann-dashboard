@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {CrawlLogStatusComponent} from './crawl-log-status.component';
 import {CommonsModule} from '../../../commons';
 import {CrawlLog} from '../../../../shared/models';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('CrawlLogStatusComponent', () => {
   let component: CrawlLogStatusComponent;
@@ -10,7 +11,7 @@ describe('CrawlLogStatusComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule],
+      imports: [CommonsModule, RouterTestingModule],
       declarations: [CrawlLogStatusComponent]
     })
       .compileComponents();

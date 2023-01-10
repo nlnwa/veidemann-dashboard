@@ -4,6 +4,7 @@ import {JobExecutionShortcutsComponent} from './job-execution-shortcuts.componen
 import {CoreTestingModule} from '../../../core/core.testing.module';
 import {AbilityModule} from '@casl/angular';
 import {JobExecutionStatus} from '../../../../shared/models';
+import {CommonsModule} from '../../../commons';
 
 describe('JobExecutionShortcutsComponent', () => {
   let component: JobExecutionShortcutsComponent;
@@ -12,7 +13,7 @@ describe('JobExecutionShortcutsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [JobExecutionShortcutsComponent],
-      imports: [CoreTestingModule.forRoot(), AbilityModule]
+      imports: [CoreTestingModule.forRoot(), AbilityModule, CommonsModule]
     })
       .compileComponents();
   });
