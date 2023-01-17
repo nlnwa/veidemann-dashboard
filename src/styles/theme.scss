@@ -1,64 +1,46 @@
 @use '@angular/material' as mat;
 
-$my-app-typography: mat.define-typography-config(
-  $font-family: 'Lato, Helvetica, Arial, sans-serif'
-);
-
-@include mat.all-component-typographies($my-app-typography);
+// @include mat.all-component-typographies($my-app-typography);
 @include mat.core();
 
-$my-app-primary: mat.define-palette(mat.$blue-gray-palette);
-$my-app-accent: mat.define-palette(mat.$orange-palette);
-$my-app-warn: mat.define-palette(mat.$red-palette);
+$veidemann-dashboard-primary: mat.define-palette(mat.$green-palette);
+$veidemann-dashboard-accent: mat.define-palette(mat.$orange-palette);
+$veidemann-dashboard-warn: mat.define-palette(mat.$red-palette);
+$veidemann-dashboard-banner: mat.define-palette(mat.$blue-gray-palette, 800);
+$veidemann-dashboard-typography: mat.define-typography-config(
+  $font-family: 'Lato',
+);
+
 $dark-focused: rgba(black, 0.12);
-$ad-app-primary: mat.define-palette(mat.$blue-gray-palette, 800);
+
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: ($veidemann-dashboard-primary),
+    accent: $veidemann-dashboard-accent,
+    warn: $veidemann-dashboard-warn
+  ),
+  typography: $veidemann-dashboard-typography,
+  density: 0,
+));
 
 /* LIGHT THEME */
 
 $light-theme: mat.define-light-theme((
   color: (
-    primary: $my-app-primary,
-    accent: $my-app-accent,
-    warn: $my-app-warn
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
+    primary: $veidemann-dashboard-primary,
+    accent: $veidemann-dashboard-accent,
+    warn: $veidemann-dashboard-warn
+  )
 ));
 
-// $highlight: mat.get-color-from-palette(map-get($my-app-theme, background), 'hover');
-$highlight: mat.get-color-from-palette(map-get($light-theme, background), 'hover');
+ $highlight: mat.get-color-from-palette(map-get($dark-theme, background), 'hover');
 
-/* DARK THEME */
+@include mat.all-component-typographies($veidemann-dashboard-typography);
 
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $ad-app-primary,
-    accent: $my-app-accent,
-    warn: $my-app-warn
-  ),
-));
-
-//$primary: mat.get-color-from-palette($my-app-primary);
-//$accent: mat.get-color-from-palette($my-app-accent);
-//$warn: mat.get-color-from-palette($my-app-warn);
-
-
-//@media (prefers-color-scheme: light) {
-//  @include mat.all-component-themes($my-app-theme);
-//}
-//
-//@media (prefers-color-scheme: dark) {
-//  @include mat.all-component-colors($angular-dark-theme);
-//}
-
-// Apply the light theme by default
-@include mat.core-theme($light-theme);
-@include mat.button-theme($light-theme);
+// Apply the dark theme by default
+@include mat.all-component-themes($dark-theme);
 
 // Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: dark) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
-  @include mat.core-color($dark-theme);
-  @include mat.button-color($dark-theme);
+@media (prefers-color-scheme: light) {
+  @include mat.all-component-colors($light-theme);
 }

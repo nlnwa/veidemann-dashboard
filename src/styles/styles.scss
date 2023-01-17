@@ -1,10 +1,6 @@
 @use '@angular/material' as mat;
 @import './theme';
 
-//$color-config: mat.get-color-config($theme);
-// $warn: map.get($color-config, 'warn');
-// $warn: mat.get-color-from-palette($my-app-warn);
-
 html, body, app-root, mat-sidenav-container {
   margin: 0;
   width: 100%;
@@ -71,7 +67,7 @@ html, body {
 
 .formattedUri {
   text-decoration: none;
-  color: mat.get-color-from-palette($my-app-primary);
+  color: mat.get-color-from-palette($veidemann-dashboard-primary, 500);
 }
 
 .formattedUri:hover {
@@ -79,14 +75,13 @@ html, body {
 }
 
 tr.item-row.row-disabled td a.formattedUri {
-  color: mat.get-color-from-palette($my-app-warn);
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);
 }
 
 tr.resource-row.row-error td a.formattedUri {
-  color: mat.get-color-from-palette($my-app-warn);
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
 .disabledJob .mat-list-item-content {
-  color: mat.get-color-from-palette($my-app-warn)
+  color: mat.get-color-from-palette($veidemann-dashboard-warn)
 }
