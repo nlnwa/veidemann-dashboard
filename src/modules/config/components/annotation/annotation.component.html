@@ -1,10 +1,10 @@
 <div fxLayout="column" *ngIf="'read' | able: 'annotation'">
   <form>
     <mat-form-field>
+      <mat-label i18n="@@annotationListInputLabel">Annotation</mat-label>
       <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
         <ng-container *ngFor="let group of groups$ | async">
           <mat-chip-row *ngFor="let value of group.values"
-                    [selectable]="canUpdate"
                     [removable]="removable"
                     (removed)="onRemoveAnnotation(group.key, value)"
                     (click)="onClickAnnotation(group.key, value)"
@@ -16,7 +16,7 @@
         <input #chipInput
                matInput
                [formControl]="control"
-               placeholder="Annotation"
+               placeholder="New annotation..."
                i18n-placeholder="@@annotationChipListPlaceholder"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="annotationInputSeparators"

@@ -1,7 +1,9 @@
 <mat-nav-list>
   <ng-container [ngSwitch]="configObject.kind">
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.SEED]"
          [routerLink]="['../../seed']"
@@ -12,7 +14,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.SEED">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: 'reports'"
          [routerLink]="['/report/crawlexecution/']"
@@ -45,7 +49,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.CRAWLJOB">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: 'reports'"
          [routerLink]="['/report/jobexecution']"
@@ -67,7 +73,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.CRAWLSCHEDULECONFIG">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
          [routerLink]="['../../crawljobs']"
@@ -80,7 +88,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
          [routerLink]="['../../crawljobs']"
@@ -93,7 +103,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.COLLECTION">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
          [routerLink]="['../../crawlconfig']"
@@ -106,7 +118,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
          [routerLink]="['../../crawlconfig']"
@@ -119,7 +133,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.BROWSERSCRIPT">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"
          [routerLink]="['../../browserconfig']"
@@ -132,7 +148,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.POLITENESSCONFIG">
-      <h2 mat-subheader>Filters</h2>
+      <div mat-subheader i18n="@@filterShortcutListTitle">
+        Filters
+      </div>
       <a mat-list-item
          *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
          [routerLink]="['../../crawlconfig']"

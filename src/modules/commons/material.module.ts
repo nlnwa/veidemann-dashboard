@@ -31,6 +31,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NgxMatDatetimePickerModule, NgxMatTimepickerModule} from '@angular-material-components/datetime-picker';
 import {NgxMatMomentModule} from '@angular-material-components/moment-adapter';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 
 const modules = [
   MatTabsModule,
@@ -72,7 +73,8 @@ const modules = [
   imports: modules,
   exports: modules,
   providers: [
-    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: 'no-NO'}
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: 'no-NO'},
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'}}
   ]
 })
 export class MaterialModule {

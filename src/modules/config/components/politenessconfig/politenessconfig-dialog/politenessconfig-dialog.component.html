@@ -7,18 +7,20 @@
     <app-meta formControlName="meta"></app-meta>
     <div fxLayout="column" fxLayoutGap="16px">
       <mat-form-field>
-        <mat-select placeholder="Choose policy"
-                    formControlName="robotsPolicy"
-                    i18n-placeholder="@@politenessconfigFormRobotPolicyDropdownPlaceholder">
+        <mat-label i18n="@@politenessconfigFormRobotPolicyDropdownLabel">
+          Robot policy
+        </mat-label>
+        <mat-select formControlName="robotsPolicy">
           <mat-option *ngFor="let policy of robotsPolicies" [value]="policy">{{RobotsPolicy[policy]}}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field *ngIf="robotsPolicy.value === RobotsPolicy.CUSTOM_ROBOTS">
+        <mat-label i18n="@@politenessconfigFormCustomRobotsPolicyInputPlaceholder">
+          robots.txt
+        </mat-label>
             <textarea matInput
-                      formControlName="customRobots"
-                      placeholder="robots.txt"
-                      i18n-placeholder="politenessconfigFormCustomRobotsPolicyInputPlaceholder">
+                      formControlName="customRobots">
             </textarea>
       </mat-form-field>
 

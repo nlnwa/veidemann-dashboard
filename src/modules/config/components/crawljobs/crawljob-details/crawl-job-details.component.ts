@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 import {ConfigObject, ConfigRef, CrawlJob, Kind, Meta} from '../../../../../shared/models';
 import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model';
-import {config} from 'rxjs';
 
 
 @Component({
@@ -41,9 +40,9 @@ export class CrawlJobDetailsComponent implements OnChanges {
   @Output()
   runCrawl = new EventEmitter<ConfigObject>();
 
-  form: UntypedFormGroup;
+  form;
 
-  constructor(protected fb: UntypedFormBuilder,
+  constructor(protected fb: FormBuilder,
               protected authService: AuthService) {
     this.createForm();
   }

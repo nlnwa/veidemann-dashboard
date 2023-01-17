@@ -4,7 +4,7 @@
 <p><strong>Updated:</strong> {{configObject.meta.lastModified | date: 'medium'}} by {{configObject.meta.lastModifiedBy}}
 </p>
 <p><strong>ID:</strong> {{configObject.id}}
-  <button mat-button mat-icon-button (click)="copyIdToClipboard()">
+  <button mat-icon-button (click)="copyIdToClipboard()">
     <mat-icon matTooltip="copy ID to clipboard"
               i18n-matTooltip="@@copyIdButtonTooltip"
               matSuffix>content_copy

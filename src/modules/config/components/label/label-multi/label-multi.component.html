@@ -5,8 +5,8 @@
     <div fxFlex fxLayout="row" fxLayoutGap="16px">
       <mat-chip-listbox fxFlex id="commonLabelsChipList" cdkDropList cdkDropListConnectedTo="labelInputChipList">
         <mat-chip-option *ngFor="let label of configObject.meta.labelList" [selectable]="false"
-                  cdkDrag [cdkDragData]="label.key + ':' + label.value"
-                  [cdkDragDisabled]="shouldAddLabel || shouldAddLabel === undefined">
+                         cdkDrag [cdkDragData]="label.key + ':' + label.value"
+                         [cdkDragDisabled]="shouldAddLabel || shouldAddLabel === undefined">
           {{label.key}}:{{label.value}}
         </mat-chip-option>
       </mat-chip-listbox>
@@ -26,17 +26,19 @@
     </div>
     <div fxflex fxLayout="column" *ngIf="shouldAddLabel !== undefined">
       <mat-form-field>
+        <mat-label i18n="@@labelMultiInputLabel">
+          Label
+        </mat-label>
         <mat-chip-grid id="labelInputChipList" #labelInputChipList
                        cdkDropList cdkDropListConnectedTo="commonLabelsChipList"
                        (cdkDropListDropped)="onDrop($event)">
           <mat-chip-row *ngFor="let label of labels"
-                    (removed)="onRemove(label.key, label.value)">
+                        (removed)="onRemove(label.key, label.value)">
             {{label.key}}:{{label.value}}
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip-row>
           <input #chipInput
                  matInput
-                 placeholder="Label"
                  [formControl]="control"
                  [matChipInputFor]="labelInputChipList"
                  [matChipInputSeparatorKeyCodes]="labelInputSeparators"

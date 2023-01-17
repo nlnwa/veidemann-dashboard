@@ -1,6 +1,9 @@
 <form [formGroup]="form">
   <mat-form-field>
-    <input matInput placeholder={{this.placeholder}} formControlName="fileSize">
+    <mat-label>
+      {{this.placeholder}}
+    </mat-label>
+    <input matInput formControlName="fileSize">
   </mat-form-field>
   <mat-error *ngIf="fileSize.hasError('pattern')" i18n="@@fileSizeInputInvalidPatternError">
     Field doesn't contain a valid file size

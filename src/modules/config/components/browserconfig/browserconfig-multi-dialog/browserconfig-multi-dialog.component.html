@@ -12,8 +12,10 @@
       <h5 *ngIf="allSelected">Browserscripts:</h5>
       <div fxlayout="row" fxLayoutGap="16px">
         <mat-form-field fxFlex>
-          <mat-select placeholder="BrowserScripts" multiple formControlName="commonScriptRefIdList"
-                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+          <mat-label i18n="@@browserconfigFormBrowserscriptsDropdownLabel">
+            BrowserScripts
+          </mat-label>
+          <mat-select multiple formControlName="commonScriptRefIdList">
             <mat-option *ngFor="let browserScript of browserScripts" disabled="true"
                         [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
           </mat-select>
@@ -35,8 +37,10 @@
       </div>
       <div fxLayout="column" *ngIf="shouldAddBrowserScript !== undefined">
         <mat-form-field fxFlex>
-          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
-                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+          <mat-label i18n="@@browserconfigFormBrowserscriptsDropdownLabel">
+            BrowserScripts
+          </mat-label>
+          <mat-select multiple formControlName="scriptRefIdList">
             <mat-option *ngFor="let browserScript of browserScripts" [value]="browserScript.id">
               {{browserScript.meta.name}}
             </mat-option>
@@ -71,8 +75,8 @@
         </div>
       </div>
       <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
-        <app-selector fxFlex placeholder="Script selector" formControlName="scriptSelectorList"
-                      [removable]="true" i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        <app-selector fxFlex placeholderText="Script selector" formControlName="scriptSelectorList"
+                      [removable]="true" i18n-placeholderText="@@browserconfigFormScriptSelectorPlaceholder">
         </app-selector>
         <mat-hint *ngIf="shouldAddSelector">Enter script selectors to add</mat-hint>
         <mat-hint *ngIf="!shouldAddSelector">Enter script selectors to remove</mat-hint>
@@ -81,6 +85,9 @@
 
     <div fxFlex fxLayout="column">
       <mat-form-field>
+        <mat-label i18n="@@browserconfigFormUserAgentLabel">
+          User agent
+        </mat-label>
         <input matInput formControlName="userAgent" placeholder="User agent"
                i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
         <mat-error *ngIf="!userAgent.valid"
@@ -90,6 +97,9 @@
       </mat-form-field>
 
       <mat-form-field>
+        <mat-label i18n="@@browserconfigFormWindowWidthLabel">
+          Window width
+        </mat-label>
         <input matInput formControlName="windowWidth" placeholder="Window width"
                i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
         <mat-error *ngIf="!windowWidth.valid"
@@ -99,6 +109,9 @@
       </mat-form-field>
 
       <mat-form-field>
+        <mat-label i18n="@@browserconfigFormWindowHeightLabel">
+          Window height
+        </mat-label>
         <input matInput formControlName="windowHeight" placeholder="Window height"
                i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
         <mat-error *ngIf="!windowHeight.valid"

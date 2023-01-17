@@ -1,3 +1,4 @@
+<div style="height: 90%; width: 90%" fxFlex>
 <form [formGroup]="form">
   <div>
     <h2 mat-dialog-title>
@@ -17,8 +18,10 @@
                    (move)="move.emit($event)"></app-seed-meta>
     <div fxLayoutGap="16px">
       <mat-form-field>
-        <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
-                    multiple formControlName="jobRefListId">
+        <mat-label i18n="seedDetailsFormCrawlJobLabel">
+          CrawlJob
+        </mat-label>
+        <mat-select multiple formControlName="jobRefListId">
           <mat-option *ngFor="let crawlJob of crawlJobs"
                       [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
         </mat-select>
@@ -50,3 +53,4 @@
           i18n="@@commonButtonCancel">CANCEL
   </button>
 </mat-dialog-actions>
+</div>

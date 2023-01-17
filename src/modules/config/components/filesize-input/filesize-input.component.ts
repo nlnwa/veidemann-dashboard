@@ -2,10 +2,9 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Input, On
 import {
   AbstractControl,
   ControlValueAccessor,
-  UntypedFormBuilder,
-  UntypedFormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  UntypedFormBuilder,
   ValidationErrors,
   Validators
 } from '@angular/forms';
@@ -60,7 +59,7 @@ export class FilesizeInputComponent implements ControlValueAccessor, AfterViewIn
 
   @Input() placeholder: string;
 
-  form: UntypedFormGroup;
+  form;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   // ControlValueAccessor callbacks

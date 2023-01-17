@@ -1,10 +1,11 @@
 <div [formGroup]="form" fxLayout="column">
 
   <mat-form-field data-testid="name">
+    <mat-label i18n="@@seedMetaUrlInputLabel">
+      URL
+    </mat-label>
     <textarea matInput
               formControlName="name"
-              placeholder="URL"
-              i18n="@@seedMetaUrlInputPlaceholder"
               cdkTextareaAutosize
               cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="10"
@@ -42,7 +43,7 @@
     <button mat-list-item
             *ngIf="name.errors.seedExistsOnEntity?.length > 1"
             (click)="onRemoveExistingUrls(name.errors.seedExistsOnEntity)">
-      <mat-icon mat-list-icon>remove_circle</mat-icon>
+      <mat-icon matListItemIcon>remove_circle</mat-icon>
       <span i18n="@@seedMetaRemoveAlreadyExistingSeedsButton">Remove all from list</span>
     </button>
 
@@ -50,7 +51,7 @@
             *ngFor="let seed of name.errors.seedExistsOnEntity"
             (click)="onRemoveExistingUrl(seed)"
             matTooltip="Remove url from list" i18n-matTooltip="@@seedMetaRemoveSeedFromListTooltip">
-      <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+      <mat-icon matListItemIcon>remove_circle_outline</mat-icon>
       {{seed.meta.name}}
     </button>
   </mat-action-list>
@@ -59,7 +60,7 @@
     <mat-list-item *ngIf="name.errors.seedExists.length">
       <button mat-stroked-button data-testid="moveAllExistingSeedsToCurrentEntity"
               (click)="onMoveSeedsToCurrentEntity(name.errors.seedExists)">
-        <mat-icon mat-list-icon>swap_vert</mat-icon>
+        <mat-icon matListItemIcon>swap_vert</mat-icon>
         <span i18n="@@seedMetaMoveAllExistingSeedsToEntityButton">Move all to this entity</span>
       </button>
     </mat-list-item>
@@ -69,13 +70,13 @@
               matTooltip="Move seed to this entity"
               i18n-matTooltip="@@seedMetaMoveExistingSeedToEntityButtonTooltip"
               data-testid="seedExistsListMoveSeedToEntityButton">
-        <mat-icon mat-list-icon>swap_horiz</mat-icon>
+        <mat-icon matListItemIcon>swap_horiz</mat-icon>
       </button>
 
       <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
               matTooltip="Remove URL from the list"
               i18n-matTooltip="@@seedMetaRemoveExistingSeedFromTheListButtonTooltip">
-        <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
+        <mat-icon matListItemIcon>remove_circle_outline</mat-icon>
       </button>
 
       <a matTooltip="Go to entity with existing seed"
@@ -89,9 +90,10 @@
   </mat-list>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Description"
-              i18n-placeholder="@@metaDescriptionInputPlaceholder" matTextareaAutosize>
-    </textarea>
+    <mat-label i18n="@@metaDescriptionInputLabel">
+      Description
+    </mat-label>
+    <textarea matInput formControlName="description" matTextareaAutosize></textarea>
   </mat-form-field>
 
   <app-labels [removable]="editable" formControlName="labelList"></app-labels>
@@ -100,6 +102,7 @@
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
     <mat-form-field fxFlex *ngIf="created.value">
       <input matInput
+             readonly="true"
              formControlName="created"
              placeholder="Created"
              i18n-placeholder="@@metaCreatedInputPlaceholder">
@@ -107,6 +110,7 @@
 
     <mat-form-field fxFlex *ngIf="createdBy.value">
       <input matInput
+             readonly="true"
              formControlName="createdBy"
              placeholder="Created by"
              i18n-placeholder="@@metaCreatedByInputPlaceholder">
@@ -116,6 +120,7 @@
   <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="8px">
     <mat-form-field fxFlex *ngIf="lastModified.value">
       <input matInput
+             readonly="true"
              formControlName=lastModified
              placeholder="Last modified"
              i18n-placeholder="@@metaLastModifiedInputPlaceholder">
@@ -123,6 +128,7 @@
 
     <mat-form-field fxFlex *ngIf="lastModifiedBy.value">
       <input matInput
+             readonly="true"
              formControlName="lastModifiedBy"
              placeholder="Last modified by"
              i18n-placeholder="@@metaLastModifiedByInputPlaceholder">

@@ -1,6 +1,7 @@
 <div fxLayout="column">
   <form>
     <mat-form-field>
+      <mat-label i18n="@@labelListInputLabel">{{labelText}}</mat-label>
       <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px" cdkDropList
                      (cdkDropListDropped)="onDrop($event)">
         <ng-container *ngFor="let group of groups$ | async">
@@ -10,7 +11,6 @@
                         (click)="onClickLabel(group.key, value)"
                         cdkDrag
                         [cdkDragData]="group.key + ':' + value">
-            <mat-chip-option [selectable]="canUpdate"></mat-chip-option>
             {{group.key + ':' + value}}
             <button matChipRemove *ngIf="removable && !disabled" aria-label="'remove label ' + group + ':' + value">
               <mat-icon>cancel</mat-icon>
@@ -19,8 +19,9 @@
         </ng-container>
         <input #chipInput
                matInput
+               [placeholder]="placeholderText"
+               i18n-placeholder="@@labelChipInputPlaceholderText"
                [formControl]="control"
-               [placeholder]="placeholder"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="labelInputSeparators"
                (matChipInputTokenEnd)="onSave($event);"

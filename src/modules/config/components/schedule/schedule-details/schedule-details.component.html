@@ -13,11 +13,10 @@
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="!showSave">
+          <mat-label i18n="@@configIdLabel">Id</mat-label>
           <input matInput
                  formControlName="id"
-                 placeholder="Id"
-                 readonly
-                 i18n-placeholder="@@configIdPlaceholder">
+                 readonly>
         </mat-form-field>
       </div>
 
@@ -26,33 +25,38 @@
           <h3 mat-subheader i18n="@@scheduleFormCronExpressionHeader">CRON expression</h3>
           <div fxLayout="rolw wrap" fxLayoutGap="24px">
             <mat-form-field data-testid="cronMinute">
-              <input matInput formControlName="minute"
-                     placeholder="Minute"
-                     i18n-placeholder="@@scheduleCronExpressionMinutePlaceholder">
+              <mat-label i18n="@@scheduleCronExpressionMinuteLabel">
+                Minute
+              </mat-label>
+              <input matInput formControlName="minute">
               <mat-hint>0-59</mat-hint>
             </mat-form-field>
             <mat-form-field data-testid="cronHour">
-              <input matInput formControlName="hour"
-                     placeholder="Hour"
-                     i18n-placeholder="@@scheduleCronExpressionHourPlaceholder">
+              <mat-label i18n="@@scheduleCronExpressionHourLabel">
+                Hour
+              </mat-label>
+              <input matInput formControlName="hour">
               <mat-hint>0-23</mat-hint>
             </mat-form-field>
             <mat-form-field data-testid="cronDayOfMonth">
-              <input matInput formControlName="dom"
-                     placeholder="Day of month"
-                     i18n-placeholder="@@scheduleCronExpressionDomPlaceholder">
+              <mat-label i18n="@@scheduleCronExpressionDomLabel">
+                Day of month
+              </mat-label>
+              <input matInput formControlName="dom">
               <mat-hint>1-31</mat-hint>
             </mat-form-field>
             <mat-form-field data-testid="cronMonth">
-              <input matInput formControlName="month"
-                     placeholder="Month"
-                     i18n-placeholder="@@scheduleCronExpressionMonthPlaceholder">
+              <mat-label i18n="@@scheduleCronExpressionMonthLabel">
+                Month
+              </mat-label>
+              <input matInput formControlName="month">
               <mat-hint>1-12</mat-hint>
             </mat-form-field>
             <mat-form-field data-testid="cronDayOfWeek">
-              <input matInput formControlName="dow"
-                     placeholder="Day of week"
-                     i18n-placeholder="@@scheduleCronExpressionDowPlaceholder">
+              <mat-label i18n="@@scheduleCronExpressionDowLabel">
+                Day of week
+              </mat-label>
+              <input matInput formControlName="dow">
               <mat-hint>0-6</mat-hint>
             </mat-form-field>
           </div>
@@ -66,8 +70,10 @@
           <h3 mat-subheader i18n="@@scheduleDetailsValidFromToHeader">Time limit</h3>
           <div fxLayout="row wrap" fxLayoutGap="24px">
             <mat-form-field data-testid="validFrom">
+              <mat-label i18n="@@scheduleDetailsValidFromInputLabel">
+                Valid from
+              </mat-label>
               <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                     placeholder="Valid from" i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
                      data-testid="validFromInput">
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"
                                      data-testid="validFromToggle"></mat-datepicker-toggle>
@@ -75,8 +81,10 @@
             </mat-form-field>
 
             <mat-form-field data-testid="validTo">
+              <mat-label i18n="@@scheduleDetailsValidToInputLabel">
+                Valid to
+              </mat-label>
               <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
-                     placeholder="Valid to" i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
                      data-testid="validToInput">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"
                                      data-testid="validToToggle"></mat-datepicker-toggle>

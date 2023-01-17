@@ -18,9 +18,10 @@
                         + 'or leave untouched to keep the configurations original value.'
                         : null">
             <mat-form-field>
-              <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom"
-                     i18n-placeholder="@@scheduleDetailsValidFromInputPlaceholder"
-                     placeholder="Valid from">
+              <mat-label i18n="@@scheduleDetailsValidFromInputLabel">
+                Valid from
+              </mat-label>
+              <input matInput [matDatepicker]="validFromDatepicker" formControlName="validFrom">
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validFromDatepicker></mat-datepicker>
             </mat-form-field>
@@ -33,9 +34,10 @@
                         + 'or leave untouched to keep the configurations original value.'
                         : null">
             <mat-form-field>
-              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo"
-                     i18n-placeholder="@@scheduleDetailsValidToInputPlaceholder"
-                     placeholder="Valid to">
+              <mat-label i18n="@@scheduleDetailsValidToInputLabel">
+                Valid to
+              </mat-label>
+              <input matInput [matDatepicker]="validToDatepicker" formControlName="validTo">
               <mat-datepicker-toggle matSuffix [for]="validToDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #validToDatepicker></mat-datepicker>
             </mat-form-field>

@@ -1,5 +1,7 @@
 <mat-nav-list>
-  <h2 mat-subheader>Actions</h2>
+  <div mat-subheader i18n="@@actionShortcutListTitle">
+    Actions
+  </div>
   <ng-container [ngSwitch]="configObject.kind">
 
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">

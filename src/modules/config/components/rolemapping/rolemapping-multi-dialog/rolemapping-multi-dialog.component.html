@@ -4,8 +4,10 @@
 <mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field>
-      <mat-select placeholder="Choose role" formControlName="roleList" multiple
-                  i18n-placeholder="@@rolemappingFormRoleDropdownPlaceholder">
+      <mat-label i18n="@@rolemappingDetailsRoleDropdownLabel">
+        Role
+      </mat-label>
+      <mat-select formControlName="roleList" multiple>
         <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
       </mat-select>
       <mat-error *ngIf="!roleList.valid" i18n="@@roleMappingDetailsRoleRequiredError">
