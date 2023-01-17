@@ -1,15 +1,19 @@
 <form [formGroup]="form" fxLayout="column">
   <mat-form-field>
-    <mat-select placeholder="State" multiple formControlName="stateList"
-                i18n-placeholder="@@crawlJobExecutionReportFilterStatePlaceholder">
+    <mat-label i18n="@@crawlJobExecutionReportFilterStateLabel">
+      State
+    </mat-label>
+    <mat-select multiple formControlName="stateList">
       <mat-option *ngFor="let state of jobExecutionStates"
                   [value]="state.toString(10)">{{JobExecutionState[state]}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select placeholder="CrawlJob" formControlName="jobId"
-                i18n-placeholder="@@crawlJobExecutionReportFilterCrawlJobPlaceholder">
+    <mat-label i18n="@@crawlJobExecutionReportFilterCrawlJobLabel">
+      CrawlJob
+    </mat-label>
+    <mat-select formControlName="jobId">
       <mat-option [value]=""></mat-option>
       <mat-option *ngFor="let job of crawlJobOptions"
                   [value]="job.id">{{job.meta.name}}</mat-option>
@@ -17,15 +21,19 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
-           placeholder="From" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeFromPlaceholder">
+    <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeFromLabel">
+      From
+    </mat-label>
+    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom">
     <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #startTimeFromDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo"
-           placeholder="To" i18n-placeholder="@@crawlJobExecutionReportFilterStartTimeToPlaceholder">
+    <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeToLabel">
+      To
+    </mat-label>
+    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo">
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #startTimeToDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>

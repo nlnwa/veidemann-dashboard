@@ -1,15 +1,19 @@
 <form [formGroup]="form" fxLayout="column">
   <mat-form-field>
-    <mat-select placeholder="State" multiple formControlName="stateList"
-                i18n-placeholder="@@crawlExecutionReportFilterStatePlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterStateLabel">
+      State
+    </mat-label>
+    <mat-select multiple formControlName="stateList">
       <mat-option *ngFor="let state of crawlExecutionStates"
                   [value]="state.toString(10)">{{CrawlExecutionState[state]}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select placeholder="CrawlJob" formControlName="jobId"
-                i18n-placeholder="@@crawlExecutionReportFilterCrawlJobPlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterCrawlJobLabel">
+      CrawlJob
+    </mat-label>
+    <mat-select formControlName="jobId">
       <mat-option [value]=""></mat-option>
       <mat-option *ngFor="let job of crawlJobOptions"
                   [value]="job.id">{{job.meta.name}}</mat-option>
@@ -17,29 +21,33 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput
-           formControlName="jobExecutionId"
-           placeholder="JobExecution ID"
-           i18n-placeholder="@@crawlExecutionReportFilterJobExecutionIdPlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterJobExecutionIdLabel">
+      JobExecution ID
+    </mat-label>
+    <input matInput formControlName="jobExecutionId">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput
-           formControlName="seedId"
-           placeholder="Seed ID"
-           i18n-placeholder="@@crawlExecutionReportFilterSeedIdPlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterSeedIdLabel">
+      Seed ID
+    </mat-label>
+    <input matInput formControlName="seedId">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom"
-           placeholder="From" i18n-placeholder="@@crawlExecutionReportFilterStartTimeFromPlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterStartTimeFromLabel">
+      From
+    </mat-label>
+    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom">
     <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #startTimeFromDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo"
-           placeholder="To" i18n-placeholder="@@crawlExecutionReportFilterStartTimeToPlaceholder">
+    <mat-label i18n="@@crawlExecutionReportFilterStartTimeToLabel">
+      To
+    </mat-label>
+    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo">
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #startTimeToDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
   </mat-form-field>
