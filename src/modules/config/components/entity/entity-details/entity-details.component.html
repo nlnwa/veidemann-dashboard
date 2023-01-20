@@ -15,11 +15,10 @@
     <mat-card-content fxLayout="column">
       <app-meta formControlName="meta"></app-meta>
       <mat-form-field *ngIf="!showSave">
-        <input matInput
-               formControlName="id"
-               placeholder="Id"
-               readonly
-               i18n-placeholder="@@metaIdInputPlaceholder">
+        <mat-label i18n="configIdLabel">
+          Id
+        </mat-label>
+        <input matInput formControlName="id" readonly>
       </mat-form-field>
     </mat-card-content>
 

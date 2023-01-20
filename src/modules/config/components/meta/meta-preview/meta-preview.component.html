@@ -22,7 +22,7 @@
 <p *ngIf="configObject.meta.annotationList.length && canShowAnnotation">
   <mat-label>Annotations</mat-label>
   <mat-chip-listbox *ngIf="canShowAnnotation">
-    <mat-chip-option color="primary" selected *ngFor="let annotation of configObject.meta.annotationList">
+    <mat-chip-option color="primary"  *ngFor="let annotation of configObject.meta.annotationList">
       {{annotation.key}}:{{annotation.value}}
     </mat-chip-option>
   </mat-chip-listbox>
