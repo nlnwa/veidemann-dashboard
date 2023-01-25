@@ -15,7 +15,7 @@ table {
 }
 
 tr.resource-detail-row {
-  height: 0;
+  height: 0 !important;
 }
 
 tr.resource-row:not(.resource-expanded-row):hover {

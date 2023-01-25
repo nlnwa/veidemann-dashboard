@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {Resource} from '../../../../shared/models';
+import {ApiError, Resource} from '../../../../shared/models';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MatTableDataSource} from '@angular/material/table';
 
@@ -22,6 +22,7 @@ export class ResourceComponent implements OnInit {
   resources: Resource[];
 
   displayedColumns: string[] = ['uri', 'discoveryPath'];
+  resourceDisplayedColumn: string[] = ['resourceType','resourceValue']
   expandedResource: Resource | null;
   dataSource = new MatTableDataSource<Resource>();
 
@@ -40,5 +41,20 @@ export class ResourceComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getResource(resource: Resource){
+    console.log(resource);
+    const datasource = [];
+    const resource = {
+    {type: }
+    }
+
+    // for (const [key, value] of resource){
+    //   if(value) {
+    //     datasource.push({key,value});
+    //   }
+    // }
+    return datasource;
   }
 }

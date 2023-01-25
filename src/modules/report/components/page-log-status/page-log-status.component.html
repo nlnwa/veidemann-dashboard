@@ -7,23 +7,60 @@
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="16px">
 
-      <table class="mat-table table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@pageLogReportStatusUriHeaderCell">URI</th>
-          <th class="mat-header-cell" i18n="@@pageLogReportStatusReferrerHeaderCell">Referrer</th>
-          <th class="mat-header-cell" i18n="@@pageLogReportStatusCollectionFinalNameHeaderCell">Collection name</th>
-          <th class="mat-header-cell" i18n="@@pageLogReportStatusMethodHeaderCell">Method</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell"><span [innerHTML]="pageLog.uri | urlFormat"></span></td>
-          <td class="mat-cell">{{pageLog.referrer}}</td>
-          <td class="mat-cell">{{pageLog.collectionFinalName}}</td>
-          <td class="mat-cell">{{pageLog.method}}</td>
-        </tr>
-        </tbody>
+<!--      <table mat-table [dataSource]="treeDataSource">-->
+<!--        <thead>-->
+<!--        <tr class="mat-header-row">-->
+<!--          <th class="mat-header-cell" i18n="@@pageLogReportStatusUriHeaderCell">URI</th>-->
+<!--          <th class="mat-header-cell" i18n="@@pageLogReportStatusReferrerHeaderCell">Referrer</th>-->
+<!--          <th class="mat-header-cell" i18n="@@pageLogReportStatusCollectionFinalNameHeaderCell">Collection name</th>-->
+<!--          <th class="mat-header-cell" i18n="@@pageLogReportStatusMethodHeaderCell">Method</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr class="mat-row">-->
+<!--          <td class="mat-cell"><span [innerHTML]="pageLog.uri | urlFormat"></span></td>-->
+<!--          <td class="mat-cell">{{pageLog.referrer}}</td>-->
+<!--          <td class="mat-cell">{{pageLog.collectionFinalName}}</td>-->
+<!--          <td class="mat-cell">{{pageLog.method}}</td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--      </table>-->
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="uri">
+          <th mat-header-cell *matHeaderCellDef i18n="@@pageLogReportStatusUriHeaderCell">
+            URI
+          </th>
+          <td mat-cell *matCellDef="let pageLog">
+            <span [innerHTML]="pageLog.uri | urlFormat"></span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="referrer">
+          <th mat-header-cell *matHeaderCellDef i18n="@@pageLogReportStatusReferrerHeaderCell">
+            Referrer
+          </th>
+          <td mat-cell *matCellDef="let pageLog">
+            {{pageLog.referrer}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="collectionName">
+          <th mat-header-cell *matHeaderCellDef i18n="@@pageLogReportStatusCollectionFinalNameHeaderCell">
+            Collection name
+          </th>
+          <td mat-cell *matCellDef="let pageLog">
+            {{pageLog.collectionFinalName}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="method">
+          <th mat-header-cell *matHeaderCellDef i18n="@@pageLogReportStatusMethodHeaderCell">
+            Method
+          </th>
+          <td mat-cell *matCellDef="let pageLog">
+            {{pageLog.method}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="pageLogDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: pageLogDisplayedColumns"></tr>
       </table>
 
       <mat-accordion>
@@ -44,7 +81,7 @@
               Outlinks
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
             <!-- This is the tree node template for leaf nodes -->
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
               <!-- use a disabled button to provide padding for tree leaf -->

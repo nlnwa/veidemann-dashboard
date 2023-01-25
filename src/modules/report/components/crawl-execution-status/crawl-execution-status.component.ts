@@ -19,7 +19,8 @@ export class CrawlExecutionStatusComponent implements OnInit{
 
   dataSource = new MatTableDataSource<CrawlExecutionStatus>();
   crawlExecDisplayedColumns: string[] = ['jobExecution', 'job', 'state'];
-  crawlExecRuntimeDisplayedColumns: string[] = ['createdTime', 'startTime', 'endTime', 'lastChangeTime']
+  crawlExecRuntimeDisplayedColumns: string[] = ['createdTime', 'startTime', 'endTime', 'lastChangeTime'];
+  crawlExecStatisticsDisplayedColumns: string[] = ['statistics', 'count'];
 
   constructor(private fileSizePipe: FileSizePipe) {
   }

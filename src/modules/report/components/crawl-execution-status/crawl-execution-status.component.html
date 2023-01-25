@@ -123,7 +123,7 @@
 
       <table mat-table [dataSource]="getStatistics()">
         <ng-container matColumnDef="statistics">
-          <th mat-header-cell *matHeaderCellDef i18n="@@crawlExecutionReportStatusStatisticsHeaderCell"">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlExecutionReportStatusStatisticsHeaderCell">
             Statistics
           </th>
           <td mat-cell *matCellDef="let execution">
@@ -138,8 +138,8 @@
             {{execution.count}}
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="jobExecStatisticsDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: jobExecStatisticsDisplayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="crawlExecStatisticsDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: crawlExecStatisticsDisplayedColumns"></tr>
       </table>
 
       <div class="content-padding" *ngIf="crawlExecutionStatus.error as error">

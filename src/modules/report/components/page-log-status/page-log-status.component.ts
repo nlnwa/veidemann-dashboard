@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} fro
 import {PageLog} from '../../../../shared/models';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {MatTableDataSource} from '@angular/material/table';
 
 interface UriNode {
   name: string;
@@ -38,7 +39,10 @@ export class PageLogStatusComponent implements OnChanges {
     node => node.expandable,
     node => node.children);
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  treeDataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  dataSource = new MatTableDataSource<PageLog>();
+
+  pageLogDisplayedColumns: string[] = ['uri', 'referrer', 'collectionName', 'method'];
 
   @Input()
   pageLog: PageLog;
@@ -50,7 +54,8 @@ export class PageLogStatusComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.pageLog && this.pageLog && this.pageLog.outlink) {
-      this.dataSource.data = this.groupOutlinks(this.pageLog.outlink);
+      this.treeDataSource.data = this.groupOutlinks(this.pageLog.outlink);
+      this.dataSource = new MatTableDataSource<PageLog>([this.pageLog]);
     }
   }
 
