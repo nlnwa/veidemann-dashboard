@@ -82,45 +82,6 @@
         <tr mat-row *matRowDef="let row; columns: crawlExecRuntimeDisplayedColumns"></tr>
       </table>
 
-<!--      <table class="mat-table">-->
-<!--        <thead>-->
-<!--        <tr class="mat-header-row">-->
-<!--          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusStatisticsHeaderCell">Statistics</th>-->
-<!--          <th class="mat-header-cell">Count</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.urisCrawled">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsUrisCrawled">URIs crawled</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.urisCrawled}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.bytesCrawled">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsBytesCrawled">Bytes crawled</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.bytesCrawled | filesize}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsCrawled">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsCrawled">Documents crawled</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.documentsCrawled}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsDenied">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsDenied">Documents denied</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.documentsDenied}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsFailed">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsFailed">Documents failed</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.documentsFailed}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsOutOfScope">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsOutOfScope">Documents out of scope</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.documentsOutOfScope}}</td>-->
-<!--        </tr>-->
-<!--        <tr class="mat-row" *ngIf="crawlExecutionStatus.documentsRetried">-->
-<!--          <td class="mat-cell" i18n="@@crawlExecutionReportStatusStatisticsDocumentsRetried">Documents retried</td>-->
-<!--          <td class="mat-cell">{{crawlExecutionStatus.documentsRetried}}</td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-
       <table mat-table [dataSource]="getStatistics()">
         <ng-container matColumnDef="statistics">
           <th mat-header-cell *matHeaderCellDef i18n="@@crawlExecutionReportStatusStatisticsHeaderCell">

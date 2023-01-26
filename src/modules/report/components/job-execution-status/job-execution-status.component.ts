@@ -23,13 +23,11 @@ export class JobExecutionStatusComponent implements OnInit {
 
   @Input()
   jobExecutionStatus: JobExecutionStatus;
-
   dataSource = new MatTableDataSource<JobExecutionStatus>()
   jobExecStateDisplayedColumns: string[] = ['crawlJob', 'state'];
   jobExecRuntimeDisplayedColumns: string[] = ['startTime', 'endTime'];
   jobExecStatisticsDisplayedColumns: string[] = ['statistics', 'count'];
   jobExecExecutionsDisplayedColumns: string[] = ['state', 'count'];
-
 
   constructor(private fileSizePipe: FileSizePipe) {
   }

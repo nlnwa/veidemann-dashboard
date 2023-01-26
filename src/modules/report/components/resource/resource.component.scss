@@ -6,12 +6,8 @@ table {
   table-layout: fixed;
 }
 
-.mat-column-uri {
-  flex: 0 0 90%;
-  width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.mat-column-resourceType {
+  width: 10%
 }
 
 tr.resource-detail-row {
