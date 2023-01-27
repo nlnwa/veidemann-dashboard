@@ -8,6 +8,7 @@
                         formControlName="disabled"
                         i18n-matTooltip="@@crawljobFormDisableToggleSwitchTooltipUpdatSelected"
                         color="accent"
+                        mat-dialog-title
                         [matTooltip]="disabled.disabled ?
                           'Setting is not equal for the selected configurations. '
                          +'Click here and set desired value to override all, '
@@ -20,6 +21,7 @@
                         formControlName="disabled"
                         i18n-matTooltip="@@crawljobFormDisableToggleSwitchTooltipUpdateAll"
                         color="accent"
+                        mat-dialog-title
                         [matTooltip]="disabled.disabled ?
                          'Field is disabled. Click here and set desired value to use for all crawljobs in database,'
                         + 'or leave untouched to keep the configurations original value'
