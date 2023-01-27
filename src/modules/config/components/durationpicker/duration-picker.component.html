@@ -1,24 +1,24 @@
 <form [formGroup]="form" fxFlex>
-  <div fxLayout="row" fxLayoutGap="24px">
-    <mat-form-field *ngIf="showDays" class="duration">
+  <div class="duration" fxLayout="row" fxLayoutGap="24px">
+    <mat-form-field *ngIf="showDays">
       <mat-label i18n="@@durationPickerDaysLabel">Days</mat-label>
       <input type="number" matInput formControlName="days" min="0">
     </mat-form-field>
-    <mat-form-field *ngIf="showHours" class="duration">
+    <mat-form-field *ngIf="showHours">
       <mat-label i18n="@@durationPickerHoursLabel">Hours</mat-label>
       <input type="number" matInput formControlName="hours" min="0">
     </mat-form-field>
-    <mat-form-field *ngIf="showMinutes" class="duration">
+    <mat-form-field *ngIf="showMinutes">
       <mat-label i18n="@@durationPickerMinutesLabel">Minutes</mat-label>
       <input type="number" matInput formControlName="minutes" min="0">
     </mat-form-field>
-    <mat-form-field *ngIf="showSeconds" class="duration">
+    <mat-form-field *ngIf="showSeconds">
       <mat-label i18n="@@durationPickerSecondsLabel">Seconds</mat-label>
       <input type="number" matInput formControlName="seconds" min="0">
     </mat-form-field>
-    <mat-form-field *ngIf="showMilliseconds" class="duration">
+    <mat-form-field *ngIf="showMilliseconds">
       <mat-label i18n="@@durationPickerMillisecondsLabel">Milliseconds</mat-label>
-      <input fxFlex type="number" matInput formControlName="milliseconds" min="0">
+      <input type="number" matInput formControlName="milliseconds" min="0">
     </mat-form-field>
   </div>
 </form>
