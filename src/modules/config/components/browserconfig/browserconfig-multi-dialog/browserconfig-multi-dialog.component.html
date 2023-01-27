@@ -88,8 +88,7 @@
         <mat-label i18n="@@browserconfigFormUserAgentLabel">
           User agent
         </mat-label>
-        <input matInput formControlName="userAgent" placeholder="User agent"
-               i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
+        <input matInput formControlName="userAgent">
         <mat-error *ngIf="!userAgent.valid"
                    i18n="@@browserconfigFormUserAgentRequiredError">
           Must contain at least 1 character.
@@ -100,8 +99,7 @@
         <mat-label i18n="@@browserconfigFormWindowWidthLabel">
           Window width
         </mat-label>
-        <input matInput formControlName="windowWidth" placeholder="Window width"
-               i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
+        <input matInput formControlName="windowWidth">
         <mat-error *ngIf="!windowWidth.valid"
                    i18n="@@browserconfigFormWindowWidthRequiredError">
           Must be a number.
@@ -112,8 +110,7 @@
         <mat-label i18n="@@browserconfigFormWindowHeightLabel">
           Window height
         </mat-label>
-        <input matInput formControlName="windowHeight" placeholder="Window height"
-               i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
+        <input matInput formControlName="windowHeight">
         <mat-error *ngIf="!windowHeight.valid"
                    i18n="@@browserconfigFormWindowHeightRequiredError">
           Must be a number.
