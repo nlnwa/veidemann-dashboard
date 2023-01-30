@@ -75,8 +75,8 @@
         </div>
       </div>
       <div fxLayout="column" *ngIf="shouldAddSelector !== undefined">
-        <app-selector fxFlex placeholderText="Script selector" formControlName="scriptSelectorList"
-                      [removable]="true" i18n-placeholderText="@@browserconfigFormScriptSelectorPlaceholder">
+        <app-selector fxFlex formControlName="scriptSelectorList"
+                      [removable]="true">
         </app-selector>
         <mat-hint *ngIf="shouldAddSelector">Enter script selectors to add</mat-hint>
         <mat-hint *ngIf="!shouldAddSelector">Enter script selectors to remove</mat-hint>
