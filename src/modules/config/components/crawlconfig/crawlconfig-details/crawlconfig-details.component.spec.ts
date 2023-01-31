@@ -1,6 +1,6 @@
 import {CrawlConfigDetailsComponent} from './crawlconfig-details.component';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
-import {Annotation, ConfigObject, CrawlConfig, Kind, Label, Meta} from '../../../../../shared/models';
+import {Annotation, ConfigObject, ConfigRef, CrawlConfig, Kind, Label, Meta} from '../../../../../shared/models';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {CommonsModule} from '../../../../commons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -39,9 +39,9 @@ const exampleCrawlConfig: ConfigObject = {
   crawlConfig: new CrawlConfig({
     priorityWeight: 100,
     minimumDnsTtlS: 100,
-    collectionRef: null,
-    politenessRef: null,
-    browserConfigRef: null,
+    collectionRef: new ConfigRef({kind: Kind.COLLECTION, id:'testId'}),
+    politenessRef: new ConfigRef({kind: Kind.POLITENESSCONFIG, id: 'testId'}),
+    browserConfigRef: new ConfigRef({kind: Kind.BROWSERCONFIG, id: 'testId'}),
     extra: new ExtraConfig({createScreenshot: true}),
   })
 };

@@ -39,7 +39,7 @@
     "@fullcalendar/interaction": "^6.1.0",
     "@fullcalendar/timegrid": "^6.1.0",
     "@materia-ui/ngx-monaco-editor": "^6.0.0",
-    "@ngneat/spectator": "^12.2.1",
+    "@ngneat/spectator": "^14.0.0",
     "@types/moment-duration-format": "^2.2.3",
     "@types/prismjs": "^1.26.0",
     "angular-oauth2-oidc": "~15.0.1",

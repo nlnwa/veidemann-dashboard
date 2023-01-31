@@ -2434,10 +2434,10 @@
     "@material/theme" "15.0.0-canary.684e33d25.0"
     tslib "^2.1.0"
 
-"@ngneat/spectator@^12.2.1":
-  version "12.2.1"
-  resolved "https://registry.npmjs.org/@ngneat/spectator/-/spectator-12.2.1.tgz#0c41fdc8ef32072c9b89b537a43cf90dad6bd37f"
-  integrity sha512-gsalmkLnZb/Q9+IbaLnRS/Hw1lEoSoz+hAJkKc7mqQzqkJzGpD88L5VgXAGdi9Jn/mPLx0obJJ+2niaQ4D0yJw==
+"@ngneat/spectator@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.npmjs.org/@ngneat/spectator/-/spectator-14.0.0.tgz#6ed2411b1dbdaaa2f407159b354065c6d620b3af"
+  integrity sha512-lGdh9a3FAsIdvhAGD58go4J4ooslF5L2v7w8GECAlBTz7UxFx4wowRoALlTknakqtbpHmJ7RHPBSDd/3ub5XWw==
   dependencies:
     "@testing-library/dom" "^8.11.0"
     jquery "3.6.0"
