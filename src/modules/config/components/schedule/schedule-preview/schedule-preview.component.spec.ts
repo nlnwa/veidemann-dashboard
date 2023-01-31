@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {SchedulePreviewComponent} from './schedule-preview.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {MatLabel} from '@angular/material/form-field';
+import {CommonsModule} from '../../../../commons';
 
 describe('SchedulePreviewComponent', () => {
   let component: SchedulePreviewComponent;
@@ -10,7 +11,7 @@ describe('SchedulePreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [CommonsModule],
       declarations: [SchedulePreviewComponent, MatLabel],
       providers: []
     })

@@ -1,4 +1,4 @@
-<mat-card *ngIf="jobExecutionStatus">
+<mat-card appearance="outlined" *ngIf="jobExecutionStatus">
   <mat-card-header>
     <mat-icon mat-card-avatar>hdr_strong</mat-icon>
     <mat-card-title i18n="@@crawlJobExecutionReportStatusCardTitle">JobExecution</mat-card-title>
@@ -8,78 +8,76 @@
 
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="16px">
-      <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusCrawlJobHeaderCell">Job</th>
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusStateHeaderCell">State</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell">
-            <a
-              [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]">{{jobExecutionStatus.jobId | getJobNamePipe | async}}</a>
+
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="crawlJob">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusCrawlJobHeaderCell">
+            Job
+          </th>
+          <td mat-cell *matCellDef="let jobExecutionStatus">
+            <a [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]">
+              {{jobExecutionStatus.jobId | getJobNamePipe | async}}
+            </a>
           </td>
-          <td class="mat-cell">{{JobExecutionState[jobExecutionStatus.state]}}</td>
-        </tr>
-        </tbody>
+        </ng-container>
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusCrawlJobHeaderCell">
+            State
+          </th>
+          <td mat-cell *matCellDef="let jobExecutionStatus">
+            {{JobExecutionState[jobExecutionStatus.state]}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="jobExecStateDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: jobExecStateDisplayedColumns;"></tr>
       </table>
-      <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusStartTimeHeaderCell">Start</th>
-          <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusEndTimeHeaderCell">End</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell">{{jobExecutionStatus.startTime | date : 'long'}}</td>
-          <td class="mat-cell">{{jobExecutionStatus.endTime | date : 'long'}}</td>
-        </tr>
-        </tbody>
+
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="startTime">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusStartTimeHeaderCell">
+            Start
+          </th>
+          <td mat-cell *matCellDef="let jobExecutionStatus">
+            {{jobExecutionStatus.startTime | date : 'long'}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="endTime">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusEndTimeHeaderCell">
+            End
+          </th>
+          <td mat-cell *matCellDef="let jobExecutionStatus">
+            {{jobExecutionStatus.endTime | date : 'long'}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="jobExecRuntimeDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: jobExecRuntimeDisplayedColumns;"></tr>
       </table>
+
       <div class="grid">
-        <table class="mat-table">
-          <thead>
-          <tr class="mat-header-row">
-            <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusStatisticsHeaderCell">Statistics</th>
-            <th class="mat-header-cell" i18n="@@crawlJobExecutionReportStatusStatisticsCountHeaderCell">Count</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.urisCrawled">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsUrisCrawled">URIs crawled</td>
-            <td class="mat-cell">{{jobExecutionStatus.urisCrawled}}</td>
-          </tr>
-          <tr class="mat-row">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsBytesCrawled">Bytes crawled</td>
-            <td class="mat-cell">{{jobExecutionStatus.bytesCrawled | filesize}}</td>
-          </tr>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsCrawled">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsCrawled">Documents crawled</td>
-            <td class="mat-cell">{{jobExecutionStatus.documentsCrawled}}</td>
-          </tr>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsDenied">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsDenied">Documents denied</td>
-            <td class="mat-cell">{{jobExecutionStatus.documentsDenied}}</td>
-          </tr>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsFailed">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsFailed">Documents failed</td>
-            <td class="mat-cell">{{jobExecutionStatus.documentsFailed}}</td>
-          </tr>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsOutOfScope">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsOutOfScope">Documents out of scope</td>
-            <td class="mat-cell">{{jobExecutionStatus.documentsOutOfScope}}</td>
-          </tr>
-          <tr class="mat-row" *ngIf="jobExecutionStatus.documentsRetried">
-            <td class="mat-cell" i18n="@@crawlJobExecutionReportStatusStatisticsDocumentsRetried">Documents retried</td>
-            <td class="mat-cell">{{jobExecutionStatus.documentsRetried}}</td>
-          </tr>
-          </tbody>
+        <table mat-table [dataSource]="getStatistics()">
+          <ng-container matColumnDef="statistics">
+            <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusStatisticsHeaderCell">
+              Statistics
+            </th>
+            <td mat-cell *matCellDef="let execution">
+              {{execution.stat}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusCountHeaderCell">
+              Count
+            </th>
+            <td mat-cell *matCellDef="let execution">
+              {{execution.count}}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="jobExecStatisticsDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: jobExecStatisticsDisplayedColumns"></tr>
         </table>
-        <table mat-table
-               [dataSource]="getExecMap(jobExecutionStatus.executionsStateMap)">
+
+        <table mat-table [dataSource]="getExecMap(jobExecutionStatus.executionsStateMap)">
+
           <ng-container matColumnDef="state">
             <th i18n="@@crawlJobExecutionReportJobExecutionStateHeaderCell"
                 mat-header-cell *matHeaderCellDef>State
@@ -87,21 +85,26 @@
             <td mat-cell *matCellDef="let execution">
               <a [routerLink]="['/report', 'crawlexecution']"
                  [queryParams]="{state: CrawlExecutionState[execution.key], job_id: jobExecutionStatus.jobId,
-                 job_execution_id: jobExecutionStatus.id}">{{execution.key}}</a>
+                       job_execution_id: jobExecutionStatus.id}">
+                {{execution.key}}
+              </a>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="count">
-            <th i18n="@@crawlJobExecutionReportJobExecutionStateCountHeaderCell"
-                mat-header-cell *matHeaderCellDef>Count
+            <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportJobExecutionStateCountHeaderCell">
+              Count
             </th>
-            <td mat-cell *matCellDef="let execution">{{execution.value}}</td>
+            <td mat-cell *matCellDef="let execution">
+              {{execution.value}}
+            </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="jobExecExecutionsDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: jobExecExecutionsDisplayedColumns"></tr>
         </table>
       </div>
+
       <div fxFlex class="content-padding" *ngIf="jobExecutionStatus.error as error">
         <h2 i18n="@@crawlJobExecutionReportJobExecutionErrorsHeader">Error</h2>
         <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>

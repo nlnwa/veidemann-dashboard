@@ -22,6 +22,7 @@ export class ResourceComponent implements OnInit {
   resources: Resource[];
 
   displayedColumns: string[] = ['uri', 'discoveryPath'];
+  resourceDisplayedColumn: string[] = ['resourceType', 'resourceValue']
   expandedResource: Resource | null;
   dataSource = new MatTableDataSource<Resource>();
 
@@ -41,4 +42,30 @@ export class ResourceComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  getResource(resource: Resource) {
+    const datasource = [];
+    const resources = [
+      {key: 'URI', value: resource.uri},
+      {key: 'From cache', value: resource.fromCache},
+      {key: 'Renderable', value: resource.renderable},
+      {key: 'Resource type', value: resource.resourceType},
+      {key: 'Mime type', value: resource.mimeType},
+      {key: 'Status code', value: resource.statusCode},
+      {key: 'Discovery path', value: resource.discoveryPath},
+      {key: 'WARC ID', value: resource.warcId},
+      {key: 'Referrer', value: resource.referrer},
+      {key: 'Method', value: resource.method},
+      {
+        key: 'Error', value: resource.error ?
+          resource.error.code + ': ' + resource?.error.msg + ' - ' + resource?.error.detail : null
+      }
+    ]
+    for (const res of resources) {
+      if (res.value) {
+          datasource.push(res);
+        }
+      }
+      return datasource;
+    }
 }

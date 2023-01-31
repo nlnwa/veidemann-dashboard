@@ -14,7 +14,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {CommonsModule} from '../../../../commons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
-import {BrowserScriptDirective} from './browserscript.directive';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AuthService} from '../../../../core/services/auth';
@@ -24,7 +23,7 @@ import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MonacoEditorComponent, MonacoEditorModule} from '@materia-ui/ngx-monaco-editor';
+import {MonacoEditorComponent} from '@materia-ui/ngx-monaco-editor';
 import {MockComponent} from 'ng-mocks';
 
 
@@ -75,7 +74,6 @@ describe('BrowserScriptDetailsComponent', () => {
       ],
       declarations: [
         BrowserScriptDetailsComponent,
-        BrowserScriptDirective,
         MetaComponent,
         LabelComponent,
         AnnotationComponent,

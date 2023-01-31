@@ -1,28 +1,28 @@
 <mat-nav-list>
-  <h2 mat-subheader>Shortcuts</h2>
+  <div mat-subheader>Shortcuts</div>
   <a mat-list-item
      *ngIf="'read' | able: Kind[Kind.SEED]"
      [routerLink]="['/config', 'seed', crawlExecutionStatus.seedId]"
      i18n="@@reportListActionButtonGoToSeed">
-    <mat-icon mat-list-icon>link</mat-icon>
+    <mat-icon matListItemIcon>link</mat-icon>
     Go to seed
   </a>
   <a mat-list-item
      *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
      [routerLink]="['/config', 'crawljobs', crawlExecutionStatus.jobId]"
      i18n="@@reportListActionButtonGoToCrawljob">
-    <mat-icon mat-list-icon>work</mat-icon>
+    <mat-icon matListItemIcon>work</mat-icon>
     Go to crawljob
   </a>
 </mat-nav-list>
 <mat-nav-list>
-  <h2 mat-subheader>Filters</h2>
+  <div mat-subheader>Filters</div>
   <a mat-list-item
      *ngIf="'read' | able: 'pagelog'"
      [routerLink]="['/report/pagelog']"
      [queryParams]="{execution_id: crawlExecutionStatus.id}"
      i18n="@@reportListActionButtonGoToPagelog">
-    <mat-icon mat-list-icon>art_track</mat-icon>
+    <mat-icon matListItemIcon>art_track</mat-icon>
     Show pagelog
   </a>
   <a mat-list-item
@@ -30,7 +30,7 @@
      [routerLink]="['/report/crawllog']"
      [queryParams]="{execution_id: crawlExecutionStatus.id}"
      i18n="@@reportListActionButtonGoToCrawlog">
-    <mat-icon mat-list-icon>event_note</mat-icon>
+    <mat-icon matListItemIcon>event_note</mat-icon>
     Show crawllog
   </a>
 
@@ -38,7 +38,7 @@
     <a mat-list-item
        (click)="onAbortCrawlExecution(crawlExecutionStatus)"
        i18n="@@reportListActionButtonAbortCrawlExecution">
-      <mat-icon mat-list-icon>cancel</mat-icon>
+      <mat-icon matListItemIcon>cancel</mat-icon>
       Abort crawl
     </a>
   </ng-container>

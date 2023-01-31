@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+$veidemann-dashboard-primary: mat.define-palette(mat.$blue-gray-palette);
+$veidemann-dashboard-accent: mat.define-palette(mat.$orange-palette);
+$veidemann-dashboard-warn: mat.define-palette(mat.$red-palette);
+
+$veidemann-dashboard-typography: mat.define-typography-config(
+  $font-family: 'Lato',
+);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $veidemann-dashboard-primary,
+    accent: $veidemann-dashboard-accent,
+    warn: $veidemann-dashboard-warn
+  ),
+  typography: $veidemann-dashboard-typography,
+  density: 0,
+));

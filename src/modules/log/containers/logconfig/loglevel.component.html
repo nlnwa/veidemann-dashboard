@@ -1,5 +1,5 @@
 <form [formGroup]="form" class="content-padding">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>notes</mat-icon>
       <mat-card-title i18n="@@logconfigDetailsCardTitle">Log level</mat-card-title>
@@ -7,16 +7,20 @@
     <mat-card-content>
       <ng-container formArrayName="logLevelList" *ngFor="let logLevelItem of logLevelList.controls; let i=index">
         <div [formGroupName]="i" fxLayout="row" fxLayoutGap="1em">
-          <mat-form-field fxFlex="2 1 100%">
-            <input matInput formControlName="logger" placeholder="Logger"
-                   i18n-placeholder="@@logconfigFormLoggerPlaceholder">
+          <mat-form-field fxFlex="70">
+            <mat-label i18n="@@logconfigFormLoggerInputLabel">
+              Logger
+            </mat-label>
+            <input matInput formControlName="logger">
             <mat-error *ngIf="!logLevelItem.get('logger').valid" i18n="@@logconfigLoggerRequiredError">
               Field can't be empty
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex>
-            <mat-select formControlName="level" placeholder="Level"
-                        i18n-placeholder="@@logconfigFormLevelPlaceholder">
+            <mat-label i18n="@@logconfigFormLevelSelectLabel">
+              Level
+            </mat-label>
+            <mat-select formControlName="level">
               <mat-option *ngFor="let level of levelOptions" [value]="level">{{Level[level]}}</mat-option>
             </mat-select>
             <mat-error *ngIf="!logLevelItem.get('level').valid" i18n="@@logconfigLevelRequiredError">

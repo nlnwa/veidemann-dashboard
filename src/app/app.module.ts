@@ -20,17 +20,6 @@ import {ScheduleEventDialogComponent} from './components/schedule-event-dialog/s
 import {ScheduleOverviewComponent} from './components/schedule-overview/schedule-overview.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import timeGridPlugin from '@fullcalendar/timegrid';
-
-// register FullCalendar plugins
-FullCalendarModule.registerPlugins([
-  dayGridPlugin,
-  timeGridPlugin,
-  interactionPlugin,
-]);
-
 @NgModule({
   declarations: [
     AppComponent,

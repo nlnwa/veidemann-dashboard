@@ -5,6 +5,7 @@
     <div (click)="disabled.disabled ? disabled.enable(): null">
       <mat-slide-toggle *ngIf="!allSelected"
                         class="disabled-toggle"
+                        mat-dialog-title
                         formControlName="disabled"
                         i18n="@@seedDisabledToggleSwitch"
                         i18n-matTooltip="@@seedDisabledToggleSwitchTooltipUpdateSelected"
@@ -42,8 +43,10 @@
           <h5 *ngIf="allSelected">Crawljobs:</h5>
           <div fxLayout="row" fxLayoutGap="16px">
             <mat-form-field fxFlex>
-              <mat-select placeholder="Crawlob" multiple formControlName="commonJobRefListId"
-                          i18n-placeholder="@@seedDetailsFormJobRefListPlaceholder">
+              <mat-label i18n="@@seedDetailsFormJobRefListLabel">
+                Crawljob
+              </mat-label>
+              <mat-select  multiple formControlName="commonJobRefListId">
                 <mat-option *ngFor="let crawlJob of crawlJobs"
                             [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
               </mat-select>
@@ -61,7 +64,10 @@
           </div>
           <div *ngIf="shouldAddCrawlJob !== undefined">
             <mat-form-field *ngIf="shouldAddCrawlJob!==undefined">
-              <mat-select placeholder="Crawljob" multiple formControlName="updateJobRefListId">
+              <mat-label i18n="@@seedDetailsCrawlJobDropDownLabel">
+                Crawljob
+              </mat-label>
+              <mat-select  multiple formControlName="updateJobRefListId">
                 <mat-option *ngFor="let crawlJob of crawlJobs" [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
               </mat-select>
               <mat-hint *ngIf="shouldAddCrawlJob">Select crawljobs to add</mat-hint>

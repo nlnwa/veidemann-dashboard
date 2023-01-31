@@ -35,22 +35,13 @@
             ],
             "styles": [
               "src/styles/styles.scss",
-              "src/styles/theme.scss",
-              "node_modules/prismjs/themes/prism.css",
-              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/prismjs/plugins/match-braces/prism-match-braces.css",
-              "node_modules/nano-editor/src/style.css",
-              "node_modules/nano-editor/lib/style.css",
-              "node_modules/@fullcalendar/common/main.css",
-              "node_modules/@fullcalendar/daygrid/main.css",
-              "node_modules/@fullcalendar/timegrid/main.css"
+              "src/styles/theme.scss"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
               "hammerjs",
               "google-protobuf/google/protobuf/timestamp_pb.js",
               "google-protobuf/google/protobuf/empty_pb.js",
-              "nano-editor",
               "ip-address"
             ],
             "vendorChunk": true,
@@ -120,14 +111,7 @@
             "scripts": [],
             "styles": [
               "src/styles/styles.scss",
-              "src/styles/theme.scss",
-              "node_modules/prismjs/themes/prism.css",
-              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/nano-editor/src/style.css",
-              "node_modules/nano-editor/lib/style.css",
-              "node_modules/@fullcalendar/common/main.css",
-              "node_modules/@fullcalendar/daygrid/main.css",
-              "node_modules/@fullcalendar/timegrid/main.css"
+              "src/styles/theme.scss"
             ],
             "assets": [
               "src/assets",

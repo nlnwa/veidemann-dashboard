@@ -6,7 +6,6 @@ import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ConfigDialogData} from '../../../func';
 import {CommonsModule} from '../../../../commons';
 import {MetaComponent} from '../../meta/meta.component';
-import {BrowserScriptDirective} from '../browserscript-details/browserscript.directive';
 import {LabelComponent} from '../../label/label.component';
 import {LabelService} from '../../../services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -57,7 +56,7 @@ describe('BrowserScriptDialogComponent', () => {
           useValue: {}
         }
       ],
-      declarations: [BrowserScriptDialogComponent, MetaComponent, BrowserScriptDirective, LabelComponent, AnnotationComponent, MockComponent(MonacoEditorComponent)]
+      declarations: [BrowserScriptDialogComponent, MetaComponent, LabelComponent, AnnotationComponent, MockComponent(MonacoEditorComponent)]
     })
       .compileComponents();
   }));

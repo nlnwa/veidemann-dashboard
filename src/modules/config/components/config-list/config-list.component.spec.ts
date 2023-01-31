@@ -1,6 +1,10 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ConfigListComponent} from './config-list.component';
+import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
+import {MaterialModule} from '../../../commons/material.module';
+import {CommonsModule} from '../../../commons';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('ConfigListComponent', () => {
   let component: ConfigListComponent;
@@ -8,7 +12,13 @@ describe('ConfigListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ConfigListComponent]
+      declarations: [ConfigListComponent],
+      imports: [
+        KeyboardShortcutsModule,
+        MaterialModule,
+        CommonsModule,
+        NoopAnimationsModule
+      ]
     })
       .compileComponents();
   }));

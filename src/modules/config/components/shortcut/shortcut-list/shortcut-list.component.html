@@ -1,18 +1,18 @@
 <ng-container [ngSwitch]="configObject?.kind">
   <ng-container *ngSwitchCase="Kind.SEED">
     <mat-nav-list>
-      <h2 mat-subheader>Entity</h2>
+      <div mat-subheader>Entity</div>
       <a mat-list-item
          [routerLink]="['/config', 'entity', configObject.seed.entityRef.id]">
-        <mat-icon mat-list-icon>business</mat-icon>
+        <mat-icon matListItemIcon>business</mat-icon>
         {{configObject.seed.entityRef.id | getEntityName | async}}</a>
       <ng-container *ngIf="configObject.seed.jobRefList.length > 0 && ('read' | able: Kind[Kind.CRAWLJOB])">
-        <h2 mat-subheader>Crawljobs</h2>
+        <div mat-subheader>Crawljobs</div>
         <ng-container *ngFor="let crawlJob of configObject.seed.jobRefList">
           <a mat-list-item class="disabledJob"
              [routerLink]="['/config/crawljobs/' + crawlJob.id]"
              [ngClass]='{"disabledJob": crawlJob.id | getCrawlJobDisabledStatus | async}'>
-            <mat-icon mat-list-icon>work</mat-icon>
+            <mat-icon matListItemIcon>work</mat-icon>
             {{ crawlJob.id | getJobNamePipe | async }}
           </a>
         </ng-container>
@@ -23,25 +23,25 @@
   <ng-container *ngSwitchCase="Kind.CRAWLJOB">
     <mat-nav-list>
       <ng-container *ngIf="configObject.crawlJob.scheduleRef.id && ('read' | able: Kind[Kind.CRAWLSCHEDULECONFIG])">
-        <h2 mat-subheader>Schedule</h2>
+        <div mat-subheader>Schedule</div>
         <a mat-list-item
            [routerLink]="['/config/schedule/' + configObject.crawlJob.scheduleRef.id]">
-          <mat-icon mat-list-icon>schedule</mat-icon>
+          <mat-icon matListItemIcon>schedule</mat-icon>
           {{configObject | getCrawlScheduleName | async}}
         </a>
       </ng-container>
       <ng-container *ngIf="configObject.crawlJob.crawlConfigRef && ('read' | able: Kind[Kind.CRAWLCONFIG])">
-        <h2 mat-subheader>CrawlConfig</h2>
+        <div mat-subheader>CrawlConfig</div>
         <a mat-list-item
            [routerLink]="['/config/crawlconfig/' + configObject.crawlJob.crawlConfigRef.id]">
-          <mat-icon mat-list-icon>settings_system_daydream</mat-icon>
+          <mat-icon matListItemIcon>settings_system_daydream</mat-icon>
           {{configObject | getCrawlConfigName | async}}
         </a>
       </ng-container>
       <ng-container *ngIf="configObject.crawlJob.scopeScriptRef && ('read' | able: Kind[Kind.BROWSERSCRIPT])">
-        <h2 mat-subheader>Scope script</h2>
+        <div mat-subheader>Scope script</div>
         <a mat-list-item [routerLink]="['/config/browserscript/' + configObject.crawlJob.scopeScriptRef.id]">
-          <mat-icon mat-list-icon>web_asset</mat-icon>
+          <mat-icon matListItemIcon>web_asset</mat-icon>
           {{configObject.crawlJob.scopeScriptRef.id | getBrowserScriptName | async}}
         </a>
       </ng-container>
@@ -51,26 +51,26 @@
   <ng-container *ngSwitchCase="Kind.CRAWLCONFIG">
     <mat-nav-list>
       <ng-container *ngIf="configObject.crawlConfig.collectionRef.id && ('read' | able: Kind[Kind.COLLECTION])">
-        <h2 mat-subheader>Collection</h2>
+        <div mat-subheader>Collection</div>
         <a mat-list-item
            [routerLink]="['/config/collection/' + configObject.crawlConfig.collectionRef.id]">
-          <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+          <mat-icon matListItemIcon>collections_bookmark</mat-icon>
           {{configObject | getCollectionName | async}}
         </a>
       </ng-container>
       <ng-container *ngIf="configObject.crawlConfig.browserConfigRef.id && ('read' | able: Kind[Kind.BROWSERCONFIG])">
-        <h2 mat-subheader>BrowserConfig</h2>
+        <div mat-subheader>BrowserConfig</div>
         <a mat-list-item
            [routerLink]="['/config/browserconfig/' + configObject.crawlConfig.browserConfigRef.id]">
-          <mat-icon mat-list-icon>web</mat-icon>
+          <mat-icon matListItemIcon>web</mat-icon>
           {{configObject | getBrowserConfigName | async}}
         </a>
       </ng-container>
       <ng-container *ngIf="configObject.crawlConfig.politenessRef.id && ('read' | able: Kind[Kind.POLITENESSCONFIG])">
-        <h2 mat-subheader>PolitenessConfig</h2>
+        <div mat-subheader>PolitenessConfig</div>
         <a mat-list-item
            [routerLink]="['/config/politenessconfig/' + configObject.crawlConfig.politenessRef.id]">
-          <mat-icon mat-list-icon>sentiment_very_satisfied</mat-icon>
+          <mat-icon matListItemIcon>sentiment_very_satisfied</mat-icon>
           {{configObject | getPolitenessConfigName | async}}
         </a>
       </ng-container>
@@ -80,10 +80,10 @@
   <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
     <mat-nav-list
       *ngIf="configObject.browserConfig.scriptRefList.length > 0 && ('read' | able: Kind[Kind.BROWSERSCRIPT])">
-      <h2 mat-subheader>BrowserScripts</h2>
+      <div mat-subheader>BrowserScripts</div>
       <ng-container *ngFor="let script of configObject.browserConfig.scriptRefList">
         <a mat-list-item [routerLink]="['/config/browserscript/' + script.id]">
-          <mat-icon mat-list-icon>web_asset</mat-icon>
+          <mat-icon matListItemIcon>web_asset</mat-icon>
           {{script.id | getBrowserScriptName | async}}
         </a>
       </ng-container>

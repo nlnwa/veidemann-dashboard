@@ -2,14 +2,14 @@ table {
   width: 100%;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
   text-align: left;
 }
 
-.mat-cell.requestedUri {
+.mat-mdc-cell.requestedUri {
   word-break: break-word;
 }
 
-.mat-cell.discoveryPath {
+.mat-mdc-cell.discoveryPath {
   word-break: break-word;
 }

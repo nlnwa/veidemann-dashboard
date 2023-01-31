@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>person</mat-icon>
       <mat-card-title>
@@ -13,23 +13,31 @@
     <mat-card-content>
       <div fxLayout="row wrap" fxLayoutGap="24px">
         <mat-form-field>
-          <mat-select placeholder="Choose a type" [(value)]="selectedType"
-                      i18n-placeholder="@@roleMappingDetailsTypeDropdownPlaceholder">
+          <mat-label i18n-placeholder="@@roleMappingDetailsTypeDropdownLabel">
+            Type
+          </mat-label>
+          <mat-select [(value)]="selectedType">
             <mat-option value="email" i18n="@@roleMappingDetailsTypeOptionEmail">Email</mat-option>
             <mat-option value="group" i18n="@@roleMappingDetailsTypeOptionGroup">Group</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex *ngIf="selectedType === 'email'">
-          <input matInput formControlName="email" placeholder="Email"
-                 i18n-placeholder="@@roleMappingDetailsEmailInputPlaceholder">
+          <mat-label i18n="@@roleMappingDetailsEmailInputLabel">
+            Email
+          </mat-label>
+          <input matInput formControlName="email">
         </mat-form-field>
         <mat-form-field fxFlex *ngIf="selectedType === 'group'">
-          <input matInput formControlName="group" placeholder="Group"
-                 i18n-placeholder="@@roleMappingDetailsGroupInputPlaceholder">
+          <mat-label i18n="@@roleMappingDetailsGroupInputLabel">
+            Group
+          </mat-label>
+          <input matInput formControlName="group">
         </mat-form-field>
         <mat-form-field fxFlex>
-          <mat-select placeholder="Choose role" formControlName="roleList" multiple
-                      i18n-placeholder="@@rolemappingDetailsRoleDropdownPlaceholder">
+          <mat-label i18n="@@rolemappingDetailsRoleDropdownLabel">
+            Role
+          </mat-label>
+          <mat-select formControlName="roleList" multiple>
             <mat-option *ngFor="let role of roles" [value]="role">{{Role[role]}}</mat-option>
           </mat-select>
           <mat-error *ngIf="! roleList.valid" i18n="@@roleMappingDetailsRoleRequiredError">

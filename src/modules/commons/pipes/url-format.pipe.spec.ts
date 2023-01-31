@@ -28,10 +28,8 @@ describe('UrlFormatPipe', () => {
     const domSanitizer = TestBed.get(DomSanitizer);
     const pipe = new UrlFormatPipe(domSanitizer);
     const safeResourceUrl = pipe.transform(testcase.url, false);
-    console.log('safe:', safeResourceUrl);
     // TODO: Runs, but too fragile locator. Does not have access to DOM
     const expected = domSanitizer.bypassSecurityTrustHtml('<a class="formattedUri" href="' + testcase.url + '" target="_blank">' + testcase.url + '</a> ');
-    console.log('expected: ', expected);
     expect(safeResourceUrl).toEqual(expected);
   });
 
@@ -39,9 +37,7 @@ describe('UrlFormatPipe', () => {
     const domSanitizer = TestBed.get(DomSanitizer);
     const pipe = new UrlFormatPipe(domSanitizer);
     const safeResourceUrl = pipe.transform(testcase.url, true);
-    console.log('safe: ', safeResourceUrl);
     const expected = domSanitizer.bypassSecurityTrustHtml('<a class="formattedUri" href="' + testcase.url + '" target="_blank">' + testcase.formattedUrl + '</a> ');
-    console.log('expected: ', expected);
     expect(safeResourceUrl).toEqual(expected);
   });
 

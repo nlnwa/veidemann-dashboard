@@ -1,5 +1,5 @@
 <form [formGroup]="form" fxFlex>
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>group_work</mat-icon>
       <mat-card-title>
@@ -13,14 +13,15 @@
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="!showSave">
+          <mat-label i18n="@@configIdLabel">
+            Id
+          </mat-label>
           <input matInput
                  formControlName="id"
-                 placeholder="Id"
-                 readonly
-                 i18n-placeholder="@@configIdPlaceholder">
+                 readonly>
         </mat-form-field>
       </div>
-      <div fxFlex>
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
         <mat-label i18n="@@crawlhostgroupconfigFormMinTimeBetweenPageloadLabel">
           Minimum time between page load
         </mat-label>
@@ -46,10 +47,11 @@
         </mat-error>
 
         <mat-form-field data-testid="delayFactor">
+          <mat-label i18n="@@crawlhostgroupconfigFormDelayFactorLabel">
+            Delay factor
+          </mat-label>
           <input matInput
-                 formControlName="delayFactor"
-                 placeholder="Delay factor"
-                 i18n-placeholder="@@crawlhostgroupconfigFormDelayFactorPlaceholder">
+                 formControlName="delayFactor">
           <mat-error *ngIf="!delayFactor.valid"
                      i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
             Must be a number.
@@ -57,17 +59,20 @@
         </mat-form-field>
 
         <mat-form-field>
+          <mat-label i18n="@@crawlhostgroupconfigFormMaxRetriesLabel">
+            Maximum retries
+          </mat-label>
           <input matInput
-                 formControlName="maxRetries"
-                 placeholder="Maximum retries"
-                 i18n-placeholder="@@crawlhostgroupconfigFormMaxRetriesPlaceholder">
+                 formControlName="maxRetries">
           <mat-error *ngIf="!maxRetries.valid"
                      i18n="@@crawlhostgroupconfigFormMaxRetriesValidationError">
             Must be a number.
           </mat-error>
         </mat-form-field>
 
-        <mat-label i18n="crawlhostgroupconfigFormRetryDelayLabel">Retry delay</mat-label>
+        <mat-label i18n="crawlhostgroupconfigFormRetryDelayLabel">
+          Retry delay
+        </mat-label>
         <app-duration-picker formControlName="retryDelaySeconds"
                              [unit]="UnitOfTime.SECOND"
                              [durationGranularity]="'m:s'">
@@ -76,16 +81,19 @@
                    i18n="@@crawlhostgroupconfigFormRetryDelayValidationError">
           Must be a number.
         </mat-error>
+
         <fieldset class="mat-elevation-z1" formArrayName="ipRangeList">
           <legend mat-card-subtitle i18n="@@ipRangeListHeader">IP range</legend>
           <div fxLayout="column" *ngFor="let ipRange of ipRangeControlArray.controls; let i=index"
                data-testid="ipRangeList">
             <div [formGroupName]="i"
                  fxLayout="row"
-                 fxlayoutgap="16px">
+                 fxLayoutGap="16px">
               <mat-form-field fxFlex data-testid="ipRangeFrom">
-                <input matInput formControlName="ipFrom" placeholder="IP address"
-                       i18n-placeholder="@@crawlhostgroupconfigFormIpFromPlaceholder">
+                <mat-label i18n="@@crawlhostgroupconfigFormIpFromLabel">
+                  IP address
+                </mat-label>
+                <input matInput formControlName="ipFrom">
                 <mat-hint i18n="@@crawlhostgroupconfigFormIpFromHint">From</mat-hint>
                 <mat-error *ngIf="!ipFromControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpFromRequiredError">
@@ -94,8 +102,10 @@
               </mat-form-field>
 
               <mat-form-field fxFlex data-testid="ipRangeTo">
-                <input matInput formControlName="ipTo" placeholder="IP address"
-                       i18n-placeholder="@@crawlhostgroupconfigFormIpToPlaceholder">
+                <mat-label i18n="@@crawlhostgroupconfigFormIpToLabel">
+                  IP address
+                </mat-label>
+                <input matInput formControlName="ipTo">
                 <mat-hint i18n="@@crawlhostgroupconfigFormIpToHint">To</mat-hint>
                 <mat-error *ngIf="!ipToControl(i).valid"
                            i18n="@@crawlhostgroupconfigFormValidIpToRequiredError">

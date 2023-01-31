@@ -1,5 +1,5 @@
 <div *ngIf="crawlerStatus" fxLayout="row" fxLayoutGap="16px">
-  <mat-card>
+  <mat-card appearance="outlined">
     <h2>Crawler status</h2>
     <mat-card-content>
       <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.RUNNING">
@@ -34,12 +34,12 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
+  <mat-card appearance="outlined">
     <h2>Total queue size</h2>
     <h1>{{ crawlerStatus.queueSize }}</h1>
   </mat-card>
 
-  <mat-card>
+  <mat-card appearance="outlined">
     <h2>Busy crawlhost groups</h2>
     <h1>{{ crawlerStatus.busyCrawlHostGroupCount }}</h1>
   </mat-card>

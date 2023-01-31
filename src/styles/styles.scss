@@ -1,6 +1,18 @@
 @use '@angular/material' as mat;
 @import './theme';
 
+@include mat.core();
+
+@include mat.all-component-typographies($veidemann-dashboard-typography);
+
+// Apply the dark theme by default
+@include mat.all-component-themes($dark-theme);
+
+// Apply the light theme only when the user prefers light themes.
+@media (prefers-color-scheme: light) {
+  @include mat.all-component-colors($light-theme);
+}
+
 html, body, app-root, mat-sidenav-container {
   margin: 0;
   width: 100%;
@@ -13,8 +25,12 @@ html, body {
 }
 
 // increase font size for tooltip
-.mat-tooltip {
+.mat-mdc-tooltip {
   font-size: 0.8rem !important;
+}
+
+.mat-mdc-card {
+  padding: 16px;
 }
 
 .list-container__margin {
@@ -22,14 +38,14 @@ html, body {
 }
 
 // floating action button
-.action-button.mat-fab {
+.action-button.mat-mdc-fab {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
   z-index: 100;
 }
 
-.action-button-secondary.mat-fab {
+.action-button-secondary.mat-mdc-fab {
   position: fixed;
   bottom: 5.5rem;
   right: 1rem;
@@ -67,7 +83,7 @@ html, body {
 
 .formattedUri {
   text-decoration: none;
-  color: mat.get-color-from-palette($my-app-primary);
+  color: #64a5da
 }
 
 .formattedUri:hover {
@@ -75,13 +91,13 @@ html, body {
 }
 
 tr.item-row.row-disabled td a.formattedUri {
-  color: $warn;
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);
 }
 
 tr.resource-row.row-error td a.formattedUri {
-  color: $warn;
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);
 }
 
 .disabledJob .mat-list-item-content {
-  color: $warn
+  color: mat.get-color-from-palette($veidemann-dashboard-warn)
 }

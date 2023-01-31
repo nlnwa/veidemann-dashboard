@@ -2,8 +2,11 @@ fieldset {
   border: 0px;
 }
 
-.cron-expression .mat-form-field {
-  width: 4rem;
+.cron-expression {
+  width: 100%;
+}
+.cron-expression .mat-mdc-form-field {
+  width: 18%;
 }
 
 

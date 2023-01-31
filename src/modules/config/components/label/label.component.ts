@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -24,12 +32,15 @@ import {LabelService} from '../../services/label.service';
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: LabelComponent, multi: true}],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class LabelComponent implements ControlValueAccessor, OnInit {
 
-  @Input() removable = true;
+  @Input()
+  removable = true;
 
   @Input()
-  placeholder = 'Label';
+  placeholderText = 'New label...';
+  labelText = 'Label';
 
   private fetchLabelKeys: Subject<void>;
 

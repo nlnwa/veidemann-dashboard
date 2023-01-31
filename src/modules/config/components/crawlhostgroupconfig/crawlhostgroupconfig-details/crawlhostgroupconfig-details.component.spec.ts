@@ -216,7 +216,7 @@ describe('CrawlHostGroupConfigDetailsComponent', () => {
       expect(component.canUpdate).toBeFalsy();
       const invalidRangeError = fixture.debugElement.query(By.css('[data-testid="ipRangeInvalidError"]'));
       expect(invalidRangeError).toBeDefined();
-      expect(invalidRangeError.properties.innerText).toEqual('The IP range is not valid');
+      expect(invalidRangeError.properties.innerText).toEqual(' The IP range is not valid');
       await ipRangeToInput.setValue('192.169.1.100');
       fixture.detectChanges();
       // TODO check that error message is gone

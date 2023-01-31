@@ -244,7 +244,7 @@ describe('SeedMetaComponent', () => {
           .with({selector: '[data-testid="seedExistsList"]'}));
 
         const items = await seedExistsList.getItems();
-        expect(items.length).toEqual(2);
+        expect(items.length).toEqual(3);
         expect(await items[1].getText()).toEqual('https://www.bokhylla.no');
 
         const moveSeedToEntityButton = await items[1].getHarness<MatButtonHarness>(MatButtonHarness

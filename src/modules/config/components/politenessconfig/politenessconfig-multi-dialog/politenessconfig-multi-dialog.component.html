@@ -11,9 +11,10 @@
     <div fxFlex fxLayout="column">
       <div (click)="onEnableRobotsPolicy()">
         <mat-form-field>
-          <mat-select placeholder="Choose policy"
-                      formControlName="robotsPolicy"
-                      i18n-placeholder='@@politenessconfigFormRobotPolicyDropdownPlaceholder'
+          <mat-label i18n="@@politenessconfigFormRobotPolicyDropdownLabel">
+            Robot policy
+          </mat-label>
+          <mat-select formControlName="robotsPolicy"
                       i18n-matTooltip='@@politenessconfigFormRobotPolicyDisabledExplanation'
                       [matTooltip]="robotsPolicy.disabled ?
                         'Setting is not the same for all selected configurations.'
@@ -28,11 +29,12 @@
 
       <div *ngIf="robotsPolicy.value === 'CUSTOM_ROBOTS'" class="customRobotTxtInput">
         <mat-form-field>
+          <mat-label i18n="@@politenessconfigFormCustomRobotsPolicyInputPlaceholder">
+            robots.txt
+          </mat-label>
             <textarea matInput
-                      formControlName="customRobots"
-                      placeholder="robots.txt"
-                      i18n-placeholder="politenessconfigFormCustomRobotsPolicyInputPlaceholder">
-            </textarea>
+                      formControlName="customRobots">
+          </textarea>
         </mat-form-field>
       </div>
 

@@ -1,25 +1,25 @@
 <div class="content-padding" fxLayout="row" fxLayoutGap="16px" *ngIf="crawlExecutionStatus as crawlExec">
   <div fxFlex fxLayout="column " fxLayoutGap="16px">
-    <mat-card *ngIf="crawlExec.startTime && crawlExec.endTime">
+    <mat-card appearance="outlined" *ngIf="crawlExec.startTime && crawlExec.endTime">
       <h2>Duration</h2>
       <h1>{{getDuration(crawlExec.startTime, crawlExec.endTime)}}</h1>
     </mat-card>
-    <mat-card *ngIf="(crawlExec.startTime && crawlExec.lastChangeTime) && !crawlExec.endTime">
+    <mat-card appearance="outlined" *ngIf="(crawlExec.startTime && crawlExec.lastChangeTime) && !crawlExec.endTime">
       <h2>Duration</h2>
       <h1>{{getDuration(crawlExec.startTime, crawlExec.lastChangeTime)}}</h1>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <h2>Bytes crawled</h2>
       <h1>{{crawlExec.bytesCrawled | filesize}}</h1>
     </mat-card>
 
-    <mat-card *ngIf="crawlExec.urisCrawled">
+    <mat-card appearance="outlined" *ngIf="crawlExec.urisCrawled">
       <h2>URIs crawled</h2>
       <h1>{{crawlExec.urisCrawled}}</h1>
     </mat-card>
 
-    <mat-card *ngIf="crawlExec.error as error">
+    <mat-card appearance="outlined" *ngIf="crawlExec.error as error">
       <h2>Error</h2>
       <h3>{{ExtraStatusCodes[error.code]}} ({{error.code}})</h3>
       <h4 class="monospace">{{error.msg}}</h4>
@@ -28,7 +28,7 @@
   </div>
 
   <div fxFlex fxLayout="column wrap">
-    <mat-card style="max-width: 100%">
+    <mat-card appearance="outlined" style="max-width: 100%">
       <h1>Documents</h1>
       <mat-card-content>
         <div echarts [options]="documentsChartOptions" style="height: 400px"></div>

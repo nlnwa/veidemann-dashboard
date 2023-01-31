@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-icon mat-card-avatar>event_notes</mat-icon>
     <mat-card-title i18n="@@crawlLogReportStatusCardTitle">CrawlLog</mat-card-title>
@@ -6,124 +6,97 @@
 
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="16px">
-      <table class="mat-table table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlLogReportStatusRequestUriHeaderCell">Requested URI</th>
-          <th class="mat-header-cell" i18n="@@crawlLogReportStatusReferrerHeaderCell">Referrer</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell requestedUri"><span [innerHTML]="crawlLog.requestedUri | urlFormat"></span></td>
-          <td class="mat-cell"><span [innerHTML]="crawlLog.referrer | urlFormat"></span></td>
-        </tr>
-        </tbody>
-      </table>
-      <table class="mat-table table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlLogReportStatusResponseUriHeaderCell">Response URI</th>
-          <th class="mat-header-cell" i18n="@@crawlLogReportStatusDiscoveryPathHeaderCell">Discovery path</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell"><span [innerHTML]="crawlLog.responseUri | urlFormat"></span></td>
-          <td class="mat-cell discoveryPath">{{crawlLog.discoveryPath}}</td>
-        </tr>
-        </tbody>
+
+      <table mat-table class="table" [dataSource]="dataSource">
+        <ng-container matColumnDef="requestedUri">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusRequestUriHeaderCell">
+            Requested URI
+          </th>
+          <td mat-cell class="requestedUri" *matCellDef="let crawlLog">
+            <span [innerHTML]="crawlLog.requestedUri | urlFormat"></span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="referrer">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusReferrerHeaderCell">
+            Referrer
+          </th>
+          <td class="mat-cell" *matCellDef="let crawlLog">
+            <span [innerHTML]="crawlLog.referrer | urlFormat"></span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="crawlLogRequestDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: crawlLogRequestDisplayedColumns;"></tr>
       </table>
 
-      <table class="mat-table">
-        <tr class="mat-header-row">
-          <th class="mat-header-cell"></th>
-          <th class="mat-header-cell"></th>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusStatusCodeLabelCell">statusCode</td>
-          <td class="mat-cell">{{crawlLog.statusCode}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusTimestampLabelCell">Timestamp</td>
-          <td class="mat-cell">{{crawlLog.timeStamp |date: 'long'}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusFetchTimestampLabelCell">Fetch timestamp</td>
-          <td class="mat-cell">{{crawlLog.fetchTimeStamp|date: 'long'}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusFetchTimeMsLabelCell">Fetch time</td>
-          <td class="mat-cell">{{crawlLog.fetchTimeMs / 1000}} seconds</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusBlockDigestLabelCell">Block digest</td>
-          <td class="mat-cell">{{crawlLog.blockDigest}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusPayloadDigestLabelCell">Payload digest</td>
-          <td class="mat-cell">{{crawlLog.blockDigest}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusSizeLabelCell">Size</td>
-          <td class="mat-cell">{{crawlLog.size |filesize}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusContentTypeLabelCell">Content type</td>
-          <td class="mat-cell">{{crawlLog.contentType}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusStorageReferenceLabelCell">Storage reference</td>
-          <td class="mat-cell">{{crawlLog.storageRef}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusRecordTypeLabelCell">Record type</td>
-          <td class="mat-cell">{{crawlLog.recordType}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusWarcRefersToLabelCell">WARC refers to</td>
-          <td class="mat-cell">{{crawlLog.warcRefersTo}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusIPAddressLabelCell">IP address</td>
-          <td class="mat-cell">{{crawlLog.ipAddress}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusRetriesLabelCell">Retries</td>
-          <td class="mat-cell">{{crawlLog.retries}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusCollectionFinalNameLabelCell">Collection name</td>
-          <td class="mat-cell">{{crawlLog.collectionFinalName}}</td>
-        </tr>
-        <tr class="mat-row">
-          <td class="mat-cell" i18n="@@crawlLogReportStatusMethodLabelCell">Method</td>
-          <td class="mat-cell">{{crawlLog.method}}</td>
-        </tr>
+      <table mat-table class="table" [dataSource]="dataSource">
+        <ng-container matColumnDef="responseUri">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusResponseUriHeaderCell">
+            Response URI
+          </th>
+          <td mat-cell *matCellDef="let crawlLog">
+            <span [innerHTML]="crawlLog.responseUri | urlFormat"></span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="discoveryPath">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusDiscoveryPathHeaderCell">
+            Discovery path
+          </th>
+          <td mat-cell  class="discoveryPath" *matCellDef="let crawlLog">
+            {{crawlLog.discoveryPath}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="crawlLogRespsoneDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: crawlLogRespsoneDisplayedColumns;"></tr>
       </table>
 
-      <table class="mat-table">
-        <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusIdHeaderCell">WARC ID</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobIdHeaderCell">Crawl Execution Id</th>
-          <th class="mat-header-cell" i18n="@@crawlExecutionReportStatusJobExecutionIdHeaderCell">Job Execution Id</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="mat-row">
-          <td class="mat-cell">{{crawlLog.id}}</td>
-          <td class="mat-cell">
+      <table mat-table [dataSource]="getReport()">
+        <ng-container matColumnDef="crawlLogEntry">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusHeaderCell">Report</th>
+          <td mat-cell *matCellDef="let crawlLog">
+            {{crawlLog.key}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let crawlLog">
+            {{crawlLog.value}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="crawlLogReportDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: crawlLogReportDisplayedColumns"></tr>
+      </table>
+
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusIdHeaderCell">
+            Id
+          </th>
+          <td mat-cell *matCellDef="let crawlLog">
+            {{crawlLog.id}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="crawlExecId">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusCrawlExecIdHeaderCell">
+            Crawl execution id
+          </th>
+          <td mat-cell *matCellDef="let crawlLog">
             <a [routerLink]="['/report', 'crawlexecution', crawlLog.executionId]">
               {{crawlLog.executionId}}
             </a>
           </td>
-          <td class="mat-cell">
+        </ng-container>
+        <ng-container matColumnDef="jobExecId">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlLogReportStatusJobExecIdHeaderCell">
+            Job execution id
+          </th>
+          <td mat-cell *matCellDef="let crawlLog">
             <a [routerLink]="['/report', 'jobexecution', crawlLog.jobExecutionId]">
               {{crawlLog.jobExecutionId}}
             </a>
           </td>
-        </tr>
-        </tbody>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="crawlLogIdsDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: crawlLogIdsDisplayedColumns"></tr>
       </table>
 
       <div class="content-padding" *ngIf="crawlLog.error as error">
