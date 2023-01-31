@@ -1,35 +1,9 @@
 @use '@angular/material' as mat;
+@import 'light_theme.scss';
+@import 'dark_theme.scss';
 
-$veidemann-dashboard-primary: mat.define-palette(mat.$green-palette);
-$veidemann-dashboard-accent: mat.define-palette(mat.$orange-palette);
-$veidemann-dashboard-warn: mat.define-palette(mat.$red-palette);
-$veidemann-dashboard-banner: mat.define-palette(mat.$blue-gray-palette, 800);
 $dark-focused: rgba(black, 0.12);
+$highlight: mat.get-color-from-palette(map-get($light-theme, background), 'hover');
 
-$veidemann-dashboard-typography: mat.define-typography-config(
-  $font-family: 'Lato',
-);
-
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: ($veidemann-dashboard-primary),
-    accent: $veidemann-dashboard-accent,
-    warn: $veidemann-dashboard-warn
-  ),
-  typography: $veidemann-dashboard-typography,
-  density: 0,
-));
-
-/* LIGHT THEME */
-
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $veidemann-dashboard-primary,
-    accent: $veidemann-dashboard-accent,
-    warn: $veidemann-dashboard-warn
-  )
-));
-
- $highlight: mat.get-color-from-palette(map-get($dark-theme, background), 'hover');
 
 

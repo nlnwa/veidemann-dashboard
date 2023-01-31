@@ -83,7 +83,9 @@ html, body {
 
 .formattedUri {
   text-decoration: none;
-  color: mat.get-color-from-palette($veidemann-dashboard-primary, 500);
+  //font-weight: bold;
+  // color: mat.get-color-from-palette($veidemann-dashboard-primary, 500);
+  color: #3779b0;
 }
 
 .formattedUri:hover {
