@@ -1,17 +1,14 @@
 @use '@angular/material' as mat;
 
-// @include mat.all-component-typographies($my-app-typography);
-@include mat.core();
-
 $veidemann-dashboard-primary: mat.define-palette(mat.$green-palette);
 $veidemann-dashboard-accent: mat.define-palette(mat.$orange-palette);
 $veidemann-dashboard-warn: mat.define-palette(mat.$red-palette);
 $veidemann-dashboard-banner: mat.define-palette(mat.$blue-gray-palette, 800);
+$dark-focused: rgba(black, 0.12);
+
 $veidemann-dashboard-typography: mat.define-typography-config(
   $font-family: 'Lato',
 );
-
-$dark-focused: rgba(black, 0.12);
 
 $dark-theme: mat.define-dark-theme((
   color: (
@@ -35,12 +32,4 @@ $light-theme: mat.define-light-theme((
 
  $highlight: mat.get-color-from-palette(map-get($dark-theme, background), 'hover');
 
-@include mat.all-component-typographies($veidemann-dashboard-typography);
 
-// Apply the dark theme by default
-@include mat.all-component-themes($dark-theme);
-
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
-  @include mat.all-component-colors($light-theme);
-}
