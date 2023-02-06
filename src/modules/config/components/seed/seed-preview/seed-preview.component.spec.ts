@@ -4,6 +4,7 @@ import {SeedPreviewComponent} from './seed-preview.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MatDialogModule} from '@angular/material/dialog';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
+import {CommonsModule} from '../../../../commons';
 
 describe('SeedPreviewComponent', () => {
   let component: SeedPreviewComponent;
@@ -11,7 +12,7 @@ describe('SeedPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), RouterTestingModule, MatDialogModule],
+      imports: [CoreTestingModule.forRoot(), RouterTestingModule, CommonsModule],
       declarations: [SeedPreviewComponent]
     })
       .compileComponents();

@@ -12,44 +12,50 @@
 
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <mat-select placeholder="Collection" formControlName="collectionRefId"
-                      i18n-placeholder="@@crawlconfigFormCollectionDropdownPlaceholder">
+          <mat-label i18n="@@collectionDropdownLabel">
+            Collection
+          </mat-label>
+          <mat-select formControlName="collectionRefId">
             <mat-option *ngFor="let option of collections"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="BrowserConfig" formControlName="browserConfigRefId"
-                      i18n-placeholder="@@crawlconfigFormBrowserconfigDropdownPlaceholder">
+          <mat-label i18n="browserConfigDropdownLabel">
+            BrowserConfig
+          </mat-label>
+          <mat-select formControlName="browserConfigRefId">
             <mat-option *ngFor="let option of browserConfigs"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="PolitenessConfig" formControlName="politenessRefId"
-                      i18n-placeholder="@@crawlconfigFormPolitenessconfigDropdownPlaceholder">
+          <mat-label i18n="@@politenessConfigDropdownLabel">
+            PolitenessConfig
+          </mat-label>
+          <mat-select formControlName="politenessRefId">
             <mat-option *ngFor="let option of politenessConfigs"
                         [value]="option.id">{{option.meta.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput
-                 formControlName="minimumDnsTtlS"
-                 placeholder="DNS TTL"
-                 i18n-placeholder="@@crawlconfigFormMinimumDnsTtlInputPlaceholder">
+          <mat-label i18n="@@crawlconfigFormMinimumDnsTtlInputLabel">
+            DNS TTL
+          </mat-label>
+          <input matInput formControlName="minimumDnsTtlS">
           <mat-error *ngIf="!minDnsTtlSeconds.valid"
                      i18n="@@crawlconfigFormMinDNSTTLValidationError">
             Must be a number or empty
           </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput
-                 formControlName="priorityWeight"
-                 placeholder="Priority weight"
-                 i18n-placeholder="@@crawlconfigFormPriorityWeightInputPlaceholder">
+          <mat-label i18n="@@crawlconfigFormPriorityWeightInputLabel">
+            Priority weight
+          </mat-label>
+          <input matInput formControlName="priorityWeight">
           <mat-error *ngIf="!priorityWeight.valid" i18n="@@crawlconfigFormPriorityWeightValidationError">
             Must be a number or empty
           </mat-error>

@@ -111,6 +111,7 @@ export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.configObject) {
       if (!this.configObject) {
+        console.log('changes cfg obj: ', this.configObject);
         this.form.reset();
       } else {
         this.updateForm();

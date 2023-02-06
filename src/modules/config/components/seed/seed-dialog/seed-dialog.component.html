@@ -6,7 +6,8 @@
     <span fxFlex></span>
     <mat-slide-toggle i18n="@@disableCrawljobToggleSwitch"
                       formControlName="disabled"
-                      color="warn">
+                      color="warn"
+                      mat-dialog-title>
       Deactivated
     </mat-slide-toggle>
   </div>
@@ -17,8 +18,10 @@
                    (move)="move.emit($event)"></app-seed-meta>
     <div fxLayoutGap="16px">
       <mat-form-field>
-        <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
-                    multiple formControlName="jobRefListId">
+        <mat-label i18n="seedDetailsFormCrawlJobLabel">
+          CrawlJob
+        </mat-label>
+        <mat-select multiple formControlName="jobRefListId">
           <mat-option *ngFor="let crawlJob of crawlJobs"
                       [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
         </mat-select>

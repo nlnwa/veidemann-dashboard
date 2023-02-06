@@ -1,33 +1,33 @@
 <div fxLayout="column" *ngIf="'read' | able: 'annotation'">
   <form>
     <mat-form-field>
-      <mat-chip-list [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
+      <mat-label i18n="@@annotationListInputLabel">Annotation</mat-label>
+      <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
         <ng-container *ngFor="let group of groups$ | async">
-          <mat-chip *ngFor="let value of group.values"
-                    [selectable]="canUpdate"
+          <mat-chip-row *ngFor="let value of group.values"
                     [removable]="removable"
                     (removed)="onRemoveAnnotation(group.key, value)"
                     (click)="onClickAnnotation(group.key, value)"
                     color="primary" selected>
             {{group.key + ':' + value}}
             <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
-          </mat-chip>
+          </mat-chip-row>
         </ng-container>
         <input #chipInput
                matInput
                [formControl]="control"
-               placeholder="Annotation"
+               placeholder="New annotation..."
                i18n-placeholder="@@annotationChipListPlaceholder"
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="annotationInputSeparators"
                (matChipInputTokenEnd)="onSave($event)"
         >
-      </mat-chip-list>
+      </mat-chip-grid>
     </mat-form-field>
   </form>
 
   <form [formGroup]="annotationForm" *ngIf="canUpdate && annotationForm.enabled">
-    <mat-card class="label-form">
+    <mat-card appearance="outlined" class="label-form">
       <mat-card-header>
         <mat-icon mat-card-avatar>note</mat-icon>
         <mat-card-title i18n="@@annotationEditCardTitle">Edit annotation</mat-card-title>

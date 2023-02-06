@@ -12,5 +12,5 @@ tr.item-row:nth-child(4n+1) {
 
 // preview rows have same background color as sibling
 tr.item-row:nth-child(4n+1) + tr.preview-row {
-  background-color: lighten($dark-focused, 80%);
+ background-color: lighten($dark-focused, 80%);
 }

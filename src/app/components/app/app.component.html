@@ -10,7 +10,7 @@
     [closeKey]="'escape'"
     [title]="'Keyboard shortcuts'">
   </ng-keyboard-shortcuts-help>
-  <mat-toolbar class="main-toolbar mat-primary">
+  <mat-toolbar class="main-toolbar" color="primary">
     <a routerLink="/"><img class="veidemann_logo" alt="Veidemann" src="assets/logo/veidemann_horizontal_white.png"></a>
 
     <span fxFlex></span>
@@ -26,7 +26,7 @@
 
     <span fxFlex></span>
 
-    <a mat-button mat-icon-button [matMenuTriggerFor]="helpMenu">
+    <a mat-icon-button [matMenuTriggerFor]="helpMenu">
       <mat-icon>help</mat-icon>
     </a>
     <mat-menu #helpMenu="matMenu">
@@ -56,7 +56,7 @@
     </button>
   </mat-toolbar>
 
-  <nav mat-tab-nav-bar>
+  <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
     <a mat-tab-link
        *ngIf="'read' | able: 'configs'"
        [routerLink]="['/config']"
@@ -92,7 +92,9 @@
 
   <app-dialog></app-dialog>
   <main fxFlex>
+    <mat-tab-nav-panel #tabPanel>
     <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
   </main>
 </div>
 

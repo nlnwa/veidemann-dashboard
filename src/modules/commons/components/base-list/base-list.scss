@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
 @import "src/styles/theme";
 
 table {
@@ -21,7 +23,7 @@ table {
 
 // set different text color when row is disabled
 tr.item-row.row-disabled td {
-  color: $warn;
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);
 }
 
 tr.item-row:hover {
@@ -30,7 +32,7 @@ tr.item-row:hover {
 }
 
 tr.preview-row {
-  height: 0;
+  height: 0 !important;
 
   td {
     border-bottom-width: 0;
@@ -46,7 +48,7 @@ tr.item-row.row-selected td {
 }
 
 // the master toggle checkbox row is special
-tr.mat-row.no-interaction {
+tr.mat-mdc-row.no-interaction {
   cursor: default;
   background-color: inherit;
 }

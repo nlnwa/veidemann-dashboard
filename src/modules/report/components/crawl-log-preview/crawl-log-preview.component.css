@@ -1,9 +1,9 @@
-.mat-card {
+.mat-mdc-card {
   text-align: center;
   margin-top: 16px;
 }
 
-.mat-card.discoveryPath {
+.mat-mdc-card.discoveryPath {
   width: 30em;
   word-wrap: break-word;
 }

@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>web</mat-icon>
       <mat-card-title>
@@ -16,18 +16,20 @@
       <div fxFlex fxLayout="column">
         <app-meta formControlName="meta"></app-meta>
         <mat-form-field *ngIf="!showSave">
+          <mat-label i18n="@@configIdLabel">
+            Id
+          </mat-label>
           <input matInput
                  formControlName="id"
-                 placeholder="Id"
-                 readonly
-                 i18n-placeholder="@@configIdPlaceholder">
+                 readonly>
         </mat-form-field>
       </div>
       <div fxFlex fxLayout="column">
         <mat-form-field data-testid="userAgent">
-          <input matInput formControlName="userAgent" placeholder="User agent"
-                 i18n-placeholder="@@browserconfigFormUserAgentPlaceholder"
-          >
+          <mat-label i18n="@@browserconfigFormUserAgentLabel">
+            User agent
+          </mat-label>
+          <input matInput formControlName="userAgent">
           <mat-error *ngIf="!userAgent.valid"
                      i18n="@@browserconfigFormUserAgentRequiredError"
                      data-testid="userAgentError">
@@ -36,8 +38,10 @@
         </mat-form-field>
 
         <mat-form-field data-testid="windowWidth">
-          <input matInput formControlName="windowWidth" placeholder="Window width"
-                 i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
+          <mat-label i18n="@@browserconfigFormWindowWidthLabel">
+            Window width
+          </mat-label>
+          <input matInput formControlName="windowWidth">
           <mat-error *ngIf="!windowWidth.valid"
                      i18n="@@browserconfigFormWindowWidthRequiredError"
                      data-testid="windowWidth-error">
@@ -46,8 +50,10 @@
         </mat-form-field>
 
         <mat-form-field data-testid="windowHeight">
-          <input matInput formControlName="windowHeight" placeholder="Window height"
-                 i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
+          <mat-label i18n="@@browserconfigFormWindowHeightLabel">
+            Window height
+          </mat-label>
+          <input matInput formControlName="windowHeight">
           <mat-error *ngIf="!windowHeight.valid"
                      i18n="@@browserconfigFormWindowHeightRequiredError"
                      data-testid="windowHeightError">
@@ -79,16 +85,18 @@
         </mat-error>
 
         <mat-form-field>
-          <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
-                      i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder"
-                      data-testid="browserScriptsDropdown">
-            <mat-option *ngFor="let browserScript of browserScripts"
-                        [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
+          <mat-label i18n="@@browserconfigFormBrowserscriptsDropdownLabel">
+            BrowserScripts
+          </mat-label>
+          <mat-select multiple formControlName="scriptRefIdList" data-testid="browserScriptsDropdown">
+            <mat-option *ngFor="let browserScript of browserScripts" [value]="browserScript.id">
+              {{browserScript.meta.name}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <app-selector placeholder="Script selector" formControlName="scriptSelectorList" [removable]="canEdit"
-                      i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+        <app-selector formControlName="scriptSelectorList" [removable]="canEdit"
+                      i18n-placeholderText="@@browserconfigFormScriptSelectorPlaceholder">
         </app-selector>
       </div>
     </mat-card-content>

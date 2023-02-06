@@ -33,7 +33,7 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
   onChange: (annotations: Annotation[]) => void;
   onTouched: (annotations: Annotation[]) => void;
 
-  annotationForm: UntypedFormGroup;
+  annotationForm;
   annotationInputSeparators = [ENTER, COMMA];
 
   disabled = false;

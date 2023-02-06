@@ -5,18 +5,24 @@
   <form [formGroup]="form" fxLayoutGap="16px">
     <app-collection-meta formControlName="meta"></app-collection-meta>
     <mat-form-field>
-      <mat-select placeholder="Deduplication policy"
-                  formControlName="collectionDedupPolicy"
-                  i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder">
-        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+      <mat-label i18n="@@collectionDedupPolicyDropdownLabel">
+        Deduplication policy
+      </mat-label>
+      <mat-select formControlName="collectionDedupPolicy">
+        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">
+          {{RotationPolicy[policy]}}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select placeholder="File rotation policy"
-                  formControlName="fileRotationPolicy"
-                  i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder">
-        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+      <mat-label i18n="@@collectionFileRotationPolicyDropdownLabel">
+        File rotation policy
+      </mat-label>
+      <mat-select formControlName="fileRotationPolicy">
+        <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">
+          {{RotationPolicy[policy]}}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -42,8 +48,10 @@
            fxLayoutGap="16px">
         <mat-form-field [hideRequiredMarker]="subCollectionNameInput.value.length >= 2" fxFlex
                         data-testid="subCollectionName">
-          <input matInput #subCollectionNameInput formControlName="name" placeholder="Name"
-                 i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
+          <mat-label i18n="@@collectionFormSubCollectionNameLabel">
+            Name
+          </mat-label>
+          <input matInput #subCollectionNameInput formControlName="name">
           <mat-hint *ngIf="subCollectionNameInput.value.length < 2" i18n="@@subCollectionNameInputLengthHint">
             Minimum 2 characters
           </mat-hint>
@@ -61,11 +69,13 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <mat-select placeholder="Subcollection type"
-                      formControlName="type"
-                      i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder">
-            <mat-option *ngFor="let type of subCollectionTypes"
-                        [value]="type">{{SubCollectionType[type]}}</mat-option>
+          <mat-label i18n="@@collectionSubCollectionTypeDropdownLabel">
+            Subcollection type
+          </mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let type of subCollectionTypes" [value]="type">
+              {{SubCollectionType[type]}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 

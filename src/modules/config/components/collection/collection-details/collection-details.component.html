@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>collections_bookmark</mat-icon>
       <mat-card-title>
@@ -15,30 +15,35 @@
       <div fxFlex fxLayout="column">
         <app-collection-meta formControlName="meta"></app-collection-meta>
         <mat-form-field *ngIf="!showSave">
+          <mat-label i18n="@@configIdLabel">
+            Id
+          </mat-label>
           <input matInput
                  formControlName="id"
-                 placeholder="Id"
-                 readonly
-                 i18n-placeholder="@@configIdPlaceholder">
+                 readonly>
         </mat-form-field>
       </div>
 
       <div fxFlex fxLayout="column">
         <mat-form-field>
-          <mat-select placeholder="Deduplication policy"
-                      formControlName="collectionDedupPolicy"
-                      i18n-placeholder="@@collectionDedupPolicyDropdownPlaceholder"
-                      data-testid="collectionDedupPolicy">
-            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+          <mat-label i18n="@@collectionDedupPolicyDropdownLabel">
+            Deduplication policy
+          </mat-label>
+          <mat-select formControlName="collectionDedupPolicy" data-testid="collectionDedupPolicy">
+            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">
+              {{RotationPolicy[policy]}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="File rotation policy"
-                      formControlName="fileRotationPolicy"
-                      i18n-placeholder="@@collectionFileRotationPolicyDropdownPlaceholder"
-                      data-testid="fileRotationPolicy">
-            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">{{RotationPolicy[policy]}}</mat-option>
+          <mat-label i18n="@@collectionFileRotationPolicyDropdownLabel">
+            File rotation policy
+          </mat-label>
+          <mat-select formControlName="fileRotationPolicy" data-testid="fileRotationPolicy">
+            <mat-option *ngFor="let policy of rotationPolicies" [value]="policy">
+              {{RotationPolicy[policy]}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -64,8 +69,10 @@
                fxLayoutGap="16px">
             <mat-form-field [hideRequiredMarker]="subCollectionNameInput.value.length >= 2" fxFlex
                             data-testid="subCollectionName">
-              <input matInput #subCollectionNameInput formControlName="name" placeholder="Name"
-                     i18n-placeholer="@@collectionFormSubCollectionNamePlaceholder">
+              <mat-label i18n="@@collectionFormSubCollectionNameLabel">
+                Name
+              </mat-label>
+              <input matInput #subCollectionNameInput formControlName="name">
               <mat-hint *ngIf="subCollectionNameInput.value.length < 2" i18n="@@subCollectionNameInputLengthHint">
                 Minimum 2 characters
               </mat-hint>
@@ -83,12 +90,13 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <mat-select placeholder="Subcollection type"
-                          formControlName="type"
-                          i18n-placeholder="@@collectionSubCollectionTypeDropdownPlaceholder"
-                          data-testid="subCollectionType">
-                <mat-option *ngFor="let type of subCollectionTypes"
-                            [value]="type">{{SubCollectionType[type]}}</mat-option>
+              <mat-label i18n="@@collectionSubCollectionTypeDropdownLabel">
+                Subcollection type
+              </mat-label>
+              <mat-select formControlName="type" data-testid="subCollectionType">
+                <mat-option *ngFor="let type of subCollectionTypes" [value]="type">
+                  {{SubCollectionType[type]}}
+                </mat-option>
               </mat-select>
             </mat-form-field>
 

@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>link</mat-icon>
       <mat-card-title>
@@ -31,18 +31,20 @@
                          [entityRef]="entityRef.value"
                          (move)="move.emit($event)"></app-seed-meta>
           <mat-form-field *ngIf="configObject.id">
+            <mat-label i18n="@@metaIdInputLabel">
+              Id
+            </mat-label>
             <input matInput
                    formControlName="id"
-                   placeholder="Id"
-                   readonly
-                   i18n-placeholder="@@metaIdPlaceholder">
+                   readonly>
           </mat-form-field>
 
           <mat-form-field formGroupName="entityRef">
+            <mat-label i18n="@@metaEntityIdInputLabel">
+              Entity Id
+            </mat-label>
             <input matInput formControlName="id"
-                   placeholder="Entity Id"
-                   [readonly]="entityIdReadonly"
-                   i18n-placeholder="@@metaEntityIdInputPlaceholder">
+                   [readonly]="entityIdReadonly">
             <button mat-icon-button matSuffix
                     matTooltip="Move seed to another entity"
                     i18n-matTooltip="seedDetailsEditEntityIdButtonTooltip"
@@ -57,8 +59,10 @@
 
         <div fxFlex fxLayout="column">
           <mat-form-field>
-            <mat-select placeholder="CrawlJob" i18n-placeholder="@@seedDetailsFormCrawljobPlaceholder"
-                        multiple formControlName="jobRefListId">
+            <mat-label i18n="@@crawlJobDropdownLabel">
+              Crawljob
+            </mat-label>
+            <mat-select multiple formControlName="jobRefListId">
               <mat-option *ngFor="let crawlJob of crawlJobs"
                           [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
             </mat-select>

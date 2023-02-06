@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>work</mat-icon>
       <mat-card-title>
@@ -22,11 +22,12 @@
           <app-meta formControlName="meta"></app-meta>
 
           <mat-form-field *ngIf="!showSave">
+            <mat-label i18n="@@configIdLabel">
+              Id
+            </mat-label>
             <input matInput
                    readonly
-                   formControlName="id"
-                   placeholder="Id"
-                   i18n-placeholder="@@configIdPlaceholder">
+                   formControlName="id">
           </mat-form-field>
         </div>
         <div fxFlex fxLayout="column">
@@ -45,8 +46,10 @@
 
           <ng-container formGroupName="scheduleRef">
             <mat-form-field>
-              <mat-select placeholder="Schedule" formControlName="id"
-                          i18n-placeholder="@@crawljobDetailsFormScheduleDropdownPlaceholder"
+              <mat-label i18n="@@scheduleDropdownLabel">
+                Schedule
+              </mat-label>
+              <mat-select formControlName="id"
                           data-testid="scheduleRef">
                 <mat-option [value]="">None</mat-option>
                 <mat-option *ngFor="let option of crawlScheduleConfigs"
@@ -58,8 +61,11 @@
 
           <ng-container formGroupName="crawlConfigRef">
             <mat-form-field>
-              <mat-select placeholder="CrawlConfig" formControlName="id"
-                          required i18n-placeholder="@@crawljobDetailsFormCrawlconfigDropdownPlaceholder"
+              <mat-label i18n="@@crawlConfigDropDownLabel">
+                CrawlConfig
+              </mat-label>
+              <mat-select formControlName="id"
+                          required
                           data-testid="crawlConfigRef">
                 <mat-option *ngFor="let option of crawlConfigs"
                             [value]="option.id">{{option.meta.name}}</mat-option>
@@ -72,8 +78,10 @@
           </ng-container>
           <ng-container formGroupName="scopeScriptRef">
             <mat-form-field>
-              <mat-select placeholder="Scope script" formControlName="id" required
-                          i18n-placeholder="@@crawlJobDetailsFormScopeScriptDropdownPlaceholder"
+              <mat-label i18n="@@scopeScriptDropdownLabel">
+                Scope script
+              </mat-label>
+              <mat-select formControlName="id" required
                           data-testid="scopeScriptRef">
                 <mat-option>None</mat-option>
                 <mat-option *ngFor="let option of scopeScripts"

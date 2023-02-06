@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import "src/styles/theme";
 
 table {
@@ -5,16 +6,12 @@ table {
   table-layout: fixed;
 }
 
-.mat-column-uri {
-  flex: 0 0 90%;
-  width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.mat-column-resourceType {
+  width: 10%
 }
 
 tr.resource-detail-row {
-  height: 0;
+  height: 0 !important;
 }
 
 tr.resource-row:not(.resource-expanded-row):hover {
@@ -26,7 +23,7 @@ tr.resource-row:not(.resource-expanded-row):active {
 }
 
 tr.resource-row.row-error td {
-  color: $warn;
+  color: mat.get-color-from-palette($veidemann-dashboard-warn);;
 }
 
 .resource-row td {

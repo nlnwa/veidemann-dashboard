@@ -1,15 +1,14 @@
 <div class="content-padding">
   <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
   <mat-form-field class="search-form" *ngIf="query?.kind">
+    <mat-label i18n="@@configQuerySearchInputLabel">
+      Search
+    </mat-label>
     <input matInput
            #search
-           placeholder="Search"
-           i18n-placeholder="@@configQuerySearchInputPlaceholder"
            [(ngModel)]="term"
-           (keyup.enter)="onSearch(term)"
-           i18n-placeholder="@@searchSearchFieldPlaceholder">
-    <button mat-button mat-icon-button matSuffix *ngIf="term"
-            (click)="term = ''; onSearch(term);">
+           (keyup.enter)="onSearch(term)">
+    <button mat-icon-button matSuffix *ngIf="term" (click)="term = ''; onSearch(term);">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
@@ -42,17 +41,19 @@
 
     <ng-container *ngSwitchCase="Kind.SEED">
       <mat-form-field>
-        <mat-select placeholder="CrawlJob" multiple formControlName="crawlJobIdList"
-                    i18n-placeholder="@@configQueryCrawlJobDropdownPlaceholder">
+        <mat-label i18n-placeholder="@@configQueryCrawlJobDropdownLabel">
+          CrawlJob
+        </mat-label>
+        <mat-select multiple formControlName="crawlJobIdList">
           <mat-option *ngFor="let crawlJob of options.crawlJobs"
                       [value]="crawlJob.id">{{crawlJob.meta.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
-        <input matInput
-               formControlName="entityId"
-               placeholder="Entity ID"
-               i18n-placeholder="@@configQueryEntityIdInputPlaceholder">
+        <mat-label i18n="@@configQueryEntityIdInputLabel">
+          Entity Id
+        </mat-label>
+        <input matInput formControlName="entityId">
       </mat-form-field>
 
       <mat-radio-group fxLayout="column" fxLayoutGap="16px" formControlName="disabled">
@@ -92,8 +93,10 @@
 
     <ng-container *ngSwitchCase="Kind.BROWSERCONFIG">
       <mat-form-field>
-        <mat-select placeholder="BrowserScript" multiple formControlName="scriptIdList"
-                    i18n-placeholder="@@configQueryBrowserScriptDropdownPlaceholder">
+        <mat-label i18n="@@configQueryBrowserScriptDropdownLabel">
+          BrowserScript
+        </mat-label>
+        <mat-select multiple formControlName="scriptIdList">
           <mat-option *ngFor="let browserScript of options.browserScripts"
                       [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
         </mat-select>

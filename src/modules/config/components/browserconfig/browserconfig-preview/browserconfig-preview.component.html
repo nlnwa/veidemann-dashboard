@@ -9,10 +9,10 @@
     {{configObject.browserConfig.maxInactivityTimeMs | durationFormat: 'ms'}}
   </mat-label>
   <mat-label *ngIf="configObject.browserConfig.scriptSelectorList.length"><b>Script selector</b></mat-label>
-  <mat-chip-list>
-    <mat-chip *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList">
+  <mat-chip-listbox>
+    <mat-chip-option *ngFor="let scriptSelector of configObject.browserConfig.scriptSelectorList">
       {{scriptSelector}}
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
   <app-shortcut-list [configObject]="configObject"></app-shortcut-list>
 </div>

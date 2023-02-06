@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {UntypedFormBuilder, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Label} from '../../../../shared/models';
 import {LabelService} from '../../services/label.service';
@@ -13,6 +13,10 @@ import {LabelComponent} from '../label/label.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectorComponent extends LabelComponent implements OnInit {
+
+  @Input()
+  placeholderText = 'New selector...';
+  labelText = 'Script selector';
 
   constructor(protected fb: UntypedFormBuilder,
               protected cdr: ChangeDetectorRef,

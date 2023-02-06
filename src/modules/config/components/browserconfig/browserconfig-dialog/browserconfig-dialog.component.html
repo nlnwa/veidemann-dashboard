@@ -7,8 +7,10 @@
     <app-meta formControlName="meta"></app-meta>
     <div fxLayoutGap="10px">
       <mat-form-field>
-        <input matInput formControlName="userAgent" placeholder="User agent"
-               i18n-placeholder="@@browserconfigFormUserAgentPlaceholder">
+        <mat-label i18n="@@browserconfigFormUserAgentLabel">
+          User agent
+        </mat-label>
+        <input matInput formControlName="userAgent">
         <mat-error *ngIf="!userAgent.valid"
                    i18n="@@browserconfigFormUserAgentRequiredError">
           Must contain at least 1 character.
@@ -16,8 +18,10 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="windowWidth" placeholder="Window width"
-               i18n-placeholder="@@browserconfigFormWindowWidthPlaceholder">
+        <mat-label i18n="@@browserconfigFormWindowWidthLabel">
+          Window width
+        </mat-label>
+        <input matInput formControlName="windowWidth">
         <mat-error *ngIf="!windowWidth.valid"
                    i18n="@@browserconfigFormWindowWidthRequiredError">
           Must be a number.
@@ -25,8 +29,10 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="windowHeight" placeholder="Window height"
-               i18n-placeholder="@@browserconfigFormWindowHeightPlaceholder">
+        <mat-label i18n="@@browserconfigFormWindowHeightLabel">
+          Window height
+        </mat-label>
+        <input matInput formControlName="windowHeight">
         <mat-error *ngIf="!windowHeight.valid"
                    i18n="@@browserconfigFormWindowHeightRequiredError">
           Must be a number.
@@ -55,15 +61,17 @@
     </mat-error>
 
     <mat-form-field>
-      <mat-select placeholder="BrowserScripts" multiple formControlName="scriptRefIdList"
-                  i18n-placeholder="@@browserconfigFormBrowserscriptsDropdownPlaceholder">
+      <mat-label i18n="@@browserconfigFormBrowserscriptsDropdownLabel">
+        BrowserScripts
+      </mat-label>
+      <mat-select multiple formControlName="scriptRefIdList">
         <mat-option *ngFor="let browserScript of browserScripts"
                     [value]="browserScript.id">{{browserScript.meta.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <app-selector placeholder="Script selector" formControlName="scriptSelectorList" [removable]="canEdit"
-                  i18n-placeholder="@@browserconfigFormScriptSelectorPlaceholder">
+    <app-selector formControlName="scriptSelectorList" [removable]="canEdit"
+                  i18n-placeholderText="@@browserconfigFormScriptSelectorPlaceholder">
     </app-selector>
   </form>
 </mat-dialog-content>

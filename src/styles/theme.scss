@@ -1,32 +1,9 @@
 @use '@angular/material' as mat;
+@import 'light_theme.scss';
+@import 'dark_theme.scss';
 
-$my-app-typography: mat.define-typography-config(
-  $font-family: 'Lato, Helvetica, Arial, sans-serif'
-);
-
-@include mat.core($my-app-typography);
-
-$my-app-primary: mat.define-palette(mat.$blue-gray-palette);
-$my-app-accent: mat.define-palette(mat.$orange-palette);
-$my-app-warn: mat.define-palette(mat.$red-palette);
-
-$my-app-theme: mat.define-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
-
-/* DARK THEME */
-$ad-app-primary: mat.define-palette(mat.$blue-gray-palette, 800);
-$angular-dark-theme: mat.define-dark-theme($ad-app-primary, $my-app-accent, $my-app-warn);
-
-$primary: mat.get-color-from-palette($my-app-primary);
-$accent: mat.get-color-from-palette($my-app-accent);
-$warn: mat.get-color-from-palette($my-app-warn);
-$highlight: mat.get-color-from-palette(map-get($my-app-theme, background), 'hover');
 $dark-focused: rgba(black, 0.12);
+$highlight: mat.get-color-from-palette(map-get($light-theme, background), 'hover');
 
 
-@media (prefers-color-scheme: light) {
-  @include mat.all-component-themes($my-app-theme);
-}
 
-@media (prefers-color-scheme: dark) {
-  @include mat.all-component-themes($angular-dark-theme);
-}

@@ -30,10 +30,10 @@
 
     <div fxLayout="column">
       <mat-form-field>
-        <input matInput
-               formControlName="delayFactor"
-               placeholder="Delay factor"
-               i18n-placeholder="@@crawlhostgroupconfigFormDelayFactorPlaceholder">
+        <mat-label i18n="@@crawlhostgroupconfigFormDelayFactorLabel">
+          Delay factor
+        </mat-label>
+        <input matInput formControlName="delayFactor">
         <mat-error *ngIf="!delayFactor.valid"
                    i18n="@@crawlhostgroupconfigFormMaxTimeBetweenValidationError">
           Must be a number.
@@ -41,10 +41,10 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput
-               formControlName="maxRetries"
-               placeholder="Maximum retries"
-               i18n-placeholder="@@crawlhostgroupconfigFormMaxRetriesPlaceholder">
+        <mat-label i18n="@@crawlhostgroupconfigFormMaxRetriesLabel">
+          Maximum retries
+        </mat-label>
+        <input matInput formControlName="maxRetries">
         <mat-error *ngIf="!maxRetries.valid"
                    i18n="@@crawlhostgroupconfigFormMaxRetriesValidationError">
           Must be a number.
