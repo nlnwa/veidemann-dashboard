@@ -4,18 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "veidemann-dashboard": {
+      "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "prefix": "app",
-          "style": "css"
-        },
-        "@schematics/angular:directive": {
-          "prefix": "app"
+          "style": "scss"
         }
       },
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -24,7 +21,9 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "assets": [
               "src/assets",
               {
@@ -43,13 +42,7 @@
               "google-protobuf/google/protobuf/timestamp_pb.js",
               "google-protobuf/google/protobuf/empty_pb.js",
               "ip-address"
-            ],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            ]
           },
           "configurations": {
             "production": {
@@ -77,19 +70,26 @@
                   "maximumWarning": "6kb"
                 }
               ]
+            },
+            "development": {
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "buildOptimizer": false,
+              "sourceMap": true,
+              "optimization": false,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "veidemann-dashboard:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "veidemann-dashboard:build:production"
             },
             "development": {
+              "browserTarget": "veidemann-dashboard:build:development",
               "ssl": true,
               "proxyConfig": "proxy.conf.json"
             }
@@ -106,7 +106,10 @@
           "options": {
             "main": "src/test.ts",
             "karmaConfig": "karma.conf.js",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "scripts": [],
             "styles": [
@@ -139,7 +142,6 @@
     "analytics": false,
     "packageManager": "yarn",
     "schematicCollections": [
-      "@angular-eslint/schematics",
       "@angular-eslint/schematics"
     ]
   }
