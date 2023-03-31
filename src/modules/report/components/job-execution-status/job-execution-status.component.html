@@ -28,6 +28,14 @@
             {{JobExecutionState[jobExecutionStatus.state]}}
           </td>
         </ng-container>
+        <ng-container matColumnDef="queueCount">
+          <th mat-header-cell *matHeaderCellDef i18n="@@crawlJobExecutionReportStatusQueueCountHeaderCell">
+            Queue
+          </th>
+          <td mat-cell *matCellDef="let jobExecutionStatus">
+            {{jobExecutionStatus | getUrlQueueForJobExecution | async}}
+          </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="jobExecStateDisplayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: jobExecStateDisplayedColumns;"></tr>
       </table>

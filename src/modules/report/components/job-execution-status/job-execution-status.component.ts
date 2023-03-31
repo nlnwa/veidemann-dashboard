@@ -7,13 +7,14 @@ import {
 } from '../../../../shared/models/report';
 import {MatTableDataSource} from '@angular/material/table';
 import {FileSizePipe} from 'ngx-filesize';
+import {JobexecutionTotalQueuePipe} from '../../pipe';
 
 @Component({
   selector: 'app-job-execution-status',
   templateUrl: './job-execution-status.component.html',
   styleUrls: ['./job-execution-status.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [FileSizePipe]
+  providers: [FileSizePipe, JobexecutionTotalQueuePipe]
 })
 
 export class JobExecutionStatusComponent implements OnInit {
@@ -24,7 +25,7 @@ export class JobExecutionStatusComponent implements OnInit {
   @Input()
   jobExecutionStatus: JobExecutionStatus;
   dataSource = new MatTableDataSource<JobExecutionStatus>()
-  jobExecStateDisplayedColumns: string[] = ['crawlJob', 'state'];
+  jobExecStateDisplayedColumns: string[] = ['crawlJob', 'state', 'queueCount'];
   jobExecRuntimeDisplayedColumns: string[] = ['startTime', 'endTime'];
   jobExecStatisticsDisplayedColumns: string[] = ['statistics', 'count'];
   jobExecExecutionsDisplayedColumns: string[] = ['state', 'count'];

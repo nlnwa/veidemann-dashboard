@@ -26,7 +26,7 @@ import {
   PageLogStatusComponent,
   ResourceComponent,
 } from './components';
-import {JobExecutionFetchPipe, JobNamePipe, SeedNamePipe} from './pipe';
+import {JobExecutionFetchPipe, JobexecutionTotalQueuePipe, JobNamePipe, SeedNamePipe} from './pipe';
 import {
   QueryCrawlExecutionStatusDirective,
   QueryCrawlLogDirective,
@@ -51,6 +51,7 @@ import {PageLogShortcutsComponent} from './components/page-log-shortcuts/page-lo
 import {CrawlLogShortcutsComponent} from './components/crawl-log-shortcuts/crawl-log-shortcuts.component';
 import {CrawlExecutionFetchPipe} from './pipe/crawlexecution-fetch.pipe';
 import {NgxEchartsModule} from 'ngx-echarts';
+
 
 
 @NgModule({
@@ -96,6 +97,7 @@ import {NgxEchartsModule} from 'ngx-echarts';
     PageLogShortcutsComponent,
     CrawlLogShortcutsComponent,
     CrawlExecutionFetchPipe,
+    JobexecutionTotalQueuePipe,
   ],
   imports: [
     CommonsModule,

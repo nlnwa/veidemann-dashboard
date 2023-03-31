@@ -21,6 +21,11 @@
       <h4 class="monospace">{{error.msg}}</h4>
       <p class="monospace">{{error.detail}}</p>
     </mat-card>
+    <mat-card appearance="outlined" *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING || JobExecutionState.CREATED">
+    <h2>Queue count</h2>
+      <h1>{{queueCount$ | async}}</h1>
+      <button mat-button (click)="getQueueCount()">Fetch queue size</button>
+    </mat-card>
   </div>
   <div fxFlex fxLayout="row wrap" fxLayoutGap="16px">
     <mat-card appearance="outlined" style="max-width: 50%; min-width: 45%">
