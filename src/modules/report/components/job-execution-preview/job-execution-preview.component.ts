@@ -3,8 +3,8 @@ import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionSt
 import {durationBetweenDates} from '../../../../shared/func';
 import {Router} from '@angular/router';
 import {JobexecutionTotalQueuePipe} from '../../pipe';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {startWith, switchMap} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 
 export enum JobExecutionStatusColor {
   ABORTED_MANUAL = '#924900',
