@@ -2,6 +2,9 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CrawlExecutionState, ExtraStatusCodes, JobExecutionState, JobExecutionStatus} from 'src/shared/models';
 import {durationBetweenDates} from '../../../../shared/func';
 import {Router} from '@angular/router';
+import {JobexecutionTotalQueuePipe} from '../../pipe';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {startWith, switchMap} from 'rxjs/operators';
 
 export enum JobExecutionStatusColor {
   ABORTED_MANUAL = '#924900',
@@ -25,7 +28,8 @@ export enum JobExecutionStatusColor {
 @Component({
   selector: 'app-job-execution-preview',
   templateUrl: './job-execution-preview.component.html',
-  styleUrls: ['./job-execution-preview.component.css']
+  styleUrls: ['./job-execution-preview.component.css'],
+  providers: [JobexecutionTotalQueuePipe]
 })
 
 
@@ -39,10 +43,16 @@ export class JobExecutionPreviewComponent implements OnChanges {
   documentsChartOptions: any;
   executionStatesChartOptions: any;
 
+  updateQueueCount: Subject<void>;
+  queueCount$: Observable<number>;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private jobExecutionTotalQueuePipe: JobexecutionTotalQueuePipe) {
+    this.updateQueueCount = new Subject<void>();
+    this.queueCount$ = this.updateQueueCount.pipe(
+       switchMap(() => this.jobExecutionTotalQueuePipe.transform(this.jobExecutionStatus))
+     );
   }
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobExecutionStatus) {
@@ -164,6 +174,10 @@ export class JobExecutionPreviewComponent implements OnChanges {
       datasource.push({key, value});
     }
     return datasource;
+  }
+
+  getQueueCount(): void {
+    this.updateQueueCount.next();
   }
 
   getDocuments() {
