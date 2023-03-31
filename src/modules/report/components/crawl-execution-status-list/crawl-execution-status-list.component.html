@@ -49,6 +49,13 @@
         <td mat-cell *matCellDef="let row">{{row?.error?.code}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="documentsCrawled">
+        <th i18n="@@crawlExecutionREportListDocumentsCrawledHeaderCell"
+            mat-header-cell *matHeaderCellDef>Documents crawled
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.documentsCrawled}}</td>
+      </ng-container>
+
       <ng-container matColumnDef="queueCount">
         <th i18n="@@crawlExecutionReportListQueueCountHeaderCell" mat-header-cell *matHeaderCellDef>Queue
         </th>
