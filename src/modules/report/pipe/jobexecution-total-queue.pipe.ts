@@ -37,14 +37,22 @@ export class JobexecutionTotalQueuePipe implements PipeTransform {
 
     const queryTemplate = new CrawlExecutionStatus();
     queryTemplate.jobExecutionId =  jobExectionStatus.id;
+    queryTemplate.jobId = jobExectionStatus.jobId;
+
+    const fieldMask = new FieldMask();
+    fieldMask.addPaths('jobExecutionId');
+    fieldMask.addPaths('jobId')
+
 
     const returnedFields = new FieldMask();
     returnedFields.addPaths('state');
     returnedFields.addPaths('id');
+    returnedFields.addPaths('jobExecutionId');
 
-    listRequest.setQueryTemplate(CrawlExecutionStatus.toProto(queryTemplate))
+    listRequest.setQueryTemplate(CrawlExecutionStatus.toProto(queryTemplate));
+    listRequest.setQueryMask(fieldMask);
     listRequest.setReturnedFieldsMask(returnedFields);
-    listRequest.setStateList(activeExecutionStates)
+    listRequest.setStateList(activeExecutionStates);
 
     return this.reportApiService.listCrawlExecutions(listRequest).pipe(
       switchMap(crawlExecutionStatus => {
