@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {CrawlExecutionState, CrawlExecutionStatus, JobExecutionState, JobExecutionStatus} from '../../../shared/models';
 import {Observable, of} from 'rxjs';
-import {first, map, reduce, switchMap,} from 'rxjs/operators';
+import {map, mergeMap, reduce,} from 'rxjs/operators';
 import {ExecutionId} from '../../../shared/models/controller/controller.model';
 import {ControllerApiService, ReportApiService} from '../../core/services';
 import {CrawlExecutionsListRequest, FieldMask} from '../../../api';
@@ -36,7 +36,7 @@ export class JobexecutionTotalQueuePipe implements PipeTransform {
     const listRequest = new CrawlExecutionsListRequest();
 
     const queryTemplate = new CrawlExecutionStatus();
-    queryTemplate.jobExecutionId =  jobExectionStatus.id;
+    queryTemplate.jobExecutionId = jobExectionStatus.id;
     queryTemplate.jobId = jobExectionStatus.jobId;
 
     const fieldMask = new FieldMask();
@@ -55,13 +55,12 @@ export class JobexecutionTotalQueuePipe implements PipeTransform {
     listRequest.setStateList(activeExecutionStates);
 
     return this.reportApiService.listCrawlExecutions(listRequest).pipe(
-      switchMap(crawlExecutionStatus => {
+      mergeMap(crawlExecutionStatus => {
         if (!activeExecutionStates.includes(crawlExecutionStatus.state)) {
           return of(0);
         }
         const executionId = new ExecutionId({id: crawlExecutionStatus.id});
         return this.controllerApiService.queueCountForCrawlExecution(executionId).pipe(
-          first(),
           map(countResponse => countResponse.count));
       }),
       reduce((acc, curr) => acc + curr, 0),
