@@ -1,5 +1,5 @@
 <div fxLayout="column" *ngIf="'read' | able: 'annotation'">
-  <mat-chip-listbox *ngIf="annotations">
+  <mat-chip-listbox *ngIf="annotations" [selectable]="false">
     <mat-chip-option *ngFor="let annotation of annotations">
       {{annotation.key}}:{{annotation.value}}
     </mat-chip-option>
