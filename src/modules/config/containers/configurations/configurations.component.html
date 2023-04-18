@@ -101,6 +101,7 @@
                       (click)="onFilterByCollectionRef(row)"
                       i18n="@@configListActionButtonShowCrawlConfig"
                       matTooltip="Show crawlconfigs with reference to the collection"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@collectionListShowCrawlConfigsWitchCollectionRefActionButtonTooltip">
                 <mat-icon>settings_system_daydream</mat-icon>
                 Show crawlconfigs
@@ -123,6 +124,7 @@
                       (click)="onCreateSeedFromEntity(row)"
                       i18n="@@configListActionButtonCreateSeed"
                       matTooltip="Create a new seed with reference to the entity"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">
                 <mat-icon>add_circle</mat-icon>
                 Create seed
@@ -148,6 +150,7 @@
                      [queryParams]="getJobRefListQueryParams(row)"
                      i18n="@@configListActionButtonFilterSeedsByCrawljob"
                      matTooltip="Show seeds with the same crawljob"
+                     matTooltipPosition="left"
                      i18n-matTooltip="@@seedListFilterSeedsByCrawljobActionButtonTooltip">
                     <mat-icon>work</mat-icon>
                     Filter list by crawljob
@@ -160,6 +163,7 @@
                       (click)="onFilterByEntityRef(row)"
                       i18n="@@configListActionButtonShowSeedsForEntity"
                       matTooltip="Show seeds with the same entity"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@seedListFilterSeedByEntityActionButtonTooltip">
                 <mat-icon>business</mat-icon>
                 Show seeds for entity
@@ -170,6 +174,7 @@
                       (click)="onRunCrawl(row)"
                       i18n="@@configListActionButtonRunCrawl"
                       matTooltip="Start crawling seed: {{row.meta.name}}"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@configListActionButtonRunCrawlOfSeedTooltip">
                 <mat-icon>play_arrow</mat-icon>
                 Run crawl
@@ -184,6 +189,7 @@
                       (click)="onFilterByScheduleRef(row)"
                       i18n="@@configListActionButtonShowCrawljobsWithSchedule"
                       matTooltip="Show crawljobs with reference to the schedule"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@scheduleListShowCrawljobsWithScheduleActionButtonTooltip">
                 <mat-icon>work</mat-icon>
                 Show crawljobs
@@ -199,6 +205,7 @@
                    [routerLink]="['../collection', row.crawlConfig.collectionRef?.id]"
                    i18n="@@configListActionButtonGoToCollection"
                    matTooltip="Go to collection: {{row | getCollectionName | async}}"
+                   matTooltipPosition="left"
                    i18n-matTooltip="@@crawlConfigListGoToCollectionActionButtonTooltip">
                   <mat-icon>collections_bookmark</mat-icon>
                   Go to collection
@@ -212,6 +219,7 @@
                    [routerLink]="['../browserconfig', row.crawlConfig.browserConfigRef?.id]"
                    i18n="@@configListActionButtonGoToBrowserconfig"
                    matTooltip="Go to browserconfig: {{row | getBrowserConfigName | async}}"
+                   matTooltipPosition="left"
                    i18n-matTooltip="@@crawlConfigListGoToBrowserConfigActionButtonTooltip">
                   <mat-icon>web</mat-icon>
                   Go to browserconfig
@@ -225,6 +233,7 @@
                    [routerLink]="['../politenessconfig', row.crawlConfig.politenessRef?.id]"
                    i18n="@@configListActionButtonGoToPolitenessconfig"
                    matTooltip="Go to politenessconfig: {{row | getPolitenessConfigName | async}}"
+                   matTooltipPosition="left"
                    i18n-matTooltip="@@crawlConfigListGoToPolitenessActionButtonTooltip">
                   <mat-icon>sentiment_very_satisfied</mat-icon>
                   Go to politenessconfig
@@ -237,6 +246,7 @@
                       (click)="onFilterByCrawlConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawljobsWithCrawlconfig"
                       matTooltip="Show crawljobs with reference to the crawlconfig"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@crawlConfigListFilterCrawljobsWithCrawlconfigActionButtonTooltip">
                 <mat-icon>work</mat-icon>
                 Show crawljobs
@@ -251,6 +261,7 @@
                       (click)="onFilterByBrowserConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawljobsWithBrowserconfig"
                       matTooltip="Show crawlconfigs with reference to the browserconfig"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@browserConfigListFilterCrawljobsWithBrowserconfigActionButtonTooltip">
                 <mat-icon>settings_system_daydream</mat-icon>
                 Show crawlconfigs
@@ -265,6 +276,7 @@
                       (click)="onFilterByPolitenessConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawlconfigswithPoliteness"
                       matTooltip="Show crawlconfigs with reference to the politeness"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@politenessConfigListFilterCrawlconfigWithPolitenessActionButtonTooltip">
                 <mat-icon>settings_system_daydream</mat-icon>
                 Show crawlconfigs
@@ -279,6 +291,7 @@
                       (click)="onFilterByBrowserScriptRef(row)"
                       i18n="@@configListActionButtonFilterBrowserconfigWithBrowserscript"
                       matTooltip="Show browserconfigs with reference to the browserscript"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@browserscriptListFilterBrowserconfigsWithBrowserscriptActionButtonTooltip">
                 <mat-icon>web</mat-icon>
                 Show browserconfigs
@@ -294,6 +307,7 @@
                  [queryParams]="{job_id: row.id}"
                  i18n="@@configListActionButtonGoToJobExecution"
                  matTooltip="Go to jobexecutions for crawljob"
+                 matTooltipPosition="left"
                  i18n-matTooltip="@@crawljobListJobExecutionShortcutActionButtonTooltip">
                 <mat-icon>hdr_strong</mat-icon>
                 Show jobexecutions
@@ -306,6 +320,7 @@
                    [routerLink]="['../schedule', row.crawlJob.scheduleRef?.id ]"
                    i18n="@@configListActionButtonGoToSchedule"
                    matTooltip="Go to schedule: {{row | getCrawlScheduleName | async}}"
+                   matTooltipPosition="left"
                    i18n-matTooltip="@@crawljobListScheduleShortcutActionButtonTooltip">
                   <mat-icon>schedule</mat-icon>
                   Go to schedule
@@ -319,6 +334,7 @@
                    [routerLink]="['../crawlconfig', row.crawlJob.crawlConfigRef?.id]"
                    i18n="@@configListActionButtonGoToCrawlconfig"
                    matTooltip="Go to crawlconfig: {{row | getCrawlConfigName | async}}"
+                   matTooltipPosition="left"
                    i18n-matTooltip="@@crawljobListCrawlconfigShortcutActionButtonTooltip">
                   <mat-icon>settings_system_daydream</mat-icon>
                   Go to crawlconfig
@@ -330,6 +346,7 @@
                       (click)="onFilterByCrawlJobRef(row)"
                       i18n="@@configListActionButtonFilterSeedsWithCrawljob"
                       matTooltip="Show seeds with reference to the crawljob"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@crawljobListFilterSeedsWithCrawljobActionButtonTooltip">
                 <mat-icon>link</mat-icon>
                 Show seeds
@@ -341,6 +358,7 @@
                       (click)="onRunCrawl(row)"
                       i18n="@@configListActionButtonRunCrawl"
                       matTooltip="Run crawljob: {{row.meta.name}}"
+                      matTooltipPosition="left"
                       i18n-matTooltip="@@runCrawlActionButtonTooltip">
                 <mat-icon>play_arrow</mat-icon>
                 Run crawl
