@@ -64,28 +64,30 @@
         <span i18n="@@seedMetaMoveAllExistingSeedsToEntityButton">Move all to this entity</span>
       </button>
     </mat-list-item>
+
     <mat-list-item *ngFor="let seed of name.errors.seedExists">
-      <button mat-icon-button
-              (click)="onMoveSeedToCurrentEntity(seed)"
-              matTooltip="Move seed to this entity"
-              i18n-matTooltip="@@seedMetaMoveExistingSeedToEntityButtonTooltip"
-              data-testid="seedExistsListMoveSeedToEntityButton">
-        <mat-icon matListItemIcon>swap_horiz</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
-              matTooltip="Remove URL from the list"
-              i18n-matTooltip="@@seedMetaRemoveExistingSeedFromTheListButtonTooltip">
-        <mat-icon matListItemIcon>remove_circle_outline</mat-icon>
-      </button>
-
+      <div fxLayout="row">
       <a matTooltip="Go to entity with existing seed"
-         mat-list-item
+         matListItemTitle
          i18n-matTooltip="@@seedMetaGoToEntityWithExistingSeedButtonTooltip"
          [routerLink]="['config','seed']"
          [queryParams]="{entity_id: seed.seed.entityRef.id}">
         {{seed.meta.name}}
       </a>
+        <button mat-icon-button
+                (click)="onMoveSeedToCurrentEntity(seed)"
+                matTooltip="Move seed to this entity"
+                i18n-matTooltip="@@seedMetaMoveExistingSeedToEntityButtonTooltip"
+                data-testid="seedExistsListMoveSeedToEntityButton">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+
+      <button mat-icon-button (click)="onRemoveExistingUrl(seed.meta.name)"
+              matTooltip="Remove URL from the list"
+              i18n-matTooltip="@@seedMetaRemoveExistingSeedFromTheListButtonTooltip">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+  </div>
     </mat-list-item>
   </mat-list>
 
