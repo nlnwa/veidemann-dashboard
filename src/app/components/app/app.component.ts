@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               private errorService: ErrorService) {
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
-      map((event: RouterEvent) => {
+      map(event => {
         if (event instanceof RouteConfigLoadStart) {
           this.moduleLoadSemaphore++;
         } else if (event instanceof RouteConfigLoadEnd) {
