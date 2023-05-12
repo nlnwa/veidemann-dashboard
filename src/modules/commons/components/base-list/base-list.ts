@@ -54,7 +54,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   @Input()
   multiSelect = true;
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _dataSource: DataSource<T>;
 
   @Input()

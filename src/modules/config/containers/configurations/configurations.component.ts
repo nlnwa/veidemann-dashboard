@@ -429,7 +429,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationStart),
+      filter(event => event instanceof NavigationStart),
       tap(() => this.dialog.closeAll())
     ).subscribe();
 

@@ -21,7 +21,6 @@ export class ListDataSource<T extends ListItem> implements DataSource<T> {
     this.data = new BehaviorSubject([]);
   }
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _capacity;
 
   get capacity(): number {
