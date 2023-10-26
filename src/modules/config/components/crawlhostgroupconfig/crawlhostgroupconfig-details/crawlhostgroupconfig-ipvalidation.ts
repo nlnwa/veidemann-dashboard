@@ -1,45 +1,39 @@
 import {UntypedFormControl} from '@angular/forms';
-import * as ipaddress from 'ip-address';
+import {Address4, Address6} from "ip-address";
 
 export class CrawlHostGroupConfigIpValidation {
 
   static validRanges: boolean;
-
 
   static allRangesValid(): boolean {
     return this.validRanges;
   }
 
   /**
-   * Checks if an IP address is a valid ipv4 or ipv6 address, using ip-address library
-   */
-
-  static isValidIp(ip: string): boolean {
-    const ipv6 = ipaddress.Address6;
-    const ipv4 = ipaddress.Address4;
-
-    const ipv6Addr = new ipv6(ip);
-    const ipv4Addr = new ipv4(ip);
-
-    if (ipv6Addr.isValid()) {
-      return true;
-
-    }
-    return !!ipv4Addr.isValid();
-  }
-
-  /**
-   *
    * Custom validator
    */
 
   static ipAddressValidator(control: UntypedFormControl) {
     const ip = control.value;
-    if (!CrawlHostGroupConfigIpValidation.isValidIp(ip)) {
-      return {ipAddressValidator: true};
-    }
-    return null;
+    const version = CrawlHostGroupConfigIpValidation.getIpVersion(ip);
+      const validIp = CrawlHostGroupConfigIpValidation.isValidIp(ip, version);
+      return validIp ? null : {invalidIp: {value: control.value}};
   }
+
+  /**
+   * Checks if an IP address is a valid ipv4 or ipv6 address, using ip-address library
+   */
+
+  static isValidIp(ip: string, version: string): boolean {
+    if (version === 'v6') {
+      return Address6.isValid(ip)
+    }
+    if (version === 'v4') {
+      return Address4.isValid(ip)
+    }
+    return false;
+  }
+
 
   /**
    * Checks if the first group in the from and to address is the same.
@@ -70,37 +64,56 @@ export class CrawlHostGroupConfigIpValidation {
    * Then it check if both addresses first groups is the same, and returns the result
    */
   static isValidRange(fromIp: string, toIp: string): boolean {
-    const ipv6 = ipaddress.Address6;
-    const ipv4 = ipaddress.Address4;
-    const ipv6From = new ipv6(fromIp);
-    const ipv6To = new ipv6(toIp);
-    const ipv4From = new ipv4(fromIp);
-    const ipv4To = new ipv4(toIp);
+    const fromIpVersion = this.getIpVersion(fromIp);
+    const toIpVersion = this.getIpVersion(toIp);
 
-    if (ipv6From.isValid() && ipv6To.isValid()) {
-      if (this.isInRange(ipv6From.correctForm(), ipv6To.correctForm(), true)) {
-        this.validRanges = true;
-        return true;
-      } else {
-        this.validRanges = false;
-        return false;
-      }
-
-    }
-
-    if (ipv4From.isValid() && ipv4To.isValid()) {
-      if (this.isInRange(ipv4From.correctForm(), ipv4To.correctForm(), false)) {
-        this.validRanges = true;
-        return true;
-      } else {
-        this.validRanges = false;
-        return false;
-      }
-    }
-
-    if (!(ipv4From.isValid() && ipv4To.isValid()) || !(ipv6From.isValid() && ipv4To.isValid())) {
+    if (fromIpVersion !== toIpVersion) {
       return false;
     }
 
+    if (fromIpVersion === 'v6' && toIpVersion === 'v6') {
+      const ipv6From = new Address6(fromIp);
+      const ipv6To = new Address6(toIp);
+      if (Address6.isValid(ipv6From.address) && Address6.isValid(ipv6To.address)) {
+        if (this.isInRange(ipv6From.correctForm(), ipv6To.correctForm(), true)) {
+          this.validRanges = true;
+          return true;
+        } else {
+          this.validRanges = false;
+          return false;
+        }
+      }
+    }
+
+    if (fromIpVersion === 'v4' && toIpVersion === 'v4') {
+      let ipv4From;
+      let ipv4To;
+
+      try {
+        ipv4From = new Address4(fromIp);
+        ipv4To = new Address4(toIp);
+      } catch (e) {
+        return false;
+      }
+
+      if (Address4.isValid(ipv4From.address) && Address4.isValid(ipv4To.address)) {
+        if (this.isInRange(ipv4From.correctForm(), ipv4To.correctForm(), false)) {
+          this.validRanges = true;
+          return true;
+        } else {
+          this.validRanges = false;
+          return false;
+        }
+      }
+    }
+  }
+
+  static getIpVersion(ip: string): string {
+    if (ip.includes(':')) {
+      return 'v6';
+    }
+    if (ip.includes('.')) {
+      return 'v4';
+    }
   }
 }
