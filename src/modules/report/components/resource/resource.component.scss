@@ -23,7 +23,7 @@ tr.resource-row:not(.resource-expanded-row):active {
 }
 
 tr.resource-row.row-error td {
-  color: mat.get-color-from-palette($veidemann-dashboard-warn);;
+  color: mat.m2-get-color-from-palette($veidemann-dashboard-warn);;
 }
 
 .resource-row td {
