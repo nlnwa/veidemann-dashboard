@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, ErrorHandler, LOCALE_ID, NgModule} from '@angular/core';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {registerLocaleData} from '@angular/common';
 
 import localeNbExtra from '@angular/common/locales/extra/nb';

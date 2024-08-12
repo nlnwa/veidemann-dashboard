@@ -15,11 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist",
+            "outputPath": {
+              "base": "dist"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "polyfills": [
               "zone.js"
@@ -42,7 +43,13 @@
               "google-protobuf/google/protobuf/timestamp_pb.js",
               "google-protobuf/google/protobuf/empty_pb.js",
               "ip-address"
-            ]
+            ],
+            "browser": "src/main.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -51,8 +58,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -72,9 +77,7 @@
               ]
             },
             "development": {
-              "vendorChunk": true,
               "extractLicenses": false,
-              "buildOptimizer": false,
               "sourceMap": true,
               "optimization": false,
               "namedChunks": true
