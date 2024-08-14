@@ -27,8 +27,8 @@ describe('PolitenessConfigMultiDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
-      declarations: [PolitenessConfigMultiDialogComponent, DurationPickerComponent, MatLabel, LabelMultiComponent],
+      imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule, MatLabel],
+      declarations: [PolitenessConfigMultiDialogComponent, DurationPickerComponent, LabelMultiComponent],
       providers: [UntypedFormBuilder,
         {provide: LabelService, useValue: {}},
         {provide: AuthService, useValue: {canUpdate: () => true}},

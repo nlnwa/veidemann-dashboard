@@ -11,8 +11,8 @@ describe('SchedulePreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule],
-      declarations: [SchedulePreviewComponent, MatLabel],
+      imports: [CommonsModule, MatLabel],
+      declarations: [SchedulePreviewComponent],
       providers: []
     })
       .compileComponents();

@@ -1,10 +1,12 @@
 import {UrlFormatPipe} from './url-format.pipe';
-import {async, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 
 describe('UrlFormatPipe', () => {
 
-  beforeEach(async(() => {
+  let pipe: UrlFormatPipe;
+
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule],
       declarations: [UrlFormatPipe],
@@ -15,8 +17,7 @@ describe('UrlFormatPipe', () => {
   }));
 
   it('should create an instance', () => {
-    const domSanitizer = TestBed.get(DomSanitizer);
-    const pipe = new UrlFormatPipe(domSanitizer);
+    pipe = TestBed.inject(UrlFormatPipe);
     expect(pipe).toBeTruthy();
   });
 
