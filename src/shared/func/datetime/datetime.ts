@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment-duration-format';
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
