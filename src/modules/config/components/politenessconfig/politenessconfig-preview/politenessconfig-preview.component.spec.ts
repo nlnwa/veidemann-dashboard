@@ -13,8 +13,8 @@ describe('PolitenessconfigPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule],
-      declarations: [PolitenessconfigPreviewComponent, DurationFormatPipe, MatLabel, MatChipListbox],
+      imports: [CommonsModule,  MatLabel, MatChipListbox],
+      declarations: [PolitenessconfigPreviewComponent, DurationFormatPipe],
       providers: []
     })
       .compileComponents();

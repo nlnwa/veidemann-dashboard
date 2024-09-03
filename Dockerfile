@@ -1,4 +1,4 @@
-FROM node:18-alpine as build
+FROM node:20.11-alpine as build
 
 ARG BASE_HREF=/veidemann/
 ARG VERSION

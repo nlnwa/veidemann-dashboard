@@ -1,4 +1,4 @@
-import * as chroma from 'chroma-js';
+import chroma from 'chroma-js';
 
 const w3cx11 = {
   aliceblue: '#f0f8ff',

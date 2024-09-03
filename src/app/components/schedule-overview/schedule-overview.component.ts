@@ -17,7 +17,7 @@ import * as cronParser from 'cron-parser';
 import {MatDialog} from '@angular/material/dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
 import * as momentTimezone from 'moment-timezone';
-import * as moment from 'moment';
+import moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
 import {CalendarOptions, EventClickArg} from '@fullcalendar/core';

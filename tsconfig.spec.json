@@ -5,11 +5,9 @@
     "types": [
       "jasmine",
       "node",
-      "@angular/localize"
     ]
   },
   "files": [
-    "src/test.ts",
   ],
   "include": [
     "src/**/*.spec.ts",

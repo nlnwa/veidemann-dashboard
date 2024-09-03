@@ -2,7 +2,6 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ScheduleDetailsComponent} from './schedule-details.component';
 import {Annotation, ConfigObject, CrawlScheduleConfig, Kind, Label, Meta} from '../../../../../shared/models';
 import {CommonsModule} from '../../../../commons';
-import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {LabelService} from '../../../services';
@@ -20,7 +19,7 @@ import {
   MatDatepickerToggleHarness
 } from '@angular/material/datepicker/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const exampleCrawlSchedule: ConfigObject = {
   id: 'configObject_id',
@@ -75,7 +74,6 @@ describe('ScheduleDetailsComponent', () => {
       imports: [
         AbilityModule,
         CommonsModule,
-        RouterTestingModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot(),
       ],

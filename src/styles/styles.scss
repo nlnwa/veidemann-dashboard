@@ -91,13 +91,13 @@ html, body {
 }
 
 tr.item-row.row-disabled td a.formattedUri {
-  color: mat.get-color-from-palette($veidemann-dashboard-warn);
+  color: mat.m2-get-color-from-palette($veidemann-dashboard-warn);
 }
 
 tr.resource-row.row-error td a.formattedUri {
-  color: mat.get-color-from-palette($veidemann-dashboard-warn);
+  color: mat.m2-get-color-from-palette($veidemann-dashboard-warn);
 }
 
 .disabledJob .mat-list-item-content {
-  color: mat.get-color-from-palette($veidemann-dashboard-warn)
+  color: mat.m2-get-color-from-palette($veidemann-dashboard-warn)
 }

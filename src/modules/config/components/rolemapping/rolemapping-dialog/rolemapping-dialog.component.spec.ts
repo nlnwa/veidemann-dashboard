@@ -22,8 +22,8 @@ describe('RoleMappingDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
-      declarations: [RoleMappingDialogComponent, MatError],
+      imports: [CoreTestingModule.forRoot(), MatDialogModule, MatError, CommonsModule, NoopAnimationsModule],
+      declarations: [RoleMappingDialogComponent],
       providers: [UntypedFormBuilder,
         {provide: MAT_DIALOG_DATA, useValue: MY_CONF},
         {provide: MatDialogRef, useValue: {}}

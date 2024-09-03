@@ -1,6 +1,7 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationStart, Params, Router, RouterEvent} from '@angular/router';
+import {ActivatedRoute, NavigationStart, Params, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
+import {$localize} from "@angular/localize/init";
 
 import {BehaviorSubject, combineLatest, Observable, of, Subject} from 'rxjs';
 import {

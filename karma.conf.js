@@ -30,7 +30,13 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     concurrency: 1,
-    browsers: ['Chrome'],
+    browsers: ['ChromeWithoutSearchSelect'],
+    customLaunchers: {
+      ChromeWithoutSearchSelect: {
+        base: 'Chrome',
+        flags: ['-disable-search-engine-choice-screen']
+      }
+    },
     singleRun: false,
     restartOnFileChange: true
   });
