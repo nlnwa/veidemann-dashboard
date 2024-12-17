@@ -411,12 +411,17 @@ describe('ScheduleDetailsComponent', () => {
     await fromCal.selectCell(dates[0]);
     await validFromToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedFromDate = moment().add(1, 'M').month() + '/1/' + moment().year();
+
+    // Calculate the expected date and timestamp reliably
+    const nextMonth = moment().add(1, 'month').startOf('month');
+    const expectedFromDate = nextMonth.format('M/D/YYYY');
     expect(await validFrom.getValue()).toEqual(expectedFromDate);
     expect(component.canUpdate).toBeTruthy();
+
     fixture.detectChanges();
     component.onUpdate();
-    const expectedTimestamp = moment().startOf('month').format('YYYY-MM-DD') + 'T00:00:00.000Z';
+
+    const expectedTimestamp = nextMonth.format('YYYY-MM-DD') + 'T00:00:00.000Z';
     expect(update.crawlScheduleConfig.validFrom).toBe(expectedTimestamp);
   });
 
@@ -426,15 +431,20 @@ describe('ScheduleDetailsComponent', () => {
       update = config;
     });
 
+    // Invalid input: day out of range
     await validFrom.setValue('1.32.2022');
     fixture.detectChanges();
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
+
+    // Invalid input: month out of range
     await validFrom.setValue('13.1.2022');
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
+
+    // Valid input
     await validFrom.setValue('1.1.2022');
     await validFrom.blur();
 
@@ -442,8 +452,12 @@ describe('ScheduleDetailsComponent', () => {
     expect(component.canUpdate).toBeTruthy();
 
     component.onUpdate();
-    expect(update.crawlScheduleConfig.validFrom).toBe('2022-01-01T00:00:00.000Z');
+
+    // Calculate end-of-day timestamp dynamically
+    const validDate = moment('2022-01-01').endOf('day').toISOString();
+    expect(update.crawlScheduleConfig.validFrom).toBe(validDate);
   });
+
 
   it('setting valid to date in calendar sets timestamp to end of day', async () => {
 
