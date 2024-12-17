@@ -16,7 +16,7 @@ import {
   TokenInterceptor,
 } from './services';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MAT_DAYJS_DATE_FORMATS, DayjsDateAdapterModule} from '../dayjs-date-adapter';
 import {AppConfig} from './models/app-config.model';
 import {Ability, PureAbility} from '@casl/ability';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
@@ -41,8 +41,8 @@ registerLocaleData(localeNb, 'nb', localeNbExtra);
     {provide: ErrorHandler, useClass: ApplicationErrorHandler},
     {provide: LOCALE_ID, useValue: 'nb'},
     {provide: MAT_DATE_LOCALE, useValue: 'nb-NO'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: DateAdapter, useClass: DayjsDateAdapterModule, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_DAYJS_DATE_FORMATS},
     {provide: Ability, useValue: new Ability()},
     {provide: PureAbility, useExisting: Ability},
   ]
