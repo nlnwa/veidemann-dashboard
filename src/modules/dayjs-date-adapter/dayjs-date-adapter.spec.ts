@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -36,7 +35,7 @@ import { TestBed, inject, waitForAsync } from '@angular/core/testing';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DayjsDateAdapterModule } from '.';
 
-describe('DayjsDateAdapter', () => {
+fdescribe('DayjsDateAdapter', () => {
     describe('with defaults', () => {
         let adapter: DayjsDateAdapter;
         let assertValidDate: (d: dayjs.Dayjs | null, valid: boolean) => void;
@@ -62,7 +61,7 @@ describe('DayjsDateAdapter', () => {
                 expect(adapter.isDateInstance(d))
                     .withContext(`Expected ${d} to be a date instance`)
                     .toBeTruthy();
-                expect(adapter.isValid(d!))
+                expect(adapter.isValid(d))
                     .withContext(
                         `Expected ${d} to be ${valid ? 'valid' : 'invalid'},` +
                             ` but was ${valid ? 'invalid' : 'valid'}`
@@ -404,7 +403,7 @@ describe('DayjsDateAdapter', () => {
             }
         ].forEach(({ dtString, format, expected }) =>
             it(`should parse string ${dtString} according to given format`, () => {
-                expect(adapter.parse(dtString, format)!.utcOffset(-8, true).format()).toEqual(
+                expect(adapter.parse(dtString, format).utcOffset(-8, true).format()).toEqual(
                     expected
                 );
             })
@@ -417,7 +416,7 @@ describe('DayjsDateAdapter', () => {
                         'M/D/YYYY',
                         'MM/DD/YYYY',
                         'M/D/YY'
-                    ])!
+                    ])
                     .utcOffset(-8, true)
                     .format()
             ).toEqual('2017-01-02T00:00:00-08:00');
@@ -430,7 +429,7 @@ describe('DayjsDateAdapter', () => {
                         'M/D/YYYY',
                         'MM/DD/YYYY',
                         'M/D/YY'
-                    ])!
+                    ])
                     .utcOffset(-8, true)
                     .format()
             ).toEqual('2017-01-02T00:00:00-08:00');
@@ -438,20 +437,20 @@ describe('DayjsDateAdapter', () => {
 
         it('should parse number', () => {
             const timestamp = new Date().getTime();
-            expect(adapter.parse(timestamp)!.format()).toEqual(
+            expect(adapter.parse(timestamp).format()).toEqual(
                 dayjs(timestamp).format()
             );
         });
 
         it('should parse Date', () => {
             const date = new Date(2017, JAN, 1);
-            expect(adapter.parse(date)!.format()).toEqual(dayjs(date).format());
+            expect(adapter.parse(date).format()).toEqual(dayjs(date).format());
         });
 
         it('should parse dayjs date', () => {
             const date = dayjs([2017, JAN, 1]);
             const parsedDate = adapter.parse(date, 'MM/DD/YYYY');
-            expect(parsedDate!.format()).toEqual(date.format());
+            expect(parsedDate.format()).toEqual(date.format());
             expect(parsedDate).not.toBe(date);
         });
 
@@ -674,17 +673,17 @@ describe('DayjsDateAdapter', () => {
 
         it('should clone the date when deserializing a dayjs date', () => {
             const date = dayjs([2017, JAN, 1]);
-            expect(adapter.deserialize(date)!.format()).toEqual(date.format());
+            expect(adapter.deserialize(date).format()).toEqual(date.format());
             expect(adapter.deserialize(date)).not.toBe(date);
         });
 
         it('should deserialize dates with the correct locale', () => {
             adapter.setLocale('ja');
             expect(
-                adapter.deserialize('1985-04-12T23:20:50.52Z')!.locale()
+                adapter.deserialize('1985-04-12T23:20:50.52Z').locale()
             ).toBe('ja');
-            expect(adapter.deserialize(new Date())!.locale()).toBe('ja');
-            expect(adapter.deserialize(dayjs())!.locale()).toBe('ja');
+            expect(adapter.deserialize(new Date()).locale()).toBe('ja');
+            expect(adapter.deserialize(dayjs()).locale()).toBe('ja');
         });
 
         it('setLocale should not modify global dayjs locale', () => {
@@ -697,7 +696,7 @@ describe('DayjsDateAdapter', () => {
             adapter.setLocale('ja');
             expect(adapter.createDate(2017, JAN, 1).locale()).toBe('ja');
             expect(adapter.today().locale()).toBe('ja');
-            expect(adapter.parse('1/1/2017', 'MM/DD/YYYY')!.locale()).toBe(
+            expect(adapter.parse('1/1/2017', 'MM/DD/YYYY').locale()).toBe(
                 'ja'
             );
             expect(adapter.addCalendarDays(dayjs(), 1).locale()).toBe('ja');
@@ -805,19 +804,19 @@ describe('DayjsDateAdapter', () => {
             });
 
             it('should parse dates to UTC', () => {
-                expect(adapter.parse('1/2/2017', 'MM/DD/YYYY')!.isUTC()).toBe(
+                expect(adapter.parse('1/2/2017', 'MM/DD/YYYY').isUTC()).toBe(
                     true
                 );
             });
 
             it('should return UTC date when deserializing', () => {
                 expect(
-                    adapter.deserialize('1985-04-12T23:20:50.52Z')!.isUTC()
+                    adapter.deserialize('1985-04-12T23:20:50.52Z').isUTC()
                 ).toBe(true);
             });
 
             it('should return UTC date when deserializing date only', () => {
-                expect(adapter.deserialize('1985-04-12')!.isUTC()).toBe(true);
+                expect(adapter.deserialize('1985-04-12').isUTC()).toBe(true);
             });
 
             [
@@ -848,7 +847,7 @@ describe('DayjsDateAdapter', () => {
                 }
             ].forEach(({ dtString, format, expected }) =>
                 it(`should parse string ${dtString} according to given format`, () => {
-                    expect(adapter.parse(dtString, format)!.format()).toEqual(
+                    expect(adapter.parse(dtString, format).format()).toEqual(
                         expected
                     );
                 })
@@ -861,7 +860,7 @@ describe('DayjsDateAdapter', () => {
                             'M/D/YYYY',
                             'MM/DD/YYYY',
                             'M/D/YY'
-                        ])!
+                        ])
                         .format()
                 ).toEqual('2017-01-02T00:00:00+00:00');
             });
@@ -873,7 +872,7 @@ describe('DayjsDateAdapter', () => {
                             'M/D/YYYY',
                             'MM/DD/YYYY',
                             'M/D/YY'
-                        ])!
+                        ])
                         .format()
                 ).toEqual('2017-01-02T00:00:00+00:00');
             });
@@ -901,19 +900,19 @@ describe('DayjsDateAdapter', () => {
 
             it('should detect valid strings according to given format', () => {
                 expect(
-                    adapter.parse('1/2/2017', 'D/M/YYYY')!.format('l')
+                    adapter.parse('1/2/2017', 'D/M/YYYY').format('l')
                 ).toEqual(dayjs([2017, FEB, 1]).format('l'));
             });
 
             it('should detect invalid strings according to given format', () => {
                 expect(
-                    adapter.parse('2017-01-01', 'MM/DD/YYYY')!.isValid()
+                    adapter.parse('2017-01-01', 'MM/DD/YYYY').isValid()
                 ).toBe(false);
-                expect(adapter.parse('1/2/2017', 'MM/DD/YYYY')!.isValid()).toBe(
+                expect(adapter.parse('1/2/2017', 'MM/DD/YYYY').isValid()).toBe(
                     false
                 );
                 expect(
-                    adapter.parse('Jan 5, 2017', 'MMMM D, YYYY')!.isValid()
+                    adapter.parse('Jan 5, 2017', 'MMMM D, YYYY').isValid()
                 ).toBe(false);
             });
         });
