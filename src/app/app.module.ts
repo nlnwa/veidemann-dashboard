@@ -20,23 +20,31 @@ import {ScheduleEventDialogComponent} from './components/schedule-event-dialog/s
 import {ScheduleOverviewComponent} from './components/schedule-overview/schedule-overview.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 
-@NgModule({ declarations: [
-        AppComponent,
-        ErrorDialogComponent,
-        DialogComponent,
-        TimeComponent,
-        CrawlerStatusDialogComponent,
-        CrawlerStatusComponent,
-        AboutDialogComponent,
-        HomeComponent,
-        ScheduleEventDialogComponent,
-        ScheduleOverviewComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        CommonsModule,
-        CoreModule,
-        FullCalendarModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    ErrorDialogComponent,
+    DialogComponent,
+    TimeComponent,
+    CrawlerStatusDialogComponent,
+    CrawlerStatusComponent,
+    AboutDialogComponent,
+    HomeComponent,
+    ScheduleEventDialogComponent,
+    ScheduleOverviewComponent
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    CommonsModule,
+    CoreModule,
+    FullCalendarModule
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi())
+  ]
+})
 export class AppModule {
 }

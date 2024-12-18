@@ -16,7 +16,6 @@
     "extract-i18n": "ng xi18n --output-path src/locale --locale no && xliffmerge --profile xliffmerge.json no en"
   },
   "dependencies": {
-    "@angular-material-components/datetime-picker": "^16.0.1",
     "@angular/animations": "^18.1.4",
     "@angular/cdk": "^18.1.4",
     "@angular/common": "^18.1.4",
@@ -48,7 +47,6 @@
     "filesize": "^9.0.11",
     "google-protobuf": "^3.21.2",
     "grpc-web": "^1.5.0",
-    "hammerjs": "^2.0.8",
     "ip-address": "^9.0.5",
     "minimist": "~1.2.8",
     "monaco-editor": "^0.50.0",

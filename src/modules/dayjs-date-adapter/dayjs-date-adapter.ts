@@ -1,5 +1,5 @@
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Optional, Inject, InjectionToken } from '@angular/core';
+import {Optional, Inject, InjectionToken, Injectable} from '@angular/core';
 import arraySupport from 'dayjs/plugin/arraySupport';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
@@ -55,6 +55,7 @@ interface LocaleData {
 export type DateStyles = 'long' | 'short' | 'narrow';
 
 /** Adapts dayjs.Dayjs Dates for use with Angular Material. */
+@Injectable()
 export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
     private localeData: LocaleData;
 

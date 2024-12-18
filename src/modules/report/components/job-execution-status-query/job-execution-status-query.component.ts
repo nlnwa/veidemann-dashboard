@@ -8,7 +8,7 @@ import {UntypedFormBuilder} from '@angular/forms';
 @Component({
   selector: 'app-job-execution-status-query',
   templateUrl: './job-execution-status-query.component.html',
-  styleUrls: ['./job-execution-status-query.component.css'],
+  styleUrls: ['./job-execution-status-query.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JobExecutionStatusQueryComponent extends QueryComponent<JobExecutionStatusQuery> {

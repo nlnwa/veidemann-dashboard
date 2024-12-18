@@ -1,7 +1,7 @@
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
 
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import duration, {Duration, DurationUnitType} from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(duration);
 dayjs.extend(utc);
@@ -61,24 +61,37 @@ export function toTimestampProto(timestamp: string): any {
 }
 
 export function durationBetweenDates(startTime: string, endTime: string): string {
-  if (endTime === '') {
-    return 'N/A';
-  }
   const start = dayjs(startTime);
-  const end = dayjs(endTime);
-  // @ts-ignore
-  return dayjs.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]');
+  const end = endTime === '' ? dayjs() : dayjs(endTime);
+  const diff = end.diff(start)
+  return formatDuration(dayjs.duration(diff));
+}
+
+const formatter = new Intl.RelativeTimeFormat(navigator.languages, { numeric: 'always' });
+export function formatDuration(d: Duration): string {
+
+  const parts = []
+
+  if (d.days()) parts.push(formatter.format(d.days(), 'day'));
+  if (d.hours()) parts.push(formatter.format(d.hours(), 'hour'));
+  if (d.minutes()) parts.push(formatter.format(d.minutes(), 'minute'));
+  if (d.seconds() || parts.length === 0) parts.push(formatter.format(d.seconds(), 'second'));
+
+  return parts.join(', ').replace(/^\D+/, '');
+}
+
+const timeUnitMap: { [key: string]: DurationUnitType } = {
+  ms: 'millisecond',
+  s: 'second',
+  m: 'minute',
+  h: 'hour',
+  d: 'day',
+  w: 'week',
+  M: 'month',
+  y: 'year',
 }
 
 export function timeToDuration(time: number, unit: string) {
-  if (unit === 'ms') {
-    // @ts-ignore
-    return dayjs.duration(time, 'millisecond').format('D[days]:H[hours]:mm[min]:ss[s]:SSS[ms]');
-  }
-  if (unit === 's') {
-    // @ts-ignore
-    return dayjs.duration(time, 'second').format('D[days]:H[hours]:mm[min]:ss[s]');
-  }
-
+  return formatDuration(dayjs.duration(time, timeUnitMap[unit]));
 }
 
