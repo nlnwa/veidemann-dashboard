@@ -18,10 +18,11 @@ interface UriFlatNode {
 }
 
 @Component({
-  selector: 'app-page-log-status',
-  templateUrl: './page-log-status.component.html',
-  styleUrls: ['./page-log-status.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-page-log-status',
+    templateUrl: './page-log-status.component.html',
+    styleUrls: ['./page-log-status.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageLogStatusComponent implements OnChanges {
 

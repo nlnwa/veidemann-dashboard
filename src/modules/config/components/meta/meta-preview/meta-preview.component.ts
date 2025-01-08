@@ -3,9 +3,10 @@ import {ConfigObject} from '../../../../../shared/models/config';
 import {AuthService, SnackBarService} from '../../../../core/services';
 
 @Component({
-  selector: 'app-meta-preview',
-  templateUrl: './meta-preview.component.html',
-  styleUrls: ['./meta-preview.component.css']
+    selector: 'app-meta-preview',
+    templateUrl: './meta-preview.component.html',
+    styleUrls: ['./meta-preview.component.css'],
+    standalone: false
 })
 export class MetaPreviewComponent {
 

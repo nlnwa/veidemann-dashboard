@@ -6,11 +6,12 @@ import {LabelComponent} from '../label/label.component';
 
 
 @Component({
-  selector: 'app-selector',
-  templateUrl: '../label/label.component.html',
-  styleUrls: ['../label/label.component.scss'],
-  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: SelectorComponent, multi: true}],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-selector',
+    templateUrl: '../label/label.component.html',
+    styleUrls: ['../label/label.component.scss'],
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: SelectorComponent, multi: true }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SelectorComponent extends LabelComponent implements OnInit {
 

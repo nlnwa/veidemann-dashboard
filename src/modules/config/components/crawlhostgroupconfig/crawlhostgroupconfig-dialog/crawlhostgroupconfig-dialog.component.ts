@@ -7,9 +7,10 @@ import {ConfigObject} from '../../../../../shared/models/config';
 import {CrawlHostGroupConfigDetailsComponent} from '..';
 
 @Component({
-  selector: 'app-crawlhostgroupconfig-dialog',
-  templateUrl: './crawlhostgroupconfig-dialog.component.html',
-  styleUrls: ['./crawlhostgroupconfig-dialog.component.css']
+    selector: 'app-crawlhostgroupconfig-dialog',
+    templateUrl: './crawlhostgroupconfig-dialog.component.html',
+    styleUrls: ['./crawlhostgroupconfig-dialog.component.css'],
+    standalone: false
 })
 export class CrawlHostGroupConfigDialogComponent extends CrawlHostGroupConfigDetailsComponent implements OnInit {
 

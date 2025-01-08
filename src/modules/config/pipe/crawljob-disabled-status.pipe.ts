@@ -6,7 +6,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getCrawlJobDisabledStatus'
+    name: 'getCrawlJobDisabledStatus',
+    standalone: false
 })
 export class CrawlJobDisabledStatusPipe implements PipeTransform {
   constructor(private route: ActivatedRoute, private optionsService: OptionsService) {

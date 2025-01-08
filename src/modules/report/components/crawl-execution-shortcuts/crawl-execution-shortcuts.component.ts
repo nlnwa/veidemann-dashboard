@@ -3,9 +3,10 @@ import {CrawlExecutionState, CrawlExecutionStatus, Kind} from 'src/shared/models
 import {Observable, Subject} from 'rxjs';
 
 @Component({
-  selector: 'app-crawl-execution-shortcuts',
-  templateUrl: './crawl-execution-shortcuts.component.html',
-  styleUrls: ['./crawl-execution-shortcuts.component.css']
+    selector: 'app-crawl-execution-shortcuts',
+    templateUrl: './crawl-execution-shortcuts.component.html',
+    styleUrls: ['./crawl-execution-shortcuts.component.css'],
+    standalone: false
 })
 export class CrawlExecutionShortcutsComponent {
   readonly Kind = Kind;

@@ -7,7 +7,8 @@ import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/oper
 
 
 @Directive({
-  selector: '[appQueryPageLog]'
+    selector: '[appQueryPageLog]',
+    standalone: false
 })
 export class QueryPageLogDirective extends QueryDirective<PageLogQuery, PageLog> {
   constructor(protected service: PageLogService,

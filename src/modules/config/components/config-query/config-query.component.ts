@@ -17,10 +17,11 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 
 @Component({
-  selector: 'app-config-query',
-  styleUrls: ['config-query.component.scss'],
-  templateUrl: './config-query.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-config-query',
+    styleUrls: ['config-query.component.scss'],
+    templateUrl: './config-query.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigQueryComponent extends QueryComponent<ConfigQuery> implements OnChanges, AfterViewInit {
   readonly Kind = Kind;

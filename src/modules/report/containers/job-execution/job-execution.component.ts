@@ -14,10 +14,11 @@ import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abo
 
 
 @Component({
-  selector: 'app-job-execution',
-  templateUrl: './job-execution.component.html',
-  styleUrls: ['./job-execution.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-job-execution',
+    templateUrl: './job-execution.component.html',
+    styleUrls: ['./job-execution.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class JobExecutionComponent implements OnInit {
   readonly jobExecutionStates = jobExecutionStates;

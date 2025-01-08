@@ -4,9 +4,10 @@ import {RunCrawlReply, RunCrawlRequest} from '../../../../shared/models/controll
 import {ConfigObject, Kind} from '../../../../shared/models/config';
 
 @Component({
-  selector: 'app-run-crawl-dialog',
-  templateUrl: './run-crawl-dialog.component.html',
-  styleUrls: ['./run-crawl-dialog.component.css']
+    selector: 'app-run-crawl-dialog',
+    templateUrl: './run-crawl-dialog.component.html',
+    styleUrls: ['./run-crawl-dialog.component.css'],
+    standalone: false
 })
 
 export class RunCrawlDialogComponent {

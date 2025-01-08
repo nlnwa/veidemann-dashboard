@@ -4,11 +4,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import {FileSizePipe} from 'ngx-filesize';
 
 @Component({
-  selector: 'app-crawl-execution-status',
-  templateUrl: './crawl-execution-status.component.html',
-  styleUrls: ['./crawl-execution-status.component.scss'],
-  providers: [FileSizePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawl-execution-status',
+    templateUrl: './crawl-execution-status.component.html',
+    styleUrls: ['./crawl-execution-status.component.scss'],
+    providers: [FileSizePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlExecutionStatusComponent implements OnInit{
   readonly CrawlExecutionState = CrawlExecutionState;

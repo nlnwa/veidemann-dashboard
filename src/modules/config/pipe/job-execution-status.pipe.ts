@@ -7,7 +7,8 @@ import {JobExecutionStatus} from '../../../shared/models/report';
 
 
 @Pipe({
-  name: 'getJobStatus'
+    name: 'getJobStatus',
+    standalone: false
 })
 export class JobExecutionStatusPipe implements PipeTransform {
 

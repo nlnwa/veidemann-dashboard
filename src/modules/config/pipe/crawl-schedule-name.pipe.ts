@@ -7,7 +7,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getCrawlScheduleName'
+    name: 'getCrawlScheduleName',
+    standalone: false
 })
 export class CrawlScheduleNamePipe implements PipeTransform {
 

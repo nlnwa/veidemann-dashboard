@@ -6,9 +6,10 @@ export interface DeleteDialogData {
 }
 
 @Component({
-  selector: 'app-delete-multi-dialog',
-  styleUrls: ['delete-multi-dialog.component.scss'],
-  templateUrl: 'delete-multi-dialog.component.html'
+    selector: 'app-delete-multi-dialog',
+    styleUrls: ['delete-multi-dialog.component.scss'],
+    templateUrl: 'delete-multi-dialog.component.html',
+    standalone: false
 })
 export class DeleteMultiDialogComponent {
 

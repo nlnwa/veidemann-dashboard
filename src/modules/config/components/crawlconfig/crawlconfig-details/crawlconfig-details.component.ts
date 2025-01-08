@@ -5,9 +5,10 @@ import {ConfigObject, ConfigRef, CrawlConfig, Kind, Meta} from '../../../../../s
 import {AuthService} from '../../../../core/services/auth';
 
 @Component({
-  selector: 'app-crawlconfig-details',
-  templateUrl: './crawlconfig-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawlconfig-details',
+    templateUrl: './crawlconfig-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlConfigDetailsComponent implements OnChanges {
   readonly Kind = Kind;

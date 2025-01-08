@@ -18,14 +18,15 @@ import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abo
 
 
 @Component({
-  selector: 'app-crawl-execution',
-  templateUrl: './crawl-execution.component.html',
-  styleUrls: ['./crawl-execution.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ListDataSource, {
-    provide: BASE_LIST,
-    useClass: CrawlExecutionStatusListComponent,
-  }],
+    selector: 'app-crawl-execution',
+    templateUrl: './crawl-execution.component.html',
+    styleUrls: ['./crawl-execution.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ListDataSource, {
+            provide: BASE_LIST,
+            useClass: CrawlExecutionStatusListComponent,
+        }],
+    standalone: false
 })
 export class CrawlExecutionComponent implements OnInit {
   readonly CrawlExecutionState = CrawlExecutionState;

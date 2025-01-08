@@ -26,11 +26,12 @@ import {LabelService} from '../../services/label.service';
 
 
 @Component({
-  selector: 'app-labels',
-  templateUrl: './label.component.html',
-  styleUrls: ['./label.component.scss'],
-  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: LabelComponent, multi: true}],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-labels',
+    templateUrl: './label.component.html',
+    styleUrls: ['./label.component.scss'],
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: LabelComponent, multi: true }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class LabelComponent implements ControlValueAccessor, OnInit {

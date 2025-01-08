@@ -11,10 +11,11 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 import {ScheduleOverviewComponent} from '../schedule-overview/schedule-overview.component';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit {
 

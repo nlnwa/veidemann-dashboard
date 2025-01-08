@@ -7,10 +7,11 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-config-navigation-list',
-  templateUrl: './config-nav-list.component.html',
-  styleUrls: ['../../../commons/components/navigation-list/navigation-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-config-navigation-list',
+    templateUrl: './config-nav-list.component.html',
+    styleUrls: ['../../../commons/components/navigation-list/navigation-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigNavListComponent extends NavigationListComponent {
   readonly ConfigPath = ConfigPath;

@@ -33,21 +33,22 @@ const incrementBases = {
 };
 
 @Component({
-  selector: 'app-filesize-input',
-  templateUrl: './filesize-input.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FilesizeInputComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => FilesizeInputComponent),
-      multi: true
-    }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-filesize-input',
+    templateUrl: './filesize-input.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => FilesizeInputComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => FilesizeInputComponent),
+            multi: true
+        }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class FilesizeInputComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {

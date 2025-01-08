@@ -32,10 +32,11 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 import {RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
 
 @Component({
-  selector: 'app-configurations',
-  templateUrl: './configurations.component.html',
-  styleUrls: ['./configurations.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-configurations',
+    templateUrl: './configurations.component.html',
+    styleUrls: ['./configurations.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Kind = Kind;

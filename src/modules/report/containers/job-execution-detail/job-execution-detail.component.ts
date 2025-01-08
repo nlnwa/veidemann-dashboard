@@ -11,9 +11,10 @@ import {ControllerApiService, SnackBarService} from '../../../core/services';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-crawl-log-detail',
-  templateUrl: './job-execution-detail.component.html',
-  styleUrls: ['./job-execution-detail.component.css']
+    selector: 'app-crawl-log-detail',
+    templateUrl: './job-execution-detail.component.html',
+    styleUrls: ['./job-execution-detail.component.css'],
+    standalone: false
 })
 export class JobExecutionDetailComponent extends DetailDirective<JobExecutionStatus> implements OnInit {
   readonly JobExecutionState = JobExecutionState;

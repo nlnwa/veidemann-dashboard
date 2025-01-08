@@ -4,10 +4,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ErrorService} from '../../../core/services';
 
 @Component({
-  selector: 'app-preview',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-preview',
+    templateUrl: './preview.component.html',
+    styleUrls: ['./preview.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PreviewComponent {
   readonly Kind = Kind;

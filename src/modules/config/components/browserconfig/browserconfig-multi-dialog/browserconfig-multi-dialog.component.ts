@@ -9,10 +9,11 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns'
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-browserconfig-multi-dialog',
-  templateUrl: './browserconfig-multi-dialog.component.html',
-  styleUrls: ['./browserconfig-multi-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-browserconfig-multi-dialog',
+    templateUrl: './browserconfig-multi-dialog.component.html',
+    styleUrls: ['./browserconfig-multi-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class BrowserConfigMultiDialogComponent extends BrowserConfigDetailsComponent implements OnInit {

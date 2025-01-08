@@ -32,14 +32,15 @@ export interface Parcel {
 }
 
 @Component({
-  selector: 'app-seed-meta',
-  templateUrl: './seed-meta.component.html',
-  styleUrls: ['./seed-meta.component.css'],
-  providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SeedMetaComponent), multi: true},
-    {provide: NG_ASYNC_VALIDATORS, useExisting: forwardRef(() => SeedMetaComponent), multi: true}
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-seed-meta',
+    templateUrl: './seed-meta.component.html',
+    styleUrls: ['./seed-meta.component.css'],
+    providers: [
+        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SeedMetaComponent), multi: true },
+        { provide: NG_ASYNC_VALIDATORS, useExisting: forwardRef(() => SeedMetaComponent), multi: true }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SeedMetaComponent extends MetaComponent implements AsyncValidator {
 

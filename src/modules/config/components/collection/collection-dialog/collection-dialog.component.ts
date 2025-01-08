@@ -7,10 +7,11 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-collection-dialog',
-  templateUrl: './collection-dialog.component.html',
-  styleUrls: ['./collection-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-collection-dialog',
+    templateUrl: './collection-dialog.component.html',
+    styleUrls: ['./collection-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CollectionDialogComponent extends CollectionDetailsComponent implements OnInit {
 

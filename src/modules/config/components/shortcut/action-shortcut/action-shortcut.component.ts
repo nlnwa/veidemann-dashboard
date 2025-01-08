@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ConfigObject, Kind} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-action-shortcut',
-  templateUrl: './action-shortcut.component.html',
+    selector: 'app-action-shortcut',
+    templateUrl: './action-shortcut.component.html',
+    standalone: false
 })
 export class ActionShortcutComponent {
   readonly Kind = Kind;

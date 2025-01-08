@@ -3,8 +3,9 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ConfigObject, Kind} from '../../../../shared/models/config';
 
 @Component({
-  selector: 'app-delete-dialog',
-  templateUrl: 'delete-dialog.component.html'
+    selector: 'app-delete-dialog',
+    templateUrl: 'delete-dialog.component.html',
+    standalone: false
 })
 export class DeleteDialogComponent {
   readonly Kind = Kind;

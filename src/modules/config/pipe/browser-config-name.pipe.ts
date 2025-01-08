@@ -7,7 +7,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getBrowserConfigName'
+    name: 'getBrowserConfigName',
+    standalone: false
 })
 export class BrowserConfigNamePipe implements PipeTransform {
   constructor(private route: ActivatedRoute, private optionsService: OptionsService) {

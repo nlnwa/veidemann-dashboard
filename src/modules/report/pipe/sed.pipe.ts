@@ -2,7 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 
 @Pipe({
-  name: 'sedPipe'
+    name: 'sedPipe',
+    standalone: false
 })
 export class SedPipe implements PipeTransform {
 

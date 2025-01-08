@@ -6,7 +6,8 @@ import {map} from 'rxjs/operators';
 import {OptionsService} from '../services/options.service';
 
 @Pipe({
-  name: 'getPolitenessConfigName'
+    name: 'getPolitenessConfigName',
+    standalone: false
 })
 export class PolitenessConfigNamePipe implements PipeTransform {
 

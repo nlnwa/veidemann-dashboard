@@ -7,9 +7,10 @@ import {CustomValidators} from '../../../../../shared/validation';
 import {ConfigObject, Kind} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-rolemapping-multi-dialog',
-  templateUrl: './rolemapping-multi-dialog.component.html',
-  styleUrls: ['./rolemapping-multi-dialog.component.css']
+    selector: 'app-rolemapping-multi-dialog',
+    templateUrl: './rolemapping-multi-dialog.component.html',
+    styleUrls: ['./rolemapping-multi-dialog.component.css'],
+    standalone: false
 })
 export class RoleMappingMultiDialogComponent extends RoleMappingDetailsComponent implements OnInit {
 

@@ -9,9 +9,10 @@ import {ErrorService} from '../../../modules/core/services';
 
 
 @Component({
-  selector: 'app-dialog',
-  template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-dialog',
+    template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogComponent implements OnInit, OnDestroy {
 

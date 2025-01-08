@@ -13,16 +13,17 @@ import {BASE_LIST} from '../../../../shared/directives';
 import {PageLogListComponent} from '../../components';
 
 @Component({
-  selector: 'app-pagelog',
-  templateUrl: './pagelog.component.html',
-  styleUrls: ['./pagelog.component.css'],
-  providers: [
-    ListDataSource,
-    {
-      provide: BASE_LIST,
-      useClass: PageLogListComponent,
-    }
-  ],
+    selector: 'app-pagelog',
+    templateUrl: './pagelog.component.html',
+    styleUrls: ['./pagelog.component.css'],
+    providers: [
+        ListDataSource,
+        {
+            provide: BASE_LIST,
+            useClass: PageLogListComponent,
+        }
+    ],
+    standalone: false
 })
 export class PageLogComponent implements OnInit {
 

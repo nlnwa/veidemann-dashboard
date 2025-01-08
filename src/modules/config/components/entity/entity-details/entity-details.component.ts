@@ -4,9 +4,10 @@ import {AuthService} from '../../../../core/services/auth';
 import {ConfigObject, Kind, Meta} from '../../../../../shared/models';
 
 @Component({
-  selector: 'app-entity-details',
-  templateUrl: './entity-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-entity-details',
+    templateUrl: './entity-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class EntityDetailsComponent implements OnChanges {

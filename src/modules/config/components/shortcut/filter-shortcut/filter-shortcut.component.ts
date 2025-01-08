@@ -3,8 +3,9 @@ import {ConfigObject, Kind} from '../../../../../shared/models/config';
 import {Params} from '@angular/router';
 
 @Component({
-  selector: 'app-filter-shortcut',
-  templateUrl: './filter-shortcut.component.html',
+    selector: 'app-filter-shortcut',
+    templateUrl: './filter-shortcut.component.html',
+    standalone: false
 })
 export class FilterShortcutComponent {
   readonly Kind = Kind;

@@ -2,14 +2,15 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 
 @Component({
-  selector: 'app-error-dialog',
-  template: `<h1 mat-dialog-title>{{title}}</h1>
+    selector: 'app-error-dialog',
+    template: `<h1 mat-dialog-title>{{title}}</h1>
   <div mat-dialog-content>{{content}}</div>
   <div mat-dialog-actions>
     <button mat-raised-button color="warn" matDialogClose>Ok</button>
   </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ErrorDialogComponent {
   title: string;

@@ -4,10 +4,11 @@ import {CrawlerStatus} from '../../../shared/models/controller/controller.model'
 
 
 @Component({
-  selector: 'app-crawlerstatus',
-  templateUrl: './crawlerstatus.component.html',
-  styleUrls: ['./crawlerstatus.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawlerstatus',
+    templateUrl: './crawlerstatus.component.html',
+    styleUrls: ['./crawlerstatus.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlerStatusComponent {
   readonly RunStatus = RunStatus;

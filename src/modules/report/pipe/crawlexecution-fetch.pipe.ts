@@ -4,7 +4,8 @@ import {CrawlExecutionStatus} from '../../../shared/models';
 import {Observable, of} from 'rxjs';
 
 @Pipe({
-  name: 'getLatestCrawlExecutionPipe'
+    name: 'getLatestCrawlExecutionPipe',
+    standalone: false
 })
 export class CrawlExecutionFetchPipe implements PipeTransform {
 

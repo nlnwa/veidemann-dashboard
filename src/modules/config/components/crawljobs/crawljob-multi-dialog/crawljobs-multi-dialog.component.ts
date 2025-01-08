@@ -9,9 +9,10 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns'
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-crawljobs-multi-dialog',
-  templateUrl: './crawljobs-multi-dialog.component.html',
-  styleUrls: ['./crawljobs-multi-dialog.component.css']
+    selector: 'app-crawljobs-multi-dialog',
+    templateUrl: './crawljobs-multi-dialog.component.html',
+    styleUrls: ['./crawljobs-multi-dialog.component.css'],
+    standalone: false
 })
 export class CrawlJobMultiDialogComponent extends CrawlJobDetailsComponent implements OnInit {
 

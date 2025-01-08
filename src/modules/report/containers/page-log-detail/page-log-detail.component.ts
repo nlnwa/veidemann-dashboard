@@ -7,9 +7,10 @@ import {Observable} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-crawl-log-detail',
-  templateUrl: './page-log-detail.component.html',
-  styleUrls: ['./page-log-detail.component.scss']
+    selector: 'app-crawl-log-detail',
+    templateUrl: './page-log-detail.component.html',
+    styleUrls: ['./page-log-detail.component.scss'],
+    standalone: false
 })
 export class PageLogDetailComponent extends DetailDirective<PageLog> implements OnInit {
 

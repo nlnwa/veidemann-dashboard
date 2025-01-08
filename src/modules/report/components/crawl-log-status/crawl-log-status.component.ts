@@ -6,11 +6,12 @@ import {DatePipe} from '@angular/common';
 import {FileSizePipe} from 'ngx-filesize';
 
 @Component({
-  selector: 'app-crawl-log-status',
-  templateUrl: './crawl-log-status.component.html',
-  styleUrls: ['./crawl-log-status.component.css'],
-  providers: [DatePipe, FileSizePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawl-log-status',
+    templateUrl: './crawl-log-status.component.html',
+    styleUrls: ['./crawl-log-status.component.css'],
+    providers: [DatePipe, FileSizePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlLogStatusComponent implements OnInit{
   readonly ExtraStatusCodes = ExtraStatusCodes;

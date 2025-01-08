@@ -6,9 +6,10 @@ import {AuthService, SnackBarService} from '../../../../core/services';
 
 
 @Component({
-  selector: 'app-seed-preview',
-  templateUrl: './seed-preview.component.html',
-  styleUrls: ['./seed-preview.component.css']
+    selector: 'app-seed-preview',
+    templateUrl: './seed-preview.component.html',
+    styleUrls: ['./seed-preview.component.css'],
+    standalone: false
 })
 export class SeedPreviewComponent {
   readonly CrawlExecutionState = CrawlExecutionState;

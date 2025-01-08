@@ -33,10 +33,11 @@ export interface ConfigOptions {
 }
 
 @Component({
-  selector: 'app-configs',
-  templateUrl: './config.component.html',
-  styleUrls: ['./config.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-configs',
+    templateUrl: './config.component.html',
+    styleUrls: ['./config.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigComponent implements OnInit {
   readonly Kind = Kind;

@@ -4,10 +4,11 @@ import {map} from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-time',
-  template: `<span class="time">{{time$ | async | date: 'long': 'UTC'}}</span>`,
-  styleUrls: ['./time.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-time',
+    template: `<span class="time">{{time$ | async | date: 'long': 'UTC'}}</span>`,
+    styleUrls: ['./time.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TimeComponent {
   time$: Observable<Date>;

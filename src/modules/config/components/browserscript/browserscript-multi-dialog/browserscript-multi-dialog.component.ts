@@ -9,9 +9,10 @@ import {LabelMultiComponent} from '../../label/label-multi/label-multi.component
 import {MonacoEditorLoaderService} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
-  selector: 'app-browserscript-multi-dialog',
-  templateUrl: './browserscript-multi-dialog.component.html',
-  styleUrls: ['./browserscript-multi-dialog.component.css']
+    selector: 'app-browserscript-multi-dialog',
+    templateUrl: './browserscript-multi-dialog.component.html',
+    styleUrls: ['./browserscript-multi-dialog.component.css'],
+    standalone: false
 })
 export class BrowserScriptMultiDialogComponent extends BrowserScriptDetailsComponent implements OnInit {
 

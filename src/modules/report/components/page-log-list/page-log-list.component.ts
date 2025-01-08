@@ -4,20 +4,21 @@ import {ListDataSource, PageLog} from '../../../../shared/models';
 import {BASE_LIST} from '../../../../shared/directives';
 
 @Component({
-  selector: 'app-pagelog-list',
-  templateUrl: './page-log-list.component.html',
-  styleUrls: [
-    '../../../commons/components/base-list/base-list.scss',
-    '../../../commons/components/base-list/base-list-odd.scss',
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    ListDataSource,
-    {
-      provide: BASE_LIST,
-      useExisting: forwardRef(() => PageLogListComponent)
-    }
-  ]
+    selector: 'app-pagelog-list',
+    templateUrl: './page-log-list.component.html',
+    styleUrls: [
+        '../../../commons/components/base-list/base-list.scss',
+        '../../../commons/components/base-list/base-list-odd.scss',
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        ListDataSource,
+        {
+            provide: BASE_LIST,
+            useExisting: forwardRef(() => PageLogListComponent)
+        }
+    ],
+    standalone: false
 })
 export class PageLogListComponent extends BaseListComponent<PageLog> {
 

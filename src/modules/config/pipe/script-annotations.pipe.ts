@@ -5,7 +5,8 @@ import {Observable} from 'rxjs';
 
 
 @Pipe({
-  name: 'getScriptAnnotations'
+    name: 'getScriptAnnotations',
+    standalone: false
 })
 export class ScriptAnnotationsPipe implements PipeTransform {
   constructor(private configService: ConfigService) {

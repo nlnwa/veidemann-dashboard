@@ -7,7 +7,8 @@ import {ControllerApiService, ReportApiService} from '../../core/services';
 import {CrawlExecutionsListRequest, FieldMask} from '../../../api';
 
 @Pipe({
-  name: 'getUrlQueueForJobExecution'
+    name: 'getUrlQueueForJobExecution',
+    standalone: false
 })
 export class JobexecutionTotalQueuePipe implements PipeTransform {
   constructor(private reportApiService: ReportApiService, private controllerApiService: ControllerApiService) {

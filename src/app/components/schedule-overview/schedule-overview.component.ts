@@ -43,12 +43,13 @@ interface ScheduleValidRange {
 }
 
 @Component({
-  selector: 'app-schedule-overview',
-  templateUrl: './schedule-overview.component.html',
-  styleUrls: ['./schedule-overview.component.css'],
-  providers: [ConfigApiService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.Emulated,
+    selector: 'app-schedule-overview',
+    templateUrl: './schedule-overview.component.html',
+    styleUrls: ['./schedule-overview.component.css'],
+    providers: [ConfigApiService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
+    standalone: false
 })
 export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private crawlJobs: ConfigObject[];

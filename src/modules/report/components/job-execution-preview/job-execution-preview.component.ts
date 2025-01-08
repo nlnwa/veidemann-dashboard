@@ -26,10 +26,11 @@ export enum JobExecutionStatusColor {
 }
 
 @Component({
-  selector: 'app-job-execution-preview',
-  templateUrl: './job-execution-preview.component.html',
-  styleUrls: ['./job-execution-preview.component.css'],
-  providers: [JobexecutionTotalQueuePipe]
+    selector: 'app-job-execution-preview',
+    templateUrl: './job-execution-preview.component.html',
+    styleUrls: ['./job-execution-preview.component.css'],
+    providers: [JobexecutionTotalQueuePipe],
+    standalone: false
 })
 
 

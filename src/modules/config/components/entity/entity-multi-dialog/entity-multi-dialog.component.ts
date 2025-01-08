@@ -8,8 +8,9 @@ import {ConfigObject, Kind, Label} from '../../../../../shared/models/config';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-entity-multi-dialog',
-  templateUrl: './entity-multi-dialog.component.html',
+    selector: 'app-entity-multi-dialog',
+    templateUrl: './entity-multi-dialog.component.html',
+    standalone: false
 })
 export class EntityMultiDialogComponent extends EntityDetailsComponent implements OnInit {
 

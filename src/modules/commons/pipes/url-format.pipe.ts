@@ -3,7 +3,8 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {SedPipe} from '../../report/pipe/sed.pipe';
 
 @Pipe({
-  name: 'urlFormat'
+    name: 'urlFormat',
+    standalone: false
 })
 export class UrlFormatPipe implements PipeTransform {
 

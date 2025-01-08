@@ -7,7 +7,8 @@ import {CrawlExecutionStatus} from '../../../shared/models/report';
 
 
 @Pipe({
-  name: 'getCrawlExecutionStatus'
+    name: 'getCrawlExecutionStatus',
+    standalone: false
 })
 export class CrawlExecutionStatusPipe implements PipeTransform {
 

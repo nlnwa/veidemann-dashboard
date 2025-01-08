@@ -9,9 +9,10 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns'
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-crawlconfig-multi-dialog',
-  templateUrl: './crawlconfig-multi-dialog.component.html',
-  styleUrls: ['./crawlconfig-multi-dialog.component.css']
+    selector: 'app-crawlconfig-multi-dialog',
+    templateUrl: './crawlconfig-multi-dialog.component.html',
+    styleUrls: ['./crawlconfig-multi-dialog.component.css'],
+    standalone: false
 })
 export class CrawlConfigMultiDialogComponent extends CrawlConfigDetailsComponent implements OnInit {
 

@@ -2,9 +2,10 @@ import {Component, Input} from '@angular/core';
 import {CrawlLog} from '../../../../shared/models/log';
 
 @Component({
-  selector: 'app-crawl-log-preview',
-  templateUrl: './crawl-log-preview.component.html',
-  styleUrls: ['./crawl-log-preview.component.css']
+    selector: 'app-crawl-log-preview',
+    templateUrl: './crawl-log-preview.component.html',
+    styleUrls: ['./crawl-log-preview.component.css'],
+    standalone: false
 })
 export class CrawlLogPreviewComponent {
   @Input()

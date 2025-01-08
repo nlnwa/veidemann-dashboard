@@ -18,21 +18,23 @@ import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 @Component({
-  selector: 'app-duration-picker',
-  templateUrl: './duration-picker.component.html',
-  styleUrls: ['./duration-picker.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DurationPickerComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => DurationPickerComponent),
-      multi: true
-    }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-duration-picker',
+    templateUrl: './duration-picker.component.html',
+    styleUrls: ['./duration-picker.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DurationPickerComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => DurationPickerComponent),
+            multi: true
+        }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class DurationPickerComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy {

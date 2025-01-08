@@ -2,7 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {timeToDuration} from '../../../shared/func';
 
 @Pipe({
-  name: 'durationFormat'
+    name: 'durationFormat',
+    standalone: false
 })
 export class DurationFormatPipe implements PipeTransform {
 

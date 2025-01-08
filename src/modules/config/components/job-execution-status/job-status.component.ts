@@ -2,10 +2,11 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {JobExecutionState, JobExecutionStatus} from '../../../../shared/models/report';
 
 @Component({
-  selector: 'app-config-job-execution-status',
-  templateUrl: './job-status.component.html',
-  styleUrls: ['./job-status.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-config-job-execution-status',
+    templateUrl: './job-status.component.html',
+    styleUrls: ['./job-status.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class JobStatusComponent {
   readonly JobExecutionState = JobExecutionState;

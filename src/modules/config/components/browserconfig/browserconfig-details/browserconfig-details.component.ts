@@ -7,9 +7,10 @@ import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model'
 
 
 @Component({
-  selector: 'app-browserconfig-details',
-  templateUrl: './browserconfig-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-browserconfig-details',
+    templateUrl: './browserconfig-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BrowserConfigDetailsComponent implements OnChanges {
   readonly Kind = Kind;

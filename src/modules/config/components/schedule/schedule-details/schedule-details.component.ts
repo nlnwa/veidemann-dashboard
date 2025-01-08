@@ -22,9 +22,10 @@ import {DateTime} from '../../../../../shared/func';
 
 
 @Component({
-  selector: 'app-schedule-details',
-  templateUrl: './schedule-details.component.html',
-  styleUrls: ['./schedule-details.component.css'],
+    selector: 'app-schedule-details',
+    templateUrl: './schedule-details.component.html',
+    styleUrls: ['./schedule-details.component.css'],
+    standalone: false
 })
 export class ScheduleDetailsComponent implements OnChanges {
   @Input()

@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-entity-dialog',
-  templateUrl: './entity-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-entity-dialog',
+    templateUrl: './entity-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EntityDialogComponent extends EntityDetailsComponent implements OnInit {
   constructor(protected fb: UntypedFormBuilder,

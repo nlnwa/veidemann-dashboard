@@ -9,10 +9,11 @@ import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 
 @Component({
-  selector: 'app-crawl-log',
-  templateUrl: './crawl-log.component.html',
-  styleUrls: ['./crawl-log.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawl-log',
+    templateUrl: './crawl-log.component.html',
+    styleUrls: ['./crawl-log.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlLogComponent implements OnInit {
 

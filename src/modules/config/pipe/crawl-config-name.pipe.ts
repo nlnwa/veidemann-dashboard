@@ -7,7 +7,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getCrawlConfigName'
+    name: 'getCrawlConfigName',
+    standalone: false
 })
 export class CrawlConfigNamePipe implements PipeTransform {
 

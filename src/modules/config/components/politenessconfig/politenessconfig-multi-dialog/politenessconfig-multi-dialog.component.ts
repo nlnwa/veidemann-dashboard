@@ -9,9 +9,10 @@ import {NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns'
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-politenessconfig-multi-dialog',
-  templateUrl: './politenessconfig-multi-dialog.component.html',
-  styleUrls: ['./politenessconfig-multi-dialog.component.css']
+    selector: 'app-politenessconfig-multi-dialog',
+    templateUrl: './politenessconfig-multi-dialog.component.html',
+    styleUrls: ['./politenessconfig-multi-dialog.component.css'],
+    standalone: false
 })
 export class PolitenessConfigMultiDialogComponent extends PolitenessConfigDetailsComponent implements OnInit {
 
