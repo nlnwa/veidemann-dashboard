@@ -118,14 +118,7 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.sortDirection && changes.sortActive) {
-      // ugly hack see https://github.com/angular/components/issues/10242 and https://github.com/angular/components/issues/10524
-      const sortHeader = (this.matSort.sortables.get(this.sortActive) as MatSortHeader);
-      if (sortHeader) {
-        sortHeader._setAnimationTransitionState({toState: 'active'});
-      }
-    }
-  }
+   }
 
   ngAfterViewInit() {
 
