@@ -24,13 +24,15 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MAT_DAYJS_DATE_ADAPTER_OPTIONS, MatDayjsDateAdapterModule} from '../dayjs-date-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {NgxMatDatetimePickerModule, NgxMatTimepickerModule} from '@angular-material-components/datetime-picker';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import {MatTimepickerModule} from "@angular/material/timepicker";
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
+import {DayjsDateAdapter, MAT_DAYJS_DATE_ADAPTER_OPTIONS, MAT_DAYJS_DATE_FORMATS} from "../dayjs-date-adapter";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
+import {LocaleService} from "../core/services";
 
 const modules = [
   MatTabsModule,
@@ -55,7 +57,6 @@ const modules = [
   MatPaginatorModule,
   MatSortModule,
   MatDatepickerModule,
-  MatDayjsDateAdapterModule,
   MatButtonToggleModule,
   MatProgressBarModule,
   MatBadgeModule,
@@ -63,16 +64,26 @@ const modules = [
   MatAutocompleteModule,
   MatTreeModule,
   MatProgressSpinnerModule,
-  NgxMatDatetimePickerModule,
-  NgxMatTimepickerModule,
+  MatTimepickerModule,
 ];
 
 @NgModule({
   imports: modules,
   exports: modules,
   providers: [
-    {provide: MAT_DAYJS_DATE_ADAPTER_OPTIONS, useValue: 'no-NO'},
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'}}
+    {
+      provide: DateAdapter,
+      useClass: DayjsDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_DAYJS_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DAYJS_DATE_ADAPTER_OPTIONS, useValue: {useUtc: false}},
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'}},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_DAYJS_DATE_FORMATS},
+    {
+      provide: MAT_DATE_LOCALE,
+      useFactory: (localeService: LocaleService) => localeService.getLocale(),
+      deps: [LocaleService]
+    },
   ]
 })
 export class MaterialModule {
