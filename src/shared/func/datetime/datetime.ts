@@ -67,17 +67,12 @@ export function durationBetweenDates(startTime: string, endTime: string): string
   return formatDuration(dayjs.duration(diff));
 }
 
-const formatter = new Intl.RelativeTimeFormat(navigator.languages, { numeric: 'always' });
 export function formatDuration(d: Duration): string {
-
-  const parts = []
-
-  if (d.days()) parts.push(formatter.format(d.days(), 'day'));
-  if (d.hours()) parts.push(formatter.format(d.hours(), 'hour'));
-  if (d.minutes()) parts.push(formatter.format(d.minutes(), 'minute'));
-  if (d.seconds() || parts.length === 0) parts.push(formatter.format(d.seconds(), 'second'));
-
-  return parts.join(', ').replace(/^\D+/, '');
+  const formatted = d.format("D[days]:H[hours]:m[min]:s[s]");
+  const trimmed = formatted
+    .replace(/(?:^|:)(0\w*(?:\[.*?\])?)+/g, "") // Remove leading `0` in each unit, but avoid leading zeros
+    .replace(/^:+|:+$/g, "")  // Remove any leading or trailing colons
+  return trimmed;
 }
 
 const timeUnitMap: { [key: string]: DurationUnitType } = {
@@ -92,5 +87,7 @@ const timeUnitMap: { [key: string]: DurationUnitType } = {
 }
 
 export function timeToDuration(time: number, unit: string) {
+  console.log('created duration with: ', time, 'unit: ', unit);
+  console.log('object: ', dayjs.duration(time, timeUnitMap[unit]));
   return formatDuration(dayjs.duration(time, timeUnitMap[unit]));
 }

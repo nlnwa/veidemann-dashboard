@@ -35,7 +35,7 @@ import { TestBed, inject, waitForAsync } from '@angular/core/testing';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DayjsDateAdapterModule } from '.';
 
-fdescribe('DayjsDateAdapter', () => {
+describe('DayjsDateAdapter', () => {
     describe('with defaults', () => {
         let adapter: DayjsDateAdapter;
         let assertValidDate: (d: dayjs.Dayjs | null, valid: boolean) => void;
