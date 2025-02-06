@@ -1,57 +1,63 @@
-<div class="container" *ngIf="query$ | async as query">
-  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
-  <div fxLayout="row" class="container no-scroll">
-    <app-job-execution-status-query class="content-padding scroll"
-                                    [crawlJobOptions]="crawlJobOptions"
-                                    [query]="query"
-                                    (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
-    <app-job-execution-status-list fxFlex
-                                   appQueryJobExecutionStatus [query]="query"
-                                   [pageIndex]="pageIndex$ | async"
-                                   [pageSize]="pageSize$ | async"
-                                   [sortDirection]="sortDirection$ | async"
-                                   [sortActive]="sortActive$ | async"
-                                   (sort)="onSort($event)"
-                                   (page)="onPage($event)">
-      <ng-container *appShortcut="let row">
-        <a mat-menu-item
-           *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
-           [routerLink]="['/config', 'crawljobs', row.jobId]"
-           i18n="@@reportListActionButtonGoToCrawljob">
-          <mat-icon>work</mat-icon>
-          Go to crawljob
-        </a>
-      </ng-container>
-      <ng-container *appFilter="let row">
-        <a mat-menu-item
-           *ngIf="'read' | able: 'crawlexecution'"
-           [routerLink]="['/report', 'crawlexecution']"
-           [queryParams]="{job_id: row.jobId, job_execution_id: row.id}"
-           i18n="@@reportListActionButtonGoToCrawlExecution">
-          <mat-icon>hdr_weak</mat-icon>
-          Go to crawl execution
-        </a>
-      </ng-container>
-
-      <ng-container *appAction="let row">
-        <a mat-menu-item
-           *ngIf="'read' | able: 'jobexecution'"
-           [routerLink]="['../jobexecution', row.id]"
-           i18n="@@reportListActionButtonShowFullReport">
-          <mat-icon>keyboard_arrow_right</mat-icon>
-          Show full report
-        </a>
-
-        <ng-container *ngIf="row.state === JobExecutionState.RUNNING">
+<ng-container *ngIf="ability$ | async as ability">
+  <div class="container" *ngIf="query$ | async as query">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
+    <div fxLayout="row" class="container no-scroll">
+      <app-job-execution-status-query class="content-padding scroll"
+                                      [crawlJobOptions]="crawlJobOptions"
+                                      [query]="query"
+                                      (queryChange)="onQueryChange($event)"></app-job-execution-status-query>
+      <app-job-execution-status-list fxFlex
+                                     appQueryJobExecutionStatus [query]="query"
+                                     [pageIndex]="pageIndex$ | async"
+                                     [pageSize]="pageSize$ | async"
+                                     [sortDirection]="sortDirection$ | async"
+                                     [sortActive]="sortActive$ | async"
+                                     (sort)="onSort($event)"
+                                     (page)="onPage($event)">
+        <ng-container *appShortcut="let row">
+<!--          *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
           <a mat-menu-item
-             *ngIf="'abort' | able: 'jobexecution'"
-             (click)="onAbortJobExecution(row)"
-             i18n="@@reportListActionButtonAbortCrawlExecution">
-            <mat-icon>cancel</mat-icon>
-            Abort crawl
+             *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
+             [routerLink]="['/config', 'crawljobs', row.jobId]"
+             i18n="@@reportListActionButtonGoToCrawljob">
+            <mat-icon>work</mat-icon>
+            Go to crawljob
           </a>
         </ng-container>
-      </ng-container>
-    </app-job-execution-status-list>
+        <ng-container *appFilter="let row">
+<!--          *ngIf="'read' | able: 'crawlexecution'"-->
+          <a mat-menu-item
+             *ngIf="ability.can('read', 'crawlexecution')"
+             [routerLink]="['/report', 'crawlexecution']"
+             [queryParams]="{job_id: row.jobId, job_execution_id: row.id}"
+             i18n="@@reportListActionButtonGoToCrawlExecution">
+            <mat-icon>hdr_weak</mat-icon>
+            Go to crawl execution
+          </a>
+        </ng-container>
+
+        <ng-container *appAction="let row">
+<!--          *ngIf="'read' | able: 'jobexecution'"-->
+          <a mat-menu-item
+             *ngIf="ability.can('read', 'jobexecution')"
+             [routerLink]="['../jobexecution', row.id]"
+             i18n="@@reportListActionButtonShowFullReport">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+            Show full report
+          </a>
+
+          <ng-container *ngIf="row.state === JobExecutionState.RUNNING">
+<!--            *ngIf="'abort' | able: 'jobexecution'"-->
+            <a mat-menu-item
+               *ngIf="ability.can('abort', 'jobexecution')"
+               (click)="onAbortJobExecution(row)"
+               i18n="@@reportListActionButtonAbortCrawlExecution">
+              <mat-icon>cancel</mat-icon>
+              Abort crawl
+            </a>
+          </ng-container>
+        </ng-container>
+      </app-job-execution-status-list>
+    </div>
   </div>
-</div>
+</ng-container>

@@ -11,6 +11,7 @@ import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
 import {BASE_LIST} from '../../../../shared/directives';
 import {PageLogListComponent} from '../../components';
+import {AbilityService} from '@casl/angular';
 
 @Component({
     selector: 'app-pagelog',
@@ -26,6 +27,7 @@ import {PageLogListComponent} from '../../components';
     standalone: false
 })
 export class PageLogComponent implements OnInit {
+  readonly ability$: Observable<any>;
 
   pageSize$: Observable<number>;
   pageIndex$: Observable<number>;
@@ -41,7 +43,9 @@ export class PageLogComponent implements OnInit {
               private router: Router,
               private fb: UntypedFormBuilder,
               private pageLogService: PageLogService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              abilityService: AbilityService<any>) {
+    this.ability$ = abilityService.ability$;
   }
 
   ngOnInit(): void {

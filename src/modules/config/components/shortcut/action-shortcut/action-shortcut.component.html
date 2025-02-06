@@ -1,12 +1,13 @@
-<mat-nav-list>
+<mat-nav-list *ngIf="ability$ | async as ability">
   <div mat-subheader i18n="@@actionShortcutListTitle">
     Actions
   </div>
   <ng-container [ngSwitch]="configObject.kind">
 
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
+<!--      *ngIf="'create' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
-         *ngIf="'create' | able: Kind[Kind.SEED]"
+         *ngIf="ability.can('create', Kind[Kind.SEED])"
          (click)="onCreateSeed()"
          matTooltip="Create a new seed with reference to the entity"
          i18n-matTooltip="@@crawlEntityListCreateSeedActionButtonTooltip">
@@ -16,8 +17,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.SEED">
+<!--      *ngIf="'runCrawl' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
-         *ngIf="'runCrawl' | able: Kind[Kind.SEED]"
+         *ngIf="ability.can('runCrawl', Kind[Kind.SEED])"
          (click)="onRunCrawl()">
         <mat-icon matListItemIcon>play_arrow</mat-icon>
         Crawl seed
@@ -25,8 +27,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.CRAWLJOB">
+<!--      *ngIf="'runCrawl' | able: Kind[Kind.CRAWLJOB]"-->
       <a mat-list-item
-         *ngIf="'runCrawl' | able: Kind[Kind.CRAWLJOB]"
+         *ngIf="ability.can('runCrawl', Kind[Kind.CRAWLJOB])"
          (click)="onRunCrawl()">
         <mat-icon matListItemIcon>play_arrow</mat-icon>
         Run crawljob
@@ -34,8 +37,9 @@
     </ng-container>
 
   </ng-container>
+  <!-- *ngIf="'create' | able: Kind[this.configObject.kind]"-->
   <a mat-list-item
-     *ngIf="'create' | able: Kind[this.configObject.kind]"
+     *ngIf="ability.can('create', Kind[this.configObject.kind])"
      (click)="onClone()">
     <mat-icon matListItemIcon>file_copy</mat-icon>
     Clone

@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CrawlLog} from '../../../../shared/models';
+import {Observable} from 'rxjs';
+import {AbilityService} from '@casl/angular';
 
 @Component({
     selector: 'app-crawl-log-shortcuts',
@@ -8,9 +10,11 @@ import {CrawlLog} from '../../../../shared/models';
     standalone: false
 })
 export class CrawlLogShortcutsComponent {
+  readonly ability$: Observable<any>
 
   @Input() crawlLog: CrawlLog;
 
-  constructor() {
+  constructor(abilityService: AbilityService<any>) {
+    this.ability$ = abilityService.ability$;
   }
 }

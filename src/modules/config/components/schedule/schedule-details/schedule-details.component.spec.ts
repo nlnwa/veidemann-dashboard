@@ -7,7 +7,6 @@ import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
@@ -72,7 +71,6 @@ describe('ScheduleDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         CommonsModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot(),

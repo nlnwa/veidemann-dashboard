@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CrawlExecutionState, CrawlExecutionStatus, Kind} from 'src/shared/models';
 import {Observable, Subject} from 'rxjs';
+import {AbilityService} from '@casl/angular';
 
 @Component({
     selector: 'app-crawl-execution-shortcuts',
@@ -10,6 +11,7 @@ import {Observable, Subject} from 'rxjs';
 })
 export class CrawlExecutionShortcutsComponent {
   readonly Kind = Kind;
+  readonly ability$: Observable<any>;
 
   private reload$: Observable<void>;
   private reload: Subject<void>;
@@ -20,9 +22,10 @@ export class CrawlExecutionShortcutsComponent {
   @Output()
   abortCrawlExecution = new EventEmitter<CrawlExecutionStatus>();
 
-  constructor() {
+  constructor(abilityService: AbilityService<any>) {
     this.reload = new Subject<void>();
     this.reload$ = this.reload.asObservable();
+    this.ability$ = abilityService.ability$;
   }
 
   onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus) {

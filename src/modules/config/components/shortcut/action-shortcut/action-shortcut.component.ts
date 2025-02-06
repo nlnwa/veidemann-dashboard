@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ConfigObject, Kind} from '../../../../../shared/models/config';
+import {Observable} from "rxjs";
+import {AbilityService} from "@casl/angular";
 
 @Component({
     selector: 'app-action-shortcut',
@@ -8,6 +10,7 @@ import {ConfigObject, Kind} from '../../../../../shared/models/config';
 })
 export class ActionShortcutComponent {
   readonly Kind = Kind;
+  readonly ability$: Observable<any>
 
   @Input()
   configObject: ConfigObject;
@@ -22,7 +25,8 @@ export class ActionShortcutComponent {
   clone = new EventEmitter();
 
 
-  constructor() {
+  constructor(ableService: AbilityService<any>) {
+    this.ability$ = ableService.ability$;
   }
 
   onClone() {

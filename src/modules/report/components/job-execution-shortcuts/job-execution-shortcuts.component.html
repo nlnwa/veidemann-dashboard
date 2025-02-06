@@ -1,31 +1,36 @@
-<mat-nav-list>
-  <div mat-subheader>Shortcuts</div>
-  <a mat-list-item
-     *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
-     [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]"
-     i18n="@@reportListActionButtonGoToCrawljob">
-    <mat-icon matListItemIcon>work</mat-icon>
-    Go to crawljob
-  </a>
-</mat-nav-list>
-<mat-nav-list>
-  <div mat-subheader>Filters</div>
-  <a mat-list-item
-     *ngIf="'read' | able: 'crawlexecution'"
-     [routerLink]="['/report', 'crawlexecution']"
-     [queryParams]="{job_id: jobExecutionStatus.jobId, job_execution_id: jobExecutionStatus.id}"
-     i18n="@@reportListActionButtonGoToCrawlExecution">
-    <mat-icon matListItemIcon>hdr_weak</mat-icon>
-    Go to crawl execution
-  </a>
-</mat-nav-list>
-<mat-nav-list *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING">
-  <div mat-subheader>Actions</div>
-  <a mat-list-item
-     *ngIf="'abort' | able: 'jobexecution'"
-     (click)="onAbortJobExecution(jobExecutionStatus)"
-     i18n="@@reportListActionButtonAbortCrawlExecution">
-    <mat-icon matListItemIcon>cancel</mat-icon>
-    Abort crawl
-  </a>
-</mat-nav-list>
+<ng-container *ngIf="ability$ | async as ability">
+  <mat-nav-list>
+    <div mat-subheader>Shortcuts</div>
+<!--    *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
+    <a mat-list-item
+       *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
+       [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]"
+       i18n="@@reportListActionButtonGoToCrawljob">
+      <mat-icon matListItemIcon>work</mat-icon>
+      Go to crawljob
+    </a>
+  </mat-nav-list>
+  <mat-nav-list>
+    <div mat-subheader>Filters</div>
+<!--    *ngIf="'read' | able: 'crawlexecution'"-->
+    <a mat-list-item
+       *ngIf="ability.can('read', 'crawlexecution')"
+       [routerLink]="['/report', 'crawlexecution']"
+       [queryParams]="{job_id: jobExecutionStatus.jobId, job_execution_id: jobExecutionStatus.id}"
+       i18n="@@reportListActionButtonGoToCrawlExecution">
+      <mat-icon matListItemIcon>hdr_weak</mat-icon>
+      Go to crawl execution
+    </a>
+  </mat-nav-list>
+  <mat-nav-list *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING">
+    <div mat-subheader>Actions</div>
+<!--    *ngIf="'abort' | able: 'jobexecution'"-->
+    <a mat-list-item
+       *ngIf="ability.can('abort', 'jobexecution')"
+       (click)="onAbortJobExecution(jobExecutionStatus)"
+       i18n="@@reportListActionButtonAbortCrawlExecution">
+      <mat-icon matListItemIcon>cancel</mat-icon>
+      Abort crawl
+    </a>
+  </mat-nav-list>
+</ng-container>

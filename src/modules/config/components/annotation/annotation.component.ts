@@ -15,6 +15,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {NO_COLON} from '../../../../shared/validation/patterns';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AuthService} from '../../../core/services/auth';
+import {AbilityService} from "@casl/angular";
 
 @Component({
     selector: 'app-annotation',
@@ -25,6 +26,7 @@ import {AuthService} from '../../../core/services/auth';
     standalone: false
 })
 export class AnnotationComponent implements ControlValueAccessor, OnInit {
+  readonly ability$: Observable<any>;
 
   @Input() removable = true;
 
@@ -50,8 +52,10 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
 
   constructor(protected fb: UntypedFormBuilder,
               protected cdr: ChangeDetectorRef,
-              protected authService: AuthService) {
+              protected authService: AuthService,
+              abilityService: AbilityService<any>) {
     this.createForm();
+    this.ability$ = abilityService.ability$;
   }
 
   get canEdit(): boolean {

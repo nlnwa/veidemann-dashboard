@@ -1,12 +1,11 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../core.testing.module';
 import {GuardService} from './guard.service';
 
 describe('GuardService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule],
+      imports: [CoreTestingModule.forRoot()],
       providers: [GuardService]
     });
   });

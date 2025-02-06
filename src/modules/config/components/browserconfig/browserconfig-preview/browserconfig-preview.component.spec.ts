@@ -4,7 +4,6 @@ import {BrowserconfigPreviewComponent} from './browserconfig-preview.component';
 import {CommonsModule} from '../../../../commons';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ShortcutListComponent} from '../../shortcut/shortcut-list/shortcut-list.component';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 
 describe('BrowserconfigPreviewComponent', () => {
@@ -13,7 +12,7 @@ describe('BrowserconfigPreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule, CoreTestingModule.forRoot(), AbilityModule],
+      imports: [CommonsModule, CoreTestingModule.forRoot()],
       declarations: [BrowserconfigPreviewComponent, ShortcutListComponent],
       providers: []
     })

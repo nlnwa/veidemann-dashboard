@@ -1,17 +1,9 @@
-import {APP_INITIALIZER, ErrorHandler, LOCALE_ID, NgModule} from '@angular/core';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {APP_INITIALIZER, LOCALE_ID, NgModule} from '@angular/core';
 import {OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
 import {JwksValidationHandler} from 'angular-oauth2-oidc-jwks';
-import {
-  AppInitializerService,
-  ApplicationErrorHandler,
-  AuthService,
-  ControllerApiService,
-  LocaleService,
-  TokenInterceptor,
-} from './services';
+import {AppInitializerService, AuthService, ControllerApiService, LocaleService,} from './services';
 import {AppConfig} from './models/app-config.model';
-import {Ability, PureAbility} from '@casl/ability';
+import {createMongoAbility, PureAbility} from '@casl/ability';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
 @NgModule({
@@ -33,8 +25,7 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
       deps: [AppInitializerService, AppConfig, OAuthService, ControllerApiService, AuthService],
       multi: true
     },
-    {provide: Ability, useValue: new Ability()},
-    {provide: PureAbility, useExisting: Ability},
+    {provide: PureAbility, useValue: createMongoAbility()},
   ]
 })
 export class CoreModule {

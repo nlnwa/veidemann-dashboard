@@ -4,7 +4,6 @@ import {AnnotationComponent} from './annotation.component';
 import {UntypedFormBuilder} from '@angular/forms';
 import {AuthService} from '../../../core/services/auth';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {AbilityModule} from '@casl/angular';
 
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
@@ -12,7 +11,7 @@ describe('AnnotationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule],
+      imports: [CoreTestingModule.forRoot()],
       providers: [UntypedFormBuilder,
         {
           provide: AuthService,

@@ -2,7 +2,6 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PageLogShortcutsComponent} from './page-log-shortcuts.component';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {AbilityModule} from '@casl/angular';
 import {CommonsModule} from '../../../commons';
 
 describe('PageLogShortcutsComponent', () => {
@@ -15,7 +14,7 @@ describe('PageLogShortcutsComponent', () => {
       imports: [
         CommonsModule,
         CoreTestingModule.forRoot(),
-        AbilityModule]
+        ]
     })
       .compileComponents();
   });

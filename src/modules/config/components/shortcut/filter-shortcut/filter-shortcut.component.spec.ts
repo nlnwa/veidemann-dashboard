@@ -3,7 +3,6 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FilterShortcutComponent} from './filter-shortcut.component';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
-import {AbilityModule} from '@casl/angular';
 import {MatListModule} from '@angular/material/list';
 
 describe('FilterShortcutComponent', () => {
@@ -12,7 +11,7 @@ describe('FilterShortcutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule, MatListModule],
+      imports: [CoreTestingModule.forRoot(), MatListModule],
       declarations: [FilterShortcutComponent],
       providers: []
     })

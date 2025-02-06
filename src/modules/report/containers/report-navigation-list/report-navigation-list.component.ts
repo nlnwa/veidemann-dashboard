@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../../../core/services/auth';
 import {NavigationListComponent} from '../../../commons/components';
+import {Observable} from 'rxjs';
+import {AbilityService} from '@casl/angular';
 
 @Component({
     selector: 'app-report-navigation-list',
@@ -9,8 +11,9 @@ import {NavigationListComponent} from '../../../commons/components';
     standalone: false
 })
 export class ReportNavigationListComponent extends NavigationListComponent {
+  readonly ability$: Observable<any>;
 
-  constructor(protected authService: AuthService) {
+  constructor(protected authService: AuthService, abilityService: AbilityService<any>) {
     super(authService);
   }
 }

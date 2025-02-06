@@ -12,7 +12,6 @@ import {AuthService} from '../../../../core/services';
 import {DurationPickerComponent} from '../../durationpicker/duration-picker';
 import {CommonsModule} from '../../../../commons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {AbilityModule} from '@casl/angular';
 import {of} from 'rxjs';
 
 describe('CrawlHostGroupConfigMultiDialogComponent', () => {
@@ -26,7 +25,7 @@ describe('CrawlHostGroupConfigMultiDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule, CommonsModule, NoopAnimationsModule],
+      imports: [CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
       providers: [UntypedFormBuilder,
         {
           provide: LabelService,

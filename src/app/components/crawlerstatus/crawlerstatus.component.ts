@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {RunStatus} from '../../../shared/models/controller';
 import {CrawlerStatus} from '../../../shared/models/controller/controller.model';
+import {Observable} from "rxjs";
+import {AbilityService} from "@casl/angular";
 
 
 @Component({
@@ -12,6 +14,10 @@ import {CrawlerStatus} from '../../../shared/models/controller/controller.model'
 })
 export class CrawlerStatusComponent {
   readonly RunStatus = RunStatus;
+  readonly ability$: Observable<any>;
+  constructor(abilityService: AbilityService<any>) {
+    this.ability$ = abilityService.ability$;
+  }
 
   @Input()
   crawlerStatus: CrawlerStatus;

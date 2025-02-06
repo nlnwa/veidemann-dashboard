@@ -7,7 +7,6 @@ import {LabelService} from '../../services';
 import {of} from 'rxjs';
 import {AnnotationComponent, LabelComponent} from '..';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {AbilityModule} from '@casl/angular';
 import {CommonsModule} from '../../../commons';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
@@ -104,7 +103,6 @@ describe('SeedMetaComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        AbilityModule,
         MaterialModule,
         CommonsModule,
         CoreTestingModule.forRoot(),

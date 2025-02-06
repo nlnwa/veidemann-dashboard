@@ -5,6 +5,7 @@ import {ControllerApiService, ErrorService} from '../../../modules/core/services
 import {CrawlerStatusDialogComponent} from '../index';
 import {MatDialog} from '@angular/material/dialog';
 import {CrawlerStatus} from '../../../shared/models/controller/controller.model';
+import {AbilityService} from "@casl/angular";
 
 @Component({
     selector: 'app-home',
@@ -13,13 +14,16 @@ import {CrawlerStatus} from '../../../shared/models/controller/controller.model'
     standalone: false
 })
 export class HomeComponent implements OnInit {
+  readonly ability$: Observable<any>;
 
   updateRunStatus: Subject<void> = new Subject();
   crawlerStatus$: Observable<CrawlerStatus>;
 
   constructor(private errorService: ErrorService,
               private controllerApiService: ControllerApiService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              abilityService: AbilityService<any>) {
+    this.ability$ = abilityService.ability$;
   }
 
   ngOnInit(): void {

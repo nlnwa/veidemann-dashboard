@@ -1,12 +1,11 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CrawlExecutionShortcutsComponent} from './crawl-execution-shortcuts.component';
-import {AbilityModule} from '@casl/angular';
 import {CommonsModule} from '../../../commons';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreTestingModule} from '../../../core/core.testing.module';
-import {ConfigObject, CrawlExecutionStatus} from '../../../../shared/models';
+import {CrawlExecutionStatus} from '../../../../shared/models';
 
 describe('CrawlExecutionShortcutsComponent', () => {
   let component: CrawlExecutionShortcutsComponent;
@@ -15,7 +14,7 @@ describe('CrawlExecutionShortcutsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CrawlExecutionShortcutsComponent],
-      imports: [AbilityModule, CommonsModule, RouterTestingModule, NoopAnimationsModule, CoreTestingModule.forRoot()]
+      imports: [CommonsModule, RouterTestingModule, NoopAnimationsModule, CoreTestingModule.forRoot()]
     })
       .compileComponents();
   });

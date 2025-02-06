@@ -19,7 +19,6 @@ import {
   Label,
   Meta
 } from '../../../../../shared/models';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MockComponent} from 'ng-mocks';
@@ -122,7 +121,6 @@ describe('BrowserConfigDetailsComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        AbilityModule,
         MaterialModule,
         RouterTestingModule,
         CoreTestingModule.forRoot(),

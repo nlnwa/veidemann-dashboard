@@ -9,7 +9,6 @@ import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
 import {ConfigDialogData} from '../../../func';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 
 describe('ScheduleDialogComponent', () => {
@@ -24,7 +23,7 @@ describe('ScheduleDialogComponent', () => {
     {
       component: ScheduleDialogComponent,
       declarations: [MetaComponent, LabelComponent, AnnotationComponent],
-      imports: [AbilityModule, CoreTestingModule.forRoot(), MatDialogModule, CommonsModule],
+      imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule],
       providers: [UntypedFormBuilder,
         {
           provide: LabelService,

@@ -7,15 +7,17 @@ import {CrawlLogQuery, CrawlLogService} from '../../services';
 import {debounceTime, distinctUntilChanged, map, share, shareReplay} from 'rxjs/operators';
 import {PageEvent} from '@angular/material/paginator';
 import {Sort} from '../../../../shared/func';
+import {AbilityService} from '@casl/angular';
 
 @Component({
-    selector: 'app-crawl-log',
-    templateUrl: './crawl-log.component.html',
-    styleUrls: ['./crawl-log.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-crawl-log',
+  templateUrl: './crawl-log.component.html',
+  styleUrls: ['./crawl-log.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class CrawlLogComponent implements OnInit {
+  readonly ability$: Observable<any>;
 
   pageLength$: Observable<number>;
   pageSize$: Observable<number>;
@@ -31,7 +33,10 @@ export class CrawlLogComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private crawlLogService: CrawlLogService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              abilityService: AbilityService<any>
+  ) {
+    this.ability$ = abilityService.ability$;
   }
 
   ngOnInit(): void {

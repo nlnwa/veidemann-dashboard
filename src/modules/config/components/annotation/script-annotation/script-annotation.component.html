@@ -1,7 +1,10 @@
-<div fxLayout="column" *ngIf="'read' | able: 'annotation'">
+<ng-container *ngIf="ability$ | async as ability">
+<!--  <div fxLayout="column" *ngIf="'read' | able: 'annotation'">-->
+<div fxLayout="column" *ngIf="ability.can('read', 'annotation')">
   <mat-chip-listbox *ngIf="annotations" [selectable]="false">
     <mat-chip-option *ngFor="let annotation of annotations">
       {{annotation.key}}:{{annotation.value}}
     </mat-chip-option>
   </mat-chip-listbox>
 </div>
+</ng-container>

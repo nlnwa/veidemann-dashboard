@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ConfigObject, Kind} from '../../../../../shared/models/config';
 import {Params} from '@angular/router';
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-filter-shortcut',
@@ -9,6 +10,7 @@ import {Params} from '@angular/router';
 })
 export class FilterShortcutComponent {
   readonly Kind = Kind;
+  readonly ability$: Observable<any>;
 
   @Input()
   configObject: ConfigObject;

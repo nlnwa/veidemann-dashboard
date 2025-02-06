@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {PageLog} from '../../../../shared/models';
+import {Observable} from 'rxjs';
+import {AbilityService} from '@casl/angular';
 
 @Component({
     selector: 'app-page-log-shortcuts',
@@ -8,9 +10,11 @@ import {PageLog} from '../../../../shared/models';
     standalone: false
 })
 export class PageLogShortcutsComponent {
+  readonly ability$: Observable<any>
 
   @Input() pageLog: PageLog;
 
-  constructor() {
+  constructor(abilityService: AbilityService<any>) {
+    this.ability$ = abilityService.ability$;
   }
 }

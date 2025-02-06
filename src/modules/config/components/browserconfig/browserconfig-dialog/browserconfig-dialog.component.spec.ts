@@ -11,7 +11,6 @@ import {ConfigDialogData} from '../../../func';
 import {LabelService} from '../../../services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
 
@@ -31,7 +30,6 @@ describe('BrowserConfigDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CoreTestingModule.forRoot(),
-        AbilityModule,
         CommonsModule,
         NoopAnimationsModule,
         MatDialogModule, ReactiveFormsModule],

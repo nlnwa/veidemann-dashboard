@@ -1,66 +1,69 @@
-<div fxLayout="column" *ngIf="'read' | able: 'annotation'">
-  <form>
-    <mat-form-field>
-      <mat-label i18n="@@annotationListInputLabel">Annotation</mat-label>
-      <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
-        <ng-container *ngFor="let group of groups$ | async">
-          <mat-chip-row *ngFor="let value of group.values"
-                    [removable]="removable"
-                    (removed)="onRemoveAnnotation(group.key, value)"
-                    (click)="onClickAnnotation(group.key, value)"
-                    color="primary" selected>
-            {{group.key + ':' + value}}
-            <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
-          </mat-chip-row>
-        </ng-container>
-        <input #chipInput
-               matInput
-               [formControl]="control"
-               placeholder="New annotation..."
-               i18n-placeholder="@@annotationChipListPlaceholder"
-               [matChipInputFor]="chipList"
-               [matChipInputSeparatorKeyCodes]="annotationInputSeparators"
-               (matChipInputTokenEnd)="onSave($event)"
-        >
-      </mat-chip-grid>
-    </mat-form-field>
-  </form>
+<ng-container *ngIf="ability$ | async as ability">
+<!--  <div fxLayout="column" *ngIf="'read' | able: 'annotation'">-->
+  <div fxLayout="column" *ngIf="ability.can('read', 'annotation')">
+    <form>
+      <mat-form-field>
+        <mat-label i18n="@@annotationListInputLabel">Annotation</mat-label>
+        <mat-chip-grid [disabled]="disabled" #chipList fxLayout="row wrap" fxLayoutGap="8px">
+          <ng-container *ngFor="let group of groups$ | async">
+            <mat-chip-row *ngFor="let value of group.values"
+                          [removable]="removable"
+                          (removed)="onRemoveAnnotation(group.key, value)"
+                          (click)="onClickAnnotation(group.key, value)"
+                          color="primary" selected>
+              {{ group.key + ':' + value }}
+              <mat-icon matChipRemove *ngIf="removable && !disabled">cancel</mat-icon>
+            </mat-chip-row>
+          </ng-container>
+          <input #chipInput
+                 matInput
+                 [formControl]="control"
+                 placeholder="New annotation..."
+                 i18n-placeholder="@@annotationChipListPlaceholder"
+                 [matChipInputFor]="chipList"
+                 [matChipInputSeparatorKeyCodes]="annotationInputSeparators"
+                 (matChipInputTokenEnd)="onSave($event)"
+          >
+        </mat-chip-grid>
+      </mat-form-field>
+    </form>
 
-  <form [formGroup]="annotationForm" *ngIf="canUpdate && annotationForm.enabled">
-    <mat-card appearance="outlined" class="label-form">
-      <mat-card-header>
-        <mat-icon mat-card-avatar>note</mat-icon>
-        <mat-card-title i18n="@@annotationEditCardTitle">Edit annotation</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="newLabelCard" fxLayout="row" fxLayoutGap="16px">
-        <mat-form-field fxFlex>
-          <input #newKey matInput placeholder="Key" formControlName="key"
-                 i18n-placeholder="@@annotationFormAddNewKeyPlaceholder">
-          <mat-error *ngIf="!key.valid"
-                     i18n="@@annotationKeyEmptyError">
-            Can't be empty or contain a colon.
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field fxFlex>
-          <input #newValue matInput placeholder="Value" formControlName="value"
-                 i18n-placeholder="@@annotationFormAddNewValuePlaceholder">
-          <mat-error *ngIf="!value.valid"
-                     i18n="@@annotationValueEmptyError">
-            Can't be empty.
-          </mat-error>
-        </mat-form-field>
-      </mat-card-content>
+    <form [formGroup]="annotationForm" *ngIf="canUpdate && annotationForm.enabled">
+      <mat-card appearance="outlined" class="label-form">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>note</mat-icon>
+          <mat-card-title i18n="@@annotationEditCardTitle">Edit annotation</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="newLabelCard" fxLayout="row" fxLayoutGap="16px">
+          <mat-form-field fxFlex>
+            <input #newKey matInput placeholder="Key" formControlName="key"
+                   i18n-placeholder="@@annotationFormAddNewKeyPlaceholder">
+            <mat-error *ngIf="!key.valid"
+                       i18n="@@annotationKeyEmptyError">
+              Can't be empty or contain a colon.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <input #newValue matInput placeholder="Value" formControlName="value"
+                   i18n-placeholder="@@annotationFormAddNewValuePlaceholder">
+            <mat-error *ngIf="!value.valid"
+                       i18n="@@annotationValueEmptyError">
+              Can't be empty.
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
 
-      <mat-card-actions>
-        <button mat-raised-button color="accent"
-                *ngIf="showUpdate"
-                [disabled]="!(annotationForm.valid && annotationForm.dirty)"
-                (click)="onUpdateAnnotation(newKey.value, newValue.value)">OK
-        </button>
-        <button i18n="@@commonButtonCancel" mat-button
-                (click)="onAbort()">CANCEL
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </form>
-</div>
+        <mat-card-actions>
+          <button mat-raised-button color="accent"
+                  *ngIf="showUpdate"
+                  [disabled]="!(annotationForm.valid && annotationForm.dirty)"
+                  (click)="onUpdateAnnotation(newKey.value, newValue.value)">OK
+          </button>
+          <button i18n="@@commonButtonCancel" mat-button
+                  (click)="onAbort()">CANCEL
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
+</ng-container>

@@ -17,7 +17,6 @@ import {
   RobotsPolicy
 } from '../../../../../shared/models';
 import {AnnotationComponent, DurationPickerComponent, LabelComponent, MetaComponent} from '../..';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
@@ -68,7 +67,6 @@ describe('PolitenessConfigDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         RouterTestingModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot(),

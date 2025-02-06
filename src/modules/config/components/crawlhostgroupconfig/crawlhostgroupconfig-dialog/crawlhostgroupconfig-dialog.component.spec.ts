@@ -12,7 +12,6 @@ import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AnnotationComponent} from '../../annotation/annotation.component';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {DurationPickerComponent} from '../../durationpicker/duration-picker';
 
@@ -27,7 +26,7 @@ describe('CrawlHostGroupConfigDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule, CommonsModule, NoopAnimationsModule],
+      imports: [CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
       providers: [
         {
           provide: LabelService,

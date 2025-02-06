@@ -18,7 +18,6 @@ import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AuthService} from '../../../../core/services/auth';
 import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
-import {AbilityModule} from '@casl/angular';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
 import {MatSelectHarness} from '@angular/material/select/testing';
@@ -66,7 +65,6 @@ describe('BrowserScriptDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         RouterTestingModule,
         CommonsModule,
         NoopAnimationsModule,

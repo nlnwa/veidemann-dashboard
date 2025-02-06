@@ -1,11 +1,13 @@
 <div *ngIf="crawlerStatus" fxLayout="row" fxLayoutGap="16px">
+  <ng-container *ngIf="ability$ | async as ability">
   <mat-card appearance="outlined">
     <h2>Crawler status</h2>
     <mat-card-content>
       <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.RUNNING">
         <h1 class="crawlerRunning">RUNNING</h1>
+        <!-- *ngIf="'update' | able: 'crawlerStatus'" -->
         <button mat-raised-button
-                *ngIf="'update' | able: 'crawlerStatus'"
+                *ngIf="ability.can('update', 'crawlerStatus')"
                 matTooltip="Pause crawler"
                 i18n-matTooltip="@@crawlerStatusPauseCrawlerButtonTooltip"
                 (click)="onPauseCrawler(true)">
@@ -22,8 +24,9 @@
 
       <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.PAUSED">
         <h1 class="crawlerPaused">PAUSED</h1>
+        <!-- *ngIf="'update' | able: 'crawlerStatus'" -->
         <button mat-raised-button
-                *ngIf="'update' | able: 'crawlerStatus'"
+                *ngIf="ability.can('update', 'crawlerStatus')"
                 matTooltip="Unpause crawler"
                 i18n-matTooltip="@@crawlerStatusUnpauseCrawlerButtonTooltip"
                 (click)="onPauseCrawler(false)">
@@ -43,4 +46,5 @@
     <h2>Busy crawlhost groups</h2>
     <h1>{{ crawlerStatus.busyCrawlHostGroupCount }}</h1>
   </mat-card>
+  </ng-container>
 </div>
