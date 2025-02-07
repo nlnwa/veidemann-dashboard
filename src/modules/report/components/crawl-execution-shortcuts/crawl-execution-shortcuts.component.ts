@@ -22,10 +22,10 @@ export class CrawlExecutionShortcutsComponent {
   @Output()
   abortCrawlExecution = new EventEmitter<CrawlExecutionStatus>();
 
-  constructor(abilityService: AbilityService<any>) {
+  constructor(private abilityService: AbilityService<any>) {
     this.reload = new Subject<void>();
     this.reload$ = this.reload.asObservable();
-    this.ability$ = abilityService.ability$;
+    this.ability$ = this.abilityService.ability$;
   }
 
   onAbortCrawlExecution(crawlExecutionStatus: CrawlExecutionStatus) {

@@ -1,7 +1,7 @@
 <ng-container *ngIf="ability$ | async as ability">
   <mat-nav-list>
     <div mat-subheader>Shortcuts</div>
-<!--    *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
+
     <a mat-list-item
        *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
        [routerLink]="['/config', 'crawljobs', jobExecutionStatus.jobId]"
@@ -12,7 +12,7 @@
   </mat-nav-list>
   <mat-nav-list>
     <div mat-subheader>Filters</div>
-<!--    *ngIf="'read' | able: 'crawlexecution'"-->
+
     <a mat-list-item
        *ngIf="ability.can('read', 'crawlexecution')"
        [routerLink]="['/report', 'crawlexecution']"
@@ -24,7 +24,7 @@
   </mat-nav-list>
   <mat-nav-list *ngIf="jobExecutionStatus.state === JobExecutionState.RUNNING">
     <div mat-subheader>Actions</div>
-<!--    *ngIf="'abort' | able: 'jobexecution'"-->
+
     <a mat-list-item
        *ngIf="ability.can('abort', 'jobexecution')"
        (click)="onAbortJobExecution(jobExecutionStatus)"

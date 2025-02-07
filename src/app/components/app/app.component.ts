@@ -39,8 +39,8 @@ export class AppComponent implements OnInit, AfterViewInit {
               private snackBarService: SnackBarService,
               private dialog: MatDialog,
               private errorService: ErrorService,
-              abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+              private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
       map(event => {

@@ -5,7 +5,6 @@
     <mat-card-content>
       <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.RUNNING">
         <h1 class="crawlerRunning">RUNNING</h1>
-        <!-- *ngIf="'update' | able: 'crawlerStatus'" -->
         <button mat-raised-button
                 *ngIf="ability.can('update', 'crawlerStatus')"
                 matTooltip="Pause crawler"
@@ -24,7 +23,6 @@
 
       <div fxLayout="column" *ngIf="crawlerStatus.runStatus === RunStatus.PAUSED">
         <h1 class="crawlerPaused">PAUSED</h1>
-        <!-- *ngIf="'update' | able: 'crawlerStatus'" -->
         <button mat-raised-button
                 *ngIf="ability.can('update', 'crawlerStatus')"
                 matTooltip="Unpause crawler"

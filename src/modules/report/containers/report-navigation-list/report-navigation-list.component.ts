@@ -13,7 +13,9 @@ import {AbilityService} from '@casl/angular';
 export class ReportNavigationListComponent extends NavigationListComponent {
   readonly ability$: Observable<any>;
 
-  constructor(protected authService: AuthService, abilityService: AbilityService<any>) {
+  constructor(protected authService: AuthService,
+              private abilityService: AbilityService<any>) {
     super(authService);
+    this.ability$ = this.abilityService.ability$;
   }
 }

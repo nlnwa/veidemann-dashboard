@@ -53,9 +53,9 @@ export class AnnotationComponent implements ControlValueAccessor, OnInit {
   constructor(protected fb: UntypedFormBuilder,
               protected cdr: ChangeDetectorRef,
               protected authService: AuthService,
-              abilityService: AbilityService<any>) {
+              private abilityService: AbilityService<any>) {
     this.createForm();
-    this.ability$ = abilityService.ability$;
+    this.ability$ = this.abilityService.ability$;
   }
 
   get canEdit(): boolean {

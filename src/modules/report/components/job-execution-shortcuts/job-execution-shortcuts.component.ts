@@ -19,8 +19,8 @@ export class JobExecutionShortcutsComponent {
   @Output()
   abortJobExecution = new EventEmitter<JobExecutionStatus>();
 
-  constructor(abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+  constructor(private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 
   onAbortJobExecution(jobExecutionStatus: JobExecutionStatus) {

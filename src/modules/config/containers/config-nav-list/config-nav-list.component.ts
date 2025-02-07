@@ -28,8 +28,8 @@ export class ConfigNavListComponent extends NavigationListComponent {
   @Input()
   options: ConfigOptions;
 
-  constructor(protected authService: AuthService, private router: Router, abilityService: AbilityService<any>) {
+  constructor(protected authService: AuthService, private router: Router, private abilityService: AbilityService<any>) {
     super(authService);
-    this.ability$ = abilityService.ability$;
+    this.ability$ = this.abilityService.ability$;
   }
 }

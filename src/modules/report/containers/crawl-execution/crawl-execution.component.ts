@@ -57,12 +57,12 @@ export class CrawlExecutionComponent implements OnInit {
               private dialog: MatDialog,
               private controllerApiService: ControllerApiService,
               private snackBarService: SnackBarService,
-              abilityService: AbilityService<any>
+              private abilityService: AbilityService<any>
   ) {
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
     this.reload = new Subject<void>();
     this.reload$ = this.reload.asObservable();
-    this.ability$ = abilityService.ability$;
+    this.ability$ = this.abilityService.ability$;
   }
 
   ngOnInit() {

@@ -13,7 +13,6 @@
                         (sort)="onSort($event)"
                         (page)="onPage($event)">
       <ng-container *appShortcut="let row">
-<!--        *ngIf="'read' | able: 'jobexecution'"-->
         <a mat-menu-item
            *ngIf="ability.can('read', 'jobexecution')"
            [routerLink]="['/report', 'jobexecution', row.jobExecutionId]"
@@ -21,7 +20,6 @@
           <mat-icon>hdr_strong</mat-icon>
           Go to job execution
         </a>
-<!--        *ngIf="'read' | able: 'crawlexecution'"-->
         <a mat-menu-item
            *ngIf="ability.can('read', 'crawlexecution')"
            [routerLink]="['/report', 'crawlexecution', row.executionId]"
@@ -31,7 +29,6 @@
         </a>
       </ng-container>
       <ng-container *appAction="let row">
-<!--        *ngIf="'read' | able: 'crawllog'"-->
         <a mat-menu-item
            *ngIf="ability.can('read', 'crawllog')"
            [routerLink]="['../crawllog', row.id]"

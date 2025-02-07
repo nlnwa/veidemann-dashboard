@@ -15,8 +15,9 @@ import {AbilityService} from "@casl/angular";
 export class CrawlerStatusComponent {
   readonly RunStatus = RunStatus;
   readonly ability$: Observable<any>;
-  constructor(abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+
+  constructor(private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 
   @Input()

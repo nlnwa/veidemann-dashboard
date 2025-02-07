@@ -14,7 +14,7 @@ export class CrawlLogShortcutsComponent {
 
   @Input() crawlLog: CrawlLog;
 
-  constructor(abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+  constructor(private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 }

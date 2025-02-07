@@ -22,8 +22,8 @@ export class HomeComponent implements OnInit {
   constructor(private errorService: ErrorService,
               private controllerApiService: ControllerApiService,
               private dialog: MatDialog,
-              abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+              private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 
   ngOnInit(): void {

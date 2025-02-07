@@ -1,7 +1,7 @@
 <ng-container *ngIf="ability$ | async as ability">
   <mat-nav-list>
     <div mat-subheader>Shortcuts</div>
-<!--    *ngIf="'read' | able: Kind[Kind.SEED]"-->
+
     <a mat-list-item
        *ngIf="ability.can('read', Kind[Kind.SEED])"
        [routerLink]="['/config', 'seed', crawlExecutionStatus.seedId]"
@@ -9,7 +9,7 @@
       <mat-icon matListItemIcon>link</mat-icon>
       Go to seed
     </a>
-<!--    *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
+
     <a mat-list-item
        *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
        [routerLink]="['/config', 'crawljobs', crawlExecutionStatus.jobId]"
@@ -20,7 +20,7 @@
   </mat-nav-list>
   <mat-nav-list>
     <div mat-subheader>Filters</div>
-<!--    *ngIf="'read' | able: 'pagelog'"-->
+
     <a mat-list-item
        *ngIf="ability.can('read','pagelog')"
        [routerLink]="['/report/pagelog']"
@@ -29,7 +29,7 @@
       <mat-icon matListItemIcon>art_track</mat-icon>
       Show pagelog
     </a>
-<!--    *ngIf="'read' | able: 'crawllog'"-->
+
     <a mat-list-item
        *ngIf="ability.can('read','crawllog')"
        [routerLink]="['/report/crawllog']"
@@ -38,7 +38,7 @@
       <mat-icon matListItemIcon>event_note</mat-icon>
       Show crawllog
     </a>
-<!--    <ng-container *ngIf="canAbort(crawlExecutionStatus.state) && ('abort' | able: 'crawlexecution')">-->
+
     <ng-container *ngIf="canAbort(crawlExecutionStatus.state) && ability.can('abort','crawlexecution')">
       <a mat-list-item
          (click)="onAbortCrawlExecution(crawlExecutionStatus)"

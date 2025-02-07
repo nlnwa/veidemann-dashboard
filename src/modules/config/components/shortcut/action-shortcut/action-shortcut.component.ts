@@ -25,8 +25,8 @@ export class ActionShortcutComponent {
   clone = new EventEmitter();
 
 
-  constructor(ableService: AbilityService<any>) {
-    this.ability$ = ableService.ability$;
+  constructor(private ableService: AbilityService<any>) {
+    this.ability$ = this.ableService.ability$;
   }
 
   onClone() {

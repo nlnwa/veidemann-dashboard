@@ -4,7 +4,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
@@ -18,7 +17,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: 'reports'"-->
       <a mat-list-item
          *ngIf="ability.can('read', 'reports')"
          [routerLink]="['/report/crawlexecution/']"
@@ -29,7 +27,6 @@
         Show crawlexecutions
       </a>
       <ng-container *ngIf="configObject.seed.jobRefList.length">
-<!--        *ngIf="'read' | able: Kind[Kind.SEED]"-->
         <a mat-list-item
            *ngIf="ability.can('read', Kind[Kind.SEED])"
            [routerLink]="['../../seed']"
@@ -40,7 +37,6 @@
           Filter by crawljob
         </a>
       </ng-container>
-<!--      *ngIf="'read' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
@@ -56,7 +52,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: 'reports'"-->
       <a mat-list-item
          *ngIf="ability.can('read', 'reports')"
          [routerLink]="['/report/jobexecution']"
@@ -66,7 +61,6 @@
         <mat-icon matListItemIcon>hdr_strong</mat-icon>
         Show jobexecutions
       </a>
-<!--      *ngIf="'read' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
@@ -82,7 +76,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
          [routerLink]="['../../crawljobs']"
@@ -98,7 +91,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
          [routerLink]="['../../crawljobs']"
@@ -114,7 +106,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"
@@ -130,7 +121,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"
@@ -146,7 +136,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.BROWSERCONFIG])"
          [routerLink]="['../../browserconfig']"
@@ -162,7 +151,6 @@
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
-<!--      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"-->
       <a mat-list-item
          *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"

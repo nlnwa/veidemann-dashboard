@@ -17,7 +17,6 @@
 
       <span fxFlex></span>
 
-      <!-- <button *ngIf="'read' | able: 'report'" -->
       <button *ngIf="ability.can('read', 'report')"
               color="primary"
               mat-flat-button
@@ -59,7 +58,6 @@
       </button>
     </mat-toolbar>
 
-    <!-- *ngIf="'read' | able: 'configs'" -->
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
       <a mat-tab-link
          *ngIf="ability.can('read', 'configs')"
@@ -69,7 +67,7 @@
          [active]="config.isActive">
         <span i18n="@@mainMenuConfiguration">CONFIGURATION</span>
       </a>
-<!-- *ngIf="'read' | able: 'report'"-->
+
       <a mat-tab-link
          *ngIf="ability.can('read', 'report')"
          [routerLink]="['/report']"
@@ -78,7 +76,7 @@
          [active]="report.isActive">
         <span i18n="@@mainMenuReport">REPORT</span>
       </a>
-<!-- *ngIf="'read' | able: 'logconfig'" -->
+
       <a mat-tab-link
          *ngIf="ability.can('read', 'logconfig')"
          [routerLink]="['/logconfig']"

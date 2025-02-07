@@ -14,7 +14,6 @@
                                      (sort)="onSort($event)"
                                      (page)="onPage($event)">
       <ng-container *appShortcut="let row">
-<!--        *ngIf="'read' | able: Kind[Kind.SEED]"-->
         <a mat-menu-item
            *ngIf="ability.can('read', Kind[Kind.SEED])"
            [routerLink]="['/config', 'seed', row.seedId]"
@@ -22,7 +21,6 @@
           <mat-icon>link</mat-icon>
           Go to seed
         </a>
-<!--        *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
         <a mat-menu-item
            *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
            [routerLink]="['/config', 'crawljobs', row.jobId]"
@@ -40,7 +38,6 @@
           <mat-icon>art_track</mat-icon>
           Go to pagelog
         </a>
-<!--        *ngIf="'read' | able: 'crawllog'"-->
         <a mat-menu-item
            *ngIf="ability.can('read', 'crawllog')"
            [routerLink]="['../crawllog']"
@@ -51,7 +48,6 @@
         </a>
       </ng-container>
       <ng-container *appAction="let row">
-<!--        <ng-container *ngIf="canAbort(row.state) && ('abort' | able: 'crawlexecution')">-->
         <ng-container *ngIf="canAbort(row.state) && ability.can('abort','crawlexecution')">
           <a mat-menu-item
              (click)="onAbortCrawlExecution(row)"
@@ -60,7 +56,6 @@
             Abort crawl
           </a>
         </ng-container>
-<!--        *ngIf="'read' | able: 'crawlexecution'"-->
         <a mat-menu-item
            *ngIf="ability.can('read', 'crawlexecution')"
            [routerLink]="['../crawlexecution', row.id]"

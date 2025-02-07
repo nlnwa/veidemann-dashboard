@@ -15,7 +15,6 @@
                                      (sort)="onSort($event)"
                                      (page)="onPage($event)">
         <ng-container *appShortcut="let row">
-<!--          *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"-->
           <a mat-menu-item
              *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
              [routerLink]="['/config', 'crawljobs', row.jobId]"
@@ -25,7 +24,6 @@
           </a>
         </ng-container>
         <ng-container *appFilter="let row">
-<!--          *ngIf="'read' | able: 'crawlexecution'"-->
           <a mat-menu-item
              *ngIf="ability.can('read', 'crawlexecution')"
              [routerLink]="['/report', 'crawlexecution']"
@@ -37,7 +35,6 @@
         </ng-container>
 
         <ng-container *appAction="let row">
-<!--          *ngIf="'read' | able: 'jobexecution'"-->
           <a mat-menu-item
              *ngIf="ability.can('read', 'jobexecution')"
              [routerLink]="['../jobexecution', row.id]"
@@ -47,7 +44,6 @@
           </a>
 
           <ng-container *ngIf="row.state === JobExecutionState.RUNNING">
-<!--            *ngIf="'abort' | able: 'jobexecution'"-->
             <a mat-menu-item
                *ngIf="ability.can('abort', 'jobexecution')"
                (click)="onAbortJobExecution(row)"

@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {Kind, Role} from '../../../../shared/models';
-import {Ability, AbilityBuilder, createMongoAbility, MongoAbility, PureAbility} from '@casl/ability';
+import {AbilityBuilder, createMongoAbility, MongoAbility, PureAbility} from '@casl/ability';
 
 
 @Injectable({

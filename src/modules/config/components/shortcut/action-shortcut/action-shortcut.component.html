@@ -5,7 +5,6 @@
   <ng-container [ngSwitch]="configObject.kind">
 
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
-<!--      *ngIf="'create' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
          *ngIf="ability.can('create', Kind[Kind.SEED])"
          (click)="onCreateSeed()"
@@ -17,7 +16,6 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.SEED">
-<!--      *ngIf="'runCrawl' | able: Kind[Kind.SEED]"-->
       <a mat-list-item
          *ngIf="ability.can('runCrawl', Kind[Kind.SEED])"
          (click)="onRunCrawl()">
@@ -27,7 +25,6 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="Kind.CRAWLJOB">
-<!--      *ngIf="'runCrawl' | able: Kind[Kind.CRAWLJOB]"-->
       <a mat-list-item
          *ngIf="ability.can('runCrawl', Kind[Kind.CRAWLJOB])"
          (click)="onRunCrawl()">
@@ -37,7 +34,6 @@
     </ng-container>
 
   </ng-container>
-  <!-- *ngIf="'create' | able: Kind[this.configObject.kind]"-->
   <a mat-list-item
      *ngIf="ability.can('create', Kind[this.configObject.kind])"
      (click)="onClone()">

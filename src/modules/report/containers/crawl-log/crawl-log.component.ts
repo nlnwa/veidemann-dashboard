@@ -34,9 +34,9 @@ export class CrawlLogComponent implements OnInit {
               private router: Router,
               private crawlLogService: CrawlLogService,
               private errorService: ErrorService,
-              abilityService: AbilityService<any>
+              private abilityService: AbilityService<any>
   ) {
-    this.ability$ = abilityService.ability$;
+    this.ability$ = this.abilityService.ability$;
   }
 
   ngOnInit(): void {

@@ -91,7 +91,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
               private controllerApiService: ControllerApiService,
               private kindService: KindService,
               private optionsService: OptionsService,
-              abilityService: AbilityService<any>) {
+              private abilityService: AbilityService<any>) {
 
     this.options$ = this.optionsService.options$.pipe(
       tap(options => this.options = options)
@@ -110,7 +110,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     this.reload = new Subject();
 
     this.recount = new Subject();
-    this.ability$ = abilityService.ability$
+    this.ability$ = this.abilityService.ability$
   }
 
   ngOnInit(): void {

@@ -14,7 +14,7 @@ export class ShortcutListComponent {
   @Input()
   configObject: ConfigObject;
 
-  constructor(abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+  constructor(private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 }

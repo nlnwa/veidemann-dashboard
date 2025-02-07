@@ -44,8 +44,8 @@ export class PageLogComponent implements OnInit {
               private fb: UntypedFormBuilder,
               private pageLogService: PageLogService,
               private errorService: ErrorService,
-              abilityService: AbilityService<any>) {
-    this.ability$ = abilityService.ability$;
+              private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
   }
 
   ngOnInit(): void {
