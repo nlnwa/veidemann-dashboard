@@ -4,6 +4,7 @@ import {AuthService, ConfigApiService, ErrorService, GuardService, SnackBarServi
 import {AppInitializerService} from './services/app.initializer.service';
 import {of} from 'rxjs';
 import {AppConfig} from './models';
+import {AbilityService} from "@casl/angular";
 
 @NgModule()
 export class CoreTestingModule {
@@ -28,6 +29,12 @@ export class CoreTestingModule {
         {
           provide: GuardService,
           useValue: {}
+        },
+        {
+          provide: AbilityService,
+          useValue: {
+            ability$: of(null)
+          }
         },
         {
           provide: AuthService,
