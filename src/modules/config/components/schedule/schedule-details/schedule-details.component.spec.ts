@@ -382,22 +382,8 @@ describe('ScheduleDetailsComponent', () => {
     });
   });
 
-  // TODO:
-  //  use no-nb as locale when inputting dates ?
-  //  Use updateButton.click() instead of component.onUpdate().(Gets error fixture already destroyed when using click())
-
-  /** Testing datepicker component.
-   * When checking validation for entering invalid dates, output from calendar is in en-US locale.
-   * Same goes for when typing in input.
-   * ex: writing dd.mm.yyyy in test (24.12.2022), is invalid.
-   * Tested on live page (where locale is set), and works as expected (24.12.2022 is valid and 12.24.2022 is invalid).
-   *
-   * At the end of each test the updated configObject (from prepareSave), is validated to be as expected.
-   *
-   */
-
   it('setting valid from date in calendar sets timestamp to beginning of day', async () => {
-
+    console.log('running test')
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -412,7 +398,9 @@ describe('ScheduleDetailsComponent', () => {
 
     // Calculate the expected date and timestamp reliably
     const expectedDate = dayjs().startOf('month');
-    const expected = expectedDate.format('MM/DD/YYYY');
+    console.log('expectedDate', expectedDate);
+    const expected = expectedDate.format('D.M.YYYY');
+    console.log('expected after formatting', expected);
     expect(await validFrom.getValue()).toEqual(expected);
     expect(component.canUpdate).toBeTruthy();
 
@@ -423,43 +411,34 @@ describe('ScheduleDetailsComponent', () => {
     expect(update.crawlScheduleConfig.validFrom).toBe(expectedTimestamp);
   });
 
-  // TODO: Fix this test
-  xit('setting valid from date in input sets timestamp to end of day', async () => {
+  it('setting valid from date in input sets timestamp to start of day', async () => {
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
     });
 
-    // Invalid input: day out of range
-    await validFrom.setValue('1.32.2022');
+    await validFrom.setValue('32.1.2022');
     fixture.detectChanges();
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
 
-    // Invalid input: month out of range
-    await validFrom.setValue('13.1.2022');
+    await validFrom.setValue('1.13.2022');
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
 
-    // Valid input
     await validFrom.setValue('1.1.2022');
     await validFrom.blur();
-
     expect(await validFromFormField.isControlValid()).toBeTruthy();
     expect(component.canUpdate).toBeTruthy();
 
     component.onUpdate();
 
-    // Calculate end-of-day timestamp dynamically
-    const validDate = dayjs('2022-01-01').endOf('day').toISOString();
-    expect(update.crawlScheduleConfig.validFrom).toBe(validDate);
+    expect(update.crawlScheduleConfig.validFrom).toBe('2022-01-01T00:00:00.000Z');
   });
 
-  // TODO: Fix this test
-  xit('setting valid to date in calendar sets timestamp to end of day', async () => {
-
+  it('setting valid to date in calendar sets timestamp to end of day', async () => {
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -468,10 +447,10 @@ describe('ScheduleDetailsComponent', () => {
     await validToToggle.openCalendar();
     const toCal = await validToToggle.getCalendar();
     const daysInMonth = await toCal.getCells();
-    await toCal.selectCell({text: (daysInMonth.length).toString()});
+    await daysInMonth[daysInMonth.length -1].select();
     await validToToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedToDate = dayjs().add(1, 'M').month() + '/' + daysInMonth.length + '/' + dayjs().year();
+    const expectedToDate = dayjs().endOf('month').format('D.M.YYYY');
     expect(await validTo.getValue()).toEqual(expectedToDate);
     expect(component.canUpdate).toBeTruthy();
     component.onUpdate();
@@ -479,8 +458,7 @@ describe('ScheduleDetailsComponent', () => {
     expect(update.crawlScheduleConfig.validTo).toBe(expectedTimestamp);
   });
 
-  // TODO: Fix this test
-  xit('setting valid to date in input sets timestamp to beginning of day', async () => {
+  it('setting valid to date in input sets timestamp to end of day', async () => {
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -491,8 +469,9 @@ describe('ScheduleDetailsComponent', () => {
     await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validTo.setValue('13.1.2022');
+    await validTo.setValue('32.1.2022');
     await validTo.blur();
+
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
     await validTo.setValue('1.1.2022');
