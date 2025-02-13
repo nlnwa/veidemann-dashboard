@@ -210,12 +210,19 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
   }
 
   parse(value: any, parseFormat?: string | string[]): dayjs.Dayjs | null {
-    if (value && typeof value === 'string') {
-      return this.dayJs(value, parseFormat, this.locale, true);
-    } else if (value) {
-      return this.dayJs(value, undefined, this.locale, true);
+    const customFormats = ['D.M.YYYY', 'DD.MM.YYYY'];
+
+    if (value === '') {
+      return null;
     }
-    return null;
+
+    const parsedDate = this.dayJs(value, customFormats, this.locale, true, true);
+
+    if (parsedDate.isValid()) {
+      return parsedDate;
+    } else {
+      return this.dayJs(null, undefined, this.locale, true, true);
+    }
   }
 
   format(date: dayjs.Dayjs, displayFormat: string): string {
@@ -315,14 +322,15 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
     input?: any,
     format?: string | string[],
     locale?: string,
-    keepLocalTime?: boolean
+    keepLocalTime?: boolean,
+    strict?: boolean
   ): dayjs.Dayjs {
     const {useUtc}: DayJsDateAdapterOptions = this.options || {};
 
     const result =
       input instanceof Date || typeof input === 'number' || !format
-        ? dayjs(input, undefined, locale)
-        : dayjs(input, format, locale);
+        ? dayjs(input, undefined, locale, strict)
+        : dayjs(input, format, locale, strict);
 
     return useUtc ? result.utc(keepLocalTime) : result;
   }
