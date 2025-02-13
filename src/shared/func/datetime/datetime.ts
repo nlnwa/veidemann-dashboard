@@ -87,7 +87,5 @@ const timeUnitMap: { [key: string]: DurationUnitType } = {
 }
 
 export function timeToDuration(time: number, unit: string) {
-  console.log('created duration with: ', time, 'unit: ', unit);
-  console.log('object: ', dayjs.duration(time, timeUnitMap[unit]));
   return formatDuration(dayjs.duration(time, timeUnitMap[unit]));
 }

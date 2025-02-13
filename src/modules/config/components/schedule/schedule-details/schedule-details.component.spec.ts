@@ -383,7 +383,6 @@ describe('ScheduleDetailsComponent', () => {
   });
 
   it('setting valid from date in calendar sets timestamp to beginning of day', async () => {
-    console.log('running test')
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -398,9 +397,8 @@ describe('ScheduleDetailsComponent', () => {
 
     // Calculate the expected date and timestamp reliably
     const expectedDate = dayjs().startOf('month');
-    console.log('expectedDate', expectedDate);
     const expected = expectedDate.format('D.M.YYYY');
-    console.log('expected after formatting', expected);
+
     expect(await validFrom.getValue()).toEqual(expected);
     expect(component.canUpdate).toBeTruthy();
 
