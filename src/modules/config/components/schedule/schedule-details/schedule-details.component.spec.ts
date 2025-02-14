@@ -18,7 +18,8 @@ import {
   MatDatepickerToggleHarness
 } from '@angular/material/datepicker/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import {MAT_DATE_LOCALE} from "@angular/material/core";
 
 const exampleCrawlSchedule: ConfigObject = {
   id: 'configObject_id',
@@ -82,6 +83,10 @@ describe('ScheduleDetailsComponent', () => {
         AnnotationComponent
       ],
       providers: [
+        {
+          provide: MAT_DATE_LOCALE,
+          useValue: 'nb-NO',
+        },
         {
           provide: AuthService,
           useValue: {
@@ -396,8 +401,8 @@ describe('ScheduleDetailsComponent', () => {
     fixture.detectChanges();
 
     // Calculate the expected date and timestamp reliably
-    const expectedDate = dayjs().startOf('month');
-    const expected = expectedDate.format('D.M.YYYY');
+    const expectedDate = dayjs().locale('nb').startOf('month');
+    const expected = expectedDate.format('l');
 
     expect(await validFrom.getValue()).toEqual(expected);
     expect(component.canUpdate).toBeTruthy();
@@ -448,11 +453,11 @@ describe('ScheduleDetailsComponent', () => {
     await daysInMonth[daysInMonth.length -1].select();
     await validToToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedToDate = dayjs().endOf('month').format('D.M.YYYY');
+    const expectedToDate = dayjs().locale('nb').endOf('month').format('D.M.YYYY');
     expect(await validTo.getValue()).toEqual(expectedToDate);
     expect(component.canUpdate).toBeTruthy();
     component.onUpdate();
-    const expectedTimestamp = dayjs().endOf('month').format('YYYY-MM-DD') + 'T23:59:59.999Z';
+    const expectedTimestamp = dayjs().locale('nb').endOf('month').format('YYYY-MM-DD') + 'T23:59:59.999Z';
     expect(update.crawlScheduleConfig.validTo).toBe(expectedTimestamp);
   });
 

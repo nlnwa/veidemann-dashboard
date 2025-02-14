@@ -1,15 +1,33 @@
+import {inject, Injectable, InjectionToken} from '@angular/core';
 import {DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
-import {Optional, Inject, InjectionToken, Injectable} from '@angular/core';
+
+import dayjs from 'dayjs';
 import arraySupport from 'dayjs/plugin/arraySupport';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
 
+// https://day.js.org/docs/en/parse/utc
+dayjs.extend(utc);
+// https://day.js.org/docs/en/display/format#localized-formats
+dayjs.extend(localizedFormat);
+// https://day.js.org/docs/en/parse/string-format
+dayjs.extend(customParseFormat);
+// https://day.js.org/docs/en/plugin/locale-data
+dayjs.extend(localeData);
+// https://day.js.org/docs/en/plugin/array-support
+dayjs.extend(arraySupport);
+
 declare const ngDevMode: object | null;
 
 export interface DayJsDateAdapterOptions {
+  /**
+   * When enabled, the dates have to match the format exactly.
+   * See https://day.js.org/docs/en/parse/string-format
+   */
+  strict?: boolean;
+
   /**
    * Turns the use of utc dates on or off.
    * Changing this will change how Angular Material DatePicker outputs dates.
@@ -43,122 +61,117 @@ function range<T>(length: number, valueFunction: (index: number) => T): T[] {
   return valuesArray;
 }
 
-interface LocaleData {
-  dates: string[];
-  firstDayOfWeek: number;
-  longDaysOfWeek: string[];
-  longMonths: string[];
-  narrowDaysOfWeek: string[];
-  shortDaysOfWeek: string[];
-  shortMonths: string[];
-}
-
 export type DateStyles = 'long' | 'short' | 'narrow';
 
 /** Adapts dayjs.Dayjs Dates for use with Angular Material. */
 @Injectable()
 export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
-  private localeData: LocaleData;
+  private _options = inject<DayJsDateAdapterOptions>(MAT_DAYJS_DATE_ADAPTER_OPTIONS, {
+    optional: true,
+  });
 
-  constructor(
-    @Optional() @Inject(MAT_DATE_LOCALE) public dateLocale: string,
-    @Optional()
-    @Inject(MAT_DAYJS_DATE_ADAPTER_OPTIONS)
-    private readonly options?: DayJsDateAdapterOptions
-  ) {
+  private _localeData: {
+    firstDayOfWeek: number;
+    longMonths: string[];
+    shortMonths: string[];
+    dates: string[];
+    longDaysOfWeek: string[];
+    shortDaysOfWeek: string[];
+    narrowDaysOfWeek: string[];
+  };
+
+  constructor() {
     super();
-
-    this.localeData = this.initializeParser(dateLocale);
+    const dateLocale = inject<string>(MAT_DATE_LOCALE, {optional: true});
+    this.setLocale(dateLocale || dayjs.locale());
   }
 
-  override setLocale(locale: string): LocaleData {
+  override setLocale(locale: string) {
     super.setLocale(locale);
-    this.dateLocale = locale;
-    const dayJsLocaleData = this.dayJs().locale(locale).localeData();
-    this.localeData = {
-      firstDayOfWeek: dayJsLocaleData.firstDayOfWeek(),
-      longMonths: dayJsLocaleData.months(),
-      shortMonths: dayJsLocaleData.monthsShort(),
-      dates: range(31, (i) =>
-        this.createDate(2017, 0, i + 1).format('D')
-      ),
 
-      longDaysOfWeek: dayJsLocaleData.weekdays(),
-      shortDaysOfWeek: dayJsLocaleData.weekdaysShort(),
-      narrowDaysOfWeek: dayJsLocaleData.weekdaysMin()
+    const localeData = dayjs().locale(locale).localeData();
+    this._localeData = {
+      firstDayOfWeek: localeData.firstDayOfWeek(),
+      longMonths: localeData.months(),
+      shortMonths: localeData.monthsShort(),
+      longDaysOfWeek: localeData.weekdays(),
+      shortDaysOfWeek: localeData.weekdaysShort(),
+      narrowDaysOfWeek: localeData.weekdaysMin(),
+      dates: (() => {
+        const dtf =
+          typeof Intl !== 'undefined'
+            ? new Intl.DateTimeFormat(this.locale, {
+              day: 'numeric',
+              timeZone: 'utc'
+            })
+            : null;
+
+        return range(31, (i) => {
+          if (dtf) {
+            // dayjs doesn't appear to support this functionality.
+            // Fall back to `Intl` on supported browsers.
+            const date = new Date();
+            date.setUTCFullYear(2017, 0, i + 1);
+            date.setUTCHours(0, 0, 0, 0);
+            return dtf.format(date).replace(/[\u200e\u200f]/g, '');
+          }
+
+          return i + '';
+        });
+      })(),
     };
-    return this.localeData;
   }
 
   getYear(date: dayjs.Dayjs): number {
-    return this.dayJs(date).year();
+    return this.clone(date).year();
   }
 
   getMonth(date: dayjs.Dayjs): number {
-    return this.dayJs(date).month();
+    return this.clone(date).month();
   }
 
   getDate(date: dayjs.Dayjs): number {
-    return this.dayJs(date).date();
+    return this.clone(date).date();
   }
 
   getDayOfWeek(date: dayjs.Dayjs): number {
-    return this.dayJs(date).day();
+    return this.clone(date).day();
   }
 
   getMonthNames(style: DateStyles): string[] {
     return style === 'long'
-      ? this.localeData.longMonths
-      : this.localeData.shortMonths;
+      ? this._localeData.longMonths
+      : this._localeData.shortMonths;
   }
 
   getDateNames(): string[] {
-    const dtf =
-      typeof Intl !== 'undefined'
-        ? new Intl.DateTimeFormat(this.locale, {
-          day: 'numeric',
-          timeZone: 'utc'
-        })
-        : null;
-
-    return range(31, (i) => {
-      if (dtf) {
-        // dayjs doesn't appear to support this functionality.
-        // Fall back to `Intl` on supported browsers.
-        const date = new Date();
-        date.setUTCFullYear(2017, 0, i + 1);
-        date.setUTCHours(0, 0, 0, 0);
-        return dtf.format(date).replace(/[\u200e\u200f]/g, '');
-      }
-
-      return i + '';
-    });
+    return this._localeData.dates;
   }
 
   getDayOfWeekNames(style: DateStyles): string[] {
     if (style === 'long') {
-      return this.localeData.longDaysOfWeek;
+      return this._localeData.longDaysOfWeek;
     }
     if (style === 'short') {
-      return this.localeData.shortDaysOfWeek;
+      return this._localeData.shortDaysOfWeek;
     }
-    return this.localeData.narrowDaysOfWeek;
+    return this._localeData.narrowDaysOfWeek;
   }
 
   getYearName(date: dayjs.Dayjs): string {
-    return this.dayJs(date).format('YYYY');
+    return this.clone(date).format('YYYY');
   }
 
   getFirstDayOfWeek(): number {
-    return this.localeData.firstDayOfWeek;
+    return this._localeData.firstDayOfWeek;
   }
 
   getNumDaysInMonth(date: dayjs.Dayjs): number {
-    return this.dayJs(date).daysInMonth();
+    return this.clone(date).daysInMonth();
   }
 
   clone(date: dayjs.Dayjs): dayjs.Dayjs {
-    return date.clone().locale(this.dateLocale);
+    return date.clone().locale(this.locale);
   }
 
   createDate(year: number, month: number, date: number): dayjs.Dayjs {
@@ -184,14 +197,7 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
       }
     }
 
-    const result = this.dayJs(
-      [year, month, date],
-      undefined,
-      undefined,
-      true
-    )
-      .startOf('day')
-      .locale(this.locale);
+    const result = this._createDayJs([year, month, date]).locale(this.locale);
 
     // If the result isn't valid, the date must have been out of bounds for this month.
     if (
@@ -206,46 +212,41 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
   }
 
   today(): dayjs.Dayjs {
-    return this.dayJs().locale(this.dateLocale);
+    return this._createDayJs();
   }
 
   parse(value: any, parseFormat?: string | string[]): dayjs.Dayjs | null {
-    const customFormats = ['D.M.YYYY', 'DD.MM.YYYY'];
-
-    if (value === '') {
+    if (!value) {
       return null;
     }
-
-    const parsedDate = this.dayJs(value, customFormats, this.locale, true, true);
-
-    if (parsedDate.isValid()) {
-      return parsedDate;
-    } else {
-      return this.dayJs(null, undefined, this.locale, true, true);
+    if (typeof value === 'string') {
+      return this._createDayJs(value, parseFormat);
     }
+    return this._createDayJs(value);
   }
 
   format(date: dayjs.Dayjs, displayFormat: string): string {
+    date = this.clone(date);
     if (!this.isValid(date)) {
       throw Error('DayjsDateAdapter: Cannot format invalid date.');
     }
-    return date.locale(this.locale).format(displayFormat);
+    return date.format(displayFormat);
   }
 
   addCalendarYears(date: dayjs.Dayjs, years: number): dayjs.Dayjs {
-    return date.locale(this.dateLocale).add(years, 'year');
+    return this.clone(date).add(years, 'year');
   }
 
   addCalendarMonths(date: dayjs.Dayjs, months: number): dayjs.Dayjs {
-    return date.locale(this.dateLocale).add(months, 'month');
+    return this.clone(date).add(months, 'month');
   }
 
   addCalendarDays(date: dayjs.Dayjs, days: number): dayjs.Dayjs {
-    return date.locale(this.dateLocale).add(days, 'day');
+    return this.clone(date).add(days, 'day');
   }
 
   toIso8601(date: dayjs.Dayjs): string {
-    return date.locale(this.dateLocale).toISOString();
+    return this.clone(date).toISOString();
   }
 
   /**
@@ -264,21 +265,18 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
   override deserialize(value: any): dayjs.Dayjs | null {
     let date;
     if (value instanceof Date) {
-      date = this.dayJs(value);
+      date = this._createDayJs(value);
     } else if (this.isDateInstance(value)) {
-      // NOTE: assumes that cloning also sets the correct locale.
       return this.clone(value);
     }
     if (typeof value === 'string') {
       if (!value) {
         return null;
       }
-      date = value.includes('T')
-        ? this.dayJs(value)
-        : this.dayJs(value, undefined, undefined, true);
+      date = this._createDayJs(value);
     }
     if (date && this.isValid(date)) {
-      return this.dayJs(date).locale(this.dateLocale);
+      return date;
     }
     return super.deserialize(value);
   }
@@ -288,60 +286,54 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
   }
 
   isValid(date: dayjs.Dayjs): boolean {
-    return this.dayJs(date).isValid();
+    return date.isValid();
   }
 
   invalid(): dayjs.Dayjs {
-    return this.dayJs(null);
+    return dayjs(null);
   }
 
   setTime(target: dayjs.Dayjs, hours: number, minutes: number, seconds: number): dayjs.Dayjs {
-    return this.dayJs(target)
+    return this.clone(target)
       .hour(hours)
       .minute(minutes)
       .second(seconds);
   }
 
   getHours(date: dayjs.Dayjs): number {
-    return this.dayJs(date).hour();
+    return this.clone(date).hour();
   }
 
   getMinutes(date: dayjs.Dayjs): number {
-    return this.dayJs(date).minute();
+    return this.clone(date).minute();
   }
 
   getSeconds(date: dayjs.Dayjs): number {
-     return this.dayJs(date).second();
+    return this.clone(date).second();
   }
 
   addSeconds(date: dayjs.Dayjs, amount: number): dayjs.Dayjs {
-    return this.dayJs(date).add(amount, 'second');
+    return this.clone(date).add(amount, 'second');
   }
 
-  private dayJs(
-    input?: any,
-    format?: string | string[],
+  private _createDayJs(
+    date?: dayjs.ConfigType,
+    format?: dayjs.OptionType,
     locale?: string,
-    keepLocalTime?: boolean,
-    strict?: boolean
   ): dayjs.Dayjs {
-    const {useUtc}: DayJsDateAdapterOptions = this.options || {};
+    const {strict, useUtc}: DayJsDateAdapterOptions = this._options || {};
 
-    const result =
-      input instanceof Date || typeof input === 'number' || !format
-        ? dayjs(input, undefined, locale, strict)
-        : dayjs(input, format, locale, strict);
+    let f: string;
+    if (format && Array.isArray(format) && format.length > 0) {
+      f = format[0];
+    } else if (format && typeof format === 'string') {
+      f = format;
+    }
 
-    return useUtc ? result.utc(keepLocalTime) : result;
-  }
-
-  private initializeParser(dateLocale: string): LocaleData {
-    dayjs.extend(utc);
-    dayjs.extend(localizedFormat);
-    dayjs.extend(customParseFormat);
-    dayjs.extend(localeData);
-    dayjs.extend(arraySupport);
-
-    return this.setLocale(dateLocale);
+    if (useUtc) {
+      return dayjs.utc(date, f, strict).locale(locale || this.locale);
+    } else {
+      return dayjs(date, format, strict).locale(locale || this.locale);
+    }
   }
 }

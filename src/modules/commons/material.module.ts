@@ -76,7 +76,7 @@ const modules = [
       useClass: DayjsDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_DAYJS_DATE_ADAPTER_OPTIONS]
     },
-    {provide: MAT_DAYJS_DATE_ADAPTER_OPTIONS, useValue: {useUtc: false}},
+    {provide: MAT_DAYJS_DATE_ADAPTER_OPTIONS, useValue: {useUtc: false, strict: true}},
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'}},
     {provide: MAT_DATE_FORMATS, useValue: MAT_DAYJS_DATE_FORMATS},
     {

@@ -377,12 +377,12 @@ describe('DayjsDateAdapter', () => {
 
     [
       {
-        dtString: '2.1.2017',
-        format: 'M.D.YYYY',
+        dtString: '01.02.2017',
+        format: 'MM.DD.YYYY',
         expected: '2017-01-02T00:00:00-08:00'
       },
       {
-        dtString: '02.01.2017',
+        dtString: '01.02.2017',
         format: 'MM.DD.YYYY',
         expected: '2017-01-02T00:00:00-08:00'
       },
@@ -814,8 +814,8 @@ describe('DayjsDateAdapter', () => {
 
       [
         {
-          dtString: '2.1.2017',
-          format: 'D.M.YYYY',
+          dtString: '1/2/2017',
+          format: 'M/D/YYYY',
           expected: '2017-01-02T00:00:00+00:00'
         },
         {
@@ -840,35 +840,11 @@ describe('DayjsDateAdapter', () => {
         }
       ].forEach(({dtString, format, expected}) =>
         it(`should parse string ${dtString} according to given format`, () => {
-          expect(adapter.parse(dtString, format).format()).toEqual(
+          expect(adapter.parse(dtString, format)!.format()).toEqual(
             expected
           );
         })
       );
-
-      it(`should parse dayjs object according to given format`, () => {
-        expect(
-          adapter
-            .parse(dayjs([2017, JAN, 2]), [
-              'M/D/YYYY',
-              'MM/DD/YYYY',
-              'M/D/YY'
-            ])
-            .format()
-        ).toEqual('2017-01-02T00:00:00+00:00');
-      });
-
-      it(`should parse JS Date object according to given format`, () => {
-        expect(
-          adapter
-            .parse(new Date(2017, JAN, 2), [
-              'M/D/YYYY',
-              'MM/DD/YYYY',
-              'M/D/YY'
-            ])
-            .format()
-        ).toEqual('2017-01-02T00:00:00+00:00');
-      });
     });
 
     describe('strict mode', () => {

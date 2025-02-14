@@ -78,6 +78,7 @@
               <mat-datepicker-toggle matSuffix [for]="validFromDatepicker"
                                      data-testid="validFromToggle"></mat-datepicker-toggle>
               <mat-datepicker #validFromDatepicker></mat-datepicker>
+              <mat-error *ngIf="!validFrom.valid">{{validFrom.errors | json}}</mat-error>
             </mat-form-field>
 
             <mat-form-field data-testid="validTo">
