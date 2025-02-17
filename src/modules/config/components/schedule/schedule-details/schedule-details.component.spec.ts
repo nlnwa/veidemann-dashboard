@@ -85,7 +85,7 @@ describe('ScheduleDetailsComponent', () => {
       providers: [
         {
           provide: MAT_DATE_LOCALE,
-          useValue: 'nb-NO',
+          useValue: 'nb',
         },
         {
           provide: AuthService,
@@ -472,17 +472,18 @@ describe('ScheduleDetailsComponent', () => {
     await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validTo.setValue('32.1.2022');
-    await validTo.blur();
 
+    await validTo.setValue('32.1.2022');
+    fixture.detectChanges();
+    await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validTo.setValue('1.1.2022');
-    await validTo.blur();
 
+    await validTo.setValue('1.1.2022');
+    fixture.detectChanges();
+    await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeTruthy();
     expect(component.canUpdate).toBeTruthy();
-
     component.onUpdate();
     expect(update.crawlScheduleConfig.validTo).toBe('2022-01-01T23:59:59.999Z');
   });

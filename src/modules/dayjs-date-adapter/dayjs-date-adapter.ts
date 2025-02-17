@@ -319,7 +319,6 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
   private _createDayJs(
     date?: dayjs.ConfigType,
     format?: dayjs.OptionType,
-    locale?: string,
   ): dayjs.Dayjs {
     const {strict, useUtc}: DayJsDateAdapterOptions = this._options || {};
 
@@ -331,9 +330,9 @@ export class DayjsDateAdapter extends DateAdapter<dayjs.Dayjs> {
     }
 
     if (useUtc) {
-      return dayjs.utc(date, f, strict).locale(locale || this.locale);
+      return dayjs.utc(date, f, strict).locale(this.locale);
     } else {
-      return dayjs(date, format, strict).locale(locale || this.locale);
+      return dayjs(date, format, this.locale, strict).locale(this.locale);
     }
   }
 }
