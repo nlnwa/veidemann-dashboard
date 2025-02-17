@@ -1,8 +1,7 @@
-import {APP_INITIALIZER, LOCALE_ID, NgModule} from '@angular/core';
+import {inject, LOCALE_ID, NgModule, provideAppInitializer} from '@angular/core';
 import {OAuthModule, OAuthService, ValidationHandler} from 'angular-oauth2-oidc';
 import {JwksValidationHandler} from 'angular-oauth2-oidc-jwks';
-import {AppInitializerService, AuthService, ControllerApiService, LocaleService,} from './services';
-import {AppConfig} from './models/app-config.model';
+import {AppInitializerService, LocaleService,} from './services';
 import {createMongoAbility, PureAbility} from '@casl/ability';
 import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
 
@@ -19,12 +18,12 @@ import {KeyboardShortcutsModule} from 'ng-keyboard-shortcuts';
     },
     OAuthService,
     {provide: ValidationHandler, useClass: JwksValidationHandler},
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (appInitializerService: AppInitializerService) => () => appInitializerService.init(),
-      deps: [AppInitializerService, AppConfig, OAuthService, ControllerApiService, AuthService],
-      multi: true
-    },
+    provideAppInitializer(
+      ()  => {
+        const appInitializerService = inject(AppInitializerService);
+        return appInitializerService.init();
+      }
+    ),
     {provide: PureAbility, useValue: createMongoAbility()},
   ]
 })
