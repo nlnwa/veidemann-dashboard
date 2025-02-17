@@ -24,7 +24,7 @@ import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
-export abstract class BaseListComponent<T extends ListItem> implements OnChanges, AfterViewInit {
+export abstract class BaseListComponent<T extends ListItem> implements AfterViewInit {
   readonly Kind = Kind;
   length$: BehaviorSubject<number>;
 
@@ -116,9 +116,6 @@ export abstract class BaseListComponent<T extends ListItem> implements OnChanges
     this.allSelected = false;
     this.length$ = new BehaviorSubject<number>(0);
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-   }
 
   ngAfterViewInit() {
 
