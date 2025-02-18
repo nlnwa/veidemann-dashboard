@@ -43,7 +43,6 @@ import {AbortCrawlDialogComponent} from './components/abort-crawl-dialog/abort-c
 import {JobExecutionPreviewComponent} from './components/job-execution-preview/job-execution-preview.component';
 import {CrawlExecutionPreviewComponent} from './components/crawl-execution-preview/crawl-execution-preview.component';
 import {CrawlLogPreviewComponent} from './components/crawl-log-preview/crawl-log-preview.component';
-import {AbilityModule} from '@casl/angular';
 import {ExecutionQueueCountPipe} from './pipe/execution-queue-count.pipe';
 import {CrawlExecutionShortcutsComponent} from './components/crawl-execution-shortcuts/crawl-execution-shortcuts.component';
 import {JobExecutionShortcutsComponent} from './components/job-execution-shortcuts/job-execution-shortcuts.component';
@@ -102,7 +101,6 @@ import {NgxEchartsModule} from 'ngx-echarts';
   imports: [
     CommonsModule,
     ReportRoutingModule,
-    AbilityModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),

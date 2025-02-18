@@ -17,14 +17,15 @@ import {takeUntil} from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-meta',
-  templateUrl: './meta.component.html',
-  styleUrls: ['./meta.component.css'],
-  providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MetaComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => MetaComponent), multi: true},
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-meta',
+    templateUrl: './meta.component.html',
+    styleUrls: ['./meta.component.css'],
+    providers: [
+        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MetaComponent), multi: true },
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => MetaComponent), multi: true },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class MetaComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor, Validator {

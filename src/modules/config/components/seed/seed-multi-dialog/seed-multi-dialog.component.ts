@@ -8,9 +8,10 @@ import {ConfigObject, ConfigRef, Kind, Label} from '../../../../../shared/models
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-seed-multi-dialog',
-  templateUrl: './seed-multi-dialog.component.html',
-  styleUrls: ['./seed-multi-dialog.component.css']
+    selector: 'app-seed-multi-dialog',
+    templateUrl: './seed-multi-dialog.component.html',
+    styleUrls: ['./seed-multi-dialog.component.css'],
+    standalone: false
 })
 export class SeedMultiDialogComponent extends SeedDetailsComponent implements OnInit {
 

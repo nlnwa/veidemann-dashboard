@@ -6,7 +6,8 @@ import {JobExecutionService, JobExecutionStatusQuery} from '../services';
 
 
 @Directive({
-  selector: '[appQueryJobExecutionStatus]'
+    selector: '[appQueryJobExecutionStatus]',
+    standalone: false
 })
 export class QueryJobExecutionStatusDirective extends QueryWithPageLengthDirective<JobExecutionStatusQuery, JobExecutionStatus> {
 

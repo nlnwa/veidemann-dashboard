@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-crawlconfig-dialog',
-  templateUrl: './crawlconfig-dialog.component.html',
-  styleUrls: ['./crawlconfig-dialog.component.css']
+    selector: 'app-crawlconfig-dialog',
+    templateUrl: './crawlconfig-dialog.component.html',
+    styleUrls: ['./crawlconfig-dialog.component.css'],
+    standalone: false
 })
 export class CrawlConfigDialogComponent extends CrawlConfigDetailsComponent implements OnInit {
 

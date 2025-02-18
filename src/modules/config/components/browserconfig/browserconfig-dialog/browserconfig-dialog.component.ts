@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-browserconfig-dialog',
-  templateUrl: './browserconfig-dialog.component.html',
-  styleUrls: ['./browserconfig-dialog.component.css']
+    selector: 'app-browserconfig-dialog',
+    templateUrl: './browserconfig-dialog.component.html',
+    styleUrls: ['./browserconfig-dialog.component.css'],
+    standalone: false
 })
 export class BrowserConfigDialogComponent extends BrowserConfigDetailsComponent implements OnInit {
 

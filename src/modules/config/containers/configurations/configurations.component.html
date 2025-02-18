@@ -1,4 +1,4 @@
-<div fxLayout="column" class="container">
+<div fxLayout="column" class="container" *ngIf="ability$ | async as ability">
   <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div fxFlex fxLayout="row" class="container no-scroll">
@@ -6,7 +6,7 @@
       <mat-action-list>
         <ng-container *ngIf="kind$ | async as kind">
           <button mat-list-item
-                  *ngIf="('create' | able: Kind[kind]) && showCreateButton$ | async"
+                  *ngIf="ability.can('create', Kind[kind]) && showCreateButton$ | async"
                   (click)="onCreateConfigWithDialog()"
                   i18n="@@configurationSideBarMenuAddConfigButton"
                   matTooltip="Create a new configuration"
@@ -62,8 +62,7 @@
                          (selectAll)="onSelectAll()"
                          (sort)="onSort($event)"
                          (page)="onPage($event)"
-                         (rowClick)="onRowClick($event)"
-        >
+                         (rowClick)="onRowClick($event)">
           <button mat-icon-button
                   *ngIf="kind===Kind.SEED && !isAllSelected"
                   (click)="onRunCrawlSelected(selectedConfigs)">
@@ -72,22 +71,21 @@
             </mat-icon>
           </button>
           <button mat-icon-button
-                  *ngIf="!isAllSelected && ('update' | able: Kind[kind])"
+                  *ngIf="!isAllSelected && (ability.can('update', Kind[kind]))"
                   (click)="onEditSelected()">
             <mat-icon matTooltip="Edit selected configurations"
                       i18n-matTooltip="@@configurationEditSelectedConfigurationsButtonTooltip">edit
             </mat-icon>
           </button>
           <button mat-icon-button
-                  *ngIf="isAllSelected && ('updateAll' | able: Kind[kind])"
+                  *ngIf="isAllSelected && (ability.can('updateAll', Kind[kind]))"
                   (click)="onEditSelected()">
             <mat-icon matTooltip="Edit all configurations in database"
                       i18n-matTooltip="@@configurationEditAllConfigurationsInDbButtonTooltip">edit
             </mat-icon>
           </button>
-
           <button mat-icon-button
-                  *ngIf="!isAllSelected && ('delete' | able: Kind[kind])"
+                  *ngIf="!isAllSelected && (ability.can('delete', Kind[kind]))"
                   (click)="onDeleteSelectedConfigs()">
             <mat-icon matTooltip="Delete selected configurations"
                       i18n-matTooltip="@@configurationDeleteSelectedConfigurationsButtonTooltip">delete
@@ -97,7 +95,7 @@
           <ng-container *ngIf="kind === Kind.COLLECTION">
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+                      *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
                       (click)="onFilterByCollectionRef(row)"
                       i18n="@@configListActionButtonShowCrawlConfig"
                       matTooltip="Show crawlconfigs with reference to the collection"
@@ -108,9 +106,8 @@
               </button>
             </ng-container>
           </ng-container>
-
           <ng-container *ngIf="kind === Kind.CRAWLENTITY">
-            <ng-container *ngIf="'read' | able: Kind[Kind.SEED]">
+            <ng-container *ngIf="ability.can('read', Kind[Kind.SEED])">
               <a *appFilter="let row" mat-menu-item
                  [routerLink]="['../seed']"
                  [queryParams]="{entity_id: row.id}"
@@ -119,7 +116,7 @@
                 Go to seed list
               </a>
             </ng-container>
-            <ng-container *ngIf="'create' | able: Kind[Kind.SEED]">
+            <ng-container *ngIf="ability.can('create', Kind[Kind.SEED])">
               <button *appAction="let row" mat-menu-item
                       (click)="onCreateSeedFromEntity(row)"
                       i18n="@@configListActionButtonCreateSeed"
@@ -133,7 +130,7 @@
           </ng-container>
 
           <ng-container *ngIf="kind === Kind.SEED">
-            <ng-container *ngIf="'read' | able: 'CrawlExecution'">
+            <ng-container *ngIf="ability.can('read', 'CrawlExecution')">
               <a *appFilter="let row" mat-menu-item
                  [routerLink]="['/report/crawlexecution']"
                  [queryParams]="{seed_id: row.id}"
@@ -144,7 +141,7 @@
             </ng-container>
             <ng-container *appFilter="let row">
               <ng-container *ngIf="row?.seed?.jobRefList.length">
-                <ng-container *ngIf="'read' | able: Kind[Kind.SEED]">
+                <ng-container *ngIf="ability.can('read', Kind[Kind.SEED])">
                   <a mat-menu-item
                      [routerLink]="['../seed']"
                      [queryParams]="getJobRefListQueryParams(row)"
@@ -159,7 +156,7 @@
               </ng-container>
             </ng-container>
             <ng-container *appFilter="let row">
-              <button *ngIf="'read' | able: Kind[Kind.SEED]" mat-menu-item
+              <button *ngIf="ability.can('read', Kind[Kind.SEED])" mat-menu-item
                       (click)="onFilterByEntityRef(row)"
                       i18n="@@configListActionButtonShowSeedsForEntity"
                       matTooltip="Show seeds with the same entity"
@@ -185,7 +182,7 @@
           <ng-container *ngIf="kind === Kind.CRAWLSCHEDULECONFIG">
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+                      *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
                       (click)="onFilterByScheduleRef(row)"
                       i18n="@@configListActionButtonShowCrawljobsWithSchedule"
                       matTooltip="Show crawljobs with reference to the schedule"
@@ -201,7 +198,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.collectionRef?.id">
                 <a mat-menu-item
-                   *ngIf="'read' | able: Kind[Kind.COLLECTION]"
+                   *ngIf="ability.can('read', Kind[Kind.COLLECTION])"
                    [routerLink]="['../collection', row.crawlConfig.collectionRef?.id]"
                    i18n="@@configListActionButtonGoToCollection"
                    matTooltip="Go to collection: {{row | getCollectionName | async}}"
@@ -215,7 +212,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.browserConfigRef?.id">
                 <a mat-menu-item
-                   *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"
+                   *ngIf="ability.can('read', Kind[Kind.BROWSERCONFIG])"
                    [routerLink]="['../browserconfig', row.crawlConfig.browserConfigRef?.id]"
                    i18n="@@configListActionButtonGoToBrowserconfig"
                    matTooltip="Go to browserconfig: {{row | getBrowserConfigName | async}}"
@@ -229,7 +226,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlConfig?.politenessRef?.id">
                 <a mat-menu-item
-                   *ngIf="'read' | able: Kind[Kind.POLITENESSCONFIG]"
+                   *ngIf="ability.can('read', Kind[Kind.POLITENESSCONFIG])"
                    [routerLink]="['../politenessconfig', row.crawlConfig.politenessRef?.id]"
                    i18n="@@configListActionButtonGoToPolitenessconfig"
                    matTooltip="Go to politenessconfig: {{row | getPolitenessConfigName | async}}"
@@ -242,7 +239,7 @@
             </ng-container>
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+                      *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
                       (click)="onFilterByCrawlConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawljobsWithCrawlconfig"
                       matTooltip="Show crawljobs with reference to the crawlconfig"
@@ -257,7 +254,7 @@
           <ng-container *ngIf="kind === Kind.BROWSERCONFIG">
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+                      *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
                       (click)="onFilterByBrowserConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawljobsWithBrowserconfig"
                       matTooltip="Show crawlconfigs with reference to the browserconfig"
@@ -272,7 +269,7 @@
           <ng-container *ngIf="kind === Kind.POLITENESSCONFIG">
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+                      *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
                       (click)="onFilterByPolitenessConfigRef(row)"
                       i18n="@@configListActionButtonFilterCrawlconfigswithPoliteness"
                       matTooltip="Show crawlconfigs with reference to the politeness"
@@ -287,7 +284,7 @@
           <ng-container *ngIf="kind === Kind.BROWSERSCRIPT">
             <ng-container *appFilter="let row">
               <button mat-menu-item
-                      *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"
+                      *ngIf="ability.can('read', Kind[Kind.BROWSERCONFIG])"
                       (click)="onFilterByBrowserScriptRef(row)"
                       i18n="@@configListActionButtonFilterBrowserconfigWithBrowserscript"
                       matTooltip="Show browserconfigs with reference to the browserscript"
@@ -300,8 +297,8 @@
           </ng-container>
 
           <ng-container *ngIf="kind === Kind.CRAWLJOB">
-            <span *appExtra="let row">{{row | getJobStatus | jobState | async}}</span>
-            <ng-container *ngIf="'read' | able: 'reports'">
+            <span *appExtra="let row">{{ row | getJobStatus | jobState | async }}</span>
+            <ng-container *ngIf="ability.can('read', 'reports')">
               <a *appShortcut="let row" mat-menu-item
                  [routerLink]="['/report/jobexecution']"
                  [queryParams]="{job_id: row.id}"
@@ -316,7 +313,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlJob?.scheduleRef.id">
                 <a mat-menu-item
-                   *ngIf="'read' | able: Kind[Kind.CRAWLSCHEDULECONFIG]"
+                   *ngIf="ability.can('read', Kind[Kind.CRAWLSCHEDULECONFIG])"
                    [routerLink]="['../schedule', row.crawlJob.scheduleRef?.id ]"
                    i18n="@@configListActionButtonGoToSchedule"
                    matTooltip="Go to schedule: {{row | getCrawlScheduleName | async}}"
@@ -330,7 +327,7 @@
             <ng-container *appShortcut="let row">
               <ng-container *ngIf="row.crawlJob?.crawlConfigRef?.id">
                 <a mat-menu-item
-                   *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+                   *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
                    [routerLink]="['../crawlconfig', row.crawlJob.crawlConfigRef?.id]"
                    i18n="@@configListActionButtonGoToCrawlconfig"
                    matTooltip="Go to crawlconfig: {{row | getCrawlConfigName | async}}"
@@ -342,7 +339,7 @@
               </ng-container>
             </ng-container>
             <ng-container *appFilter="let row">
-              <button *ngIf="'read' | able: Kind[Kind.SEED]" mat-menu-item
+              <button *ngIf="ability.can('read', Kind[Kind.SEED])" mat-menu-item
                       (click)="onFilterByCrawlJobRef(row)"
                       i18n="@@configListActionButtonFilterSeedsWithCrawljob"
                       matTooltip="Show seeds with reference to the crawljob"

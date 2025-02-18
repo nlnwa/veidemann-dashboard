@@ -10,10 +10,11 @@ import {ControllerApiService, SnackBarService} from '../../../core/services';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-crawl-execution',
-  templateUrl: './crawl-execution.component.html',
-  styleUrls: ['./crawl-execution.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawl-execution',
+    templateUrl: './crawl-execution.component.html',
+    styleUrls: ['./crawl-execution.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlExecutionDetailComponent extends DetailDirective<CrawlExecutionStatus> implements OnInit {
 

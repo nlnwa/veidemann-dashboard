@@ -13,24 +13,28 @@ import {Duration} from '../../../../shared/models/duration/duration.model';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {NUMBER_OR_EMPTY_STRING} from '../../../../shared/validation/patterns';
-import * as moment from 'moment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 @Component({
-  selector: 'app-duration-picker',
-  templateUrl: './duration-picker.component.html',
-  styleUrls: ['./duration-picker.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DurationPickerComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => DurationPickerComponent),
-      multi: true
-    }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-duration-picker',
+    templateUrl: './duration-picker.component.html',
+    styleUrls: ['./duration-picker.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DurationPickerComponent),
+            multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => DurationPickerComponent),
+            multi: true
+        }
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class DurationPickerComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy {
@@ -149,7 +153,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   secondsToDuration(seconds: number): Duration {
-    const s = moment.duration(seconds, 'seconds');
+    const s = dayjs.duration(seconds, 'seconds');
     return new Duration({
       days: s.days(),
       hours: s.hours(),
@@ -160,7 +164,7 @@ export class DurationPickerComponent implements ControlValueAccessor, OnInit, Af
   }
 
   msToDuration(milliseconds: number): Duration {
-    const ms = moment.duration(milliseconds);
+    const ms = dayjs.duration(milliseconds);
     return new Duration({
       days: null,
       hours: null,

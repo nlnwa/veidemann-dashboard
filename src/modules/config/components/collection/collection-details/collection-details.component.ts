@@ -14,10 +14,11 @@ import {VALID_COLLECTION_NAME} from '../../../../../shared/validation/patterns';
 
 
 @Component({
-  selector: 'app-collection-details',
-  templateUrl: './collection-details.component.html',
-  styleUrls: ['./collection-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-collection-details',
+    templateUrl: './collection-details.component.html',
+    styleUrls: ['./collection-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CollectionDetailsComponent implements OnChanges {
 

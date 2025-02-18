@@ -9,9 +9,10 @@ import {DateTime} from '../../../../../shared/func';
 import {LabelMultiComponent} from '../../label/label-multi/label-multi.component';
 
 @Component({
-  selector: 'app-schedule-multi-dialog',
-  templateUrl: './schedule-multi-dialog.component.html',
-  styleUrls: ['./schedule-multi-dialog.component.css']
+    selector: 'app-schedule-multi-dialog',
+    templateUrl: './schedule-multi-dialog.component.html',
+    styleUrls: ['./schedule-multi-dialog.component.css'],
+    standalone: false
 })
 export class ScheduleMultiDialogComponent extends ScheduleDetailsComponent implements OnInit {
 

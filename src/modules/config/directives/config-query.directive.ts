@@ -9,7 +9,8 @@ import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 
 @Directive({
-  selector: '[appQueryConfigObject]'
+    selector: '[appQueryConfigObject]',
+    standalone: false
 })
 export class ConfigQueryDirective extends QueryDirective<ConfigQuery, ConfigObject> {
   @Input()

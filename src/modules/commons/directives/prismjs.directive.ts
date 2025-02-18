@@ -7,7 +7,8 @@ import 'prismjs/components/prism-python';
 // import 'prismjs/plugins/match-braces/prism-match-braces';
 
 @Directive({
-  selector: '[appHighlight]'
+    selector: '[appHighlight]',
+    standalone: false
 })
 export class HighlightDirective implements AfterViewChecked {
   private done = false;

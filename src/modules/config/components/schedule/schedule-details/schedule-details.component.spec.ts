@@ -7,7 +7,6 @@ import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
@@ -19,7 +18,8 @@ import {
   MatDatepickerToggleHarness
 } from '@angular/material/datepicker/testing';
 import {MatFormFieldHarness} from '@angular/material/form-field/testing';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import {MAT_DATE_LOCALE} from "@angular/material/core";
 
 const exampleCrawlSchedule: ConfigObject = {
   id: 'configObject_id',
@@ -72,7 +72,6 @@ describe('ScheduleDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         CommonsModule,
         NoopAnimationsModule,
         CoreTestingModule.forRoot(),
@@ -84,6 +83,10 @@ describe('ScheduleDetailsComponent', () => {
         AnnotationComponent
       ],
       providers: [
+        {
+          provide: MAT_DATE_LOCALE,
+          useValue: 'nb',
+        },
         {
           provide: AuthService,
           useValue: {
@@ -384,22 +387,7 @@ describe('ScheduleDetailsComponent', () => {
     });
   });
 
-  // TODO:
-  //  use no-nb as locale when inputting dates ?
-  //  Use updateButton.click() instead of component.onUpdate().(Gets error fixture already destroyed when using click())
-
-  /** Testing datepicker component.
-   * When checking validation for entering invalid dates, output from calendar is in en-US locale.
-   * Same goes for when typing in input.
-   * ex: writing dd.mm.yyyy in test (24.12.2022), is invalid.
-   * Tested on live page (where locale is set), and works as expected (24.12.2022 is valid and 12.24.2022 is invalid).
-   *
-   * At the end of each test the updated configObject (from prepareSave), is validated to be as expected.
-   *
-   */
-
   it('setting valid from date in calendar sets timestamp to beginning of day', async () => {
-
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -411,42 +399,49 @@ describe('ScheduleDetailsComponent', () => {
     await fromCal.selectCell(dates[0]);
     await validFromToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedFromDate = moment().add(1, 'M').month() + '/1/' + moment().year();
-    expect(await validFrom.getValue()).toEqual(expectedFromDate);
+
+    // Calculate the expected date and timestamp reliably
+    const expectedDate = dayjs().locale('nb').startOf('month');
+    const expected = expectedDate.format('l');
+
+    expect(await validFrom.getValue()).toEqual(expected);
     expect(component.canUpdate).toBeTruthy();
+
     fixture.detectChanges();
     component.onUpdate();
-    const expectedTimestamp = moment().startOf('month').format('YYYY-MM-DD') + 'T00:00:00.000Z';
+
+    const expectedTimestamp = expectedDate.format('YYYY-MM-DD') + 'T00:00:00.000Z';
     expect(update.crawlScheduleConfig.validFrom).toBe(expectedTimestamp);
   });
 
-  it('setting valid from date in input sets timestamp to end of day', async () => {
+  it('setting valid from date in input sets timestamp to start of day', async () => {
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
     });
 
-    await validFrom.setValue('1.32.2022');
+    await validFrom.setValue('32.1.2022');
     fixture.detectChanges();
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validFrom.setValue('13.1.2022');
+
+    await validFrom.setValue('1.13.2022');
     await validFrom.blur();
     expect(await validFromFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
+
     await validFrom.setValue('1.1.2022');
     await validFrom.blur();
-
     expect(await validFromFormField.isControlValid()).toBeTruthy();
     expect(component.canUpdate).toBeTruthy();
 
     component.onUpdate();
+
     expect(update.crawlScheduleConfig.validFrom).toBe('2022-01-01T00:00:00.000Z');
   });
 
   it('setting valid to date in calendar sets timestamp to end of day', async () => {
-
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -455,18 +450,18 @@ describe('ScheduleDetailsComponent', () => {
     await validToToggle.openCalendar();
     const toCal = await validToToggle.getCalendar();
     const daysInMonth = await toCal.getCells();
-    await toCal.selectCell({text: (daysInMonth.length).toString()});
+    await daysInMonth[daysInMonth.length -1].select();
     await validToToggle.closeCalendar();
     fixture.detectChanges();
-    const expectedToDate = moment().add(1, 'M').month() + '/' + daysInMonth.length + '/' + moment().year();
+    const expectedToDate = dayjs().locale('nb').endOf('month').format('D.M.YYYY');
     expect(await validTo.getValue()).toEqual(expectedToDate);
     expect(component.canUpdate).toBeTruthy();
     component.onUpdate();
-    const expectedTimestamp = moment().endOf('month').format('YYYY-MM-DD') + 'T23:59:59.999Z';
+    const expectedTimestamp = dayjs().locale('nb').endOf('month').format('YYYY-MM-DD') + 'T23:59:59.999Z';
     expect(update.crawlScheduleConfig.validTo).toBe(expectedTimestamp);
   });
 
-  it('setting valid to date in input sets timestamp to beginning of day', async () => {
+  it('setting valid to date in input sets timestamp to end of day', async () => {
     let update: ConfigObject | undefined;
     component.update.subscribe((config: ConfigObject) => {
       update = config;
@@ -477,16 +472,18 @@ describe('ScheduleDetailsComponent', () => {
     await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validTo.setValue('13.1.2022');
+
+    await validTo.setValue('32.1.2022');
+    fixture.detectChanges();
     await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeFalsy();
     expect(component.canUpdate).toBeFalsy();
-    await validTo.setValue('1.1.2022');
-    await validTo.blur();
 
+    await validTo.setValue('1.1.2022');
+    fixture.detectChanges();
+    await validTo.blur();
     expect(await validToFormField.isControlValid()).toBeTruthy();
     expect(component.canUpdate).toBeTruthy();
-
     component.onUpdate();
     expect(update.crawlScheduleConfig.validTo).toBe('2022-01-01T23:59:59.999Z');
   });

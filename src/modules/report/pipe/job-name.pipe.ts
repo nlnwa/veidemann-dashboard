@@ -5,7 +5,8 @@ import {JobExecutionService} from '../services';
 
 
 @Pipe({
-  name: 'getJobNamePipe'
+    name: 'getJobNamePipe',
+    standalone: false
 })
 export class JobNamePipe implements PipeTransform {
 

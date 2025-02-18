@@ -7,9 +7,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ConfigDialogData} from '../../../func';
 
 @Component({
-  selector: 'app-entity-dialog',
-  templateUrl: './seed-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-entity-dialog',
+    templateUrl: './seed-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SeedDialogComponent extends SeedDetailsComponent implements OnInit {
   crawlJobs: ConfigObject[];

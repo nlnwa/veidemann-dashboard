@@ -9,9 +9,10 @@ import {LabelService} from '../../../services/label.service';
 import {UntypedFormControl} from '@angular/forms';
 
 @Component({
-  selector: 'app-label-multi',
-  templateUrl: './label-multi.component.html',
-  styleUrls: ['./label-multi.component.css']
+    selector: 'app-label-multi',
+    templateUrl: './label-multi.component.html',
+    styleUrls: ['./label-multi.component.css'],
+    standalone: false
 })
 export class LabelMultiComponent implements OnInit {
   @Input()

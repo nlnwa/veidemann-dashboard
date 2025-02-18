@@ -7,9 +7,10 @@ import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model'
 
 
 @Component({
-  selector: 'app-crawljob-details',
-  templateUrl: './crawl-job-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawljob-details',
+    templateUrl: './crawl-job-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlJobDetailsComponent implements OnChanges {
   readonly Kind = Kind;

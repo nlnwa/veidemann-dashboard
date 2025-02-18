@@ -5,9 +5,10 @@ import {ErrorService} from '../../../core/services';
 import {JobExecutionState} from '../../../../shared/models/report';
 
 @Component({
-  selector: 'app-shortcut',
-  templateUrl: './shortcut.component.html',
-  styleUrls: ['./shortcut.component.scss']
+    selector: 'app-shortcut',
+    templateUrl: './shortcut.component.html',
+    styleUrls: ['./shortcut.component.scss'],
+    standalone: false
 })
 export class ShortcutComponent {
   readonly Kind = Kind;

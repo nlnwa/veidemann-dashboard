@@ -1,11 +1,11 @@
-<mat-nav-list>
+<mat-nav-list *ngIf="ability$ | async as ability">
   <ng-container [ngSwitch]="configObject.kind">
     <ng-container *ngSwitchCase="Kind.CRAWLENTITY">
       <div mat-subheader i18n="@@filterShortcutListTitle">
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.SEED]"
+         *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
          [queryParams]="{entity_id: configObject.id}">
         <mat-icon matListItemIcon>link</mat-icon>
@@ -18,7 +18,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: 'reports'"
+         *ngIf="ability.can('read', 'reports')"
          [routerLink]="['/report/crawlexecution/']"
          [queryParams]="{seed_id: configObject.id}"
          matTooltip="Show crawlexecutions for the seed"
@@ -28,7 +28,7 @@
       </a>
       <ng-container *ngIf="configObject.seed.jobRefList.length">
         <a mat-list-item
-           *ngIf="'read' | able: Kind[Kind.SEED]"
+           *ngIf="ability.can('read', Kind[Kind.SEED])"
            [routerLink]="['../../seed']"
            [queryParams]="getJobRefListQueryParams(configObject)"
            matTooltip="Show seeds with the same crawljob"
@@ -38,7 +38,7 @@
         </a>
       </ng-container>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.SEED]"
+         *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
          [queryParams]="{entity_id: configObject.seed.entityRef.id}"
          matTooltip="Show seeds with the same entity"
@@ -53,7 +53,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: 'reports'"
+         *ngIf="ability.can('read', 'reports')"
          [routerLink]="['/report/jobexecution']"
          [queryParams]="{job_id: configObject.id}"
          matTooltip="Go to jobexecutions for the crawljob"
@@ -62,7 +62,7 @@
         Show jobexecutions
       </a>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.SEED]"
+         *ngIf="ability.can('read', Kind[Kind.SEED])"
          [routerLink]="['../../seed']"
          [queryParams]="{crawl_job_id: configObject.id}"
          matTooltip="Show seeds with reference to the crawljob"
@@ -77,7 +77,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+         *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
          [routerLink]="['../../crawljobs']"
          [queryParams]="{schedule_id: configObject.id}"
          matTooltip="Show crawljobs with reference to the schedule"
@@ -92,7 +92,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+         *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
          [routerLink]="['../../crawljobs']"
          [queryParams]="{crawl_config_id: configObject.id}"
          matTooltip="Show crawljobs with reference to the crawlconfig"
@@ -107,7 +107,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+         *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"
          [queryParams]="{collection_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the collection"
@@ -122,7 +122,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+         *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"
          [queryParams]="{browser_config_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the browserconfig"
@@ -137,7 +137,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.BROWSERCONFIG]"
+         *ngIf="ability.can('read', Kind[Kind.BROWSERCONFIG])"
          [routerLink]="['../../browserconfig']"
          [queryParams]="{script_id: configObject.id}"
          matTooltip="Show browserconfigs with reference to the browserscript"
@@ -152,7 +152,7 @@
         Filters
       </div>
       <a mat-list-item
-         *ngIf="'read' | able: Kind[Kind.CRAWLCONFIG]"
+         *ngIf="ability.can('read', Kind[Kind.CRAWLCONFIG])"
          [routerLink]="['../../crawlconfig']"
          [queryParams]="{politeness_id: configObject.id}"
          matTooltip="Show crawlconfigs with reference to the politeness"

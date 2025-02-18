@@ -17,7 +17,6 @@ import {CommonsModule} from '../../../../commons';
 import {LabelService} from '../../../services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 
 describe('PolitenessConfigDialogComponent', () => {
@@ -32,7 +31,7 @@ describe('PolitenessConfigDialogComponent', () => {
   };
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AbilityModule, CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
+      imports: [CoreTestingModule.forRoot(), MatDialogModule, CommonsModule, NoopAnimationsModule],
       declarations: [PolitenessConfigDialogComponent,
         DurationPickerComponent,
         SelectorComponent,

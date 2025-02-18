@@ -18,9 +18,10 @@ import {Parcel} from '../..';
 import {configRefIdRequired} from '../../../../../shared/validation/configref';
 
 @Component({
-  selector: 'app-seed-details',
-  templateUrl: './seed-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-seed-details',
+    templateUrl: './seed-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SeedDetailsComponent implements OnChanges, OnDestroy {
 

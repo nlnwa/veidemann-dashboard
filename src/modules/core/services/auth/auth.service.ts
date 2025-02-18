@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {Metadata} from 'grpc-web';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {Kind, Role} from '../../../../shared/models';
-import {Ability, AbilityBuilder} from '@casl/ability';
+import {AbilityBuilder, createMongoAbility, MongoAbility, PureAbility} from '@casl/ability';
 
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AuthService {
 
   roles: Role[];
 
-  constructor(private oauthService: OAuthService, private ability: Ability) {
+  constructor(private oauthService: OAuthService, @Inject(PureAbility) private ability: MongoAbility) {
     this.roles = [Role.ANY];
   }
 
@@ -43,7 +43,7 @@ export class AuthService {
     return decodeURIComponent(this.oauthService.state);
   }
 
-  getAbility(): Ability {
+  getAbility(): MongoAbility {
     return this.ability;
   }
 
@@ -143,7 +143,7 @@ export class AuthService {
   }
 
   updateAbility() {
-    const {can, rules} = new AbilityBuilder(Ability);
+    const {can, rules} = new AbilityBuilder(createMongoAbility);
 
     const operatorConfigs = [Kind[Kind.CRAWLENTITY], Kind[Kind.SEED], Kind[Kind.CRAWLJOB], Kind[Kind.CRAWLCONFIG],
       Kind[Kind.CRAWLSCHEDULECONFIG], Kind[Kind.BROWSERCONFIG], Kind[Kind.POLITENESSCONFIG], Kind[Kind.BROWSERSCRIPT],

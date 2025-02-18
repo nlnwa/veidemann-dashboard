@@ -15,21 +15,24 @@ import {SortDirection} from '@angular/material/sort';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog} from '@angular/material/dialog';
 import {AbortCrawlDialogComponent} from '../../components/abort-crawl-dialog/abort-crawl-dialog.component';
+import {AbilityService} from '@casl/angular';
 
 
 @Component({
-  selector: 'app-crawl-execution',
-  templateUrl: './crawl-execution.component.html',
-  styleUrls: ['./crawl-execution.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ListDataSource, {
-    provide: BASE_LIST,
-    useClass: CrawlExecutionStatusListComponent,
-  }],
+    selector: 'app-crawl-execution',
+    templateUrl: './crawl-execution.component.html',
+    styleUrls: ['./crawl-execution.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ListDataSource, {
+            provide: BASE_LIST,
+            useClass: CrawlExecutionStatusListComponent,
+        }],
+    standalone: false
 })
 export class CrawlExecutionComponent implements OnInit {
   readonly CrawlExecutionState = CrawlExecutionState;
   readonly Kind = Kind;
+  readonly ability$: Observable<any>;
 
   private reload$: Observable<void>;
   private reload: Subject<void>;
@@ -53,10 +56,13 @@ export class CrawlExecutionComponent implements OnInit {
               private errorService: ErrorService,
               private dialog: MatDialog,
               private controllerApiService: ControllerApiService,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private abilityService: AbilityService<any>
+  ) {
     this.crawlJobOptions = this.route.snapshot.data.options.crawlJobs;
     this.reload = new Subject<void>();
     this.reload$ = this.reload.asObservable();
+    this.ability$ = this.abilityService.ability$;
   }
 
   ngOnInit() {

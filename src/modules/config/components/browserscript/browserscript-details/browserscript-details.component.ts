@@ -16,10 +16,11 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MonacoEditorConstructionOptions, MonacoEditorLoaderService, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-browserscript-details',
-  templateUrl: './browserscript-details.component.html',
-  styleUrls: ['./browserscript-details.component.scss']
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-browserscript-details',
+    templateUrl: './browserscript-details.component.html',
+    styleUrls: ['./browserscript-details.component.scss'],
+    standalone: false
 })
 export class BrowserScriptDetailsComponent implements OnChanges {
   readonly BrowserScriptType = BrowserScriptType;

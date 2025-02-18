@@ -4,7 +4,8 @@ import {first, map} from 'rxjs/operators';
 import {CrawlExecutionService} from '../services';
 
 @Pipe({
-  name: 'getSeedNamePipe'
+    name: 'getSeedNamePipe',
+    standalone: false
 })
 export class SeedNamePipe implements PipeTransform {
 

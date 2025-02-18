@@ -15,7 +15,6 @@ import {AnnotationComponent} from '../annotation/annotation.component';
 import {LabelService} from '../../services';
 import {of} from 'rxjs';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../core/services';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {VALID_COLLECTION_NAME} from '../../../../shared/validation/patterns';
@@ -32,7 +31,6 @@ describe('CollectionMetaComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        AbilityModule,
         MaterialModule,
         RouterTestingModule,
         CommonsModule,

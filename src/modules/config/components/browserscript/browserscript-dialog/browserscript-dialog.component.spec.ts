@@ -11,7 +11,6 @@ import {LabelService} from '../../../services';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {AnnotationComponent} from '../../annotation/annotation.component';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
 import {MonacoEditorComponent} from '@materia-ui/ngx-monaco-editor';
@@ -29,7 +28,6 @@ describe('BrowserScriptDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         CoreTestingModule.forRoot(),
         CommonsModule,
         NoopAnimationsModule

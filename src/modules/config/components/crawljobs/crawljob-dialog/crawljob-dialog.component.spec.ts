@@ -15,7 +15,6 @@ import {
 } from '../..';
 import {CommonsModule} from '../../../../commons';
 import {LabelService} from '../../../services';
-import {AbilityModule} from '@casl/angular';
 import {of} from 'rxjs';
 import {AuthService} from '../../../../core/services';
 
@@ -30,7 +29,7 @@ describe('CrawlJobDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AbilityModule, CommonsModule, NoopAnimationsModule, CoreTestingModule.forRoot()],
+      imports: [CommonsModule, NoopAnimationsModule, CoreTestingModule.forRoot()],
       declarations: [
         MetaComponent,
         CrawlJobDialogComponent,

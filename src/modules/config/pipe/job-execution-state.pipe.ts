@@ -5,7 +5,8 @@ import {JobExecutionState, JobExecutionStatus} from '../../../shared/models/repo
 
 
 @Pipe({
-  name: 'jobState'
+    name: 'jobState',
+    standalone: false
 })
 export class JobExecutionStatePipe implements PipeTransform {
   transform(jobExecutionStatus: Observable<JobExecutionStatus>): Observable<string> {

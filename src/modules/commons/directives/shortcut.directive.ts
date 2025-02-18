@@ -1,7 +1,8 @@
 import {Directive} from '@angular/core';
 
 @Directive({
-  selector: '[appShortcut]'
+    selector: '[appShortcut]',
+    standalone: false
 })
 export class ShortcutDirective {
 }

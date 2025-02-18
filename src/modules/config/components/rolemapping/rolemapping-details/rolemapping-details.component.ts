@@ -5,9 +5,10 @@ import {ConfigObject, Kind, Meta, Role, RoleMapping} from '../../../../../shared
 
 
 @Component({
-  selector: 'app-rolemapping-details',
-  templateUrl: './rolemapping-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-rolemapping-details',
+    templateUrl: './rolemapping-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class RoleMappingDetailsComponent implements OnChanges {

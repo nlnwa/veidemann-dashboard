@@ -12,7 +12,6 @@ import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AnnotationComponent} from '../../annotation/annotation.component';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 
 describe('CrawlConfigDialogComponent', () => {
@@ -26,7 +25,7 @@ describe('CrawlConfigDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AbilityModule, CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
+      imports: [CoreTestingModule.forRoot(), CommonsModule, NoopAnimationsModule],
       declarations: [CrawlConfigDialogComponent, MetaComponent, LabelComponent, AnnotationComponent],
       providers: [
         {

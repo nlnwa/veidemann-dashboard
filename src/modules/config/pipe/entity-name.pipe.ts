@@ -5,7 +5,8 @@ import {ConfigService} from '../../commons/services';
 import {first, map} from 'rxjs/operators';
 
 @Pipe({
-  name: 'getEntityName'
+    name: 'getEntityName',
+    standalone: false
 })
 export class EntityNamePipe implements PipeTransform {
   constructor(private configService: ConfigService) {

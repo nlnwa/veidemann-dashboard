@@ -9,7 +9,6 @@ import {CoreTestingModule} from '../../../core/core.testing.module';
 import {CommonsModule} from '../../../commons';
 import {LabelComponent} from '../label/label.component';
 import {AnnotationComponent} from '../annotation/annotation.component';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../core/services';
 
 describe('MetaComponent', () => {
@@ -20,7 +19,6 @@ describe('MetaComponent', () => {
     TestBed.configureTestingModule({
       declarations: [MetaComponent, LabelComponent, AnnotationComponent],
       imports: [
-        AbilityModule,
         CoreTestingModule.forRoot(),
         CommonsModule,
         NoopAnimationsModule

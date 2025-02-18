@@ -4,9 +4,10 @@ import {CrawlLogQuery} from '../../services';
 import {QueryComponent} from '../../../commons/components';
 
 @Component({
-  selector: 'app-crawl-log-query',
-  templateUrl: './crawl-log-query.component.html',
-  styleUrls: ['./crawl-log-query.component.css']
+    selector: 'app-crawl-log-query',
+    templateUrl: './crawl-log-query.component.html',
+    styleUrls: ['./crawl-log-query.component.css'],
+    standalone: false
 })
 export class CrawlLogQueryComponent extends QueryComponent<CrawlLogQuery> {
 

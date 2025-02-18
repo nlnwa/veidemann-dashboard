@@ -7,7 +7,8 @@ import {QueryWithPageLengthDirective} from './query-with-page-length.directive';
 
 
 @Directive({
-  selector: '[appQueryCrawlExecutionStatus]'
+    selector: '[appQueryCrawlExecutionStatus]',
+    standalone: false
 })
 export class QueryCrawlExecutionStatusDirective extends QueryWithPageLengthDirective<CrawlExecutionStatusQuery, CrawlExecutionStatus> {
 

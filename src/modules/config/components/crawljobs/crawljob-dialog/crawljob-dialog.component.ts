@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {BrowserScriptType, ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-crawljob-dialog',
-  templateUrl: './crawljob-dialog.component.html',
-  styleUrls: ['./crawljob-dialog.component.css']
+    selector: 'app-crawljob-dialog',
+    templateUrl: './crawljob-dialog.component.html',
+    styleUrls: ['./crawljob-dialog.component.css'],
+    standalone: false
 })
 export class CrawlJobDialogComponent extends CrawlJobDetailsComponent implements OnInit {
 

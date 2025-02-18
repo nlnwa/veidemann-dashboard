@@ -44,10 +44,11 @@ export interface ConfigOptions {
 }
 
 @Component({
-  selector: 'app-configuration',
-  templateUrl: './configuration.component.html',
-  styleUrls: ['./configuration.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-configuration',
+    templateUrl: './configuration.component.html',
+    styleUrls: ['./configuration.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigurationComponent implements OnDestroy {
   readonly Kind = Kind;

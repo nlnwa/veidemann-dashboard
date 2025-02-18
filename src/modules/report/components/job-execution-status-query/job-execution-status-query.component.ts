@@ -6,10 +6,11 @@ import {ConfigObject} from '../../../../shared/models/config';
 import {UntypedFormBuilder} from '@angular/forms';
 
 @Component({
-  selector: 'app-job-execution-status-query',
-  templateUrl: './job-execution-status-query.component.html',
-  styleUrls: ['./job-execution-status-query.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-job-execution-status-query',
+    templateUrl: './job-execution-status-query.component.html',
+    styleUrls: ['./job-execution-status-query.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class JobExecutionStatusQueryComponent extends QueryComponent<JobExecutionStatusQuery> {
   readonly JobExecutionState = JobExecutionState;

@@ -27,7 +27,6 @@ import {
   Label,
   Meta
 } from '../../../../../shared/models';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatButtonHarness} from '@angular/material/button/testing';
@@ -158,7 +157,6 @@ describe('CrawljobDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         CommonsModule,
         RouterTestingModule,
         NoopAnimationsModule,

@@ -30,15 +30,18 @@ import {ConfigDialogData, ConfigOptions, dialogByKind, multiDialogByKind} from '
 import {ReferrerError} from '../../../../shared/error';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 import {RunCrawlRequest} from '../../../../shared/models/controller/controller.model';
+import {AbilityService} from '@casl/angular';
 
 @Component({
-  selector: 'app-configurations',
-  templateUrl: './configurations.component.html',
-  styleUrls: ['./configurations.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-configurations',
+    templateUrl: './configurations.component.html',
+    styleUrls: ['./configurations.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Kind = Kind;
+  readonly ability$: Observable<any>;
   shortcuts: ShortcutInput[] = [];
 
   length$: Observable<number>;
@@ -87,7 +90,8 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
               private route: ActivatedRoute,
               private controllerApiService: ControllerApiService,
               private kindService: KindService,
-              private optionsService: OptionsService) {
+              private optionsService: OptionsService,
+              private abilityService: AbilityService<any>) {
 
     this.options$ = this.optionsService.options$.pipe(
       tap(options => this.options = options)
@@ -106,6 +110,7 @@ export class ConfigurationsComponent implements OnInit, OnDestroy, AfterViewInit
     this.reload = new Subject();
 
     this.recount = new Subject();
+    this.ability$ = this.abilityService.ability$
   }
 
   ngOnInit(): void {

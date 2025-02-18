@@ -1,22 +1,30 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
+import {ActivatedRoute, RouteConfigLoadEnd, RouteConfigLoadStart, Router} from '@angular/router';
 
 import {Observable} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
-import {AppInitializerService, ControllerApiService, ErrorService, SnackBarService} from '../../../modules/core/services';
+import {
+  AppInitializerService,
+  ControllerApiService,
+  ErrorService,
+  SnackBarService
+} from '../../../modules/core/services';
 import {AuthService, GuardService} from '../../../modules/core/services/auth';
 import {MatDialog} from '@angular/material/dialog';
 import {AboutDialogComponent} from '../about-dialog/about-dialog.component';
 import {ShortcutEventOutput, ShortcutInput} from 'ng-keyboard-shortcuts';
 import {ScheduleOverviewComponent} from '../schedule-overview/schedule-overview.component';
+import {AbilityService} from "@casl/angular";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  readonly ability$: Observable<any>;
 
   isModuleLoading$: Observable<boolean>;
   private moduleLoadSemaphore = 0;
@@ -30,7 +38,9 @@ export class AppComponent implements OnInit, AfterViewInit {
               private guardService: GuardService,
               private snackBarService: SnackBarService,
               private dialog: MatDialog,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private abilityService: AbilityService<any>) {
+    this.ability$ = this.abilityService.ability$;
     this.isModuleLoading$ = this.router.events.pipe(
       filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
       map(event => {

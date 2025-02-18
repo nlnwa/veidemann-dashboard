@@ -8,13 +8,14 @@ import {Observable, of} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-collection-meta',
-  templateUrl: './collection-meta.component.html',
-  styleUrls: ['./collection-meta.component.css'],
-  providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CollectionMetaComponent), multi: true},
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-collection-meta',
+    templateUrl: './collection-meta.component.html',
+    styleUrls: ['./collection-meta.component.css'],
+    providers: [
+        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CollectionMetaComponent), multi: true },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CollectionMetaComponent extends MetaComponent {
 

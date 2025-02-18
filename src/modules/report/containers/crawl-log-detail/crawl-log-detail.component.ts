@@ -7,9 +7,10 @@ import {Observable} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-crawl-log-detail',
-  templateUrl: './crawl-log-detail.component.html',
-  styleUrls: ['./crawl-log-detail.component.css']
+    selector: 'app-crawl-log-detail',
+    templateUrl: './crawl-log-detail.component.html',
+    styleUrls: ['./crawl-log-detail.component.css'],
+    standalone: false
 })
 export class CrawlLogDetailComponent extends DetailDirective<CrawlLog> implements OnInit {
 

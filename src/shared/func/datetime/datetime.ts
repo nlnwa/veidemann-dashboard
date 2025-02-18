@@ -1,16 +1,20 @@
-import moment from 'moment';
-import 'moment-duration-format';
 import * as timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb.js';
+
+import dayjs from 'dayjs';
+import duration, {Duration, DurationUnitType} from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(duration);
+dayjs.extend(utc);
 
 export class DateTime {
 
   static dateToUtc(dateString: string, startOfDay: boolean): string {
-    const momentObj = moment(dateString);
-    if (momentObj.isValid()) {
-      const utc = moment.utc()
-        .year(momentObj.get('year'))
-        .month(momentObj.get('month'))
-        .date(momentObj.get('date'));
+    const date = dayjs(dateString);
+    if (date.isValid()) {
+      const utc = dayjs.utc()
+        .year(date.get('year'))
+        .month(date.get('month'))
+        .date(date.get('date'));
       if (startOfDay) {
         return utc.startOf('day').toISOString();
       } else {
@@ -25,9 +29,7 @@ export class DateTime {
    *  Convert endOf startOf times from backend to 12pm to avoid that datepicker sets next day based on users timezone
    */
   static adjustTime(timestamp) {
-    const m = moment.utc(timestamp);
-    m.set({h: 12, m: 0, s: 0});
-    return m;
+    return dayjs.utc(timestamp).set('hour', 12).set('minute', 0).set('second', 0);
   }
 }
 
@@ -59,24 +61,31 @@ export function toTimestampProto(timestamp: string): any {
 }
 
 export function durationBetweenDates(startTime: string, endTime: string): string {
-  if (endTime === '') {
-    return 'N/A';
-  }
-  const start = moment(startTime);
-  const end = moment(endTime);
-  // @ts-ignore
-  return moment.duration(end.diff(start)).format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
+  const start = dayjs(startTime);
+  const end = endTime === '' ? dayjs() : dayjs(endTime);
+  const diff = end.diff(start)
+  return formatDuration(dayjs.duration(diff));
+}
+
+export function formatDuration(d: Duration): string {
+  const formatted = d.format("D[days]:H[hours]:m[min]:s[s]");
+  const trimmed = formatted
+    .replace(/(?:^|:)(0\w*(?:\[.*?\])?)+/g, "") // Remove leading `0` in each unit, but avoid leading zeros
+    .replace(/^:+|:+$/g, "")  // Remove any leading or trailing colons
+  return trimmed;
+}
+
+const timeUnitMap: { [key: string]: DurationUnitType } = {
+  ms: 'millisecond',
+  s: 'second',
+  m: 'minute',
+  h: 'hour',
+  d: 'day',
+  w: 'week',
+  M: 'month',
+  y: 'year',
 }
 
 export function timeToDuration(time: number, unit: string) {
-  if (unit === 'ms') {
-    // @ts-ignore
-    return moment.duration(time, 'milliseconds').format('d[days]:hh[hours]:mm[min]:ss[s]:SSS[ms]', {trim: 'both'});
-  }
-  if (unit === 's') {
-    // @ts-ignore
-    return moment.duration(time, 'seconds').format('d[days]:hh[hours]:mm[min]:ss[s]', {trim: 'both'});
-  }
-
+  return formatDuration(dayjs.duration(time, timeUnitMap[unit]));
 }
-

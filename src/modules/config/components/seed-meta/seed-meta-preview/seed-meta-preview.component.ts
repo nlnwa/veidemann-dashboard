@@ -3,9 +3,10 @@ import {ConfigObject} from '../../../../../shared/models';
 import {AuthService, SnackBarService} from '../../../../core/services';
 
 @Component({
-  selector: 'app-seed-meta-preview',
-  templateUrl: './seed-meta-preview.component.html',
-  styleUrls: ['./seed-meta-preview.component.css']
+    selector: 'app-seed-meta-preview',
+    templateUrl: './seed-meta-preview.component.html',
+    styleUrls: ['./seed-meta-preview.component.css'],
+    standalone: false
 })
 export class SeedMetaPreviewComponent {
 

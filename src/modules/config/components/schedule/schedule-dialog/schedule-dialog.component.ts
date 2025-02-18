@@ -7,9 +7,10 @@ import {ConfigObject} from '../../../../../shared/models/config';
 import {ScheduleDetailsComponent} from '..';
 
 @Component({
-  selector: 'app-schedule-dialog',
-  templateUrl: './schedule-dialog.component.html',
-  styleUrls: ['./schedule-dialog.component.css']
+    selector: 'app-schedule-dialog',
+    templateUrl: './schedule-dialog.component.html',
+    styleUrls: ['./schedule-dialog.component.css'],
+    standalone: false
 })
 export class ScheduleDialogComponent extends ScheduleDetailsComponent implements OnInit {
 

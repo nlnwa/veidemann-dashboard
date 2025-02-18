@@ -1,14 +1,14 @@
-<mat-nav-list>
+<mat-nav-list *ngIf="ability$ | async as ability">
   <div mat-subheader>Actions</div>
   <a mat-list-item
-     *ngIf="'read' | able: 'jobexecution'"
+     *ngIf="ability.can('read', 'jobexecution')"
      [routerLink]="['/report', 'jobexecution', pageLog.jobExecutionId]"
      i18n="@@reportListActionButtonGoToJobExecution">
     <mat-icon matListItemIcon>hdr_strong</mat-icon>
     Go to job execution
   </a>
   <a mat-list-item
-     *ngIf="'read' | able: 'crawlexecution'"
+     *ngIf="ability.can('read', 'crawlexecution')"
      [routerLink]="['/report', 'crawlexecution', pageLog.executionId]"
      i18n="@@reportListActionButtonGoToCrawlExecution">
     <mat-icon matListItemIcon>hdr_weak</mat-icon>

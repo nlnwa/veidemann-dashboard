@@ -8,9 +8,10 @@ import {ConfigObject} from '../../../../../shared/models/config';
 import {MonacoEditorLoaderService} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
-  selector: 'app-browserscript-dialog',
-  templateUrl: './browserscript-dialog.component.html',
-  styleUrls: ['./browserscript-dialog.component.css']
+    selector: 'app-browserscript-dialog',
+    templateUrl: './browserscript-dialog.component.html',
+    styleUrls: ['./browserscript-dialog.component.css'],
+    standalone: false
 })
 export class BrowserScriptDialogComponent extends BrowserScriptDetailsComponent implements OnInit {
 

@@ -1,5 +1,4 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../core.testing.module';
 import { HttpClient } from '@angular/common/http';
 import {ReportApiService} from './report-api.service';
@@ -7,7 +6,7 @@ import {ReportApiService} from './report-api.service';
 describe('ReportApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule],
+      imports: [CoreTestingModule.forRoot()],
       providers: [ReportApiService,
         {provide: HttpClient, useValue: {}}
       ]

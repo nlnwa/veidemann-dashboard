@@ -1,5 +1,4 @@
 import {ActionShortcutComponent} from './action-shortcut.component';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {ConfigObject, Kind} from '../../../../../shared/models';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
@@ -11,7 +10,7 @@ describe('ActionShortcutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CoreTestingModule.forRoot(), AbilityModule, MatListModule],
+      imports: [CoreTestingModule.forRoot(), MatListModule],
       declarations: [ActionShortcutComponent],
       providers: []
     })

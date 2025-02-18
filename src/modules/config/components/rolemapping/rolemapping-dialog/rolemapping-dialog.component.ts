@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-rolemapping-dialog',
-  templateUrl: './rolemapping-dialog.component.html',
-  styleUrls: ['./rolemapping-dialog.component.css']
+    selector: 'app-rolemapping-dialog',
+    templateUrl: './rolemapping-dialog.component.html',
+    styleUrls: ['./rolemapping-dialog.component.css'],
+    standalone: false
 })
 export class RoleMappingDialogComponent extends RoleMappingDetailsComponent implements OnInit {
 

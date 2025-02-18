@@ -7,7 +7,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getCollectionName'
+    name: 'getCollectionName',
+    standalone: false
 })
 export class CollectionNamePipe implements PipeTransform {
 

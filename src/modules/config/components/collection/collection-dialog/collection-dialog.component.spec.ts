@@ -12,7 +12,6 @@ import {AnnotationComponent, FilesizeInputComponent, LabelComponent, MetaCompone
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {CollectionMetaComponent} from '../../collection-meta/collection-meta.component';
 
@@ -31,7 +30,7 @@ describe('CollectionDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CommonsModule, CoreTestingModule.forRoot(), MatDialogModule, MatIconModule, NoopAnimationsModule, AbilityModule],
+      imports: [CommonsModule, CoreTestingModule.forRoot(), MatDialogModule, MatIconModule, NoopAnimationsModule],
       declarations: [CollectionDialogComponent, CollectionMetaComponent, FilesizeInputComponent, LabelComponent, AnnotationComponent],
       providers: [UntypedFormBuilder,
         {

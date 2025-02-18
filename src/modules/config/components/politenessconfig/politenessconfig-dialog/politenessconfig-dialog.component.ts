@@ -7,9 +7,10 @@ import {ConfigDialogData} from '../../../func';
 import {ConfigObject} from '../../../../../shared/models/config';
 
 @Component({
-  selector: 'app-politenessconfig-dialog',
-  templateUrl: './politenessconfig-dialog.component.html',
-  styleUrls: ['./politenessconfig-dialog.component.css']
+    selector: 'app-politenessconfig-dialog',
+    templateUrl: './politenessconfig-dialog.component.html',
+    styleUrls: ['./politenessconfig-dialog.component.css'],
+    standalone: false
 })
 export class PolitenessConfigDialogComponent extends PolitenessConfigDetailsComponent implements OnInit {
 

@@ -6,7 +6,8 @@ import {CrawlExecutionState, CrawlExecutionStatus} from '../../../shared/models/
 import {first, map} from 'rxjs/operators';
 
 @Pipe({
-  name: 'getExecutionQueueCountPipe'
+    name: 'getExecutionQueueCountPipe',
+    standalone: false
 })
 export class ExecutionQueueCountPipe implements PipeTransform {
   constructor(private controllerApiService: ControllerApiService) {

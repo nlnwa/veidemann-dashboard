@@ -7,7 +7,8 @@ import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 
 @Directive({
-  selector: '[appQueryCrawlLog]'
+    selector: '[appQueryCrawlLog]',
+    standalone: false
 })
 export class QueryCrawlLogDirective extends QueryDirective<CrawlLogQuery, CrawlLog> {
   constructor(protected service: CrawlLogService,

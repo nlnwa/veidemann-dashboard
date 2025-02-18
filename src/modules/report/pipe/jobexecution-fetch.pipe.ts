@@ -4,7 +4,8 @@ import {Observable, of} from 'rxjs';
 import {JobExecutionStatus} from '../../../shared/models';
 
 @Pipe({
-  name: 'getLatestJobExecutionPipe'
+    name: 'getLatestJobExecutionPipe',
+    standalone: false
 })
 export class JobExecutionFetchPipe implements PipeTransform {
 

@@ -9,9 +9,10 @@ import {LabelMultiComponent} from '../../label/label-multi/label-multi.component
 import {ANY_DECIMAL_NUMBER_OR_EMPTY_STRING, NUMBER_OR_EMPTY_STRING} from '../../../../../shared/validation/patterns';
 
 @Component({
-  selector: 'app-crawlhostgroupconfig-multi-dialog',
-  templateUrl: './crawlhostgroupconfig-multi-dialog.component.html',
-  styleUrls: ['./crawlhostgroupconfig-multi-dialog.component.css']
+    selector: 'app-crawlhostgroupconfig-multi-dialog',
+    templateUrl: './crawlhostgroupconfig-multi-dialog.component.html',
+    styleUrls: ['./crawlhostgroupconfig-multi-dialog.component.css'],
+    standalone: false
 })
 export class CrawlHostGroupConfigMultiDialogComponent extends CrawlHostGroupConfigDetailsComponent implements OnInit {
 

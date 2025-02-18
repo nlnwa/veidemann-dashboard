@@ -20,22 +20,32 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeFromLabel">
+    From:
+  </mat-label>
   <mat-form-field>
-    <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeFromLabel">
-      From
-    </mat-label>
-    <input matInput [ngxMatDatetimePicker]="startTimeFromDatePicker" formControlName="startTimeFrom">
+    <input matInput [matDatepicker]="startTimeFromDatePicker" formControlName="startTimeFrom">
     <mat-datepicker-toggle matSuffix [for]="startTimeFromDatePicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #startTimeFromDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+    <mat-datepicker #startTimeFromDatePicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matTimepicker]="startTimeFromTimepicker" formControlName="startTimeFrom">
+    <mat-timepicker-toggle matSuffix [for]="startTimeFromTimepicker"></mat-timepicker-toggle>
+    <mat-timepicker #startTimeFromTimepicker></mat-timepicker>
   </mat-form-field>
 
+  <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeToLabel">
+    To:
+  </mat-label>
   <mat-form-field>
-    <mat-label i18n="@@crawlJobExecutionReportFilterStartTimeToLabel">
-      To
-    </mat-label>
-    <input matInput [ngxMatDatetimePicker]="startTimeToDatePicker" formControlName="startTimeTo">
+    <input matInput [matDatepicker]="startTimeToDatePicker" formControlName="startTimeTo">
     <mat-datepicker-toggle matSuffix [for]="startTimeToDatePicker"></mat-datepicker-toggle>
-    <ngx-mat-datetime-picker #startTimeToDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+    <mat-datepicker #startTimeToDatePicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matTimepicker]="startTimeToTimepicker" formControlName="startTimeTo">
+    <mat-timepicker-toggle matSuffix [for]="startTimeToTimepicker"></mat-timepicker-toggle>
+    <mat-timepicker #startTimeToTimepicker></mat-timepicker>
   </mat-form-field>
 
   <mat-checkbox labelPosition="after" formControlName="watch"

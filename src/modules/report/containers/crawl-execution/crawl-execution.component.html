@@ -1,4 +1,4 @@
-<div fxLayout="column" class="container">
+<div fxLayout="column" class="container" *ngIf="ability$ | async as ability">
   <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
   <div fxFlex fxLayout="row" class="no-scroll" *ngIf="query$ | async as query">
     <app-crawl-execution-status-query class="content-padding scroll"
@@ -15,14 +15,14 @@
                                      (page)="onPage($event)">
       <ng-container *appShortcut="let row">
         <a mat-menu-item
-           *ngIf="'read' | able: Kind[Kind.SEED]"
+           *ngIf="ability.can('read', Kind[Kind.SEED])"
            [routerLink]="['/config', 'seed', row.seedId]"
            i18n="@@reportListActionButtonGoToSeed">
           <mat-icon>link</mat-icon>
           Go to seed
         </a>
         <a mat-menu-item
-           *ngIf="'read' | able: Kind[Kind.CRAWLJOB]"
+           *ngIf="ability.can('read', Kind[Kind.CRAWLJOB])"
            [routerLink]="['/config', 'crawljobs', row.jobId]"
            i18n="@@reportListActionButtonGoToCrawljob">
           <mat-icon>work</mat-icon>
@@ -31,7 +31,7 @@
       </ng-container>
       <ng-container *appFilter="let row">
         <a mat-menu-item
-           *ngIf="'read' | able: 'pagelog'"
+           *ngIf="ability.can('read', 'pagelog')"
            [routerLink]="['../pagelog']"
            [queryParams]="{execution_id: row.id, watch: isDone(row) ? null : true}"
            i18n="@@reportListActionButtonGoToPagelog">
@@ -39,7 +39,7 @@
           Go to pagelog
         </a>
         <a mat-menu-item
-           *ngIf="'read' | able: 'crawllog'"
+           *ngIf="ability.can('read', 'crawllog')"
            [routerLink]="['../crawllog']"
            [queryParams]="{execution_id: row.id}"
            i18n="@@reportListActionButtonGoToCrawlog">
@@ -48,7 +48,7 @@
         </a>
       </ng-container>
       <ng-container *appAction="let row">
-        <ng-container *ngIf="canAbort(row.state) && ('abort' | able: 'crawlexecution')">
+        <ng-container *ngIf="canAbort(row.state) && ability.can('abort','crawlexecution')">
           <a mat-menu-item
              (click)="onAbortCrawlExecution(row)"
              i18n="@@reportListActionButtonAbortCrawlExecution">
@@ -57,7 +57,7 @@
           </a>
         </ng-container>
         <a mat-menu-item
-           *ngIf="'read' | able: 'crawlexecution'"
+           *ngIf="ability.can('read', 'crawlexecution')"
            [routerLink]="['../crawlexecution', row.id]"
            i18n-matTooltip="@@reportListActionButtonShowFullReport">
           <mat-icon>keyboard_arrow_right</mat-icon>

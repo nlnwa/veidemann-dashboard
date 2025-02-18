@@ -10,10 +10,11 @@ import {$localize} from "@angular/localize/init";
 
 
 @Component({
-  selector: 'app-loglevel',
-  templateUrl: './loglevel.component.html',
-  styleUrls: ['./loglevel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-loglevel',
+    templateUrl: './loglevel.component.html',
+    styleUrls: ['./loglevel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LoglevelComponent implements OnInit, OnDestroy {
   readonly Level = Level;

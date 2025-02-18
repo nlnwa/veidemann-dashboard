@@ -3,9 +3,10 @@ import {BrowserScriptType, ConfigObject} from '../../../../../shared/models/conf
 import {MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
-  selector: 'app-browserscript-preview',
-  templateUrl: './browserscript-preview.component.html',
-  styleUrls: ['./browserscript-preview.component.css']
+    selector: 'app-browserscript-preview',
+    templateUrl: './browserscript-preview.component.html',
+    styleUrls: ['./browserscript-preview.component.css'],
+    standalone: false
 })
 export class BrowserscriptPreviewComponent implements OnInit {
   readonly BrowserScriptType = BrowserScriptType;

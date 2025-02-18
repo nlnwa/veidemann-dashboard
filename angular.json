@@ -17,8 +17,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "baseHref": "/veidemann/",
             "outputPath": {
-              "base": "dist"
+              "base": "dist/app",
+              "browser": "veidemann"
             },
             "index": "src/index.html",
             "tsConfig": "tsconfig.app.json",

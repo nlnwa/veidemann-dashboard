@@ -7,9 +7,10 @@ import {UnitOfTime} from '../../../../../shared/models/duration/unit-time.model'
 
 
 @Component({
-  selector: 'app-politenessconfig-details',
-  templateUrl: './politenessconfig-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-politenessconfig-details',
+    templateUrl: './politenessconfig-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PolitenessConfigDetailsComponent implements OnChanges {

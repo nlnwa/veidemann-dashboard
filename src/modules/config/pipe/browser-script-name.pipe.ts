@@ -6,7 +6,8 @@ import {OptionsService} from '../services/options.service';
 
 
 @Pipe({
-  name: 'getBrowserScriptName'
+    name: 'getBrowserScriptName',
+    standalone: false
 })
 export class BrowserScriptNamePipe implements PipeTransform {
   constructor(private route: ActivatedRoute, private optionsService: OptionsService) {

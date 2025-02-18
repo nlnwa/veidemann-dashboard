@@ -5,9 +5,10 @@ import {CrawlExecutionStatus, JobExecutionStatus} from '../../../../shared/model
 import {Kind} from '../../../../shared/models/config';
 
 @Component({
-  selector: 'app-abort-crawl-dialog',
-  templateUrl: './abort-crawl-dialog.component.html',
-  styleUrls: ['./abort-crawl-dialog.component.css']
+    selector: 'app-abort-crawl-dialog',
+    templateUrl: './abort-crawl-dialog.component.html',
+    styleUrls: ['./abort-crawl-dialog.component.css'],
+    standalone: false
 })
 export class AbortCrawlDialogComponent {
   readonly Kind = Kind;

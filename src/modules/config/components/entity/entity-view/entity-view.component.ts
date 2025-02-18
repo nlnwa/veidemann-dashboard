@@ -2,9 +2,10 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ConfigObject, Label} from '../../../../../shared/models';
 
 @Component({
-  selector: 'app-entity-view',
-  templateUrl: './entity-view.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-entity-view',
+    templateUrl: './entity-view.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class EntityViewComponent {

@@ -11,9 +11,10 @@ export enum CrawlExecutionStatusColors {
 }
 
 @Component({
-  selector: 'app-crawl-execution-preview',
-  templateUrl: './crawl-execution-preview.component.html',
-  styleUrls: ['./crawl-execution-preview.component.css']
+    selector: 'app-crawl-execution-preview',
+    templateUrl: './crawl-execution-preview.component.html',
+    styleUrls: ['./crawl-execution-preview.component.css'],
+    standalone: false
 })
 export class CrawlExecutionPreviewComponent implements OnChanges {
   readonly CrawlExecutionState = CrawlExecutionState;

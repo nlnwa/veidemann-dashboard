@@ -7,3 +7,4 @@ export {AppInitializerService} from './app.initializer.service';
 export {ControllerApiService} from './api/controller-api.service';
 export {ReportApiService} from './api/report-api.service';
 export {LogApiService} from './api/log-api.service';
+export {LocaleService} from './locale.service';

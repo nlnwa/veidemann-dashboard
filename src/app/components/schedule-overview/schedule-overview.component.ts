@@ -16,14 +16,17 @@ import {takeUntil, toArray} from 'rxjs/operators';
 import * as cronParser from 'cron-parser';
 import {MatDialog} from '@angular/material/dialog';
 import {ScheduleEventDialogComponent} from '../schedule-event-dialog/schedule-event-dialog.component';
-import * as momentTimezone from 'moment-timezone';
-import moment from 'moment';
 import {colorScales} from './colors';
 import {DateClickArg} from '@fullcalendar/interaction';
 import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(timezone)
+dayjs.extend(isBetween)
 
 interface ScheduledJob {
   crawlJobName: string;
@@ -40,12 +43,13 @@ interface ScheduleValidRange {
 }
 
 @Component({
-  selector: 'app-schedule-overview',
-  templateUrl: './schedule-overview.component.html',
-  styleUrls: ['./schedule-overview.component.css'],
-  providers: [ConfigApiService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.Emulated,
+    selector: 'app-schedule-overview',
+    templateUrl: './schedule-overview.component.html',
+    styleUrls: ['./schedule-overview.component.css'],
+    providers: [ConfigApiService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
+    standalone: false
 })
 export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   private crawlJobs: ConfigObject[];
@@ -189,7 +193,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       endDate: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1),
       utc: true,
       iterator: true,
-      tz: momentTimezone.tz.guess(),
+      tz: dayjs.tz.guess(),
     };
 
     const prevOptions = {
@@ -197,7 +201,7 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
       endDate: this.viewDate,
       iterator: true,
       utc: true,
-      tz: momentTimezone.tz.guess(),
+      tz: dayjs.tz.guess(),
     };
 
     const schedule = [];
@@ -312,9 +316,9 @@ export class ScheduleOverviewComponent implements OnInit, OnDestroy {
   }
 
   private isDateInRange(startDate: string, validRange: ScheduleValidRange) {
-    const eventStart = moment(startDate);
-    const validFrom = validRange.validFrom ? moment(validRange.validFrom) : moment().startOf('year');
-    const validTo = validRange.validTo ? moment(validRange.validTo) : moment().endOf('year');
-    return moment(eventStart).isBetween(validFrom, validTo);
+    const eventStart = dayjs(startDate);
+    const validFrom = validRange.validFrom ? dayjs(validRange.validFrom) : dayjs().startOf('year');
+    const validTo = validRange.validTo ? dayjs(validRange.validTo) : dayjs().endOf('year');
+    return dayjs(eventStart).isBetween(validFrom, validTo);
   }
 }

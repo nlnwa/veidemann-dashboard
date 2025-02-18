@@ -12,10 +12,11 @@ import {
 import {UnitOfTime} from 'src/shared/models/duration/unit-time.model';
 
 @Component({
-  selector: 'app-crawlhostgroupconfig-details',
-  templateUrl: './crawlhostgroupconfig-details.component.html',
-  styleUrls: ['./crawlhostgroupconfig-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-crawlhostgroupconfig-details',
+    templateUrl: './crawlhostgroupconfig-details.component.html',
+    styleUrls: ['./crawlhostgroupconfig-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CrawlHostGroupConfigDetailsComponent implements OnChanges {
   readonly UnitOfTime = UnitOfTime;

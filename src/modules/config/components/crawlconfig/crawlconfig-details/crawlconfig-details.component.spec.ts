@@ -9,7 +9,6 @@ import {LabelComponent} from '../../label/label.component';
 import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AnnotationComponent} from '../../annotation/annotation.component';
-import {AbilityModule} from '@casl/angular';
 import {AuthService} from '../../../../core/services';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {ExtraConfig} from '../../../../../shared/models/config/crawlconfig.model';
@@ -68,7 +67,6 @@ describe('CrawlConfigDetailsComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        AbilityModule,
         MaterialModule,
         RouterTestingModule,
         CoreTestingModule.forRoot(),

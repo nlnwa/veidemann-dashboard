@@ -10,11 +10,12 @@ import {FileSizePipe} from 'ngx-filesize';
 import {JobexecutionTotalQueuePipe} from '../../pipe';
 
 @Component({
-  selector: 'app-job-execution-status',
-  templateUrl: './job-execution-status.component.html',
-  styleUrls: ['./job-execution-status.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [FileSizePipe, JobexecutionTotalQueuePipe]
+    selector: 'app-job-execution-status',
+    templateUrl: './job-execution-status.component.html',
+    styleUrls: ['./job-execution-status.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FileSizePipe, JobexecutionTotalQueuePipe],
+    standalone: false
 })
 
 export class JobExecutionStatusComponent implements OnInit {

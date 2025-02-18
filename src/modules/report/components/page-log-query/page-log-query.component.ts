@@ -4,9 +4,10 @@ import {PageLogQuery} from '../../services';
 import {UntypedFormBuilder} from '@angular/forms';
 
 @Component({
-  selector: 'app-page-log-query',
-  templateUrl: './page-log-query.component.html',
-  styleUrls: ['./page-log-query.component.css']
+    selector: 'app-page-log-query',
+    templateUrl: './page-log-query.component.html',
+    styleUrls: ['./page-log-query.component.css'],
+    standalone: false
 })
 export class PageLogQueryComponent extends QueryComponent<PageLogQuery> {
 

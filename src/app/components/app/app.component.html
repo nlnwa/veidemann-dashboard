@@ -1,101 +1,104 @@
 <div class="container mat-typography" fxLayout="column" *ngIf="!error; else initFailed">
-  <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
-  <ng-keyboard-shortcuts-help
-    class="keys"
-    [keyDescription]="'Show this menu'"
-    [keyLabel]="'General'"
-    [key]="'shift + h'"
-    [closeKeyDescription]="'Hide this help menu'"
-    [closeKeyLabel]="'General'"
-    [closeKey]="'escape'"
-    [title]="'Keyboard shortcuts'">
-  </ng-keyboard-shortcuts-help>
-  <mat-toolbar class="main-toolbar" color="primary">
-    <a routerLink="/"><img class="veidemann_logo" alt="Veidemann" src="assets/logo/veidemann_horizontal_white.png"></a>
+  <ng-container *ngIf="ability$ | async as ability">
+    <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
+    <ng-keyboard-shortcuts-help
+      class="keys"
+      [keyDescription]="'Show this menu'"
+      [keyLabel]="'General'"
+      [key]="'shift + h'"
+      [closeKeyDescription]="'Hide this help menu'"
+      [closeKeyLabel]="'General'"
+      [closeKey]="'escape'"
+      [title]="'Keyboard shortcuts'">
+    </ng-keyboard-shortcuts-help>
+    <mat-toolbar class="main-toolbar" color="primary">
+      <a routerLink="/"><img class="veidemann_logo" alt="Veidemann"
+                             src="assets/logo/veidemann_horizontal_white.png"></a>
 
-    <span fxFlex></span>
+      <span fxFlex></span>
 
-    <button *ngIf="'read' | able: 'report'"
-            color="primary"
-            mat-flat-button
-            matTooltip="Click to show overview of scheduled crawljobs"
-            i18n-matTooltip="@@mainToolbarScheduledCrawljobsButtonTooltip"
-            (click)="onShowJobSchedule()">
-      <app-time></app-time>
-    </button>
+      <button *ngIf="ability.can('read', 'report')"
+              color="primary"
+              mat-flat-button
+              matTooltip="Click to show overview of scheduled crawljobs"
+              i18n-matTooltip="@@mainToolbarScheduledCrawljobsButtonTooltip"
+              (click)="onShowJobSchedule()">
+        <app-time></app-time>
+      </button>
 
-    <span fxFlex></span>
+      <span fxFlex></span>
 
-    <a mat-icon-button [matMenuTriggerFor]="helpMenu">
-      <mat-icon>help</mat-icon>
-    </a>
-    <mat-menu #helpMenu="matMenu">
-      <a mat-menu-item
-         target="_blank"
-         [routerLink]="['/docs']"
-         [routerLinkActive]="['is-active']"
-         [routerLinkActiveOptions]="{exact:true}">Docs</a>
-      <a mat-menu-item (click)="onAbout()">About</a>
-    </mat-menu>
+      <a mat-icon-button [matMenuTriggerFor]="helpMenu">
+        <mat-icon>help</mat-icon>
+      </a>
+      <mat-menu #helpMenu="matMenu">
+        <a mat-menu-item
+           target="_blank"
+           [routerLink]="['/docs']"
+           [routerLinkActive]="['is-active']"
+           [routerLinkActiveOptions]="{exact:true}">Docs</a>
+        <a mat-menu-item (click)="onAbout()">About</a>
+      </mat-menu>
 
-    <button color="primary"
-            mat-flat-button
-            (click)="onLogin()"
-            *ngIf="!isLoggedIn">
-      <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@mainToolbarLoginButton">LOGIN</span>
-    </button>
+      <button color="primary"
+              mat-flat-button
+              (click)="onLogin()"
+              *ngIf="!isLoggedIn">
+        <mat-icon>account_box</mat-icon>&nbsp;
+        <span i18n="@@mainToolbarLoginButton">LOGIN</span>
+      </button>
 
-    <button color="primary"
-            mat-flat-button
-            matTooltip="{{name}}"
-            (click)="onLogout()"
-            *ngIf="isLoggedIn">
-      <mat-icon>account_box</mat-icon>&nbsp;
-      <span i18n="@@mainToolbarLogoutButton">LOGOUT</span>
-    </button>
-  </mat-toolbar>
+      <button color="primary"
+              mat-flat-button
+              matTooltip="{{name}}"
+              (click)="onLogout()"
+              *ngIf="isLoggedIn">
+        <mat-icon>account_box</mat-icon>&nbsp;
+        <span i18n="@@mainToolbarLogoutButton">LOGOUT</span>
+      </button>
+    </mat-toolbar>
 
-  <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
-    <a mat-tab-link
-       *ngIf="'read' | able: 'configs'"
-       [routerLink]="['/config']"
-       routerLinkActive
-       #config="routerLinkActive"
-       [active]="config.isActive">
-      <span i18n="@@mainMenuConfiguration">CONFIGURATION</span>
-    </a>
+    <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
+      <a mat-tab-link
+         *ngIf="ability.can('read', 'configs')"
+         [routerLink]="['/config']"
+         routerLinkActive
+         #config="routerLinkActive"
+         [active]="config.isActive">
+        <span i18n="@@mainMenuConfiguration">CONFIGURATION</span>
+      </a>
 
-    <a mat-tab-link
-       *ngIf="'read' | able: 'report'"
-       [routerLink]="['/report']"
-       routerLinkActive
-       #report="routerLinkActive"
-       [active]="report.isActive">
-      <span i18n="@@mainMenuReport">REPORT</span>
-    </a>
+      <a mat-tab-link
+         *ngIf="ability.can('read', 'report')"
+         [routerLink]="['/report']"
+         routerLinkActive
+         #report="routerLinkActive"
+         [active]="report.isActive">
+        <span i18n="@@mainMenuReport">REPORT</span>
+      </a>
 
-    <a mat-tab-link
-       *ngIf="'read' | able: 'logconfig'"
-       [routerLink]="['/logconfig']"
-       routerLinkActive
-       #log="routerLinkActive"
-       [active]="log.isActive">
-      <span i18n="@@mainMenuLogConfiguration">LOG LEVEL</span>
-    </a>
-  </nav>
+      <a mat-tab-link
+         *ngIf="ability.can('read', 'logconfig')"
+         [routerLink]="['/logconfig']"
+         routerLinkActive
+         #log="routerLinkActive"
+         [active]="log.isActive">
+        <span i18n="@@mainMenuLogConfiguration">LOG LEVEL</span>
+      </a>
+    </nav>
 
-  <div *ngIf="isModuleLoading$ | async" class="module-loader">
-    <h2 i18n="@@appModuleLoadingText">Loading module...</h2>
-    <mat-spinner [strokeWidth]="2"></mat-spinner>
-  </div>
+    <div *ngIf="isModuleLoading$ | async" class="module-loader">
+      <h2 i18n="@@appModuleLoadingText">Loading module...</h2>
+      <mat-spinner [strokeWidth]="2"></mat-spinner>
+    </div>
 
-  <app-dialog></app-dialog>
-  <main fxFlex>
-    <mat-tab-nav-panel #tabPanel>
-    <router-outlet></router-outlet>
-    </mat-tab-nav-panel>
-  </main>
+    <app-dialog></app-dialog>
+    <main fxFlex>
+      <mat-tab-nav-panel #tabPanel>
+        <router-outlet></router-outlet>
+      </mat-tab-nav-panel>
+    </main>
+  </ng-container>
 </div>
 
 <ng-template #initFailed>

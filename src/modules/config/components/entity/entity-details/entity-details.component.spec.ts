@@ -5,7 +5,6 @@ import {LabelService} from '../../../services';
 import {of} from 'rxjs';
 import {AnnotationComponent, LabelComponent, MetaComponent} from '../..';
 import {Annotation, ConfigObject, CrawlEntity, Kind, Label, Meta} from '../../../../../shared/models';
-import {AbilityModule} from '@casl/angular';
 import {CoreTestingModule} from '../../../../core/core.testing.module';
 import {AuthService} from '../../../../core/services';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -46,7 +45,6 @@ describe('EntityDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        AbilityModule,
         CommonsModule,
         RouterTestingModule,
         NoopAnimationsModule,
