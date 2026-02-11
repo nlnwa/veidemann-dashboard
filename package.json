@@ -28,7 +28,7 @@
     "@angular/platform-browser": "^19.1.5",
     "@angular/platform-browser-dynamic": "^19.1.5",
     "@angular/router": "^19.1.5",
-    "@casl/ability": "^6.7.3",
+    "@casl/ability": "^6.7.5",
     "@casl/angular": "^9.0.3",
     "@fullcalendar/angular": "^6.1.16",
     "@fullcalendar/core": "^6.1.15",
